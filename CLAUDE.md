@@ -8,5 +8,5 @@
 - Jeder Arbeitsschritt bekommt eine neue Versionsnummer. Dazu:
   - README aktualisieren (Status-Tabelle, Versionshistorie, Gesprächsprotokoll, Entscheidungen, offene Fragen).
   - Pull Request nach `main` erstellen und direkt mergen.
-  - Git-Tag für die Version setzen.
+  - Versionsnummer in den Titel von Pull Request und Merge-Commit schreiben, z. B. `v0.2.0: …` (Tags lassen sich aus der Arbeitsumgebung nicht pushen).
 - Hauptgerät ist ein Galaxy Tab S9: Alles muss per Touch im Browser funktionieren.

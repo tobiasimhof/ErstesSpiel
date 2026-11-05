@@ -6,7 +6,7 @@ Ein **Factory-Game mit Wirtschaftssimulation** im Alchemie-Setting (Arbeitstitel
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.1.0 – Projektstart |
+| **Aktuelle Version** | v0.1.1 – Projektstart (Korrektur Versionierung) |
 | **Phase** | Planung (noch kein Spielcode) |
 | **Spielen (live)** | noch nicht verfügbar |
 | **Nächster Schritt** | Offene Fragen (Abschnitt 5) beantworten, Bausteine und Technik festlegen |
@@ -45,7 +45,7 @@ Festgelegt am 05.11.2026.
 3. **Dokumentieren:** Claude aktualisiert diese README (Status-Tabelle, Versionshistorie, Gesprächsprotokoll, Entscheidungen, offene Fragen).
 4. **Mergen:** Pull Request nach `main`, direkt gemergt.
 5. **Live:** Das Spiel wird automatisch veröffentlicht (geplant: GitHub Pages, sobald es Spielcode gibt).
-6. **Markieren:** Die Version bekommt einen Git-Tag, z. B. `v0.2.0`.
+6. **Markieren:** Die Versionsnummer steht im Titel des Pull Requests und des Merge-Commits auf `main`, z. B. `v0.2.0: …`.
 7. **Testen:** Tobias spielt auf dem Tablet und gibt Feedback. Daraus entsteht der nächste Schritt.
 
 **Versionsnummern:** `vA.B.C`
@@ -55,7 +55,7 @@ Festgelegt am 05.11.2026.
 - `C` steigt bei einer reinen Fehlerkorrektur (z. B. `v0.3.0` → `v0.3.1`).
 - `v1.0.0` = erste vollständige, rund spielbare Version.
 
-**Zurückgehen:** Jede Version ist ein eigener Merge auf `main` mit eigenem Tag. Bei einem großen Fehler kann Claude gezielt eine Version rückgängig machen oder den Stand einer älteren Version wiederherstellen.
+**Zurückgehen:** Jede Version ist ein eigener Merge auf `main`, erkennbar an der Versionsnummer im Titel. Bei einem großen Fehler kann Claude gezielt eine Version rückgängig machen oder den Stand einer älteren Version wiederherstellen.
 
 ---
 
@@ -97,7 +97,7 @@ Das Projekt zerlegt in Einzelteile. Noch nichts davon ist entschieden.
 |---|---|---|
 | 05.11.2026 | Zusammenarbeitsregeln 1–6 (Abschnitt 1) | Von Tobias festgelegt. |
 | 05.11.2026 | Zusätzlich gibt es eine `CLAUDE.md` | Claude lädt diese Datei in jedem neuen Chat automatisch. Sie verweist auf die README, damit Regel 4 zuverlässig greift. |
-| 05.11.2026 | Jede Version bekommt einen Git-Tag | Macht das Zurückgehen auf eine alte Version einfach (Regel 1). |
+| 05.11.2026 | Versionsnummer im Titel jedes Pull Requests und Merge-Commits statt Git-Tags | Claudes Arbeitsumgebung darf nur auf den Arbeitsbranch pushen, Tags werden abgelehnt. Ein Merge-Commit mit Versionsnummer reicht, um auf eine alte Version zurückzugehen (Regel 1). Optional kann Tobias auf GitHub unter „Releases“ zusätzlich Tags anlegen. |
 | 05.11.2026 | Zuerst Logik und Spielprinzip, Grafik später | Von Tobias gewünscht. Für den Anfang reichen Platzhalter. |
 
 ---
@@ -126,12 +126,24 @@ Stand 05.11.2026. Die ausführliche Fassung steht im Chat vom 05.11.2026.
 13. Spielsprache: Deutsch, Englisch oder beides?
 
 **Arbeitsweise**
-14. Ist das Versionsschema in Ordnung? Sollen ältere Versionen unter eigenem Link spielbar bleiben?
+14. Ist das Versionsschema in Ordnung (Versionsnummer im Merge-Titel)? Sollen ältere Versionen unter eigenem Link spielbar bleiben?
 15. Lieber kleine Schritte (jede Sitzung etwas Sichtbares) oder größere?
 
 ---
 
 ## 6. Versionshistorie
+
+### v0.1.1 – Korrektur Versionierung (05.11.2026)
+
+**Vorgenommen:**
+- Nach dem Merge von v0.1.0 einen Versions-Tag setzen.
+
+**Fragen, die wir uns gestellt haben:**
+- Was tun, wenn das Setzen von Tags nicht funktioniert?
+
+**Gemacht:**
+- Festgestellt: Claudes Arbeitsumgebung darf keine Tags pushen (die Verbindung wird jedes Mal abgelehnt).
+- Versionierung umgestellt: Die Versionsnummer steht jetzt im Titel jedes Pull Requests und Merge-Commits. README und `CLAUDE.md` entsprechend korrigiert.
 
 ### v0.1.0 – Projektstart (05.11.2026)
 
@@ -149,7 +161,7 @@ Stand 05.11.2026. Die ausführliche Fassung steht im Chat vom 05.11.2026.
 **Gemacht:**
 - README zum Projektgedächtnis ausgebaut (Regeln, Ablauf, Bausteine, Entscheidungen, offene Fragen, Historie, Protokoll).
 - `CLAUDE.md` angelegt, die Claude in jedem neuen Chat automatisch auf die README verweist.
-- Ablauf Branch → Pull Request → Merge → Tag einmal komplett durchgespielt.
+- Ablauf Branch → Pull Request → Merge einmal komplett durchgespielt.
 - Noch kein Spielcode (Regel 6).
 
 ---
@@ -169,6 +181,8 @@ Wir bauen ein eigenes Spiel mit ähnlichem Prinzip, keinen Nachbau.
 **GitHub-Check:**
 - Repo `tobiasimhof/ErstesSpiel` ist erreichbar und öffentlich, Claude hat Schreibrechte.
 - Weil das Repo öffentlich ist, kann das Spiel kostenlos über GitHub Pages live gehen.
+- Branch pushen, Pull Request erstellen und mergen funktioniert.
+- Versions-Tags kann Claude nicht pushen. Deshalb steht die Versionsnummer im Titel jedes Merges (siehe Entscheidungen).
 
 **Frage zu Assets:** Gibt es über GitHub eine Asset-Datenbank?
 - GitHub selbst hat keine Asset-Datenbank, aber Assets können direkt im Repo liegen.
