@@ -7,13 +7,20 @@
   --ink: #3b2a1a;
   --accent: #ffd43b;
   --border: #8a6a3f;
+  --ok: #2f9e44;
+  --danger: #c92a2a;
   --hud-height: 44px;
   --safe-left: env(safe-area-inset-left, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 * {
   box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
 }
 
 html,
@@ -38,8 +45,57 @@ body {
   height: 100dvh;
 }
 
-/* Obere Leiste */
+/* ---------- Knöpfe ---------- */
+
+button {
+  font: inherit;
+  color: var(--ink);
+  background: var(--parchment);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  min-height: 36px;
+  padding: 0 12px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+button:active {
+  background: var(--parchment-dark);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+button.primary {
+  background: var(--ok);
+  border-color: #1f6f30;
+  color: #fff;
+  font-weight: 700;
+}
+
+button.danger {
+  background: var(--danger);
+  border-color: #8f1d1d;
+  color: #fff;
+  font-weight: 700;
+}
+
+.big-button {
+  min-height: 48px;
+  padding: 0 18px;
+  font-size: 17px;
+  font-weight: 700;
+  border-width: 3px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Obere Leiste ---------- */
+
 #hud {
+  position: relative;
   flex: 0 0 var(--hud-height);
   display: flex;
   align-items: center;
@@ -50,7 +106,7 @@ body {
   font-weight: 600;
   font-size: 15px;
   white-space: nowrap;
-  z-index: 2;
+  z-index: 5;
 }
 
 .hud-item {
@@ -67,32 +123,34 @@ body {
   flex: 1;
 }
 
+#btn-menu {
+  width: 40px;
+  padding: 0;
+  font-size: 18px;
+}
+
 .hud-version {
   font-size: 12px;
   font-weight: 500;
   opacity: 0.75;
 }
 
-button {
-  font: inherit;
-  color: var(--ink);
+.menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: max(12px, var(--safe-right));
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
   background: var(--parchment);
   border: 2px solid var(--border);
-  border-radius: 8px;
-  min-height: 34px;
-  padding: 0 12px;
-  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
-button:active {
-  background: var(--parchment-dark);
-}
+/* ---------- Spielfeld ---------- */
 
-button[hidden] {
-  display: none;
-}
-
-/* Spielfeld */
 #stage {
   position: relative;
   flex: 1;
@@ -106,13 +164,14 @@ button[hidden] {
   touch-action: none;
 }
 
-/* Infofenster */
+/* ---------- Infofenster ---------- */
+
 #info-panel {
   position: absolute;
   top: 12px;
   right: max(12px, var(--safe-right));
-  width: min(300px, 42vw);
-  max-height: calc(100% - 24px);
+  width: min(310px, 42vw);
+  max-height: calc(100% - 92px);
   overflow-y: auto;
   padding: 14px 16px;
   background: var(--parchment);
@@ -122,10 +181,7 @@ button[hidden] {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
   font-size: 15px;
   line-height: 1.4;
-}
-
-#info-panel[hidden] {
-  display: none;
+  z-index: 3;
 }
 
 #info-close {
@@ -133,7 +189,6 @@ button[hidden] {
   top: 8px;
   right: 8px;
   width: 36px;
-  min-height: 36px;
   padding: 0;
 }
 
@@ -172,23 +227,36 @@ button[hidden] {
   font-size: 14px;
 }
 
-.info-soon[hidden],
-.info-meta[hidden] {
-  display: none;
+.panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
 }
 
-/* Bedienhinweis unten */
-#hint {
+.panel-actions button {
+  min-height: 40px;
+}
+
+/* ---------- Hinweis & Meldungen ---------- */
+
+#hint,
+#toast {
   position: absolute;
   left: 50%;
-  bottom: 12px;
   transform: translateX(-50%);
+  max-width: calc(100% - 300px);
   padding: 8px 14px;
-  background: rgba(36, 26, 16, 0.82);
+  background: rgba(36, 26, 16, 0.88);
   border-radius: 999px;
   font-size: 13px;
-  white-space: nowrap;
+  text-align: center;
   pointer-events: none;
+  z-index: 4;
+}
+
+#hint {
+  bottom: 18px;
   transition: opacity 0.6s;
 }
 
@@ -196,7 +264,196 @@ button[hidden] {
   opacity: 0;
 }
 
-/* Hochformat: Hinweis zum Drehen */
+#toast {
+  bottom: 76px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid rgba(243, 230, 196, 0.35);
+}
+
+/* ---------- Untere Leisten ---------- */
+
+#bottom-bar {
+  position: absolute;
+  left: max(12px, var(--safe-left));
+  right: max(12px, var(--safe-right));
+  bottom: max(12px, var(--safe-bottom));
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 3;
+}
+
+#bottom-bar button {
+  pointer-events: auto;
+}
+
+.bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px max(12px, var(--safe-right)) max(8px, var(--safe-bottom)) max(12px, var(--safe-left));
+  background: linear-gradient(var(--wood-light), var(--wood));
+  border-top: 2px solid var(--wood-dark);
+  box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.35);
+  z-index: 3;
+}
+
+.build-items {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.build-item {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 104px;
+  min-height: 76px;
+  padding: 6px 4px;
+  border-radius: 10px;
+}
+
+.build-icon {
+  font-size: 26px;
+  line-height: 1.1;
+}
+
+.build-name {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.build-meta {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+#build-close {
+  flex: 0 0 auto;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  font-size: 18px;
+}
+
+.tool-text {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.3;
+  white-space: normal;
+}
+
+.tool-buttons {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.tool-buttons button {
+  min-height: 46px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* ---------- Große Fenster ---------- */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-box {
+  position: relative;
+  width: min(520px, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 18px 20px;
+  background: var(--parchment);
+  color: var(--ink);
+  border: 3px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.modal-box h2 {
+  margin: 0 44px 4px 0;
+  font-size: 20px;
+}
+
+.modal-box h3 {
+  margin: 16px 0 6px;
+  font-size: 16px;
+}
+
+.modal-box p {
+  margin: 8px 0;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 38px;
+  padding: 0;
+}
+
+.modal-meta {
+  opacity: 0.75;
+  font-size: 14px;
+}
+
+.shop-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.stat {
+  padding: 6px 10px;
+  background: rgba(138, 106, 63, 0.15);
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.empty-note {
+  padding: 10px 12px;
+  background: rgba(138, 106, 63, 0.12);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+}
+
+.dialog-box {
+  width: min(400px, 100%);
+}
+
+.dialog-box .panel-actions {
+  justify-content: flex-end;
+}
+
+/* ---------- Hochformat: Hinweis zum Drehen ---------- */
+
 #rotate-overlay {
   display: none;
 }
@@ -222,7 +479,8 @@ button[hidden] {
   }
 }
 
-/* Sehr niedrige Bildschirme (Handy quer) */
+/* ---------- Niedrige Bildschirme (Handy quer) ---------- */
+
 @media (max-height: 420px) {
   :root {
     --hud-height: 40px;
@@ -235,13 +493,68 @@ button[hidden] {
 
   #info-panel {
     top: 8px;
-    max-height: calc(100% - 16px);
+    max-height: calc(100% - 76px);
     padding: 10px 12px;
     font-size: 14px;
   }
 
+  #info-text {
+    margin-top: 8px;
+  }
+
+  .info-soon {
+    margin-top: 6px;
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+
+  .panel-actions {
+    margin-top: 8px;
+  }
+
+  .big-button {
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  #bottom-bar {
+    bottom: max(8px, var(--safe-bottom));
+  }
+
   #hint {
-    bottom: 8px;
+    bottom: 14px;
     font-size: 12px;
+  }
+
+  #toast {
+    bottom: 64px;
+  }
+
+  .build-item {
+    width: 94px;
+    min-height: 64px;
+  }
+
+  .build-icon {
+    font-size: 22px;
+  }
+
+  .tool-text {
+    font-size: 12.5px;
+  }
+
+  .tool-buttons button {
+    min-height: 42px;
+    font-size: 14px;
+    padding: 0 10px;
+  }
+
+  .modal {
+    padding: 8px;
+  }
+
+  .modal-box {
+    padding: 12px 16px;
+    font-size: 14px;
   }
 }

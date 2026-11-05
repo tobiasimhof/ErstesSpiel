@@ -2,14 +2,14 @@
 
 Erstes Spiel gecodet zusammen mit Claude.
 
-Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeitstitel offen). Man baut auf einem kleinen Grundstück seine eigene Fabrik. Holz und Stein werden gewonnen, über Förderbänder durch Werkstätten geschickt und zu immer komplexeren Waren verarbeitet. Die Waren verkauft man im eigenen Laden oder auf dem Schwarzmarkt. Mit dem Gold baut man den Laden aus, schaltet neue Produktionen frei und kauft mehr Fläche. Ziel ist ein Spiel für Handy und Tablet im Querformat, später mit Clans und einem gemeinsamen Markt aller Spieler.
+Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeitstitel offen). Man baut auf einem kleinen Grundstück seine eigene Fabrik. Holz und Stein werden gewonnen, über Förderbänder durch Werkstätten geschickt und zu immer komplexeren Waren verarbeitet. Das ganze Grundstück ist der eigene Laden; die Waren verkauft man dort oder auf dem Schwarzmarkt. Mit dem Gold baut man den Laden aus, schaltet neue Produktionen frei und kauft mehr Fläche. Ziel ist ein Spiel für Handy und Tablet im Querformat, später mit Clans und einem gemeinsamen Markt aller Spieler.
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.3.0 – Spielfeld |
+| **Aktuelle Version** | v0.4.0 – Bauen & Speichern |
 | **Phase** | M1 – Fabrik-Grundgerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias testet v0.3.0 auf Tablet und Handy; Plan für v0.4.0 (Abschnitt 6) freigeben |
+| **Nächster Schritt** | Tobias testet v0.4.0; Plan für v0.5.0 und Lager-Frage (Abschnitte 6 und 8) beantworten |
 
 ---
 
@@ -86,19 +86,21 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 ### 3.3 Fabrik
 
 - Das Grundstück besteht aus quadratischen Feldern (Raster). Man startet klein und kauft Fläche dazu, immer teurer.
-- **Start:** Laden (Hauptgebäude), Holzfällerlager, Steinbruch.
+- **Der Laden ist das ganze Grundstück**, kein einzelnes Gebäude. Darauf stehen zu Beginn ein Holzfällerlager und ein Steinbruch.
 - Gebäude belegen mehrere Felder und haben Ein- und Ausgänge.
 - **Förderbänder** verbinden die Gebäude und transportieren Waren Stück für Stück.
+- **Aufteilen und Zusammenführen durch Ziehen**, ohne Verteiler-Gebäude: Zieht man von einem bestehenden Band aus, teilt es sich auf (bis zu 3 Richtungen pro Feld; mehrfach aufteilen ergibt 4 und mehr Strecken). Zieht man auf ein bestehendes Band, laufen beide zusammen. Abzweigungen verteilen die Waren abwechselnd.
+- **Ein- und Ausgänge** sind als Pfeile am Gebäude zu sehen: blau = Eingang, orange = Ausgang.
 - **Werkstätten** verarbeiten nach Rezept, z. B. Sägewerk: Holz → Bretter.
 - **Montage-Werkstätten** brauchen mehrere Zutaten, z. B. Schreinerei: 4 Holzwinkel + 5 Bretter + 10 Steinnägel → Tür.
 - Eine Werkstatt kann mehrere Rezepte. Man stellt ein, was sie gerade herstellt.
-- **Umbauen ist leicht und günstig** (verschieben, drehen, abreißen mit Rückerstattung), weil man sich ständig an den Markt anpasst.
+- **Umbauen ist leicht und günstig** (verschieben, drehen, abreißen mit Rückerstattung), weil man sich ständig an den Markt anpasst. Das gilt für alle Gebäude, auch die Startgebäude, damit man den Schwerpunkt der Fabrik jederzeit neu setzen kann.
 - **Bauen geht sofort**, sofern man das Gold und die Waren dafür hat. Es gibt keine Bauzeiten.
 
 ### 3.4 Wirtschaft
 
 - Jede Ware hat einen **Grundwert**. Verarbeitete Waren sind mehr wert als ihre Zutaten zusammen, Weiterverarbeiten lohnt sich also.
-- **Laden:** Waren kommen per Förderband in den Laden und landen in dessen Lager. Von dort verkauft man sie an Händler (Computer-Kunden).
+- **Laden:** Der Knopf „Laden“ unten links zeigt das ganze Inventar, also alles, was in den Lagern hergestellt wurde. Von dort bietet man Waren zum Verkauf an Händler (Computer-Kunden) an.
 - **Nachfrage:** Wer viel von einer Ware verkauft, drückt ihren Preis. Mit der Zeit erholt er sich wieder. Dazu kommen Trends, z. B. „Die Stadt baut eine Mauer: Steinblöcke +50 % für 2 Tage“. Eine Tür bringt also mal mehr, mal weniger Gold, je nachdem, wie gefragt sie gerade ist. So entsteht das Wirtschaftsgefühl, und es lohnt sich, je nach Marktlage umzubauen.
 - **Spottpreis:** Holz und Stein werden immer angekauft, wenn auch billig. Pleite gehen ist dadurch nicht möglich.
 - **Kaufen statt herstellen:** Jede Ware kann man auch kaufen, z. B. eine fertige Tür. Das ist teurer als selbst herstellen, spart aber Platz und Zeit.
@@ -188,15 +190,26 @@ Das Sägewerk kann zwei Rezepte. Man stellt ein, ob es Bretter oder Holzblöcke 
 | `src/version.js` | Versionsnummer, wird im Spiel angezeigt |
 | `src/main.js` | Verbindet Spielregeln, Kamera, Eingabe und Anzeige |
 | `src/core/` | Spielregeln und Spielzustand, ohne Grafik |
-| `src/core/data/` | Datentabellen (Gebäude; später Waren, Rezepte, Preise) |
+| `src/core/data/buildings.js` | Datentabelle der Gebäude (Größe, Ein- und Ausgänge, Texte) und Reihenfolge im Baumenü |
+| `src/core/state.js` | Spielzustand anlegen, Abfragen auf dem Raster |
+| `src/core/dirs.js` | Himmelsrichtungen (oben, rechts, unten, links) |
+| `src/core/geometry.js` | Größe, Drehung, Felder sowie Ein- und Ausgänge von Gebäuden |
+| `src/core/buildings.js` | Gebäude bauen, verschieben, drehen, abreißen, freie Stelle suchen |
+| `src/core/belts.js` | Förderbänder legen, aufteilen, zusammenführen, drehen, abreißen |
+| `src/core/save.js` | Spielstand in Text umwandeln und prüfen |
 | `src/view/camera.js` | Kamera: verschieben, zoomen, Bildschirm ↔ Welt umrechnen |
-| `src/view/input.js` | Touch, Maus und Mausrad |
-| `src/view/renderer.js` | Zeichnet Spielfeld und Gebäude |
-| `src/view/hud.js` | Obere Leiste und Infofenster |
+| `src/view/input.js` | Touch, Maus und Mausrad (Antippen, Ziehen, zwei Finger) |
+| `src/view/controller.js` | Modi (Ansehen, Bauleiste, Platzieren, Förderband, Abreißen) und was Gesten darin tun |
+| `src/view/renderer.js` | Zeichnet Spielfeld, Bänder, Gebäude, Vorschau |
+| `src/view/hud.js` | Obere Leiste und Menü ☰ |
+| `src/view/panels.js` | Infofenster, Laden-Fenster, Rückfragen, Meldungen |
+| `src/view/buildbar.js` | Untere Leisten: Laden/Bauen, Bauleiste, Werkzeugleiste |
+| `src/view/press.js` | Knöpfe reagieren aufs Loslassen des Fingers (siehe Entscheidungen) |
+| `src/view/storage.js` | Speichern und Laden im Browser |
 | `src/style.css` | Aussehen der Oberfläche |
 | `assets/icons/` | App-Symbole (erzeugt mit `tools/make-icons.py`) |
-| `tests/*.test.js` | Automatische Tests der Spielregeln und der Kamera |
-| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße mit Screenshots |
+| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Speichern, Kamera, Versionsnummer |
+| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Abreißen, Speichern und Neues Spiel per Touch durch |
 
 **Prüfen vor jedem Merge:** `npm test` (Spielregeln) und `npm run test:browser` (Browser-Test).
 
@@ -222,33 +235,37 @@ Das Sägewerk kann zwei Rezepte. Man stellt ein, ob es Bretter oder Holzblöcke 
 | Version | Inhalt | Stand |
 |---|---|---|
 | v0.3.0 | **Spielfeld:** Raster, Startgebäude, verschieben und zoomen per Touch, erster Live-Gang | ✅ fertig |
-| v0.4.0 | **Bauen & Speichern:** Baumenü; Sägewerk und Förderbänder platzieren, drehen, verschieben, abreißen; Spielstand bleibt beim Neuladen erhalten | Plan wartet auf Freigabe |
-| v0.5.0 | **Produktion:** Holzfällerlager produziert, Förderbänder transportieren, Sägewerk verarbeitet, Laden nimmt Waren auf | |
-| v0.6.0 | **Verkaufen:** Laden-Lager, Verkauf an Händler, Gold; Bauen kostet Gold. Erster vollständiger Kreislauf | |
+| v0.4.0 | **Bauen & Speichern:** Laden als ganze Fläche, Bauleiste, Gebäude und Förderbänder bauen, verschieben, drehen, abreißen; Bänder aufteilen und zusammenführen; Spielstand bleibt erhalten | ✅ fertig |
+| v0.5.0 | **Produktion:** Holzfällerlager und Steinbruch produzieren, Waren laufen über die Bänder, Sägewerk verarbeitet, Lager füllen sich, Inventar im Laden | Plan wartet auf Freigabe |
+| v0.6.0 | **Verkaufen:** Waren im Laden zum Verkauf anbieten, Gold; Bauen kostet Gold. Erster vollständiger Kreislauf | |
 | v0.7.0 | **Offline & Lagergrenzen:** Fabrik läuft offline weiter, bis Lager voll sind oder Zutaten fehlen | |
 
-### v0.3.0 – Spielfeld (fertig)
+### v0.4.0 – Bauen & Speichern (fertig)
 
-- Querformat; im Hochformat erscheint „Bitte dreh dein Gerät ins Querformat“.
-- Obere Leiste: Gold, Laden-Level, Knopf „Vollbild“ (Android/PC) und Versionsnummer.
-- Grundstück aus 16 × 10 Feldern in einer Welt aus 32 × 20 Feldern. Die Fläche drumherum ist schraffiert und gesperrt.
-- Startgebäude als farbige Blöcke mit Symbol und Namen: Laden ⚖️ (3 × 3), Holzfällerlager 🪓 (2 × 2), Steinbruch ⛏️ (2 × 2).
-- Ein Finger: verschieben. Zwei Finger: zoomen. Am PC: Maus ziehen, Mausrad.
-- Antippen: Gebäude zeigt ein Infofenster (Name, Größe, Beschreibung, „Bald: …“); gesperrte Fläche zeigt einen Hinweis; freie Fläche schließt das Fenster.
-- „Zum Startbildschirm hinzufügen“ legt ein eigenes App-Symbol an; dann startet das Spiel im Vollbild und im Querformat.
+**Neu im Spiel:**
+- Der Laden ist das ganze Grundstück (Schild „Dein Laden · Level 1“ oben links). Start mit Holzfällerlager und Steinbruch.
+- Unten links **„⚖️ Laden“**: Fenster mit Level, Fläche, Anzahl der Gebäude und Bänder und dem (noch leeren) Inventar.
+- Unten rechts **„🔨 Bauen“**: Bauleiste mit Holzfällerlager, Steinbruch, Sägewerk (2 × 1), Förderband und Abreißen.
+- **Gebäude platzieren:** Vorschau erscheint an einer freien Stelle, grün = passt, rot = geht nicht. Mit dem Finger schieben oder auf ein Feld tippen, dann ↻ Drehen, ✕ Abbrechen oder ✓ Bauen.
+- **Förderbänder:** mit einem Finger ziehen; Kurven entstehen automatisch; zurückziehen nimmt Stücke wieder weg; von einem Band aus ziehen teilt auf; auf ein Band ziehen führt zusammen; in ein Gebäude ziehen verbindet; Antippen dreht.
+- **Abreißen:** über Bänder wischen; Gebäude antippen (mit Rückfrage).
+- **Gebäude und Bänder antippen:** Infofenster mit ↔ Verschieben, ↻ Drehen und 🗑 Abreißen.
+- **Pfeile** an jedem Gebäude: blau = Eingang, orange = Ausgang. Sie drehen mit.
+- **Speichern:** automatisch im Browser nach jeder Änderung und beim Verlassen. Menü ☰ → „Neues Spiel“ (mit Rückfrage) startet von vorn.
+- Zwei Finger verschieben und zoomen in jedem Modus; am PC verschieben rechte oder mittlere Maustaste immer die Karte.
 
-**Was Tobias testet:** Link auf Tablet und Handy öffnen, drehen, verschieben, zoomen, Gebäude und Flächen antippen, „Vollbild“ ausprobieren, optional zum Startbildschirm hinzufügen. Fühlt sich das flüssig an? Ist alles gut lesbar?
+**Was Tobias testet:** Bauen, Bänder ziehen, aufteilen und zusammenführen, Gebäude verschieben, drehen, abreißen, Seite neu laden (alles noch da?), „Neues Spiel“. Fühlt sich das Ziehen der Bänder natürlich an?
 
-### Plan für v0.4.0 – Bauen & Speichern (wartet auf Freigabe)
+### Plan für v0.5.0 – Produktion (wartet auf Freigabe)
 
-- **Bauleiste:** Ein Knopf „🔨 Bauen“ unten rechts öffnet eine Leiste mit **Sägewerk** (2 × 2) und **Förderband** (1 Feld). Im Prototyp ist das Sägewerk sofort verfügbar; Freischaltpunkte kommen später.
-- **Gebäude platzieren:** Gebäude in der Leiste antippen → eine Vorschau erscheint auf dem Spielfeld. Grün = passt, rot = belegt oder gesperrt. Vorschau mit dem Finger verschieben, dann ✓ Bauen, ↻ Drehen oder ✕ Abbrechen.
-- **Ein- und Ausgänge:** Jedes Gebäude zeigt mit Pfeilen, wo Waren hinein- und herausgehen. Drehen ändert die Seite. Das wird in v0.5.0 wichtig.
-- **Förderbänder legen:** Förderband wählen und mit einem Finger eine Strecke ziehen. Die Laufrichtung folgt dem Finger, Kurven entstehen automatisch. Während man Bänder legt, verschiebt man die Karte mit zwei Fingern.
-- **Umbauen:** Gebäude antippen → im Infofenster „Verschieben“, „Drehen“, „Abreißen“. Förderbänder entfernt man mit einem Radier-Werkzeug in der Bauleiste.
-- **Startgebäude** (Laden, Holzfällerlager, Steinbruch) lassen sich verschieben und drehen, aber nicht abreißen.
-- **Noch kostenlos:** Gold wird erst ab v0.6.0 gebraucht. Bänder zeigen ihre Laufrichtung, transportieren aber noch nichts (kommt in v0.5.0).
-- **Speichern (vorgezogen aus v0.7.0):** Das Spiel speichert automatisch im Browser, damit Gebautes beim Neuladen nicht verschwindet. Dazu ein Knopf „Neues Spiel“.
+- **Waren-Tabelle:** Holz 🪵, Stein 🪨, Bretter (Symbole vorläufig).
+- **Simulation in festen Takten** (Spielregeln in `src/core`, getrennt von der Grafik).
+- **Holzfällerlager und Steinbruch** stellen regelmäßig Holz bzw. Stein her (Platzhalter: 1 Stück alle 3 Sekunden) und geben es am orangen Pfeil auf ein Band.
+- **Förderbänder** transportieren die Waren sichtbar Feld für Feld (Platzhalter: 2 Felder pro Sekunde). Ist ein Band voll, staut es sich zurück. Abzweigungen verteilen abwechselnd, Zusammenführungen nehmen abwechselnd auf.
+- **Sägewerk** nimmt Holz am blauen Pfeil an und macht daraus Bretter (1 Holz → 2 Bretter, Platzhalter: 2 Sekunden).
+- **Lager (Vorschlag, siehe offene Frage 2):** Jedes Gebäude hat ein kleines eigenes Lager. Was nicht weiter kann, bleibt dort, bis das Lager voll ist; dann stoppt das Gebäude. Neu ist ein **Lagerhaus** als Endpunkt für Bänder mit großem Lager. Das **Inventar im Laden** zeigt alle Lager zusammen.
+- **Infofenster** zeigt, was ein Gebäude gerade tut (arbeitet, wartet auf Holz, Lager voll) und was in seinem Lager liegt.
+- Waren auf Bändern und in Lagern werden mitgespeichert. Verkaufen folgt in v0.6.0, Offline-Produktion in v0.7.0.
 
 ---
 
@@ -285,6 +302,15 @@ Das Sägewerk kann zwei Rezepte. Man stellt ein, ob es Bretter oder Holzblöcke 
 | 05.11.2026 | Freischaltpunkte pro Laden-Level und Arbeitstitel später entscheiden | Fragen 5 und 9: erst ein Prototyp. |
 | 05.11.2026 | Browser-Spiel ohne Build-Schritt; GitHub Pages aus `main` / `(root)` | Einfach und robust; Tobias hat Pages eingeschaltet. |
 | 05.11.2026 | Platzhalter-Grafik: farbige Blöcke mit Emojis; Laden-Symbol ⚖️ (Händlerwaage) | Das 🏪-Emoji zeigt einen modernen „24“-Laden und passt nicht ins Mittelalter. |
+| 05.11.2026 | Der Laden ist kein Gebäude, sondern das ganze Grundstück; Knopf „Laden“ unten links zeigt das Inventar aller Lager und dient später zum Verkaufen | Von Tobias gewünscht (Chat 2). |
+| 05.11.2026 | Knopf „Bauen“ unten rechts öffnet die Bauleiste | Von Tobias gewünscht (Chat 2). |
+| 05.11.2026 | Alle Gebäude, auch die Startgebäude, lassen sich verschieben, drehen und abreißen | Man soll den Schwerpunkt der Fabrik jederzeit neu setzen können (Chat 2). |
+| 05.11.2026 | Förderbänder teilen sich auf und führen zusammen durch einfaches Ziehen, ohne Verteiler-Gebäude; Abzweigungen verteilen abwechselnd | Von Tobias gewünscht (Chat 2): aus 1 Strecke werden durch Ziehen 4. |
+| 05.11.2026 | Ein- und Ausgänge als Pfeile: blau = Eingang, orange = Ausgang | Von Tobias bestätigt. |
+| 05.11.2026 | Speichern schon ab v0.4.0 (automatisch im Browser), „Neues Spiel“ im Menü ☰ | Von Tobias bestätigt; sonst wäre Gebautes nach dem Neuladen weg. |
+| 05.11.2026 | Sägewerk ist 2 × 1 Felder (Eingang links, Ausgang rechts) | Kompakt und gut für gerade Produktionslinien. |
+| 05.11.2026 | Bauen ist bis v0.6.0 kostenlos | Gold gibt es erst mit dem Verkaufen. |
+| 05.11.2026 | Knöpfe reagieren aufs Loslassen des Fingers statt auf „click“ | Chrome verschluckt den Klick, wenn man direkt nach einer schnellen Wischbewegung tippt (beim Browser-Test gefunden). |
 
 ---
 
@@ -292,14 +318,38 @@ Das Sägewerk kann zwei Rezepte. Man stellt ein, ob es Bretter oder Holzblöcke 
 
 Stand 05.11.2026.
 
-1. **Plan für v0.4.0** (Abschnitt 6) freigeben, inklusive vorgezogenem Speichern?
-2. **Startgebäude:** verschiebbar und drehbar, aber nicht abreißbar. Einverstanden?
+1. **Plan für v0.5.0** (Abschnitt 6) freigeben?
+2. **Lager:** Jedes Gebäude hat ein kleines eigenes Lager, dazu kommt ein Lagerhaus als Endpunkt für Bänder; das Inventar im Laden zeigt alle Lager zusammen. Passt das zu deiner Idee der „Lager“?
 3. **Freischaltpunkte** pro Laden-Level: Details in M3 entscheiden.
 4. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.4.0 – Bauen & Speichern (05.11.2026)
+
+**Vorgenommen:**
+- Gebäude und Förderbänder bauen, verschieben, drehen und abreißen.
+- Den Laden zur ganzen Fläche machen, mit Knöpfen „Laden“ und „Bauen“ unten.
+- Förderbänder durch Ziehen aufteilen und zusammenführen.
+- Spielstand speichern.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie zieht man Förderbänder mit dem Finger, ohne dass die Karte mitwandert? → Ein Finger legt Bänder, zwei Finger bewegen die Karte.
+- Wie teilt man eine Strecke ohne Verteiler? → Von einem bestehenden Band aus ziehen fügt einen Ausgang hinzu.
+- Was passiert, wenn der Finger beim Ziehen kurz auf gesperrte Fläche rutscht? → Die Strecke pausiert und geht weiter, sobald der Finger zurück ist.
+- Wie schützen wir Spielstände vor Beschädigung? → Jeder Spielstand wird beim Laden geprüft; ist er kaputt, startet ein neues Spiel mit Hinweis.
+
+**Gemacht:**
+- Laden-Gebäude entfernt; das Grundstück trägt das Schild „Dein Laden“. Laden-Fenster mit Inventar-Platzhalter.
+- Bauleiste, Vorschau beim Platzieren (grün/rot), Werkzeugleiste mit Drehen, Abbrechen, Bauen/Fertig.
+- Förderbänder mit Kurven, Aufteilen, Zusammenführen, Anschluss an Gebäude, Drehen, Wisch-Abriss.
+- Ein- und Ausgangspfeile an Gebäuden, Sägewerk als drittes Gebäude.
+- Infofenster mit Aktionen, Rückfragen beim Abreißen und bei „Neues Spiel“, kurze Meldungen.
+- Automatisches Speichern im Browser mit Prüfung beim Laden.
+- 44 automatische Tests und ein Browser-Test, der alles per Touch auf Tablet- und Handygröße durchspielt – alle bestanden.
+- Beim Browser-Test gefunden und behoben: Nach schnellem Wischen verschluckte Chrome den nächsten Knopfdruck; Namen verdeckten Pfeile und Symbole; der Auswahlrahmen lief durch den Namen.
 
 ### v0.3.0 – Spielfeld (05.11.2026)
 
@@ -371,6 +421,24 @@ Stand 05.11.2026.
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 05.11.2026 – Chat 2: Feedback zu v0.3.0 & v0.4.0
+
+**Feedback von Tobias:**
+- v0.3.0 funktioniert und läuft auf dem Tablet.
+- Speichern gerne schon jetzt einbauen.
+- Alles soll sich drehen und verschieben lassen, aber auch löschen, damit man den Fokus auf eine neue Fabrik legen kann.
+- Der Laden soll kein Gebäude sein, sondern die komplette Fläche, auf der gebaut werden kann. Unten gibt es einen Knopf „Laden“: Dort sieht man sein ganzes Inventar, also alles, was man in seinen „Lagern“ hergestellt hat, und kann es zum Verkauf anbieten.
+- Außerdem einen Knopf „Bauen“ für Sägewerk, Förderbänder usw.
+- Förderbänder: mehrere Strecken zusammenlegen können, ohne Verteiler; 1 Strecke durch einfaches Ziehen in 4 aufteilen.
+- Die Pfeile für Ein- und Ausgänge sind gut.
+- Freigabe für v0.4.0.
+
+**Umgesetzt:** v0.4.0 (siehe Versionshistorie).
+
+**Claudes Hinweise:**
+- Ein Band-Feld kann in bis zu 3 Richtungen abzweigen (eine Seite ist der Zulauf). Für 4 Strecken zweigt man zweimal ab, z. B. erst in 2 und jede davon noch einmal.
+- Wie die „Lager“ genau funktionieren, entscheidet sich mit v0.5.0 (offene Frage 2).
 
 ### 05.11.2026 – Chat 1, Teil 3: Feinschliff des Konzepts & v0.3.0
 

@@ -16,4 +16,6 @@
 - Neue Version: `src/version.js`, die `?v=` Angaben in `index.html` und die Status-Tabelle der README anpassen (ein Test prüft das).
 - Die Live-Seite (github.io) ist aus der Arbeitsumgebung nicht erreichbar; nach dem Merge den Pages-Status über GitHub Actions („pages build and deployment“) prüfen.
 - Spielregeln (Simulation) strikt getrennt von der Darstellung halten; Waren, Rezepte, Gebäude und Preise als Datentabellen.
+- Knöpfe immer mit `onPress` aus `src/view/press.js` verbinden, nicht mit `click` (Chrome verschluckt Klicks direkt nach schnellem Wischen).
+- Spielstand-Format (`src/core/save.js`): Bei Änderungen `SAVE_VERSION` erhöhen und alte Spielstände umwandeln, damit Tobias' Fabrik nicht verloren geht.
 - Andere Spiele (Alchemy Factory, Clash of Clans, Hay Day) dienen nur als Vorbild für Mechaniken: eigene Namen, eigene Rezepte, eigene Grafik.

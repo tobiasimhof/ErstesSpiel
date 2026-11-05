@@ -14,7 +14,7 @@
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="icon" type="image/png" href="assets/icons/icon-192.png" />
     <link rel="apple-touch-icon" href="assets/icons/icon-192.png" />
-    <link rel="stylesheet" href="src/style.css?v=0.3.0" />
+    <link rel="stylesheet" href="src/style.css?v=0.4.0" />
   </head>
   <body>
     <div id="app">
@@ -29,7 +29,11 @@
         </div>
         <div class="hud-spacer"></div>
         <button id="btn-fullscreen" type="button">Vollbild</button>
+        <button id="btn-menu" type="button" aria-label="Menü">☰</button>
         <div id="hud-version" class="hud-version">v</div>
+        <div id="menu" class="menu" hidden>
+          <button id="menu-new-game" type="button">🔄 Neues Spiel</button>
+        </div>
       </header>
 
       <main id="stage">
@@ -46,10 +50,49 @@
           </div>
           <p id="info-text"></p>
           <p id="info-soon" class="info-soon"></p>
+          <div id="info-actions" class="panel-actions"></div>
         </aside>
 
         <div id="hint">Ziehen: verschieben · Zwei Finger: zoomen · Gebäude antippen</div>
+        <div id="toast" hidden></div>
+
+        <div id="bottom-bar">
+          <button id="btn-shop" type="button" class="big-button">⚖️ Laden</button>
+          <button id="btn-build" type="button" class="big-button">🔨 Bauen</button>
+        </div>
+
+        <div id="build-bar" class="bar" hidden>
+          <div id="build-items" class="build-items"></div>
+          <button id="build-close" type="button" aria-label="Bauleiste schließen">✕</button>
+        </div>
+
+        <div id="tool-bar" class="bar" hidden>
+          <span id="tool-text" class="tool-text"></span>
+          <div class="tool-buttons">
+            <button id="tool-rotate" type="button">↻ Drehen</button>
+            <button id="tool-cancel" type="button">✕ Abbrechen</button>
+            <button id="tool-confirm" type="button" class="primary">✓ Fertig</button>
+          </div>
+        </div>
       </main>
+    </div>
+
+    <div id="modal" class="modal" hidden>
+      <div class="modal-box">
+        <button id="modal-close" type="button" class="modal-close" aria-label="Schließen">✕</button>
+        <div id="modal-content"></div>
+      </div>
+    </div>
+
+    <div id="dialog" class="modal" hidden>
+      <div class="modal-box dialog-box">
+        <h2 id="dialog-title"></h2>
+        <p id="dialog-text"></p>
+        <div class="panel-actions">
+          <button id="dialog-cancel" type="button">Abbrechen</button>
+          <button id="dialog-ok" type="button" class="primary">OK</button>
+        </div>
+      </div>
     </div>
 
     <div id="rotate-overlay">
@@ -58,6 +101,6 @@
     </div>
 
     <noscript>Dieses Spiel braucht JavaScript.</noscript>
-    <script type="module" src="src/main.js?v=0.3.0"></script>
+    <script type="module" src="src/main.js?v=0.4.0"></script>
   </body>
 </html>

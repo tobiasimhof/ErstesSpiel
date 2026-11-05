@@ -1,20 +1,24 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { BUILDINGS } from '../src/core/data/buildings.js';
-import { createNewGame, buildingAt, buildingSize, isInWorld, isOwned, occupies } from '../src/core/state.js';
+import { BUILDINGS, BUILD_MENU } from '../src/core/data/buildings.js';
+import { footprintSize, occupies } from '../src/core/geometry.js';
+import { createNewGame, buildingAt, isInWorld, isOwned, parseTileKey, tileKey } from '../src/core/state.js';
 
-test('Neues Spiel startet mit Laden, Holzfällerlager und Steinbruch', () => {
+test('Neues Spiel startet mit Holzfällerlager und Steinbruch; der Laden ist die Fläche', () => {
   const state = createNewGame();
-  assert.deepEqual(state.buildings.map((b) => b.type).sort(), ['holzfaeller', 'laden', 'steinbruch']);
+  assert.deepEqual(state.buildings.map((b) => b.type).sort(), ['holzfaeller', 'steinbruch']);
   assert.equal(state.shopLevel, 1);
   assert.ok(state.gold > 0);
+  assert.deepEqual(state.belts, {});
+  assert.ok(state.buildings.every((b) => b.rot === 0));
 });
 
-test('Jedes Gebäude hat eine eindeutige ID', () => {
+test('Jedes Gebäude hat eine eindeutige ID, nextBuildingId ist größer', () => {
   const state = createNewGame();
   const ids = state.buildings.map((b) => b.id);
   assert.equal(new Set(ids).size, ids.length);
+  assert.ok(ids.every((id) => id < state.nextBuildingId));
 });
 
 test('Das Grundstück liegt vollständig in der Welt', () => {
@@ -24,20 +28,16 @@ test('Das Grundstück liegt vollständig in der Welt', () => {
   assert.ok(plot.y + plot.height <= world.height);
 });
 
-test('Startgebäude stehen komplett auf dem eigenen Grundstück', () => {
+test('Startgebäude stehen komplett auf dem Grundstück und überlappen nicht', () => {
   const state = createNewGame();
   for (const b of state.buildings) {
-    const { width, height } = buildingSize(b);
+    const { width, height } = footprintSize(b.type, b.rot);
     for (let ty = b.y; ty < b.y + height; ty++) {
       for (let tx = b.x; tx < b.x + width; tx++) {
         assert.ok(isOwned(state, tx, ty), `${b.type} ragt bei (${tx}, ${ty}) aus dem Grundstück`);
       }
     }
   }
-});
-
-test('Startgebäude überlappen sich nicht', () => {
-  const state = createNewGame();
   for (let ty = 0; ty < state.world.height; ty++) {
     for (let tx = 0; tx < state.world.width; tx++) {
       const count = state.buildings.filter((b) => occupies(b, tx, ty)).length;
@@ -48,12 +48,12 @@ test('Startgebäude überlappen sich nicht', () => {
 
 test('buildingAt findet Gebäude auf allen ihren Feldern', () => {
   const state = createNewGame();
-  const laden = state.buildings.find((b) => b.type === 'laden');
-  const { width, height } = buildingSize(laden);
-  assert.equal(buildingAt(state, laden.x, laden.y), laden);
-  assert.equal(buildingAt(state, laden.x + width - 1, laden.y + height - 1), laden);
-  assert.equal(buildingAt(state, laden.x + width, laden.y), null);
-  assert.equal(buildingAt(state, laden.x - 1, laden.y), null);
+  const b = state.buildings[0];
+  const { width, height } = footprintSize(b.type, b.rot);
+  assert.equal(buildingAt(state, b.x, b.y), b);
+  assert.equal(buildingAt(state, b.x + width - 1, b.y + height - 1), b);
+  assert.equal(buildingAt(state, b.x + width, b.y), null);
+  assert.equal(buildingAt(state, b.x - 1, b.y), null);
 });
 
 test('isOwned und isInWorld erkennen die Ränder richtig', () => {
@@ -68,6 +68,10 @@ test('isOwned und isInWorld erkennen die Ränder richtig', () => {
   assert.equal(isInWorld(state, state.world.width, 0), false);
 });
 
+test('tileKey und parseTileKey passen zusammen', () => {
+  assert.deepEqual(parseTileKey(tileKey(12, -3)), { x: 12, y: -3 });
+});
+
 test('Gebäude-Tabelle ist vollständig ausgefüllt', () => {
   for (const [key, def] of Object.entries(BUILDINGS)) {
     for (const field of ['name', 'icon', 'color', 'description']) {
@@ -75,5 +79,11 @@ test('Gebäude-Tabelle ist vollständig ausgefüllt', () => {
     }
     assert.ok(Array.isArray(def.size) && def.size.length === 2, `${key}.size fehlt`);
     assert.ok(def.size.every((n) => Number.isInteger(n) && n > 0), `${key}.size ungültig`);
+    for (const port of def.ports ?? []) {
+      assert.ok(['in', 'out'].includes(port.kind), `${key}: Port-Art ungültig`);
+      assert.ok(port.x >= 0 && port.x < def.size[0] && port.y >= 0 && port.y < def.size[1], `${key}: Port außerhalb`);
+      assert.ok(['N', 'E', 'S', 'W'].includes(port.side), `${key}: Port-Seite ungültig`);
+    }
   }
+  for (const type of BUILD_MENU) assert.ok(BUILDINGS[type], `Baumenü enthält unbekanntes Gebäude ${type}`);
 });

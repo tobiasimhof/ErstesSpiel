@@ -1,31 +1,49 @@
-// Anzeige über dem Spielfeld: obere Leiste und Infofenster.
+// Obere Leiste: Gold, Laden-Level, Vollbild, Menü und Versionsnummer.
+
+import { onPress } from './press.js';
 
 const numberFormat = new Intl.NumberFormat('de-DE');
 
-export function createHud({ version, onClosePanel }) {
+export function createHud({ version, onNewGame }) {
   const gold = document.getElementById('hud-gold');
   const level = document.getElementById('hud-level');
-  const versionEl = document.getElementById('hud-version');
-  const panel = document.getElementById('info-panel');
-  const panelIcon = document.getElementById('info-icon');
-  const panelTitle = document.getElementById('info-title');
-  const panelMeta = document.getElementById('info-meta');
-  const panelText = document.getElementById('info-text');
-  const panelSoon = document.getElementById('info-soon');
+  const menuButton = document.getElementById('btn-menu');
+  const menu = document.getElementById('menu');
   const hint = document.getElementById('hint');
 
-  versionEl.textContent = `v${version}`;
-  document.getElementById('info-close').addEventListener('click', () => onClosePanel());
+  document.getElementById('hud-version').textContent = `v${version}`;
 
-  function showPanel({ icon, title, meta, text, soon }) {
-    panelIcon.textContent = icon;
-    panelTitle.textContent = title;
-    panelMeta.textContent = meta ?? '';
-    panelMeta.hidden = !meta;
-    panelText.textContent = text;
-    panelSoon.textContent = soon ? `Bald: ${soon}` : '';
-    panelSoon.hidden = !soon;
-    panel.hidden = false;
+  function closeMenu() {
+    menu.hidden = true;
+  }
+  onPress(menuButton, () => {
+    menu.hidden = !menu.hidden;
+  });
+  document.addEventListener('pointerdown', (event) => {
+    if (!menu.hidden && !menu.contains(event.target) && event.target !== menuButton) closeMenu();
+  });
+  onPress(document.getElementById('menu-new-game'), () => {
+    closeMenu();
+    onNewGame();
+  });
+
+  // Vollbild (Android/PC). Ohne Vollbild-Funktion wird der Knopf ausgeblendet.
+  const fullscreenButton = document.getElementById('btn-fullscreen');
+  if (document.fullscreenEnabled) {
+    onPress(fullscreenButton, async () => {
+      try {
+        if (document.fullscreenElement) {
+          await document.exitFullscreen();
+        } else {
+          await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
+          await screen.orientation?.lock?.('landscape').catch(() => {});
+        }
+      } catch {
+        // Vollbild wurde vom Browser abgelehnt – das Spiel läuft trotzdem weiter.
+      }
+    });
+  } else {
+    fullscreenButton.hidden = true;
   }
 
   return {
@@ -33,23 +51,9 @@ export function createHud({ version, onClosePanel }) {
       gold.textContent = numberFormat.format(state.gold);
       level.textContent = String(state.shopLevel);
     },
-    showBuilding(def, building, state) {
-      const meta = [`${def.size[0]} × ${def.size[1]} Felder`];
-      if (building.type === 'laden') meta.unshift(`Level ${state.shopLevel}`);
-      showPanel({ icon: def.icon, title: def.name, meta: meta.join(' · '), text: def.description, soon: def.soon });
-    },
-    showLocked() {
-      showPanel({
-        icon: '🔒',
-        title: 'Gesperrte Fläche',
-        text: 'Diese Fläche gehört noch nicht dir. Später kannst du sie mit Gold kaufen und deine Fabrik vergrößern.',
-      });
-    },
-    hidePanel() {
-      panel.hidden = true;
-    },
     hideHint() {
       hint.classList.add('hidden');
     },
+    closeMenu,
   };
 }
