@@ -2,14 +2,14 @@
 
 Erstes Spiel gecodet zusammen mit Claude.
 
-Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeitstitel offen). Man baut auf einem kleinen Grundstück seine eigene Fabrik. Holz und Stein werden gewonnen, über Förderbänder durch Werkstätten geschickt und zu immer komplexeren Waren verarbeitet. Das ganze Grundstück ist der eigene Laden; die Waren verkauft man dort oder auf dem Schwarzmarkt. Mit dem Gold baut man den Laden aus, schaltet neue Produktionen frei und kauft mehr Fläche. Ziel ist ein Spiel für Handy und Tablet im Querformat, später mit Clans und einem gemeinsamen Markt aller Spieler.
+Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeitstitel offen). Man baut auf einem kleinen Grundstück seine eigene Fabrik. Rohstoffe wie Holzstämme kauft man beim Händler, verarbeitet sie zu Holzblöcken und schickt diese über Förderbänder durch Werkstätten, wo immer komplexere Waren entstehen. Das ganze Grundstück ist der eigene Laden; die Waren verkauft man dort oder auf dem Schwarzmarkt. Mit dem Gold baut man den Laden aus, schaltet neue Produktionen frei und kauft mehr Fläche. Ziel ist ein Spiel für Handy und Tablet im Querformat, später mit Clans und einem gemeinsamen Markt aller Spieler.
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.4.0 – Bauen & Speichern |
+| **Aktuelle Version** | v0.4.1 – Saubere Abzweigungen |
 | **Phase** | M1 – Fabrik-Grundgerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias testet v0.4.0; Plan für v0.5.0 und Lager-Frage (Abschnitte 6 und 8) beantworten |
+| **Nächster Schritt** | Rückfragen zum neuen Produktionskonzept (Abschnitt 8) beantworten, dann Plan für v0.5.0 (Abschnitt 6) freigeben |
 
 ---
 
@@ -91,7 +91,12 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Förderbänder** verbinden die Gebäude und transportieren Waren Stück für Stück.
 - **Aufteilen und Zusammenführen durch Ziehen**, ohne Verteiler-Gebäude: Zieht man von einem bestehenden Band aus, teilt es sich auf (bis zu 3 Richtungen pro Feld; mehrfach aufteilen ergibt 4 und mehr Strecken). Zieht man auf ein bestehendes Band, laufen beide zusammen. Abzweigungen verteilen die Waren abwechselnd.
 - **Ein- und Ausgänge** sind als Pfeile am Gebäude zu sehen: blau = Eingang, orange = Ausgang.
-- **Werkstätten** verarbeiten nach Rezept, z. B. Sägewerk: Holz → Bretter.
+- **Rohstoffe kauft man beim Händler**, z. B. einen Holzstamm. Den legt man in das Holzfällerlager, das daraus nach und nach Holzblöcke herstellt (Beispiel: 1 Holzstamm → 200 Holzblöcke in 15 Minuten).
+- **Werkstätten** verarbeiten nach Rezept, z. B. Sägewerk: 1 Holzblock → 1 Winkel oder 1 Stab (5 Sekunden). Man stellt ein, was es herstellt.
+- **Typischer Aufbau:** Ein Holzfällerlager wird auf 4 Strecken verteilt. Zwei davon gehen in Sägewerke (eins auf Winkel, eins auf Stäbe eingestellt), zwei laufen weiter für spätere Rezepte, die Holzblöcke direkt brauchen (z. B. zusammen mit Splitt).
+- **Stau:** Ist ein Band voll (z. B. weil es im Nichts endet), bleibt alles stehen und davor wird nicht weiter produziert.
+- **Lagerhäuser** sind die einzige Möglichkeit, Waren zu lagern. Sie sind Zwischenstationen: Man kann z. B. 200 Stäbe zwischenlagern, die Waren können aber auch weiterlaufen.
+- **Versandportal:** Waren, die hineinlaufen, landen direkt im Laden.
 - **Montage-Werkstätten** brauchen mehrere Zutaten, z. B. Schreinerei: 4 Holzwinkel + 5 Bretter + 10 Steinnägel → Tür.
 - Eine Werkstatt kann mehrere Rezepte. Man stellt ein, was sie gerade herstellt.
 - **Umbauen ist leicht und günstig** (verschieben, drehen, abreißen mit Rückerstattung), weil man sich ständig an den Markt anpasst. Das gilt für alle Gebäude, auch die Startgebäude, damit man den Schwerpunkt der Fabrik jederzeit neu setzen kann.
@@ -100,11 +105,12 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 ### 3.4 Wirtschaft
 
 - Jede Ware hat einen **Grundwert**. Verarbeitete Waren sind mehr wert als ihre Zutaten zusammen, Weiterverarbeiten lohnt sich also.
-- **Laden:** Der Knopf „Laden“ unten links zeigt das ganze Inventar, also alles, was in den Lagern hergestellt wurde. Von dort bietet man Waren zum Verkauf an Händler (Computer-Kunden) an.
+- **Laden:** Der Knopf „Laden“ unten links öffnet den Laden. Er hat ein eigenes **Lager** (gefüllt über das Versandportal) und **Verkaufstheken**. Je nach Level bzw. Größe einer Theke passen darauf z. B. 20 Winkel. Von den Theken kaufen Computer-Kunden (NPCs) zu einem „normalen“ Preis.
+- **Händler:** Hier kauft man Rohstoffe wie Holzstämme.
 - **Nachfrage:** Wer viel von einer Ware verkauft, drückt ihren Preis. Mit der Zeit erholt er sich wieder. Dazu kommen Trends, z. B. „Die Stadt baut eine Mauer: Steinblöcke +50 % für 2 Tage“. Eine Tür bringt also mal mehr, mal weniger Gold, je nachdem, wie gefragt sie gerade ist. So entsteht das Wirtschaftsgefühl, und es lohnt sich, je nach Marktlage umzubauen.
-- **Spottpreis:** Holz und Stein werden immer angekauft, wenn auch billig. Pleite gehen ist dadurch nicht möglich.
+- **Spottpreis:** Einfache Waren wie Holzblöcke werden immer angekauft, wenn auch billig. Weil Rohstoffe jetzt Gold kosten, braucht es zusätzlich einen Schutz vor dem Pleitegehen (offene Frage).
 - **Kaufen statt herstellen:** Jede Ware kann man auch kaufen, z. B. eine fertige Tür. Das ist teurer als selbst herstellen, spart aber Platz und Zeit.
-- **Schwarzmarkt** (später, online): Spieler bieten Waren zu eigenen Preisen an. Je mehr Spieler eine Ware anbieten, desto stärker fällt ihr Preis. Computer-Händler sorgen dafür, dass der Markt auch mit wenigen Spielern lebendig ist.
+- **Schwarzmarkt** (später, online, noch unsicher): Spieler bieten Waren zu eigenen Preisen an; der Online-Markt bestimmt die Preise. Idee von Tobias: Alle Läden sind verbunden – bieten alle Winkel an, sinkt der Preis für Winkel. Computer-Händler sorgen dafür, dass der Markt auch mit wenigen Spielern lebendig ist.
 
 ### 3.5 Fortschritt
 
@@ -118,7 +124,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - Das Spiel läuft in Echtzeit. Die Fabrik produziert weiter, auch wenn das Spiel geschlossen ist.
 - Die Produktion läuft, bis ein Lager voll ist oder einer Werkstatt die Zutaten ausgehen. Ein zusätzliches Zeitlimit gibt es nicht.
 - Volle Lager sind der Anreiz, regelmäßig reinzuschauen.
-- Holzfällerlager und Steinbruch liefern unbegrenzt (Annahme von Claude, damit man nie pleitegeht).
+- Holzfällerlager und Steinbruch brauchen gekaufte Rohstoffe (Holzstamm, vermutlich Felsbrocken); die frühere Annahme „liefern unbegrenzt“ ist damit hinfällig.
 
 ### 3.7 Online-Teil (später)
 
@@ -136,31 +142,32 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 
 Unser eigener Rezeptbaum. Alle Mengen sind Platzhalter und werden beim Balancing angepasst.
 
-**Prinzip (von Tobias bestätigt):** Die Grundzutaten sind Holz und Stein. Daraus entstehen kleinere Grundformen wie Bretter, Holzblöcke und Steinblöcke. Aus diesen werden Einzelteile wie Winkel und Stäbe, für Stein genauso. Aus den Einzelteilen baut man fertige Waren.
+**Prinzip (von Tobias, Chat 2 aktualisiert):** Rohstoffe werden gekauft (z. B. Holzstamm). Daraus entstehen Grundformen wie Holzblöcke. Aus Holzblöcken werden Einzelteile wie Winkel und Stäbe, für Stein genauso. Aus den Einzelteilen (und Grundformen) baut man fertige Waren.
 
-| Stufe | Ware | Werkstatt | Rezept |
-|---|---|---|---|
-| 0 | Holz | Holzfällerlager | wird gewonnen |
-| 0 | Stein | Steinbruch | wird gewonnen |
-| 1 | Bretter | Sägewerk | 1 Holz → 2 Bretter |
-| 1 | Holzblock | Sägewerk | 1 Holz → 1 Holzblock |
-| 1 | Steinblock | Steinmetz | 1 Stein → 1 Steinblock |
-| 1 | Splitt | Steinbrecher | 1 Stein → 2 Splitt |
-| 2 | Holzwinkel | Zuschnitt | 1 Brett → 2 Holzwinkel |
-| 2 | Holzstab | Drechslerei | 1 Holzblock → 2 Holzstäbe |
-| 2 | Steinplatte | Steinsäge | 1 Steinblock → 2 Steinplatten |
-| 2 | Steinsäule | Steindrechslerei | 1 Steinblock → 1 Steinsäule |
-| 2 | Steinnägel | Nagelschleiferei | 1 Splitt → 4 Steinnägel |
-| 2 | Holzzahnrad | Schnitzerei | 2 Holzstäbe → 1 Holzzahnrad |
-| 3 | Tür | Schreinerei | 4 Holzwinkel + 5 Bretter + 10 Steinnägel |
-| 3 | Kiste | Schreinerei | 6 Bretter + 8 Steinnägel |
-| 3 | Leiter | Schreinerei | 8 Holzstäbe + 6 Steinnägel |
-| 3 | Mahlwerk | Mühlenbauer | 1 Steinblock + 2 Holzzahnräder |
-| 3 | Brunnen | Bauhütte | 6 Steinplatten + 2 Steinsäulen + 1 Holzzahnrad |
+Spalte „Stand“: **Tobias** = so gewünscht, **Vorschlag** = Claudes Vorschlag (noch offen), **Entwurf 1** = aus dem ersten Entwurf, muss noch an das neue Prinzip angepasst werden.
 
-Das Sägewerk kann zwei Rezepte. Man stellt ein, ob es Bretter oder Holzblöcke herstellt.
+| Stufe | Ware | Woher | Rezept (Mengen und Zeiten sind Platzhalter) | Stand |
+|---|---|---|---|---|
+| 0 | Holzstamm | Händler | kaufen | Tobias |
+| 0 | Felsbrocken | Händler | kaufen | Vorschlag |
+| 1 | Holzblock | Holzfällerlager | 1 Holzstamm → 200 Holzblöcke in 15 Minuten | Tobias |
+| 1 | Steinblock | Steinbruch | 1 Felsbrocken → 200 Steinblöcke in 15 Minuten | Vorschlag |
+| 2 | Holzwinkel | Sägewerk, Einstellung „Winkel“ | 1 Holzblock → 1 Holzwinkel (5 Sekunden) | Tobias |
+| 2 | Holzstab | Sägewerk, Einstellung „Stäbe“ | 1 Holzblock → 1 Holzstab (5 Sekunden) | Tobias |
+| 2 | Brett | Sägewerk, Einstellung „Bretter“ | 1 Holzblock → 1 Brett (5 Sekunden) | Vorschlag |
+| 2 | Splitt | Steinmetz, Einstellung „Splitt“ | 1 Steinblock → 4 Splitt | Vorschlag |
+| 2 | Steinplatte | Steinmetz, Einstellung „Platten“ | 1 Steinblock → 1 Steinplatte | Vorschlag |
+| 2 | Steinsäule | Steinmetz, Einstellung „Säulen“ | 1 Steinblock → 1 Steinsäule | Vorschlag |
+| 3 | Steinnägel | Nagelschleiferei | 1 Splitt → 4 Steinnägel | Entwurf 1 |
+| 3 | Holzzahnrad | Schnitzerei | 2 Holzstäbe → 1 Holzzahnrad | Entwurf 1 |
+| 4 | Tür | Schreinerei | 4 Holzwinkel + 5 Bretter + 10 Steinnägel | Entwurf 1 |
+| 4 | Kiste | Schreinerei | 6 Bretter + 8 Steinnägel | Entwurf 1 |
+| 4 | Leiter | Schreinerei | 8 Holzstäbe + 6 Steinnägel | Entwurf 1 |
+| 4 | Mahlwerk | Mühlenbauer | 1 Steinblock + 2 Holzzahnräder | Entwurf 1 |
+| 4 | Brunnen | Bauhütte | 6 Steinplatten + 2 Steinsäulen + 1 Holzzahnrad | Entwurf 1 |
+| ? | (neu) | ? | Holzblöcke + Splitt → etwas Neues | Idee von Tobias |
 
-**Erster Ausschnitt für den Prototyp:** Holz, Stein, Bretter, Splitt, Holzwinkel, Steinnägel, Tür.
+**Erster Ausschnitt für den Prototyp (v0.5.0):** Holzstamm, Holzblock, Holzwinkel, Holzstab.
 
 **Ideen für später:** weitere Rohstoffe wie Eisenerz (Schmelze, Schmiede, echte Nägel, Werkzeuge), Lehm (Ziegel), Hanf (Seile), Sand (Glas); größere Waren wie Fässer, Karren, Fenster.
 
@@ -236,9 +243,10 @@ Das Sägewerk kann zwei Rezepte. Man stellt ein, ob es Bretter oder Holzblöcke 
 |---|---|---|
 | v0.3.0 | **Spielfeld:** Raster, Startgebäude, verschieben und zoomen per Touch, erster Live-Gang | ✅ fertig |
 | v0.4.0 | **Bauen & Speichern:** Laden als ganze Fläche, Bauleiste, Gebäude und Förderbänder bauen, verschieben, drehen, abreißen; Bänder aufteilen und zusammenführen; Spielstand bleibt erhalten | ✅ fertig |
-| v0.5.0 | **Produktion:** Holzfällerlager und Steinbruch produzieren, Waren laufen über die Bänder, Sägewerk verarbeitet, Lager füllen sich, Inventar im Laden | Plan wartet auf Freigabe |
-| v0.6.0 | **Verkaufen:** Waren im Laden zum Verkauf anbieten, Gold; Bauen kostet Gold. Erster vollständiger Kreislauf | |
-| v0.7.0 | **Offline & Lagergrenzen:** Fabrik läuft offline weiter, bis Lager voll sind oder Zutaten fehlen | |
+| v0.4.1 | **Saubere Abzweigungen:** Pfeile an Abzweigungen aufgeräumt, keine Fugen mehr zwischen Bandfeldern | ✅ fertig |
+| v0.5.0 | **Produktion:** Holzstamm einlegen, Holzfällerlager macht Holzblöcke, Waren laufen über die Bänder, Sägewerk macht Winkel oder Stäbe, Lagerhaus, Versandportal, Laden-Lager | Plan wartet auf Rückfragen |
+| v0.6.0 | **Handel:** Händler (Holzstämme kaufen), Verkaufstheken im Laden, NPC-Kunden, Gold; Bauen kostet Gold; Preise nach Nachfrage. Erster vollständiger Kreislauf | |
+| v0.7.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist, bis Bänder voll sind oder Rohstoffe fehlen | |
 
 ### v0.4.0 – Bauen & Speichern (fertig)
 
@@ -256,16 +264,19 @@ Das Sägewerk kann zwei Rezepte. Man stellt ein, ob es Bretter oder Holzblöcke 
 
 **Was Tobias testet:** Bauen, Bänder ziehen, aufteilen und zusammenführen, Gebäude verschieben, drehen, abreißen, Seite neu laden (alles noch da?), „Neues Spiel“. Fühlt sich das Ziehen der Bänder natürlich an?
 
-### Plan für v0.5.0 – Produktion (wartet auf Freigabe)
+### Plan für v0.5.0 – Produktion (wartet auf Rückfragen)
 
-- **Waren-Tabelle:** Holz 🪵, Stein 🪨, Bretter (Symbole vorläufig).
-- **Simulation in festen Takten** (Spielregeln in `src/core`, getrennt von der Grafik).
-- **Holzfällerlager und Steinbruch** stellen regelmäßig Holz bzw. Stein her (Platzhalter: 1 Stück alle 3 Sekunden) und geben es am orangen Pfeil auf ein Band.
-- **Förderbänder** transportieren die Waren sichtbar Feld für Feld (Platzhalter: 2 Felder pro Sekunde). Ist ein Band voll, staut es sich zurück. Abzweigungen verteilen abwechselnd, Zusammenführungen nehmen abwechselnd auf.
-- **Sägewerk** nimmt Holz am blauen Pfeil an und macht daraus Bretter (1 Holz → 2 Bretter, Platzhalter: 2 Sekunden).
-- **Lager (Vorschlag, siehe offene Frage 2):** Jedes Gebäude hat ein kleines eigenes Lager. Was nicht weiter kann, bleibt dort, bis das Lager voll ist; dann stoppt das Gebäude. Neu ist ein **Lagerhaus** als Endpunkt für Bänder mit großem Lager. Das **Inventar im Laden** zeigt alle Lager zusammen.
-- **Infofenster** zeigt, was ein Gebäude gerade tut (arbeitet, wartet auf Holz, Lager voll) und was in seinem Lager liegt.
-- Waren auf Bändern und in Lagern werden mitgespeichert. Verkaufen folgt in v0.6.0, Offline-Produktion in v0.7.0.
+- **Waren-Tabelle:** Holzstamm, Holzblock, Holzwinkel, Holzstab (je nach Antwort auch Brett). Symbole vorläufig.
+- **Startvorrat:** 3 Holzstämme im Laden-Lager, bis es in v0.6.0 den Händler gibt.
+- **Holzstamm einlegen:** Holzfällerlager antippen → „Holzstamm einlegen“. Es stellt daraus 200 Holzblöcke her (Platzhalter: 15 Minuten, also etwa alle 4,5 Sekunden einer) und gibt sie am orangen Pfeil aufs Band.
+- **Sägewerk:** Im Infofenster einstellen, ob es Winkel oder Stäbe herstellt (5 Sekunden pro Holzblock).
+- **Förderbänder** transportieren die Waren sichtbar Feld für Feld. Abzweigungen verteilen abwechselnd, Zusammenführungen nehmen abwechselnd auf. **Ist ein Band voll, steht alles davor still.**
+- **Lagerhaus** (neues Gebäude): Eingang und Ausgang, fasst z. B. 200 Waren, gibt sie weiter, sobald der Ausgang frei ist. Einzige Möglichkeit, Waren zu lagern.
+- **Versandportal** (neues Gebäude): Waren, die hineinlaufen, landen im Laden-Lager.
+- **Laden-Fenster** zeigt das Laden-Lager mit Mengen (Verkaufstheken folgen in v0.6.0).
+- **Infofenster** zeigt, was ein Gebäude gerade tut (arbeitet, wartet auf Holzblöcke, Band voll) und wie viel noch übrig ist.
+- **Testmodus:** Schalter im Menü ☰, der die Zeit z. B. 10-mal schneller laufen lässt, damit man nicht 15 Minuten auf einen Holzstamm warten muss.
+- Waren auf Bändern, in Gebäuden und Lagern werden mitgespeichert.
 
 ---
 
@@ -311,21 +322,49 @@ Das Sägewerk kann zwei Rezepte. Man stellt ein, ob es Bretter oder Holzblöcke 
 | 05.11.2026 | Sägewerk ist 2 × 1 Felder (Eingang links, Ausgang rechts) | Kompakt und gut für gerade Produktionslinien. |
 | 05.11.2026 | Bauen ist bis v0.6.0 kostenlos | Gold gibt es erst mit dem Verkaufen. |
 | 05.11.2026 | Knöpfe reagieren aufs Loslassen des Fingers statt auf „click“ | Chrome verschluckt den Klick, wenn man direkt nach einer schnellen Wischbewegung tippt (beim Browser-Test gefunden). |
+| 05.11.2026 | Rohstoffe werden beim Händler gekauft (z. B. Holzstamm); das Holzfällerlager macht aus 1 Holzstamm 200 Holzblöcke (Platzhalter: 15 Minuten) | Von Tobias (Chat 2, Teil 2). Ersetzt die Annahme „Holz und Stein unbegrenzt“. |
+| 05.11.2026 | Sägewerk: 1 Holzblock → 1 Winkel oder 1 Stab (Platzhalter: 5 Sekunden), einstellbar | Von Tobias (Chat 2, Teil 2). |
+| 05.11.2026 | Waren lagern nur in Lagerhäusern; Lagerhäuser sind Zwischenstationen, durch die Waren weiterlaufen können | Von Tobias (Chat 2, Teil 2). Ersetzt Claudes Vorschlag „jedes Gebäude hat ein eigenes Lager“. |
+| 05.11.2026 | Ein Versandportal schickt Waren in den Laden; der Laden hat ein Lager und Verkaufstheken (Menge je nach Theken-Level, z. B. 20 Winkel); Verkauf an NPCs zum normalen Preis | Von Tobias (Chat 2, Teil 2). |
+| 05.11.2026 | Ist ein Band voll, steht alles davor still (kein Überlauf, keine Verluste) | Von Tobias (Chat 2, Teil 2). |
+| 05.11.2026 | An Abzweigungen steht nur der Pfeil, der geradeaus weiterläuft; Bänder werden in drei Durchgängen gezeichnet | Tobias fand die Abzweigungen in v0.4.0 „unsauber“. |
 
 ---
 
 ## 8. Offene Fragen
 
-Stand 05.11.2026.
+Stand 05.11.2026. Zu jeder Frage steht Claudes Vorschlag dabei.
 
-1. **Plan für v0.5.0** (Abschnitt 6) freigeben?
-2. **Lager:** Jedes Gebäude hat ein kleines eigenes Lager, dazu kommt ein Lagerhaus als Endpunkt für Bänder; das Inventar im Laden zeigt alle Lager zusammen. Passt das zu deiner Idee der „Lager“?
-3. **Freischaltpunkte** pro Laden-Level: Details in M3 entscheiden.
-4. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
+1. **Bretter:** Werden sie für die Tür weiter gebraucht? Vorschlag: als dritte Einstellung im Sägewerk (1 Holzblock → 1 Brett).
+2. **Stein:** analog zu Holz? Vorschlag: Felsbrocken beim Händler kaufen → Steinbruch → 200 Steinblöcke in 15 Minuten; Steinmetz macht aus Steinblöcken Splitt, Steinplatten oder Steinsäulen.
+3. **Holzfällerlager:** Wie viele Holzstämme kann man auf einmal einlegen? Vorschlag: bis zu 3, die nacheinander verarbeitet werden.
+4. **Lagerhaus:** gemischte Waren oder nur eine Sorte pro Lagerhaus? Vorschlag: gemischt, Waren gehen in der Reihenfolge weiter, in der sie angekommen sind.
+5. **Pleiteschutz:** Rohstoffe kosten jetzt Gold. Was, wenn man kein Gold und nichts zu verkaufen hat? Vorschlag: Dann schenkt der Händler einen Holzstamm.
+6. **Verkaufstheken:** Preis automatisch = aktueller Marktpreis, oder selbst festlegen? Vorschlag: im Laden automatisch; eigene Preise erst auf dem Schwarzmarkt.
+7. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden. Claudes Gedanke: Die NPC-Preise im Laden werden später global (verkaufen alle Spieler Winkel, sinkt der Winkelpreis); der Schwarzmarkt ist Handel direkt zwischen Spielern zu eigenen Preisen.
+8. **Plan für v0.5.0** (Abschnitt 6) freigeben, inklusive Testmodus?
+9. **Freischaltpunkte** pro Laden-Level: Details in M3 entscheiden.
+10. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.4.1 – Saubere Abzweigungen (05.11.2026)
+
+**Vorgenommen:**
+- Den „unsauberen“ Look an Band-Abzweigungen beheben, den Tobias auf dem Tablet gefunden hat.
+- Tobias' neues Produktionskonzept festhalten und den Plan für v0.5.0 daran anpassen.
+
+**Fragen, die wir uns gestellt haben:**
+- Warum sahen die Abzweigungen unsauber aus? → Pro Abzweig-Feld standen zwei Pfeile gedrängt in einer Ecke, einer davon genau auf der Kante zum Abzweig. Außerdem schimmerten an den Feldgrenzen feine Linien durch.
+- Wie zeigt man die Richtung an Abzweigungen, ohne zu überladen? → Nur der Pfeil geradeaus steht in der Mitte; die Abzweige zeigen ihre Richtung mit dem nächsten Bandfeld.
+
+**Gemacht:**
+- Bänder werden in drei Durchgängen gezeichnet (Ränder, Laufflächen, Pfeile) und überlappen minimal: keine Fugen mehr.
+- Neue Pfeil-Regel für Abzweigungen; Abzweige, die direkt in ein Gebäude führen, bekommen einen kleinen Pfeil an der Mündung; Verteiler ohne Pfeil bekommen einen Punkt.
+- README: neues Produktionskonzept (Händler, Holzstamm → Holzblöcke, Sägewerk mit Einstellung, Lagerhaus, Versandportal, Verkaufstheken), Rezepttabelle mit Spalte „Stand“, neuer Plan für v0.5.0, neue offene Fragen.
+- Alle 44 Tests und der Browser-Test bestanden.
 
 ### v0.4.0 – Bauen & Speichern (05.11.2026)
 
@@ -421,6 +460,21 @@ Stand 05.11.2026.
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 05.11.2026 – Chat 2, Teil 2: Feedback zu v0.4.0 & neues Produktionskonzept
+
+**Feedback von Tobias:** Alles getestet, es läuft sehr gut. Kleiner grafischer Fehler: Getrennte Förderbänder sehen an den Abzweigungen „unsauber“ aus (Screenshot mit blau markierter Spalte von Abzweigen).
+
+**Neues Produktionskonzept von Tobias:**
+- Holz und Steine muss man kaufen, z. B. beim Händler. Ein gekaufter Holzstamm wird auf den Holzfäller gelegt, der daraus z. B. in 15 Minuten 200 Holzblöcke herstellt.
+- Die Holzblöcke werden im Sägewerk zu Winkeln oder Stäben weiterverarbeitet, z. B. 5 Sekunden pro Holzblock. Das Sägewerk stellt man so ein, dass es nur Winkel oder nur Stäbe herstellt.
+- Beispiel: Einen Holzfäller auf 4 Strecken verteilen → 4× Holzblöcke. Davon je eine Strecke in die Produktion von Winkeln und von Stäben, zwei Strecken laufen weiter, weil ein späteres Rezept z. B. Holzblöcke und Splitt braucht.
+- Es soll nur Lagerhäuser als Zwischenstation geben, z. B. „hier 200 Stäbe zwischenlagern“; die Waren können aber auch weiterlaufen. Nur in diesen Lagern kann man Ware lagern.
+- Wie kommt die Ware von der Produktion in den Laden? Idee: ein „Versandportal“, das die Ware direkt in den Laden schickt. Im Laden gibt es ein Lager mit Verkaufstheken; je nach Level bzw. Größe einer Theke kann man dort z. B. 20 Winkel platzieren und verkaufen – zu einem „normalen“ Preis an NPCs.
+- Zusätzlich die Ware am Schwarzmarkt anbieten, sodass der Online-Markt die Preise bestimmt – noch unsicher, ob und wie das Sinn ergibt. Weitere Idee: Alle Läden sind verbunden; wenn alle Winkel anbieten, sinkt der Preis für Winkel.
+- Endet eine Strecke z. B. an einem Förderband, bleibt alles stehen und es wird nicht weiter produziert, weil das Band voll ist.
+
+**Umgesetzt:** v0.4.1 (Abzweigungen), siehe Versionshistorie. Das neue Konzept steht in den Abschnitten 3, 4 und 6; die offenen Punkte in Abschnitt 8.
 
 ### 05.11.2026 – Chat 2: Feedback zu v0.3.0 & v0.4.0
 
