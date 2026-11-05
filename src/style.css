@@ -1,0 +1,247 @@
+:root {
+  --wood-dark: #2a1d12;
+  --wood: #3b2a1a;
+  --wood-light: #4a3423;
+  --parchment: #f3e6c4;
+  --parchment-dark: #e4d2a6;
+  --ink: #3b2a1a;
+  --accent: #ffd43b;
+  --border: #8a6a3f;
+  --hud-height: 44px;
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: #1f1a14;
+  color: var(--parchment);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* Obere Leiste */
+#hud {
+  flex: 0 0 var(--hud-height);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 max(12px, var(--safe-right)) 0 max(12px, var(--safe-left));
+  background: linear-gradient(var(--wood-light), var(--wood));
+  border-bottom: 2px solid var(--wood-dark);
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.hud-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hud-icon {
+  font-size: 18px;
+}
+
+.hud-spacer {
+  flex: 1;
+}
+
+.hud-version {
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+button {
+  font: inherit;
+  color: var(--ink);
+  background: var(--parchment);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  min-height: 34px;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+button:active {
+  background: var(--parchment-dark);
+}
+
+button[hidden] {
+  display: none;
+}
+
+/* Spielfeld */
+#stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+#game {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+/* Infofenster */
+#info-panel {
+  position: absolute;
+  top: 12px;
+  right: max(12px, var(--safe-right));
+  width: min(300px, 42vw);
+  max-height: calc(100% - 24px);
+  overflow-y: auto;
+  padding: 14px 16px;
+  background: var(--parchment);
+  color: var(--ink);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+#info-panel[hidden] {
+  display: none;
+}
+
+#info-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 36px;
+  min-height: 36px;
+  padding: 0;
+}
+
+.info-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: 40px;
+}
+
+.info-icon {
+  font-size: 34px;
+  line-height: 1;
+}
+
+#info-panel h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.info-meta {
+  margin: 2px 0 0;
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+#info-text {
+  margin: 12px 0 0;
+}
+
+.info-soon {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  background: rgba(138, 106, 63, 0.15);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.info-soon[hidden],
+.info-meta[hidden] {
+  display: none;
+}
+
+/* Bedienhinweis unten */
+#hint {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  padding: 8px 14px;
+  background: rgba(36, 26, 16, 0.82);
+  border-radius: 999px;
+  font-size: 13px;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.6s;
+}
+
+#hint.hidden {
+  opacity: 0;
+}
+
+/* Hochformat: Hinweis zum Drehen */
+#rotate-overlay {
+  display: none;
+}
+
+@media (orientation: portrait) {
+  #rotate-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px;
+    background: var(--wood);
+    text-align: center;
+    font-size: 18px;
+  }
+
+  .rotate-icon {
+    font-size: 56px;
+  }
+}
+
+/* Sehr niedrige Bildschirme (Handy quer) */
+@media (max-height: 420px) {
+  :root {
+    --hud-height: 40px;
+  }
+
+  #hud {
+    gap: 12px;
+    font-size: 14px;
+  }
+
+  #info-panel {
+    top: 8px;
+    max-height: calc(100% - 16px);
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  #hint {
+    bottom: 8px;
+    font-size: 12px;
+  }
+}
