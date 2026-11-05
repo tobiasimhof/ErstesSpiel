@@ -1,24 +1,72 @@
-// Einstiegspunkt: verbindet Spielzustand, Kamera, Eingabe und Anzeige.
+// Einstiegspunkt: lädt den Spielstand und verbindet Spielregeln, Kamera,
+// Eingabe, Anzeige und Speichern.
 
 import { VERSION } from './version.js';
-import { BUILDINGS } from './core/data/buildings.js';
-import { createNewGame, buildingAt, isInWorld, isOwned } from './core/state.js';
-import { TILE, createCamera, setViewSize, screenToWorld, panBy, zoomAt, fitRect, clampCamera } from './view/camera.js';
+import { createNewGame } from './core/state.js';
+import { TILE, createCamera, setViewSize, zoomAt, panBy, fitRect, clampCamera } from './view/camera.js';
 import { createRenderer } from './view/renderer.js';
 import { attachInput } from './view/input.js';
 import { createHud } from './view/hud.js';
+import { createPanels } from './view/panels.js';
+import { createBuildBar } from './view/buildbar.js';
+import { createController } from './view/controller.js';
+import { clearGame, loadGame, saveGame } from './view/storage.js';
+
+const loaded = loadGame();
+const state = loaded.status === 'ok' ? loaded.state : createNewGame();
 
 const canvas = document.getElementById('game');
-const state = createNewGame();
-const ui = { selectedId: null };
+const ui = { mode: 'normal', selected: null, ghost: null, beltPreview: null };
 const camera = createCamera();
 const renderer = createRenderer(canvas);
-const hud = createHud({ version: VERSION, onClosePanel: () => select(null) });
+const panels = createPanels();
 
 let needsDraw = true;
 const requestDraw = () => {
   needsDraw = true;
 };
+
+// ---------- Speichern ----------
+
+let saveTimer = null;
+let resetting = false;
+function saveNow() {
+  clearTimeout(saveTimer);
+  saveTimer = null;
+  if (!resetting) saveGame(state);
+}
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveNow, 400);
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') saveNow();
+});
+window.addEventListener('pagehide', saveNow);
+
+function onChange() {
+  hud.update(state);
+  requestDraw();
+  scheduleSave();
+}
+
+async function newGame() {
+  const ok = await panels.confirm({
+    title: 'Neues Spiel starten?',
+    text: 'Deine Fabrik wird gelöscht und du beginnst von vorn.',
+    okLabel: 'Neues Spiel',
+    danger: true,
+  });
+  if (!ok) return;
+  resetting = true;
+  clearTimeout(saveTimer);
+  clearGame();
+  location.reload();
+}
+
+// ---------- Oberfläche ----------
+
+const hud = createHud({ version: VERSION, onNewGame: newGame });
 
 function worldBounds() {
   return { x: 0, y: 0, width: state.world.width * TILE, height: state.world.height * TILE };
@@ -29,27 +77,42 @@ function plotRect() {
   return { x: p.x * TILE, y: p.y * TILE, width: p.width * TILE, height: p.height * TILE };
 }
 
-function select(building) {
-  ui.selectedId = building ? building.id : null;
-  if (building) hud.showBuilding(BUILDINGS[building.type], building, state);
-  else hud.hidePanel();
-  requestDraw();
-}
+// Die Knöpfe rufen den Controller erst beim Antippen auf, daher darf er
+// danach erzeugt werden.
+let controller = null;
+const buildBar = createBuildBar({
+  onShop: () => controller.openShop(hud),
+  onOpenMenu: () => controller.openMenu(),
+  onCloseMenu: () => controller.closeMenu(),
+  onSelectTool: (tool) => controller.selectTool(tool),
+  onConfirm: () => controller.confirmTool(),
+  onRotate: () => controller.rotateTool(),
+  onCancel: () => controller.cancelTool(),
+});
+controller = createController({ state, camera, ui, panels, buildBar, onChange, requestDraw, worldBounds });
+buildBar.setMode('normal');
+panels.setInfoCloseHandler(() => controller.closeInfo());
 
-function handleTap(sx, sy) {
-  const world = screenToWorld(camera, sx, sy);
-  const tx = Math.floor(world.x / TILE);
-  const ty = Math.floor(world.y / TILE);
-  const building = isInWorld(state, tx, ty) ? buildingAt(state, tx, ty) : null;
-  if (building) {
-    select(building);
-  } else if (isInWorld(state, tx, ty) && !isOwned(state, tx, ty)) {
-    select(null);
-    hud.showLocked();
-  } else {
-    select(null);
-  }
-}
+attachInput(canvas, {
+  onTap: (x, y) => controller.onTap(x, y),
+  onDragStart: (x, y) => controller.onDragStart(x, y),
+  onDragMove: (x, y, dx, dy) => controller.onDragMove(x, y, dx, dy),
+  onDragEnd: (x, y) => controller.onDragEnd(x, y),
+  onDragCancel: () => controller.onDragCancel(),
+  onPan(dx, dy) {
+    panBy(camera, dx, dy, worldBounds());
+    requestDraw();
+  },
+  onZoom(x, y, factor) {
+    zoomAt(camera, x, y, factor, worldBounds());
+    requestDraw();
+  },
+  onInteract: () => hud.hideHint(),
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') controller.back();
+});
 
 function handleResize() {
   const size = renderer.resize();
@@ -60,41 +123,12 @@ function handleResize() {
   requestDraw();
 }
 
-attachInput(canvas, {
-  onPan(dx, dy) {
-    panBy(camera, dx, dy, worldBounds());
-    requestDraw();
-  },
-  onZoom(sx, sy, factor) {
-    zoomAt(camera, sx, sy, factor, worldBounds());
-    requestDraw();
-  },
-  onTap: handleTap,
-  onInteract: () => hud.hideHint(),
-});
-
-// Vollbild (Android/PC). Auf Geräten ohne Vollbild-Funktion wird der Knopf ausgeblendet.
-const fullscreenButton = document.getElementById('btn-fullscreen');
-if (document.fullscreenEnabled) {
-  fullscreenButton.addEventListener('click', async () => {
-    try {
-      if (document.fullscreenElement) {
-        await document.exitFullscreen();
-      } else {
-        await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
-        await screen.orientation?.lock?.('landscape').catch(() => {});
-      }
-    } catch {
-      // Vollbild wurde vom Browser abgelehnt – das Spiel läuft trotzdem weiter.
-    }
-  });
-} else {
-  fullscreenButton.hidden = true;
-}
-
 new ResizeObserver(handleResize).observe(canvas);
 handleResize();
 hud.update(state);
+
+if (loaded.status === 'ok') panels.toast('Spielstand geladen.', 1600);
+else if (loaded.status === 'invalid') panels.toast('Spielstand war beschädigt – neues Spiel gestartet.', 3500);
 
 function frame() {
   if (needsDraw) {
@@ -106,4 +140,4 @@ function frame() {
 requestAnimationFrame(frame);
 
 // Für automatische Browser-Tests und zur Fehlersuche.
-window.__game = { VERSION, state, camera, ui, TILE };
+window.__game = { VERSION, state, camera, ui, TILE, saveNow };
