@@ -3,7 +3,7 @@
 
 import { TILE } from './camera.js';
 import { BUILDINGS } from '../core/data/buildings.js';
-import { DELTA, opposite } from '../core/dirs.js';
+import { DELTA, opposite, step } from '../core/dirs.js';
 import { buildingPorts, footprintSize } from '../core/geometry.js';
 import { inputSides, pathDirections } from '../core/belts.js';
 import { beltAt, isOwned, parseTileKey } from '../core/state.js';
@@ -59,10 +59,7 @@ export function createRenderer(canvas) {
 
     drawGround(state, cam);
 
-    for (const [key, belt] of Object.entries(state.belts)) {
-      const { x, y } = parseTileKey(key);
-      drawBelt(x, y, belt.outs, inputSides(state, x, y));
-    }
+    drawBelts(state);
 
     // Auswahlrahmen vor den Gebäuden zeichnen: er liegt in der Lücke um das
     // Gebäude und verdeckt so weder Namen noch Pfeile.
@@ -141,39 +138,79 @@ export function createRenderer(canvas) {
 
   // ---------- Förderbänder ----------
 
-  // Zeichnet ein Band-Feld: ein Steg zu jeder verbundenen Seite und Pfeile
-  // in jede Ausgangsrichtung.
-  function drawBelt(x, y, outs, ins) {
-    const cx = (x + 0.5) * TILE;
-    const cy = (y + 0.5) * TILE;
-    const sides = new Set([...outs, ...ins]);
-    // Bandanfang ohne Zulauf: als gerades Stück zeichnen
-    if (ins.length === 0 && outs.length > 0) sides.add(opposite(outs[0]));
+  // Bänder in drei Durchgängen: erst alle Ränder, dann alle Laufflächen, dann
+  // alle Pfeile. So malt kein Feld über die Lauffläche seines Nachbarn. Arme zu
+  // Nachbarbändern ragen ein kleines Stück über die Feldgrenze, damit dort
+  // keine feine Fuge durchscheint.
+  function drawBelts(state) {
+    const tiles = Object.entries(state.belts).map(([key, belt]) => {
+      const { x, y } = parseTileKey(key);
+      let ins = inputSides(state, x, y);
+      // Bandanfang ohne Zulauf: als gerades Stück zeichnen
+      if (ins.length === 0 && belt.outs.length > 0) ins = [opposite(belt.outs[0])];
+      const sides = new Set([...belt.outs, ...ins]);
+      const joined = new Set([...sides].filter((d) => {
+        const n = step({ x, y }, d);
+        return Boolean(beltAt(state, n.x, n.y));
+      }));
+      return { x, y, outs: belt.outs, ins, sides, joined };
+    });
 
     ctx.fillStyle = COLORS.beltRail;
-    drawBand(cx, cy, sides, TILE * 0.7);
+    for (const t of tiles) drawBand(t, TILE * 0.7);
     ctx.fillStyle = COLORS.beltBand;
-    drawBand(cx, cy, sides, TILE * 0.54);
+    for (const t of tiles) drawBand(t, TILE * 0.54);
 
     ctx.strokeStyle = COLORS.beltArrow;
     ctx.lineWidth = TILE * 0.08;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    // Bei Abzweigungen liegen die Pfeile näher am Rand, damit sie sich nicht berühren.
-    const offset = outs.length > 1 ? 0.3 : 0.22;
-    const size = outs.length > 1 ? TILE * 0.12 : TILE * 0.15;
-    for (const dir of outs) drawChevron(cx + DELTA[dir].x * TILE * offset, cy + DELTA[dir].y * TILE * offset, dir, size);
+    for (const t of tiles) drawBeltArrows(t);
   }
 
-  function drawBand(cx, cy, sides, width) {
-    const half = TILE / 2;
+  function drawBand(t, width) {
+    const cx = (t.x + 0.5) * TILE;
+    const cy = (t.y + 0.5) * TILE;
     const w = width;
     ctx.fillRect(cx - w / 2, cy - w / 2, w, w);
-    for (const dir of sides) {
-      if (dir === 'N') ctx.fillRect(cx - w / 2, cy - half, w, half);
-      if (dir === 'S') ctx.fillRect(cx - w / 2, cy, w, half);
-      if (dir === 'W') ctx.fillRect(cx - half, cy - w / 2, half, w);
-      if (dir === 'E') ctx.fillRect(cx, cy - w / 2, half, w);
+    for (const dir of t.sides) {
+      const len = TILE / 2 + (t.joined.has(dir) ? 1 : 0);
+      if (dir === 'N') ctx.fillRect(cx - w / 2, cy - len, w, len);
+      if (dir === 'S') ctx.fillRect(cx - w / 2, cy, w, len);
+      if (dir === 'W') ctx.fillRect(cx - len, cy - w / 2, len, w);
+      if (dir === 'E') ctx.fillRect(cx, cy - w / 2, len, w);
+    }
+  }
+
+  // Pfeile: normalerweise einer pro Feld. An Abzweigungen steht nur der Pfeil,
+  // der geradeaus weiterläuft, in der Mitte – die Richtung der Abzweige zeigt
+  // das nächste Band. Führt ein Abzweig nicht auf ein Band (z. B. direkt in
+  // ein Gebäude), bekommt er einen Pfeil an seiner Mündung. Bleibt ein
+  // Verteiler ganz ohne Pfeil, markiert ihn ein Punkt.
+  function drawBeltArrows(t) {
+    const cx = (t.x + 0.5) * TILE;
+    const cy = (t.y + 0.5) * TILE;
+    if (t.outs.length === 1) {
+      const dir = t.outs[0];
+      drawChevron(cx + DELTA[dir].x * TILE * 0.22, cy + DELTA[dir].y * TILE * 0.22, dir, TILE * 0.15);
+      return;
+    }
+    const straight = new Set(t.ins.map(opposite));
+    let drawn = 0;
+    for (const dir of t.outs) {
+      if (straight.has(dir)) {
+        drawChevron(cx, cy, dir, TILE * 0.15);
+        drawn++;
+      } else if (!t.joined.has(dir)) {
+        drawChevron(cx + DELTA[dir].x * TILE * 0.36, cy + DELTA[dir].y * TILE * 0.36, dir, TILE * 0.11);
+        drawn++;
+      }
+    }
+    if (drawn === 0) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, TILE * 0.07, 0, Math.PI * 2);
+      ctx.fillStyle = COLORS.beltArrow;
+      ctx.fill();
     }
   }
 
