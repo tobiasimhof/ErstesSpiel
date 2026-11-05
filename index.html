@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <title>ErstesSpiel</title>
+    <meta name="description" content="Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter." />
+    <meta name="theme-color" content="#3b2a1a" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="assets/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png" />
+    <link rel="stylesheet" href="src/style.css?v=0.3.0" />
+  </head>
+  <body>
+    <div id="app">
+      <header id="hud">
+        <div class="hud-item" title="Gold">
+          <span class="hud-icon" aria-hidden="true">🪙</span>
+          <span id="hud-gold">0</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-icon" aria-hidden="true">⚖️</span>
+          <span>Laden-Level <span id="hud-level">1</span></span>
+        </div>
+        <div class="hud-spacer"></div>
+        <button id="btn-fullscreen" type="button">Vollbild</button>
+        <div id="hud-version" class="hud-version">v</div>
+      </header>
+
+      <main id="stage">
+        <canvas id="game" aria-label="Spielfeld"></canvas>
+
+        <aside id="info-panel" hidden>
+          <button id="info-close" type="button" aria-label="Schließen">✕</button>
+          <div class="info-head">
+            <span id="info-icon" class="info-icon" aria-hidden="true"></span>
+            <div>
+              <h2 id="info-title"></h2>
+              <p id="info-meta" class="info-meta"></p>
+            </div>
+          </div>
+          <p id="info-text"></p>
+          <p id="info-soon" class="info-soon"></p>
+        </aside>
+
+        <div id="hint">Ziehen: verschieben · Zwei Finger: zoomen · Gebäude antippen</div>
+      </main>
+    </div>
+
+    <div id="rotate-overlay">
+      <div class="rotate-icon" aria-hidden="true">📱↻</div>
+      <p>Bitte dreh dein Gerät ins Querformat.</p>
+    </div>
+
+    <noscript>Dieses Spiel braucht JavaScript.</noscript>
+    <script type="module" src="src/main.js?v=0.3.0"></script>
+  </body>
+</html>
