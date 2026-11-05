@@ -9,4 +9,7 @@
   - README aktualisieren (Status-Tabelle, Versionshistorie, Gesprächsprotokoll, Entscheidungen, offene Fragen).
   - Pull Request nach `main` erstellen und direkt mergen.
   - Versionsnummer in den Titel von Pull Request und Merge-Commit schreiben, z. B. `v0.2.0: …` (Tags lassen sich aus der Arbeitsumgebung nicht pushen).
-- Hauptgerät ist ein Galaxy Tab S9: Alles muss per Touch im Browser funktionieren.
+- Hauptgerät ist ein Galaxy Tab S9: Alles muss per Touch im Browser funktionieren. Das Spiel läuft nur im Querformat, auf Tablet und Handy.
+- Vor jedem Merge mit Spielcode: automatische Tests der Spielregeln und ein Durchlauf im Browser (Playwright) in Tablet- und Handygröße im Querformat.
+- Spielregeln (Simulation) strikt getrennt von der Darstellung halten; Waren, Rezepte, Gebäude und Preise als Datentabellen.
+- Andere Spiele (Alchemy Factory, Clash of Clans, Hay Day) dienen nur als Vorbild für Mechaniken: eigene Namen, eigene Rezepte, eigene Grafik.
