@@ -9,6 +9,8 @@
 //   erase  – Abreißen
 
 import { BUILDINGS } from '../core/data/buildings.js';
+import { ITEMS } from '../core/data/items.js';
+import { RECIPES } from '../core/data/recipes.js';
 import { DIR_NAMES } from '../core/dirs.js';
 import { footprintSize } from '../core/geometry.js';
 import {
@@ -27,7 +29,10 @@ import {
   removeBelt,
   rotateBelt,
 } from '../core/belts.js';
+import { buildingStatus, loadInput, losesWorkOnRemove, productionOf, setRecipe } from '../core/production.js';
+import { storageCapacity, storageCount, storageTotal } from '../core/shop.js';
 import { beltAt, buildingAt, findBuilding, isInWorld, isOwned } from '../core/state.js';
+import { createItemIcon } from './itemArt.js';
 import { TILE, panBy, screenToWorld } from './camera.js';
 
 const TEXT = {
@@ -40,6 +45,9 @@ const TEXT = {
 export function createController({ state, camera, ui, panels, buildBar, onChange, requestDraw, worldBounds }) {
   let mode = 'normal';
   let drag = null;
+  let info = null; // { buttons, setStatus } des offenen Infofensters
+  let infoRefresh = null; // aktualisiert das offene Infofenster
+  let shopOpen = false;
 
   const changed = () => onChange();
 
@@ -59,9 +67,61 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
 
   function select(selection) {
     ui.selected = selection;
+    infoRefresh = null;
     if (selection) showSelectionInfo();
     else panels.hideInfo();
     requestDraw();
+  }
+
+  const DOT = { work: '🟢', idle: '🟡', blocked: '🔴' };
+  const numberFormat = new Intl.NumberFormat('de-DE');
+
+  function formatDuration(seconds) {
+    const s = Math.max(0, Math.round(seconds));
+    if (s < 60) return `${s} s`;
+    const m = Math.floor(s / 60);
+    return `${m}:${String(s % 60).padStart(2, '0')} min`;
+  }
+
+  // Aktualisiert Statuszeilen und Knöpfe eines Gebäude-Infofensters.
+  function updateBuildingInfo(id) {
+    const b = findBuilding(state, id);
+    if (!b) return select(null);
+    const p = productionOf(b.type);
+    const prod = b.prod;
+    const status = buildingStatus(state, b);
+    const lines = [`${DOT[status.level]} ${status.text}`];
+    if (p?.kind === 'source') {
+      const input = ITEMS[p.input];
+      const output = ITEMS[p.output];
+      lines.push(`1 ${input.name} → ${p.amount} ${output.plural} in ${formatDuration(p.duration)}`);
+      if (prod.loaded) lines.push(`Fertig in etwa ${formatDuration(prod.remaining * (p.duration / p.amount))}`);
+      lines.push(`${input.plural} im Laden-Lager: ${storageCount(state, p.input)}`);
+      const button = info.buttons.get('load');
+      button.textContent = prod.loaded ? `${input.name} wird verarbeitet` : `➕ ${input.name} einlegen`;
+      button.disabled = prod.loaded || storageCount(state, p.input) < 1;
+    } else if (p?.kind === 'workshop') {
+      const recipe = RECIPES[prod.recipe];
+      const [inType, need] = Object.entries(recipe.inputs)[0];
+      lines.push(`Rezept: ${need} ${ITEMS[inType].plural} → ${recipe.amount} ${ITEMS[recipe.output].name} (${recipe.time} s)`);
+      lines.push(`Am Eingang: ${prod.stock[inType] ?? 0} / ${need * 2} ${ITEMS[inType].plural}`);
+      for (const key of p.recipes) info.buttons.get(`recipe:${key}`)?.classList.toggle('primary', key === prod.recipe);
+    } else if (p?.kind === 'storage') {
+      for (let i = 0; i < p.slots; i++) {
+        const slot = prod.slots[i];
+        lines.push(slot ? `Fach ${i + 1}: ${ITEMS[slot.type].name} ${slot.count} / ${p.slotSize}` : `Fach ${i + 1}: leer`);
+      }
+    } else if (p?.kind === 'shipping') {
+      lines.push(`Bisher versendet: ${numberFormat.format(prod.shipped)} Waren`);
+      lines.push(`Laden-Lager: ${storageTotal(state)} / ${storageCapacity(state)}`);
+    }
+    info.setStatus(lines);
+  }
+
+  function updateBeltInfo(x, y) {
+    const belt = beltAt(state, x, y);
+    if (!belt) return select(null);
+    info.setStatus([belt.item ? `Transportiert: ${ITEMS[belt.item.type].name}` : 'Gerade leer']);
   }
 
   function showSelectionInfo() {
@@ -71,29 +131,62 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
       const b = findBuilding(state, sel.id);
       if (!b) return select(null);
       const def = BUILDINGS[b.type];
+      const p = productionOf(b.type);
       const size = footprintSize(b.type, b.rot);
-      panels.showInfo({
+      const actions = [];
+      if (p?.kind === 'source') {
+        actions.push({
+          key: 'load',
+          label: '',
+          primary: true,
+          onClick: () => {
+            if (loadInput(state, b)) {
+              changed();
+              panels.toast(`${ITEMS[p.input].name} eingelegt.`);
+            } else {
+              panels.toast(`Kein ${ITEMS[p.input].name} im Laden-Lager.`);
+            }
+            infoRefresh?.();
+          },
+        });
+      }
+      if (p?.kind === 'workshop') {
+        for (const key of p.recipes) {
+          actions.push({
+            key: `recipe:${key}`,
+            label: RECIPES[key].label,
+            onClick: () => {
+              setRecipe(b, key);
+              changed();
+              infoRefresh?.();
+            },
+          });
+        }
+      }
+      actions.push(
+        { label: '↔ Verschieben', group: actions.length > 0, onClick: () => startPlace(b.type, b) },
+        {
+          label: '↻ Drehen',
+          onClick: () => {
+            if (rotateBuilding(state, b.id)) {
+              changed();
+              infoRefresh?.();
+            } else {
+              panels.toast('Zum Drehen fehlt hier der Platz.');
+            }
+          },
+        },
+        { label: '🗑 Abreißen', danger: true, onClick: () => askRemoveBuilding(b) },
+      );
+      info = panels.showInfo({
         icon: def.icon,
         title: def.name,
         meta: `${size.width} × ${size.height} Felder`,
         text: def.description,
-        soon: def.soon,
-        actions: [
-          { label: '↔ Verschieben', onClick: () => startPlace(b.type, b) },
-          {
-            label: '↻ Drehen',
-            onClick: () => {
-              if (rotateBuilding(state, b.id)) {
-                changed();
-                showSelectionInfo();
-              } else {
-                panels.toast('Zum Drehen fehlt hier der Platz.');
-              }
-            },
-          },
-          { label: '🗑 Abreißen', danger: true, onClick: () => askRemoveBuilding(b) },
-        ],
+        actions,
       });
+      infoRefresh = () => updateBuildingInfo(b.id);
+      infoRefresh();
     } else if (sel.kind === 'belt') {
       const belt = beltAt(state, sel.x, sel.y);
       if (!belt) return select(null);
@@ -101,12 +194,11 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
         belt.outs.length === 1
           ? `Läuft nach ${DIR_NAMES[belt.outs[0]]}`
           : `Teilt auf nach ${belt.outs.map((d) => DIR_NAMES[d]).join(', ')}`;
-      panels.showInfo({
+      info = panels.showInfo({
         icon: '➡️',
         title: 'Förderband',
         meta,
-        text: 'Transportiert Waren Feld für Feld in Pfeilrichtung. Zeigt ein Band in mehrere Richtungen, verteilt es die Waren abwechselnd.',
-        soon: 'Ab v0.5.0 laufen hier Waren.',
+        text: 'Transportiert Waren Feld für Feld in Pfeilrichtung. Zeigt ein Band in mehrere Richtungen, verteilt es die Waren abwechselnd. Ist ein Band voll, staut sich alles davor.',
         actions: [
           {
             label: '↻ Drehen',
@@ -127,6 +219,8 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
           },
         ],
       });
+      infoRefresh = () => updateBeltInfo(sel.x, sel.y);
+      infoRefresh();
     }
   }
 
@@ -134,7 +228,9 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
     const def = BUILDINGS[b.type];
     const ok = await panels.confirm({
       title: `${def.name} abreißen?`,
-      text: 'Das Gebäude verschwindet. Du kannst es jederzeit über „Bauen“ neu errichten.',
+      text: losesWorkOnRemove(b)
+        ? 'Der angefangene Rohstoff geht dabei verloren. Waren im Gebäude kommen ins Laden-Lager.'
+        : 'Waren im Gebäude kommen ins Laden-Lager. Du kannst es jederzeit über „Bauen“ neu errichten.',
       okLabel: 'Abreißen',
       danger: true,
     });
@@ -266,35 +362,52 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
 
   // ---------- Laden ----------
 
+  function buildShop(box, { el }) {
+    const beltCount = Object.keys(state.belts).length;
+    box.append(
+      el('h2', null, '⚖️ Dein Laden'),
+      el('p', 'modal-meta', `Level ${state.shopLevel} · Fläche ${state.plot.width} × ${state.plot.height} Felder`),
+      el(
+        'p',
+        null,
+        'Waren aus deinem Versandportal landen hier im Laden-Lager. Ab v0.6.0 stellst du sie auf Verkaufstheken und verkaufst sie an Kunden.',
+      ),
+    );
+    const stats = el('div', 'shop-stats');
+    stats.append(
+      el('div', 'stat', `🏗️ Gebäude: ${state.buildings.length}`),
+      el('div', 'stat', `➡️ Förderbänder: ${beltCount}`),
+      el('div', 'stat', `🪙 Gold: ${numberFormat.format(state.gold)}`),
+    );
+    box.append(stats, el('h3', null, `Laden-Lager (${storageTotal(state)} / ${storageCapacity(state)})`));
+
+    const entries = Object.keys(ITEMS).filter((type) => storageCount(state, type) > 0);
+    if (entries.length === 0) {
+      box.append(el('p', 'empty-note', 'Leer. Baue ein Versandportal und lass Waren hineinlaufen.'));
+      return;
+    }
+    const list = el('div', 'item-list');
+    let total = 0;
+    for (const type of entries) {
+      const def = ITEMS[type];
+      const count = storageCount(state, type);
+      const row = el('div', 'item-row');
+      const note = def.raw
+        ? `Rohstoff · Kaufpreis ${numberFormat.format(def.buyPrice)} 🪙`
+        : `Wert ${numberFormat.format(def.price)} 🪙 je Stück`;
+      if (!def.raw) total += count * def.price;
+      row.append(createItemIcon(type, 30), el('span', 'item-name', def.name), el('span', 'item-note', note), el('span', 'item-count', `${numberFormat.format(count)}×`));
+      list.append(row);
+    }
+    box.append(list);
+    if (total > 0) box.append(el('p', 'modal-meta', `Wert aller Waren (ohne Rohstoffe): ${numberFormat.format(total)} 🪙`));
+  }
+
   function openShop(hud) {
     select(null);
     hud?.closeMenu();
-    const beltCount = Object.keys(state.belts).length;
-    panels.showModal((box, { el }) => {
-      box.append(
-        el('h2', null, '⚖️ Dein Laden'),
-        el('p', 'modal-meta', `Level ${state.shopLevel} · Fläche ${state.plot.width} × ${state.plot.height} Felder`),
-        el(
-          'p',
-          null,
-          'Dein ganzes Grundstück ist dein Laden. Alles, was deine Gebäude herstellen, landet in deinem Inventar und kann hier zum Verkauf angeboten werden.',
-        ),
-      );
-      const stats = el('div', 'shop-stats');
-      stats.append(
-        el('div', 'stat', `🏗️ Gebäude: ${state.buildings.length}`),
-        el('div', 'stat', `➡️ Förderbänder: ${beltCount}`),
-        el('div', 'stat', `🪙 Gold: ${state.gold}`),
-      );
-      box.append(stats, el('h3', null, 'Inventar'));
-      box.append(
-        el(
-          'p',
-          'empty-note',
-          'Noch keine Waren. Ab v0.5.0 stellen deine Gebäude Waren her, ab v0.6.0 kannst du sie hier verkaufen.',
-        ),
-      );
-    });
+    shopOpen = true;
+    panels.showModal(buildShop);
   }
 
   // ---------- Eingabe ----------
@@ -318,6 +431,13 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
     },
     closeInfo() {
       select(null);
+    },
+
+    // Wird regelmäßig aufgerufen, damit offene Fenster aktuell bleiben.
+    refresh() {
+      infoRefresh?.();
+      if (shopOpen && panels.isModalOpen()) panels.showModal(buildShop);
+      else shopOpen = false;
     },
 
     back() {

@@ -129,6 +129,15 @@ button.danger {
   font-size: 18px;
 }
 
+.hud-speed {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #e8590c;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .hud-version {
   font-size: 12px;
   font-weight: 500;
@@ -225,6 +234,21 @@ button.danger {
   background: rgba(138, 106, 63, 0.15);
   border-radius: 8px;
   font-size: 14px;
+}
+
+.info-status {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(138, 106, 63, 0.35);
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.actions-break {
+  flex-basis: 100%;
+  height: 0;
 }
 
 .panel-actions {
@@ -437,6 +461,47 @@ button.danger {
   font-weight: 600;
 }
 
+.item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.item-row {
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  grid-template-areas:
+    'icon name count'
+    'icon note count';
+  align-items: center;
+  column-gap: 10px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(138, 106, 63, 0.3);
+  border-radius: 8px;
+}
+
+.item-icon {
+  grid-area: icon;
+}
+
+.item-name {
+  grid-area: name;
+  font-weight: 700;
+}
+
+.item-note {
+  grid-area: note;
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.item-count {
+  grid-area: count;
+  font-size: 18px;
+  font-weight: 700;
+}
+
 .empty-note {
   padding: 10px 12px;
   background: rgba(138, 106, 63, 0.12);
@@ -503,6 +568,12 @@ button.danger {
   }
 
   .info-soon {
+    margin-top: 6px;
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+
+  .info-status {
     margin-top: 6px;
     padding: 6px 8px;
     font-size: 13px;

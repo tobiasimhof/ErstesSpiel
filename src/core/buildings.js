@@ -2,6 +2,8 @@
 
 import { BUILDINGS } from './data/buildings.js';
 import { footprintSize, footprintTiles } from './geometry.js';
+import { buildingContents, createProductionState } from './production.js';
+import { addAllToStorage } from './shop.js';
 import { beltAt, buildingAt, findBuilding, isOwned } from './state.js';
 
 // Passt ein Gebäude an diese Stelle? Alle Felder müssen zum eigenen
@@ -20,7 +22,7 @@ export function canPlaceBuilding(state, type, x, y, rot = 0, ignoreId = null) {
 
 export function placeBuilding(state, type, x, y, rot = 0) {
   if (!canPlaceBuilding(state, type, x, y, rot)) return null;
-  const building = { id: state.nextBuildingId++, type, x, y, rot };
+  const building = { id: state.nextBuildingId++, type, x, y, rot, prod: createProductionState(type) };
   state.buildings.push(building);
   return building;
 }
@@ -41,10 +43,12 @@ export function rotateBuilding(state, id) {
   return moveBuilding(state, id, building.x, building.y, (building.rot + 1) % 4);
 }
 
+// Reißt ab. Waren im Gebäude kommen ins Laden-Lager (siehe buildingContents).
 export function removeBuilding(state, id) {
   const index = state.buildings.findIndex((b) => b.id === id);
   if (index === -1) return false;
-  state.buildings.splice(index, 1);
+  const [building] = state.buildings.splice(index, 1);
+  addAllToStorage(state, buildingContents(building));
   return true;
 }
 

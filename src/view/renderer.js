@@ -6,6 +6,9 @@ import { BUILDINGS } from '../core/data/buildings.js';
 import { DELTA, opposite, step } from '../core/dirs.js';
 import { buildingPorts, footprintSize } from '../core/geometry.js';
 import { inputSides, pathDirections } from '../core/belts.js';
+import { buildingProgress, buildingStatus } from '../core/production.js';
+import { BELT_SPEED, TICK } from '../core/sim.js';
+import { drawItem } from './itemArt.js';
 import { beltAt, isOwned, parseTileKey } from '../core/state.js';
 
 const COLORS = {
@@ -30,6 +33,11 @@ const COLORS = {
   ghostOk: '#51cf66',
   ghostBad: '#ff6b6b',
   preview: 'rgba(255, 212, 59, 0.38)',
+  statusWork: '#51cf66',
+  statusIdle: '#fcc419',
+  statusBlocked: '#ff6b6b',
+  barBack: 'rgba(0, 0, 0, 0.45)',
+  barFill: '#ffe066',
   previewArrow: '#fff8dc',
 };
 
@@ -59,7 +67,7 @@ export function createRenderer(canvas) {
 
     drawGround(state, cam);
 
-    drawBelts(state);
+    drawBelts(state, ui.simAlpha ?? 0);
 
     // Auswahlrahmen vor den Gebäuden zeichnen: er liegt in der Lücke um das
     // Gebäude und verdeckt so weder Namen noch Pfeile.
@@ -67,7 +75,7 @@ export function createRenderer(canvas) {
 
     const movingId = ui.ghost?.movingId ?? null;
     for (const building of state.buildings) {
-      drawBuilding(building, cam, { alpha: building.id === movingId ? 0.3 : 1 });
+      drawBuilding(building, cam, { alpha: building.id === movingId ? 0.3 : 1, state });
     }
 
     if (ui.beltPreview) drawBeltPreview(state, ui.beltPreview);
@@ -142,7 +150,7 @@ export function createRenderer(canvas) {
   // alle Pfeile. So malt kein Feld über die Lauffläche seines Nachbarn. Arme zu
   // Nachbarbändern ragen ein kleines Stück über die Feldgrenze, damit dort
   // keine feine Fuge durchscheint.
-  function drawBelts(state) {
+  function drawBelts(state, simAlpha) {
     const tiles = Object.entries(state.belts).map(([key, belt]) => {
       const { x, y } = parseTileKey(key);
       let ins = inputSides(state, x, y);
@@ -166,6 +174,30 @@ export function createRenderer(canvas) {
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     for (const t of tiles) drawBeltArrows(t);
+
+    // Waren: vom Eingang zur Feldmitte, dann zum geplanten Ausgang. simAlpha
+    // schiebt sie zwischen zwei Takten weich weiter.
+    for (const [key, belt] of Object.entries(state.belts)) {
+      if (!belt.item) continue;
+      const { x, y } = parseTileKey(key);
+      const item = belt.item;
+      const p = item.progress >= 1 ? 1 : Math.min(1, item.progress + BELT_SPEED * TICK * simAlpha);
+      const exit = belt.outs[(belt.rr ?? 0) % belt.outs.length];
+      const cx = (x + 0.5) * TILE;
+      const cy = (y + 0.5) * TILE;
+      let px;
+      let py;
+      if (p < 0.5) {
+        const f = p / 0.5;
+        px = cx + DELTA[item.from].x * TILE * 0.5 * (1 - f);
+        py = cy + DELTA[item.from].y * TILE * 0.5 * (1 - f);
+      } else {
+        const f = (p - 0.5) / 0.5;
+        px = cx + DELTA[exit].x * TILE * 0.5 * f;
+        py = cy + DELTA[exit].y * TILE * 0.5 * f;
+      }
+      drawItem(ctx, item.type, px, py, TILE * 0.34);
+    }
   }
 
   function drawBand(t, width) {
@@ -246,7 +278,7 @@ export function createRenderer(canvas) {
 
   // ---------- Gebäude ----------
 
-  function drawBuilding(building, cam, { alpha = 1, outline = null } = {}) {
+  function drawBuilding(building, cam, { alpha = 1, outline = null, state = null } = {}) {
     const def = BUILDINGS[building.type];
     const { width, height } = footprintSize(building.type, building.rot);
     const inset = 4;
@@ -281,25 +313,35 @@ export function createRenderer(canvas) {
     ctx.textBaseline = 'middle';
     ctx.fillText(def.icon, x + w / 2, y + h * 0.46);
 
-    // Name: bleibt auf dem Bildschirm etwa 12 px groß. Sitzt mittig auf der
-    // Unterkante; bei kleinen Gebäuden (auf dem Bildschirm) daneben, damit das
-    // Symbol sichtbar bleibt. Hat das Gebäude unten einen Ein- oder Ausgang,
-    // wandert der Name nach oben. Bei sehr kleinem Zoom ausgeblendet.
+    // Name: bleibt auf dem Bildschirm etwa 12 px groß. Er sucht sich die erste
+    // Stelle, an der er keinen Ein-/Ausgangspfeil verdeckt: Unterkante,
+    // Oberkante, unter dem Gebäude, über dem Gebäude. Bei kleinen Gebäuden (auf
+    // dem Bildschirm) nur außerhalb, damit das Symbol sichtbar bleibt. Bei sehr
+    // kleinem Zoom ausgeblendet.
     const ports = buildingPorts(building);
     if (cam.zoom >= 0.5) {
       const fontSize = 12 / cam.zoom;
       ctx.font = `600 ${fontSize}px ${LABEL_FONT}`;
       const textW = ctx.measureText(def.name).width;
       const padX = 6 / cam.zoom;
+      const boxW = textW + 2 * padX;
       const boxH = fontSize * 1.5;
+      const boxX = x + w / 2 - boxW / 2;
+      const clear = TILE * 0.26; // Abstand, damit Pfeile frei bleiben (größer als portBox)
+      const candidates = [
+        y + h - boxH / 2, // auf der Unterkante
+        y - boxH / 2, // auf der Oberkante
+        y + h + clear, // unter dem Gebäude
+        y - boxH - clear, // über dem Gebäude
+      ];
       const small = h * cam.zoom < 56;
-      const top = ports.some((p) => p.side === 'S');
-      const boxX = x + w / 2 - textW / 2 - padX;
-      let boxY = y + h - boxH / 2;
-      if (small) boxY = top ? y - boxH - 6 : y + h + 6;
-      else if (top) boxY = y - boxH / 2;
+      const arrows = ports.map((port) => portBox(port));
+      const free = (by) =>
+        arrows.every((a) => boxX + boxW < a.x0 || boxX > a.x1 || by + boxH < a.y0 || by > a.y1);
+      const options = small ? candidates.slice(2) : candidates;
+      const boxY = options.find(free) ?? options[0];
       ctx.fillStyle = COLORS.labelBg;
-      roundRect(boxX, boxY, textW + 2 * padX, boxH, boxH / 2);
+      roundRect(boxX, boxY, boxW, boxH, boxH / 2);
       ctx.fill();
       ctx.fillStyle = COLORS.labelText;
       ctx.fillText(def.name, x + w / 2, boxY + boxH / 2 + fontSize * 0.05);
@@ -307,6 +349,34 @@ export function createRenderer(canvas) {
 
     // Ein- und Ausgänge zuletzt, damit der Name sie nicht verdeckt
     for (const port of ports) drawPort(port);
+
+    // Status (nur gebaute Gebäude): Licht oben rechts, Fortschrittsleiste oben
+    if (state && building.prod) {
+      const status = buildingStatus(state, building);
+      const r = 6 / cam.zoom;
+      ctx.beginPath();
+      ctx.arc(x + w - r - 4 / cam.zoom, y + r + 4 / cam.zoom, r, 0, Math.PI * 2);
+      ctx.fillStyle =
+        status.level === 'work' ? COLORS.statusWork : status.level === 'blocked' ? COLORS.statusBlocked : COLORS.statusIdle;
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 2 / cam.zoom;
+      ctx.stroke();
+
+      const progress = buildingProgress(building);
+      if (progress !== null) {
+        const barH = 5 / cam.zoom;
+        const barX = x + 8;
+        const barW = w - 16 - 2 * r - 8 / cam.zoom;
+        const barY = y + 4 / cam.zoom + r - barH / 2;
+        ctx.fillStyle = COLORS.barBack;
+        roundRect(barX, barY, barW, barH, barH / 2);
+        ctx.fill();
+        ctx.fillStyle = COLORS.barFill;
+        roundRect(barX, barY, Math.max(barH, barW * progress), barH, barH / 2);
+        ctx.fill();
+      }
+    }
 
     if (outline) {
       ctx.globalAlpha = 1;
@@ -321,6 +391,15 @@ export function createRenderer(canvas) {
       }
     }
     ctx.globalAlpha = 1;
+  }
+
+  // Ungefähre Fläche eines Pfeils (für die Platzierung des Namens).
+  function portBox(port) {
+    const d = DELTA[port.side];
+    const ex = (port.tile.x + 0.5) * TILE + d.x * (TILE / 2 - 4);
+    const ey = (port.tile.y + 0.5) * TILE + d.y * (TILE / 2 - 4);
+    const r = TILE * 0.22;
+    return { x0: ex - r, x1: ex + r, y0: ey - r, y1: ey + r };
   }
 
   // Pfeil auf der Gebäudekante: blau zeigt hinein (Eingang), orange hinaus (Ausgang).
