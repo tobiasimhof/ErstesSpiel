@@ -12,6 +12,7 @@
 
 import { DIRS, dirBetween, opposite, rotateCW, sortDirs, step } from './dirs.js';
 import { buildingPorts } from './geometry.js';
+import { addToStorage } from './shop.js';
 import { beltAt, buildingAt, isInWorld, isOwned, tileKey } from './state.js';
 
 export function canHoldBelt(state, x, y) {
@@ -140,13 +141,17 @@ export function rotateBelt(state, x, y) {
   const belt = beltAt(state, x, y);
   if (!belt) return false;
   belt.outs = sortDirs(belt.outs.map((d) => rotateCW(d)));
+  belt.rr = 0;
   return true;
 }
 
-// Entfernt ein Band. Nachbarbänder, die hineingezeigt haben, verlieren diesen
-// Ausgang, sofern sie noch einen anderen haben.
+// Entfernt ein Band. Eine Ware darauf kommt ins Laden-Lager. Nachbarbänder,
+// die hineingezeigt haben, verlieren diesen Ausgang, sofern sie noch einen
+// anderen haben.
 export function removeBelt(state, x, y) {
-  if (!beltAt(state, x, y)) return false;
+  const belt = beltAt(state, x, y);
+  if (!belt) return false;
+  if (belt.item) addToStorage(state, belt.item.type, 1);
   delete state.belts[tileKey(x, y)];
   for (const dir of DIRS) {
     const n = step({ x, y }, dir);

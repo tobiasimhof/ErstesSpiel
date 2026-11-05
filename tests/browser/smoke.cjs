@@ -49,11 +49,14 @@ const DEVICES = [
 ];
 
 let failures = 0;
+const failed = [];
+let currentDevice = '';
 function check(condition, message) {
   if (condition) {
     console.log(`  ✔ ${message}`);
   } else {
     failures++;
+    failed.push(`${currentDevice}: ${message}`);
     console.log(`  ✘ ${message}`);
   }
 }
@@ -124,6 +127,7 @@ async function waitForGame(page) {
 
 async function runDevice(browser, baseUrl, device, expectedVersion) {
   console.log(`\n${device.name} (${device.viewport.width}×${device.viewport.height})`);
+  currentDevice = device.name;
   const context = await browser.newContext({
     viewport: device.viewport,
     deviceScaleFactor: device.deviceScaleFactor,
@@ -165,7 +169,12 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   // ---------- Gebäude antippen, drehen ----------
   await tapTile(page, 10, 6);
   check((await page.textContent('#info-title')) === 'Holzfällerlager', 'Antippen zeigt Infofenster „Holzfällerlager“');
-  check((await page.locator('#info-actions button').count()) === 3, 'Infofenster hat Verschieben, Drehen, Abreißen');
+  const actionTexts = await page.locator('#info-actions button').allTextContents();
+  check(
+    ['Holzstamm einlegen', 'Verschieben', 'Drehen', 'Abreißen'].every((t) => actionTexts.some((a) => a.includes(t))),
+    'Infofenster hat Einlegen, Verschieben, Drehen, Abreißen',
+  );
+  check((await page.textContent('#info-status')).includes('Holzstämme im Laden-Lager: 3'), 'Infofenster zeigt Vorrat im Laden-Lager');
   await page.locator('#info-actions button', { hasText: 'Drehen' }).tap();
   await sleep(80);
   check((await game(page, () => window.__game.state.buildings[0].rot)) === 1, 'Drehen dreht das Gebäude');
@@ -177,7 +186,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.tap('#btn-shop');
   await sleep(80);
   const shopText = await page.textContent('#modal-content');
-  check(shopText.includes('Dein Laden') && shopText.includes('Inventar'), 'Laden-Fenster zeigt Laden und Inventar');
+  check(shopText.includes('Dein Laden') && shopText.includes('Laden-Lager') && shopText.includes('Holzstamm'), 'Laden-Fenster zeigt Laden-Lager mit Startvorrat');
   await shot('3-laden');
   await page.tap('#modal-close');
   check(!(await page.isVisible('#modal')), 'Laden-Fenster schließt');
@@ -350,6 +359,108 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }));
   check(fresh.buildings === 2 && fresh.belts === 0, 'Neues Spiel startet frisch');
 
+  // ---------- Produktion ----------
+  // Holzfäller (10,6) gibt rechts bei (12,6) aus → Band bis (15,6) → Versandportal ab (16,6)
+  await page.tap('#btn-build');
+  await page.tap('.build-item[data-tool="belt"]');
+  await touchDragTiles(page, cdp, [
+    [12, 6],
+    [15, 6],
+  ]);
+  await page.tap('#tool-confirm');
+  await page.tap('.build-item[data-tool="versandportal"]');
+  await sleep(80);
+  const portalGhost = await game(page, () => ({ ...window.__game.ui.ghost }));
+  await touchDragTiles(page, cdp, [
+    [portalGhost.x, portalGhost.y],
+    [16, 6],
+  ]);
+  await page.tap('#tool-confirm');
+  // Sägewerk zum Umstellen des Rezepts
+  await page.tap('.build-item[data-tool="saegewerk"]');
+  await sleep(80);
+  const sawGhost = await game(page, () => ({ ...window.__game.ui.ghost }));
+  await touchDragTiles(page, cdp, [
+    [sawGhost.x, sawGhost.y],
+    [14, 10],
+  ]);
+  await page.tap('#tool-confirm');
+  await page.tap('#build-close');
+  await sleep(80);
+  const placed = await game(page, () => window.__game.state.buildings.map((b) => `${b.type}@${b.x},${b.y}`).sort());
+  check(placed.includes('versandportal@16,6') && placed.includes('saegewerk@14,10'), `Versandportal und Sägewerk gebaut (${placed.join(' ')})`);
+
+  await tapTile(page, 10, 6);
+  await page.locator('#info-actions button', { hasText: 'Holzstamm einlegen' }).tap();
+  await sleep(80);
+  const afterLoad = await game(page, () => ({
+    logs: window.__game.state.storage.holzstamm,
+    loaded: window.__game.state.buildings.find((b) => b.type === 'holzfaeller').prod.loaded,
+  }));
+  check(afterLoad.loaded && afterLoad.logs === 2, 'Holzstamm eingelegt, Vorrat sinkt auf 2');
+  check(
+    await page.locator('#info-actions button', { hasText: 'wird verarbeitet' }).isDisabled(),
+    'Zweiter Holzstamm lässt sich nicht einlegen',
+  );
+  await page.tap('#info-close');
+
+  await game(page, () => window.__game.simulate(14));
+  await sleep(120);
+  const onBelt = await game(page, () => Object.values(window.__game.state.belts).filter((b) => b.item).length);
+  check(onBelt >= 1, `Waren laufen über das Band (${onBelt} unterwegs)`);
+  await shot('8-produktion');
+
+  await game(page, () => window.__game.simulate(90));
+  const blocks = await game(page, () => window.__game.state.storage.holzblock ?? 0);
+  check(blocks >= 15, `Holzblöcke kommen im Laden-Lager an (${blocks})`);
+  await page.tap('#btn-shop');
+  await sleep(80);
+  const shopNow = await page.textContent('#modal-content');
+  check(shopNow.includes('Holzblock') && shopNow.includes('Holzstamm'), 'Laden-Fenster listet Holzblöcke und Holzstämme');
+  await shot('9-laden-lager');
+  await page.tap('#modal-close');
+
+  await tapTile(page, 14, 10);
+  check((await page.textContent('#info-title')) === 'Sägewerk', 'Sägewerk antippen zeigt Infofenster');
+  await page.locator('#info-actions button', { hasText: 'Stäbe' }).tap();
+  await sleep(450);
+  check((await game(page, () => window.__game.state.buildings.find((b) => b.type === 'saegewerk').prod.recipe)) === 'holzstab', 'Rezept auf Stäbe umgestellt');
+  check(
+    await page.locator('#info-actions button', { hasText: 'Stäbe' }).evaluate((b) => b.classList.contains('primary')),
+    'Gewähltes Rezept ist hervorgehoben',
+  );
+  await shot('10-saegewerk');
+  await page.tap('#info-close');
+
+  await page.tap('#btn-menu');
+  await page.tap('#menu-test-mode');
+  await sleep(80);
+  check(await page.isVisible('#hud-speed'), 'Testmodus zeigt ⏩ ×10');
+  const tBefore = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'holzfaeller').prod.remaining);
+  // Bei ×10 entstehen in 3 s etwa 6–7 Holzblöcke, bei normaler Zeit unter 1.
+  await sleep(3000);
+  const tAfter = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'holzfaeller').prod.remaining);
+  check(tBefore - tAfter >= 3, `Im Testmodus läuft die Zeit schneller (${tBefore - tAfter} Blöcke in 3 s)`);
+  await page.tap('#btn-menu');
+  await page.tap('#menu-test-mode');
+  check(!(await page.isVisible('#hud-speed')), 'Testmodus wieder aus');
+
+  // Die Fabrik läuft beim Neuladen weiter; beim Verlassen wird der neueste Stand
+  // gespeichert. Deshalb: nichts darf verloren gehen (eher kommt etwas dazu).
+  const snapshot = () =>
+    game(page, () => ({
+      logs: window.__game.state.storage.holzstamm ?? 0,
+      blocks: window.__game.state.storage.holzblock ?? 0,
+    }));
+  const beforeReload = await snapshot();
+  await page.reload();
+  await waitForGame(page);
+  const afterReload = await snapshot();
+  check(
+    afterReload.logs === beforeReload.logs && afterReload.blocks >= beforeReload.blocks,
+    `Laden-Lager bleibt nach dem Neuladen erhalten (Holzstämme ${beforeReload.logs} → ${afterReload.logs}, Holzblöcke ${beforeReload.blocks} → ${afterReload.blocks})`,
+  );
+
   check(errors.length === 0, `Keine Fehler in der Konsole${errors.length ? ': ' + errors.join(' | ') : ''}`);
   await context.close();
 }
@@ -386,7 +497,7 @@ async function runPortrait(browser, baseUrl) {
     server.close();
   }
 
-  console.log(failures === 0 ? '\nAlle Browser-Prüfungen bestanden.' : `\n${failures} Prüfung(en) fehlgeschlagen.`);
+  console.log(failures === 0 ? '\nAlle Browser-Prüfungen bestanden.' : `\n${failures} Prüfung(en) fehlgeschlagen:\n  - ${failed.join('\n  - ')}`);
   console.log(`Screenshots: ${OUT}`);
   process.exit(failures === 0 ? 0 : 1);
 })().catch((err) => {

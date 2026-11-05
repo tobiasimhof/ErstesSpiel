@@ -4,12 +4,14 @@ import { onPress } from './press.js';
 
 const numberFormat = new Intl.NumberFormat('de-DE');
 
-export function createHud({ version, onNewGame }) {
+export function createHud({ version, onNewGame, onToggleTestMode }) {
   const gold = document.getElementById('hud-gold');
   const level = document.getElementById('hud-level');
   const menuButton = document.getElementById('btn-menu');
   const menu = document.getElementById('menu');
   const hint = document.getElementById('hint');
+  const speedBadge = document.getElementById('hud-speed');
+  const testModeButton = document.getElementById('menu-test-mode');
 
   document.getElementById('hud-version').textContent = `v${version}`;
 
@@ -21,6 +23,10 @@ export function createHud({ version, onNewGame }) {
   });
   document.addEventListener('pointerdown', (event) => {
     if (!menu.hidden && !menu.contains(event.target) && event.target !== menuButton) closeMenu();
+  });
+  onPress(testModeButton, () => {
+    closeMenu();
+    onToggleTestMode();
   });
   onPress(document.getElementById('menu-new-game'), () => {
     closeMenu();
@@ -53,6 +59,11 @@ export function createHud({ version, onNewGame }) {
     },
     hideHint() {
       hint.classList.add('hidden');
+    },
+    setTestMode(on, factor) {
+      testModeButton.textContent = `⏩ Testmodus: ${on ? 'an' : 'aus'} (Zeit ×${factor})`;
+      speedBadge.textContent = `⏩ ×${factor}`;
+      speedBadge.hidden = !on;
     },
     closeMenu,
   };

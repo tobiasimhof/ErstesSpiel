@@ -11,9 +11,10 @@ function el(tag, className, text) {
   return node;
 }
 
-function makeButton({ label, onClick, danger = false, primary = false }) {
+function makeButton({ label, onClick, danger = false, primary = false, disabled = false }) {
   const button = el('button', [danger && 'danger', primary && 'primary'].filter(Boolean).join(' '), label);
   button.type = 'button';
+  button.disabled = disabled;
   onPress(button, onClick);
   return button;
 }
@@ -26,6 +27,7 @@ export function createPanels() {
   const infoText = document.getElementById('info-text');
   const infoSoon = document.getElementById('info-soon');
   const infoActions = document.getElementById('info-actions');
+  const infoStatus = document.getElementById('info-status');
   let onInfoClose = null;
   onPress(document.getElementById('info-close'), () => onInfoClose?.());
 
@@ -62,7 +64,10 @@ export function createPanels() {
       onInfoClose = handler;
     },
 
-    showInfo({ icon, title, meta, text, soon, actions = [] }) {
+    // Zeigt das Infofenster. Gibt { buttons, setStatus } zurück: Knöpfe mit
+    // "key" lassen sich später ändern (Beschriftung, gesperrt, hervorgehoben),
+    // ohne neu erzeugt zu werden – so geht kein Tippen verloren.
+    showInfo({ icon, title, meta, text, soon, actions = [], status = [] }) {
       infoIcon.textContent = icon;
       infoTitle.textContent = title;
       infoMeta.textContent = meta ?? '';
@@ -70,9 +75,23 @@ export function createPanels() {
       infoText.textContent = text;
       infoSoon.textContent = soon ? `Bald: ${soon}` : '';
       infoSoon.hidden = !soon;
-      infoActions.replaceChildren(...actions.map(makeButton));
+      const buttons = new Map();
+      infoActions.replaceChildren(
+        ...actions.flatMap((action) => {
+          const button = makeButton(action);
+          if (action.key) buttons.set(action.key, button);
+          // group: beginnt eine neue Zeile (z. B. nach den Rezept-Knöpfen)
+          return action.group ? [el('div', 'actions-break'), button] : [button];
+        }),
+      );
       infoActions.hidden = actions.length === 0;
+      const setStatus = (lines) => {
+        infoStatus.replaceChildren(...lines.map((line) => el('div', 'status-line', line)));
+        infoStatus.hidden = lines.length === 0;
+      };
+      setStatus(status);
       info.hidden = false;
+      return { buttons, setStatus };
     },
 
     hideInfo() {

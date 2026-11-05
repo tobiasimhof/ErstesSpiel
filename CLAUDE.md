@@ -17,5 +17,8 @@
 - Die Live-Seite (github.io) ist aus der Arbeitsumgebung nicht erreichbar; nach dem Merge den Pages-Status über GitHub Actions („pages build and deployment“) prüfen.
 - Spielregeln (Simulation) strikt getrennt von der Darstellung halten; Waren, Rezepte, Gebäude und Preise als Datentabellen.
 - Knöpfe immer mit `onPress` aus `src/view/press.js` verbinden, nicht mit `click` (Chrome verschluckt Klicks direkt nach schnellem Wischen).
+- Zeiten, Mengen und Preise stehen nur in den Datentabellen (`src/core/data/`). Die Simulation läuft in festen Takten (`src/core/sim.js`).
+- Browser-Tests nicht von echter Zeit abhängig machen: `window.__game.simulate(sekunden)` nutzen. Die Fabrik läuft im Browser ständig weiter – Prüfungen müssen das aushalten.
+- Bei automatischen Textersetzungen (z. B. mit Python) nur genau ein Vorkommen ersetzen und das vorher prüfen; ein mehrfaches Ersetzen hat schon einmal das CSS beschädigt.
 - Spielstand-Format (`src/core/save.js`): Bei Änderungen `SAVE_VERSION` erhöhen und alte Spielstände umwandeln, damit Tobias' Fabrik nicht verloren geht.
 - Andere Spiele (Alchemy Factory, Clash of Clans, Hay Day) dienen nur als Vorbild für Mechaniken: eigene Namen, eigene Rezepte, eigene Grafik.

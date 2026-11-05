@@ -4,7 +4,9 @@
 //
 // Der Laden ist kein Gebäude, sondern das ganze eigene Grundstück (plot).
 
+import { START_STORAGE } from './data/shop.js';
 import { occupies } from './geometry.js';
+import { createProductionState } from './production.js';
 
 // Gesamte Welt in Feldern. Alles außerhalb des Grundstücks ist gesperrt
 // und kann später gekauft werden.
@@ -26,11 +28,20 @@ export function createNewGame() {
     plot: { ...START_PLOT },
     buildings: [],
     nextBuildingId: 1,
-    // Förderbänder: Schlüssel "x,y" → { outs: [Richtungen] }
+    // Förderbänder: Schlüssel "x,y" → { outs: [Richtungen], item?, rr?, lastFrom? }
     belts: {},
+    // Laden-Lager: Ware → Anzahl
+    storage: { ...START_STORAGE },
   };
   for (const start of START_BUILDINGS) {
-    state.buildings.push({ id: state.nextBuildingId++, type: start.type, x: start.x, y: start.y, rot: 0 });
+    state.buildings.push({
+      id: state.nextBuildingId++,
+      type: start.type,
+      x: start.x,
+      y: start.y,
+      rot: 0,
+      prod: createProductionState(start.type),
+    });
   }
   return state;
 }

@@ -3,6 +3,7 @@
 
 import { VERSION } from './version.js';
 import { createNewGame } from './core/state.js';
+import { TICK, simulate, tick } from './core/sim.js';
 import { TILE, createCamera, setViewSize, zoomAt, panBy, fitRect, clampCamera } from './view/camera.js';
 import { createRenderer } from './view/renderer.js';
 import { attachInput } from './view/input.js';
@@ -10,13 +11,15 @@ import { createHud } from './view/hud.js';
 import { createPanels } from './view/panels.js';
 import { createBuildBar } from './view/buildbar.js';
 import { createController } from './view/controller.js';
-import { clearGame, loadGame, saveGame } from './view/storage.js';
+import { clearGame, loadGame, loadSettings, saveGame, saveSettings } from './view/storage.js';
 
 const loaded = loadGame();
 const state = loaded.status === 'ok' ? loaded.state : createNewGame();
 
 const canvas = document.getElementById('game');
-const ui = { mode: 'normal', selected: null, ghost: null, beltPreview: null };
+const ui = { mode: 'normal', selected: null, ghost: null, beltPreview: null, simAlpha: 0 };
+const settings = loadSettings();
+const TEST_SPEED = 10;
 const camera = createCamera();
 const renderer = createRenderer(canvas);
 const panels = createPanels();
@@ -43,6 +46,8 @@ document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') saveNow();
 });
 window.addEventListener('pagehide', saveNow);
+// Die Fabrik läuft ständig, deshalb zusätzlich regelmäßig speichern.
+setInterval(saveNow, 10000);
 
 function onChange() {
   hud.update(state);
@@ -66,7 +71,15 @@ async function newGame() {
 
 // ---------- Oberfläche ----------
 
-const hud = createHud({ version: VERSION, onNewGame: newGame });
+function toggleTestMode() {
+  settings.testMode = !settings.testMode;
+  saveSettings(settings);
+  hud.setTestMode(settings.testMode, TEST_SPEED);
+  panels.toast(settings.testMode ? `Testmodus an: Zeit läuft ${TEST_SPEED}-mal schneller.` : 'Testmodus aus: normale Zeit.');
+}
+
+const hud = createHud({ version: VERSION, onNewGame: newGame, onToggleTestMode: toggleTestMode });
+hud.setTestMode(Boolean(settings.testMode), TEST_SPEED);
 
 function worldBounds() {
   return { x: 0, y: 0, width: state.world.width * TILE, height: state.world.height * TILE };
@@ -127,17 +140,55 @@ new ResizeObserver(handleResize).observe(canvas);
 handleResize();
 hud.update(state);
 
-if (loaded.status === 'ok') panels.toast('Spielstand geladen.', 1600);
+if (loaded.status === 'ok' && loaded.migratedFrom) {
+  panels.toast('Spielstand übernommen. Neu: 3 Holzstämme und 3 Felsbrocken im Laden-Lager.', 4000);
+} else if (loaded.status === 'ok') panels.toast('Spielstand geladen.', 1600);
 else if (loaded.status === 'invalid') panels.toast('Spielstand war beschädigt – neues Spiel gestartet.', 3500);
 
-function frame() {
-  if (needsDraw) {
-    needsDraw = false;
-    renderer.draw(state, camera, ui);
+// ---------- Takt ----------
+// Die Simulation läuft in festen Takten (TICK). Pro Bild werden so viele Takte
+// gerechnet, wie Zeit vergangen ist. Ist das Spiel im Hintergrund, ruht es
+// (Offline-Produktion folgt in v0.7.0).
+
+let lastTime = performance.now();
+let accumulator = 0;
+let lastRefresh = 0;
+
+function frame(now) {
+  const realDt = Math.min(0.25, Math.max(0, (now - lastTime) / 1000));
+  lastTime = now;
+  accumulator += realDt * (settings.testMode ? TEST_SPEED : 1);
+  let steps = 0;
+  while (accumulator >= TICK && steps < 200) {
+    tick(state);
+    accumulator -= TICK;
+    steps++;
+  }
+  if (steps === 200) accumulator = 0;
+  ui.simAlpha = accumulator / TICK;
+
+  renderer.draw(state, camera, ui);
+  needsDraw = false;
+
+  if (now - lastRefresh > 400) {
+    lastRefresh = now;
+    controller.refresh();
   }
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
 
 // Für automatische Browser-Tests und zur Fehlersuche.
-window.__game = { VERSION, state, camera, ui, TILE, saveNow };
+window.__game = {
+  VERSION,
+  state,
+  camera,
+  ui,
+  TILE,
+  saveNow,
+  simulate(seconds) {
+    simulate(state, seconds);
+    controller.refresh();
+    requestDraw();
+  },
+};

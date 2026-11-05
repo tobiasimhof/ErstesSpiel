@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.4.1 – Saubere Abzweigungen |
+| **Aktuelle Version** | v0.5.0 – Produktion |
 | **Phase** | M1 – Fabrik-Grundgerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Rückfragen zum neuen Produktionskonzept (Abschnitt 8) beantworten, dann Plan für v0.5.0 (Abschnitt 6) freigeben |
+| **Nächster Schritt** | Tobias testet v0.5.0 und schickt seinen Techbaum; danach planen wir v0.6.0 (Handel) |
 
 ---
 
@@ -69,6 +69,7 @@ Festgelegt am 05.11.2026.
 ### 3.1 Vision
 
 - **Schwerpunkt: die optimale Fabrik bauen.** Die Wirtschaft gibt vor, *was* sich gerade zu bauen lohnt: Was wird gebraucht, zu welchem Preis, und womit verdiene ich genug, um weiter zu wachsen?
+- **Leitidee (Tobias):** Das Spiel lebt von der optimalen Produktionsstätte. Am Anfang braucht man vieles aus Holz, also lohnen sich Sägewerke. Später braucht man nur noch einzelne Holzteile und dafür mehr von anderem, also baut man die Holzproduktion zurück und anderes aus. So bleibt das Spiel bis in hohe Level spannend.
 - **Setting:** Mittelalter. Werkzeuge und Waren bleiben einfach. Es gibt zwei Grundstoffe: **Holz** und **Stein**.
 - **Plattform:** Handy und Tablet, **nur Querformat**. Zuerst als Browser-Spiel, später als App.
 - **Sprache:** vorerst nur Deutsch.
@@ -91,11 +92,11 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Förderbänder** verbinden die Gebäude und transportieren Waren Stück für Stück.
 - **Aufteilen und Zusammenführen durch Ziehen**, ohne Verteiler-Gebäude: Zieht man von einem bestehenden Band aus, teilt es sich auf (bis zu 3 Richtungen pro Feld; mehrfach aufteilen ergibt 4 und mehr Strecken). Zieht man auf ein bestehendes Band, laufen beide zusammen. Abzweigungen verteilen die Waren abwechselnd.
 - **Ein- und Ausgänge** sind als Pfeile am Gebäude zu sehen: blau = Eingang, orange = Ausgang.
-- **Rohstoffe kauft man beim Händler**, z. B. einen Holzstamm. Den legt man in das Holzfällerlager, das daraus nach und nach Holzblöcke herstellt (Beispiel: 1 Holzstamm → 200 Holzblöcke in 15 Minuten).
-- **Werkstätten** verarbeiten nach Rezept, z. B. Sägewerk: 1 Holzblock → 1 Winkel oder 1 Stab (5 Sekunden). Man stellt ein, was es herstellt.
+- **Rohstoffe kauft man beim Händler**, z. B. einen Holzstamm. Den legt man in das Holzfällerlager, das daraus nach und nach Holzblöcke herstellt (Beispiel: 1 Holzstamm → 200 Holzblöcke in 15 Minuten). **Es passt immer nur ein Holzstamm hinein.** Stein läuft genauso: Felsbrocken kaufen → Steinbruch → 200 Steinblöcke.
+- **Werkstätten** verarbeiten nach Rezept. Man stellt ein, was sie herstellen: Sägewerk → Winkel oder Stäbe, Steinmetz → Platten oder Splitt (je 5 Blöcke → 1 Teil, 5 Sekunden; Platzhalter).
 - **Typischer Aufbau:** Ein Holzfällerlager wird auf 4 Strecken verteilt. Zwei davon gehen in Sägewerke (eins auf Winkel, eins auf Stäbe eingestellt), zwei laufen weiter für spätere Rezepte, die Holzblöcke direkt brauchen (z. B. zusammen mit Splitt).
 - **Stau:** Ist ein Band voll (z. B. weil es im Nichts endet), bleibt alles stehen und davor wird nicht weiter produziert.
-- **Lagerhäuser** sind die einzige Möglichkeit, Waren zu lagern. Sie sind Zwischenstationen: Man kann z. B. 200 Stäbe zwischenlagern, die Waren können aber auch weiterlaufen.
+- **Lagerhäuser** sind die einzige Möglichkeit, Waren zu lagern. Sie sind Zwischenstationen und eine Art Verteiler: 3 Fächer zu je 50 Waren, aber nur ein Eingang und ein Ausgang – deshalb lagert man sinnvollerweise nur eine Sorte, z. B. 3 × 50 Holzblöcke. Was hineinläuft, läuft weiter, sobald am Ausgang Platz ist.
 - **Versandportal:** Waren, die hineinlaufen, landen direkt im Laden.
 - **Montage-Werkstätten** brauchen mehrere Zutaten, z. B. Schreinerei: 4 Holzwinkel + 5 Bretter + 10 Steinnägel → Tür.
 - Eine Werkstatt kann mehrere Rezepte. Man stellt ein, was sie gerade herstellt.
@@ -104,7 +105,8 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 
 ### 3.4 Wirtschaft
 
-- Jede Ware hat einen **Grundwert**. Verarbeitete Waren sind mehr wert als ihre Zutaten zusammen, Weiterverarbeiten lohnt sich also.
+- **Zuerst feste Preise**, damit die Spielmechanik einfach bleibt. Weiterverarbeiten muss sich lohnen (Beispiel von Tobias): Kostet ein Holzstamm 50 Gold, bringen die 200 Holzblöcke daraus knapp über 50 Gold. Macht man daraus 40 Winkel (oder 20 Winkel und 20 Stäbe), bringt der Verkauf deutlich mehr. So kann man nach und nach die Produktion ausbauen.
+- **Platzhalter-Preise im Spiel** (alles ×10, damit es nur ganze Goldbeträge gibt): Holzstamm/Felsbrocken 550 Gold (Kauf) → 200 Blöcke à 3 Gold = 600 Gold (+9 %) → 40 Teile à 18 Gold = 720 Gold (+31 %). Ein Test prüft, dass jede Stufe mehr bringt als die vorige.
 - **Laden:** Der Knopf „Laden“ unten links öffnet den Laden. Er hat ein eigenes **Lager** (gefüllt über das Versandportal) und **Verkaufstheken**. Je nach Level bzw. Größe einer Theke passen darauf z. B. 20 Winkel. Von den Theken kaufen Computer-Kunden (NPCs) zu einem „normalen“ Preis.
 - **Händler:** Hier kauft man Rohstoffe wie Holzstämme.
 - **Nachfrage:** Wer viel von einer Ware verkauft, drückt ihren Preis. Mit der Zeit erholt er sich wieder. Dazu kommen Trends, z. B. „Die Stadt baut eine Mauer: Steinblöcke +50 % für 2 Tage“. Eine Tür bringt also mal mehr, mal weniger Gold, je nachdem, wie gefragt sie gerade ist. So entsteht das Wirtschaftsgefühl, und es lohnt sich, je nach Marktlage umzubauen.
@@ -149,15 +151,15 @@ Spalte „Stand“: **Tobias** = so gewünscht, **Vorschlag** = Claudes Vorschla
 | Stufe | Ware | Woher | Rezept (Mengen und Zeiten sind Platzhalter) | Stand |
 |---|---|---|---|---|
 | 0 | Holzstamm | Händler | kaufen | Tobias |
-| 0 | Felsbrocken | Händler | kaufen | Vorschlag |
+| 0 | Felsbrocken | Händler | kaufen | Tobias |
 | 1 | Holzblock | Holzfällerlager | 1 Holzstamm → 200 Holzblöcke in 15 Minuten | Tobias |
-| 1 | Steinblock | Steinbruch | 1 Felsbrocken → 200 Steinblöcke in 15 Minuten | Vorschlag |
-| 2 | Holzwinkel | Sägewerk, Einstellung „Winkel“ | 1 Holzblock → 1 Holzwinkel (5 Sekunden) | Tobias |
-| 2 | Holzstab | Sägewerk, Einstellung „Stäbe“ | 1 Holzblock → 1 Holzstab (5 Sekunden) | Tobias |
-| 2 | Brett | Sägewerk, Einstellung „Bretter“ | 1 Holzblock → 1 Brett (5 Sekunden) | Vorschlag |
-| 2 | Splitt | Steinmetz, Einstellung „Splitt“ | 1 Steinblock → 4 Splitt | Vorschlag |
-| 2 | Steinplatte | Steinmetz, Einstellung „Platten“ | 1 Steinblock → 1 Steinplatte | Vorschlag |
-| 2 | Steinsäule | Steinmetz, Einstellung „Säulen“ | 1 Steinblock → 1 Steinsäule | Vorschlag |
+| 1 | Steinblock | Steinbruch | 1 Felsbrocken → 200 Steinblöcke in 15 Minuten | Tobias |
+| 2 | Holzwinkel | Sägewerk, Einstellung „Winkel“ | 5 Holzblöcke → 1 Holzwinkel (5 Sekunden) | Tobias (Verhältnis 5 : 1 aus seinem Rechenbeispiel) |
+| 2 | Holzstab | Sägewerk, Einstellung „Stäbe“ | 5 Holzblöcke → 1 Holzstab (5 Sekunden) | Tobias (5 : 1) |
+| 2 | Brett | – | offen (die Tür war nur ein Beispiel) | kommt mit dem Techbaum |
+| 2 | Splitt | Steinmetz, Einstellung „Splitt“ | 5 Steinblöcke → 1 Splitt (5 Sekunden) | Tobias (Mengen Platzhalter) |
+| 2 | Steinplatte | Steinmetz, Einstellung „Platten“ | 5 Steinblöcke → 1 Steinplatte (5 Sekunden) | Tobias (Mengen Platzhalter) |
+| 2 | Steinsäule | – | offen | kommt mit dem Techbaum |
 | 3 | Steinnägel | Nagelschleiferei | 1 Splitt → 4 Steinnägel | Entwurf 1 |
 | 3 | Holzzahnrad | Schnitzerei | 2 Holzstäbe → 1 Holzzahnrad | Entwurf 1 |
 | 4 | Tür | Schreinerei | 4 Holzwinkel + 5 Bretter + 10 Steinnägel | Entwurf 1 |
@@ -167,7 +169,9 @@ Spalte „Stand“: **Tobias** = so gewünscht, **Vorschlag** = Claudes Vorschla
 | 4 | Brunnen | Bauhütte | 6 Steinplatten + 2 Steinsäulen + 1 Holzzahnrad | Entwurf 1 |
 | ? | (neu) | ? | Holzblöcke + Splitt → etwas Neues | Idee von Tobias |
 
-**Erster Ausschnitt für den Prototyp (v0.5.0):** Holzstamm, Holzblock, Holzwinkel, Holzstab.
+**Im Spiel seit v0.5.0:** Holzstamm, Felsbrocken, Holzblock, Steinblock, Holzwinkel, Holzstab, Steinplatte, Splitt.
+
+**Techbaum:** Tobias entwirft einen eigenen Techbaum (angekündigt am 05.11.2026). Er ersetzt die Zeilen „Entwurf 1“ und legt fest, wie es nach den Einzelteilen weitergeht.
 
 **Ideen für später:** weitere Rohstoffe wie Eisenerz (Schmelze, Schmiede, echte Nägel, Werkzeuge), Lehm (Ziegel), Hanf (Seile), Sand (Glas); größere Waren wie Fässer, Karren, Fenster.
 
@@ -197,17 +201,24 @@ Spalte „Stand“: **Tobias** = so gewünscht, **Vorschlag** = Claudes Vorschla
 | `src/version.js` | Versionsnummer, wird im Spiel angezeigt |
 | `src/main.js` | Verbindet Spielregeln, Kamera, Eingabe und Anzeige |
 | `src/core/` | Spielregeln und Spielzustand, ohne Grafik |
-| `src/core/data/buildings.js` | Datentabelle der Gebäude (Größe, Ein- und Ausgänge, Texte) und Reihenfolge im Baumenü |
+| `src/core/data/buildings.js` | Datentabelle der Gebäude (Größe, Ein- und Ausgänge, Texte, Produktion) und Reihenfolge im Baumenü |
+| `src/core/data/items.js` | Datentabelle der Waren (Name, Preise, Aussehen) |
+| `src/core/data/recipes.js` | Datentabelle der Rezepte (Zutaten, Ergebnis, Zeit) |
+| `src/core/data/shop.js` | Laden: Lagergröße je Level, Startvorrat |
 | `src/core/state.js` | Spielzustand anlegen, Abfragen auf dem Raster |
 | `src/core/dirs.js` | Himmelsrichtungen (oben, rechts, unten, links) |
 | `src/core/geometry.js` | Größe, Drehung, Felder sowie Ein- und Ausgänge von Gebäuden |
 | `src/core/buildings.js` | Gebäude bauen, verschieben, drehen, abreißen, freie Stelle suchen |
 | `src/core/belts.js` | Förderbänder legen, aufteilen, zusammenführen, drehen, abreißen |
-| `src/core/save.js` | Spielstand in Text umwandeln und prüfen |
+| `src/core/production.js` | Was Gebäude tun: einlegen, herstellen, zwischenlagern, versenden, Status |
+| `src/core/sim.js` | Simulation in festen Takten: Waren auf Bändern, Stau, Aufteilen, Zusammenführen |
+| `src/core/shop.js` | Laden-Lager |
+| `src/core/save.js` | Spielstand in Text umwandeln, prüfen und alte Spielstände umwandeln |
 | `src/view/camera.js` | Kamera: verschieben, zoomen, Bildschirm ↔ Welt umrechnen |
 | `src/view/input.js` | Touch, Maus und Mausrad (Antippen, Ziehen, zwei Finger) |
 | `src/view/controller.js` | Modi (Ansehen, Bauleiste, Platzieren, Förderband, Abreißen) und was Gesten darin tun |
-| `src/view/renderer.js` | Zeichnet Spielfeld, Bänder, Gebäude, Vorschau |
+| `src/view/renderer.js` | Zeichnet Spielfeld, Bänder, Waren, Gebäude mit Statuslicht, Vorschau |
+| `src/view/itemArt.js` | Aussehen der Waren (auf dem Band und in Listen) |
 | `src/view/hud.js` | Obere Leiste und Menü ☰ |
 | `src/view/panels.js` | Infofenster, Laden-Fenster, Rückfragen, Meldungen |
 | `src/view/buildbar.js` | Untere Leisten: Laden/Bauen, Bauleiste, Werkzeugleiste |
@@ -244,8 +255,8 @@ Spalte „Stand“: **Tobias** = so gewünscht, **Vorschlag** = Claudes Vorschla
 | v0.3.0 | **Spielfeld:** Raster, Startgebäude, verschieben und zoomen per Touch, erster Live-Gang | ✅ fertig |
 | v0.4.0 | **Bauen & Speichern:** Laden als ganze Fläche, Bauleiste, Gebäude und Förderbänder bauen, verschieben, drehen, abreißen; Bänder aufteilen und zusammenführen; Spielstand bleibt erhalten | ✅ fertig |
 | v0.4.1 | **Saubere Abzweigungen:** Pfeile an Abzweigungen aufgeräumt, keine Fugen mehr zwischen Bandfeldern | ✅ fertig |
-| v0.5.0 | **Produktion:** Holzstamm einlegen, Holzfällerlager macht Holzblöcke, Waren laufen über die Bänder, Sägewerk macht Winkel oder Stäbe, Lagerhaus, Versandportal, Laden-Lager | Plan wartet auf Rückfragen |
-| v0.6.0 | **Handel:** Händler (Holzstämme kaufen), Verkaufstheken im Laden, NPC-Kunden, Gold; Bauen kostet Gold; Preise nach Nachfrage. Erster vollständiger Kreislauf | |
+| v0.5.0 | **Produktion:** Rohstoff einlegen, Holz- und Steinblöcke, Waren laufen über die Bänder, Stau, Sägewerk und Steinmetz mit Einstellung, Lagerhaus, Versandportal, Laden-Lager, Testmodus | ✅ fertig |
+| v0.6.0 | **Handel:** Händler (Holzstämme und Felsbrocken kaufen), Verkaufstheken im Laden, NPC-Kunden, Gold; Bauen kostet Gold. Erster vollständiger Kreislauf | wartet auf Techbaum und Planung |
 | v0.7.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist, bis Bänder voll sind oder Rohstoffe fehlen | |
 
 ### v0.4.0 – Bauen & Speichern (fertig)
@@ -264,19 +275,24 @@ Spalte „Stand“: **Tobias** = so gewünscht, **Vorschlag** = Claudes Vorschla
 
 **Was Tobias testet:** Bauen, Bänder ziehen, aufteilen und zusammenführen, Gebäude verschieben, drehen, abreißen, Seite neu laden (alles noch da?), „Neues Spiel“. Fühlt sich das Ziehen der Bänder natürlich an?
 
-### Plan für v0.5.0 – Produktion (wartet auf Rückfragen)
+### v0.5.0 – Produktion (fertig)
 
-- **Waren-Tabelle:** Holzstamm, Holzblock, Holzwinkel, Holzstab (je nach Antwort auch Brett). Symbole vorläufig.
-- **Startvorrat:** 3 Holzstämme im Laden-Lager, bis es in v0.6.0 den Händler gibt.
-- **Holzstamm einlegen:** Holzfällerlager antippen → „Holzstamm einlegen“. Es stellt daraus 200 Holzblöcke her (Platzhalter: 15 Minuten, also etwa alle 4,5 Sekunden einer) und gibt sie am orangen Pfeil aufs Band.
-- **Sägewerk:** Im Infofenster einstellen, ob es Winkel oder Stäbe herstellt (5 Sekunden pro Holzblock).
-- **Förderbänder** transportieren die Waren sichtbar Feld für Feld. Abzweigungen verteilen abwechselnd, Zusammenführungen nehmen abwechselnd auf. **Ist ein Band voll, steht alles davor still.**
-- **Lagerhaus** (neues Gebäude): Eingang und Ausgang, fasst z. B. 200 Waren, gibt sie weiter, sobald der Ausgang frei ist. Einzige Möglichkeit, Waren zu lagern.
-- **Versandportal** (neues Gebäude): Waren, die hineinlaufen, landen im Laden-Lager.
-- **Laden-Fenster** zeigt das Laden-Lager mit Mengen (Verkaufstheken folgen in v0.6.0).
-- **Infofenster** zeigt, was ein Gebäude gerade tut (arbeitet, wartet auf Holzblöcke, Band voll) und wie viel noch übrig ist.
-- **Testmodus:** Schalter im Menü ☰, der die Zeit z. B. 10-mal schneller laufen lässt, damit man nicht 15 Minuten auf einen Holzstamm warten muss.
-- Waren auf Bändern, in Gebäuden und Lagern werden mitgespeichert.
+**Neu im Spiel:**
+- **Waren:** Holzstamm, Felsbrocken, Holzblock, Steinblock, Holzwinkel, Holzstab, Steinplatte, Splitt – als kleine Formen auf den Bändern zu sehen.
+- **Startvorrat:** 3 Holzstämme und 3 Felsbrocken im Laden-Lager (bis es in v0.6.0 den Händler gibt). Bestehende Spielstände bekommen ihn beim ersten Öffnen dazu.
+- **Rohstoff einlegen:** Holzfällerlager oder Steinbruch antippen → „Holzstamm einlegen“ bzw. „Felsbrocken einlegen“. Immer nur einer auf einmal. Daraus entstehen 200 Blöcke in 15 Minuten (alle 4,5 Sekunden einer).
+- **Sägewerk** (Winkel oder Stäbe) und neu **Steinmetz** (Platten oder Splitt): im Infofenster umstellen, je 5 Blöcke → 1 Teil in 5 Sekunden.
+- **Förderbänder transportieren** Feld für Feld (2 Felder pro Sekunde). Abzweigungen verteilen abwechselnd und überspringen volle Strecken, Zusammenführungen nehmen abwechselnd auf. **Ist ein Band voll, steht alles davor still.** Falsche Waren kommen nicht in eine Werkstatt – das Band staut sich.
+- **Lagerhaus** (neu): 3 Fächer zu je 50 Waren, ein Eingang, ein Ausgang, gibt weiter, sobald Platz ist.
+- **Versandportal** (neu): nimmt von allen vier Seiten an und schickt alles ins Laden-Lager.
+- **Laden-Fenster:** Laden-Lager (500 Plätze) mit Mengen und Wert jeder Ware.
+- **Statuslicht** an jedem Gebäude: grün = arbeitet, gelb = wartet, rot = Ausgang voll. Gelbe Leiste = Fortschritt.
+- **Infofenster** zeigt laufend, was ein Gebäude tut, was am Eingang liegt, die Fächer des Lagerhauses und was versendet wurde.
+- **Abreißen** gibt Waren aus Gebäuden und von Bändern ins Laden-Lager zurück; ein unberührter Rohstoff kommt zurück, ein angefangener geht verloren (das Spiel fragt vorher).
+- **Testmodus** im Menü ☰: Zeit läuft 10-mal schneller (Anzeige „⏩ ×10“ oben).
+- Alles wird mitgespeichert. Ist das Spiel im Hintergrund, ruht die Fabrik (Offline-Produktion folgt in v0.7.0).
+
+**Was Tobias testet:** Rohstoff einlegen, Waren über Bänder ins Versandportal schicken, Sägewerk und Steinmetz umstellen, aufteilen (z. B. 1 Holzfäller auf 4 Strecken), Lagerhaus dazwischen, Stau provozieren, Laden-Fenster ansehen. Für schnelle Tests den Testmodus nutzen.
 
 ---
 
@@ -328,6 +344,16 @@ Spalte „Stand“: **Tobias** = so gewünscht, **Vorschlag** = Claudes Vorschla
 | 05.11.2026 | Ein Versandportal schickt Waren in den Laden; der Laden hat ein Lager und Verkaufstheken (Menge je nach Theken-Level, z. B. 20 Winkel); Verkauf an NPCs zum normalen Preis | Von Tobias (Chat 2, Teil 2). |
 | 05.11.2026 | Ist ein Band voll, steht alles davor still (kein Überlauf, keine Verluste) | Von Tobias (Chat 2, Teil 2). |
 | 05.11.2026 | An Abzweigungen steht nur der Pfeil, der geradeaus weiterläuft; Bänder werden in drei Durchgängen gezeichnet | Tobias fand die Abzweigungen in v0.4.0 „unsauber“. |
+| 05.11.2026 | Leitidee: Das Spiel lebt von der optimalen Produktionsstätte; welche Produktion sich lohnt, ändert sich mit dem Level | Von Tobias (Chat 2, Teil 3). |
+| 05.11.2026 | Stein läuft wie Holz: Felsbrocken kaufen → Steinbruch → 200 Steinblöcke; Steinmetz macht wie das Sägewerk zwei Dinge (Platten oder Splitt) | Von Tobias (Chat 2, Teil 3). |
+| 05.11.2026 | Im Holzfällerlager (und Steinbruch) liegt immer nur ein Rohstoff | Von Tobias (Chat 2, Teil 3). |
+| 05.11.2026 | Lagerhaus: 3 Fächer zu je 50, ein Eingang, ein Ausgang; dient als Zwischenlager und Verteiler | Von Tobias (Chat 2, Teil 3). |
+| 05.11.2026 | Zuerst feste Preise; jede Verarbeitungsstufe muss mehr bringen als die vorige | Von Tobias (Chat 2, Teil 3). |
+| 05.11.2026 | Werkstätten: 5 Blöcke → 1 Teil | Aus Tobias' Rechenbeispiel (200 Holzblöcke → 40 Winkel); ersetzt die frühere Angabe „1 Holzblock → 1 Winkel“. |
+| 05.11.2026 | Goldbeträge im Spiel ×10 (Holzstamm 550 statt 50), damit jede Ware einen ganzen Goldpreis hat | Claudes Vorschlag; Holzblöcke hätten sonst einen Preis von etwa 0,27 Gold. |
+| 05.11.2026 | Tobias entwirft einen eigenen Techbaum | Damit nicht bei jedem Schritt neu überlegt werden muss, wie es weitergeht. |
+| 05.11.2026 | Testmodus (Zeit ×10) im Menü | Damit man nicht 15 Minuten auf einen Holzstamm warten muss. |
+| 05.11.2026 | Abgerissene Gebäude und Bänder geben ihre Waren ins Laden-Lager zurück | Claudes Vorschlag, damit Umbauen nichts kostet außer einem angefangenen Rohstoff. |
 
 ---
 
@@ -335,20 +361,39 @@ Spalte „Stand“: **Tobias** = so gewünscht, **Vorschlag** = Claudes Vorschla
 
 Stand 05.11.2026. Zu jeder Frage steht Claudes Vorschlag dabei.
 
-1. **Bretter:** Werden sie für die Tür weiter gebraucht? Vorschlag: als dritte Einstellung im Sägewerk (1 Holzblock → 1 Brett).
-2. **Stein:** analog zu Holz? Vorschlag: Felsbrocken beim Händler kaufen → Steinbruch → 200 Steinblöcke in 15 Minuten; Steinmetz macht aus Steinblöcken Splitt, Steinplatten oder Steinsäulen.
-3. **Holzfällerlager:** Wie viele Holzstämme kann man auf einmal einlegen? Vorschlag: bis zu 3, die nacheinander verarbeitet werden.
-4. **Lagerhaus:** gemischte Waren oder nur eine Sorte pro Lagerhaus? Vorschlag: gemischt, Waren gehen in der Reihenfolge weiter, in der sie angekommen sind.
-5. **Pleiteschutz:** Rohstoffe kosten jetzt Gold. Was, wenn man kein Gold und nichts zu verkaufen hat? Vorschlag: Dann schenkt der Händler einen Holzstamm.
-6. **Verkaufstheken:** Preis automatisch = aktueller Marktpreis, oder selbst festlegen? Vorschlag: im Laden automatisch; eigene Preise erst auf dem Schwarzmarkt.
-7. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden. Claudes Gedanke: Die NPC-Preise im Laden werden später global (verkaufen alle Spieler Winkel, sinkt der Winkelpreis); der Schwarzmarkt ist Handel direkt zwischen Spielern zu eigenen Preisen.
-8. **Plan für v0.5.0** (Abschnitt 6) freigeben, inklusive Testmodus?
-9. **Freischaltpunkte** pro Laden-Level: Details in M3 entscheiden.
-10. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
+1. **Techbaum:** Tobias schickt ihn. Er legt Rezepte, Mengen, Zeiten und Preise fest (ersetzt „Entwurf 1“ in Abschnitt 4).
+2. **Verhältnis 5 : 1** (5 Blöcke → 1 Teil) richtig verstanden? Früher hieß es „1 Holzblock → 1 Winkel in 5 Sekunden“, das Rechenbeispiel sagt 200 → 40.
+3. **Goldbeträge ×10** in Ordnung (Holzstamm 550 Gold statt 50)?
+4. **Pleiteschutz:** Rohstoffe kosten Gold. Was, wenn man kein Gold und nichts zu verkaufen hat? Vorschlag: Dann schenkt der Händler einen Holzstamm.
+5. **Verkaufstheken (v0.6.0):** Wie viele Theken zu Beginn, wie viel passt darauf (Beispiel: 20), wie schnell kaufen die NPCs? Vorschlag: 2 Theken à 20 Stück, Kunden kaufen alle paar Sekunden eine Ware.
+6. **Startgold (v0.6.0):** Vorschlag: so viel, dass man 2 Holzstämme kaufen kann.
+7. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
+8. **Freischaltpunkte** pro Laden-Level: Details in M3 entscheiden.
+9. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.5.0 – Produktion (05.11.2026)
+
+**Vorgenommen:**
+- Die Fabrik zum Leben erwecken: Rohstoffe einlegen, Waren herstellen und über Bänder transportieren.
+- Tobias' Vorgaben umsetzen: ein Rohstoff pro Holzfäller, Stein wie Holz, Werkstätten mit zwei Einstellungen, Lagerhaus mit 3 × 50, Versandportal, Stau bei vollem Band.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie verteilen Abzweigungen fair, ohne dass eine volle Strecke alles blockiert? → Abwechselnd, volle Richtungen werden übersprungen.
+- Wie kommen beim Zusammenführen alle Zuläufe dran, auch ein Gebäude neben einem vollen Band? → Bänder und Gebäude melden sich jeden Takt an, das Ziel nimmt reihum an.
+- Wie testet man eine 15-Minuten-Produktion? → Testmodus (×10) für Tobias, Zeitraffer in den automatischen Tests.
+- Wie bleiben bestehende Fabriken erhalten? → Spielstand-Format Version 2 mit Umwandlung von Version 1; beschädigte Spielstände werden vor dem Überschreiben gesichert.
+
+**Gemacht:**
+- Datentabellen für Waren, Rezepte, Laden; neue Gebäude Steinmetz, Lagerhaus, Versandportal.
+- Simulation in festen Takten (`src/core/sim.js`) mit Stau, Aufteilen und Zusammenführen.
+- Waren auf Bändern sichtbar, Statuslicht und Fortschrittsleiste an Gebäuden, Infofenster mit laufendem Status, Laden-Fenster mit Laden-Lager, Testmodus.
+- Namen an Gebäuden suchen sich eine Stelle, an der sie keinen Pfeil verdecken.
+- 59 automatische Tests (u. a. 200 Blöcke pro Stamm, 200 → 40 Winkel, Stau, faires Aufteilen und Zusammenführen, Lagerhaus 3 × 50, falsche Ware, Rückerstattung, Wirtschaftsrechnung, Umwandlung alter Spielstände) und der Browser-Test mit Produktionsablauf – alle bestanden, mehrfach wiederholt.
+- Beim Testen gefunden und behoben: eine versehentlich doppelt ersetzte Stil-Regel, die alle Knopfreihen rechtsbündig machte; zwei Prüfungen im Browser-Test, die je nach Zeitpunkt schwankten.
 
 ### v0.4.1 – Saubere Abzweigungen (05.11.2026)
 
@@ -460,6 +505,20 @@ Stand 05.11.2026. Zu jeder Frage steht Claudes Vorschlag dabei.
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 05.11.2026 – Chat 2, Teil 3: Freigabe v0.5.0 & Feinschliff
+
+**Tobias:**
+- Das Produktionskonzept ist richtig verstanden, der Plan für v0.5.0 passt.
+- Es braucht etwas Analoges zum Sägewerk für Steine, das aus Steinblöcken zwei Dinge herstellt (Platten und Splitt).
+- Die Tür war nur ein Beispiel. Tobias entwickelt (heute Abend) einen eigenen Techbaum und schickt ihn, damit nicht bei jedem Schritt überlegt werden muss, wie es weitergeht.
+- Stein läuft genau wie Holz: kaufen, aus einem Stein werden viele Steinblöcke usw.
+- Ins Holzfällerlager passt nur ein Baumstamm.
+- Das Spiel soll von der optimalen Produktionsstätte leben: Am Anfang braucht man viel aus Holz (Sägewerke lohnen sich), am Ende nur noch Einzelteile aus Holz und mehr anderes, dann lohnt es sich, die Holzproduktion zu verkleinern – so lebt das Spiel bis in hohe Level.
+- Lagerhaus: z. B. 3 Fächer frei, aber nur ein Eingang und ein Ausgang, deshalb lagert man dort sinnvollerweise nur eine Sache, z. B. 3 × 50 Holzblöcke. Es dient als Zwischenlager und „Verteiler“.
+- Mit festen Preisen anfangen, damit die Mechanik einfach bleibt; es muss sich aber lohnen: Holzstamm z. B. 50 Gold → 200 Holzblöcke verkauft knapp über 50 Gold → als 40 Winkel (oder 20 Winkel und 20 Stäbe) deutlich mehr, damit man die Produktion nach und nach erhöhen kann.
+
+**Umgesetzt:** v0.5.0 (siehe Versionshistorie). Claude hat dabei das Verhältnis 5 : 1 aus dem Rechenbeispiel übernommen und die Goldbeträge ×10 gerechnet (offene Fragen 2 und 3).
 
 ### 05.11.2026 – Chat 2, Teil 2: Feedback zu v0.4.0 & neues Produktionskonzept
 
