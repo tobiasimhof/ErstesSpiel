@@ -7,6 +7,7 @@
 //   2 (v0.5.0): + Laden-Lager, Zustand der Gebäude, Waren auf Bändern
 //   3 (v0.6.0): Techbaum – Sägewerk und Steinmetz 2 × 2, Holzwinkel → Holzplatte,
 //               Splitt → Stein-Zahnrad, Eisen-Kette
+//   4 (v0.6.1): größeres Grundstück (22 × 14) und größere Welt (40 × 26)
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
@@ -17,9 +18,9 @@ import { isDir, sortDirs } from './dirs.js';
 import { footprintSize, rotateLocal } from './geometry.js';
 import { buildingContents, createProductionState, productionOf } from './production.js';
 import { addAllToStorage } from './shop.js';
-import { parseTileKey } from './state.js';
+import { START_PLOT, WORLD_HEIGHT, WORLD_WIDTH, parseTileKey } from './state.js';
 
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 4;
 
 // v0.6.0: Waren und Rezepte, die es nicht mehr gibt, und was aus ihnen wird.
 const RENAMED_ITEMS = { holzwinkel: 'holzplatte', splitt: 'steinzahnrad' };
@@ -71,6 +72,17 @@ function migrate(state, from) {
     if (from >= 2 && isObj(state.storage)) {
       state.storage.eisenerz = (isCount(state.storage.eisenerz) ? state.storage.eisenerz : 0) + IRON_GIFT;
     }
+  }
+  if (from < 4 && isObj(state.world) && isObj(state.plot)) {
+    // v0.6.0 → v0.6.1: Grundstück und Welt wachsen nach rechts und unten.
+    // Gebäude und Bänder bleiben, wo sie sind.
+    const grow = (obj, key, min) => {
+      if (isInt(obj[key])) obj[key] = Math.max(obj[key], min);
+    };
+    grow(state.world, 'width', WORLD_WIDTH);
+    grow(state.world, 'height', WORLD_HEIGHT);
+    grow(state.plot, 'width', START_PLOT.width);
+    grow(state.plot, 'height', START_PLOT.height);
   }
   return state;
 }

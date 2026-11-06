@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.6.0 – Techbaum, Teil 1 (Eisen-Kette, Maschinen 2 × 2) |
+| **Aktuelle Version** | v0.6.1 – Größeres Grundstück (22 × 14) |
 | **Phase** | M1 – Fabrik-Grundgerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias testet v0.6.0 auf dem Tablet und gibt Feedback (z. B. zu Preisen und Anschlüssen); danach plant Claude **v0.7.0 – Handel** (Abschnitt 6) |
+| **Nächster Schritt** | Neuer Chat: Tobias testet kurz v0.6.1 (Platz für die zweite Eisen-Linie). Danach stellt Claude den **Plan für v0.7.0 – Handel** vor (Abschnitt 6, Stichpunkte unter „Ausblick v0.7.0“), Tobias gibt ihn frei, dann wird programmiert |
 
 ---
 
@@ -86,7 +86,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 
 ### 3.3 Fabrik
 
-- Das Grundstück besteht aus quadratischen Feldern (Raster). Man startet klein und kauft Fläche dazu, immer teurer.
+- Das Grundstück besteht aus quadratischen Feldern (Raster). Man startet mit **22 × 14 Feldern** (seit v0.6.1, vorher 16 × 10) und kauft später Fläche dazu, immer teurer. Ringsum liegt gesperrte Fläche (Welt 40 × 26), die man später kaufen kann.
 - **Der Laden ist das ganze Grundstück**, kein einzelnes Gebäude. Darauf stehen zu Beginn ein Holzfällerlager und ein Steinbruch.
 - Gebäude belegen mehrere Felder und haben Ein- und Ausgänge. **Größen (Tobias, 06.11.2026):** Maschinen 2 × 2 (damit sie später zwei Eingänge für zwei verschiedene Rohstoffe haben können), alles andere kleiner: Förderbänder 1 × 1, Lagerhaus 2 × 1, Versandportal 1 × 1.
 - **Förderbänder** verbinden die Gebäude und transportieren Waren Stück für Stück.
@@ -333,10 +333,28 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | v0.5.1 | **Kompakter:** Lagerhaus 2 × 1 (oben links rein, unten rechts raus), Versandportal 1 × 1 mit einem Eingang | ✅ fertig |
 | v0.5.2 | **Techbaum festgelegt:** Antworten von Tobias, Namen, Größen, Preistabelle und Plan für v0.6.0 in der README (Spiel unverändert) | ✅ fertig |
 | v0.6.0 | **Techbaum, Teil 1:** Grundmaschinen 2 × 2 mit neuen Modi (Sägewerk, Steinmetz, Schmiede), Eisen-Kette mit Schmelzhütte, Preistabelle | ✅ fertig |
-| v0.7.0 | **Handel:** Händler (Rohstoffe kaufen), Laden mit von Hand bestückten Verkaufstheken, zufällige Kunden mit zufälligen Einkäufen, Gold; Bauen kostet Gold; Start ohne Gold mit Gratis-Holzstamm; Pleiteschutz | |
+| v0.6.1 | **Größeres Grundstück:** 22 × 14 statt 16 × 10 Felder, wächst nach rechts und unten | ✅ fertig |
+| v0.7.0 | **Handel:** Händler (Rohstoffe kaufen), Laden mit von Hand bestückten Verkaufstheken, zufällige Kunden mit zufälligen Einkäufen, Gold; Bauen kostet Gold; Start ohne Gold mit Gratis-Holzstamm; Pleiteschutz | als Nächstes planen |
 | v0.8.0 | **Techbaum, Teil 2:** Kombinations-Maschinen mit zwei Zutaten und die Weiterverarbeitung (Kugellager, Regler, Mini-Schloss …) | |
 | v0.9.0 | **Laden-Level:** Freischalten nach Level (Holz → Stein → Eisen), Laden-Ausbau mit Gold und Waren | |
 | v0.10.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
+
+### Ausblick v0.7.0 – Handel (Plan noch nicht besprochen)
+
+Was bereits feststeht (Abschnitte 3.4 und 7) und in den Plan gehört:
+- **Händler:** Rohstoffe kaufen – Holzstamm und Felsbrocken je 550 Gold, Eisenerz 2.200 Gold (Preistabelle 4.2). Später kann man jede Ware kaufen, teurer als selbst herstellen.
+- **Laden mit Verkaufstheken:** zu Beginn 2 Theken, je eine Sorte, bis 20 Stück; von Hand aus dem Laden-Lager bestückt.
+- **Kunden:** alle 10–30 Sekunden einer, kauft 1–3 Waren zum festen Wert aus der Preistabelle.
+- **Gold:** Start ohne Gold (bisher stehen 100 Gold oben – Platzhalter); der erste Holzstamm ist gratis. Pleiteschutz: Bei absoluter Pleite gibt es einen Holzstamm geschenkt.
+- **Bauen kostet Gold** (bisher kostenlos). Abreißen erstattet.
+- **Offene Punkte für den Plan:** Baukosten je Gebäude; was mit dem Startvorrat bestehender Spielstände passiert (z. B. behalten); ob das Laden-Lager (500 Plätze) so bleibt; ob Fläche kaufen schon hier oder erst mit dem Laden-Level (v0.9.0) kommt.
+
+### v0.6.1 – Größeres Grundstück (fertig)
+
+- **Grundstück 22 × 14 Felder** statt 16 × 10. Es wächst nach rechts und unten; Gebäude und Bänder bleiben, wo sie sind. Die Welt drumherum wächst von 32 × 20 auf 40 × 26, damit später noch Fläche zum Kaufen bleibt.
+- **Bestehende Spielstände** (Spielstand-Version 3 → 4) bekommen die größere Fläche beim nächsten Öffnen automatisch.
+- Anlass: Tobias' Fabrik nach dem Test von v0.6.0 – für eine zweite Eisen-Linie fehlte der Platz.
+- Dies ist eine Zwischenlösung bis „Fläche kaufen“ (Abschnitt 3.5); 22 × 14 ist dann die Startgröße.
 
 ### v0.6.0 – Techbaum, Teil 1 (fertig)
 
@@ -460,6 +478,7 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | 06.11.2026 | Plan für v0.6.0 mit Preistabelle und Anschlüssen freigegeben, „erstmal so umsetzen und dann schauen, wie es wirkt“ | Tobias (Chat 4). Preise werden nach dem Test angepasst. |
 | 06.11.2026 | Rezept-Knöpfe heißen kurz „Platten“, „Stäbe“, „Zahnräder“, „Nägel“; Symbole: Schmelzhütte 🔥, Schmiede 🔨 | Claudes Wahl; jederzeit änderbar. |
 | 06.11.2026 | Alte Sägewerke und Steinmetze wachsen so, dass ihre Anschlüsse an derselben Stelle bleiben | Bestehende Bänder bleiben angeschlossen; nur wenn kein Platz ist, wird versetzt. |
+| 06.11.2026 | Grundstück 22 × 14 statt 16 × 10 (wächst nach rechts und unten), Welt 40 × 26; gilt auch für bestehende Spielstände | Tobias (Chat 4): Für eine zweite Eisen-Linie fehlte der Platz. Zwischenlösung bis „Fläche kaufen“. |
 
 ---
 
@@ -467,14 +486,28 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 
 Stand 06.11.2026.
 
-1. **Feedback zu v0.6.0:** Wirken Preise, Größen und Anschlüsse? Danach Plan für v0.7.0 (Handel).
-2. **Laden-Level (v0.9.0):** Was kostet ein Aufstieg (Gold und Waren)? Gibt es zusätzlich Freischaltpunkte? Vorschlag kommt mit dem Plan für v0.9.0.
-3. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
-4. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
+1. **Plan für v0.7.0 (Handel)** im neuen Chat vorstellen und freigeben lassen; offene Punkte dazu stehen in Abschnitt 6 unter „Ausblick v0.7.0“.
+2. **Preise:** Tobias hat v0.6.0 getestet und nichts bemängelt („alles sieht gut aus“). Ob die Preise sich im Spiel gut anfühlen, zeigt sich erst mit dem Verkaufen (v0.7.0).
+3. **Laden-Level (v0.9.0):** Was kostet ein Aufstieg (Gold und Waren)? Gibt es zusätzlich Freischaltpunkte? Vorschlag kommt mit dem Plan für v0.9.0.
+4. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
+5. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.6.1 – Größeres Grundstück (06.11.2026)
+
+**Vorgenommen:**
+- Platz für eine zweite Eisen-Linie schaffen, ohne „Fläche kaufen“ vorzuziehen.
+
+**Fragen, die wir uns gestellt haben:**
+- In welche Richtung wächst das Grundstück? → Nach rechts und unten, damit bestehende Gebäude und Bänder unverändert bleiben.
+- Passt auf dem Handy noch alles auf den Bildschirm? → Ja, beim Öffnen wird das ganze Grundstück gezeigt; Gebäude bleiben erkennbar (Browser-Test).
+
+**Gemacht:**
+- Grundstück 22 × 14, Welt 40 × 26, Spielstand-Version 4 mit Umwandlung.
+- 69 automatische Tests (neu: Umwandlung von Version 3, Startgröße) und der Browser-Test in Tablet- und Handygröße – alle bestanden.
 
 ### v0.6.0 – Techbaum, Teil 1 (06.11.2026)
 
@@ -653,6 +686,16 @@ Stand 06.11.2026.
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 06.11.2026 – Chat 4, Teil 2: Test von v0.6.0 & größeres Grundstück
+
+**Feedback von Tobias** (Screenshot vom Tablet): Alles sieht gut aus, die Ware kommt im Laden an. Tobias hat eine Fabrik mit 2 Sägewerken, 2 Steinmetzen, einer Schmiede, 3 Lagerhäusern als Verteiler und 5 Versandportalen gebaut. Für eine zweite Eisen-Linie fehlt aber der Platz.
+
+**Claudes Vorschlag:** v0.6.1 – Grundstück 22 × 14 statt 16 × 10, wächst nach rechts und unten, auch für bestehende Spielstände; „Fläche kaufen“ bleibt für später.
+
+**Tobias:** Passt so. Alles in der README festhalten, weil danach ein neuer Chat startet.
+
+**Umgesetzt:** v0.6.1 (siehe Versionshistorie). Der neue Chat beginnt mit dem Plan für v0.7.0 (Handel).
 
 ### 06.11.2026 – Chat 4: Freigabe v0.6.0
 

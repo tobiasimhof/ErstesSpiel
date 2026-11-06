@@ -140,15 +140,39 @@ test('Spielstand aus v0.5 (Version 2) wird auf den Techbaum umgestellt', () => {
 
 test('Passt eine gewachsene Maschine nirgends hin, kommt ihr Inhalt ins Laden-Lager', () => {
   const v2 = v2Game();
-  v2.plot = { x: 14, y: 6, width: 2, height: 1 }; // nur Platz für das alte 2 × 1-Sägewerk
-  v2.buildings = [v2.buildings[1]];
-  v2.belts = {};
+  v2.buildings = [v2.buildings[1]]; // Sägewerk 2 × 1 bei (14,6)
   v2.storage = {};
+  // Alles andere auf dem (gewachsenen) Grundstück ist mit Bändern belegt.
+  v2.belts = {};
+  for (let y = 5; y < 5 + 14; y++) {
+    for (let x = 8; x < 8 + 22; x++) if (!(y === 6 && (x === 14 || x === 15))) v2.belts[`${x},${y}`] = { outs: ['E'] };
+  }
   const loaded = deserializeGame(JSON.stringify({ saveVersion: 2, savedAt: 5, state: v2 }));
   assert.ok(loaded);
   assert.equal(loaded.state.buildings.length, 0, 'abgerissen');
   assert.deepEqual(loaded.state.storage, { eisenerz: 2, holzblock: 3, holzplatte: 1 });
   assert.equal(loaded.notes.length, 1);
+});
+
+test('Spielstand aus v0.6.0 (Version 3): Grundstück wächst nach rechts und unten, alles bleibt an seinem Platz', () => {
+  const v3 = createNewGame();
+  v3.world = { width: 32, height: 20 };
+  v3.plot = { x: 8, y: 5, width: 16, height: 10 };
+  const before = JSON.stringify(v3.buildings);
+  const loaded = deserializeGame(JSON.stringify({ saveVersion: 3, savedAt: 5, state: v3 }));
+  assert.ok(loaded);
+  assert.equal(loaded.migratedFrom, 3);
+  assert.deepEqual(loaded.state.plot, { x: 8, y: 5, width: 22, height: 14 });
+  assert.deepEqual(loaded.state.world, { width: 40, height: 26 });
+  assert.equal(JSON.stringify(loaded.state.buildings), before, 'Gebäude unverändert');
+  assert.deepEqual(loaded.state.storage, v3.storage, 'kein Geschenk doppelt');
+  assert.deepEqual(loaded.notes, []);
+});
+
+test('Neues Spiel startet mit 22 × 14 Feldern', () => {
+  const s = createNewGame();
+  assert.deepEqual([s.plot.width, s.plot.height], [22, 14]);
+  assert.ok(s.plot.x + s.plot.width < s.world.width && s.plot.y + s.plot.height < s.world.height, 'gesperrte Fläche rundherum');
 });
 
 test('Kaputte oder fremde Daten werden abgelehnt', () => {
