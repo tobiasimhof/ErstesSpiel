@@ -690,6 +690,138 @@ button.pick-row {
   justify-content: flex-end;
 }
 
+/* ---------- Laden-Level (v0.9.0) ---------- */
+
+/* „Laden-Level 1“ oben ist ein Knopf, sieht aber aus wie die übrige Leiste */
+button.hud-level {
+  min-height: 34px;
+  padding: 0 10px;
+  color: var(--parchment);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(243, 230, 196, 0.35);
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+button.hud-level:active {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+button.hud-level.ready {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(255, 212, 59, 0.45);
+  animation: level-ready 1.6s ease-in-out infinite;
+}
+
+.level-ready {
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--ink);
+  font-weight: 800;
+}
+
+@keyframes level-ready {
+  50% {
+    box-shadow: 0 0 0 5px rgba(255, 212, 59, 0.2);
+  }
+}
+
+/* Gesperrte Gebäude in der Bauleiste */
+.build-item.locked {
+  opacity: 0.5;
+  background: var(--parchment-dark);
+}
+
+.build-lock {
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.trade-row.locked {
+  opacity: 0.6;
+}
+
+.level-banner {
+  margin: 0 44px 10px 0;
+  padding: 8px 12px;
+  background: rgba(47, 158, 68, 0.18);
+  border: 1px solid var(--ok);
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.level-list,
+.goal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.level-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(138, 106, 63, 0.3);
+  border-radius: 8px;
+}
+
+.level-badge {
+  flex: 0 0 auto;
+  font-weight: 700;
+}
+
+.level-text {
+  font-size: 14px;
+}
+
+.goal-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(138, 106, 63, 0.3);
+  border-radius: 8px;
+}
+
+.goal-row.done {
+  background: rgba(47, 158, 68, 0.15);
+  border-color: rgba(47, 158, 68, 0.5);
+}
+
+.goal-mark {
+  font-size: 18px;
+}
+
+.goal-name {
+  flex: 1;
+  font-weight: 700;
+}
+
+.goal-count {
+  font-weight: 700;
+}
+
+.level-reward {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(138, 106, 63, 0.12);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.level-reward > div + div {
+  margin-top: 4px;
+}
+
+button.level-up {
+  min-height: 46px;
+  padding: 0 18px;
+}
+
 /* ---------- Spiel startet nicht ---------- */
 
 #boot-error {

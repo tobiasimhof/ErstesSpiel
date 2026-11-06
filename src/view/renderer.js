@@ -6,6 +6,7 @@ import { BUILDINGS } from '../core/data/buildings.js';
 import { DELTA, opposite, step } from '../core/dirs.js';
 import { buildingPorts, footprintSize } from '../core/geometry.js';
 import { inputSides, pathDirections } from '../core/belts.js';
+import { landOffer, landOffers } from '../core/land.js';
 import { buildingProgress, buildingStatus } from '../core/production.js';
 import { BELT_SPEED, TICK } from '../core/sim.js';
 import { drawItem } from './itemArt.js';
@@ -39,6 +40,9 @@ const COLORS = {
   barBack: 'rgba(0, 0, 0, 0.45)',
   barFill: '#ffe066',
   previewArrow: '#fff8dc',
+  landSignText: '#ffe066',
+  landSignPoor: 'rgba(243, 230, 196, 0.6)',
+  landPick: 'rgba(255, 212, 59, 0.28)',
 };
 
 const EMOJI_FONT = '"Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", sans-serif';
@@ -82,6 +86,43 @@ export function createRenderer(canvas) {
     if (ui.ghost) drawBuilding(ui.ghost, cam, { alpha: 0.7, outline: ui.ghost.valid ? COLORS.ghostOk : COLORS.ghostBad });
 
     drawPlotLabel(state, cam);
+    // Schilder „＋ Preis“ zum Flächenkauf, nur beim Ansehen und in der Bauleiste
+    if (ui.mode === 'normal' || ui.mode === 'menu') drawLandSigns(state, cam);
+  }
+
+  // ---------- Fläche kaufen (v0.9.0) ----------
+
+  // An jeder Seite, an der es noch Fläche gibt, ein Schild mit dem Preis.
+  // Es liegt auf der gesperrten Fläche direkt neben dem Grundstück, mittig
+  // zur Seite, und ist auf dem Bildschirm etwa gleich groß.
+  function drawLandSigns(state, cam) {
+    const p = state.plot;
+    const fontSize = 13 / cam.zoom;
+    const gap = 5 / cam.zoom;
+    ctx.font = `700 ${fontSize}px ${LABEL_FONT}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    for (const offer of landOffers(state)) {
+      const text = `＋ ${offer.price.toLocaleString('de-DE')} 🪙`;
+      const boxW = ctx.measureText(text).width + 16 / cam.zoom;
+      const boxH = fontSize * 1.8;
+      const midX = (offer.x + offer.width / 2) * TILE;
+      const midY = (offer.y + offer.height / 2) * TILE;
+      let x = midX - boxW / 2;
+      let y = midY - boxH / 2;
+      if (offer.side === 'E') x = (p.x + p.width) * TILE + gap;
+      if (offer.side === 'W') x = p.x * TILE - gap - boxW;
+      if (offer.side === 'N') y = p.y * TILE - gap - boxH;
+      if (offer.side === 'S') y = (p.y + p.height) * TILE + gap;
+      ctx.fillStyle = COLORS.labelBg;
+      roundRect(x, y, boxW, boxH, boxH / 2);
+      ctx.fill();
+      ctx.strokeStyle = COLORS.plotBorder;
+      ctx.lineWidth = 1.5 / cam.zoom;
+      ctx.stroke();
+      ctx.fillStyle = state.gold >= offer.price ? COLORS.landSignText : COLORS.landSignPoor;
+      ctx.fillText(text, x + boxW / 2, y + boxH / 2 + fontSize * 0.05);
+    }
   }
 
   // ---------- Boden ----------
@@ -441,6 +482,13 @@ export function createRenderer(canvas) {
     } else if (selected.kind === 'belt') {
       roundRect(selected.x * TILE + 2, selected.y * TILE + 2, TILE - 4, TILE - 4, 8);
       ctx.stroke();
+    } else if (selected.kind === 'land') {
+      // Der Streifen, der gekauft würde
+      const offer = landOffer(state, selected.side);
+      if (!offer) return;
+      ctx.fillStyle = COLORS.landPick;
+      ctx.fillRect(offer.x * TILE, offer.y * TILE, offer.width * TILE, offer.height * TILE);
+      ctx.strokeRect(offer.x * TILE, offer.y * TILE, offer.width * TILE, offer.height * TILE);
     }
   }
 

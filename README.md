@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.8.0 – Eisenstange statt Eisennägel |
+| **Aktuelle Version** | v0.9.0 – Fläche kaufen & erste Level |
 | **Phase** | M1 – Fabrik-Grundgerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Neuer Chat: Tobias spielt kurz v0.8.0 (Eisenstangen; zum Beurteilen des Verkaufstempos den Testmodus ausschalten – er beschleunigt auch die Kunden ×10). Danach stellt Claude den **Plan für v0.9.0 – Techbaum, Teil 2** vor (Entwurf der Rezepte mit Eisenstange in Abschnitt 4.2, Stichpunkte in Abschnitt 6 unter „Ausblick v0.9.0“), Tobias gibt ihn frei, dann wird programmiert |
+| **Nächster Schritt** | Tobias testet v0.9.0: mit einem neuen Spiel (☰ → Neues Spiel) den Weg Holz → Stein → Eisen über die Level und Fläche kaufen (Schilder „＋“ am Rand). Danach stellt Claude den **Plan für v0.10.0 – Techbaum, Teil 2** vor (Entwurf der Rezepte in Abschnitt 4.2, Stichpunkte in Abschnitt 6 unter „Ausblick v0.10.0“), Tobias gibt ihn frei, dann wird programmiert |
 
 ---
 
@@ -86,8 +86,8 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 
 ### 3.3 Fabrik
 
-- Das Grundstück besteht aus quadratischen Feldern (Raster). Man startet mit **22 × 14 Feldern** (seit v0.6.1, vorher 16 × 10) und kauft später Fläche dazu, immer teurer. Ringsum liegt gesperrte Fläche (Welt 40 × 26), die man später kaufen kann.
-- **Der Laden ist das ganze Grundstück**, kein einzelnes Gebäude. Darauf stehen zu Beginn ein Holzfällerlager, ein Steinbruch und (seit v0.7.0) ein Versandportal.
+- Das Grundstück besteht aus quadratischen Feldern (Raster). Man startet mit **22 × 14 Feldern** (seit v0.6.1, vorher 16 × 10). Ringsum liegt gesperrte Fläche (Welt 40 × 26). **Seit v0.9.0 kauft man Fläche dazu:** An jeder Seite des Grundstücks steht ein Schild mit dem Preis; ein Streifen ist 2 Felder tief und reicht über die ganze Seite. Jeder Kauf wird teurer (Abschnitt 6, v0.9.0).
+- **Der Laden ist das ganze Grundstück**, kein einzelnes Gebäude. Darauf stehen zu Beginn ein Holzfällerlager und (seit v0.7.0) ein Versandportal. Bis v0.8.0 stand dort auch ein Steinbruch; seit v0.9.0 baut man ihn ab Level 2 selbst.
 - Gebäude belegen mehrere Felder und haben Ein- und Ausgänge. **Größen (Tobias, 06.11.2026):** Maschinen 2 × 2 (damit sie später zwei Eingänge für zwei verschiedene Rohstoffe haben können), alles andere kleiner: Förderbänder 1 × 1, Lagerhaus 2 × 1, Versandportal 1 × 1.
 - **Förderbänder** verbinden die Gebäude und transportieren Waren Stück für Stück.
 - **Aufteilen und Zusammenführen durch Ziehen**, ohne Verteiler-Gebäude: Zieht man von einem bestehenden Band aus, teilt es sich auf (bis zu 3 Richtungen pro Feld; mehrfach aufteilen ergibt 4 und mehr Strecken). Zieht man auf ein bestehendes Band, laufen beide zusammen. Abzweigungen verteilen die Waren abwechselnd.
@@ -111,7 +111,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Laden:** Der Knopf „Laden“ unten links öffnet den Laden mit den Reitern **Lager**, **Theken** und **Händler** (seit v0.7.0). Er hat ein eigenes **Lager** (gefüllt über das Versandportal) und **Verkaufstheken**. Die Theken bestückt man **von Hand** mit dem, was man verkaufen möchte; je nach Level bzw. Größe einer Theke passen darauf z. B. 20 Winkel. **Kunden kommen zufällig vorbei und kaufen zufällig viel**, z. B. der eine 2 Zahnräder und 1 Splitt, der nächste 3 Winkel – zu einem „normalen“ Preis. Später darf der Laden interaktiver werden; für den Anfang reicht die Übersicht.
 - **Händler:** Hier kauft man Rohstoffe wie Holzstämme. **Verkaufen kann man nur über die Theken**, nicht an den Händler (Tobias, v0.7.0): Was man nicht mehr braucht, verkauft man über die Theken; vieles braucht man später noch, deshalb lohnt sich ein gemischtes Lager.
 - **Nachfrage:** Wer viel von einer Ware verkauft, drückt ihren Preis. Mit der Zeit erholt er sich wieder. Dazu kommen Trends, z. B. „Die Stadt baut eine Mauer: Steinblöcke +50 % für 2 Tage“. Eine Tür bringt also mal mehr, mal weniger Gold, je nachdem, wie gefragt sie gerade ist. So entsteht das Wirtschaftsgefühl, und es lohnt sich, je nach Marktlage umzubauen.
-- **Start:** Kein Startgold. Der erste Holzstamm und der erste Felsbrocken sind gratis, dazu 20 Holzblöcke für die ersten Förderbänder zum Versandportal.
+- **Start:** Kein Startgold. Der erste Holzstamm ist gratis, dazu 20 Holzblöcke für die ersten Förderbänder zum Versandportal. Den ersten Felsbrocken gibt es beim Aufstieg auf Level 2, das erste Eisenerz bei Level 3 (seit v0.9.0).
 - **Pleiteschutz:** Bei absoluter Pleite bekommt man einen Holzstamm geschenkt (Idee von Claude, von Tobias für gut befunden). „Pleite“ heißt: weniger Gold als ein Holzstamm kostet, kein Rohstoff im Lager oder in Arbeit, und alle Waren (Lager, Theken, Fabrik) zusammen sind weniger wert als ein Holzstamm.
 - **Rohstoffe und Erträge:** Stein kostet so viel wie Holz und bringt ähnliche Erträge. Eisen kostet deutlich mehr, bringt aber auch mehr Gold. So verdient man mit jedem neuen Rohstoff mehr – und frühere Produkte verlieren ihren Wert nicht, weil sie für spätere Rezepte gebraucht werden.
 - **Kaufen statt herstellen:** Jede Ware kann man auch kaufen, z. B. eine fertige Tür. Das ist teurer als selbst herstellen, spart aber Platz und Zeit.
@@ -120,8 +120,10 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 ### 3.5 Fortschritt
 
 - **Laden-Level**, ähnlich dem Rathaus in Clash of Clans: Jede Stufe schaltet neue Werkstätten, Rezepte, Lagerplatz und Fläche frei. Jede Stufe wird teurer. **Rohstoffe nach Level:** Holz ab Level 1, Stein ab Level 2, Eisen ab Level 3.
+- **Erste einfache Level (seit v0.9.0):** Level 1 startet nur mit Holz. Wer 1 Holzplatte und 1 Holzstab hergestellt hat, kann auf Level 2 (Stein) aufsteigen; nach 1 Steinplatte und 1 Stein-Zahnrad auf Level 3 (Eisen). Aufsteigen geht per Knopf im Level-Fenster (oben auf „Laden-Level“ tippen) und kostet vorerst nichts. **Zu Beginn jedes Levels gibt es einen Rohstoff gratis** (Tobias).
+- **Später: Aufgaben, Erfahrung und Gold (Modell von Tobias):** Für jedes Level gibt es Aufgaben, z. B. „50 Blöcke und 20 Holzplatten herstellen“. Dafür bekommt man z. B. 100 Erfahrungspunkte (XP) und 250 Gold. Mit genug Erfahrung schaltet man das nächste Level frei und kauft den Aufstieg dann mit Gold, z. B. 100 Gold für Level 2. So gibt es mehrere Handlungsstränge – Ware produzieren, Ware verkaufen, Ware für Aufgaben herstellen – und man setzt den Schwerpunkt seiner Produktion je nachdem anders.
 - **Laden-Ausbau** geht sofort, kostet aber Gold **und** Waren, z. B. 200 Holzzahnräder + 200 Splitt + 500 Gold. So muss man ständig Neues produzieren, und das Produzieren ersetzt das Warten.
-- **Fläche kaufen:** Das Grundstück wird stückweise erweitert, immer teurer und begrenzt durch das Laden-Level.
+- **Fläche kaufen:** Das Grundstück wird stückweise erweitert, immer teurer (seit v0.9.0 im Spiel, mit Gold). Ob das Laden-Level die Fläche begrenzt, entscheiden wir mit den Aufgaben.
 - **Freischaltpunkte (Idee, später entscheiden):** Jeder Laden-Aufstieg gibt Punkte, z. B. 10 Punkte für Level 2. Mit den Punkten schaltet man neue Werkstätten frei, etwa das Sägewerk, und kann sie danach sofort bauen.
 
 ### 3.6 Zeit
@@ -209,7 +211,7 @@ Namen aus Tobias' Tabelle → Spiel: Holz-Werkbank → Sägewerk, Steinmetz-Stat
 
 **Anschlüsse der 2 × 2-Maschinen** (Grundmaschinen seit v0.6.0 im Spiel): Grundmaschinen: Eingang links oben, Ausgang rechts oben (gerade Linie; bestehende Bänder am Sägewerk bleiben angeschlossen). Kombi- und Weiterverarbeitungs-Maschinen: zwei Eingänge links oben und links unten (jeder nimmt jede passende Zutat), Ausgang rechts oben. Block-Gebäude unverändert (Ausgang rechts oben).
 
-**Rezepte und Preise** (Holz, Stein und Eisen bis zu den Grundmaschinen im Spiel, Eisenstange seit v0.8.0; alles ab „Handkurbel“ ist ein **Entwurf für v0.9.0**, noch nicht freigegeben): Regel: Blöcke bringen knapp mehr als der Rohstoff kostet (+9 %), jedes weitere Teil rund 20 % mehr als seine Zutaten zusammen. So macht man beim Verkaufen in der Anfangsphase nie Minus. Stein kostet und bringt so viel wie Holz; Eisen kostet viermal so viel und bringt entsprechend mehr.
+**Rezepte und Preise** (Holz, Stein und Eisen bis zu den Grundmaschinen im Spiel, Eisenstange seit v0.8.0; alles ab „Handkurbel“ ist ein **Entwurf für v0.10.0**, noch nicht freigegeben): Regel: Blöcke bringen knapp mehr als der Rohstoff kostet (+9 %), jedes weitere Teil rund 20 % mehr als seine Zutaten zusammen. So macht man beim Verkaufen in der Anfangsphase nie Minus. Stein kostet und bringt so viel wie Holz; Eisen kostet viermal so viel und bringt entsprechend mehr.
 
 | Ware | Herstellung | Zeit | Wert (Gold) |
 |---|---|---|---|
@@ -235,7 +237,7 @@ Namen aus Tobias' Tabelle → Spiel: Holz-Werkbank → Sägewerk, Steinmetz-Stat
 
 **Eisenstange statt Eisennägel (v0.8.0):** Bis v0.7.1 machte die Schmiede aus 5 Barren 5 Nägel zu je 14 Gold. Tobias fiel beim Spielen auf, dass dadurch extrem viele Nägel entstehen (100–140 im Lager, von allem anderen etwa 20), und an der Theke brachten 20 Nägel nur 280 Gold. Jetzt läuft die Schmiede wie Sägewerk und Steinmetz: 5 : 1. Im Entwurf oben ersetzt „1 Eisenstange“ die bisherigen „2 Eisennägel“ (die Werte sind nach der +20-%-Regel neu gerechnet). Damit braucht jedes Eisen-Kombiteil 5 statt 2 Barren – Eisen wird gefragter. Nägel können später als eigene Stufe zurückkommen (z. B. 1 Eisenstange → mehrere Nägel).
 
-**Freischalten nach Laden-Level** (von Tobias bestätigt): Level 1 Holz, Level 2 Stein (+ Mühlenbauer für die Handkurbel), Level 3 Eisen (+ Zimmerei, Feinwerkstatt), Level 4 Feinschmiede, Getriebebauer, Schlosserei. Den ersten Rohstoff jeder Sorte gibt es gratis: den ersten Holzstamm zum Spielstart, den ersten Felsbrocken beim Erreichen von Level 2, das erste Eisenerz bei Level 3. Bis es Laden-Level gibt (v0.10.0), ist alles sofort baubar.
+**Freischalten nach Laden-Level** (von Tobias bestätigt): Level 1 Holz, Level 2 Stein (+ Mühlenbauer für die Handkurbel), Level 3 Eisen (+ Zimmerei, Feinwerkstatt), Level 4 Feinschmiede, Getriebebauer, Schlosserei. Den ersten Rohstoff jeder Sorte gibt es gratis: den ersten Holzstamm zum Spielstart, den ersten Felsbrocken beim Erreichen von Level 2, das erste Eisenerz bei Level 3. **Seit v0.9.0 im Spiel** (Level 1–3, Spalte „Freigeschaltet ab“ in der Gebäude-Tabelle oben); die Kombinations-Maschinen und Level 4 kommen mit v0.10.0.
 
 **Baukosten** (seit v0.7.0, Platzhalter; Tobias: „erstmal spielen und schauen, ob es nicht zu lange dauert“):
 
@@ -255,17 +257,17 @@ Das Sägewerk kostet nur Holzblöcke, damit die erste Maschine ohne Platten baub
 
 **Holzwinkel und Splitt** fliegen raus (vielleicht kommen sie später wieder). Vorhandene im Spielstand werden umgewandelt: Holzwinkel → Holzplatte, Splitt → Stein-Zahnrad.
 
-### 4.3 Im Spiel (Stand v0.8.0)
+### 4.3 Im Spiel (Stand v0.9.0)
 
 | Stufe | Ware | Woher | Rezept |
 |---|---|---|---|
-| 0 | Holzstamm, Felsbrocken, Eisenerz | Händler (550 / 550 / 2.200 Gold); 1 Holzstamm und 1 Felsbrocken gratis zum Start | – |
+| 0 | Holzstamm (ab Level 1), Felsbrocken (ab Level 2), Eisenerz (ab Level 3) | Händler (550 / 550 / 2.200 Gold); 1 Holzstamm gratis zum Start, je 1 Felsbrocken bzw. Eisenerz gratis beim Aufstieg | – |
 | 1 | Holzblock / Steinblock / Eisenbarren | Holzfällerlager / Steinbruch / Schmelzhütte | 1 Rohstoff → 200 Stück in 15 Minuten |
 | 2 | Holzplatte / Holzstab | Sägewerk, Einstellung „Platten“ / „Stäbe“ | 5 Holzblöcke → 1 Teil (5 Sekunden) |
 | 2 | Steinplatte / Stein-Zahnrad | Steinmetz, Einstellung „Platten“ / „Zahnräder“ | 5 Steinblöcke → 1 Teil (5 Sekunden) |
 | 2 | Mini-Eisenplatte / Eisenstange | Schmiede, Einstellung „Platten“ / „Stangen“ | 5 Eisenbarren → 1 Teil (5 Sekunden) |
 
-Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit v0.9.0.
+Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit v0.10.0.
 
 **Ideen für später:** weitere Rohstoffe wie Eisenerz (Schmelze, Schmiede, echte Nägel, Werkzeuge), Lehm (Ziegel), Hanf (Seile), Sand (Glas); größere Waren wie Fässer, Karren, Fenster.
 
@@ -301,6 +303,8 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | `src/core/data/items.js` | Datentabelle der Waren (Name, Preise, Aussehen) |
 | `src/core/data/recipes.js` | Datentabelle der Rezepte (Zutaten, Ergebnis, Zeit) |
 | `src/core/data/shop.js` | Laden: Lagergröße und Theken je Level, Kunden-Takt, Startvorrat, Testpaket |
+| `src/core/data/levels.js` | Laden-Level: Name, Ziel für den Aufstieg, Gratis-Rohstoff (was ein Level freischaltet, steht als `level` bei Gebäuden und Rohstoffen) |
+| `src/core/data/land.js` | Fläche kaufen: Streifentiefe, Preis je Feld, Preissteigerung |
 | `src/core/state.js` | Spielzustand anlegen, Abfragen auf dem Raster |
 | `src/core/dirs.js` | Himmelsrichtungen (oben, rechts, unten, links) |
 | `src/core/geometry.js` | Größe, Drehung, Felder sowie Ein- und Ausgänge von Gebäuden |
@@ -310,6 +314,8 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | `src/core/sim.js` | Simulation in festen Takten: Waren auf Bändern, Stau, Aufteilen, Zusammenführen |
 | `src/core/shop.js` | Laden-Lager, Baukosten bezahlen und zurückgeben |
 | `src/core/market.js` | Handel: Händler, Theken, Kunden (mit eigenem Zufall im Spielstand), Pleiteschutz, Testpaket |
+| `src/core/levels.js` | Laden-Level: was freigeschaltet ist, hergestellte Waren zählen, Ziel prüfen, aufsteigen |
+| `src/core/land.js` | Fläche kaufen: Streifen und Preis je Seite, Kauf, welche Seite ein Feld der gesperrten Fläche ist |
 | `src/core/save.js` | Spielstand in Text umwandeln, prüfen und alte Spielstände umwandeln |
 | `src/view/camera.js` | Kamera: verschieben, zoomen, Bildschirm ↔ Welt umrechnen |
 | `src/view/input.js` | Touch, Maus und Mausrad (Antippen, Ziehen, zwei Finger) |
@@ -319,6 +325,7 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | `src/view/hud.js` | Obere Leiste und Menü ☰ |
 | `src/view/panels.js` | Infofenster, großes Fenster, Rückfragen, Meldungen |
 | `src/view/shop.js` | Laden-Fenster mit den Reitern Lager, Theken, Händler |
+| `src/view/levels.js` | Level-Fenster: Freigeschaltetes, nächstes Ziel mit Häkchen, Knopf „Aufsteigen“ |
 | `src/view/format.js` | Texte für Zahlen, Waren und Kosten |
 | `src/view/buildbar.js` | Untere Leisten: Laden/Bauen, Bauleiste, Werkzeugleiste |
 | `src/view/press.js` | Knöpfe reagieren aufs Loslassen des Fingers (siehe Entscheidungen) |
@@ -326,8 +333,8 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | `src/style.css` | Aussehen der Oberfläche |
 | `assets/icons/` | App-Symbole (erzeugt mit `tools/make-icons.py`) |
 | `tools/set-version.mjs` | Setzt die Versionsnummer in `src/version.js` und `index.html` (inkl. Import-Map) |
-| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Speichern, Kamera, Versionsnummer |
-| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Abreißen, Speichern und Neues Spiel per Touch durch |
+| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer |
+| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen, Abreißen, Speichern, Neues Spiel, Theken, Aufsteigen und die Eisen-Kette per Touch durch |
 
 **Prüfen vor jedem Merge:** `npm test` (Spielregeln) und `npm run test:browser` (Browser-Test).
 
@@ -362,17 +369,47 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | v0.7.0 | **Handel:** Händler (Rohstoffe kaufen), Laden mit von Hand bestückten Verkaufstheken, zufällige Kunden mit zufälligen Einkäufen, Gold; Bauen kostet Waren; Start ohne Gold mit Gratis-Holzstamm; Pleiteschutz | ✅ fertig |
 | v0.7.1 | **Fehlerkorrektur:** Spiel startete nach dem Update nicht (alte und neue Dateien gemischt); Meldung statt schwarzem Bildschirm | ✅ fertig |
 | v0.8.0 | **Eisenstange:** Schmiede macht Eisenstangen (5 : 1) statt Eisennägel (5 : 5); vorhandene Nägel werden umgewandelt | ✅ fertig |
-| v0.9.0 | **Techbaum, Teil 2:** Kombinations-Maschinen mit zwei Zutaten und die Weiterverarbeitung (Kugellager, Regler, Mini-Schloss …) | als Nächstes planen |
-| v0.10.0 | **Laden-Level:** Freischalten nach Level (Holz → Stein → Eisen), Laden-Ausbau mit Gold und Waren | |
-| v0.11.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
+| v0.9.0 | **Fläche kaufen & erste Level:** Grundstück streifenweise mit Gold vergrößern; Level 1 Holz → 2 Stein → 3 Eisen mit einfachen Zielen und Gratis-Rohstoff | ✅ fertig |
+| v0.10.0 | **Techbaum, Teil 2:** Kombinations-Maschinen mit zwei Zutaten und die Weiterverarbeitung (Kugellager, Regler, Mini-Schloss …), dazu Level 4 | als Nächstes planen |
+| v0.11.0 | **Aufgaben:** Aufgaben mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen (Modell von Tobias, Abschnitt 3.5) | |
+| v0.12.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
 
-### Ausblick v0.9.0 – Techbaum, Teil 2 (Plan noch nicht besprochen)
+### Ausblick v0.10.0 – Techbaum, Teil 2 (Plan noch nicht besprochen)
 
 Was bereits feststeht (Abschnitte 4.2 und 7) und in den Plan gehört:
 - **6 neue Maschinen**, alle 2 × 2, je zwei Einstellungen: Mühlenbauer, Zimmerei, Feinwerkstatt (Kombi aus Grundteilen) sowie Feinschmiede, Getriebebauer, Schlosserei (Weiterverarbeitung).
 - **Anschlüsse:** zwei Eingänge links oben und links unten (jeder nimmt jede passende Zutat), Ausgang rechts oben.
 - **Rezepte und Werte:** Entwurf in Abschnitt 4.2 – seit v0.8.0 mit „1 Eisenstange“ statt „2 Eisennägel“; die Werte sind nach der +20-%-Regel neu gerechnet und müssen noch freigegeben werden.
-- **Offene Punkte für den Plan:** Baukosten der 6 Maschinen in Waren (Tabelle wie in 4.2 fortsetzen); Eisenfeder hat im Entwurf nur eine Zutat (1 Eisenstange) – so lassen oder eine zweite Zutat?; die beiden freien Einstellungen (Zimmerei B, Schlosserei B); wie eine Werkstatt anzeigt, welche Zutat ihr noch fehlt; ob Kunden die teuren Teile genauso oft kaufen wie einfache.
+- **Level:** Mühlenbauer ab Level 2, Zimmerei und Feinwerkstatt ab Level 3, Feinschmiede, Getriebebauer und Schlosserei ab Level 4 – dafür braucht Level 4 ein Ziel und einen Gratis-Rohstoff (oder etwas anderes als Geschenk, weil es keinen vierten Rohstoff gibt).
+- **Offene Punkte für den Plan:** Baukosten der 6 Maschinen in Waren (Tabelle wie in 4.2 fortsetzen; Tobias: eine gute Balance der Maschinenkosten macht das Hinarbeiten auf Neues reizvoll); Eisenfeder hat im Entwurf nur eine Zutat (1 Eisenstange) – so lassen oder eine zweite Zutat?; die beiden freien Einstellungen (Zimmerei B, Schlosserei B); wie eine Werkstatt anzeigt, welche Zutat ihr noch fehlt; ob Kunden die teuren Teile genauso oft kaufen wie einfache.
+
+### v0.9.0 – Fläche kaufen & erste Level (fertig)
+
+**Fläche kaufen:**
+- An jeder Seite des Grundstücks steht auf der gesperrten Fläche ein Schild mit dem Preis, z. B. „＋ 280 🪙“ (gelb = genug Gold, blass = zu wenig). Antippen der gesperrten Fläche neben dem Grundstück zeigt den Streifen hell und ein Fenster „Fläche kaufen“ mit Größe, Preis und Knopf „Kaufen“. Ecken lassen sich nicht direkt kaufen; sie kommen mit, wenn man an zwei Seiten gekauft hat.
+- Ein Streifen ist **2 Felder tief** und reicht über die ganze Seite (am Rand der Welt notfalls 1 Feld). Gebäude und Bänder bleiben, wo sie sind.
+- **Preis (Platzhalter):** 10 Gold je Feld, jeder Kauf macht jedes Feld 20 % teurer (auf 10 Gold gerundet). Beispiele: erster Streifen rechts oder links 2 × 14 = 28 Felder für 280 Gold, oben oder unten 2 × 22 = 44 Felder für 440 Gold; der zweite Kauf kostet 12 Gold je Feld, der fünfte etwa 21, der zehnte etwa 52.
+- Bis zum Rand der Welt (40 × 26 Felder) sind es 16 Käufe – gut dreimal so viel Fläche wie zum Start.
+- Beim Öffnen wird das ganze Grundstück gezeigt, mit etwas Rand, damit die Schilder oben und unten sichtbar sind.
+
+**Erste Level:**
+
+| Level | Neu freigeschaltet | Gratis beim Aufstieg | Aufsteigen, sobald hergestellt |
+|---|---|---|---|
+| 1 · Holz | Holzfällerlager, Sägewerk, Lagerhaus, Versandportal, Förderband; Holzstamm beim Händler | Start: 1 Holzstamm, 20 Holzblöcke | – |
+| 2 · Stein | Steinbruch, Steinmetz; Felsbrocken beim Händler | 1 Felsbrocken | 1 Holzplatte + 1 Holzstab |
+| 3 · Eisen | Schmelzhütte, Schmiede; Eisenerz beim Händler | 1 Eisenerz | 1 Steinplatte + 1 Stein-Zahnrad |
+
+- **Neues Spiel:** nur Holzfällerlager und Versandportal, 1 Holzstamm und 20 Holzblöcke. Den Steinbruch baut man ab Level 2 selbst (10 Holzplatten + 5 Holzstäbe).
+- **Level-Fenster:** Oben auf „Laden-Level“ tippen. Es zeigt, was freigeschaltet ist, das nächste Ziel mit Häkchen und den Knopf „⬆ Aufsteigen“. Ist das Ziel erreicht, erscheint oben ein ⬆ und eine kurze Meldung. Nach dem Aufstieg gratuliert das Fenster und nennt das Geschenk.
+- **Gesperrtes ist sichtbar:** In der Bauleiste stehen gesperrte Gebäude ausgegraut mit „🔒 Level 2“ hinter Förderband und Abreißen; antippen sagt, ab welchem Level. Beim Händler steht „🔒 ab Level 2“.
+- **Das Spiel zählt mit, was hergestellt wird** (Blöcke, Platten, Stäbe …) – die Grundlage für die späteren Aufgaben.
+- Das **Testpaket** gibt nur Waren, die schon freigeschaltet sind.
+- **Bestehende Spielstände** (Spielstand-Version 6 → 7): Die Fabrik bekommt Level 3, nichts wird gesperrt; Gold, Lager und Gebäude bleiben. Eine Meldung weist auf das Flächenkaufen hin. Der Zähler für Hergestelltes beginnt bei null.
+
+**Was Tobias testet:**
+- Mit der bestehenden Fabrik: Fläche kaufen und die freien Felder für Umbauten nutzen (z. B. Bänder zusammenlegen). Achtung: Gebäude, die vor v0.7.0 gebaut wurden, geben beim Abreißen keine Baukosten zurück (sie waren gratis) – Verschieben ist kostenlos.
+- Mit einem neuen Spiel (☰ → Neues Spiel, die jetzige Fabrik geht dabei verloren): den Weg Holz → Stein → Eisen über die Level. Passen Ziele, Gratis-Rohstoffe und Flächenpreise? Fühlt sich der Einstieg mit nur einem Holzstamm gut an?
 
 ### v0.8.0 – Eisenstange statt Eisennägel (fertig)
 
@@ -545,6 +582,17 @@ Was bereits feststeht (Abschnitte 4.2 und 7) und in den Plan gehört:
 | 06.11.2026 | Alte Nägel: je 5 → 1 Eisenstange, aufgerundet; Nägel auf Bändern zusammengezählt ins Laden-Lager | Claudes Wahl: Der Wert bleibt etwa gleich (5 × 14 = 70 ≈ 72), niemand verliert etwas. |
 | 06.11.2026 | Im Techbaum-Entwurf ersetzt „1 Eisenstange“ die bisherigen „2 Eisennägel“; Werte neu nach +20 % | Claudes Entwurf; wird mit dem Plan für v0.9.0 freigegeben. |
 | 06.11.2026 | Eisenstange als eigener Schritt v0.8.0; Fahrplan rückt nach: v0.9.0 Techbaum Teil 2, v0.10.0 Laden-Level, v0.11.0 Offline | Tobias: „Das kann jetzt schon gerne rein, damit wir alles frisch haben.“ |
+| 06.11.2026 | Theken werden weiter von Hand bestückt, auch im Testmodus kein automatisches Nachfüllen | Tobias (Chat 6): So behält man die Übersicht und verkauft nicht versehentlich alles. |
+| 06.11.2026 | Blöcke zum Bauen: Es bleibt dabei, man plant eine eigene Strecke für Blöcke ein (kein Kauf von Blöcken beim Händler) | Tobias (Chat 6): Abreißen gibt die Baukosten 1 : 1 zurück; die Produktion immer auf das zu verlagern, was gerade gebraucht wird, gehört zum Spielprinzip. |
+| 06.11.2026 | Neue Reihenfolge: v0.9.0 Fläche kaufen & erste Level, v0.10.0 Techbaum Teil 2, v0.11.0 Aufgaben, v0.12.0 Offline | Tobias (Chat 6): Nicht die Zeit, sondern der Platz ist das Problem – für die 6 neuen Maschinen fehlt sonst die Fläche. Level schon jetzt, damit die Logik früh rund spielbar ist. |
+| 06.11.2026 | Fläche kaufen: Streifen 2 Felder tief an einer frei wählbaren Seite, mit Gold, 10 Gold je Feld, jeder Kauf +20 % je Feld, bis zum Rand der Welt | Claudes Vorschlag, von Tobias freigegeben. Gold bekommt damit ein Ziel neben den Rohstoffen. |
+| 06.11.2026 | Erste Level bewusst einfach: Level 2 nach 1 Holzplatte + 1 Holzstab, Level 3 nach 1 Steinplatte + 1 Stein-Zahnrad; Aufsteigen per Knopf, vorerst kostenlos | Tobias (Chat 6): So gibt es schon in der Anfangsphase einen runden Prototyp. |
+| 06.11.2026 | Zu Beginn jedes Levels gibt es einen Rohstoff gratis (Level 1 Holzstamm, Level 2 Felsbrocken, Level 3 Eisenerz) | Tobias (Chat 6). |
+| 06.11.2026 | Später: Aufgaben bringen Erfahrung (XP) und Gold; mit genug XP schaltet man das nächste Level frei und bezahlt den Aufstieg mit Gold; Stränge produzieren, verkaufen, für Aufgaben herstellen | Modell von Tobias (Chat 6), kommt mit v0.11.0. |
+| 06.11.2026 | Neues Spiel startet nur mit Holzfällerlager und Versandportal; den Steinbruch baut man ab Level 2 selbst | Claudes Plan, von Tobias freigegeben: „Level 1 startet man nur mit Holz.“ |
+| 06.11.2026 | Bestehende Spielstände bekommen Level 3 | Claudes Wahl: Tobias' Fabrik hat schon Stein und Eisen, es soll nichts gesperrt werden. |
+| 06.11.2026 | Fläche kauft man über ein Fenster mit Knopf (erst Fläche antippen, dann „Kaufen“) statt mit einem Tipp | Claudes Wahl: Zwei Schritte verhindern versehentliche Käufe; das Fenster zeigt Größe und Preis. |
+| 06.11.2026 | Gesperrte Gebäude stehen in der Bauleiste hinten, mit Schloss und Level; das Testpaket gibt nur freigeschaltete Waren | Claudes Wahl: Was man bauen kann, steht vorn; man sieht trotzdem, was als Nächstes kommt. |
 
 ---
 
@@ -552,16 +600,36 @@ Was bereits feststeht (Abschnitte 4.2 und 7) und in den Plan gehört:
 
 Stand 06.11.2026.
 
-1. **Plan für v0.9.0 (Techbaum, Teil 2)** im neuen Chat vorstellen und freigeben lassen; offene Punkte stehen in Abschnitt 6 unter „Ausblick v0.9.0“.
-2. **Handel im echten Tempo:** Tobias hat v0.7.0 bisher im Testmodus gespielt (Kunden kommen dort 10-mal so oft). Wie fühlen sich Verkaufstempo (2 Theken × 20, ein Kunde alle 10–30 s), Goldertrag und Baukosten in normaler Zeit an? Danach Zahlen anpassen. Erster Eindruck: „Ware verkauft sich und ich nehme Geld ein.“
+1. **Test von v0.9.0:** Passen Flächenpreise, Level-Ziele und Gratis-Rohstoffe? Danach den **Plan für v0.10.0 (Techbaum, Teil 2)** vorstellen und freigeben lassen; offene Punkte stehen in Abschnitt 6 unter „Ausblick v0.10.0“.
+2. **Handel im echten Tempo:** Tobias spielt zuerst im Testmodus durch, um die Logik bis weit in den Fortschritt zu prüfen, und danach in Echtzeit. Bisher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10), deshalb wurde mehr produziert als verkauft. Verkaufstempo, Goldertrag und Baukosten in normaler Zeit danach anpassen.
 3. **Laden-Lager 500 Plätze:** Bleibt das so, oder wird es mit dem Laden-Level größer? Volle Lager stoppen die Versandportale.
-4. **Laden-Level (v0.10.0):** Was kostet ein Aufstieg (Gold und Waren)? Gibt es zusätzlich Freischaltpunkte? Vorschlag kommt mit dem Plan für v0.10.0.
-5. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
-6. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
+4. **Aufgaben (v0.11.0):** Werden die Waren für eine Aufgabe abgegeben (verbraucht), oder zählt nur, dass man sie hergestellt hat? Wie viel Erfahrung braucht ein Level, was kostet ein Aufstieg? Kostet der Laden-Ausbau zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Vorschlag kommt mit dem Plan für v0.11.0.
+5. **Einstieg:** Tobias' Idee, am Anfang vor allem die Massenproduktion auszubauen, damit man schnell genug Ware von allem hat – später austesten.
+6. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
+7. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.9.0 – Fläche kaufen & erste Level (06.11.2026)
+
+**Vorgenommen:**
+- Mehr Platz für neue Maschinen: Fläche kaufen vorziehen (Tobias: Der Platz ist das Problem, nicht die Zeit).
+- Erste, bewusst einfache Level, damit der Weg Holz → Stein → Eisen schon jetzt rund spielbar ist.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie wächst das Grundstück, ohne dass Gebäude verrutschen? → Es bleibt ein Rechteck und wächst in Streifen an einer Seite; alles behält seine Stelle.
+- Wie verhindert man versehentliche Käufe? → Erst die Fläche antippen (Streifen wird hell, Fenster mit Preis), dann „Kaufen“.
+- Woran sieht man, was ein Level bringt und was fehlt? → Level-Fenster mit Häkchen-Liste, ⬆ oben in der Leiste, gesperrte Gebäude mit Schloss in der Bauleiste und beim Händler.
+- Was passiert mit Tobias' Fabrik? → Sie bekommt Level 3; nichts wird gesperrt.
+
+**Gemacht:**
+- Neue Datentabellen `levels.js` und `land.js`, Level bei Gebäuden und Rohstoffen, neue Spielregeln `src/core/levels.js` und `src/core/land.js`, Level-Fenster `src/view/levels.js`.
+- Spielstand-Version 7 mit Umwandlung von Version 6 (Level 3, Zähler, gekaufte Fläche).
+- Nachgestellt: Ein Spielstand wie Tobias' Fabrik aus v0.8.0 öffnet sich mit Level 3, Gold und Gebäuden; die Meldung zum Flächenkauf erscheint.
+- 123 automatische Tests (neu u. a.: Streifen und Preise an allen Seiten, Rand der Welt, ganze Welt kaufen, Antippen der gesperrten Fläche, Sperren beim Bauen und beim Händler, Zählen hergestellter Waren, Aufstieg mit Geschenk, neues Spiel von Holz bis Eisen, Umwandlung von Version 6) und der Browser-Test (neu: Start nur mit Holz, gesperrte Gebäude und Rohstoffe, Fläche kaufen per Touch, Aufsteigen auf Level 2 und 3 im Level-Fenster) – alle bestanden.
+- Beim Testen gefunden und behoben: Die Schilder über und unter dem Grundstück lagen beim Öffnen halb unter der oberen Leiste; der Rand beim Öffnen ist jetzt etwas größer.
 
 ### v0.8.0 – Eisenstange statt Eisennägel (06.11.2026)
 
@@ -801,6 +869,22 @@ Stand 06.11.2026.
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 06.11.2026 – Chat 6: Test von v0.8.0, Plan und Umsetzung v0.9.0
+
+**Tobias** (Screenshot der alten Fabrik: Schmelzhütte, 2 Schmieden, 2 Sägewerke, 2 Steinmetze, 9 Lagerhäuser, 8 Versandportale): v0.8.0 läuft, alles hat sich gut geändert. Er spielt erst alles mit hoher Geschwindigkeit durch, um die Logik bis weit in den Fortschritt zu prüfen, danach in Echtzeit. 2 Theken fühlen sich gut an; er hat mehr produziert als verkauft, weil die Theken im Schnellmodus oft leer standen – das Lager hat aber einen hohen Warenwert. Knifflig war, dass für neue Gebäude Blöcke fehlten, weil keine Strecke Blöcke in den Laden schickte. Mit rund 2.500 Gold konnte er Holz und Stein nachkaufen. Mit einer guten Balance der Maschinenkosten lohnt sich das Hinarbeiten auf Neues. Idee: am Anfang eher die Massenproduktion erhöhen. **Nicht die Zeit, sondern der Platz ist das Problem** – für weitere Maschinen wäre kein Platz.
+
+**Claude:** Rund ein Drittel der Fläche ist noch frei (vor allem rechts), aber Lagerhäuser und Versandportale belegen 26 Felder; mehrere Bänder lassen sich in ein Portal zusammenführen. Vorschlag: Fläche kaufen vorziehen; Fragen zu Theken im Testmodus und zu Blöcken.
+
+**Tobias' Antworten:**
+- Theken bleiben manuell, damit er die Übersicht behält und nicht versehentlich alles verkauft.
+- Erst Fläche, dann Techbaum. Dazu schon kleine Level: Level 1 nur Holz, Level 2 Stein, Level 3 Eisen. Langfristig mit Aufgaben (z. B. 50 Blöcke und 20 Holzplatten herstellen → 100 XP und 250 Gold); mit genug Erfahrung schaltet man das nächste Level frei und kauft den Aufstieg, z. B. für 100 Gold. So gibt es mehrere Handlungsstränge (produzieren, verkaufen, für Aufgaben herstellen). Für den Anfang ganz einfach: aufsteigen, sobald man z. B. 1 Holzplatte und 1 Holzstab hergestellt hat.
+- Blöcke: bleibt so – Abreißen gibt die Baukosten 1 : 1 zurück, und die Produktion auf das zu verlagern, was gerade gebraucht wird, gehört zum Spielprinzip.
+- Das Zusammenlegen der Bänder hatte er vergessen.
+
+**Claude** hat den Plan für v0.9.0 vorgestellt (Abschnitt 6). **Tobias:** „Ja, leg los. Zu Beginn eines Levels sollte man immer 1× Rohstoff gratis bekommen.“
+
+**Umgesetzt:** v0.9.0 (siehe Versionshistorie).
 
 ### 06.11.2026 – Chat 5, Teil 3: v0.7.0 läuft, Freigabe Eisenstange
 

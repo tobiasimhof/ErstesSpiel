@@ -49,6 +49,7 @@ test('Händler: Rohstoff kaufen kostet Gold und landet im Laden-Lager', () => {
 
 test('Händler: Bei vollem Laden-Lager gibt es nichts', () => {
   const state = emptyGame({ holzblock: SHOP_LEVELS[1].storage }, 5000);
+  state.shopLevel = 3;
   assert.equal(buyRaw(state, 'eisenerz'), 'full');
   assert.equal(state.gold, 5000);
 });
@@ -320,12 +321,19 @@ test('Pleiteschutz läuft in der Simulation mit', () => {
 
 test('Testpaket: 1.000 Gold und 50 von jeder Ware (ohne Rohstoffe)', () => {
   const state = emptyGame({});
+  state.shopLevel = 3;
   applyTestPack(state);
   assert.equal(state.gold, TEST_PACK.gold);
   assert.equal(storageCount(state, 'holzplatte'), 50);
   assert.equal(storageCount(state, 'eisenstange'), 50);
   assert.equal(storageCount(state, 'holzstamm'), 0);
   for (const type of BUILD_MENU) assert.ok(canAfford(state, BUILDINGS[type].cost), `${type} baubar`);
+});
+
+test('Testpaket auf Level 1: nur Holz-Waren', () => {
+  const state = emptyGame({});
+  applyTestPack(state);
+  assert.deepEqual(state.storage, { holzblock: 50, holzplatte: 50, holzstab: 50 });
 });
 
 // ---------- Speichern ----------

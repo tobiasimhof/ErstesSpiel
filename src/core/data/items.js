@@ -2,6 +2,7 @@
 //
 // raw:      Rohstoff, wird gekauft und in ein Gebäude eingelegt (nicht aufs Band)
 // buyPrice: Kaufpreis beim Händler (ab v0.7.0)
+// level:    Rohstoff: ab diesem Laden-Level beim Händler (v0.9.0)
 // price:    fester Wert/Verkaufspreis im Laden
 // shape/color: Aussehen auf dem Band und in Listen
 //
@@ -11,9 +12,9 @@
 
 export const ITEMS = {
   // Rohstoffe
-  holzstamm: { name: 'Holzstamm', plural: 'Holzstämme', raw: true, buyPrice: 550, color: '#8a5a2b', shape: 'log' },
-  felsbrocken: { name: 'Felsbrocken', plural: 'Felsbrocken', raw: true, buyPrice: 550, color: '#8d939b', shape: 'rock' },
-  eisenerz: { name: 'Eisenerz', plural: 'Eisenerz', raw: true, buyPrice: 2200, color: '#7a4f43', shape: 'rock', ore: true },
+  holzstamm: { name: 'Holzstamm', plural: 'Holzstämme', raw: true, level: 1, buyPrice: 550, color: '#8a5a2b', shape: 'log' },
+  felsbrocken: { name: 'Felsbrocken', plural: 'Felsbrocken', raw: true, level: 2, buyPrice: 550, color: '#8d939b', shape: 'rock' },
+  eisenerz: { name: 'Eisenerz', plural: 'Eisenerz', raw: true, level: 3, buyPrice: 2200, color: '#7a4f43', shape: 'rock', ore: true },
   // Blöcke
   holzblock: { name: 'Holzblock', plural: 'Holzblöcke', price: 3, color: '#cf9a5f', shape: 'block', grain: true },
   steinblock: { name: 'Steinblock', plural: 'Steinblöcke', price: 3, color: '#a7adb5', shape: 'block' },

@@ -10,6 +10,7 @@
 
 import { ITEMS } from './data/items.js';
 import { BAILOUT_ITEM, CUSTOMERS, SALES_LOG_SIZE, SHOP_LEVELS, TEST_PACK } from './data/shop.js';
+import { isItemUnlocked } from './levels.js';
 import { productionOf, buildingContents } from './production.js';
 import { addToStorage, storageCount, storageFree, takeFromStorage } from './shop.js';
 
@@ -54,10 +55,12 @@ export function isSellable(type) {
 
 // ---------- Händler ----------
 
-// Ergebnis: 'ok' | 'gold' (zu wenig Gold) | 'full' (Laden-Lager voll) | 'invalid'
+// Ergebnis: 'ok' | 'gold' (zu wenig Gold) | 'full' (Laden-Lager voll) |
+// 'locked' (erst ab einem höheren Laden-Level, v0.9.0) | 'invalid'
 export function buyRaw(state, type) {
   const def = ITEMS[type];
   if (!def?.raw || !(def.buyPrice > 0)) return 'invalid';
+  if (!isItemUnlocked(state, type)) return 'locked';
   if (state.gold < def.buyPrice) return 'gold';
   if (storageFree(state) < 1) return 'full';
   state.gold -= def.buyPrice;
@@ -178,7 +181,10 @@ export function checkBailout(state) {
 
 // ---------- Testpaket (nur im Testmodus) ----------
 
+// Gold und von jeder freigeschalteten Ware (ohne Rohstoffe) TEST_PACK.each Stück.
 export function applyTestPack(state) {
   state.gold += TEST_PACK.gold;
-  for (const type of Object.keys(ITEMS)) if (!ITEMS[type].raw) addToStorage(state, type, TEST_PACK.each);
+  for (const type of Object.keys(ITEMS)) {
+    if (!ITEMS[type].raw && isItemUnlocked(state, type)) addToStorage(state, type, TEST_PACK.each);
+  }
 }

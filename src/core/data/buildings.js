@@ -5,6 +5,7 @@
 //        side = Seite, an der das Förderband andockt (N, E, S, W).
 //        kind 'in' = Eingang (blauer Pfeil), 'out' = Ausgang (oranger Pfeil).
 // cost:  Baukosten in Waren aus dem Laden-Lager (v0.7.0). Abreißen gibt sie zurück.
+// level: ab diesem Laden-Level baubar (v0.9.0, siehe data/levels.js).
 // production: was das Gebäude tut
 //   source   – verarbeitet einen eingelegten Rohstoff nach und nach
 //              (amount Stück in duration Sekunden)
@@ -15,6 +16,7 @@
 
 export const BUILDINGS = {
   holzfaeller: {
+    level: 1,
     name: 'Holzfällerlager',
     cost: { holzplatte: 10, holzstab: 10 },
     icon: '🪓',
@@ -26,6 +28,7 @@ export const BUILDINGS = {
     production: { kind: 'source', input: 'holzstamm', output: 'holzblock', amount: 200, duration: 900 },
   },
   steinbruch: {
+    level: 2,
     name: 'Steinbruch',
     cost: { holzplatte: 10, holzstab: 5 },
     icon: '⛏️',
@@ -37,6 +40,7 @@ export const BUILDINGS = {
     production: { kind: 'source', input: 'felsbrocken', output: 'steinblock', amount: 200, duration: 900 },
   },
   schmelzhuette: {
+    level: 3,
     name: 'Schmelzhütte',
     cost: { steinplatte: 20, holzplatte: 10 },
     icon: '🔥',
@@ -48,6 +52,7 @@ export const BUILDINGS = {
     production: { kind: 'source', input: 'eisenerz', output: 'eisenbarren', amount: 200, duration: 900 },
   },
   saegewerk: {
+    level: 1,
     name: 'Sägewerk',
     cost: { holzblock: 40 },
     icon: '🪚',
@@ -62,6 +67,7 @@ export const BUILDINGS = {
     production: { kind: 'workshop', recipes: ['holzplatte', 'holzstab'] },
   },
   steinmetz: {
+    level: 2,
     name: 'Steinmetz',
     cost: { steinblock: 30, holzstab: 5 },
     icon: '⚒️',
@@ -76,6 +82,7 @@ export const BUILDINGS = {
     production: { kind: 'workshop', recipes: ['steinplatte', 'steinzahnrad'] },
   },
   schmiede: {
+    level: 3,
     name: 'Schmiede',
     cost: { steinplatte: 10, eisenbarren: 30 },
     icon: '🔨',
@@ -90,6 +97,7 @@ export const BUILDINGS = {
     production: { kind: 'workshop', recipes: ['minieisenplatte', 'eisenstange'] },
   },
   lagerhaus: {
+    level: 1,
     name: 'Lagerhaus',
     cost: { holzplatte: 8 },
     icon: '📦',
@@ -104,6 +112,7 @@ export const BUILDINGS = {
     production: { kind: 'storage', slots: 3, slotSize: 50 },
   },
   versandportal: {
+    level: 1,
     name: 'Versandportal',
     cost: { holzblock: 10 },
     icon: '🌀',

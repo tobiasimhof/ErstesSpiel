@@ -2,6 +2,7 @@
 // Abreißen) und Werkzeugleiste (während man baut).
 
 import { BELT_COST, BUILDINGS, BUILD_MENU } from '../core/data/buildings.js';
+import { buildingLevel, isBuildingUnlocked } from '../core/levels.js';
 import { canAfford } from '../core/shop.js';
 import { costText } from './format.js';
 import { createItemIcon } from './itemArt.js';
@@ -47,7 +48,7 @@ export function createBuildBar({ onShop, onOpenMenu, onCloseMenu, onSelectTool, 
   const entries = [
     ...BUILD_MENU.map((type) => {
       const def = BUILDINGS[type];
-      return { tool: type, icon: def.icon, name: def.name, cost: def.cost ?? {} };
+      return { tool: type, building: true, icon: def.icon, name: def.name, cost: def.cost ?? {} };
     }),
     ...EXTRA_TOOLS,
   ];
@@ -71,8 +72,35 @@ export function createBuildBar({ onShop, onOpenMenu, onCloseMenu, onSelectTool, 
       meta.textContent = entry.meta;
     }
     button.append(icon, name, meta);
+    if (entry.building) {
+      // Gesperrt (v0.9.0): statt der Kosten steht dort, ab welchem Level es das Gebäude gibt.
+      const lock = document.createElement('span');
+      lock.className = 'build-meta build-lock';
+      lock.textContent = `🔒 Level ${buildingLevel(entry.tool)}`;
+      lock.hidden = true;
+      button.append(lock);
+      entry.lock = lock;
+    }
+    entry.button = button;
+    entry.meta = meta;
     onPress(button, () => onSelectTool(entry.tool));
     items.append(button);
+  }
+
+  // Reihenfolge: freigeschaltete Gebäude, Förderband und Abreißen, dann die
+  // gesperrten Gebäude nach Level. Umgestellt wird nur, wenn sich etwas ändert.
+  let order = '';
+  function arrange(state) {
+    const locked = (e) => e.building && !isBuildingUnlocked(state, e.tool);
+    const sorted = [
+      ...entries.filter((e) => e.building && !locked(e)),
+      ...entries.filter((e) => !e.building),
+      ...entries.filter(locked).sort((a, b) => buildingLevel(a.tool) - buildingLevel(b.tool)),
+    ];
+    const next = sorted.map((e) => e.tool).join(',');
+    if (next === order) return;
+    order = next;
+    items.append(...sorted.map((e) => e.button));
   }
 
   return {
@@ -91,13 +119,17 @@ export function createBuildBar({ onShop, onOpenMenu, onCloseMenu, onSelectTool, 
     setConfirmEnabled(enabled) {
       toolConfirm.disabled = !enabled;
     },
-    // Graut Gebäude aus, für die die Waren im Laden-Lager nicht reichen.
-    // Sie bleiben antippbar und sagen dann, was fehlt.
+    // Graut Gebäude aus, für die die Waren im Laden-Lager nicht reichen, und
+    // zeigt gesperrte Gebäude mit Schloss. Beide bleiben antippbar und sagen
+    // dann, was fehlt.
     updateCosts(state) {
+      arrange(state);
       for (const entry of entries) {
-        if (!entry.cost) continue;
-        const button = items.querySelector(`[data-tool="${entry.tool}"]`);
-        button?.classList.toggle('short', !canAfford(state, entry.cost));
+        const locked = Boolean(entry.building) && !isBuildingUnlocked(state, entry.tool);
+        entry.button.classList.toggle('locked', locked);
+        if (entry.lock) entry.lock.hidden = !locked;
+        entry.meta.hidden = locked;
+        if (entry.cost) entry.button.classList.toggle('short', !locked && !canAfford(state, entry.cost));
       }
     },
   };

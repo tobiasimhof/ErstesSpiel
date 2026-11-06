@@ -13,6 +13,9 @@ import { createBuildBar } from './view/buildbar.js';
 import { createController } from './view/controller.js';
 import { createShopView } from './view/shop.js';
 import { applyTestPack } from './core/market.js';
+import { canLevelUp } from './core/levels.js';
+import { createLevelView, unlockText } from './view/levels.js';
+import { costText } from './view/format.js';
 import { clearGame, loadGame, loadSettings, saveGame, saveSettings } from './view/storage.js';
 
 const loaded = loadGame();
@@ -84,10 +87,31 @@ function testPack() {
   applyTestPack(state);
   onChange();
   controller.refresh();
-  panels.toast('Testpaket: 1.000 Gold und von jeder Ware 50 Stück ins Laden-Lager gelegt.');
+  panels.toast('Testpaket: 1.000 Gold und von jeder freigeschalteten Ware 50 Stück ins Laden-Lager gelegt.');
 }
 
-const hud = createHud({ version: VERSION, onNewGame: newGame, onToggleTestMode: toggleTestMode, onTestPack: testPack });
+// ---------- Laden-Level (v0.9.0) ----------
+
+let levelReady = canLevelUp(state);
+function onLevelUp({ level, gift }) {
+  levelReady = false;
+  onChange();
+  buildBar.updateCosts(state);
+  panels.toast(`Laden-Level ${level}! Neu: ${unlockText(level)}. Gratis im Laden-Lager: ${costText(gift)}.`, 6000);
+}
+const levelView = createLevelView({ state, panels, onLevelUp });
+function openLevel() {
+  controller.closeInfo();
+  levelView.open();
+}
+
+const hud = createHud({
+  version: VERSION,
+  onNewGame: newGame,
+  onToggleTestMode: toggleTestMode,
+  onTestPack: testPack,
+  onLevel: () => openLevel(),
+});
 hud.setTestMode(Boolean(settings.testMode), TEST_SPEED);
 
 function worldBounds() {
@@ -141,7 +165,8 @@ function handleResize() {
   const size = renderer.resize();
   const firstLayout = camera.viewWidth === 0;
   setViewSize(camera, size.width, size.height);
-  if (firstLayout) fitRect(camera, plotRect(), 24, worldBounds());
+  // Rand von 36 px: Die Schilder zum Flächenkauf über und unter dem Grundstück bleiben sichtbar.
+  if (firstLayout) fitRect(camera, plotRect(), 36, worldBounds());
   else clampCamera(camera, worldBounds());
   requestDraw();
 }
@@ -151,20 +176,22 @@ handleResize();
 hud.update(state);
 
 if (loaded.status === 'ok' && loaded.migratedFrom) {
+  const from = loaded.migratedFrom;
   const notes = [
-    loaded.migratedFrom < 5
-      ? 'Spielstand übernommen. Neu: Handel! Im Laden gibt es jetzt Theken und den Händler; Bauen kostet Waren aus dem Laden-Lager.'
-      : 'Spielstand übernommen. Neu: Die Schmiede macht Eisenstangen statt Nägel.',
+    'Spielstand übernommen.',
+    from < 5 ? 'Neu: Handel! Im Laden gibt es jetzt Theken und den Händler; Bauen kostet Waren aus dem Laden-Lager.' : '',
+    from === 5 ? 'Neu: Die Schmiede macht Eisenstangen statt Nägel.' : '',
+    from < 7 ? 'Neu: Fläche kaufen – tippe auf die ＋-Schilder am Rand. Deine Fabrik hat Laden-Level 3, alles bleibt freigeschaltet.' : '',
     ...(loaded.notes ?? []),
-  ];
-  panels.toast(notes.join(' '), 7000);
+  ].filter(Boolean);
+  panels.toast(notes.join(' '), 9000);
 } else if (loaded.status === 'ok') panels.toast('Spielstand geladen.', 1600);
 else if (loaded.status === 'invalid') panels.toast('Spielstand war beschädigt – neues Spiel gestartet.', 3500);
 
 // ---------- Takt ----------
 // Die Simulation läuft in festen Takten (TICK). Pro Bild werden so viele Takte
 // gerechnet, wie Zeit vergangen ist. Ist das Spiel im Hintergrund, ruht es
-// (Offline-Produktion folgt in v0.11.0).
+// (Offline-Produktion folgt in v0.12.0).
 
 let lastTime = performance.now();
 let accumulator = 0;
@@ -190,7 +217,14 @@ function frame(now) {
   if (now - lastRefresh > 400) {
     lastRefresh = now;
     controller.refresh();
+    levelView.refresh();
     hud.update(state); // Gold ändert sich, wenn Kunden kaufen
+    // Ziel fürs nächste Level gerade erreicht: einmal Bescheid sagen
+    const ready = canLevelUp(state);
+    if (ready && !levelReady) {
+      panels.toast(`Ziel erreicht! Tippe oben auf „Laden-Level“, um auf Level ${state.shopLevel + 1} aufzusteigen.`, 5000);
+    }
+    levelReady = ready;
     if (state.market.gifts !== lastGifts) {
       if (state.market.gifts > lastGifts) {
         panels.toast('Der Händler hat Mitleid: Du bekommst einen Holzstamm geschenkt. Er liegt im Laden-Lager.', 5000);
@@ -211,6 +245,7 @@ window.__game = {
   ui,
   TILE,
   saveNow,
+  openLevel,
   simulate(seconds) {
     simulate(state, seconds);
     controller.refresh();

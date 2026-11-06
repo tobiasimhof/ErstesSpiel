@@ -30,6 +30,8 @@ import {
   removeBelt,
   rotateBelt,
 } from '../core/belts.js';
+import { buyLand, landOffer, landSideAt } from '../core/land.js';
+import { buildingLevel, isBuildingUnlocked, isItemUnlocked, itemLevel } from '../core/levels.js';
 import { buyRaw } from '../core/market.js';
 import { buildingStatus, loadInput, losesWorkOnRemove, productionOf, setRecipe } from '../core/production.js';
 import { affordableCount, canAfford, missingFor, storageCapacity, storageCount, storageTotal } from '../core/shop.js';
@@ -43,6 +45,14 @@ const TEXT = {
   belt: `Förderband (${costText(BELT_COST)} je Feld): mit einem Finger ziehen. Von einem Band aus ziehen teilt es auf, auf ein Band ziehen führt zusammen. Antippen dreht.`,
   erase: 'Abreißen: über Förderbänder wischen oder ein Gebäude antippen.',
 };
+
+// Fläche kaufen (v0.9.0): Seiten und Streifen in Worten
+const SIDE_TEXT = { N: 'oben', E: 'rechts', S: 'unten', W: 'links' };
+function stripText(offer) {
+  const across = offer.side === 'E' || offer.side === 'W';
+  const unit = across ? (offer.depth === 1 ? 'Spalte' : 'Spalten') : offer.depth === 1 ? 'Reihe' : 'Reihen';
+  return `${offer.depth} ${unit} ${SIDE_TEXT[offer.side]}`;
+}
 
 export function createController({ state, camera, ui, panels, buildBar, shopView, onChange, requestDraw, worldBounds }) {
   let mode = 'normal';
@@ -100,7 +110,7 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
       const button = info.buttons.get('load');
       button.textContent = prod.loaded ? `${input.name} wird verarbeitet` : `➕ ${input.name} einlegen`;
       button.disabled = prod.loaded || storageCount(state, p.input) < 1;
-      info.buttons.get('buy').disabled = state.gold < input.buyPrice;
+      info.buttons.get('buy').disabled = state.gold < input.buyPrice || !isItemUnlocked(state, p.input);
     } else if (p?.kind === 'workshop') {
       const recipe = RECIPES[prod.recipe];
       const [inType, need] = Object.entries(recipe.inputs)[0];
@@ -161,6 +171,7 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
               panels.toast(`${ITEMS[p.input].name} gekauft. Jetzt einlegen.`);
             } else if (result === 'gold') panels.toast('Dafür reicht dein Gold nicht.');
             else if (result === 'full') panels.toast('Dein Laden-Lager ist voll.');
+            else if (result === 'locked') panels.toast(`${ITEMS[p.input].name} gibt es erst ab Level ${itemLevel(p.input)}.`);
             infoRefresh?.();
           },
         });
@@ -236,7 +247,48 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
       });
       infoRefresh = () => updateBeltInfo(sel.x, sel.y);
       infoRefresh();
+    } else if (sel.kind === 'land') {
+      showLandInfo(sel.side);
     }
+  }
+
+  // ---------- Fläche kaufen (v0.9.0) ----------
+
+  function showLandInfo(side) {
+    const offer = landOffer(state, side);
+    if (!offer) return select(null);
+    const price = numberFormat.format(offer.price);
+    info = panels.showInfo({
+      icon: '🗺️',
+      title: 'Fläche kaufen',
+      meta: `${stripText(offer)} · ${offer.fields} Felder`,
+      text: 'Vergrößert dein Grundstück an dieser Seite. Gebäude und Bänder bleiben, wo sie sind. Jeder Kauf macht weitere Fläche teurer.',
+      actions: [
+        {
+          key: 'buy',
+          label: `Kaufen · ${price} 🪙`,
+          primary: true,
+          onClick: () => {
+            const result = buyLand(state, side);
+            if (result === 'ok') {
+              select(null);
+              changed();
+              panels.toast(`Fläche gekauft: ${offer.fields} neue Felder ${SIDE_TEXT[side]}.`);
+            } else if (result === 'gold') panels.toast('Dafür reicht dein Gold nicht.');
+            else select(null);
+          },
+        },
+      ],
+    });
+    infoRefresh = () => {
+      const lack = offer.price - state.gold;
+      info.buttons.get('buy').disabled = lack > 0;
+      info.setStatus([
+        `Preis: ${price} Gold (${numberFormat.format(Math.round(offer.price / offer.fields))} Gold je Feld)`,
+        lack > 0 ? `Dir fehlen noch ${numberFormat.format(lack)} Gold.` : `Dein Gold: ${numberFormat.format(state.gold)}`,
+      ]);
+    };
+    infoRefresh();
   }
 
   async function askRemoveBuilding(b) {
@@ -264,14 +316,15 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
     const building = buildingAt(state, tile.x, tile.y);
     if (building) return select({ kind: 'building', id: building.id });
     if (beltAt(state, tile.x, tile.y)) return select({ kind: 'belt', x: tile.x, y: tile.y });
+    if (isOwned(state, tile.x, tile.y)) return select(null);
+    const side = landSideAt(state, tile.x, tile.y);
+    if (side) return select({ kind: 'land', side });
     select(null);
-    if (!isOwned(state, tile.x, tile.y)) {
-      panels.showInfo({
-        icon: '🔒',
-        title: 'Gesperrte Fläche',
-        text: 'Diese Fläche gehört noch nicht zu deinem Laden. Später kannst du sie mit Gold kaufen und deine Fabrik vergrößern.',
-      });
-    }
+    panels.showInfo({
+      icon: '🔒',
+      title: 'Gesperrte Fläche',
+      text: 'Diese Ecke gehört noch nicht zu deinem Laden. Kaufe Fläche an den Seiten deines Grundstücks – die Ecken kommen dabei nach und nach mit dazu.',
+    });
   }
 
   // ---------- Bauleiste ----------
@@ -286,6 +339,13 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
     setMode('normal');
   }
 
+  function toastLocked(type) {
+    panels.toast(
+      `${BUILDINGS[type].name}: gibt es ab Level ${buildingLevel(type)}. Oben auf „Laden-Level“ tippen zeigt, was dafür fehlt.`,
+      3500,
+    );
+  }
+
   function toastMissing(cost) {
     panels.toast(`Dir fehlen im Laden-Lager: ${costText(missingFor(state, cost))}.`, 3000);
   }
@@ -297,6 +357,7 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
     }
     if (tool === 'erase') return setMode('erase', { text: TEXT.erase });
     if (!BUILDINGS[tool]) return;
+    if (!isBuildingUnlocked(state, tool)) return toastLocked(tool);
     if (!canAfford(state, BUILDINGS[tool].cost)) return toastMissing(BUILDINGS[tool].cost);
     startPlace(tool, null);
   }
@@ -357,6 +418,7 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
       select({ kind: 'building', id });
     } else {
       const result = buyBuilding(state, g.type, g.x, g.y, g.rot);
+      if (result === 'locked') return toastLocked(g.type);
       if (result === 'cost') return toastMissing(BUILDINGS[g.type].cost);
       if (!result) return;
       ui.ghost = null;

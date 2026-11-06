@@ -162,7 +162,9 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   );
   check(versioned && unversioned.length === 0, `Alle Programmdateien werden mit Versionsnummer geladen${unversioned.length ? ': ohne ' + unversioned.join(', ') : ''}`);
   const types = await game(page, () => window.__game.state.buildings.map((b) => b.type).sort());
-  check(JSON.stringify(types) === '["holzfaeller","steinbruch","versandportal"]', 'Start: Holzfällerlager, Steinbruch und Versandportal');
+  check(JSON.stringify(types) === '["holzfaeller","versandportal"]', 'Start nur mit Holz: Holzfällerlager und Versandportal');
+  check((await page.textContent('#btn-level')).includes('Laden-Level 1'), 'Oben steht „Laden-Level 1“');
+  check(!(await page.isVisible('#hud-level-ready')), 'Noch kein Aufstieg möglich (kein ⬆)');
   check((await page.textContent('#hud-gold')) === '0', 'Start ohne Gold');
   check(await page.isVisible('#btn-shop'), 'Knopf „Laden“ sichtbar');
   check(await page.isVisible('#btn-build'), 'Knopf „Bauen“ sichtbar');
@@ -205,6 +207,11 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(shopText.includes('Dein Laden') && shopText.includes('Holzstamm') && shopText.includes('Holzblock'), 'Laden-Fenster zeigt Laden-Lager mit Startvorrat');
   check((await page.locator('#modal-content .tab').count()) === 3, 'Laden-Fenster hat drei Reiter');
   await shot('3-laden');
+  await page.tap('#modal-content .tab[data-tab="haendler"]');
+  await sleep(80);
+  const rockRow = page.locator('#modal-content .trade-row', { hasText: 'Felsbrocken' });
+  check((await rockRow.textContent()).includes('ab Level 2') && (await rockRow.locator('button').isDisabled()), 'Händler: Felsbrocken gesperrt bis Level 2');
+  await shot('3-haendler-gesperrt');
   await page.tap('#modal-close');
   check(!(await page.isVisible('#modal')), 'Laden-Fenster schließt');
 
@@ -228,7 +235,20 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(80);
   check(await page.isVisible('#build-bar'), 'Bauleiste öffnet sich');
   check(!(await page.isVisible('#bottom-bar')), 'Grundleiste ist währenddessen ausgeblendet');
+  const barOrder = await page.locator('#build-items .build-item').evaluateAll((items) => items.map((b) => b.dataset.tool));
+  check(
+    JSON.stringify(barOrder.slice(0, 6)) === '["holzfaeller","saegewerk","lagerhaus","versandportal","belt","erase"]',
+    `Bauleiste: erst Holz-Gebäude und Werkzeuge, dann gesperrte (${barOrder.join(', ')})`,
+  );
+  const quarryItem = page.locator('.build-item[data-tool="steinbruch"]');
+  check(
+    (await quarryItem.evaluate((b) => b.classList.contains('locked'))) && (await quarryItem.textContent()).includes('Level 2'),
+    'Steinbruch in der Bauleiste gesperrt (🔒 Level 2)',
+  );
   await shot('4-bauleiste');
+  await quarryItem.tap();
+  await sleep(80);
+  check((await mode(page)) === 'menu' && (await page.textContent('#toast')).includes('ab Level 2'), 'Gesperrtes Gebäude antippen sagt, ab welchem Level');
   await page.tap('.build-item[data-tool="saegewerk"]');
   await sleep(80);
   check((await mode(page)) === 'place', 'Sägewerk wählen startet die Vorschau');
@@ -315,10 +335,26 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await tapTile(page, 16, 13);
   check(!(await page.isVisible('#info-panel')), 'Antippen freier Fläche schließt Infofenster');
 
-  // ---------- Gesperrte Fläche ----------
+  // ---------- Fläche kaufen ----------
+  // Karte etwas nach unten schieben, damit auch die Ecke über dem Grundstück zu sehen ist
+  await game(page, () => {
+    window.__game.camera.y -= 2 * window.__game.TILE;
+  });
+  await tapTile(page, plot.px - 1, plot.py - 1);
+  check((await page.textContent('#info-title')) === 'Gesperrte Fläche', 'Ecke der gesperrten Fläche zeigt Hinweis');
   await tapTile(page, plot.px - 1, plot.py + 4);
-  check((await page.textContent('#info-title')) === 'Gesperrte Fläche', 'Gesperrte Fläche zeigt Hinweis');
-  await page.tap('#info-close');
+  check((await page.textContent('#info-title')) === 'Fläche kaufen', 'Gesperrte Fläche links antippen bietet Fläche an');
+  check((await page.textContent('#info-meta')).includes('2 Spalten links · 28 Felder'), 'Angebot: 2 Spalten links, 28 Felder');
+  const landButton = page.locator('#info-actions button', { hasText: 'Kaufen' });
+  check((await landButton.textContent()).includes('280'), 'Erster Streifen kostet 280 Gold');
+  await shot('6b-flaeche-angebot');
+  const goldBeforeLand = await game(page, () => window.__game.state.gold);
+  await landButton.tap();
+  await sleep(120);
+  const land = await game(page, () => ({ plot: { ...window.__game.state.plot }, gold: window.__game.state.gold }));
+  check(land.plot.x === plot.px - 2 && land.plot.width === 24 && land.gold === goldBeforeLand - 280, `Fläche gekauft (Grundstück ${land.plot.width} × ${land.plot.height}, Gold ${goldBeforeLand} → ${land.gold})`);
+  check(!(await page.isVisible('#info-panel')), 'Nach dem Kauf schließt das Fenster');
+  await shot('6c-flaeche-gekauft');
 
   // ---------- Zoomen & Verschieben ----------
   const cx = canvasBox.x + canvasBox.width / 2;
@@ -367,12 +403,13 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     buildings: window.__game.state.buildings.length,
     belts: Object.keys(window.__game.state.belts).length,
     rot: window.__game.state.buildings.find((b) => b.type === 'holzfaeller').rot,
+    plotWidth: window.__game.state.plot.width,
   }));
-  check(after.buildings === 4 && after.belts === beltCountBefore && after.rot === 1, 'Nach dem Neuladen ist alles noch da');
+  check(after.buildings === 3 && after.belts === beltCountBefore && after.rot === 1 && after.plotWidth === 24, 'Nach dem Neuladen ist alles noch da (auch die gekaufte Fläche)');
   check((await page.textContent('#toast')).includes('Spielstand geladen'), 'Meldung „Spielstand geladen“');
 
   // ---------- Gebäude abreißen ----------
-  await tapTile(page, 10, 12);
+  await tapTile(page, 14, 9);
   await page.locator('#info-actions button', { hasText: 'Abreißen' }).tap();
   await sleep(80);
   check(await page.isVisible('#dialog'), 'Abreißen fragt nach');
@@ -380,7 +417,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await shot('7-abreissen-frage');
   await page.tap('#dialog-ok');
   await sleep(80);
-  check(!(await game(page, () => window.__game.state.buildings.some((b) => b.type === 'steinbruch'))), 'Steinbruch abgerissen');
+  check(!(await game(page, () => window.__game.state.buildings.some((b) => b.type === 'versandportal'))), 'Versandportal abgerissen');
 
   // ---------- Neues Spiel ----------
   await page.tap('#btn-menu');
@@ -393,7 +430,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     buildings: window.__game.state.buildings.length,
     belts: Object.keys(window.__game.state.belts).length,
   }));
-  check(fresh.buildings === 3 && fresh.belts === 0, 'Neues Spiel startet frisch');
+  check(fresh.buildings === 2 && fresh.belts === 0, 'Neues Spiel startet frisch');
 
   // ---------- Einstieg ohne Gold ----------
   await page.tap('#btn-build');
@@ -472,10 +509,48 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await game(page, () => window.__game.state.counters[0].count)) === 20, 'Auffüllen füllt die Theke wieder auf 20');
   await shot('10-verkauf');
 
+  await page.tap('#modal-close');
+
+  // ---------- Laden-Level ----------
+  // Das Zählen hergestellter Waren prüfen die automatischen Tests; hier wird
+  // das Ziel direkt gesetzt und der Aufstieg per Touch durchgespielt.
+  await game(page, () => Object.assign(window.__game.state.produced, { holzplatte: 1, holzstab: 1 }));
+  const readyShown = await page
+    .waitForFunction(() => !document.getElementById('hud-level-ready').hidden, null, { timeout: 3000 })
+    .then(() => true, () => false);
+  check(readyShown, 'Ziel erreicht: oben erscheint ⬆');
+  await shot('10b-level-bereit');
+  await page.tap('#btn-level');
+  await sleep(120);
+  const levelText = await page.textContent('#modal-content');
+  check(levelText.includes('Laden-Level 1') && levelText.includes('Nächstes Ziel: Level 2 · Stein'), 'Level-Fenster zeigt Level 1 und das nächste Ziel');
+  check((await page.locator('#modal-content .goal-row.done').count()) === 2, 'Beide Ziele abgehakt');
+  await shot('10c-level-fenster');
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 2' }).tap();
+  await sleep(150);
+  const lvl2 = await game(page, () => ({ level: window.__game.state.shopLevel, rocks: window.__game.state.storage.felsbrocken ?? 0 }));
+  check(lvl2.level === 2 && lvl2.rocks === 1, `Aufgestiegen auf Level 2, Gratis-Felsbrocken im Lager (${JSON.stringify(lvl2)})`);
+  check((await page.textContent('#modal-content')).includes('Level 2 erreicht'), 'Level-Fenster gratuliert');
+  check((await page.textContent('#hud-level')) === '2', 'Oben steht Level 2');
+  const upButton3 = page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 3' });
+  check(await upButton3.isDisabled(), 'Level 3 noch gesperrt (Ziel nicht erreicht)');
+  await shot('10d-level-2');
+  await game(page, () => Object.assign(window.__game.state.produced, { steinplatte: 1, steinzahnrad: 1 }));
+  const enabled3 = await page
+    .waitForFunction(() => [...document.querySelectorAll('#modal-content button')].some((b) => b.textContent.includes('Level 3') && !b.disabled), null, { timeout: 3000 })
+    .then(() => true, () => false);
+  check(enabled3, 'Level-Fenster aktualisiert sich: Aufstieg auf Level 3 möglich');
+  await upButton3.tap();
+  await sleep(150);
+  const lvl3 = await game(page, () => ({ level: window.__game.state.shopLevel, ore: window.__game.state.storage.eisenerz ?? 0 }));
+  check(lvl3.level === 3 && lvl3.ore === 1, `Aufgestiegen auf Level 3, Gratis-Eisenerz im Lager (${JSON.stringify(lvl3)})`);
+  check((await page.textContent('#modal-content')).includes('höchste Level'), 'Level 3 ist vorerst das höchste');
+  await shot('10e-level-3');
+  await page.tap('#modal-close');
+
   // ---------- Händler ----------
   // Für den Rest des Tests genau die nötigen Waren und Gold geben (das
   // Testpaket mehrfach würde das Laden-Lager füllen).
-  await page.tap('#modal-close');
   await game(page, () => {
     const s = window.__game.state.storage;
     window.__game.state.gold += 3000;
@@ -492,7 +567,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.locator('#modal-content .trade-row', { hasText: 'Eisenerz' }).locator('button').tap();
   await sleep(80);
   const bought = await game(page, () => ({ gold: window.__game.state.gold, ore: window.__game.state.storage.eisenerz ?? 0 }));
-  check(bought.ore === 1 && bought.gold === goldBeforeBuy - 2200, `Händler: Eisenerz für 2.200 Gold gekauft (${goldBeforeBuy} → ${bought.gold})`);
+  check(bought.ore === 2 && bought.gold === goldBeforeBuy - 2200, `Händler: Eisenerz für 2.200 Gold gekauft (${goldBeforeBuy} → ${bought.gold}, jetzt ${bought.ore} Eisenerz)`);
   await shot('11-haendler');
   await page.tap('#modal-close');
 
@@ -553,7 +628,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await page.textContent('#info-title')) === 'Schmelzhütte', 'Schmelzhütte antippen zeigt Infofenster');
   await page.locator('#info-actions button', { hasText: 'Eisenerz einlegen' }).tap();
   await sleep(80);
-  check((await game(page, () => window.__game.state.storage.eisenerz ?? 0)) === 0, 'Gekauftes Eisenerz eingelegt');
+  check((await game(page, () => window.__game.state.storage.eisenerz ?? 0)) === 1, 'Eisenerz eingelegt (eins bleibt im Lager)');
   await page.tap('#info-close');
   await game(page, () => window.__game.simulate(40));
   const smithy = await game(page, () => {
