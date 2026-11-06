@@ -1,6 +1,6 @@
 # Hinweise für Claude
 
-- Lies zu Beginn jedes Chats die komplette `README.md`. Sie ist das Gedächtnis des Projekts.
+- Lies zu Beginn jedes Chats die komplette `README.md`. Sie ist das Gedächtnis des Projekts. Wo es weitergeht, steht in der Status-Tabelle oben unter „Nächster Schritt“; offene Punkte stehen in Abschnitt 8.
 - Kommuniziere auf Deutsch.
 - Halte dich an die Zusammenarbeitsregeln (README, Abschnitt 1) und an den Arbeitsablauf (README, Abschnitt 2).
 - Tobias programmiert nicht selbst. Erkläre Ergebnisse verständlich, ohne Programmierkenntnisse vorauszusetzen.
