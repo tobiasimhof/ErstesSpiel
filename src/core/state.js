@@ -10,10 +10,11 @@ import { createProductionState } from './production.js';
 
 // Gesamte Welt in Feldern. Alles außerhalb des Grundstücks ist gesperrt
 // und kann später gekauft werden.
-export const WORLD_WIDTH = 32;
-export const WORLD_HEIGHT = 20;
+// v0.6.1: Grundstück 22 × 14 (vorher 16 × 10), Welt 40 × 26 (vorher 32 × 20).
+export const WORLD_WIDTH = 40;
+export const WORLD_HEIGHT = 26;
 
-const START_PLOT = { x: 8, y: 5, width: 16, height: 10 };
+export const START_PLOT = { x: 8, y: 5, width: 22, height: 14 };
 const START_GOLD = 100;
 const START_BUILDINGS = [
   { type: 'holzfaeller', x: 10, y: 6 },
