@@ -13,7 +13,7 @@
 - Vor jedem Merge mit Spielcode: automatische Tests der Spielregeln und ein Durchlauf im Browser (Playwright) in Tablet- und Handygröße im Querformat:
   - `npm test`
   - `SCREENSHOT_DIR=<Scratchpad>/shots npm run test:browser`, danach die Screenshots ansehen.
-- Neue Version: `src/version.js`, die `?v=` Angaben in `index.html` und die Status-Tabelle der README anpassen (ein Test prüft das).
+- Neue Version: `node tools/set-version.mjs A.B.C` (setzt `src/version.js`, alle `?v=` und die Import-Map in `index.html`) und die Status-Tabelle der README anpassen. Auch nach dem Anlegen einer neuen Programmdatei `node tools/set-version.mjs` aufrufen – sonst lädt der Browser alte und neue Dateien gemischt (ein Test prüft das).
 - Die Live-Seite (github.io) ist aus der Arbeitsumgebung nicht erreichbar; nach dem Merge den Pages-Status über GitHub Actions („pages build and deployment“) prüfen.
 - Spielregeln (Simulation) strikt getrennt von der Darstellung halten; Waren, Rezepte, Gebäude und Preise als Datentabellen.
 - Knöpfe immer mit `onPress` aus `src/view/press.js` verbinden, nicht mit `click` (Chrome verschluckt Klicks direkt nach schnellem Wischen).

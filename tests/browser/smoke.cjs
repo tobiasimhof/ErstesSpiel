@@ -147,6 +147,20 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   // ---------- Start ----------
   check((await page.textContent('#hud-version')) === `v${expectedVersion}`, `Versionsnummer v${expectedVersion} sichtbar`);
   check(!(await page.isVisible('#rotate-overlay')), 'Kein Dreh-Hinweis im Querformat');
+  check(!(await page.isVisible('#boot-error')), 'Keine Meldung „Spiel konnte nicht starten“');
+  const versioned = await page.evaluate(() =>
+    performance
+      .getEntriesByType('resource')
+      .filter((e) => e.name.includes('/src/') && e.name.endsWith('.js') === false && e.name.includes('.js'))
+      .every((e) => e.name.includes(`?v=${window.__game.VERSION}`)),
+  );
+  const unversioned = await page.evaluate(() =>
+    performance
+      .getEntriesByType('resource')
+      .map((e) => e.name)
+      .filter((n) => n.includes('/src/') && /\.js$/.test(n)),
+  );
+  check(versioned && unversioned.length === 0, `Alle Programmdateien werden mit Versionsnummer geladen${unversioned.length ? ': ohne ' + unversioned.join(', ') : ''}`);
   const types = await game(page, () => window.__game.state.buildings.map((b) => b.type).sort());
   check(JSON.stringify(types) === '["holzfaeller","steinbruch","versandportal"]', 'Start: Holzfällerlager, Steinbruch und Versandportal');
   check((await page.textContent('#hud-gold')) === '0', 'Start ohne Gold');

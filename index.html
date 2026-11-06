@@ -14,7 +14,44 @@
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="icon" type="image/png" href="assets/icons/icon-192.png" />
     <link rel="apple-touch-icon" href="assets/icons/icon-192.png" />
-    <link rel="stylesheet" href="src/style.css?v=0.7.0" />
+    <link rel="stylesheet" href="src/style.css?v=0.7.1" />
+    <!-- Jede Programmdatei bekommt die Versionsnummer, damit der Browser nach
+         einem Update nicht alte und neue Dateien mischt. Wird von
+         tools/set-version.mjs geschrieben – nicht von Hand ändern. -->
+    <script type="importmap">
+    {
+      "imports": {
+        "./src/core/belts.js": "./src/core/belts.js?v=0.7.1",
+        "./src/core/buildings.js": "./src/core/buildings.js?v=0.7.1",
+        "./src/core/data/buildings.js": "./src/core/data/buildings.js?v=0.7.1",
+        "./src/core/data/items.js": "./src/core/data/items.js?v=0.7.1",
+        "./src/core/data/recipes.js": "./src/core/data/recipes.js?v=0.7.1",
+        "./src/core/data/shop.js": "./src/core/data/shop.js?v=0.7.1",
+        "./src/core/dirs.js": "./src/core/dirs.js?v=0.7.1",
+        "./src/core/geometry.js": "./src/core/geometry.js?v=0.7.1",
+        "./src/core/market.js": "./src/core/market.js?v=0.7.1",
+        "./src/core/production.js": "./src/core/production.js?v=0.7.1",
+        "./src/core/save.js": "./src/core/save.js?v=0.7.1",
+        "./src/core/shop.js": "./src/core/shop.js?v=0.7.1",
+        "./src/core/sim.js": "./src/core/sim.js?v=0.7.1",
+        "./src/core/state.js": "./src/core/state.js?v=0.7.1",
+        "./src/main.js": "./src/main.js?v=0.7.1",
+        "./src/version.js": "./src/version.js?v=0.7.1",
+        "./src/view/buildbar.js": "./src/view/buildbar.js?v=0.7.1",
+        "./src/view/camera.js": "./src/view/camera.js?v=0.7.1",
+        "./src/view/controller.js": "./src/view/controller.js?v=0.7.1",
+        "./src/view/format.js": "./src/view/format.js?v=0.7.1",
+        "./src/view/hud.js": "./src/view/hud.js?v=0.7.1",
+        "./src/view/input.js": "./src/view/input.js?v=0.7.1",
+        "./src/view/itemArt.js": "./src/view/itemArt.js?v=0.7.1",
+        "./src/view/panels.js": "./src/view/panels.js?v=0.7.1",
+        "./src/view/press.js": "./src/view/press.js?v=0.7.1",
+        "./src/view/renderer.js": "./src/view/renderer.js?v=0.7.1",
+        "./src/view/shop.js": "./src/view/shop.js?v=0.7.1",
+        "./src/view/storage.js": "./src/view/storage.js?v=0.7.1"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="app">
@@ -105,7 +142,47 @@
       <p>Bitte dreh dein Gerät ins Querformat.</p>
     </div>
 
+    <div id="boot-error" hidden>
+      <div class="boot-error-box">
+        <h2>⚠️ Das Spiel konnte nicht starten</h2>
+        <p>Dein Spielstand ist sicher gespeichert. Meist hilft es, kurz zu warten und neu zu laden.</p>
+        <p id="boot-error-text" class="boot-error-text"></p>
+        <button id="boot-error-reload" type="button" class="primary">↻ Neu laden</button>
+      </div>
+    </div>
+
     <noscript>Dieses Spiel braucht JavaScript.</noscript>
-    <script type="module" src="src/main.js?v=0.7.0"></script>
+    <script>
+      // Startet das Spiel nicht, erscheint statt eines schwarzen Bildschirms
+      // eine Meldung mit dem Fehlertext (für einen Screenshot an Claude).
+      // Absichtlich ohne Module, damit das auch klappt, wenn Module nicht laden.
+      (function () {
+        var messages = [];
+        function show() {
+          if (window.__game) return;
+          document.getElementById('boot-error-text').textContent =
+            messages.join(' · ') || 'Das Spiel hat nicht rechtzeitig geladen.';
+          document.getElementById('boot-error').hidden = false;
+        }
+        window.addEventListener(
+          'error',
+          function (event) {
+            if (window.__game) return;
+            var target = event.target;
+            messages.push(event.message || ('Datei nicht geladen: ' + ((target && (target.src || target.href)) || '?')));
+            setTimeout(show, 300);
+          },
+          true,
+        );
+        window.addEventListener('load', function () {
+          setTimeout(show, 5000);
+        });
+        // Einfacher click genügt hier: Der Knopf erscheint nur ohne laufendes Spiel.
+        document.getElementById('boot-error-reload').addEventListener('click', function () {
+          location.reload();
+        });
+      })();
+    </script>
+    <script type="module" src="src/main.js?v=0.7.1"></script>
   </body>
 </html>
