@@ -353,7 +353,8 @@ export function createRenderer(canvas) {
     // Status (nur gebaute Gebäude): Licht oben rechts, Fortschrittsleiste oben
     if (state && building.prod) {
       const status = buildingStatus(state, building);
-      const r = 6 / cam.zoom;
+      // Licht etwa 12 px groß, bei kleinen Gebäuden (z. B. 1 × 1 auf dem Handy) kleiner
+      const r = Math.min(6 / cam.zoom, Math.min(w, h) * 0.13);
       ctx.beginPath();
       ctx.arc(x + w - r - 4 / cam.zoom, y + r + 4 / cam.zoom, r, 0, Math.PI * 2);
       ctx.fillStyle =
