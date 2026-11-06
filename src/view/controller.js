@@ -33,11 +33,19 @@ import {
 import { buyLand, landOffer, landSideAt } from '../core/land.js';
 import { buildingLevel, isBuildingUnlocked, isItemUnlocked, itemLevel } from '../core/levels.js';
 import { buyRaw } from '../core/market.js';
-import { buildingStatus, loadInput, losesWorkOnRemove, productionOf, setRecipe } from '../core/production.js';
+import {
+  buildingStatus,
+  loadInput,
+  losesWorkOnRemove,
+  productionOf,
+  returnUnusedStock,
+  setRecipe,
+  workshopInputs,
+} from '../core/production.js';
 import { affordableCount, canAfford, missingFor, storageCapacity, storageCount, storageTotal } from '../core/shop.js';
 import { beltAt, buildingAt, findBuilding, isInWorld, isOwned } from '../core/state.js';
 import { TILE, panBy, screenToWorld } from './camera.js';
-import { costText, numberFormat } from './format.js';
+import { costText, itemCount, numberFormat } from './format.js';
 
 const TEXT = {
   place: (name, cost) => `${name} (kostet ${cost}): Vorschau mit dem Finger an die gewünschte Stelle schieben.`,
@@ -113,10 +121,22 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
       info.buttons.get('buy').disabled = state.gold < input.buyPrice || !isItemUnlocked(state, p.input);
     } else if (p?.kind === 'workshop') {
       const recipe = RECIPES[prod.recipe];
-      const [inType, need] = Object.entries(recipe.inputs)[0];
+      const inputs = workshopInputs(b);
       const outName = recipe.amount === 1 ? ITEMS[recipe.output].name : ITEMS[recipe.output].plural;
-      lines.push(`Rezept: ${need} ${ITEMS[inType].plural} → ${recipe.amount} ${outName} (${recipe.time} s)`);
-      lines.push(`Am Eingang: ${prod.stock[inType] ?? 0} / ${need * 2} ${ITEMS[inType].plural}`);
+      const ingredients = inputs.map((i) => itemCount(i.type, i.need)).join(' + ');
+      lines.push(`Rezept: ${ingredients} → ${recipe.amount} ${outName} (${recipe.time} s)`);
+      if (inputs.length === 1) {
+        const [{ type, have, need }] = inputs;
+        lines.push(`Am Eingang: ${have} / ${need * 2} ${ITEMS[type].plural}`);
+      } else {
+        // v0.10.0: jede Zutat mit Vorrat – fehlt etwas, steht es dabei
+        for (const i of inputs) {
+          const mark = i.done ? '✅' : '⬜';
+          const lack = i.done ? '' : ` – fehlt noch ${i.need - i.have}`;
+          lines.push(`${mark} ${ITEMS[i.type].name}: ${i.have} / ${i.need}${lack}`);
+        }
+        lines.push(`Wert: ${numberFormat.format(ITEMS[recipe.output].price)} 🪙 je ${ITEMS[recipe.output].name}`);
+      }
       for (const key of p.recipes) info.buttons.get(`recipe:${key}`)?.classList.toggle('primary', key === prod.recipe);
     } else if (p?.kind === 'storage') {
       for (let i = 0; i < p.slots; i++) {
@@ -183,6 +203,9 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
             label: RECIPES[key].label,
             onClick: () => {
               setRecipe(b, key);
+              // v0.10.0: Zutaten, die das neue Rezept nicht braucht, ins Laden-Lager
+              const returned = returnUnusedStock(state, b);
+              if (Object.keys(returned).length > 0) panels.toast(`Zurück ins Laden-Lager: ${costText(returned)}.`);
               changed();
               infoRefresh?.();
             },

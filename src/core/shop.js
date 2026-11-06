@@ -1,9 +1,35 @@
 // Laden-Lager: hier landen Waren aus dem Versandportal und gekaufte Rohstoffe.
 
-import { SHOP_LEVELS } from './data/shop.js';
+import { COUNTER_SIZES, SHOP_LEVELS } from './data/shop.js';
 
 export function storageCapacity(state) {
   return SHOP_LEVELS[state.shopLevel]?.storage ?? SHOP_LEVELS[1].storage;
+}
+
+// ---------- Anzahl und Größe der Theken (v0.10.0) ----------
+
+export function counterCountFor(level) {
+  return (SHOP_LEVELS[level] ?? SHOP_LEVELS[1]).counters;
+}
+
+// Plätze auf Theke Nummer index (0 = erste Theke).
+export function counterSizeAt(index) {
+  return COUNTER_SIZES[Math.min(index, COUNTER_SIZES.length - 1)];
+}
+
+export function emptyCounter() {
+  return { type: null, count: 0 };
+}
+
+// Stellt so viele leere Theken dazu, wie das Laden-Level vorsieht (nach dem
+// Aufstieg und beim Laden eines Spielstands). Gibt die Anzahl neuer Theken zurück.
+export function addMissingCounters(state) {
+  let added = 0;
+  while (state.counters.length < counterCountFor(state.shopLevel)) {
+    state.counters.push(emptyCounter());
+    added++;
+  }
+  return added;
 }
 
 export function storageTotal(state) {

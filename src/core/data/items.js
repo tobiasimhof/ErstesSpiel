@@ -27,4 +27,17 @@ export const ITEMS = {
   minieisenplatte: { name: 'Mini-Eisenplatte', plural: 'Mini-Eisenplatten', price: 72, color: '#a9b4c2', shape: 'smallplate' },
   // v0.8.0: Eisenstange statt Eisennägel (vorher 5 Barren → 5 Nägel, das gab zu viele Nägel)
   eisenstange: { name: 'Eisenstange', plural: 'Eisenstangen', price: 72, color: '#9fa9b7', shape: 'bar' },
+  // v0.10.0: Kombi-Teile aus zwei Zutaten (Techbaum, Teil 2). Wert = Zutaten + 20 %.
+  // Zimmerei
+  handkurbel: { name: 'Handkurbel', plural: 'Handkurbeln', price: 324, color: '#b98a52', shape: 'crank' },
+  schalter: { name: 'Mechanischer Schalter', plural: 'Mechanische Schalter', price: 324, color: '#9aa1aa', shape: 'switch' },
+  verstaerkteholzplatte: { name: 'Verstärkte Holzplatte', plural: 'Verstärkte Holzplatten', price: 648, color: '#c79459', shape: 'reinforced', grain: true },
+  // Feinschmiede
+  scharnier: { name: 'Scharnier', plural: 'Scharniere', price: 1296, color: '#a9b4c2', shape: 'hinge' },
+  eisenfeder: { name: 'Eisenfeder', plural: 'Eisenfedern', price: 1296, color: '#8e98a6', shape: 'spring' },
+  kugellager: { name: 'Kugellager', plural: 'Kugellager', price: 1987, color: '#b5bfcc', shape: 'bearing' },
+  // Schlosserei
+  steinkette: { name: 'Steinkette', plural: 'Steinketten', price: 648, color: '#a7adb5', shape: 'chain' },
+  regler: { name: 'Regler', plural: 'Regler', price: 778, color: '#b0844f', shape: 'regulator' },
+  minischloss: { name: 'Mini-Schloss', plural: 'Mini-Schlösser', price: 1944, color: '#c9a24a', shape: 'lock' },
 };

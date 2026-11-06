@@ -8,6 +8,7 @@
 import { BUILDINGS } from '../core/data/buildings.js';
 import { ITEMS } from '../core/data/items.js';
 import { LEVELS, MAX_LEVEL, canLevelUp, levelUp, nextLevelGoal, unlocksOf } from '../core/levels.js';
+import { counterCountFor, counterSizeAt } from '../core/shop.js';
 import { itemCount } from './format.js';
 import { createItemIcon } from './itemArt.js';
 
@@ -19,11 +20,17 @@ function el(tag, className, text) {
 }
 
 // „🪓 Holzfällerlager, 🪚 Sägewerk · Holzstamm beim Händler“
+// v0.10.0: dazu neue Verkaufstheken, z. B. „🛒 Theke 3 (25 Plätze)“
 export function unlockText(level) {
   const { buildings, raws } = unlocksOf(level);
   const parts = buildings.map((type) => `${BUILDINGS[type].icon} ${BUILDINGS[type].name}`);
   const rawText = raws.map((type) => `${ITEMS[type].name} beim Händler`);
-  return [parts.join(', '), ...rawText].filter(Boolean).join(' · ');
+  const counters = [];
+  const before = level > 1 ? counterCountFor(level - 1) : 0;
+  if (level > 1) {
+    for (let i = before; i < counterCountFor(level); i++) counters.push(`🛒 Theke ${i + 1} (${counterSizeAt(i)} Plätze)`);
+  }
+  return [parts.join(', '), ...rawText, ...counters].filter(Boolean).join(' · ');
 }
 
 export function levelTitle(level) {
@@ -48,7 +55,7 @@ export function createLevelView({ state, panels, onLevelUp }) {
     }
     box.append(
       el('h2', null, `⚖️ Laden-Level ${state.shopLevel}`),
-      el('p', 'modal-meta', 'Jedes Level schaltet neue Gebäude und Rohstoffe frei. Zu Beginn jedes Levels gibt es einen Rohstoff gratis.'),
+      el('p', 'modal-meta', 'Jedes Level schaltet Neues frei – Gebäude, Rohstoffe und ab Level 4 eine weitere Verkaufstheke. Zu Beginn jedes Levels gibt es einen Rohstoff gratis.'),
       el('h3', null, 'Freigeschaltet'),
     );
     const unlocked = el('div', 'level-list');
@@ -62,7 +69,7 @@ export function createLevelView({ state, panels, onLevelUp }) {
     const goal = nextLevelGoal(state);
     if (!goal) {
       box.append(
-        el('p', 'empty-note', `Du hast das höchste Level (${MAX_LEVEL}) erreicht. Weitere Level kommen mit dem Techbaum, Teil 2.`),
+        el('p', 'empty-note', `Du hast das höchste Level (${MAX_LEVEL}) erreicht. Weitere Level kommen bald.`),
       );
       refs = { box, rows: [], button: null };
       return;

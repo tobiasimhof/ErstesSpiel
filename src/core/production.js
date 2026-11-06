@@ -2,7 +2,10 @@
 // versenden. Jedes Gebäude hat dafür einen Zustand in building.prod.
 
 import { BUILDINGS } from './data/buildings.js';
+import { ITEMS } from './data/items.js';
 import { RECIPES } from './data/recipes.js';
+import { step } from './dirs.js';
+import { buildingPorts } from './geometry.js';
 import { countProduced } from './levels.js';
 import { addToStorage, storageCount, storageFree, takeFromStorage } from './shop.js';
 
@@ -135,6 +138,75 @@ function hasInputs(prod, recipe) {
   return Object.entries(recipe.inputs).every(([type, n]) => (prod.stock[type] ?? 0) >= n);
 }
 
+// ---------- Zutaten einer Werkstatt (v0.10.0) ----------
+
+// Zutaten des eingestellten Rezepts: [{ type, need, have, done }]
+export function workshopInputs(building) {
+  const p = productionOf(building.type);
+  if (p?.kind !== 'workshop') return [];
+  const prod = building.prod;
+  return Object.entries(RECIPES[prod.recipe].inputs).map(([type, need]) => {
+    const have = prod.stock[type] ?? 0;
+    return { type, need, have, done: have >= need };
+  });
+}
+
+// Welche Zutaten fehlen gerade? Nur bei Rezepten mit zwei (oder mehr)
+// Zutaten und nur, solange die Werkstatt wartet – dafür zeigt das Spielfeld
+// ein kleines Bild der fehlenden Ware an der Maschine.
+export function missingInputs(building) {
+  const p = productionOf(building.type);
+  const prod = building.prod;
+  if (p?.kind !== 'workshop' || prod.busy || prod.out) return [];
+  const inputs = workshopInputs(building);
+  if (inputs.length < 2) return [];
+  return inputs.filter((i) => !i.done).map((i) => i.type);
+}
+
+// Stau am Eingang: Die Werkstatt wartet, und an jedem angeschlossenen
+// Eingang steht eine Ware, die sie gerade nicht annehmen kann (falsche Ware
+// oder von dieser Zutat ist schon genug da). Dann kommt nie wieder etwas
+// hinein. Ergebnis: Sorte der stauenden Ware (die erste) oder null.
+export function inputJam(state, building) {
+  const p = productionOf(building.type);
+  const prod = building.prod;
+  if (p?.kind !== 'workshop' || prod.busy || prod.out) return null;
+  let jam = null;
+  for (const port of buildingPorts(building)) {
+    if (port.kind !== 'in') continue;
+    const belt = state.belts[`${port.outside.x},${port.outside.y}`];
+    if (!belt) continue;
+    const feeds = belt.outs.some((dir) => {
+      const t = step(port.outside, dir);
+      return t.x === port.tile.x && t.y === port.tile.y;
+    });
+    if (!feeds) continue;
+    // Ein Band mit Abzweigung kann seine Ware auch anderswo loswerden.
+    if (belt.outs.length !== 1 || !belt.item || belt.item.progress < 1) return null;
+    if (canAccept(state, building, belt.item.type)) return null;
+    jam ??= belt.item.type;
+  }
+  return jam;
+}
+
+// Nach dem Umstellen: Zutaten, die das neue Rezept nicht braucht, kommen ins
+// Laden-Lager (sonst lägen sie unsichtbar in der Maschine fest). Gibt zurück,
+// was zurückgelegt wurde: { Ware: Anzahl }.
+export function returnUnusedStock(state, building) {
+  const p = productionOf(building.type);
+  if (p?.kind !== 'workshop') return {};
+  const prod = building.prod;
+  const needed = RECIPES[prod.recipe].inputs;
+  const returned = {};
+  for (const [type, n] of Object.entries(prod.stock)) {
+    if (needed[type] || n <= 0) continue;
+    addToStorage(state, type, n);
+    returned[type] = n;
+    delete prod.stock[type];
+  }
+  return returned;
+}
+
 // ---------- Aktionen ----------
 
 // Legt einen Rohstoff aus dem Laden-Lager ein (nur einer auf einmal).
@@ -200,11 +272,26 @@ export function buildingStatus(state, building) {
     return { level: 'idle', text: 'Leer – Rohstoff einlegen.' };
   }
   if (p?.kind === 'workshop') {
-    const recipe = RECIPES[prod.recipe];
     if (prod.out && prod.blocked) return { level: 'blocked', text: 'Ausgang voll – das Band nimmt nichts mehr an.' };
     if (prod.busy) return { level: 'work', text: 'Arbeitet.' };
-    const [type, need] = Object.entries(recipe.inputs)[0];
-    return { level: 'idle', text: `Wartet auf Nachschub (${prod.stock[type] ?? 0} / ${need}).` };
+    const inputs = workshopInputs(building);
+    const jam = inputJam(state, building);
+    if (jam) {
+      const missing = inputs.filter((i) => !i.done).map((i) => ITEMS[i.type].name);
+      const known = inputs.some((i) => i.type === jam);
+      return {
+        level: 'blocked',
+        text: known
+          ? `Eingang blockiert: Am Band staut sich ${ITEMS[jam].name}, es fehlt ${missing.join(' und ')}.`
+          : `Eingang blockiert: ${ITEMS[jam].name} wird hier nicht gebraucht.`,
+      };
+    }
+    if (inputs.length === 1) {
+      const [{ have, need }] = inputs;
+      return { level: 'idle', text: `Wartet auf Nachschub (${have} / ${need}).` };
+    }
+    const missing = inputs.filter((i) => !i.done).map((i) => `${ITEMS[i.type].name} (${i.have} / ${i.need})`);
+    return { level: 'idle', text: `Wartet auf ${missing.join(' und ')}.` };
   }
   if (p?.kind === 'storage') {
     const total = prod.slots.reduce((sum, s) => sum + s.count, 0);

@@ -491,8 +491,31 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(80);
   await page.locator('#modal-content .pick-row', { hasText: 'Holzblock' }).tap();
   await sleep(80);
+  // v0.10.0: Danach wählt man die Menge (vorgeschlagen: so viele wie passen)
+  check((await page.textContent('#modal-content .amount-number')) === '20', 'Mengenwahl schlägt 20 vor (Theke voll)');
+  await page.locator('#modal-content .amount-stepper button', { hasText: '−5' }).tap();
+  await page.locator('#modal-content .amount-stepper button', { hasText: '−5' }).tap();
+  await page.locator('#modal-content .amount-stepper button', { hasText: '−1' }).tap();
+  await page.locator('#modal-content .amount-stepper button', { hasText: '−1' }).tap();
+  check((await page.textContent('#modal-content .amount-number')) === '8', 'Menge auf 8 gestellt');
+  await shot('9a-menge');
+  const blocksBefore = await game(page, () => window.__game.state.storage.holzblock ?? 0);
+  await page.locator('#modal-content button', { hasText: 'Auf die Theke' }).tap();
+  await sleep(80);
+  const counter8 = await game(page, () => ({ ...window.__game.state.counters[0], store: window.__game.state.storage.holzblock ?? 0 }));
+  check(
+    counter8.type === 'holzblock' && counter8.count === 8 && counter8.store >= blocksBefore - 8,
+    `Theke 1 mit genau 8 Holzblöcken bestückt (${JSON.stringify(counter8)})`,
+  );
+  // Über „Menge“ lässt sich die Anzahl später ändern
+  await page.locator('#modal-content .counter-buttons button', { hasText: 'Menge' }).first().tap();
+  await sleep(80);
+  check((await page.textContent('#modal-content .amount-number')) === '8', 'Menge öffnet mit der aktuellen Anzahl');
+  await page.locator('#modal-content .amount-stepper button', { hasText: 'Alle' }).tap();
+  await page.locator('#modal-content button', { hasText: 'Auf die Theke' }).tap();
+  await sleep(80);
   const counter = await game(page, () => window.__game.state.counters[0]);
-  check(counter.type === 'holzblock' && counter.count === 20, `Theke 1 mit 20 Holzblöcken bestückt (${JSON.stringify(counter)})`);
+  check(counter.type === 'holzblock' && counter.count === 20, `„Alle“ füllt Theke 1 auf 20 Holzblöcke (${JSON.stringify(counter)})`);
   await shot('9-theken');
   await game(page, () => window.__game.simulate(90));
   await sleep(500);
@@ -544,7 +567,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(150);
   const lvl3 = await game(page, () => ({ level: window.__game.state.shopLevel, ore: window.__game.state.storage.eisenerz ?? 0 }));
   check(lvl3.level === 3 && lvl3.ore === 1, `Aufgestiegen auf Level 3, Gratis-Eisenerz im Lager (${JSON.stringify(lvl3)})`);
-  check((await page.textContent('#modal-content')).includes('höchste Level'), 'Level 3 ist vorerst das höchste');
+  check((await page.textContent('#modal-content')).includes('Nächstes Ziel: Level 4 · Zimmerei'), 'Nach Level 3 kommt Level 4 (Zimmerei)');
+  check((await page.textContent('#modal-content')).includes('Theke 3 (25 Plätze)'), 'Level 4 kündigt die dritte Theke an');
   await shot('10e-level-3');
   await page.tap('#modal-close');
 
@@ -567,7 +591,10 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.locator('#modal-content .trade-row', { hasText: 'Eisenerz' }).locator('button').tap();
   await sleep(80);
   const bought = await game(page, () => ({ gold: window.__game.state.gold, ore: window.__game.state.storage.eisenerz ?? 0 }));
-  check(bought.ore === 2 && bought.gold === goldBeforeBuy - 2200, `Händler: Eisenerz für 2.200 Gold gekauft (${goldBeforeBuy} → ${bought.gold}, jetzt ${bought.ore} Eisenerz)`);
+  // Kunden kaufen währenddessen weiter (Holzblöcke à 3 Gold) – das Gold darf
+  // deshalb etwas über „vorher − 2.200“ liegen.
+  const paid = goldBeforeBuy - bought.gold;
+  check(bought.ore === 2 && paid <= 2200 && paid > 2200 - 60, `Händler: Eisenerz für 2.200 Gold gekauft (${goldBeforeBuy} → ${bought.gold}, jetzt ${bought.ore} Eisenerz)`);
   await shot('11-haendler');
   await page.tap('#modal-close');
 
@@ -644,6 +671,94 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await page.textContent('#info-status')).includes('5 Eisenbarren → 1 Eisenstange'), 'Rezept zeigt 5 Barren → 1 Eisenstange');
   await shot('13-eisen');
   await page.tap('#info-close');
+
+  // ---------- Level 4: Zimmerei mit zwei Eingängen (v0.10.0) ----------
+  await game(page, () => Object.assign(window.__game.state.produced, { minieisenplatte: 1, eisenstange: 1 }));
+  await page.tap('#btn-level');
+  await sleep(120);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 4' }).tap();
+  await sleep(150);
+  const lvl4 = await game(page, () => ({ level: window.__game.state.shopLevel, counters: window.__game.state.counters.length }));
+  check(lvl4.level === 4 && lvl4.counters === 3, `Level 4: dritte Verkaufstheke (${JSON.stringify(lvl4)})`);
+  await page.tap('#modal-close');
+  await game(page, () => {
+    const s = window.__game.state.storage;
+    s.holzplatte = (s.holzplatte ?? 0) + 20;
+    s.eisenstange = (s.eisenstange ?? 0) + 10;
+  });
+  await page.tap('#btn-build');
+  check(
+    !(await page.locator('.build-item[data-tool="zimmerei"]').evaluate((b) => b.classList.contains('locked'))),
+    'Zimmerei in der Bauleiste freigeschaltet',
+  );
+  check(
+    await page.locator('.build-item[data-tool="feinschmiede"]').evaluate((b) => b.classList.contains('locked')),
+    'Feinschmiede noch gesperrt (Level 5)',
+  );
+  await buildAt('zimmerei', 26, 13);
+  await page.tap('#build-close');
+  await sleep(80);
+  const zim = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'zimmerei'));
+  check(Boolean(zim) && zim.x === 26 && zim.y === 13, `Zimmerei gebaut (${zim ? `${zim.x},${zim.y}` : 'fehlt'})`);
+  // Holzstäbe liegen schon drin, Zahnräder fehlen → kleines Bild an der Maschine
+  await game(page, () => {
+    window.__game.state.buildings.find((b) => b.type === 'zimmerei').prod.stock = { holzstab: 10, steinzahnrad: 2 };
+  });
+  await tapTile(page, 26, 13);
+  check((await page.textContent('#info-title')) === 'Zimmerei', 'Zimmerei antippen zeigt Infofenster');
+  const zimButtons = await page.locator('#info-actions button').allTextContents();
+  check(
+    ['Handkurbeln', 'Schalter', 'Verst. Platten'].every((t) => zimButtons.some((b) => b.includes(t))),
+    `Drei Einstellungen (${zimButtons.slice(0, 3).join(', ')})`,
+  );
+  const zimStatus = await page.textContent('#info-status');
+  check(
+    zimStatus.includes('10 Holzstäbe + 5 Stein-Zahnräder → 1 Handkurbel') && zimStatus.includes('Stein-Zahnrad: 2 / 5 – fehlt noch 3'),
+    'Infofenster zeigt Rezept und welche Zutat wie viel fehlt',
+  );
+  check(zimStatus.includes('Wartet auf Stein-Zahnrad (2 / 5)'), 'Status nennt die fehlende Zutat');
+  await shot('14-zimmerei');
+  const sticksBefore = await game(page, () => window.__game.state.storage.holzstab ?? 0);
+  await page.locator('#info-actions button', { hasText: 'Verst. Platten' }).tap();
+  await sleep(450);
+  const switched = await game(page, () => ({
+    recipe: window.__game.state.buildings.find((b) => b.type === 'zimmerei').prod.recipe,
+    sticks: window.__game.state.storage.holzstab ?? 0,
+  }));
+  check(
+    switched.recipe === 'verstaerkteholzplatte' && switched.sticks === sticksBefore + 10,
+    `Umstellen legt nicht gebrauchte Zutaten ins Laden-Lager (${JSON.stringify(switched)})`,
+  );
+  check((await page.textContent('#toast')).includes('Zurück ins Laden-Lager'), 'Meldung nennt, was zurückgelegt wurde');
+  await page.tap('#info-close');
+
+  // ---------- Level 5 und 6: je eine Theke mehr, 5 Theken auf Level 6 ----------
+  await game(page, () => Object.assign(window.__game.state.produced, { handkurbel: 1, schalter: 1, scharnier: 1, eisenfeder: 1 }));
+  await page.tap('#btn-level');
+  await sleep(120);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 5' }).tap();
+  await sleep(150);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 6' }).tap();
+  await sleep(150);
+  const lvl6 = await game(page, () => ({ level: window.__game.state.shopLevel, counters: window.__game.state.counters.length }));
+  check(lvl6.level === 6 && lvl6.counters === 5, `Level 6 mit 5 Verkaufstheken (${JSON.stringify(lvl6)})`);
+  check((await page.textContent('#modal-content')).includes('höchste Level'), 'Level 6 ist vorerst das höchste');
+  await shot('15-level-6');
+  await page.tap('#modal-close');
+  await page.tap('#btn-shop');
+  await sleep(80);
+  await page.tap('#modal-content .tab[data-tab="theken"]');
+  await sleep(80);
+  const heads = await page.locator('#modal-content .counter-head').allTextContents();
+  check(
+    heads.length === 5 && heads[4].includes('35 Plätze') && heads[2].includes('25 Plätze'),
+    `Theken 1–5 mit 20, 20, 25, 30, 35 Plätzen (${heads.join(' | ')})`,
+  );
+  await shot('16-fuenf-theken');
+  await page.tap('#modal-close');
+  await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)
+  await page.tap('#info-close').catch(() => {});
+  await shot('17-fabrik');
 
   await page.tap('#btn-menu');
   await page.tap('#menu-test-mode');

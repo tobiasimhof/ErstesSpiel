@@ -10,7 +10,7 @@ import { BUILDINGS, BUILD_MENU } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
 import { LEVELS, MAX_LEVEL } from './data/levels.js';
 import { RECIPES } from './data/recipes.js';
-import { addAllToStorage } from './shop.js';
+import { addAllToStorage, addMissingCounters } from './shop.js';
 
 export { LEVELS, MAX_LEVEL };
 
@@ -79,11 +79,14 @@ export function canLevelUp(state) {
   return Boolean(goal) && goal.every((g) => g.done);
 }
 
-// Steigt auf, legt das Geschenk ins Laden-Lager. Ergebnis: { level, gift } oder null.
+// Steigt auf, legt das Geschenk ins Laden-Lager und stellt neue Theken auf
+// (v0.10.0). Ergebnis: { level, gift, counters } oder null.
+// counters: Anzahl neuer Verkaufstheken.
 export function levelUp(state) {
   if (!canLevelUp(state)) return null;
   state.shopLevel++;
   const gift = { ...(LEVELS[state.shopLevel].gift ?? {}) };
   addAllToStorage(state, gift);
-  return { level: state.shopLevel, gift };
+  const counters = addMissingCounters(state);
+  return { level: state.shopLevel, gift, counters };
 }

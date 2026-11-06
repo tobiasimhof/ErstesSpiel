@@ -11,9 +11,11 @@ import { CUSTOMERS } from '../core/data/shop.js';
 import {
   buyRaw,
   clearCounter,
+  counterMaxFor,
   counterSize,
   fillCounter,
   isSellable,
+  setCounterAmount,
   setCounterItem,
 } from '../core/market.js';
 import { isItemUnlocked, itemLevel } from '../core/levels.js';
@@ -33,6 +35,8 @@ export function createShopView({ state, panels, onChange }) {
   let open = false;
   let tab = 'lager';
   let picking = null; // Index der Theke, für die gerade eine Ware gewählt wird
+  // v0.10.0: Menge wählen – { index, type, draft } (draft = eingestellte Anzahl)
+  let amountFor = null;
   let refs = null;
   let section = null; // { sig, update } des sichtbaren Reiters
 
@@ -88,8 +92,17 @@ export function createShopView({ state, panels, onChange }) {
   }
 
   function thekenSig() {
+    if (amountFor) return `amount|${amountFor.index}|${amountFor.type}`;
     if (picking !== null) return `pick|${picking}|${sellableInStorage().join(',')}`;
     return `theken|${state.counters.map((c) => c.type ?? '-').join(',')}`;
+  }
+
+  // Öffnet die Mengenwahl. draft: vorgeschlagene Anzahl (null = so viele wie möglich).
+  function startAmount(index, type, draft = null) {
+    const max = counterMaxFor(state, index, type);
+    amountFor = { index, type, draft: draft === null ? max : Math.min(draft, max) };
+    picking = null;
+    refresh();
   }
 
   function salesText(sale) {
@@ -105,18 +118,13 @@ export function createShopView({ state, panels, onChange }) {
     if (types.length === 0) {
       body.append(el('p', 'empty-note', 'Im Laden-Lager liegt nichts, was sich verkaufen lässt.'));
     } else {
-      body.append(el('p', 'modal-meta', 'Die Theke wird gleich mit dieser Ware aufgefüllt.'));
+      body.append(el('p', 'modal-meta', 'Danach wählst du, wie viele Stück auf die Theke kommen.'));
       const list = el('div', 'item-list');
       for (const type of types) {
         const def = ITEMS[type];
         const button = makeButton({
           label: '',
-          onClick: () => {
-            setCounterItem(state, index, type);
-            fillCounter(state, index);
-            picking = null;
-            changed();
-          },
+          onClick: () => startAmount(index, type),
         });
         button.classList.add('item-row', 'pick-row');
         const count = el('span', 'item-count');
@@ -142,7 +150,88 @@ export function createShopView({ state, panels, onChange }) {
     };
   }
 
+  // v0.10.0: Wie viele Stück sollen auf die Theke? (Tobias: „nur 8 davon verkaufen“)
+  function buildAmount(body, { makeButton }) {
+    const { index, type } = amountFor;
+    const def = ITEMS[type];
+    const size = counterSize(state, index);
+    body.append(el('h3', null, `Theke ${index + 1}: Wie viele ${def.plural}?`));
+    const ware = el('div', 'counter-ware');
+    const text = el('div', 'counter-text');
+    text.append(el('span', 'item-name', def.name), el('span', 'item-note', `je ${numberFormat.format(def.price)} 🪙 · Theke fasst ${size}`));
+    ware.append(createItemIcon(type, 34), text);
+    const number = el('div', 'amount-number');
+    const worth = el('div', 'amount-worth');
+    const display = el('div', 'amount-display');
+    display.append(number, worth);
+    const step = (n) => () => {
+      const max = counterMaxFor(state, index, type);
+      amountFor.draft = Math.max(0, Math.min(max, amountFor.draft + n));
+      update();
+    };
+    const minus5 = makeButton({ label: '−5', onClick: step(-5) });
+    const minus1 = makeButton({ label: '−1', onClick: step(-1) });
+    const plus1 = makeButton({ label: '+1', onClick: step(1) });
+    const plus5 = makeButton({ label: '+5', onClick: step(5) });
+    const none = makeButton({
+      label: '0',
+      onClick: () => {
+        amountFor.draft = 0;
+        update();
+      },
+    });
+    const all = makeButton({
+      label: '',
+      onClick: () => {
+        amountFor.draft = counterMaxFor(state, index, type);
+        update();
+      },
+    });
+    const stepper = el('div', 'amount-stepper');
+    stepper.append(none, minus5, minus1, display, plus1, plus5, all);
+    const meta = el('p', 'modal-meta');
+    const ok = makeButton({
+      label: '✓ Auf die Theke',
+      primary: true,
+      onClick: () => {
+        const counter = state.counters[index];
+        if (counter.type !== type) setCounterItem(state, index, type);
+        const n = setCounterAmount(state, index, amountFor.draft);
+        amountFor = null;
+        changed();
+        panels.toast(`Theke ${index + 1}: ${itemCount(type, n)}.`);
+      },
+    });
+    ok.classList.add('amount-ok');
+    const cancel = makeButton({
+      label: '✕ Abbrechen',
+      onClick: () => {
+        amountFor = null;
+        refresh();
+      },
+    });
+    const actions = el('div', 'panel-actions');
+    actions.append(cancel, ok);
+    body.append(ware, stepper, meta, actions);
+
+    function update() {
+      const counter = state.counters[index];
+      const max = counterMaxFor(state, index, type);
+      amountFor.draft = Math.min(amountFor.draft, max);
+      const n = amountFor.draft;
+      number.textContent = String(n);
+      worth.textContent = `${numberFormat.format(n * def.price)} 🪙`;
+      all.textContent = `Alle (${max})`;
+      minus5.disabled = minus1.disabled = none.disabled = n <= 0;
+      plus5.disabled = plus1.disabled = all.disabled = n >= max;
+      const onCounter = counter.type === type ? counter.count : 0;
+      meta.textContent = `Auf der Theke: ${onCounter} · im Laden-Lager: ${storageCount(state, type)}. Was du weniger einstellst, kommt zurück ins Laden-Lager.`;
+    }
+    return update;
+  }
+
   function buildTheken(body, helpers) {
+    if (amountFor) return buildAmount(body, helpers);
     if (picking !== null) return buildPicker(body, helpers);
     const { makeButton } = helpers;
     body.append(
@@ -155,7 +244,7 @@ export function createShopView({ state, panels, onChange }) {
     const grid = el('div', 'counters');
     const cards = state.counters.map((counter, index) => {
       const card = el('div', 'counter-card');
-      const head = el('div', 'counter-head', `Theke ${index + 1}`);
+      const head = el('div', 'counter-head', `Theke ${index + 1} · ${counterSize(state, index)} Plätze`);
       const ware = el('div', 'counter-ware');
       const amount = el('span', 'counter-amount');
       if (counter.type) {
@@ -179,8 +268,12 @@ export function createShopView({ state, panels, onChange }) {
         else panels.toast(`Kein ${ITEMS[counter.type].name} mehr im Laden-Lager.`);
       };
       const buttons = el('div', 'counter-buttons');
-      const plus1 = makeButton({ label: '+1', onClick: fill(1) });
-      const plus5 = makeButton({ label: '+5', onClick: fill(5) });
+      // v0.10.0: „Menge“ statt +1/+5 – stellt genau die gewünschte Anzahl ein
+      const amountButton = makeButton({
+        label: '🔢 Menge',
+        onClick: () => startAmount(index, counter.type, counter.count),
+      });
+      amountButton.dataset.counterAction = 'menge';
       const full = makeButton({ label: 'Auffüllen', primary: true, onClick: fill(Infinity) });
       const back = makeButton({
         label: '↩ Abräumen',
@@ -190,11 +283,11 @@ export function createShopView({ state, panels, onChange }) {
         },
       });
       back.title = 'Zurück ins Laden-Lager';
-      if (counter.type) buttons.append(plus1, plus5, full, back);
+      if (counter.type) buttons.append(amountButton, full, back);
       buttons.append(pick);
       card.append(head, ware, buttons);
       grid.append(card);
-      return { amount, plus1, plus5, full, back };
+      return { amount, full };
     });
     const next = el('p', 'modal-meta');
     const salesBox = el('div', 'sales');
@@ -202,14 +295,12 @@ export function createShopView({ state, panels, onChange }) {
     let salesShown = null;
 
     return () => {
-      const size = counterSize(state);
       state.counters.forEach((counter, index) => {
         const c = cards[index];
         if (!counter.type) return;
+        const size = counterSize(state, index);
         c.amount.textContent = `${counter.count} / ${size}`;
         const room = counter.count < size && storageCount(state, counter.type) > 0;
-        c.plus1.disabled = !room;
-        c.plus5.disabled = !room;
         c.full.disabled = !room;
       });
       const anything = state.counters.some((c) => c.count > 0);
@@ -300,6 +391,7 @@ export function createShopView({ state, panels, onChange }) {
   function showTab(key) {
     tab = key;
     picking = null;
+    amountFor = null;
     updateHeader();
     renderSection(true);
   }
@@ -318,6 +410,7 @@ export function createShopView({ state, panels, onChange }) {
     open(startTab) {
       if (startTab) tab = startTab;
       picking = null;
+      amountFor = null;
       section = null;
       panels.showModal((box, helpers) => {
         const meta = el('p', 'modal-meta');

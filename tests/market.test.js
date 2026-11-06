@@ -190,9 +190,15 @@ test('Das Sägewerk kostet nur Holzblöcke – sonst käme man am Anfang nie an 
 });
 
 test('Kein Gebäude kostet mehr, als ein Rohstoff seiner Stufe einbringt', () => {
+  // Level 1 bis 3: Holz, Stein, Eisen; ab Level 4 Eisen. Ein Rohstoff wird zu
+  // 40 Teilen aus der Grundmaschine (Holz/Stein 720 Gold, Eisen 2.880 Gold).
+  const raw = { 1: 'holzstamm', 2: 'felsbrocken', 3: 'eisenerz' };
+  const partsValue = { holzstamm: 40 * ITEMS.holzplatte.price, felsbrocken: 40 * ITEMS.steinplatte.price, eisenerz: 40 * ITEMS.eisenstange.price };
   for (const type of BUILD_MENU) {
     const worth = Object.entries(BUILDINGS[type].cost).reduce((sum, [item, n]) => sum + ITEMS[item].price * n, 0);
-    assert.ok(worth <= ITEMS.holzstamm.buyPrice, `${type} kostet ${worth} Gold an Waren`);
+    const limit = partsValue[raw[Math.min(BUILDINGS[type].level, 3)]];
+    assert.ok(worth <= limit, `${type} kostet ${worth} Gold an Waren (höchstens ${limit})`);
+    if (BUILDINGS[type].level <= 2) assert.ok(worth <= ITEMS.holzstamm.buyPrice, `${type}: am Anfang günstig`);
   }
 });
 
@@ -341,6 +347,19 @@ test('Testpaket: 1.000 Gold und 50 von jeder Ware (ohne Rohstoffe)', () => {
   assert.equal(storageCount(state, 'holzplatte'), 50);
   assert.equal(storageCount(state, 'eisenstange'), 50);
   assert.equal(storageCount(state, 'holzstamm'), 0);
+  assert.equal(storageCount(state, 'handkurbel'), 0, 'Kombi-Teile erst ab Level 4');
+  for (const type of BUILD_MENU) {
+    if (BUILDINGS[type].level <= 3) assert.ok(canAfford(state, BUILDINGS[type].cost), `${type} baubar`);
+  }
+});
+
+test('Testpaket auf Level 6: Kombi-Teile nur je 5 Stück, alle Gebäude baubar', () => {
+  const state = emptyGame({});
+  state.shopLevel = 6;
+  applyTestPack(state);
+  assert.equal(storageCount(state, 'eisenstange'), 50);
+  assert.equal(storageCount(state, 'handkurbel'), TEST_PACK.eachAdvanced);
+  assert.equal(storageCount(state, 'minischloss'), TEST_PACK.eachAdvanced);
   for (const type of BUILD_MENU) assert.ok(canAfford(state, BUILDINGS[type].cost), `${type} baubar`);
 });
 

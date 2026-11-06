@@ -25,7 +25,7 @@ import { createNewGame } from '../src/core/state.js';
 // ---------- Datentabellen ----------
 
 test('Level-Tabelle: Level 1 bis MAX_LEVEL, jedes ab Level 2 mit Ziel und Gratis-Rohstoff', () => {
-  assert.equal(MAX_LEVEL, 3);
+  assert.equal(MAX_LEVEL, 6);
   for (let level = 1; level <= MAX_LEVEL; level++) {
     const def = LEVELS[level];
     assert.ok(def?.name, `Level ${level} hat einen Namen`);
@@ -37,10 +37,11 @@ test('Level-Tabelle: Level 1 bis MAX_LEVEL, jedes ab Level 2 mit Ziel und Gratis
       assert.ok(n > 0);
       assert.ok(itemLevel(type) < level, `${type} lässt sich vor Level ${level} herstellen`);
     }
-    // Zu Beginn jedes Levels genau ein Rohstoff dieses Levels gratis (Tobias)
+    // Zu Beginn jedes Levels genau ein Rohstoff gratis (Tobias): bis Level 3
+    // der neue Rohstoff, danach Eisenerz (einen vierten Rohstoff gibt es nicht).
     assert.deepEqual(Object.values(def.gift), [1]);
     const [raw] = Object.keys(def.gift);
-    assert.ok(ITEMS[raw].raw && itemLevel(raw) === level, `Geschenk ${raw} ist der Rohstoff von Level ${level}`);
+    assert.ok(ITEMS[raw].raw && itemLevel(raw) === Math.min(level, 3), `Geschenk ${raw} passt zu Level ${level}`);
   }
 });
 
@@ -66,6 +67,21 @@ test('Holz ab Level 1, Stein ab Level 2, Eisen ab Level 3', () => {
   assert.equal(itemLevel('eisenbarren'), 3);
   assert.equal(itemLevel('eisenstange'), 3);
   assert.equal(BUILD_MENU.filter((t) => BUILDINGS[t].level === 1).length, 4);
+});
+
+test('Level 4 bis 6 schalten je eine Kombi-Maschine frei (v0.10.0)', () => {
+  assert.deepEqual(unlocksOf(4), { buildings: ['zimmerei'], raws: [] });
+  assert.deepEqual(unlocksOf(5), { buildings: ['feinschmiede'], raws: [] });
+  assert.deepEqual(unlocksOf(6), { buildings: ['schlosserei'], raws: [] });
+  for (const type of ['handkurbel', 'schalter', 'verstaerkteholzplatte']) assert.equal(itemLevel(type), 4, type);
+  for (const type of ['scharnier', 'eisenfeder', 'kugellager']) assert.equal(itemLevel(type), 5, type);
+  for (const type of ['steinkette', 'regler', 'minischloss']) assert.equal(itemLevel(type), 6, type);
+  // Baukosten bestehen nur aus Waren, die man vorher herstellen kann
+  for (const type of ['zimmerei', 'feinschmiede', 'schlosserei']) {
+    for (const item of Object.keys(BUILDINGS[type].cost)) {
+      assert.ok(itemLevel(item) < BUILDINGS[type].level, `${type}: ${item} vorher herstellbar`);
+    }
+  }
 });
 
 // ---------- Sperren ----------
@@ -140,7 +156,7 @@ test('Aufstieg auf Level 2: 1 Holzplatte und 1 Holzstab herstellen, dann gibt es
   simulate(state, 60);
   assert.equal(canLevelUp(state), true);
   const result = levelUp(state);
-  assert.deepEqual(result, { level: 2, gift: { felsbrocken: 1 } });
+  assert.deepEqual(result, { level: 2, gift: { felsbrocken: 1 }, counters: 0 });
   assert.equal(state.shopLevel, 2);
   assert.equal(storageCount(state, 'felsbrocken'), 1, 'Gratis-Felsbrocken im Laden-Lager');
   assert.equal(canLevelUp(state), false, 'nächstes Ziel: Stein');
@@ -150,18 +166,39 @@ test('Aufstieg auf Level 2: 1 Holzplatte und 1 Holzstab herstellen, dann gibt es
   );
 });
 
-test('Aufstieg auf Level 3 nach Steinplatte und Stein-Zahnrad, dann gibt es ein Eisenerz; danach ist Schluss', () => {
+test('Aufstieg auf Level 3 nach Steinplatte und Stein-Zahnrad, dann gibt es ein Eisenerz', () => {
   const state = createNewGame(2);
   state.shopLevel = 2;
   state.produced = { steinplatte: 1 };
   assert.equal(canLevelUp(state), false);
   state.produced.steinzahnrad = 3;
-  assert.deepEqual(levelUp(state), { level: 3, gift: { eisenerz: 1 } });
+  assert.deepEqual(levelUp(state), { level: 3, gift: { eisenerz: 1 }, counters: 0 });
   assert.equal(storageCount(state, 'eisenerz'), 1);
+  assert.deepEqual(
+    nextLevelGoal(state).map((g) => g.type),
+    ['minieisenplatte', 'eisenstange'],
+    'nächstes Ziel: Eisen-Teile',
+  );
+});
+
+test('Level 4 bis 6: Ziel, Eisenerz als Geschenk und je eine neue Theke; danach ist Schluss', () => {
+  const state = createNewGame(3);
+  state.shopLevel = 3;
+  state.produced = { minieisenplatte: 1, eisenstange: 1 };
+  assert.deepEqual(levelUp(state), { level: 4, gift: { eisenerz: 1 }, counters: 1 });
+  assert.equal(state.counters.length, 3);
+  assert.equal(canLevelUp(state), false, 'Level 5 braucht Handkurbel und Schalter');
+  state.produced.handkurbel = 1;
+  state.produced.schalter = 1;
+  assert.deepEqual(levelUp(state), { level: 5, gift: { eisenerz: 1 }, counters: 1 });
+  state.produced.scharnier = 1;
+  state.produced.eisenfeder = 1;
+  assert.deepEqual(levelUp(state), { level: 6, gift: { eisenerz: 1 }, counters: 1 });
+  assert.equal(state.counters.length, 5);
+  assert.equal(storageCount(state, 'eisenerz'), 3);
   assert.equal(nextLevelGoal(state), null, 'höchstes Level');
-  assert.equal(canLevelUp(state), false);
   assert.equal(levelUp(state), null);
-  assert.equal(state.shopLevel, 3);
+  assert.equal(state.shopLevel, 6);
 });
 
 test('Ein neues Spiel lässt sich von Holz bis Eisen durchspielen', () => {
@@ -180,7 +217,7 @@ test('Ein neues Spiel lässt sich von Holz bis Eisen durchspielen', () => {
   simulate(state, 40);
   setRecipe(mason, 'steinzahnrad');
   simulate(state, 40);
-  assert.deepEqual(levelUp(state), { level: 3, gift: { eisenerz: 1 } });
+  assert.deepEqual(levelUp(state), { level: 3, gift: { eisenerz: 1 }, counters: 0 });
   Object.assign(state.storage, { steinplatte: 30, holzplatte: 10, eisenbarren: 30 });
   assert.equal(typeof buyBuilding(state, 'schmelzhuette', 18, 12, 0), 'object');
   assert.equal(typeof buyBuilding(state, 'schmiede', 20, 12, 0), 'object');

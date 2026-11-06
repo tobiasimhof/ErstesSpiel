@@ -10,9 +10,17 @@
 
 import { ITEMS } from './data/items.js';
 import { BAILOUT_ITEM, CUSTOMERS, SALES_LOG_SIZE, SHOP_LEVELS, TEST_PACK } from './data/shop.js';
-import { isItemUnlocked } from './levels.js';
+import { isItemUnlocked, itemLevel } from './levels.js';
 import { productionOf, buildingContents } from './production.js';
-import { addToStorage, storageCount, storageFree, takeFromStorage } from './shop.js';
+import {
+  addToStorage,
+  counterCountFor,
+  counterSizeAt,
+  emptyCounter,
+  storageCount,
+  storageFree,
+  takeFromStorage,
+} from './shop.js';
 
 // ---------- Zufall ----------
 
@@ -44,8 +52,7 @@ export function shopLevelData(state) {
 }
 
 export function createCounters(level = 1) {
-  const n = (SHOP_LEVELS[level] ?? SHOP_LEVELS[1]).counters;
-  return Array.from({ length: n }, () => ({ type: null, count: 0 }));
+  return Array.from({ length: counterCountFor(level) }, emptyCounter);
 }
 
 // Darf eine Ware auf die Theke? (Rohstoffe haben keinen Verkaufswert.)
@@ -70,8 +77,9 @@ export function buyRaw(state, type) {
 
 // ---------- Theken ----------
 
-export function counterSize(state) {
-  return shopLevelData(state).counterSize;
+// Plätze auf Theke index (v0.10.0: jede Theke hat ihre eigene Größe).
+export function counterSize(state, index) {
+  return counterSizeAt(index);
 }
 
 // Stellt eine Sorte auf die Theke. Liegt dort eine andere, kommt sie ins Lager zurück.
@@ -88,12 +96,36 @@ export function setCounterItem(state, index, type) {
 export function fillCounter(state, index, n = Infinity) {
   const counter = state.counters[index];
   if (!counter?.type) return 0;
-  const moved = Math.max(0, Math.min(n, counterSize(state) - counter.count, storageCount(state, counter.type)));
+  const moved = Math.max(0, Math.min(n, counterSize(state, index) - counter.count, storageCount(state, counter.type)));
   if (moved > 0) {
     takeFromStorage(state, counter.type, moved);
     counter.count += moved;
   }
   return moved;
+}
+
+// Höchstens so viele Stück dieser Ware passen gerade auf die Theke
+// (was schon dort liegt plus Vorrat im Laden-Lager, begrenzt durch die Größe).
+export function counterMaxFor(state, index, type) {
+  const counter = state.counters[index];
+  if (!counter || !isSellable(type)) return 0;
+  const onCounter = counter.type === type ? counter.count : 0;
+  return Math.min(counterSize(state, index), onCounter + storageCount(state, type));
+}
+
+// Stellt genau target Stück auf die Theke (v0.10.0, Tobias: „nur 8 davon
+// verkaufen“). Mehr wird aus dem Laden-Lager nachgelegt, zu viel kommt zurück.
+// Gibt die Anzahl danach zurück.
+export function setCounterAmount(state, index, target) {
+  const counter = state.counters[index];
+  if (!counter?.type) return 0;
+  const want = Math.max(0, Math.min(Math.floor(target), counterSize(state, index)));
+  if (want > counter.count) fillCounter(state, index, want - counter.count);
+  else if (want < counter.count) {
+    addToStorage(state, counter.type, counter.count - want);
+    counter.count = want;
+  }
+  return counter.count;
 }
 
 // Räumt die Theke ab: Die Waren kommen zurück ins Laden-Lager.
@@ -185,6 +217,7 @@ export function checkBailout(state) {
 export function applyTestPack(state) {
   state.gold += TEST_PACK.gold;
   for (const type of Object.keys(ITEMS)) {
-    if (!ITEMS[type].raw && isItemUnlocked(state, type)) addToStorage(state, type, TEST_PACK.each);
+    if (ITEMS[type].raw || !isItemUnlocked(state, type)) continue;
+    addToStorage(state, type, itemLevel(type) >= TEST_PACK.advancedLevel ? TEST_PACK.eachAdvanced : TEST_PACK.each);
   }
 }
