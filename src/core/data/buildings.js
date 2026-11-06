@@ -62,28 +62,24 @@ export const BUILDINGS = {
   lagerhaus: {
     name: 'Lagerhaus',
     icon: '📦',
-    size: [2, 2],
+    size: [2, 1],
     color: '#8b6b4a',
     description:
-      'Zwischenlager mit 3 Fächern zu je 50 Waren. Was am blauen Pfeil hineinläuft, wird gelagert und am orangen Pfeil weitergegeben, sobald dort Platz ist.',
+      'Zwischenlager mit 3 Fächern zu je 50 Waren. Eingang oben links (blauer Pfeil), Ausgang unten rechts (oranger Pfeil). Was hineinläuft, wird gelagert und weitergegeben, sobald am Ausgang Platz ist.',
     ports: [
-      { kind: 'in', x: 0, y: 0, side: 'W' },
-      { kind: 'out', x: 1, y: 0, side: 'E' },
+      { kind: 'in', x: 0, y: 0, side: 'N' },
+      { kind: 'out', x: 1, y: 0, side: 'S' },
     ],
     production: { kind: 'storage', slots: 3, slotSize: 50 },
   },
   versandportal: {
     name: 'Versandportal',
     icon: '🌀',
-    size: [2, 2],
+    size: [1, 1],
     color: '#5f4b8b',
-    description: 'Schickt alles, was hineinläuft, direkt ins Lager deines Ladens. Nimmt Waren von allen vier Seiten an.',
-    ports: [
-      { kind: 'in', x: 0, y: 0, side: 'W' },
-      { kind: 'in', x: 1, y: 0, side: 'N' },
-      { kind: 'in', x: 1, y: 1, side: 'E' },
-      { kind: 'in', x: 0, y: 1, side: 'S' },
-    ],
+    description:
+      'Schickt alles, was am blauen Pfeil hineinläuft, direkt ins Lager deines Ladens. Mit „Drehen“ zeigt der Eingang in eine andere Richtung.',
+    ports: [{ kind: 'in', x: 0, y: 0, side: 'W' }],
     production: { kind: 'shipping' },
   },
 };

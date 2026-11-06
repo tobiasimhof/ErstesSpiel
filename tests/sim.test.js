@@ -6,6 +6,7 @@ import { placeBuilding, removeBuilding } from '../src/core/buildings.js';
 import { ITEMS } from '../src/core/data/items.js';
 import { RECIPES } from '../src/core/data/recipes.js';
 import { BUILDINGS } from '../src/core/data/buildings.js';
+import { buildingPorts } from '../src/core/geometry.js';
 import { buildingContents, buildingStatus, loadInput, setRecipe } from '../src/core/production.js';
 import { storageCount } from '../src/core/shop.js';
 import { simulate } from '../src/core/sim.js';
@@ -89,13 +90,13 @@ test('Aufteilen verteilt abwechselnd auf beide Strecken', () => {
   const state = emptyGame();
   const wood = woodLine(state, 16);
   placeBuilding(state, 'versandportal', 17, 6, 0);
-  // Abzweig bei (14,6) nach unten in ein zweites Portal (13,9)-(14,10),
-  // dessen oberer Eingang bei (14,9) vom Band (14,8) beliefert wird
+  // Abzweig bei (14,6) nach unten in ein zweites Portal bei (14,9), einmal
+  // gedreht: sein Eingang zeigt nach oben zum Band (14,8)
   drag(state, [
     [14, 6],
     [14, 8],
   ]);
-  placeBuilding(state, 'versandportal', 13, 9, 0);
+  placeBuilding(state, 'versandportal', 14, 9, 1);
   loadInput(state, wood);
   simulate(state, 400);
   const portals = state.buildings.filter((b) => b.type === 'versandportal');
@@ -198,10 +199,38 @@ test('Falsche Ware kommt nicht in die Werkstatt – das Band staut sich', () => 
   assert.equal(buildingStatus(state, stone).level, 'blocked');
 });
 
+// Holzfäller (10,6) → Band (12,6),(13,6) → von oben ins Lagerhaus (13,7)-(14,7);
+// Ausgang unten rechts bei (14,7) → Feld (14,8)
+function woodIntoStore(state) {
+  const wood = placeBuilding(state, 'holzfaeller', 10, 6, 0);
+  const store = placeBuilding(state, 'lagerhaus', 13, 7, 0);
+  drag(state, [
+    [12, 6],
+    [13, 6],
+    [13, 7],
+  ]);
+  return { wood, store };
+}
+
+test('Lagerhaus ist 2 × 1: Eingang oben links, Ausgang unten rechts', () => {
+  const store = { id: 1, type: 'lagerhaus', x: 13, y: 7, rot: 0 };
+  const ports = buildingPorts(store).map((p) => [p.kind, p.side, p.outside.x, p.outside.y]);
+  assert.deepEqual(ports, [
+    ['in', 'N', 13, 6],
+    ['out', 'S', 14, 8],
+  ]);
+});
+
+test('Versandportal hat genau einen Eingang, der mitdreht', () => {
+  const portal = { id: 1, type: 'versandportal', x: 14, y: 9, rot: 0 };
+  assert.deepEqual(buildingPorts(portal).map((p) => [p.kind, p.side]), [['in', 'W']]);
+  portal.rot = 1;
+  assert.deepEqual(buildingPorts(portal).map((p) => [p.kind, p.side]), [['in', 'N']]);
+});
+
 test('Lagerhaus puffert bis 3 × 50 und gibt weiter, sobald Platz ist', () => {
   const state = emptyGame();
-  const wood = woodLine(state, 13);
-  const store = placeBuilding(state, 'lagerhaus', 14, 6, 0); // Eingang W (14,6), Ausgang E (15,6)→(16,6)
+  const { wood, store } = woodIntoStore(state);
   loadInput(state, wood);
   simulate(state, 1000); // Ausgang ohne Band → alles bleibt im Lager
   const total = store.prod.slots.reduce((s, x) => s + x.count, 0);
@@ -211,18 +240,17 @@ test('Lagerhaus puffert bis 3 × 50 und gibt weiter, sobald Platz ist', () => {
 
   // Jetzt ein Band zum Portal anschließen → das Lager leert sich
   drag(state, [
-    [16, 6],
-    [17, 6],
+    [14, 8],
+    [14, 9],
   ]);
-  placeBuilding(state, 'versandportal', 18, 6, 0);
+  placeBuilding(state, 'versandportal', 14, 10, 1); // Eingang oben
   simulate(state, 600);
   assert.ok(storageCount(state, 'holzblock') >= 190, `im Laden: ${storageCount(state, 'holzblock')}`);
 });
 
 test('Abreißen gibt Waren ins Laden-Lager zurück, ein angefangener Stamm geht verloren', () => {
   const state = emptyGame();
-  const wood = woodLine(state, 13);
-  const store = placeBuilding(state, 'lagerhaus', 14, 6, 0);
+  const { wood, store } = woodIntoStore(state);
   loadInput(state, wood);
   simulate(state, 120);
   const inStore = store.prod.slots.reduce((s, x) => s + x.count, 0);
