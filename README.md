@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.9.0 – Fläche kaufen & erste Level |
+| **Aktuelle Version** | v0.9.1 – Startkapital 500 Gold |
 | **Phase** | M1 – Fabrik-Grundgerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias testet v0.9.0: mit einem neuen Spiel (☰ → Neues Spiel) den Weg Holz → Stein → Eisen über die Level und Fläche kaufen (Schilder „＋“ am Rand). Danach stellt Claude den **Plan für v0.10.0 – Techbaum, Teil 2** vor (Entwurf der Rezepte in Abschnitt 4.2, Stichpunkte in Abschnitt 6 unter „Ausblick v0.10.0“), Tobias gibt ihn frei, dann wird programmiert |
+| **Nächster Schritt** | Tobias spielt sein Testspiel in Echtzeit weiter (500 Gold wurden nachgezahlt): Holz → Stein → Eisen über die Level, Fläche kaufen (Schilder „＋“ am Rand). Danach stellt Claude den **Plan für v0.10.0 – Techbaum, Teil 2** vor (Entwurf der Rezepte in Abschnitt 4.2, Stichpunkte in Abschnitt 6 unter „Ausblick v0.10.0“), Tobias gibt ihn frei, dann wird programmiert |
 
 ---
 
@@ -111,7 +111,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Laden:** Der Knopf „Laden“ unten links öffnet den Laden mit den Reitern **Lager**, **Theken** und **Händler** (seit v0.7.0). Er hat ein eigenes **Lager** (gefüllt über das Versandportal) und **Verkaufstheken**. Die Theken bestückt man **von Hand** mit dem, was man verkaufen möchte; je nach Level bzw. Größe einer Theke passen darauf z. B. 20 Winkel. **Kunden kommen zufällig vorbei und kaufen zufällig viel**, z. B. der eine 2 Zahnräder und 1 Splitt, der nächste 3 Winkel – zu einem „normalen“ Preis. Später darf der Laden interaktiver werden; für den Anfang reicht die Übersicht.
 - **Händler:** Hier kauft man Rohstoffe wie Holzstämme. **Verkaufen kann man nur über die Theken**, nicht an den Händler (Tobias, v0.7.0): Was man nicht mehr braucht, verkauft man über die Theken; vieles braucht man später noch, deshalb lohnt sich ein gemischtes Lager.
 - **Nachfrage:** Wer viel von einer Ware verkauft, drückt ihren Preis. Mit der Zeit erholt er sich wieder. Dazu kommen Trends, z. B. „Die Stadt baut eine Mauer: Steinblöcke +50 % für 2 Tage“. Eine Tür bringt also mal mehr, mal weniger Gold, je nachdem, wie gefragt sie gerade ist. So entsteht das Wirtschaftsgefühl, und es lohnt sich, je nach Marktlage umzubauen.
-- **Start:** Kein Startgold. Der erste Holzstamm ist gratis, dazu 20 Holzblöcke für die ersten Förderbänder zum Versandportal. Den ersten Felsbrocken gibt es beim Aufstieg auf Level 2, das erste Eisenerz bei Level 3 (seit v0.9.0).
+- **Start:** 500 Gold Startkapital (seit v0.9.1, vorher kein Gold). Der erste Holzstamm ist gratis, dazu 20 Holzblöcke für die ersten Förderbänder zum Versandportal. Das Startkapital sorgt dafür, dass nach den ersten Gebäuden genug Gold für den zweiten Holzstamm da ist. Den ersten Felsbrocken gibt es beim Aufstieg auf Level 2, das erste Eisenerz bei Level 3 (seit v0.9.0).
 - **Pleiteschutz:** Bei absoluter Pleite bekommt man einen Holzstamm geschenkt (Idee von Claude, von Tobias für gut befunden). „Pleite“ heißt: weniger Gold als ein Holzstamm kostet, kein Rohstoff im Lager oder in Arbeit, und alle Waren (Lager, Theken, Fabrik) zusammen sind weniger wert als ein Holzstamm.
 - **Rohstoffe und Erträge:** Stein kostet so viel wie Holz und bringt ähnliche Erträge. Eisen kostet deutlich mehr, bringt aber auch mehr Gold. So verdient man mit jedem neuen Rohstoff mehr – und frühere Produkte verlieren ihren Wert nicht, weil sie für spätere Rezepte gebraucht werden.
 - **Kaufen statt herstellen:** Jede Ware kann man auch kaufen, z. B. eine fertige Tür. Das ist teurer als selbst herstellen, spart aber Platz und Zeit.
@@ -370,6 +370,7 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | v0.7.1 | **Fehlerkorrektur:** Spiel startete nach dem Update nicht (alte und neue Dateien gemischt); Meldung statt schwarzem Bildschirm | ✅ fertig |
 | v0.8.0 | **Eisenstange:** Schmiede macht Eisenstangen (5 : 1) statt Eisennägel (5 : 5); vorhandene Nägel werden umgewandelt | ✅ fertig |
 | v0.9.0 | **Fläche kaufen & erste Level:** Grundstück streifenweise mit Gold vergrößern; Level 1 Holz → 2 Stein → 3 Eisen mit einfachen Zielen und Gratis-Rohstoff | ✅ fertig |
+| v0.9.1 | **Startkapital:** 500 Gold zum Start, bestehende Spielstände bekommen sie einmalig nachgezahlt | ✅ fertig |
 | v0.10.0 | **Techbaum, Teil 2:** Kombinations-Maschinen mit zwei Zutaten und die Weiterverarbeitung (Kugellager, Regler, Mini-Schloss …), dazu Level 4 | als Nächstes planen |
 | v0.11.0 | **Aufgaben:** Aufgaben mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen (Modell von Tobias, Abschnitt 3.5) | |
 | v0.12.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
@@ -382,6 +383,13 @@ Was bereits feststeht (Abschnitte 4.2 und 7) und in den Plan gehört:
 - **Rezepte und Werte:** Entwurf in Abschnitt 4.2 – seit v0.8.0 mit „1 Eisenstange“ statt „2 Eisennägel“; die Werte sind nach der +20-%-Regel neu gerechnet und müssen noch freigegeben werden.
 - **Level:** Mühlenbauer ab Level 2, Zimmerei und Feinwerkstatt ab Level 3, Feinschmiede, Getriebebauer und Schlosserei ab Level 4 – dafür braucht Level 4 ein Ziel und einen Gratis-Rohstoff (oder etwas anderes als Geschenk, weil es keinen vierten Rohstoff gibt).
 - **Offene Punkte für den Plan:** Baukosten der 6 Maschinen in Waren (Tabelle wie in 4.2 fortsetzen; Tobias: eine gute Balance der Maschinenkosten macht das Hinarbeiten auf Neues reizvoll); Eisenfeder hat im Entwurf nur eine Zutat (1 Eisenstange) – so lassen oder eine zweite Zutat?; die beiden freien Einstellungen (Zimmerei B, Schlosserei B); wie eine Werkstatt anzeigt, welche Zutat ihr noch fehlt; ob Kunden die teuren Teile genauso oft kaufen wie einfache.
+
+### v0.9.1 – Startkapital (fertig)
+
+- **Neues Spiel mit 500 Gold.** Grund (Tobias' Test in Echtzeit): Der erste Holzstamm bringt 200 Holzblöcke (+ 20 vom Start). Nach 2 Sägewerken (80 Blöcke) und Bändern (etwa 25) bleiben rund 115 Blöcke, also etwa 23 Teile für rund 400 Gold – der nächste Holzstamm kostet aber 550. Mit Startkapital: 372 + 500 = 872 Gold, nach dem zweiten Stamm bleiben 322; der zweite Stamm bringt ohne neue Baukosten rund 720 Gold, ab dann trägt sich die Produktion.
+- **Bestehende Spielstände** (Spielstand-Version 7 → 8) bekommen die 500 Gold einmalig nachgezahlt, mit Meldung. Level, Lager und Zähler bleiben.
+- **Pleiteschutz bleibt unverändert** (Tobias). Bekannte Lücke: Ein Rohstoff im Lager verhindert das Geschenk, auch wenn kein Gebäude dasteht, das ihn verarbeiten kann (z. B. der Gratis-Felsbrocken ohne Steinbruch). Mit dem Startkapital tritt das kaum noch auf.
+- **Tipp:** Ab Level 2 lohnt es sich, 10 Holzplatten und 5 Holzstäbe für den Steinbruch zurückzulegen, statt alles zu verkaufen.
 
 ### v0.9.0 – Fläche kaufen & erste Level (fertig)
 
@@ -400,7 +408,7 @@ Was bereits feststeht (Abschnitte 4.2 und 7) und in den Plan gehört:
 | 2 · Stein | Steinbruch, Steinmetz; Felsbrocken beim Händler | 1 Felsbrocken | 1 Holzplatte + 1 Holzstab |
 | 3 · Eisen | Schmelzhütte, Schmiede; Eisenerz beim Händler | 1 Eisenerz | 1 Steinplatte + 1 Stein-Zahnrad |
 
-- **Neues Spiel:** nur Holzfällerlager und Versandportal, 1 Holzstamm und 20 Holzblöcke. Den Steinbruch baut man ab Level 2 selbst (10 Holzplatten + 5 Holzstäbe).
+- **Neues Spiel:** nur Holzfällerlager und Versandportal, 1 Holzstamm und 20 Holzblöcke (seit v0.9.1 dazu 500 Gold). Den Steinbruch baut man ab Level 2 selbst (10 Holzplatten + 5 Holzstäbe).
 - **Level-Fenster:** Oben auf „Laden-Level“ tippen. Es zeigt, was freigeschaltet ist, das nächste Ziel mit Häkchen und den Knopf „⬆ Aufsteigen“. Ist das Ziel erreicht, erscheint oben ein ⬆ und eine kurze Meldung. Nach dem Aufstieg gratuliert das Fenster und nennt das Geschenk.
 - **Gesperrtes ist sichtbar:** In der Bauleiste stehen gesperrte Gebäude ausgegraut mit „🔒 Level 2“ hinter Förderband und Abreißen; antippen sagt, ab welchem Level. Beim Händler steht „🔒 ab Level 2“.
 - **Das Spiel zählt mit, was hergestellt wird** (Blöcke, Platten, Stäbe …) – die Grundlage für die späteren Aufgaben.
@@ -593,6 +601,8 @@ Was bereits feststeht (Abschnitte 4.2 und 7) und in den Plan gehört:
 | 06.11.2026 | Bestehende Spielstände bekommen Level 3 | Claudes Wahl: Tobias' Fabrik hat schon Stein und Eisen, es soll nichts gesperrt werden. |
 | 06.11.2026 | Fläche kauft man über ein Fenster mit Knopf (erst Fläche antippen, dann „Kaufen“) statt mit einem Tipp | Claudes Wahl: Zwei Schritte verhindern versehentliche Käufe; das Fenster zeigt Größe und Preis. |
 | 06.11.2026 | Gesperrte Gebäude stehen in der Bauleiste hinten, mit Schloss und Level; das Testpaket gibt nur freigeschaltete Waren | Claudes Wahl: Was man bauen kann, steht vorn; man sieht trotzdem, was als Nächstes kommt. |
+| 06.11.2026 | 500 Gold Startkapital; bestehende Spielstände bekommen es einmalig nachgezahlt | Tobias (Chat 6, Teil 2): In Echtzeit reichte das Gold nach den ersten Gebäuden nicht für den zweiten Holzstamm. Ersetzt „kein Startgold“ vom 06.11.2026. |
+| 06.11.2026 | Pleiteschutz bleibt, wie er ist (ein Rohstoff im Lager zählt, auch ohne passendes Gebäude) | Tobias (Chat 6, Teil 2): Mit dem Startkapital ist das Problem gelöst. |
 
 ---
 
@@ -604,13 +614,29 @@ Stand 06.11.2026.
 2. **Handel im echten Tempo:** Tobias spielt zuerst im Testmodus durch, um die Logik bis weit in den Fortschritt zu prüfen, und danach in Echtzeit. Bisher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10), deshalb wurde mehr produziert als verkauft. Verkaufstempo, Goldertrag und Baukosten in normaler Zeit danach anpassen.
 3. **Laden-Lager 500 Plätze:** Bleibt das so, oder wird es mit dem Laden-Level größer? Volle Lager stoppen die Versandportale.
 4. **Aufgaben (v0.11.0):** Werden die Waren für eine Aufgabe abgegeben (verbraucht), oder zählt nur, dass man sie hergestellt hat? Wie viel Erfahrung braucht ein Level, was kostet ein Aufstieg? Kostet der Laden-Ausbau zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Vorschlag kommt mit dem Plan für v0.11.0.
-5. **Einstieg:** Tobias' Idee, am Anfang vor allem die Massenproduktion auszubauen, damit man schnell genug Ware von allem hat – später austesten.
-6. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
-7. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
+5. **Einstieg:** Tobias' Idee, am Anfang vor allem die Massenproduktion auszubauen, damit man schnell genug Ware von allem hat – später austesten. Reichen die 500 Gold Startkapital auch für den Weg zu Stein und Eisen?
+6. **Pleiteschutz:** Ein Rohstoff ohne passendes Gebäude (z. B. Felsbrocken ohne Steinbruch) verhindert das Geschenk. Vorerst bewusst so gelassen; beobachten.
+7. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
+8. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.9.1 – Startkapital (06.11.2026)
+
+**Vorgenommen:**
+- Tobias ist beim Test in Echtzeit nach dem ersten Holzstamm fast pleite gegangen (372 Gold, der nächste Stamm kostet 550). Vorschlag von Tobias: 500 Gold Startkapital.
+
+**Fragen, die wir uns gestellt haben:**
+- Liegt es an der Spielweise? → Nein: Der erste Holzstamm muss die ersten Gebäude mitbezahlen und bringt dann höchstens rund 400 Gold – nie genug für den zweiten.
+- Muss Tobias neu anfangen? → Nein, bestehende Spielstände bekommen die 500 Gold einmalig nachgezahlt.
+- Soll der Pleiteschutz einen Rohstoff ohne passendes Gebäude ignorieren? → Vorerst nicht (Tobias); mit Startkapital kaum noch nötig.
+
+**Gemacht:**
+- Startgold 500 in der Datentabelle, Spielstand-Version 8 mit Nachzahlung, Meldung beim Öffnen.
+- Nachgestellt: Tobias' Testspiel (Level 2, 372 Gold, Felsbrocken) öffnet sich mit 872 Gold auf Level 2.
+- 125 automatische Tests (neu: Startkapital reicht nach 2 Sägewerken für den zweiten Holzstamm, Nachzahlung nur einmal) und der Browser-Test – alle bestanden.
 
 ### v0.9.0 – Fläche kaufen & erste Level (06.11.2026)
 
@@ -869,6 +895,16 @@ Stand 06.11.2026.
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 06.11.2026 – Chat 6, Teil 2: Test von v0.9.0 in Echtzeit & Startkapital
+
+**Tobias:** In normaler Geschwindigkeit getestet und quasi pleite gegangen. Nur das Nötigste gebaut (2 Sägewerke, damit beides hergestellt werden kann), 372 Gold verdient – für einen neuen Holzstamm fehlen rund 200 Gold. Level 2 erreicht, aber noch nichts mit Stein gebaut, weil die „Produktionskosten“ ins Minus geführt haben. Vorschlag: 500 Gold Startkapital, damit nach dem Bauen genug Gold für einen zweiten Holzstamm bleibt.
+
+**Claude:** Nachgerechnet – mit einem Holzstamm allein reicht es nie (rund 400 Gold nach den Baukosten). Plan v0.9.1: 500 Gold Startkapital, einmalige Nachzahlung für bestehende Spielstände, und eine Lücke im Pleiteschutz schließen (Felsbrocken ohne Steinbruch verhindert das Geschenk).
+
+**Tobias:** Startkapital und Nachzahlung direkt umsetzen. Den Pleiteschutz lassen wir erstmal so, weil sich das Problem mit den 500 Gold eigentlich gelöst hat.
+
+**Umgesetzt:** v0.9.1 (siehe Versionshistorie).
 
 ### 06.11.2026 – Chat 6: Test von v0.8.0, Plan und Umsetzung v0.9.0
 

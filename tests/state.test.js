@@ -9,7 +9,7 @@ test('Neues Spiel startet nur mit Holz: Holzfällerlager und Versandportal; der 
   const state = createNewGame();
   assert.deepEqual(state.buildings.map((b) => b.type).sort(), ['holzfaeller', 'versandportal']);
   assert.equal(state.shopLevel, 1);
-  assert.equal(state.gold, 0, 'Start ohne Gold');
+  assert.equal(state.gold, 500, 'Start mit 500 Gold Startkapital (v0.9.1)');
   assert.deepEqual(state.storage, { holzstamm: 1, holzblock: 20 });
   assert.deepEqual(state.produced, {});
   assert.equal(state.landBought, 0);

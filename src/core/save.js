@@ -14,12 +14,14 @@
 //   7 (v0.9.0): Laden-Level mit Freischalten, Zähler hergestellter Waren
 //               (produced), gekaufte Fläche (landBought). Bestehende Fabriken
 //               bekommen Level 3, damit nichts gesperrt wird.
+//   8 (v0.9.1): Startkapital – bestehende Spielstände bekommen START_GOLD
+//               einmalig nachgezahlt (Format sonst unverändert).
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
 import { RECIPES } from './data/recipes.js';
 import { MAX_LEVEL } from './data/levels.js';
-import { SALES_LOG_SIZE, START_STORAGE } from './data/shop.js';
+import { SALES_LOG_SIZE, START_GOLD, START_STORAGE } from './data/shop.js';
 import { canPlaceBuilding, findFreeSpot } from './buildings.js';
 import { isDir, sortDirs } from './dirs.js';
 import { footprintSize, rotateLocal } from './geometry.js';
@@ -28,7 +30,7 @@ import { createCounters, createMarket } from './market.js';
 import { addAllToStorage } from './shop.js';
 import { START_PLOT, WORLD_HEIGHT, WORLD_WIDTH, parseTileKey } from './state.js';
 
-export const SAVE_VERSION = 7;
+export const SAVE_VERSION = 8;
 
 // v0.6.0: Waren und Rezepte, die es nicht mehr gibt, und was aus ihnen wird.
 const RENAMED_ITEMS = { holzwinkel: 'holzplatte', splitt: 'steinzahnrad' };
@@ -111,6 +113,10 @@ function migrate(state, from, notes = []) {
     state.shopLevel = Math.max(isInt(state.shopLevel) ? state.shopLevel : 1, EXISTING_FACTORY_LEVEL);
     state.produced = {};
     state.landBought = 0;
+  }
+  if (from < 8 && isNum(state.gold)) {
+    // v0.9.0 → v0.9.1: Das Startkapital gibt es für bestehende Spielstände einmalig dazu.
+    state.gold += START_GOLD;
   }
   return state;
 }

@@ -165,7 +165,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(JSON.stringify(types) === '["holzfaeller","versandportal"]', 'Start nur mit Holz: Holzfällerlager und Versandportal');
   check((await page.textContent('#btn-level')).includes('Laden-Level 1'), 'Oben steht „Laden-Level 1“');
   check(!(await page.isVisible('#hud-level-ready')), 'Noch kein Aufstieg möglich (kein ⬆)');
-  check((await page.textContent('#hud-gold')) === '0', 'Start ohne Gold');
+  check((await page.textContent('#hud-gold')) === '500', 'Start mit 500 Gold Startkapital');
   check(await page.isVisible('#btn-shop'), 'Knopf „Laden“ sichtbar');
   check(await page.isVisible('#btn-build'), 'Knopf „Bauen“ sichtbar');
 
@@ -192,7 +192,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     'Infofenster hat Einlegen, Verschieben, Drehen, Abreißen',
   );
   check((await page.textContent('#info-status')).includes('Holzstämme im Laden-Lager: 1'), 'Infofenster zeigt Vorrat im Laden-Lager');
-  check(await page.locator('#info-actions button', { hasText: 'Holzstamm kaufen' }).isDisabled(), 'Ohne Gold lässt sich kein Holzstamm kaufen');
+  check(await page.locator('#info-actions button', { hasText: 'Holzstamm kaufen' }).isDisabled(), 'Mit 500 Gold reicht es noch nicht für einen Holzstamm (550)');
   await page.locator('#info-actions button', { hasText: 'Drehen' }).tap();
   await sleep(80);
   check((await game(page, () => window.__game.state.buildings[0].rot)) === 1, 'Drehen dreht das Gebäude');
@@ -432,7 +432,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }));
   check(fresh.buildings === 2 && fresh.belts === 0, 'Neues Spiel startet frisch');
 
-  // ---------- Einstieg ohne Gold ----------
+  // ---------- Einstieg mit Startkapital ----------
   await page.tap('#btn-build');
   await sleep(80);
   check(
@@ -497,7 +497,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await game(page, () => window.__game.simulate(90));
   await sleep(500);
   const sold = await game(page, () => ({ gold: window.__game.state.gold, sales: window.__game.state.market.sales.length }));
-  check(sold.gold > 0 && sold.sales > 0, `Kunden kaufen und zahlen (${sold.gold} Gold, ${sold.sales} Verkäufe)`);
+  check(sold.gold > 500 && sold.sales > 0, `Kunden kaufen und zahlen (${sold.gold} Gold, ${sold.sales} Verkäufe)`);
   // Kunden kaufen live weiter; die Leiste zieht spätestens nach 0,4 s nach.
   const hudSynced = await page
     .waitForFunction(() => document.getElementById('hud-gold').textContent === new Intl.NumberFormat('de-DE').format(window.__game.state.gold), null, { timeout: 3000 })
