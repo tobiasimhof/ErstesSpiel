@@ -16,6 +16,7 @@ import {
   isSellable,
   setCounterItem,
 } from '../core/market.js';
+import { isItemUnlocked, itemLevel } from '../core/levels.js';
 import { storageCapacity, storageCount, storageFree, storageTotal } from '../core/shop.js';
 import { createItemIcon } from './itemArt.js';
 import { itemCount, numberFormat } from './format.js';
@@ -229,6 +230,11 @@ export function createShopView({ state, panels, onChange }) {
 
   // ---------- Händler ----------
 
+  // Neu aufbauen, wenn sich das Level ändert (gesperrte Rohstoffe, v0.9.0).
+  function haendlerSig() {
+    return `haendler|${state.shopLevel}`;
+  }
+
   function buildHaendler(body, { makeButton }) {
     body.append(el('p', null, 'Der Händler verkauft Rohstoffe. Was du kaufst, liegt danach im Laden-Lager – von dort legst du es in dein Gebäude ein.'));
     const list = el('div', 'item-list');
@@ -246,9 +252,15 @@ export function createShopView({ state, panels, onChange }) {
             panels.toast(`${def.name} gekauft. Er liegt im Laden-Lager.`);
           } else if (result === 'gold') panels.toast('Dafür reicht dein Gold nicht.');
           else if (result === 'full') panels.toast('Dein Laden-Lager ist voll.');
+          else if (result === 'locked') panels.toast(`${def.name} gibt es erst ab Level ${itemLevel(type)}.`);
         },
       });
       button.classList.add('item-count');
+      if (!isItemUnlocked(state, type)) {
+        button.textContent = `🔒 ab Level ${itemLevel(type)}`;
+        button.classList.remove('primary');
+        row.classList.add('locked');
+      }
       row.append(createItemIcon(type, 30), el('span', 'item-name', def.name), note, button);
       list.append(row);
       return { type, note, button };
@@ -257,7 +269,7 @@ export function createShopView({ state, panels, onChange }) {
     return () => {
       for (const { type, note, button } of rows) {
         note.textContent = `Im Laden-Lager: ${storageCount(state, type)}`;
-        button.disabled = state.gold < ITEMS[type].buyPrice || storageFree(state) < 1;
+        button.disabled = !isItemUnlocked(state, type) || state.gold < ITEMS[type].buyPrice || storageFree(state) < 1;
       }
     };
   }
@@ -267,7 +279,7 @@ export function createShopView({ state, panels, onChange }) {
   const SECTIONS = {
     lager: { sig: lagerSig, build: buildLager },
     theken: { sig: thekenSig, build: buildTheken },
-    haendler: { sig: () => 'haendler', build: buildHaendler },
+    haendler: { sig: haendlerSig, build: buildHaendler },
   };
 
   function renderSection(force = false) {

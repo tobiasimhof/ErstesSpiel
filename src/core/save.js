@@ -11,10 +11,14 @@
 //   5 (v0.7.0): Handel – Verkaufstheken, Kunden (market), bezahlte Baukosten
 //               an Gebäuden (paid) und Bändern (paid: true)
 //   6 (v0.8.0): Eisenstange statt Eisennägel (je 5 Nägel → 1 Stange, aufgerundet)
+//   7 (v0.9.0): Laden-Level mit Freischalten, Zähler hergestellter Waren
+//               (produced), gekaufte Fläche (landBought). Bestehende Fabriken
+//               bekommen Level 3, damit nichts gesperrt wird.
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
 import { RECIPES } from './data/recipes.js';
+import { MAX_LEVEL } from './data/levels.js';
 import { SALES_LOG_SIZE, START_STORAGE } from './data/shop.js';
 import { canPlaceBuilding, findFreeSpot } from './buildings.js';
 import { isDir, sortDirs } from './dirs.js';
@@ -24,7 +28,7 @@ import { createCounters, createMarket } from './market.js';
 import { addAllToStorage } from './shop.js';
 import { START_PLOT, WORLD_HEIGHT, WORLD_WIDTH, parseTileKey } from './state.js';
 
-export const SAVE_VERSION = 6;
+export const SAVE_VERSION = 7;
 
 // v0.6.0: Waren und Rezepte, die es nicht mehr gibt, und was aus ihnen wird.
 const RENAMED_ITEMS = { holzwinkel: 'holzplatte', splitt: 'steinzahnrad' };
@@ -35,6 +39,9 @@ const GROWN_MACHINES = { saegewerk: [2, 1], steinmetz: [2, 1] };
 const IRON_GIFT = 2;
 // v0.8.0: So viele Eisennägel ergeben eine Eisenstange (wie das Rezept: 5 Barren → 1 Stange).
 const NAILS_PER_BAR = 5;
+// v0.9.0: Bestehende Fabriken haben schon Holz, Stein und Eisen – sie bekommen
+// dieses Level, damit nichts gesperrt wird.
+const EXISTING_FACTORY_LEVEL = 3;
 
 export function serializeGame(state, now = Date.now()) {
   return JSON.stringify({ saveVersion: SAVE_VERSION, savedAt: now, state });
@@ -98,6 +105,13 @@ function migrate(state, from, notes = []) {
     state.market = createMarket();
   }
   if (from < 6) convertNails(state, notes);
+  if (from < 7) {
+    // v0.8 → v0.9: Laden-Level, Zähler hergestellter Waren, Flächenkauf.
+    // Bisher Hergestelltes wurde nicht gezählt; der Zähler beginnt bei null.
+    state.shopLevel = Math.max(isInt(state.shopLevel) ? state.shopLevel : 1, EXISTING_FACTORY_LEVEL);
+    state.produced = {};
+    state.landBought = 0;
+  }
   return state;
 }
 
@@ -296,7 +310,9 @@ function isValidCounter(c) {
 export function isValidState(s) {
   if (!isObj(s)) return false;
   if (!isNum(s.gold)) return false;
-  if (!isInt(s.shopLevel) || s.shopLevel < 1) return false;
+  if (!isInt(s.shopLevel) || s.shopLevel < 1 || s.shopLevel > MAX_LEVEL) return false;
+  if (!isObj(s.produced) || !Object.entries(s.produced).every(([t, n]) => isItem(t) && isCount(n))) return false;
+  if (!isCount(s.landBought)) return false;
 
   const w = s.world;
   if (!w || !isInt(w.width) || !isInt(w.height) || w.width <= 0 || w.height <= 0) return false;

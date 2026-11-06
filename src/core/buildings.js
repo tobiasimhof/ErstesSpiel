@@ -2,6 +2,7 @@
 
 import { BUILDINGS } from './data/buildings.js';
 import { footprintSize, footprintTiles } from './geometry.js';
+import { isBuildingUnlocked } from './levels.js';
 import { buildingContents, createProductionState } from './production.js';
 import { addAllToStorage, payCost, refundCost } from './shop.js';
 import { beltAt, buildingAt, findBuilding, isOwned } from './state.js';
@@ -29,8 +30,10 @@ export function placeBuilding(state, type, x, y, rot = 0) {
 
 // Bauen mit Baukosten (v0.7.0): Die Waren kommen aus dem Laden-Lager. Was
 // bezahlt wurde, merkt sich das Gebäude (paid) und gibt es beim Abreißen zurück.
-// Ergebnis: das Gebäude, 'cost' (Waren fehlen) oder null (kein Platz).
+// Ergebnis: das Gebäude, 'locked' (Laden-Level zu niedrig, v0.9.0),
+// 'cost' (Waren fehlen) oder null (kein Platz).
 export function buyBuilding(state, type, x, y, rot = 0) {
+  if (BUILDINGS[type] && !isBuildingUnlocked(state, type)) return 'locked';
   if (!canPlaceBuilding(state, type, x, y, rot)) return null;
   const cost = BUILDINGS[type].cost ?? {};
   if (!payCost(state, cost)) return 'cost';

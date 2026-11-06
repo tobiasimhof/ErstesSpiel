@@ -247,6 +247,48 @@ test('Spielstand ohne Nägel: keine Umwandlungs-Meldung', () => {
   assert.deepEqual(loaded.state.storage, v5.storage);
 });
 
+test('Spielstand aus v0.8 (Version 6): bestehende Fabrik bekommt Level 3, nichts wird gesperrt', () => {
+  // Wie Tobias' Fabrik: Holz, Stein und Eisen stehen schon
+  const v6 = createNewGame(6);
+  placeBuilding(v6, 'steinbruch', 10, 12, 0);
+  placeBuilding(v6, 'schmelzhuette', 16, 12, 0);
+  placeBuilding(v6, 'schmiede', 20, 12, 0);
+  v6.gold = 2978;
+  v6.storage = { holzplatte: 30, eisenstange: 28, felsbrocken: 1 };
+  delete v6.produced;
+  delete v6.landBought;
+  const before = { buildings: JSON.stringify(v6.buildings), belts: JSON.stringify(v6.belts), plot: { ...v6.plot } };
+  const loaded = deserializeGame(JSON.stringify({ saveVersion: 6, savedAt: 5, state: v6 }));
+  assert.ok(loaded, 'wird angenommen');
+  assert.equal(loaded.migratedFrom, 6);
+  const s = loaded.state;
+  assert.equal(s.shopLevel, 3);
+  assert.deepEqual(s.produced, {});
+  assert.equal(s.landBought, 0);
+  assert.equal(s.gold, 2978);
+  assert.deepEqual(s.storage, { holzplatte: 30, eisenstange: 28, felsbrocken: 1 }, 'kein Geschenk, nichts weg');
+  assert.equal(JSON.stringify(s.buildings), before.buildings);
+  assert.equal(JSON.stringify(s.belts), before.belts);
+  assert.deepEqual(s.plot, before.plot);
+  assert.deepEqual(loaded.notes, []);
+});
+
+test('Ungültiges Level, Zähler oder Flächenkäufe werden erkannt', () => {
+  const bad = (change) => {
+    const s = createNewGame();
+    change(s);
+    return isValidState(s);
+  };
+  assert.equal(bad(() => {}), true);
+  assert.equal(bad((s) => (s.shopLevel = 4)), false);
+  assert.equal(bad((s) => (s.shopLevel = 0)), false);
+  assert.equal(bad((s) => (s.produced = { holzblock: -1 })), false);
+  assert.equal(bad((s) => (s.produced = { unbekannt: 1 })), false);
+  assert.equal(bad((s) => delete s.produced), false);
+  assert.equal(bad((s) => (s.landBought = 1.5)), false);
+  assert.equal(bad((s) => delete s.landBought), false);
+});
+
 test('Neues Spiel startet mit 22 × 14 Feldern', () => {
   const s = createNewGame();
   assert.deepEqual([s.plot.width, s.plot.height], [22, 14]);

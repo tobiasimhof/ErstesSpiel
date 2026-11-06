@@ -3,6 +3,7 @@
 
 import { BUILDINGS } from './data/buildings.js';
 import { RECIPES } from './data/recipes.js';
+import { countProduced } from './levels.js';
 import { addToStorage, storageCount, storageFree, takeFromStorage } from './shop.js';
 
 export function productionOf(type) {
@@ -103,6 +104,7 @@ export function updateProduction(state, building, dt) {
     if (prod.timer >= interval) {
       prod.timer -= interval;
       prod.out = { type: p.output, count: 1 };
+      countProduced(state, p.output, 1);
       prod.remaining--;
       if (prod.remaining <= 0) {
         prod.loaded = false;
@@ -123,6 +125,7 @@ export function updateProduction(state, building, dt) {
         prod.busy = false;
         prod.timer = 0;
         prod.out = { type: recipe.output, count: recipe.amount };
+        countProduced(state, recipe.output, recipe.amount);
       }
     }
   }

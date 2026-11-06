@@ -1,15 +1,18 @@
 // Obere Leiste: Gold, Laden-Level, Vollbild, Menü und Versionsnummer.
 
+import { canLevelUp } from '../core/levels.js';
 import { onPress } from './press.js';
 
 const numberFormat = new Intl.NumberFormat('de-DE');
 
-export function createHud({ version, onNewGame, onToggleTestMode, onTestPack }) {
+export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, onLevel }) {
   const gold = document.getElementById('hud-gold');
   const goldGain = document.getElementById('hud-gold-gain');
   const testPackButton = document.getElementById('menu-test-pack');
   let lastSaleId = null;
   const level = document.getElementById('hud-level');
+  const levelButton = document.getElementById('btn-level');
+  const levelReady = document.getElementById('hud-level-ready');
   const menuButton = document.getElementById('btn-menu');
   const menu = document.getElementById('menu');
   const hint = document.getElementById('hint');
@@ -21,6 +24,11 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack }) 
   function closeMenu() {
     menu.hidden = true;
   }
+  // Laden-Level antippen öffnet das Level-Fenster (v0.9.0)
+  onPress(levelButton, () => {
+    closeMenu();
+    onLevel();
+  });
   onPress(menuButton, () => {
     menu.hidden = !menu.hidden;
   });
@@ -63,6 +71,10 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack }) 
     update(state) {
       gold.textContent = numberFormat.format(state.gold);
       level.textContent = String(state.shopLevel);
+      // Ziel erreicht: ⬆ zeigt, dass man aufsteigen kann
+      const ready = canLevelUp(state);
+      levelReady.hidden = !ready;
+      levelButton.classList.toggle('ready', ready);
       // Neuer Verkauf an einen Kunden: kurz „+36“ neben dem Gold zeigen.
       const sale = state.market.sales[0];
       const id = sale?.id ?? 0;
