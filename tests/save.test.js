@@ -5,7 +5,8 @@ import { applyBeltPath, buildBeltPath, extendTrace } from '../src/core/belts.js'
 import { placeBuilding } from '../src/core/buildings.js';
 import { loadInput } from '../src/core/production.js';
 import { simulate } from '../src/core/sim.js';
-import { SAVE_VERSION, deserializeGame, serializeGame } from '../src/core/save.js';
+import { footprintSize, buildingPorts } from '../src/core/geometry.js';
+import { SAVE_VERSION, deserializeGame, isValidState, serializeGame } from '../src/core/save.js';
 import { createNewGame } from '../src/core/state.js';
 
 function sampleGame() {
@@ -56,8 +57,98 @@ test('Spielstand aus v0.4 (Version 1) wird umgewandelt, die Fabrik bleibt erhalt
   assert.equal(loaded.state.buildings[0].rot, 1);
   assert.deepEqual(loaded.state.belts['13,6'].outs, ['E', 'S']);
   assert.equal(loaded.state.buildings[0].prod.loaded, false);
-  assert.equal(loaded.state.buildings[1].prod.recipe, 'holzwinkel');
+  assert.equal(loaded.state.buildings[1].prod.recipe, 'holzplatte');
   assert.ok(loaded.state.storage.holzstamm > 0, 'Startvorrat dazu');
+});
+
+// Spielstand aus v0.5 (Version 2): Sägewerk und Steinmetz noch 2 × 1, mit Winkeln und Splitt.
+function v2Game() {
+  return {
+    gold: 100,
+    shopLevel: 1,
+    world: { width: 32, height: 20 },
+    plot: { x: 8, y: 5, width: 16, height: 10 },
+    buildings: [
+      { id: 1, type: 'holzfaeller', x: 10, y: 6, rot: 0, prod: { loaded: false, remaining: 0, timer: 0, out: null, blocked: false } },
+      // 1) ungedreht, unten frei → wächst nach unten
+      { id: 2, type: 'saegewerk', x: 14, y: 6, rot: 0, prod: { recipe: 'holzwinkel', stock: { holzblock: 3 }, busy: false, timer: 0, out: { type: 'holzwinkel', count: 1 }, blocked: true } },
+      // 2) gedreht (Eingang oben), links frei → wächst nach links, Anschlüsse bleiben
+      { id: 3, type: 'steinmetz', x: 19, y: 6, rot: 1, prod: { recipe: 'splitt', stock: {}, busy: false, timer: 0, out: null, blocked: false } },
+      // 3) ungedreht, darunter ein Lagerhaus → muss rücken
+      { id: 4, type: 'saegewerk', x: 14, y: 10, rot: 0, prod: { recipe: 'holzstab', stock: {}, busy: false, timer: 0, out: null, blocked: false } },
+      { id: 5, type: 'lagerhaus', x: 14, y: 11, rot: 0, prod: { slots: [{ type: 'splitt', count: 7 }, { type: 'holzblock', count: 2 }], blocked: false } },
+    ],
+    nextBuildingId: 6,
+    belts: { '13,6': { outs: ['E'], item: { type: 'holzwinkel', progress: 0.5, from: 'W' } } },
+    storage: { holzstamm: 2, holzwinkel: 10, holzplatte: 1, splitt: 4 },
+  };
+}
+
+test('Spielstand aus v0.5 (Version 2) wird auf den Techbaum umgestellt', () => {
+  const v2 = v2Game();
+  const loaded = deserializeGame(JSON.stringify({ saveVersion: 2, savedAt: 5, state: v2 }));
+  assert.ok(loaded, 'wird angenommen');
+  assert.equal(loaded.migratedFrom, 2);
+  const s = loaded.state;
+  const byId = (id) => s.buildings.find((b) => b.id === id);
+
+  // Waren umbenannt, Eisenerz dazu
+  assert.deepEqual(s.storage, { holzstamm: 2, holzplatte: 11, steinzahnrad: 4, eisenerz: 2 });
+  assert.equal(s.belts['13,6'].item.type, 'holzplatte');
+  assert.equal(byId(2).prod.recipe, 'holzplatte');
+  assert.deepEqual(byId(2).prod.out, { type: 'holzplatte', count: 1 });
+  assert.equal(byId(3).prod.recipe, 'steinzahnrad');
+  assert.equal(byId(4).prod.recipe, 'holzstab');
+  assert.deepEqual(byId(5).prod.slots[0], { type: 'steinzahnrad', count: 7 });
+
+  // 1) wächst nach unten, Anschlüsse bleiben
+  assert.deepEqual([byId(2).x, byId(2).y], [14, 6]);
+  assert.deepEqual(
+    buildingPorts(byId(2)).map((p) => [p.kind, p.outside.x, p.outside.y]),
+    [
+      ['in', 13, 6],
+      ['out', 16, 6],
+    ],
+  );
+  // 2) gedreht: Anschlüsse bleiben bei x = 19
+  assert.deepEqual([byId(3).x, byId(3).y], [18, 6]);
+  assert.deepEqual(
+    buildingPorts(byId(3)).map((p) => [p.kind, p.outside.x, p.outside.y]),
+    [
+      ['in', 19, 5],
+      ['out', 19, 8],
+    ],
+  );
+  // 3) ist gerückt und überlappt nichts
+  const moved = byId(4);
+  assert.ok(moved, 'nicht abgerissen');
+  for (const other of s.buildings) {
+    if (other === moved) continue;
+    const ox = [other.x, other.x + footprintSize(other.type, other.rot).width];
+    const oy = [other.y, other.y + footprintSize(other.type, other.rot).height];
+    const overlap = moved.x < ox[1] && moved.x + 2 > ox[0] && moved.y < oy[1] && moved.y + 2 > oy[0];
+    assert.equal(overlap, false, `überlappt nicht mit ${other.type}`);
+  }
+  assert.equal(loaded.notes.length, 1, 'Hinweis auf das versetzte Gebäude');
+  assert.ok(isValidState(s));
+
+  // Der umgewandelte Spielstand lässt sich speichern und wieder laden
+  const again = deserializeGame(serializeGame(s));
+  assert.deepEqual(again.state, s);
+  assert.equal(again.migratedFrom, undefined);
+});
+
+test('Passt eine gewachsene Maschine nirgends hin, kommt ihr Inhalt ins Laden-Lager', () => {
+  const v2 = v2Game();
+  v2.plot = { x: 14, y: 6, width: 2, height: 1 }; // nur Platz für das alte 2 × 1-Sägewerk
+  v2.buildings = [v2.buildings[1]];
+  v2.belts = {};
+  v2.storage = {};
+  const loaded = deserializeGame(JSON.stringify({ saveVersion: 2, savedAt: 5, state: v2 }));
+  assert.ok(loaded);
+  assert.equal(loaded.state.buildings.length, 0, 'abgerissen');
+  assert.deepEqual(loaded.state.storage, { eisenerz: 2, holzblock: 3, holzplatte: 1 });
+  assert.equal(loaded.notes.length, 1);
 });
 
 test('Kaputte oder fremde Daten werden abgelehnt', () => {
@@ -82,7 +173,8 @@ test('Ungültige Inhalte im Spielstand werden erkannt', () => {
     'unbekannte Ware im Lager': (s) => (s.storage.gold = 5),
     'Ware auf Band ungültig': (s) => (s.belts['12,6'].item = { type: 'holzblock', progress: 2, from: 'W' }),
     'Gebäudezustand fehlt': (s) => delete s.buildings[0].prod,
-    'Rezept passt nicht zum Gebäude': (s) => (s.buildings.find((b) => b.type === 'saegewerk').prod.recipe = 'splitt'),
+    'Rezept passt nicht zum Gebäude': (s) => (s.buildings.find((b) => b.type === 'saegewerk').prod.recipe = 'steinplatte'),
+    'alte Ware in aktuellem Spielstand': (s) => (s.storage.holzwinkel = 3),
   };
   for (const [name, breakIt] of Object.entries(cases)) {
     const state = sampleGame();

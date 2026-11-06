@@ -10,7 +10,7 @@
 //   workshop – verarbeitet Waren vom Band nach einem einstellbaren Rezept
 //   storage  – Zwischenlager mit Fächern (slots × slotSize)
 //   shipping – schickt alles ins Laden-Lager
-// Alle Zahlen sind Platzhalter.
+// Alle Zahlen sind Platzhalter. Maschinen sind 2 × 2 (README, Abschnitt 4.2).
 
 export const BUILDINGS = {
   holzfaeller: {
@@ -33,31 +33,54 @@ export const BUILDINGS = {
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
     production: { kind: 'source', input: 'felsbrocken', output: 'steinblock', amount: 200, duration: 900 },
   },
+  schmelzhuette: {
+    name: 'Schmelzhütte',
+    icon: '🔥',
+    size: [2, 2],
+    color: '#8a4b32',
+    description:
+      'Schmilzt ein eingelegtes Eisenerz nach und nach zu 200 Eisenbarren. Sie kommen am orangen Pfeil heraus.',
+    ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
+    production: { kind: 'source', input: 'eisenerz', output: 'eisenbarren', amount: 200, duration: 900 },
+  },
   saegewerk: {
     name: 'Sägewerk',
     icon: '🪚',
-    size: [2, 1],
+    size: [2, 2],
     color: '#a0703c',
     description:
-      'Macht aus je 5 Holzblöcken einen Holzwinkel oder einen Holzstab – je nach Einstellung. Holzblöcke kommen am blauen Pfeil hinein.',
+      'Macht aus je 5 Holzblöcken eine Holzplatte oder einen Holzstab – je nach Einstellung. Holzblöcke kommen am blauen Pfeil hinein.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['holzwinkel', 'holzstab'] },
+    production: { kind: 'workshop', recipes: ['holzplatte', 'holzstab'] },
   },
   steinmetz: {
     name: 'Steinmetz',
     icon: '⚒️',
-    size: [2, 1],
+    size: [2, 2],
     color: '#68707a',
     description:
-      'Macht aus je 5 Steinblöcken eine Steinplatte oder Splitt – je nach Einstellung. Steinblöcke kommen am blauen Pfeil hinein.',
+      'Macht aus je 5 Steinblöcken eine Steinplatte oder ein Stein-Zahnrad – je nach Einstellung. Steinblöcke kommen am blauen Pfeil hinein.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['steinplatte', 'splitt'] },
+    production: { kind: 'workshop', recipes: ['steinplatte', 'steinzahnrad'] },
+  },
+  schmiede: {
+    name: 'Schmiede',
+    icon: '🔨',
+    size: [2, 2],
+    color: '#5b5f6b',
+    description:
+      'Macht aus je 5 Eisenbarren eine Mini-Eisenplatte oder 5 Eisennägel – je nach Einstellung. Eisenbarren kommen am blauen Pfeil hinein.',
+    ports: [
+      { kind: 'in', x: 0, y: 0, side: 'W' },
+      { kind: 'out', x: 1, y: 0, side: 'E' },
+    ],
+    production: { kind: 'workshop', recipes: ['minieisenplatte', 'eisennagel'] },
   },
   lagerhaus: {
     name: 'Lagerhaus',
@@ -85,4 +108,13 @@ export const BUILDINGS = {
 };
 
 // Reihenfolge im Baumenü.
-export const BUILD_MENU = ['holzfaeller', 'steinbruch', 'saegewerk', 'steinmetz', 'lagerhaus', 'versandportal'];
+export const BUILD_MENU = [
+  'holzfaeller',
+  'steinbruch',
+  'schmelzhuette',
+  'saegewerk',
+  'steinmetz',
+  'schmiede',
+  'lagerhaus',
+  'versandportal',
+];

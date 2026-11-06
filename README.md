@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.5.2 – Techbaum festgelegt (nur README) |
+| **Aktuelle Version** | v0.6.0 – Techbaum, Teil 1 (Eisen-Kette, Maschinen 2 × 2) |
 | **Phase** | M1 – Fabrik-Grundgerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Neuer Chat: Claude stellt den **Plan für v0.6.0** (Abschnitt 6) samt Preistabelle (Abschnitt 4.2) vor, Tobias gibt ihn frei, dann wird programmiert |
+| **Nächster Schritt** | Tobias testet v0.6.0 auf dem Tablet und gibt Feedback (z. B. zu Preisen und Anschlüssen); danach plant Claude **v0.7.0 – Handel** (Abschnitt 6) |
 
 ---
 
@@ -178,7 +178,7 @@ Die Maschinennamen in dieser Tabelle waren nur zur Orientierung gedacht; die end
 
 ### 4.2 Festgelegter Techbaum (Stand 06.11.2026)
 
-Von Tobias bestätigt (Chat 3, Teil 2). Mengen, Zeiten und Preise sind ein **Vorschlag von Claude**, der mit dem Plan für v0.6.0 freigegeben wird. Alle Goldbeträge ×10.
+Von Tobias bestätigt (Chat 3, Teil 2). Mengen, Zeiten und Preise hat Claude vorgeschlagen; Tobias hat sie mit dem Plan für v0.6.0 zum Ausprobieren freigegeben (Chat 4): „erstmal so umsetzen und dann schauen, wie es wirkt“. Alle Goldbeträge ×10.
 
 **Kette je Rohstoff:** Rohstoff kaufen → Block-Gebäude (1 Rohstoff → 200 Blöcke in 15 Minuten) → Grundmaschine (5 Blöcke → 1 Teil). Diese Block-Stufe bleibt für alle drei Rohstoffe (Tobias: „weiterhin wichtig und richtig“).
 
@@ -204,9 +204,9 @@ Von Tobias bestätigt (Chat 3, Teil 2). Mengen, Zeiten und Preise sind ein **Vor
 
 Namen aus Tobias' Tabelle → Spiel: Holz-Werkbank → Sägewerk, Steinmetz-Station → Steinmetz, Schmiedeofen → Schmiede, Steinfels → Felsbrocken, Kombi-Werkbank → Zimmerei, Mechanik-Station → Mühlenbauer, Fein-Montage → Feinwerkstatt, Präzisions-Schmiede → Feinschmiede, Getriebe- & Ketten-Werkstatt → Getriebebauer, Sicherheits-Montage → Schlosserei. Die Warennamen bleiben wie in Tobias' Tabelle. Alle Namen lassen sich jederzeit ändern.
 
-**Anschlüsse der 2 × 2-Maschinen (Vorschlag):** Grundmaschinen: Eingang links oben, Ausgang rechts oben (gerade Linie; bestehende Bänder am Sägewerk bleiben angeschlossen). Kombi- und Weiterverarbeitungs-Maschinen: zwei Eingänge links oben und links unten (jeder nimmt jede passende Zutat), Ausgang rechts oben. Block-Gebäude unverändert (Ausgang rechts oben).
+**Anschlüsse der 2 × 2-Maschinen** (Grundmaschinen seit v0.6.0 im Spiel): Grundmaschinen: Eingang links oben, Ausgang rechts oben (gerade Linie; bestehende Bänder am Sägewerk bleiben angeschlossen). Kombi- und Weiterverarbeitungs-Maschinen: zwei Eingänge links oben und links unten (jeder nimmt jede passende Zutat), Ausgang rechts oben. Block-Gebäude unverändert (Ausgang rechts oben).
 
-**Rezepte und Preise (Vorschlag):** Regel: Blöcke bringen knapp mehr als der Rohstoff kostet (+9 %), jedes weitere Teil rund 20 % mehr als seine Zutaten zusammen. So macht man beim Verkaufen in der Anfangsphase nie Minus. Stein kostet und bringt so viel wie Holz; Eisen kostet viermal so viel und bringt entsprechend mehr.
+**Rezepte und Preise** (Holz, Stein und Eisen bis zu den Grundmaschinen seit v0.6.0 im Spiel): Regel: Blöcke bringen knapp mehr als der Rohstoff kostet (+9 %), jedes weitere Teil rund 20 % mehr als seine Zutaten zusammen. So macht man beim Verkaufen in der Anfangsphase nie Minus. Stein kostet und bringt so viel wie Holz; Eisen kostet viermal so viel und bringt entsprechend mehr.
 
 | Ware | Herstellung | Zeit | Wert (Gold) |
 |---|---|---|---|
@@ -236,16 +236,17 @@ Warum Eisennägel anders als die übrigen Teile? Nägel sind klein und werden in
 
 **Holzwinkel und Splitt** fliegen raus (vielleicht kommen sie später wieder). Vorhandene im Spielstand werden umgewandelt: Holzwinkel → Holzplatte, Splitt → Stein-Zahnrad.
 
-### 4.3 Im Spiel (Stand v0.5.2, wird mit v0.6.0 ersetzt)
+### 4.3 Im Spiel (Stand v0.6.0)
 
-| Stufe | Ware | Woher | Rezept (Platzhalter) |
+| Stufe | Ware | Woher | Rezept |
 |---|---|---|---|
-| 0 | Holzstamm, Felsbrocken | Laden-Lager (Startvorrat; Händler ab Handel-Version) | – |
-| 1 | Holzblock / Steinblock | Holzfällerlager / Steinbruch | 1 Rohstoff → 200 Blöcke in 15 Minuten |
-| 2 | Holzwinkel / Holzstab | Sägewerk, Einstellung „Winkel“ / „Stäbe“ | 5 Holzblöcke → 1 Teil (5 Sekunden) |
-| 2 | Steinplatte / Splitt | Steinmetz, Einstellung „Platten“ / „Splitt“ | 5 Steinblöcke → 1 Teil (5 Sekunden) |
+| 0 | Holzstamm, Felsbrocken, Eisenerz | Laden-Lager (Startvorrat; Händler ab v0.7.0) | – |
+| 1 | Holzblock / Steinblock / Eisenbarren | Holzfällerlager / Steinbruch / Schmelzhütte | 1 Rohstoff → 200 Stück in 15 Minuten |
+| 2 | Holzplatte / Holzstab | Sägewerk, Einstellung „Platten“ / „Stäbe“ | 5 Holzblöcke → 1 Teil (5 Sekunden) |
+| 2 | Steinplatte / Stein-Zahnrad | Steinmetz, Einstellung „Platten“ / „Zahnräder“ | 5 Steinblöcke → 1 Teil (5 Sekunden) |
+| 2 | Mini-Eisenplatte / Eisennägel | Schmiede, Einstellung „Platten“ / „Nägel“ | 5 Eisenbarren → 1 Mini-Eisenplatte oder 5 Eisennägel (5 Sekunden) |
 
-Mit v0.6.0 wird das Spiel auf den festgelegten Techbaum (4.2) umgestellt.
+Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit v0.8.0.
 
 **Ideen für später:** weitere Rohstoffe wie Eisenerz (Schmelze, Schmiede, echte Nägel, Werkzeuge), Lehm (Ziegel), Hanf (Seile), Sand (Glas); größere Waren wie Fässer, Karren, Fenster.
 
@@ -331,20 +332,23 @@ Mit v0.6.0 wird das Spiel auf den festgelegten Techbaum (4.2) umgestellt.
 | v0.5.0 | **Produktion:** Rohstoff einlegen, Blöcke, Waren auf Bändern, Stau, Werkstätten mit Einstellung, Lagerhaus, Versandportal, Laden-Lager, Testmodus | ✅ fertig |
 | v0.5.1 | **Kompakter:** Lagerhaus 2 × 1 (oben links rein, unten rechts raus), Versandportal 1 × 1 mit einem Eingang | ✅ fertig |
 | v0.5.2 | **Techbaum festgelegt:** Antworten von Tobias, Namen, Größen, Preistabelle und Plan für v0.6.0 in der README (Spiel unverändert) | ✅ fertig |
-| v0.6.0 | **Techbaum, Teil 1:** Grundmaschinen 2 × 2 mit neuen Modi (Sägewerk, Steinmetz, Schmiede), Eisen-Kette mit Schmelzhütte, Preistabelle | Plan steht unten, wartet auf Freigabe |
+| v0.6.0 | **Techbaum, Teil 1:** Grundmaschinen 2 × 2 mit neuen Modi (Sägewerk, Steinmetz, Schmiede), Eisen-Kette mit Schmelzhütte, Preistabelle | ✅ fertig |
 | v0.7.0 | **Handel:** Händler (Rohstoffe kaufen), Laden mit von Hand bestückten Verkaufstheken, zufällige Kunden mit zufälligen Einkäufen, Gold; Bauen kostet Gold; Start ohne Gold mit Gratis-Holzstamm; Pleiteschutz | |
 | v0.8.0 | **Techbaum, Teil 2:** Kombinations-Maschinen mit zwei Zutaten und die Weiterverarbeitung (Kugellager, Regler, Mini-Schloss …) | |
 | v0.9.0 | **Laden-Level:** Freischalten nach Level (Holz → Stein → Eisen), Laden-Ausbau mit Gold und Waren | |
 | v0.10.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
 
-### Plan für v0.6.0 – Techbaum, Teil 1 (Entwurf, wartet auf Freigabe)
+### v0.6.0 – Techbaum, Teil 1 (fertig)
 
-- **Waren nach Techbaum** (Abschnitt 4.2): Holzplatte, Holzstab, Steinplatte, Stein-Zahnrad, Eisenerz, Eisenbarren, Mini-Eisenplatte, Eisennägel – mit Preisen aus der Tabelle. Holzwinkel und Splitt entfallen.
-- **Sägewerk und Steinmetz werden 2 × 2** mit den neuen Modi (Sägewerk: Holzplatte / Holzstab, Steinmetz: Steinplatte / Stein-Zahnrad). Eingang links oben, Ausgang rechts oben.
-- **Eisen-Kette:** neue Gebäude Schmelzhütte (1 Eisenerz → 200 Eisenbarren) und Schmiede (Mini-Eisenplatte oder 5 Eisennägel aus 5 Barren), beide 2 × 2.
-- **Startvorrat zum Testen:** zusätzlich 2 Eisenerz im Laden-Lager, bis es in v0.7.0 den Händler gibt.
-- **Bestehende Spielstände** (Spielstand-Version 3): Sägewerk und Steinmetz wachsen nach unten auf 2 × 2, wenn dort Platz ist; sonst rücken sie an die nächste freie Stelle; geht beides nicht, werden sie abgerissen und ihr Inhalt kommt ins Laden-Lager. Holzwinkel werden zu Holzplatten, Splitt zu Stein-Zahnrädern; eingestellte Rezepte werden entsprechend umgestellt.
-- **Tests:** Rezepte und Preise der Tabelle (jede Stufe bringt mehr als ihre Zutaten), Eisen-Kette, Umwandlung alter Spielstände, Browser-Durchlauf.
+**Neu im Spiel:**
+- **Waren nach Techbaum** (Abschnitt 4.2): Holzplatte, Holzstab, Steinplatte, Stein-Zahnrad, Eisenerz, Eisenbarren, Mini-Eisenplatte, Eisennägel – jede mit eigener Form auf dem Band und Wert aus der Preistabelle. Holzwinkel und Splitt gibt es nicht mehr.
+- **Sägewerk und Steinmetz sind 2 × 2.** Sägewerk: Platten oder Stäbe, Steinmetz: Platten oder Zahnräder. Eingang links oben, Ausgang rechts oben.
+- **Eisen-Kette:** Schmelzhütte 🔥 (1 Eisenerz → 200 Eisenbarren in 15 Minuten) und Schmiede 🔨 (5 Barren → 1 Mini-Eisenplatte oder 5 Eisennägel), beide 2 × 2.
+- **Startvorrat:** zusätzlich 2 Eisenerz im Laden-Lager, bis es in v0.7.0 den Händler gibt.
+- **Bestehende Spielstände** (Spielstand-Version 2 → 3): Sägewerk und Steinmetz wachsen auf der Seite gegenüber den Pfeilen (ungedreht nach unten), die Anschlüsse bleiben an ihrem Platz. Ist dort kein Platz, rücken sie an die nächste freie Stelle (Hinweis beim Öffnen, dann neu anschließen); geht auch das nicht, werden sie abgerissen und ihr Inhalt kommt ins Laden-Lager. Holzwinkel werden zu Holzplatten, Splitt zu Stein-Zahnrädern – im Lager, auf Bändern, in Gebäuden und bei den Einstellungen. Dazu gibt es 2 Eisenerz.
+- Die Bauleiste hat jetzt 8 Gebäude; auf dem Handy lässt sie sich zur Seite wischen.
+
+**Was Tobias testet:** Schmelzhütte bauen, Eisenerz einlegen, über die Schmiede Mini-Eisenplatten und Eisennägel herstellen; Sägewerk und Steinmetz umstellen; prüfen, ob die alte Fabrik richtig übernommen wurde; im Laden-Fenster die Werte ansehen. Wirken die Preise stimmig? Für schnelle Tests den Testmodus nutzen.
 
 ### v0.5.1 – Kompaktes Lagerhaus & Versandportal (fertig)
 
@@ -453,14 +457,17 @@ Mit v0.6.0 wird das Spiel auf den festgelegten Techbaum (4.2) umgestellt.
 | 06.11.2026 | Verkaufstheken: zu Beginn 2 Theken, je eine Sorte, bis 20 Stück; alle 10–30 Sekunden ein Kunde, der 1–3 Waren kauft | Claudes Vorschlag, von Tobias angenommen (Frage 10). |
 | 06.11.2026 | Reihenfolge: v0.6.0 Techbaum Teil 1 → v0.7.0 Handel → v0.8.0 Techbaum Teil 2 → v0.9.0 Laden-Level → v0.10.0 Offline | Tobias möchte im neuen Chat genau mit diesen Punkten starten. |
 | 06.11.2026 | Reine README-Updates bekommen eine eigene C-Version (z. B. v0.5.2) | Regel 1: jeder Arbeitsschritt ist eine Version; das Spiel zeigt die Nummer mit an. |
+| 06.11.2026 | Plan für v0.6.0 mit Preistabelle und Anschlüssen freigegeben, „erstmal so umsetzen und dann schauen, wie es wirkt“ | Tobias (Chat 4). Preise werden nach dem Test angepasst. |
+| 06.11.2026 | Rezept-Knöpfe heißen kurz „Platten“, „Stäbe“, „Zahnräder“, „Nägel“; Symbole: Schmelzhütte 🔥, Schmiede 🔨 | Claudes Wahl; jederzeit änderbar. |
+| 06.11.2026 | Alte Sägewerke und Steinmetze wachsen so, dass ihre Anschlüsse an derselben Stelle bleiben | Bestehende Bänder bleiben angeschlossen; nur wenn kein Platz ist, wird versetzt. |
 
 ---
 
 ## 8. Offene Fragen
 
-Stand 06.11.2026. Die Fragen zum Techbaum sind beantwortet (Abschnitt 7, Chat 3 Teil 2).
+Stand 06.11.2026.
 
-1. **Plan für v0.6.0** (Abschnitt 6) mit Preistabelle (Abschnitt 4.2) und Anschlüssen der 2 × 2-Maschinen freigeben.
+1. **Feedback zu v0.6.0:** Wirken Preise, Größen und Anschlüsse? Danach Plan für v0.7.0 (Handel).
 2. **Laden-Level (v0.9.0):** Was kostet ein Aufstieg (Gold und Waren)? Gibt es zusätzlich Freischaltpunkte? Vorschlag kommt mit dem Plan für v0.9.0.
 3. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
 4. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
@@ -468,6 +475,22 @@ Stand 06.11.2026. Die Fragen zum Techbaum sind beantwortet (Abschnitt 7, Chat 3 
 ---
 
 ## 9. Versionshistorie
+
+### v0.6.0 – Techbaum, Teil 1 (06.11.2026)
+
+**Vorgenommen:**
+- Den festgelegten Techbaum bis zu den Grundmaschinen einbauen: neue Waren, Maschinen 2 × 2, Eisen-Kette, Preistabelle.
+- Bestehende Fabriken ohne Verlust übernehmen.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie wächst ein gedrehtes 2 × 1-Sägewerk auf 2 × 2, ohne dass die Bänder abreißen? → Es wächst auf der Seite gegenüber den Pfeilen; die Anschlüsse bleiben, wo sie waren.
+- Was, wenn dort ein anderes Gebäude oder Band steht? → Nächste freie Stelle; geht das nicht, abreißen mit Rückerstattung. Das Spiel sagt beim Öffnen Bescheid.
+- Wie zeigt man „5 Barren → 5 Nägel“ richtig an? → Bei mehr als einem Stück steht die Mehrzahl.
+
+**Gemacht:**
+- Datentabellen: 12 Waren, 6 Rezepte, 8 Gebäude im Baumenü; neue Formen für Zahnrad, Barren, Mini-Platte, Nagel und Eisenerz.
+- Spielstand-Version 3 mit Umwandlung von Version 1 und 2.
+- 67 automatische Tests (neu: Eisen-Kette, Nägel, Preistabelle für alle Stufen, Datentabellen passen zusammen, Umwandlung alter Spielstände inkl. gedrehter, versetzter und abgerissener Maschinen) und der Browser-Test (neu: Schmelzhütte und Schmiede per Touch bauen, Eisenerz einlegen, auf Nägel umstellen) – alle bestanden.
 
 ### v0.5.2 – Techbaum festgelegt (06.11.2026, nur README)
 
@@ -630,6 +653,14 @@ Stand 06.11.2026. Die Fragen zum Techbaum sind beantwortet (Abschnitt 7, Chat 3 
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 06.11.2026 – Chat 4: Freigabe v0.6.0
+
+**Claude** hat die README gelesen und den Plan für v0.6.0 samt Preistabelle vorgestellt.
+
+**Tobias:** „Lass uns das erstmal so umsetzen und dann schauen wir, wie es wirkt.“
+
+**Umgesetzt:** v0.6.0 (siehe Versionshistorie).
 
 ### 06.11.2026 – Chat 3, Teil 2: Antworten zum Techbaum
 

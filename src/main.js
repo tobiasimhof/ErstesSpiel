@@ -141,7 +141,8 @@ handleResize();
 hud.update(state);
 
 if (loaded.status === 'ok' && loaded.migratedFrom) {
-  panels.toast('Spielstand übernommen. Neu: 3 Holzstämme und 3 Felsbrocken im Laden-Lager.', 4000);
+  const notes = ['Spielstand übernommen. Neu: Eisen-Kette, 2 Eisenerz im Laden-Lager.', ...(loaded.notes ?? [])];
+  panels.toast(notes.join(' '), 6000);
 } else if (loaded.status === 'ok') panels.toast('Spielstand geladen.', 1600);
 else if (loaded.status === 'invalid') panels.toast('Spielstand war beschädigt – neues Spiel gestartet.', 3500);
 

@@ -48,20 +48,6 @@ export function drawItem(ctx, type, cx, cy, size) {
       }
       break;
     }
-    case 'angle': {
-      const t = s * 0.32;
-      ctx.beginPath();
-      ctx.moveTo(cx - s / 2, cy - s / 2);
-      ctx.lineTo(cx - s / 2 + t, cy - s / 2);
-      ctx.lineTo(cx - s / 2 + t, cy + s / 2 - t);
-      ctx.lineTo(cx + s / 2, cy + s / 2 - t);
-      ctx.lineTo(cx + s / 2, cy + s / 2);
-      ctx.lineTo(cx - s / 2, cy + s / 2);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-      break;
-    }
     case 'rod': {
       ctx.translate(cx, cy);
       ctx.rotate(-Math.PI / 4);
@@ -74,27 +60,78 @@ export function drawItem(ctx, type, cx, cy, size) {
       roundRect(ctx, cx - s * 0.58, cy - s * 0.22, s * 1.16, s * 0.44, s * 0.08);
       ctx.fill();
       ctx.stroke();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+      ctx.strokeStyle = def.grain ? 'rgba(90, 55, 20, 0.55)' : 'rgba(255, 255, 255, 0.45)';
       ctx.beginPath();
       ctx.moveTo(cx - s * 0.45, cy - s * 0.08);
       ctx.lineTo(cx + s * 0.2, cy - s * 0.08);
+      if (def.grain) {
+        ctx.moveTo(cx - s * 0.2, cy + s * 0.08);
+        ctx.lineTo(cx + s * 0.45, cy + s * 0.08);
+      }
       ctx.stroke();
       break;
     }
-    case 'grit': {
-      const dots = [
-        [-0.22, 0.12, 0.2],
-        [0.2, 0.16, 0.18],
-        [0, -0.18, 0.2],
-        [0.26, -0.18, 0.12],
-        [-0.3, -0.16, 0.12],
-      ];
-      for (const [dx, dy, r] of dots) {
+    case 'smallplate': {
+      roundRect(ctx, cx - s * 0.42, cy - s * 0.42, s * 0.84, s * 0.84, s * 0.1);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = OUTLINE;
+      for (const [dx, dy] of [[-0.24, -0.24], [0.24, -0.24], [-0.24, 0.24], [0.24, 0.24]]) {
         ctx.beginPath();
-        ctx.arc(cx + dx * s, cy + dy * s, r * s, 0, Math.PI * 2);
+        ctx.arc(cx + dx * s, cy + dy * s, s * 0.06, 0, Math.PI * 2);
         ctx.fill();
-        ctx.stroke();
       }
+      break;
+    }
+    case 'gear': {
+      const teeth = 8;
+      const outer = s * 0.52;
+      const inner = s * 0.38;
+      ctx.beginPath();
+      for (let i = 0; i < teeth * 2; i++) {
+        const r = i % 2 === 0 ? outer : inner;
+        const a0 = (i / (teeth * 2)) * Math.PI * 2;
+        const a1 = ((i + 1) / (teeth * 2)) * Math.PI * 2;
+        ctx.lineTo(cx + Math.cos(a0) * r, cy + Math.sin(a0) * r);
+        ctx.lineTo(cx + Math.cos(a1) * r, cy + Math.sin(a1) * r);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(40, 26, 12, 0.55)';
+      ctx.beginPath();
+      ctx.arc(cx, cy, s * 0.13, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    }
+    case 'ingot': {
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.4, cy - s * 0.22);
+      ctx.lineTo(cx + s * 0.4, cy - s * 0.22);
+      ctx.lineTo(cx + s * 0.56, cy + s * 0.24);
+      ctx.lineTo(cx - s * 0.56, cy + s * 0.24);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.fillRect(cx - s * 0.3, cy - s * 0.14, s * 0.44, s * 0.08);
+      break;
+    }
+    case 'nail': {
+      ctx.translate(cx, cy);
+      ctx.rotate(-Math.PI / 4);
+      ctx.beginPath();
+      ctx.moveTo(-s * 0.42, -s * 0.07);
+      ctx.lineTo(s * 0.34, -s * 0.07);
+      ctx.lineTo(s * 0.58, 0);
+      ctx.lineTo(s * 0.34, s * 0.07);
+      ctx.lineTo(-s * 0.42, s * 0.07);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      roundRect(ctx, -s * 0.56, -s * 0.22, s * 0.14, s * 0.44, s * 0.04);
+      ctx.fill();
+      ctx.stroke();
       break;
     }
     case 'log': {
@@ -122,6 +159,14 @@ export function drawItem(ctx, type, cx, cy, size) {
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
+      if (def.ore) {
+        ctx.fillStyle = '#d98a4a';
+        for (const [dx, dy, r] of [[-0.18, -0.12, 0.09], [0.16, 0.1, 0.08], [0.12, -0.26, 0.06]]) {
+          ctx.beginPath();
+          ctx.arc(cx + dx * s, cy + dy * s, r * s, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
       break;
     }
     default: {

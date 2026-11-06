@@ -103,7 +103,8 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
     } else if (p?.kind === 'workshop') {
       const recipe = RECIPES[prod.recipe];
       const [inType, need] = Object.entries(recipe.inputs)[0];
-      lines.push(`Rezept: ${need} ${ITEMS[inType].plural} → ${recipe.amount} ${ITEMS[recipe.output].name} (${recipe.time} s)`);
+      const outName = recipe.amount === 1 ? ITEMS[recipe.output].name : ITEMS[recipe.output].plural;
+      lines.push(`Rezept: ${need} ${ITEMS[inType].plural} → ${recipe.amount} ${outName} (${recipe.time} s)`);
       lines.push(`Am Eingang: ${prod.stock[inType] ?? 0} / ${need * 2} ${ITEMS[inType].plural}`);
       for (const key of p.recipes) info.buttons.get(`recipe:${key}`)?.classList.toggle('primary', key === prod.recipe);
     } else if (p?.kind === 'storage') {
@@ -370,7 +371,7 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
       el(
         'p',
         null,
-        'Waren aus deinem Versandportal landen hier im Laden-Lager. Ab v0.6.0 stellst du sie auf Verkaufstheken und verkaufst sie an Kunden.',
+        'Waren aus deinem Versandportal landen hier im Laden-Lager. Ab v0.7.0 stellst du sie auf Verkaufstheken und verkaufst sie an Kunden.',
       ),
     );
     const stats = el('div', 'shop-stats');
