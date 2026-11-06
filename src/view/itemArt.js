@@ -15,6 +15,21 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
+// Dicke Linie mit dunklem Rand (Kurbelarm, Hebel, Feder). Punkte in Bruchteilen
+// von s, der Ursprung ist schon in die Mitte verschoben.
+function thickLine(ctx, points, s, width, color) {
+  ctx.beginPath();
+  points.forEach(([px, py], i) => (i ? ctx.lineTo(px * s, py * s) : ctx.moveTo(px * s, py * s)));
+  ctx.lineWidth = Math.max(2, s * (width + 0.09));
+  ctx.strokeStyle = OUTLINE;
+  ctx.stroke();
+  ctx.lineWidth = Math.max(1, s * width);
+  ctx.strokeStyle = color;
+  ctx.stroke();
+  ctx.lineWidth = Math.max(1, s * 0.09);
+  ctx.strokeStyle = OUTLINE;
+}
+
 // Zeichnet eine Ware mittig auf (cx, cy) in etwa der Größe size.
 export function drawItem(ctx, type, cx, cy, size) {
   const def = ITEMS[type];
@@ -130,6 +145,197 @@ export function drawItem(ctx, type, cx, cy, size) {
       ctx.moveTo(-s * 0.48, -s * 0.05);
       ctx.lineTo(s * 0.48, -s * 0.05);
       ctx.stroke();
+      break;
+    }
+    // ---------- v0.10.0: Kombi-Teile ----------
+    case 'crank': {
+      // Handkurbel: Arm aus Holz, Nabe aus Stein (Zahnrad), Griff
+      ctx.translate(cx, cy);
+      thickLine(ctx, [[-0.3, 0.28], [0.28, -0.2]], s, 0.2, def.color);
+      ctx.fillStyle = '#9aa1aa';
+      ctx.beginPath();
+      ctx.arc(-0.3 * s, 0.28 * s, 0.2 * s, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = OUTLINE;
+      ctx.beginPath();
+      ctx.arc(-0.3 * s, 0.28 * s, 0.07 * s, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#e0b277';
+      roundRect(ctx, 0.18 * s, -0.5 * s, 0.22 * s, 0.42 * s, 0.1 * s);
+      ctx.fill();
+      ctx.stroke();
+      break;
+    }
+    case 'switch': {
+      // Mechanischer Schalter: Steinsockel mit Hebel aus Holz
+      ctx.translate(cx, cy);
+      thickLine(ctx, [[-0.02, 0.12], [0.3, -0.42]], s, 0.12, '#c48d55');
+      ctx.fillStyle = '#e0b277';
+      ctx.beginPath();
+      ctx.arc(0.3 * s, -0.42 * s, 0.11 * s, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = def.color;
+      roundRect(ctx, -0.5 * s, 0.02 * s, s, 0.38 * s, 0.08 * s);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(40, 26, 12, 0.5)';
+      roundRect(ctx, -0.16 * s, 0.1 * s, 0.32 * s, 0.1 * s, 0.05 * s);
+      ctx.fill();
+      break;
+    }
+    case 'reinforced': {
+      // Verstärkte Holzplatte: Holzplatte mit zwei Eisenbändern und Nieten
+      roundRect(ctx, cx - s * 0.58, cy - s * 0.26, s * 1.16, s * 0.52, s * 0.08);
+      ctx.fill();
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(90, 55, 20, 0.55)';
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.5, cy - s * 0.1);
+      ctx.lineTo(cx + s * 0.5, cy - s * 0.1);
+      ctx.moveTo(cx - s * 0.5, cy + s * 0.1);
+      ctx.lineTo(cx + s * 0.5, cy + s * 0.1);
+      ctx.stroke();
+      for (const dx of [-0.3, 0.3]) {
+        ctx.fillStyle = '#8e98a6';
+        ctx.strokeStyle = OUTLINE;
+        ctx.fillRect(cx + (dx - 0.08) * s, cy - s * 0.26, s * 0.16, s * 0.52);
+        ctx.strokeRect(cx + (dx - 0.08) * s, cy - s * 0.26, s * 0.16, s * 0.52);
+        ctx.fillStyle = OUTLINE;
+        for (const dy of [-0.15, 0.15]) {
+          ctx.beginPath();
+          ctx.arc(cx + dx * s, cy + dy * s, s * 0.035, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      break;
+    }
+    case 'hinge': {
+      // Scharnier: zwei Lappen mit Löchern, in der Mitte das Gelenk
+      for (const x0 of [-0.52, 0.1]) {
+        roundRect(ctx, cx + x0 * s, cy - s * 0.32, s * 0.42, s * 0.64, s * 0.06);
+        ctx.fill();
+        ctx.stroke();
+      }
+      ctx.fillStyle = OUTLINE;
+      for (const [dx, dy] of [[-0.31, -0.15], [-0.31, 0.15], [0.31, -0.15], [0.31, 0.15]]) {
+        ctx.beginPath();
+        ctx.arc(cx + dx * s, cy + dy * s, s * 0.05, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = '#7d8794';
+      roundRect(ctx, cx - s * 0.1, cy - s * 0.42, s * 0.2, s * 0.84, s * 0.1);
+      ctx.fill();
+      ctx.stroke();
+      break;
+    }
+    case 'spring': {
+      // Eisenfeder: Zickzack-Windungen
+      ctx.translate(cx, cy);
+      const pts = [[-0.05, -0.48]];
+      for (let i = 0; i < 6; i++) pts.push([i % 2 === 0 ? 0.3 : -0.3, -0.36 + i * 0.144]);
+      pts.push([0.05, 0.48]);
+      thickLine(ctx, pts, s, 0.12, def.color);
+      break;
+    }
+    case 'bearing': {
+      // Kugellager: äußerer Ring, Kugeln, innerer Ring
+      ctx.beginPath();
+      ctx.arc(cx, cy, s * 0.52, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#5b5f6b';
+      ctx.beginPath();
+      ctx.arc(cx, cy, s * 0.4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#eef1f5';
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.arc(cx + Math.cos(a) * s * 0.3, cy + Math.sin(a) * s * 0.3, s * 0.085, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      ctx.arc(cx, cy, s * 0.19, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = OUTLINE;
+      ctx.beginPath();
+      ctx.arc(cx, cy, s * 0.09, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    }
+    case 'chain': {
+      // Steinkette: drei Glieder schräg hintereinander
+      ctx.translate(cx, cy);
+      ctx.rotate(-Math.PI / 4);
+      for (const [dx, flat] of [[-0.36, true], [0, false], [0.36, true]]) {
+        const rx = flat ? 0.24 : 0.24;
+        const ry = flat ? 0.15 : 0.06;
+        ctx.beginPath();
+        ctx.ellipse(dx * s, 0, rx * s, ry * s, 0, 0, Math.PI * 2);
+        ctx.lineWidth = Math.max(1, s * 0.2);
+        ctx.strokeStyle = OUTLINE;
+        ctx.stroke();
+        ctx.lineWidth = Math.max(1, s * 0.11);
+        ctx.strokeStyle = def.color;
+        ctx.stroke();
+      }
+      break;
+    }
+    case 'regulator': {
+      // Regler: Gehäuse mit Skala und Zeiger
+      ctx.beginPath();
+      ctx.arc(cx, cy, s * 0.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#efe2c2';
+      ctx.beginPath();
+      ctx.arc(cx, cy, s * 0.36, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = OUTLINE;
+      ctx.lineWidth = Math.max(1, s * 0.05);
+      ctx.beginPath();
+      for (let i = 0; i <= 4; i++) {
+        const a = Math.PI * (0.8 + i * 0.35);
+        ctx.moveTo(cx + Math.cos(a) * s * 0.26, cy + Math.sin(a) * s * 0.26);
+        ctx.lineTo(cx + Math.cos(a) * s * 0.34, cy + Math.sin(a) * s * 0.34);
+      }
+      ctx.stroke();
+      ctx.strokeStyle = '#b8402f';
+      ctx.lineWidth = Math.max(1, s * 0.08);
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + s * 0.2, cy - s * 0.2);
+      ctx.stroke();
+      ctx.fillStyle = OUTLINE;
+      ctx.beginPath();
+      ctx.arc(cx, cy, s * 0.06, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    }
+    case 'lock': {
+      // Mini-Schloss: Bügel und Körper mit Schlüsselloch
+      ctx.lineWidth = Math.max(1, s * 0.22);
+      ctx.strokeStyle = OUTLINE;
+      ctx.beginPath();
+      ctx.arc(cx, cy - s * 0.1, s * 0.24, Math.PI, 0);
+      ctx.stroke();
+      ctx.lineWidth = Math.max(1, s * 0.12);
+      ctx.strokeStyle = '#a9b4c2';
+      ctx.stroke();
+      ctx.lineWidth = Math.max(1, s * 0.09);
+      ctx.strokeStyle = OUTLINE;
+      roundRect(ctx, cx - s * 0.4, cy - s * 0.12, s * 0.8, s * 0.6, s * 0.1);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = OUTLINE;
+      ctx.beginPath();
+      ctx.arc(cx, cy + s * 0.1, s * 0.08, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillRect(cx - s * 0.035, cy + s * 0.1, s * 0.07, s * 0.2);
       break;
     }
     // Nagel: derzeit ungenutzt (Nägel kommen vielleicht später zurück)

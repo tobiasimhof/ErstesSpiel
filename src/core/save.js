@@ -27,7 +27,7 @@ import { isDir, sortDirs } from './dirs.js';
 import { footprintSize, rotateLocal } from './geometry.js';
 import { buildingContents, createProductionState, productionOf } from './production.js';
 import { createCounters, createMarket } from './market.js';
-import { addAllToStorage } from './shop.js';
+import { addAllToStorage, addMissingCounters } from './shop.js';
 import { START_PLOT, WORLD_HEIGHT, WORLD_WIDTH, parseTileKey } from './state.js';
 
 export const SAVE_VERSION = 8;
@@ -65,6 +65,9 @@ export function deserializeGame(text) {
   const state = migrate(data.state, from, migrationNotes);
   if (!isValidState(state)) return null;
   for (const belt of Object.values(state.belts)) belt.outs = sortDirs(belt.outs);
+  // v0.10.0: Theken passend zum Level (z. B. nach einem Aufstieg in einer
+  // älteren Version) – fehlende kommen leer dazu. Format unverändert.
+  addMissingCounters(state);
   const result = { state, savedAt: Number(data.savedAt) || 0 };
   if (from < SAVE_VERSION) {
     result.migratedFrom = from;

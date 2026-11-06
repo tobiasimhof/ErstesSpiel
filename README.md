@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.9.2 – Test-Feedback zu v0.9.1 (nur README) |
-| **Phase** | M1 – Fabrik-Grundgerüst |
+| **Aktuelle Version** | v0.10.0 – Techbaum, Teil 2 (3 Kombi-Maschinen, Level 4–6, mehr Theken) |
+| **Phase** | M2 – Produktionsketten |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Neuer Chat: Claude stellt den **Plan für v0.10.0 – Techbaum, Teil 2** vor (Entwurf der Rezepte in Abschnitt 4.2, Stichpunkte und Erkenntnisse aus Tobias' Test in Abschnitt 6 unter „Ausblick v0.10.0“), Tobias gibt ihn frei, dann wird programmiert |
+| **Nächster Schritt** | Tobias testet v0.10.0 (Abschnitt 6, „v0.10.0 – Was Tobias testet“) und gibt Feedback; danach Plan für **v0.11.0 – Aufgaben** |
 
 ---
 
@@ -98,8 +98,8 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Stau:** Ist ein Band voll (z. B. weil es im Nichts endet), bleibt alles stehen und davor wird nicht weiter produziert.
 - **Lagerhäuser** sind die einzige Möglichkeit, Waren zu lagern. Sie sind Zwischenstationen und eine Art Verteiler: 2 × 1 Felder, 3 Fächer zu je 50 Waren, **Eingang oben links, Ausgang unten rechts** – deshalb lagert man sinnvollerweise nur eine Sorte, z. B. 3 × 50 Holzblöcke. Was hineinläuft, läuft weiter, sobald am Ausgang Platz ist.
 - **Versandportal:** 1 × 1 Feld mit **einem** Eingang (dreht mit). Waren, die hineinlaufen, landen direkt im Laden.
-- **Kombinations-Maschinen** (Techbaum) brauchen zwei verschiedene Zutaten, z. B. Mühlenbauer: 1 Stein-Zahnrad + 1 Eisenstange → Mechanischer Schalter (Entwurf, seit v0.8.0 mit Eisenstange statt Nägeln).
-- Eine Werkstatt kann mehrere Rezepte. Man stellt ein, was sie gerade herstellt.
+- **Kombi-Maschinen** (seit v0.10.0) haben zwei Eingänge und brauchen zwei verschiedene Zutaten, z. B. Zimmerei: 10 Holzstäbe + 5 Stein-Zahnräder → 1 Handkurbel. Jeder Eingang nimmt jede passende Zutat; am sichersten kommt jede Zutat über ihren eigenen Eingang. Fehlt eine Zutat, zeigt die Maschine ein kleines Bild davon; das Infofenster sagt, wie viel fehlt. Laufen beide Zutaten gemischt über ein Band und eine nimmt überhand, staut sich der Eingang (rotes Licht, „Eingang blockiert“).
+- Eine Werkstatt kann mehrere Rezepte (Grundmaschinen zwei, Kombi-Maschinen drei). Man stellt ein, was sie gerade herstellt. Beim Umstellen kommen Zutaten, die das neue Rezept nicht braucht, ins Laden-Lager.
 - **Umbauen ist leicht und günstig** (verschieben, drehen, abreißen mit Rückerstattung), weil man sich ständig an den Markt anpasst. Das gilt für alle Gebäude, auch die Startgebäude, damit man den Schwerpunkt der Fabrik jederzeit neu setzen kann.
 - **Bauen geht sofort**, sofern man die Waren dafür hat. Es gibt keine Bauzeiten.
 - **Bauen kostet Waren statt Gold** (Tobias, v0.7.0): z. B. Förderband 1 Holzblock, Sägewerk 40 Holzblöcke. Die Waren kommen aus dem Laden-Lager. So muss man abwägen: verkaufen oder damit eine weitere Maschine bauen? Abreißen gibt die bezahlten Waren zurück; Verschieben und Drehen sind kostenlos. Tabelle in Abschnitt 4.2.
@@ -108,7 +108,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 
 - **Zuerst feste Preise**, damit die Spielmechanik einfach bleibt. Weiterverarbeiten muss sich lohnen (Beispiel von Tobias): Kostet ein Holzstamm 50 Gold, bringen die 200 Holzblöcke daraus knapp über 50 Gold. Macht man daraus 40 Winkel (oder 20 Winkel und 20 Stäbe), bringt der Verkauf deutlich mehr. So kann man nach und nach die Produktion ausbauen.
 - **Platzhalter-Preise im Spiel** (alles ×10, damit es nur ganze Goldbeträge gibt): Holzstamm/Felsbrocken 550 Gold (Kauf) → 200 Blöcke à 3 Gold = 600 Gold (+9 %) → 40 Teile à 18 Gold = 720 Gold (+31 %). Ein Test prüft, dass jede Stufe mehr bringt als die vorige.
-- **Laden:** Der Knopf „Laden“ unten links öffnet den Laden mit den Reitern **Lager**, **Theken** und **Händler** (seit v0.7.0). Er hat ein eigenes **Lager** (gefüllt über das Versandportal) und **Verkaufstheken**. Die Theken bestückt man **von Hand** mit dem, was man verkaufen möchte; je nach Level bzw. Größe einer Theke passen darauf z. B. 20 Winkel. **Kunden kommen zufällig vorbei und kaufen zufällig viel**, z. B. der eine 2 Zahnräder und 1 Splitt, der nächste 3 Winkel – zu einem „normalen“ Preis. Später darf der Laden interaktiver werden; für den Anfang reicht die Übersicht.
+- **Laden:** Der Knopf „Laden“ unten links öffnet den Laden mit den Reitern **Lager**, **Theken** und **Händler** (seit v0.7.0). Er hat ein eigenes **Lager** (gefüllt über das Versandportal) und **Verkaufstheken**. Die Theken bestückt man **von Hand** mit dem, was man verkaufen möchte, und stellt dabei genau ein, wie viele Stück darauf kommen (seit v0.10.0, z. B. nur 8). Bis Level 3 gibt es 2 Theken mit je 20 Plätzen; ab Level 4 kommt mit jedem Aufstieg eine Theke dazu, jede 5 Plätze größer als die vorige (Level 6: 5 Theken mit 20, 20, 25, 30 und 35 Plätzen). **Kunden kommen zufällig vorbei und kaufen zufällig viel**, z. B. der eine 2 Zahnräder und 1 Splitt, der nächste 3 Winkel – zu einem „normalen“ Preis. Später darf der Laden interaktiver werden; für den Anfang reicht die Übersicht.
 - **Händler:** Hier kauft man Rohstoffe wie Holzstämme. **Verkaufen kann man nur über die Theken**, nicht an den Händler (Tobias, v0.7.0): Was man nicht mehr braucht, verkauft man über die Theken; vieles braucht man später noch, deshalb lohnt sich ein gemischtes Lager.
 - **Nachfrage:** Wer viel von einer Ware verkauft, drückt ihren Preis. Mit der Zeit erholt er sich wieder. Dazu kommen Trends, z. B. „Die Stadt baut eine Mauer: Steinblöcke +50 % für 2 Tage“. Eine Tür bringt also mal mehr, mal weniger Gold, je nachdem, wie gefragt sie gerade ist. So entsteht das Wirtschaftsgefühl, und es lohnt sich, je nach Marktlage umzubauen.
 - **Start:** 500 Gold Startkapital (seit v0.9.1, vorher kein Gold). Der erste Holzstamm ist gratis, dazu 20 Holzblöcke für die ersten Förderbänder zum Versandportal. Das Startkapital sorgt dafür, dass nach den ersten Gebäuden genug Gold für den zweiten Holzstamm da ist. Den ersten Felsbrocken gibt es beim Aufstieg auf Level 2, das erste Eisenerz bei Level 3 (seit v0.9.0).
@@ -121,6 +121,8 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 
 - **Laden-Level**, ähnlich dem Rathaus in Clash of Clans: Jede Stufe schaltet neue Werkstätten, Rezepte, Lagerplatz und Fläche frei. Jede Stufe wird teurer. **Rohstoffe nach Level:** Holz ab Level 1, Stein ab Level 2, Eisen ab Level 3.
 - **Erste einfache Level (seit v0.9.0):** Level 1 startet nur mit Holz. Wer 1 Holzplatte und 1 Holzstab hergestellt hat, kann auf Level 2 (Stein) aufsteigen; nach 1 Steinplatte und 1 Stein-Zahnrad auf Level 3 (Eisen). Aufsteigen geht per Knopf im Level-Fenster (oben auf „Laden-Level“ tippen) und kostet vorerst nichts. **Zu Beginn jedes Levels gibt es einen Rohstoff gratis** (Tobias).
+- **Level 4–6 (seit v0.10.0):** Jedes Level schaltet eine Kombi-Maschine und eine weitere Verkaufstheke frei: Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei. Ziel ist jeweils, die Produkte der zuletzt freigeschalteten Maschine einmal herzustellen; Geschenk ist 1 Eisenerz.
+- **Einführung bis etwa Level 10 (Tobias):** Die ersten Level konzentrieren sich darauf, eine coole Produktionsstätte aufzubauen. Man kommt mit jedem Level ein Stück weiter und lernt nach und nach alles kennen; bis etwa Level 10 ist sozusagen das „Intro“ abgeschlossen.
 - **Später: Aufgaben, Erfahrung und Gold (Modell von Tobias):** Für jedes Level gibt es Aufgaben, z. B. „50 Blöcke und 20 Holzplatten herstellen“. Dafür bekommt man z. B. 100 Erfahrungspunkte (XP) und 250 Gold. Mit genug Erfahrung schaltet man das nächste Level frei und kauft den Aufstieg dann mit Gold, z. B. 100 Gold für Level 2. So gibt es mehrere Handlungsstränge – Ware produzieren, Ware verkaufen, Ware für Aufgaben herstellen – und man setzt den Schwerpunkt seiner Produktion je nachdem anders.
 - **Laden-Ausbau** geht sofort, kostet aber Gold **und** Waren, z. B. 200 Holzzahnräder + 200 Splitt + 500 Gold. So muss man ständig Neues produzieren, und das Produzieren ersetzt das Warten.
 - **Fläche kaufen:** Das Grundstück wird stückweise erweitert, immer teurer (seit v0.9.0 im Spiel, mit Gold). Ob das Laden-Level die Fläche begrenzt, entscheiden wir mit den Aufgaben.
@@ -181,6 +183,8 @@ Abgeschrieben aus Tobias' Tabelle. Jede Maschine hat zwei Modi (A und B), zwisch
 
 Die Maschinennamen in dieser Tabelle waren nur zur Orientierung gedacht; die endgültigen Namen hat Claude ausgesucht (Abschnitt 4.2). Die Tabelle „Entwurf 1“ (Tür, Kiste, Leiter, Mahlwerk, Brunnen …) ist damit überholt.
 
+**Seit v0.10.0 (Tobias):** Statt 6 Kombinations- und Weiterverarbeitungs-Maschinen gibt es nur **3 Maschinen mit je 3 Einstellungen** (Zimmerei, Feinschmiede, Schlosserei) – sonst werden es zu viele Maschinen und zu viel Unordnung. Mörser & Stößel sowie die freien Einstellungen fallen weg; jedes der 9 Produkte hat ein eigenes Rezept (Abschnitt 4.2).
+
 ### 4.2 Festgelegter Techbaum (Stand 06.11.2026)
 
 Von Tobias bestätigt (Chat 3, Teil 2). Mengen, Zeiten und Preise hat Claude vorgeschlagen; Tobias hat sie mit dem Plan für v0.6.0 zum Ausprobieren freigegeben (Chat 4): „erstmal so umsetzen und dann schauen, wie es wirkt“. Alle Goldbeträge ×10.
@@ -197,21 +201,18 @@ Von Tobias bestätigt (Chat 3, Teil 2). Mengen, Zeiten und Preise hat Claude vor
 | Sägewerk | 2 × 2 (bisher 2 × 1) | A: Holzplatte · B: Holzstab | Level 1 |
 | Steinmetz | 2 × 2 (bisher 2 × 1) | A: Steinplatte · B: Stein-Zahnrad | Level 2 |
 | Schmiede (neu) | 2 × 2 | A: Mini-Eisenplatte · B: Eisenstange (bis v0.7.1: Eisennägel) | Level 3 |
-| Mühlenbauer (Kombi) | 2 × 2 | A: Mechanischer Schalter · B: Handkurbel | Level 2 (Schalter braucht eine Eisenstange, also praktisch ab Level 3) |
-| Zimmerei (Kombi) | 2 × 2 | A: Verstärkte Holzplatte · B: frei | Level 3 |
-| Feinwerkstatt (Kombi) | 2 × 2 | A: Mörser & Stößel · B: Scharnier | Level 3 |
-| Feinschmiede | 2 × 2 | A: Kugellager · B: Eisenfeder | Level 4 |
-| Getriebebauer | 2 × 2 | A: Steinkette · B: Regler | Level 4 |
-| Schlosserei | 2 × 2 | A: Mini-Schloss · B: frei | Level 4 |
+| Zimmerei (Kombi, seit v0.10.0) | 2 × 2 | Handkurbel · Mechanischer Schalter · Verstärkte Holzplatte | Level 4 |
+| Feinschmiede (Kombi, seit v0.10.0) | 2 × 2 | Scharnier · Eisenfeder · Kugellager | Level 5 |
+| Schlosserei (Kombi, seit v0.10.0) | 2 × 2 | Steinkette · Regler · Mini-Schloss | Level 6 |
 | Lagerhaus | 2 × 1 | Zwischenlager, 3 × 50 | Level 1 |
 | Versandportal | 1 × 1 | schickt Waren ins Laden-Lager | Level 1 |
 | Förderband | 1 × 1 | transportiert | Level 1 |
 
-Namen aus Tobias' Tabelle → Spiel: Holz-Werkbank → Sägewerk, Steinmetz-Station → Steinmetz, Schmiedeofen → Schmiede, Steinfels → Felsbrocken, Kombi-Werkbank → Zimmerei, Mechanik-Station → Mühlenbauer, Fein-Montage → Feinwerkstatt, Präzisions-Schmiede → Feinschmiede, Getriebe- & Ketten-Werkstatt → Getriebebauer, Sicherheits-Montage → Schlosserei. Die Warennamen bleiben wie in Tobias' Tabelle. Alle Namen lassen sich jederzeit ändern.
+Namen aus Tobias' Tabelle → Spiel: Holz-Werkbank → Sägewerk, Steinmetz-Station → Steinmetz, Schmiedeofen → Schmiede, Steinfels → Felsbrocken. Seit v0.10.0 gibt es nur noch 3 Kombi-Maschinen: Zimmerei, Feinschmiede, Schlosserei (Mühlenbauer, Feinwerkstatt und Getriebebauer fallen weg). Die Warennamen bleiben wie in Tobias' Tabelle. Alle Namen lassen sich jederzeit ändern.
 
-**Anschlüsse der 2 × 2-Maschinen** (Grundmaschinen seit v0.6.0 im Spiel): Grundmaschinen: Eingang links oben, Ausgang rechts oben (gerade Linie; bestehende Bänder am Sägewerk bleiben angeschlossen). Kombi- und Weiterverarbeitungs-Maschinen: zwei Eingänge links oben und links unten (jeder nimmt jede passende Zutat), Ausgang rechts oben. Block-Gebäude unverändert (Ausgang rechts oben).
+**Anschlüsse der 2 × 2-Maschinen:** Grundmaschinen (seit v0.6.0): Eingang links oben, Ausgang rechts oben (gerade Linie; bestehende Bänder am Sägewerk bleiben angeschlossen). Kombi-Maschinen (seit v0.10.0): zwei Eingänge links oben und links unten (jeder nimmt jede passende Zutat), Ausgang rechts oben. Block-Gebäude unverändert (Ausgang rechts oben).
 
-**Rezepte und Preise** (Holz, Stein und Eisen bis zu den Grundmaschinen im Spiel, Eisenstange seit v0.8.0; alles ab „Handkurbel“ ist ein **Entwurf für v0.10.0**, noch nicht freigegeben): Regel: Blöcke bringen knapp mehr als der Rohstoff kostet (+9 %), jedes weitere Teil rund 20 % mehr als seine Zutaten zusammen. So macht man beim Verkaufen in der Anfangsphase nie Minus. Stein kostet und bringt so viel wie Holz; Eisen kostet viermal so viel und bringt entsprechend mehr.
+**Rezepte und Preise** (alle im Spiel; Eisenstange seit v0.8.0, die Kombi-Teile ab „Handkurbel“ seit v0.10.0): Regel: Blöcke bringen knapp mehr als der Rohstoff kostet (+9 %), jedes weitere Teil rund 20 % mehr als seine Zutaten zusammen. So macht man beim Verkaufen in der Anfangsphase nie Minus. Stein kostet und bringt so viel wie Holz; Eisen kostet viermal so viel und bringt entsprechend mehr. **Kombi-Teile (Tobias):** Jedes Produkt hat ein eigenes Rezept; aus Grundteilen meist 10 + 5 Stück, damit alle Rohstoffe etwa gleich viel gebraucht werden. Aus einem Holzstamm und einem Felsbrocken werden so etwa 5 Handkurbeln oder Schalter – wer viel herstellen will, braucht mehr Rohstoff-Linien.
 
 | Ware | Herstellung | Zeit | Wert (Gold) |
 |---|---|---|---|
@@ -224,20 +225,21 @@ Namen aus Tobias' Tabelle → Spiel: Holz-Werkbank → Sägewerk, Steinmetz-Stat
 | Steinplatte / Stein-Zahnrad | Steinmetz: 5 Steinblöcke → 1 | 5 s | 18 |
 | Mini-Eisenplatte | Schmiede: 5 Eisenbarren → 1 | 5 s | 72 (40 Stück = 2.880) |
 | Eisenstange (seit v0.8.0) | Schmiede: 5 Eisenbarren → 1 | 5 s | 72 (40 Stück = 2.880) |
-| Handkurbel | Mühlenbauer: 1 Holzstab + 1 Stein-Zahnrad | 10 s | 43 (Zutaten 36) |
-| Mechanischer Schalter | Mühlenbauer: 1 Stein-Zahnrad + 1 Eisenstange | 10 s | 108 (Zutaten 90) |
-| Verstärkte Holzplatte | Zimmerei: 1 Holzplatte + 1 Eisenstange | 10 s | 108 (Zutaten 90) |
-| Mörser & Stößel | Feinwerkstatt: 1 Steinplatte + 1 Holzstab | 10 s | 43 (Zutaten 36) |
-| Scharnier | Feinwerkstatt: 1 Mini-Eisenplatte + 1 Eisenstange | 10 s | 173 (Zutaten 144) |
-| Kugellager | Feinschmiede: 1 Scharnier + 1 Eisenstange | 15 s | 294 (Zutaten 245) |
-| Eisenfeder | Feinschmiede: 1 Eisenstange (nur eine Zutat – im Plan klären) | 15 s | 86 (Zutaten 72) |
-| Steinkette | Getriebebauer: 2 Stein-Zahnräder + 1 Eisenstange | 15 s | 130 (Zutaten 108) |
-| Regler | Getriebebauer: 1 Mechanischer Schalter + 1 Handkurbel | 15 s | 181 (Zutaten 151) |
-| Mini-Schloss | Schlosserei: 1 Scharnier + 1 Mechanischer Schalter | 15 s | 337 (Zutaten 281) |
+| Handkurbel | Zimmerei: 10 Holzstäbe + 5 Stein-Zahnräder | 20 s | 324 (Zutaten 270) |
+| Mechanischer Schalter | Zimmerei: 10 Stein-Zahnräder + 5 Holzstäbe | 20 s | 324 (Zutaten 270) |
+| Verstärkte Holzplatte | Zimmerei: 10 Holzplatten + 5 Eisenstangen | 20 s | 648 (Zutaten 540) |
+| Scharnier | Feinschmiede: 10 Mini-Eisenplatten + 5 Eisenstangen | 20 s | 1.296 (Zutaten 1.080) |
+| Eisenfeder | Feinschmiede: 10 Eisenstangen + 5 Mini-Eisenplatten | 20 s | 1.296 (Zutaten 1.080) |
+| Kugellager | Feinschmiede: 1 Scharnier + 5 Eisenstangen | 30 s | 1.987 (Zutaten 1.656) |
+| Steinkette | Schlosserei: 10 Steinplatten + 5 Eisenstangen | 20 s | 648 (Zutaten 540) |
+| Regler | Schlosserei: 1 Handkurbel + 1 Mechanischer Schalter | 30 s | 778 (Zutaten 648) |
+| Mini-Schloss | Schlosserei: 1 Scharnier + 1 Mechanischer Schalter | 30 s | 1.944 (Zutaten 1.620) |
 
-**Eisenstange statt Eisennägel (v0.8.0):** Bis v0.7.1 machte die Schmiede aus 5 Barren 5 Nägel zu je 14 Gold. Tobias fiel beim Spielen auf, dass dadurch extrem viele Nägel entstehen (100–140 im Lager, von allem anderen etwa 20), und an der Theke brachten 20 Nägel nur 280 Gold. Jetzt läuft die Schmiede wie Sägewerk und Steinmetz: 5 : 1. Im Entwurf oben ersetzt „1 Eisenstange“ die bisherigen „2 Eisennägel“ (die Werte sind nach der +20-%-Regel neu gerechnet). Damit braucht jedes Eisen-Kombiteil 5 statt 2 Barren – Eisen wird gefragter. Nägel können später als eigene Stufe zurückkommen (z. B. 1 Eisenstange → mehrere Nägel).
+**Eisenstange statt Eisennägel (v0.8.0):** Bis v0.7.1 machte die Schmiede aus 5 Barren 5 Nägel zu je 14 Gold. Tobias fiel beim Spielen auf, dass dadurch extrem viele Nägel entstehen (100–140 im Lager, von allem anderen etwa 20), und an der Theke brachten 20 Nägel nur 280 Gold. Jetzt läuft die Schmiede wie Sägewerk und Steinmetz: 5 : 1. Nägel können später als eigene Stufe zurückkommen (z. B. 1 Eisenstange → mehrere Nägel).
 
-**Freischalten nach Laden-Level** (von Tobias bestätigt): Level 1 Holz, Level 2 Stein (+ Mühlenbauer für die Handkurbel), Level 3 Eisen (+ Zimmerei, Feinwerkstatt), Level 4 Feinschmiede, Getriebebauer, Schlosserei. Den ersten Rohstoff jeder Sorte gibt es gratis: den ersten Holzstamm zum Spielstart, den ersten Felsbrocken beim Erreichen von Level 2, das erste Eisenerz bei Level 3. **Seit v0.9.0 im Spiel** (Level 1–3, Spalte „Freigeschaltet ab“ in der Gebäude-Tabelle oben); die Kombinations-Maschinen und Level 4 kommen mit v0.10.0.
+**Steinkette aus Steinplatten (v0.10.0):** Sonst bräuchte kein Kombi-Rezept die Steinplatte. So wird jedes der 6 Grundteile gebraucht; Eisen etwas mehr als Holz und Stein, weil es auch mehr bringt.
+
+**Freischalten nach Laden-Level** (von Tobias bestätigt): Level 1 Holz, Level 2 Stein, Level 3 Eisen, Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei (seit v0.10.0 je Level eine Kombi-Maschine). Den ersten Rohstoff jeder Sorte gibt es gratis: den ersten Holzstamm zum Spielstart, den ersten Felsbrocken beim Erreichen von Level 2, das erste Eisenerz bei Level 3; ab Level 4 gibt es bei jedem Aufstieg 1 Eisenerz (einen vierten Rohstoff gibt es nicht).
 
 **Baukosten** (seit v0.7.0, Platzhalter; Tobias: „erstmal spielen und schauen, ob es nicht zu lange dauert“):
 
@@ -252,12 +254,15 @@ Namen aus Tobias' Tabelle → Spiel: Holz-Werkbank → Sägewerk, Steinmetz-Stat
 | Steinmetz | 30 Steinblöcke + 5 Holzstäbe | 180 Gold |
 | Schmelzhütte | 20 Steinplatten + 10 Holzplatten | 540 Gold |
 | Schmiede | 10 Steinplatten + 30 Eisenbarren | 540 Gold |
+| Zimmerei (v0.10.0) | 20 Holzplatten + 10 Eisenstangen | 1.080 Gold |
+| Feinschmiede (v0.10.0) | 10 Mini-Eisenplatten + 2 Mechanische Schalter | 1.368 Gold |
+| Schlosserei (v0.10.0) | 1 Scharnier + 2 Verstärkte Holzplatten | 2.592 Gold |
 
-Das Sägewerk kostet nur Holzblöcke, damit die erste Maschine ohne Platten baubar ist. Für Stein braucht man Holzteile, für Eisen Steinteile – so behalten frühere Waren ihren Wert. Kein Gebäude kostet mehr, als ein Holzstamm einbringt (ein Test prüft das).
+Das Sägewerk kostet nur Holzblöcke, damit die erste Maschine ohne Platten baubar ist. Für Stein braucht man Holzteile, für Eisen Steinteile, für die Kombi-Maschinen Teile aus den vorigen – so behalten frühere Waren ihren Wert. Kein Gebäude kostet mehr, als ein Rohstoff seines Levels als Teile einbringt (Holz und Stein 720 Gold, Eisen und ab Level 4: 2.880 Gold; ein Test prüft das). Eine Level-4-bis-6-Maschine kostet also höchstens etwa eine Runde Eisen.
 
 **Holzwinkel und Splitt** fliegen raus (vielleicht kommen sie später wieder). Vorhandene im Spielstand werden umgewandelt: Holzwinkel → Holzplatte, Splitt → Stein-Zahnrad.
 
-### 4.3 Im Spiel (Stand v0.9.0)
+### 4.3 Im Spiel (Stand v0.10.0)
 
 | Stufe | Ware | Woher | Rezept |
 |---|---|---|---|
@@ -266,8 +271,13 @@ Das Sägewerk kostet nur Holzblöcke, damit die erste Maschine ohne Platten baub
 | 2 | Holzplatte / Holzstab | Sägewerk, Einstellung „Platten“ / „Stäbe“ | 5 Holzblöcke → 1 Teil (5 Sekunden) |
 | 2 | Steinplatte / Stein-Zahnrad | Steinmetz, Einstellung „Platten“ / „Zahnräder“ | 5 Steinblöcke → 1 Teil (5 Sekunden) |
 | 2 | Mini-Eisenplatte / Eisenstange | Schmiede, Einstellung „Platten“ / „Stangen“ | 5 Eisenbarren → 1 Teil (5 Sekunden) |
+| 3 | Handkurbel / Mechanischer Schalter / Verstärkte Holzplatte | Zimmerei (ab Level 4) | aus je 10 + 5 Grundteilen (20 Sekunden) |
+| 3 | Scharnier / Eisenfeder | Feinschmiede (ab Level 5) | aus je 10 + 5 Eisen-Teilen (20 Sekunden) |
+| 3 | Steinkette | Schlosserei (ab Level 6) | 10 Steinplatten + 5 Eisenstangen (20 Sekunden) |
+| 4 | Kugellager | Feinschmiede | 1 Scharnier + 5 Eisenstangen (30 Sekunden) |
+| 4 | Regler / Mini-Schloss | Schlosserei | 1 Handkurbel bzw. 1 Scharnier + 1 Mechanischer Schalter (30 Sekunden) |
 
-Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit v0.10.0.
+Genaue Rezepte und Werte: Abschnitt 4.2.
 
 **Ideen für später:** weitere Rohstoffe wie Eisenerz (Schmelze, Schmiede, echte Nägel, Werkzeuge), Lehm (Ziegel), Hanf (Seile), Sand (Glas); größere Waren wie Fässer, Karren, Fenster.
 
@@ -333,8 +343,8 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | `src/style.css` | Aussehen der Oberfläche |
 | `assets/icons/` | App-Symbole (erzeugt mit `tools/make-icons.py`) |
 | `tools/set-version.mjs` | Setzt die Versionsnummer in `src/version.js` und `index.html` (inkl. Import-Map) |
-| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer |
-| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen, Abreißen, Speichern, Neues Spiel, Theken, Aufsteigen und die Eisen-Kette per Touch durch |
+| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`) |
+| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen, Abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufsteigen bis Level 6, die Eisen-Kette und die Zimmerei per Touch durch |
 
 **Prüfen vor jedem Merge:** `npm test` (Spielregeln) und `npm run test:browser` (Browser-Test).
 
@@ -372,19 +382,35 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | v0.9.0 | **Fläche kaufen & erste Level:** Grundstück streifenweise mit Gold vergrößern; Level 1 Holz → 2 Stein → 3 Eisen mit einfachen Zielen und Gratis-Rohstoff | ✅ fertig |
 | v0.9.1 | **Startkapital:** 500 Gold zum Start, bestehende Spielstände bekommen sie einmalig nachgezahlt | ✅ fertig |
 | v0.9.2 | **Test-Feedback (nur README):** Tobias' Test von v0.9.1 festgehalten, Plan für v0.10.0 vorbereitet | ✅ fertig |
-| v0.10.0 | **Techbaum, Teil 2:** Kombinations-Maschinen mit zwei Zutaten und die Weiterverarbeitung (Kugellager, Regler, Mini-Schloss …), dazu Level 4 | als Nächstes planen |
-| v0.11.0 | **Aufgaben:** Aufgaben mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen (Modell von Tobias, Abschnitt 3.5) | |
+| v0.10.0 | **Techbaum, Teil 2:** 3 Kombi-Maschinen mit je 2 Eingängen und 3 Einstellungen (9 neue Waren), Level 4–6, je Level eine Verkaufstheke mehr, Menge auf der Theke einstellbar | ✅ fertig |
+| v0.11.0 | **Aufgaben:** Aufgaben mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen (Modell von Tobias, Abschnitt 3.5) | als Nächstes planen |
 | v0.12.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
 
-### Ausblick v0.10.0 – Techbaum, Teil 2 (Plan noch nicht besprochen)
+### v0.10.0 – Techbaum, Teil 2 (fertig)
 
-Was bereits feststeht (Abschnitte 4.2 und 7) und in den Plan gehört:
-- **6 neue Maschinen**, alle 2 × 2, je zwei Einstellungen: Mühlenbauer, Zimmerei, Feinwerkstatt (Kombi aus Grundteilen) sowie Feinschmiede, Getriebebauer, Schlosserei (Weiterverarbeitung).
-- **Anschlüsse:** zwei Eingänge links oben und links unten (jeder nimmt jede passende Zutat), Ausgang rechts oben.
-- **Rezepte und Werte:** Entwurf in Abschnitt 4.2 – seit v0.8.0 mit „1 Eisenstange“ statt „2 Eisennägel“; die Werte sind nach der +20-%-Regel neu gerechnet und müssen noch freigegeben werden.
-- **Level:** Mühlenbauer ab Level 2, Zimmerei und Feinwerkstatt ab Level 3, Feinschmiede, Getriebebauer und Schlosserei ab Level 4 – dafür braucht Level 4 ein Ziel und einen Gratis-Rohstoff (oder etwas anderes als Geschenk, weil es keinen vierten Rohstoff gibt).
-- **Erkenntnisse aus Tobias' Test von v0.9.1 (Abschnitt 10, Chat 6, Teil 3):** Bis zum ersten Eisen etwa 45 Minuten, nach etwa 60 Minuten die zweite Runde Eisen; dafür mehrere Runden nur Holz und Stein. Stand dann: Level 3, 936 Gold, Waren im Wert von 6.081 Gold im Lager, Fabrik mit je einer Linie Holz, Stein und Eisen (je 1 Rohstoff-Gebäude → 2 Maschinen → 1 Versandportal), rechts noch viel Platz. Etwas Grinden ist gewollt. Die neuen Maschinen sollen mit ein paar weiteren Runden erreichbar sein – das ist der Maßstab für ihre Baukosten.
-- **Offene Punkte für den Plan:** Baukosten der 6 Maschinen in Waren (Tabelle wie in 4.2 fortsetzen; Tobias: eine gute Balance der Maschinenkosten macht das Hinarbeiten auf Neues reizvoll); Eisenfeder hat im Entwurf nur eine Zutat (1 Eisenstange) – so lassen oder eine zweite Zutat?; die beiden freien Einstellungen (Zimmerei B, Schlosserei B); wie eine Werkstatt anzeigt, welche Zutat ihr noch fehlt; ob Kunden die teuren Teile genauso oft kaufen wie einfache.
+**Neu im Spiel:**
+- **3 Kombi-Maschinen** (2 × 2, zwei Eingänge links, Ausgang rechts oben), je **3 Einstellungen** im Infofenster:
+
+| Maschine | ab Level | Einstellungen | Baukosten |
+|---|---|---|---|
+| 🛠️ Zimmerei | 4 | Handkurbeln · Schalter · Verst. Platten | 20 Holzplatten + 10 Eisenstangen |
+| ⚙️ Feinschmiede | 5 | Scharniere · Federn · Kugellager | 10 Mini-Eisenplatten + 2 Mechanische Schalter |
+| 🔐 Schlosserei | 6 | Steinketten · Regler · Schlösser | 1 Scharnier + 2 Verstärkte Holzplatten |
+
+- **9 neue Waren** mit eigenem Bild und eigenem Rezept (Tabelle in Abschnitt 4.2), z. B. Handkurbel = 10 Holzstäbe + 5 Stein-Zahnräder (324 Gold), Mini-Schloss = 1 Scharnier + 1 Mechanischer Schalter (1.944 Gold).
+- **Was fehlt, sieht man sofort:** Wartet eine Kombi-Maschine auf eine Zutat, zeigt sie oben eine kleine Sprechblase mit dem Bild der fehlenden Ware. Im Infofenster steht jede Zutat mit Häkchen und „fehlt noch …“. Staut sich ein Eingang (z. B. gemischtes Band, auf dem eine Zutat überhandnimmt, oder eine Ware, die hier nicht gebraucht wird), leuchtet das Licht rot: „Eingang blockiert …“. Das gilt auch für Sägewerk, Steinmetz und Schmiede.
+- **Umstellen:** Zutaten, die die neue Einstellung nicht braucht, kommen ins Laden-Lager (mit Meldung).
+- **Level 4–6:** Ziel sind jeweils die Produkte der zuletzt freigeschalteten Maschine (Level 4: 1 Mini-Eisenplatte + 1 Eisenstange, Level 5: 1 Handkurbel + 1 Mechanischer Schalter, Level 6: 1 Scharnier + 1 Eisenfeder). Geschenk: je 1 Eisenerz.
+- **Mehr Verkaufstheken:** Mit Level 4, 5 und 6 kommt je eine Theke dazu, jede 5 Plätze größer: Theke 3 = 25, Theke 4 = 30, Theke 5 = 35 Plätze. Das Level-Fenster kündigt die neue Theke an.
+- **Menge auf der Theke einstellen:** Nach „Ware wählen“ (und über den neuen Knopf „🔢 Menge“) stellt man mit 0, −5, −1, +1, +5 und „Alle“ genau ein, wie viele Stück auf die Theke kommen; darunter steht der Wert. Zu viel kommt zurück ins Laden-Lager. „Menge“ ersetzt die Knöpfe +1 und +5.
+- **Testpaket:** Kombi-Teile gibt es darin nur je 5 Stück (sonst wäre das Laden-Lager sofort voll).
+- **Bestehende Spielstände** bleiben unverändert (Format gleich, keine Umwandlung nötig). Tobias' Fabrik steht auf Level 3; das Ziel für Level 4 (1 Mini-Eisenplatte + 1 Eisenstange, gezählt seit v0.9.0) ist vermutlich schon erreicht.
+
+**Was Tobias testet:**
+- Auf Level 4 aufsteigen (oben auf „Laden-Level“ tippen), die dritte Theke ansehen und eine **Zimmerei** bauen.
+- Zwei Bänder an die Zimmerei führen: oben Holzstäbe, unten Stein-Zahnräder → Handkurbeln. Dann umstellen auf Schalter. Sieht man gut, welche Zutat fehlt?
+- Mit „Menge“ eine bestimmte Anzahl auf die Theke stellen.
+- Weiter bis Level 6: Feinschmiede und Schlosserei. Passen Baukosten, Mengen (10 + 5) und Werte? Dauert es zu lange oder geht es zu schnell?
 
 ### v0.9.2 – Test-Feedback (fertig, nur README)
 
@@ -612,6 +638,17 @@ Was bereits feststeht (Abschnitte 4.2 und 7) und in den Plan gehört:
 | 06.11.2026 | Etwas Grinden ist gewollt: Man arbeitet ein paar Runden mit Holz und Stein, um sich Eisen und Neues zu erarbeiten | Tobias (Chat 6, Teil 3): „Genauso hab ich es mir auch vorgestellt.“ Maßstab für die Baukosten in v0.10.0. |
 | 06.11.2026 | Flächenpreise bleiben so | Tobias (Chat 6, Teil 3): noch nicht genutzt, aber eine gute Erweiterung und erschwinglich; notfalls arbeitet man 1–2 Runden mehr mit Rohstoffen. |
 | 06.11.2026 | 500 Gold Startkapital reichen | Tobias (Chat 6, Teil 3): Mit dem Startkapital kam er über Holz und Stein bis zu Eisen. |
+| 06.11.2026 | Nur 3 Kombi-Maschinen mit je 2 Eingängen, 1 Ausgang und 3 Einstellungen: Zimmerei (Handkurbel, Mechanischer Schalter, Verstärkte Holzplatte), Feinschmiede (Scharnier, Eisenfeder, Kugellager), Schlosserei (Steinkette, Regler, Mini-Schloss). Mühlenbauer, Feinwerkstatt, Getriebebauer, Mörser & Stößel und die freien Einstellungen fallen weg | Tobias (Chat 7): Sonst werden es zu viele Maschinen und zu viel Unordnung. Ersetzt die Aufteilung auf 6 Maschinen vom 06.11.2026. |
+| 06.11.2026 | Jedes Produkt hat ein eigenes Rezept; aus Grundteilen meist 10 + 5 Stück (z. B. Handkurbel 10 Holzstäbe + 5 Zahnräder, Schalter 10 Zahnräder + 5 Holzstäbe) | Tobias (Chat 7): So werden alle Rohstoffe etwa gleich viel beansprucht, und die Produkte lassen sich unterschiedlich skalieren. |
+| 06.11.2026 | Steinkette aus 10 Steinplatten + 5 Eisenstangen; übrige Rezepte und Werte nach Claudes Vorschlag (+20 % auf die Zutaten) | Claudes Vorschlag: Sonst bräuchte kein Rezept die Steinplatte. Tobias: „Wir probieren die Werte gerne so aus.“ |
+| 06.11.2026 | Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei; Ziel: die Produkte der zuletzt freigeschalteten Maschine einmal herstellen; Geschenk je 1 Eisenerz | Claudes Vorschlag, von Tobias angenommen: So kommt man am Anfang immer ein Stück weiter und lernt alles kennen. Ersetzt „Level 4 Weiterverarbeitung“ vom 06.11.2026. |
+| 06.11.2026 | Bis etwa Level 10 dauert die Einführung („Intro“); die ersten Level konzentrieren sich auf das Aufbauen einer coolen Produktionsstätte | Tobias (Chat 7). |
+| 06.11.2026 | Ab Level 4 bei jedem Aufstieg eine Verkaufstheke mehr (Level 6: 5 Theken); jede neue Theke 5 Plätze größer als die vorige (20, 20, 25, 30, 35) | Tobias (Chat 7): Die Produkte werden wertvoller. Claudes Lesart: Die ersten beiden Theken bleiben bei 20 (offene Frage 9). |
+| 06.11.2026 | Menge auf der Theke genau einstellbar (z. B. nur 8 Stück); Knopf „🔢 Menge“ ersetzt +1 und +5 | Tobias (Chat 7). Die Knöpfe 0, −5, −1, +1, +5 und „Alle“ sind Claudes Wahl. |
+| 06.11.2026 | Fehlende Zutat: kleines Bild an der Maschine, im Infofenster jede Zutat mit Vorrat; Kunden kaufen teure Teile genauso oft wie einfache | Claudes Vorschlag, von Tobias angenommen. |
+| 06.11.2026 | Beim Umstellen kommen nicht gebrauchte Zutaten ins Laden-Lager; ein gestauter Eingang zeigt rotes Licht („Eingang blockiert“) | Claudes Wahl: Sonst lägen Waren unsichtbar in der Maschine fest bzw. man sähe den Stau nicht. |
+| 06.11.2026 | Kein Gebäude kostet mehr, als ein Rohstoff seines Levels als Teile einbringt (ab Level 4: ein Eisenerz, 2.880 Gold) | Claudes Wahl; ersetzt „höchstens ein Holzstamm“, damit die Kombi-Maschinen etwas kosten dürfen. |
+| 06.11.2026 | Fenster (Laden, Level) 600 statt 520 Pixel breit | Claudes Wahl: Mit 5 Theken wurden die Knöpfe auf dem Tablet zu eng. |
 
 ---
 
@@ -619,18 +656,40 @@ Was bereits feststeht (Abschnitte 4.2 und 7) und in den Plan gehört:
 
 Stand 06.11.2026.
 
-1. **Plan für v0.10.0 (Techbaum, Teil 2)** im neuen Chat vorstellen und freigeben lassen; offene Punkte und die Erkenntnisse aus Tobias' Test stehen in Abschnitt 6 unter „Ausblick v0.10.0“.
-2. **Handel im echten Tempo:** Tobias hat v0.9.1 mit dem alten Spielstand gespielt (bis Eisen etwa 45 Minuten, zweite Runde Eisen nach etwa 60 Minuten) und findet das Tempo so richtig. Auf dem Screenshot dazu war der Testmodus (×10) an – beim nächsten Test klären, welche Zeiten in Echtzeit gemessen sind. Früher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10).
+1. **Test von v0.10.0:** Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Mini-Schlössern sehr viel Gold. Beobachten, ob das zu schnell geht. Danach Plan für v0.11.0 (Aufgaben).
+2. **Handel im echten Tempo:** geklärt – Tobias' Zeiten (bis Eisen etwa 45 Minuten, zweite Runde Eisen nach etwa 60 Minuten) sind in echter Zeit gemessen; nur die Eisen-Runden hat er im Testmodus beschleunigt. Früher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10).
 3. **Laden-Lager 500 Plätze:** Bleibt das so, oder wird es mit dem Laden-Level größer? Volle Lager stoppen die Versandportale.
-4. **Aufgaben (v0.11.0):** Werden die Waren für eine Aufgabe abgegeben (verbraucht), oder zählt nur, dass man sie hergestellt hat? Wie viel Erfahrung braucht ein Level, was kostet ein Aufstieg? Kostet der Laden-Ausbau zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Vorschlag kommt mit dem Plan für v0.11.0.
+4. **Aufgaben (v0.11.0):** Werden die Waren für eine Aufgabe abgegeben (verbraucht), oder zählt nur, dass man sie hergestellt hat? Wie viel Erfahrung braucht ein Level, was kostet ein Aufstieg? Kostet der Laden-Ausbau zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Was bringen Level 7 bis 10 (Ende der Einführung)? Vorschlag kommt mit dem Plan für v0.11.0.
 5. **Einstieg:** Tobias' Idee, am Anfang vor allem die Massenproduktion auszubauen, damit man schnell genug Ware von allem hat – später austesten. Die 500 Gold Startkapital reichen für den Weg zu Stein und Eisen (Test von v0.9.1).
 6. **Pleiteschutz:** Ein Rohstoff ohne passendes Gebäude (z. B. Felsbrocken ohne Steinbruch) verhindert das Geschenk. Vorerst bewusst so gelassen; beobachten.
 7. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
 8. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
+9. **Theken-Größen:** Claude hat „das Volumen soll für jede neue Theke um 5 steigen“ so umgesetzt, dass nur die neuen Theken größer sind (20, 20, 25, 30, 35). Falls alle Theken mit jedem Level wachsen sollen (z. B. auf Level 6 alle 35), ist das eine Zeile in der Datentabelle.
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.10.0 – Techbaum, Teil 2 (06.11.2026)
+
+**Vorgenommen:**
+- Die nächste Stufe des Techbaums mit Maschinen, die zwei verschiedene Zutaten verarbeiten – nach Tobias' Wunsch nur 3 Maschinen mit je 3 Produkten statt 6 Maschinen.
+- Level 4 bis 6, mit jedem Level eine Verkaufstheke mehr; die Menge auf der Theke soll sich genau einstellen lassen.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie viele Maschinen? → 3 (Tobias), sonst wird es unübersichtlich; dafür 3 Einstellungen je Maschine.
+- Wie werden alle Rohstoffe gleich gebraucht? → Eigene Rezepte mit 10 + 5 Grundteilen (Tobias); die Steinkette nimmt Steinplatten, damit jedes Grundteil vorkommt.
+- Was passiert, wenn beide Zutaten über ein Band kommen? → Es klappt, solange das Verhältnis passt; nimmt eine Zutat überhand, staut sich der Eingang. Die Maschine zeigt das rot an („Eingang blockiert“); am sichersten bekommt jede Zutat ihren eigenen Eingang.
+- Woran sieht man, was fehlt? → Bild der fehlenden Zutat an der Maschine, im Infofenster jede Zutat mit Häkchen und „fehlt noch …“.
+- Was ist das Geschenk ab Level 4, wenn es keinen vierten Rohstoff gibt? → 1 Eisenerz.
+- Muss Tobias' Spielstand umgewandelt werden? → Nein, das Format bleibt gleich; neue Theken kommen beim Aufstieg (und beim Laden, falls welche fehlen) dazu.
+
+**Gemacht:**
+- Datentabellen: 9 Waren, 9 Rezepte, 3 Gebäude, Level 4–6, Theken je Level und Plätze je Theke; Testpaket mit je 5 Kombi-Teilen.
+- Spielregeln: Theken beim Aufstieg, Menge auf der Theke einstellen, Zutaten der Werkstatt mit Vorrat, Stau am Eingang erkennen, nicht gebrauchte Zutaten beim Umstellen zurück ins Laden-Lager.
+- Anzeige: neue Warenbilder (Kurbel, Schalter, beschlagene Platte, Scharnier, Feder, Kugellager, Kette, Regler, Schloss), Sprechblase mit fehlender Zutat, Infofenster mit Zutatenliste und drei Einstellungen, Mengenwahl für die Theken, Level-Fenster nennt neue Theken, breitere Fenster.
+- 145 automatische Tests (neu u. a. in `combo.test.js`: beide Eingänge, vertauschte Eingänge, Mini-Schloss, Regler, Kugellager, fehlende Zutat ohne Stau, Stau auf gemischtem Band, falsche Ware, Umstellen, Theken bis Level 6 mit 20/20/25/30/35 Plätzen, genau 8 Stück auf die Theke, Spielstand mit fehlender Theke) und der Browser-Test (neu: Menge 8 einstellen, „Alle“, Aufstieg bis Level 6, Zimmerei per Touch bauen, Infofenster mit fehlender Zutat, Umstellen, 5 Theken) in Tablet- und Handygröße – alle bestanden.
+- Beim Testen gefunden und behoben: Die Sprechblase rutschte bei größerer Darstellung auf den Namen; auf dem Tablet brachen „Ware wählen“ und „Abräumen“ um und „Alle (20)“ rutschte in eine eigene Zeile. Außerdem eine Prüfung im Browser-Test, die schwankte, wenn genau beim Kauf ein Kunde bezahlte.
 
 ### v0.9.2 – Test-Feedback (06.11.2026, nur README)
 
@@ -917,6 +976,23 @@ Stand 06.11.2026.
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 06.11.2026 – Chat 7: Plan und Umsetzung v0.10.0 (Techbaum, Teil 2)
+
+**Claude** hat die README gelesen und den Plan für v0.10.0 vorgestellt: 6 Maschinen (Mühlenbauer, Zimmerei, Feinwerkstatt, Feinschmiede, Getriebebauer, Schlosserei), Baukosten, Rezepttabelle, Level 4 mit Eisenerz als Geschenk, Anzeige fehlender Zutaten, Kunden kaufen teure Teile genauso oft.
+
+**Tobias:** Die Zeiten aus dem letzten Test waren echte Zeit; nur die Eisen-Durchläufe hat er etwas schneller gemacht. Für die nächste Stufe nicht 6, sondern nur **3 Maschinen** mit 2 Eingängen und 1 Ausgang, umschaltbar wie die Maschinen davor – sonst zu viele Maschinen und zu viel Unordnung:
+- Zimmerei: Handkurbel, Verstärkte Holzplatte, Schalter
+- Feinschmiede: Scharnier, Kugellager, Eisenfeder
+- Schlosserei: Steinkette, Schloss, Regler
+
+Also 9 neue Produkte und 3 neue Maschinen, die Produkte lassen sich unterschiedlich skalieren; die übrigen fallen weg. Jedes Produkt braucht ein eigenes Rezept, z. B. Handkurbel 10 Holzstäbe + 5 Zahnräder und Schalter 10 Zahnräder + 5 Holzstäbe, damit alle Ressourcen etwa gleich viel beansprucht werden.
+
+**Claude** hat den Plan überarbeitet: Rezepte im Muster 10 + 5 (Steinkette aus Steinplatten), Werte nach +20 %, Baukosten der 3 Maschinen, Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei mit je 1 Eisenerz.
+
+**Tobias:** Steinkette aus Steinplatten klingt schlüssig, die Level passen: So kommt man am Anfang immer ein Stück weiter und lernt alles kennen, bis man etwa bis Level 10 das „Intro“ abgeschlossen hat. Die Ansicht, welche Zutat fehlt und wie viel, ist gut. Dazu: Mit dem Aufstieg auf Level 4 eine Ladentheke mehr und bis Level 6 jedes Mal eine weitere – auf Level 6 also 5 Theken –, weil die Produkte wertvoller werden; das Volumen soll ab 20 für jede neue Theke um 5 steigen. Außerdem eine bestimmte Anzahl auf die Theke räumen können, z. B. nur 8. „Wir probieren die Werte gerne so aus.“
+
+**Umgesetzt:** v0.10.0 (siehe Versionshistorie).
 
 ### 06.11.2026 – Chat 6, Teil 3: Test von v0.9.1
 

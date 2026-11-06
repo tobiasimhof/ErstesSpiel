@@ -7,7 +7,7 @@ import { DELTA, opposite, step } from '../core/dirs.js';
 import { buildingPorts, footprintSize } from '../core/geometry.js';
 import { inputSides, pathDirections } from '../core/belts.js';
 import { landOffer, landOffers } from '../core/land.js';
-import { buildingProgress, buildingStatus } from '../core/production.js';
+import { buildingProgress, buildingStatus, missingInputs } from '../core/production.js';
 import { BELT_SPEED, TICK } from '../core/sim.js';
 import { drawItem } from './itemArt.js';
 import { beltAt, isOwned, parseTileKey } from '../core/state.js';
@@ -418,6 +418,10 @@ export function createRenderer(canvas) {
         roundRect(barX, barY, Math.max(barH, barW * progress), barH, barH / 2);
         ctx.fill();
       }
+
+      // v0.10.0: Kombi-Maschine wartet – kleines Bild der fehlenden Zutat(en)
+      const missing = missingInputs(building);
+      if (missing.length > 0 && cam.zoom >= 0.3) drawMissing(missing, ports, x, y, w, h, cam, x + w - 2 * r - 4 / cam.zoom);
     }
 
     if (outline) {
@@ -436,6 +440,35 @@ export function createRenderer(canvas) {
   }
 
   // Ungefähre Fläche eines Pfeils (für die Platzierung des Namens).
+  // Kleine Sprechblase mit den fehlenden Zutaten: oben zwischen Eingangspfeilen
+  // und Statuslicht, wenn dort Platz ist (und kein Pfeil im Weg), sonst mittig
+  // unter dem Symbol – nicht unten, dort steht meist der Name.
+  function drawMissing(types, ports, x, y, w, h, cam, lightLeft) {
+    const s = Math.min(19 / cam.zoom, Math.min(w, h) * 0.25);
+    const pad = s * 0.28;
+    const pillW = types.length * s + (types.length + 1) * pad;
+    const pillH = s + 2 * pad;
+    const left = x + 12 / cam.zoom;
+    const right = lightLeft - 3 / cam.zoom;
+    const top = { cx: (left + right) / 2, cy: y + 5 / cam.zoom + pillH / 2 };
+    const middle = { cx: x + w / 2, cy: y + h * 0.7 };
+    const arrows = ports.map((port) => portBox(port));
+    const fits = ({ cx, cy }) =>
+      arrows.every(
+        (a) => cx + pillW / 2 < a.x0 || cx - pillW / 2 > a.x1 || cy + pillH / 2 < a.y0 || cy - pillH / 2 > a.y1,
+      );
+    const { cx, cy } = right - left >= pillW && fits(top) ? top : middle;
+    ctx.fillStyle = 'rgba(36, 26, 16, 0.88)';
+    roundRect(cx - pillW / 2, cy - pillH / 2, pillW, pillH, pillH / 2);
+    ctx.fill();
+    ctx.strokeStyle = COLORS.statusIdle;
+    ctx.lineWidth = 1.5 / cam.zoom;
+    ctx.stroke();
+    types.forEach((type, i) => {
+      drawItem(ctx, type, cx - pillW / 2 + pad + s / 2 + i * (s + pad), cy, s * 0.85);
+    });
+  }
+
   function portBox(port) {
     const d = DELTA[port.side];
     const ex = (port.tile.x + 0.5) * TILE + d.x * (TILE / 2 - 4);

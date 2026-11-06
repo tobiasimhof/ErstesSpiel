@@ -88,7 +88,7 @@ function testPack() {
   applyTestPack(state);
   onChange();
   controller.refresh();
-  panels.toast('Testpaket: 1.000 Gold und von jeder freigeschalteten Ware 50 Stück ins Laden-Lager gelegt.');
+  panels.toast('Testpaket: 1.000 Gold und von jeder freigeschalteten Ware 50 Stück (Kombi-Teile je 5) ins Laden-Lager gelegt.');
 }
 
 // ---------- Laden-Level (v0.9.0) ----------
