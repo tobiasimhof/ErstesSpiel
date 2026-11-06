@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.9.1 – Startkapital 500 Gold |
+| **Aktuelle Version** | v0.9.2 – Test-Feedback zu v0.9.1 (nur README) |
 | **Phase** | M1 – Fabrik-Grundgerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias spielt sein Testspiel in Echtzeit weiter (500 Gold wurden nachgezahlt): Holz → Stein → Eisen über die Level, Fläche kaufen (Schilder „＋“ am Rand). Danach stellt Claude den **Plan für v0.10.0 – Techbaum, Teil 2** vor (Entwurf der Rezepte in Abschnitt 4.2, Stichpunkte in Abschnitt 6 unter „Ausblick v0.10.0“), Tobias gibt ihn frei, dann wird programmiert |
+| **Nächster Schritt** | Neuer Chat: Claude stellt den **Plan für v0.10.0 – Techbaum, Teil 2** vor (Entwurf der Rezepte in Abschnitt 4.2, Stichpunkte und Erkenntnisse aus Tobias' Test in Abschnitt 6 unter „Ausblick v0.10.0“), Tobias gibt ihn frei, dann wird programmiert |
 
 ---
 
@@ -371,6 +371,7 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | v0.8.0 | **Eisenstange:** Schmiede macht Eisenstangen (5 : 1) statt Eisennägel (5 : 5); vorhandene Nägel werden umgewandelt | ✅ fertig |
 | v0.9.0 | **Fläche kaufen & erste Level:** Grundstück streifenweise mit Gold vergrößern; Level 1 Holz → 2 Stein → 3 Eisen mit einfachen Zielen und Gratis-Rohstoff | ✅ fertig |
 | v0.9.1 | **Startkapital:** 500 Gold zum Start, bestehende Spielstände bekommen sie einmalig nachgezahlt | ✅ fertig |
+| v0.9.2 | **Test-Feedback (nur README):** Tobias' Test von v0.9.1 festgehalten, Plan für v0.10.0 vorbereitet | ✅ fertig |
 | v0.10.0 | **Techbaum, Teil 2:** Kombinations-Maschinen mit zwei Zutaten und die Weiterverarbeitung (Kugellager, Regler, Mini-Schloss …), dazu Level 4 | als Nächstes planen |
 | v0.11.0 | **Aufgaben:** Aufgaben mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen (Modell von Tobias, Abschnitt 3.5) | |
 | v0.12.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
@@ -382,7 +383,12 @@ Was bereits feststeht (Abschnitte 4.2 und 7) und in den Plan gehört:
 - **Anschlüsse:** zwei Eingänge links oben und links unten (jeder nimmt jede passende Zutat), Ausgang rechts oben.
 - **Rezepte und Werte:** Entwurf in Abschnitt 4.2 – seit v0.8.0 mit „1 Eisenstange“ statt „2 Eisennägel“; die Werte sind nach der +20-%-Regel neu gerechnet und müssen noch freigegeben werden.
 - **Level:** Mühlenbauer ab Level 2, Zimmerei und Feinwerkstatt ab Level 3, Feinschmiede, Getriebebauer und Schlosserei ab Level 4 – dafür braucht Level 4 ein Ziel und einen Gratis-Rohstoff (oder etwas anderes als Geschenk, weil es keinen vierten Rohstoff gibt).
+- **Erkenntnisse aus Tobias' Test von v0.9.1 (Abschnitt 10, Chat 6, Teil 3):** Bis zum ersten Eisen etwa 45 Minuten, nach etwa 60 Minuten die zweite Runde Eisen; dafür mehrere Runden nur Holz und Stein. Stand dann: Level 3, 936 Gold, Waren im Wert von 6.081 Gold im Lager, Fabrik mit je einer Linie Holz, Stein und Eisen (je 1 Rohstoff-Gebäude → 2 Maschinen → 1 Versandportal), rechts noch viel Platz. Etwas Grinden ist gewollt. Die neuen Maschinen sollen mit ein paar weiteren Runden erreichbar sein – das ist der Maßstab für ihre Baukosten.
 - **Offene Punkte für den Plan:** Baukosten der 6 Maschinen in Waren (Tabelle wie in 4.2 fortsetzen; Tobias: eine gute Balance der Maschinenkosten macht das Hinarbeiten auf Neues reizvoll); Eisenfeder hat im Entwurf nur eine Zutat (1 Eisenstange) – so lassen oder eine zweite Zutat?; die beiden freien Einstellungen (Zimmerei B, Schlosserei B); wie eine Werkstatt anzeigt, welche Zutat ihr noch fehlt; ob Kunden die teuren Teile genauso oft kaufen wie einfache.
+
+### v0.9.2 – Test-Feedback (fertig, nur README)
+
+- Tobias' Test von v0.9.1 mit dem nachgezahlten Startkapital festgehalten (Abschnitt 10, Chat 6, Teil 3) und als Maßstab in den Ausblick auf v0.10.0 übernommen. Spiel unverändert; nur die Versionsnummer steigt auf v0.9.2.
 
 ### v0.9.1 – Startkapital (fertig)
 
@@ -603,6 +609,9 @@ Was bereits feststeht (Abschnitte 4.2 und 7) und in den Plan gehört:
 | 06.11.2026 | Gesperrte Gebäude stehen in der Bauleiste hinten, mit Schloss und Level; das Testpaket gibt nur freigeschaltete Waren | Claudes Wahl: Was man bauen kann, steht vorn; man sieht trotzdem, was als Nächstes kommt. |
 | 06.11.2026 | 500 Gold Startkapital; bestehende Spielstände bekommen es einmalig nachgezahlt | Tobias (Chat 6, Teil 2): In Echtzeit reichte das Gold nach den ersten Gebäuden nicht für den zweiten Holzstamm. Ersetzt „kein Startgold“ vom 06.11.2026. |
 | 06.11.2026 | Pleiteschutz bleibt, wie er ist (ein Rohstoff im Lager zählt, auch ohne passendes Gebäude) | Tobias (Chat 6, Teil 2): Mit dem Startkapital ist das Problem gelöst. |
+| 06.11.2026 | Etwas Grinden ist gewollt: Man arbeitet ein paar Runden mit Holz und Stein, um sich Eisen und Neues zu erarbeiten | Tobias (Chat 6, Teil 3): „Genauso hab ich es mir auch vorgestellt.“ Maßstab für die Baukosten in v0.10.0. |
+| 06.11.2026 | Flächenpreise bleiben so | Tobias (Chat 6, Teil 3): noch nicht genutzt, aber eine gute Erweiterung und erschwinglich; notfalls arbeitet man 1–2 Runden mehr mit Rohstoffen. |
+| 06.11.2026 | 500 Gold Startkapital reichen | Tobias (Chat 6, Teil 3): Mit dem Startkapital kam er über Holz und Stein bis zu Eisen. |
 
 ---
 
@@ -610,11 +619,11 @@ Was bereits feststeht (Abschnitte 4.2 und 7) und in den Plan gehört:
 
 Stand 06.11.2026.
 
-1. **Test von v0.9.0:** Passen Flächenpreise, Level-Ziele und Gratis-Rohstoffe? Danach den **Plan für v0.10.0 (Techbaum, Teil 2)** vorstellen und freigeben lassen; offene Punkte stehen in Abschnitt 6 unter „Ausblick v0.10.0“.
-2. **Handel im echten Tempo:** Tobias spielt zuerst im Testmodus durch, um die Logik bis weit in den Fortschritt zu prüfen, und danach in Echtzeit. Bisher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10), deshalb wurde mehr produziert als verkauft. Verkaufstempo, Goldertrag und Baukosten in normaler Zeit danach anpassen.
+1. **Plan für v0.10.0 (Techbaum, Teil 2)** im neuen Chat vorstellen und freigeben lassen; offene Punkte und die Erkenntnisse aus Tobias' Test stehen in Abschnitt 6 unter „Ausblick v0.10.0“.
+2. **Handel im echten Tempo:** Tobias hat v0.9.1 mit dem alten Spielstand gespielt (bis Eisen etwa 45 Minuten, zweite Runde Eisen nach etwa 60 Minuten) und findet das Tempo so richtig. Auf dem Screenshot dazu war der Testmodus (×10) an – beim nächsten Test klären, welche Zeiten in Echtzeit gemessen sind. Früher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10).
 3. **Laden-Lager 500 Plätze:** Bleibt das so, oder wird es mit dem Laden-Level größer? Volle Lager stoppen die Versandportale.
 4. **Aufgaben (v0.11.0):** Werden die Waren für eine Aufgabe abgegeben (verbraucht), oder zählt nur, dass man sie hergestellt hat? Wie viel Erfahrung braucht ein Level, was kostet ein Aufstieg? Kostet der Laden-Ausbau zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Vorschlag kommt mit dem Plan für v0.11.0.
-5. **Einstieg:** Tobias' Idee, am Anfang vor allem die Massenproduktion auszubauen, damit man schnell genug Ware von allem hat – später austesten. Reichen die 500 Gold Startkapital auch für den Weg zu Stein und Eisen?
+5. **Einstieg:** Tobias' Idee, am Anfang vor allem die Massenproduktion auszubauen, damit man schnell genug Ware von allem hat – später austesten. Die 500 Gold Startkapital reichen für den Weg zu Stein und Eisen (Test von v0.9.1).
 6. **Pleiteschutz:** Ein Rohstoff ohne passendes Gebäude (z. B. Felsbrocken ohne Steinbruch) verhindert das Geschenk. Vorerst bewusst so gelassen; beobachten.
 7. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
 8. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
@@ -622,6 +631,19 @@ Stand 06.11.2026.
 ---
 
 ## 9. Versionshistorie
+
+### v0.9.2 – Test-Feedback (06.11.2026, nur README)
+
+**Vorgenommen:**
+- Tobias' Feedback zum Test von v0.9.1 festhalten, damit der neue Chat direkt mit dem Plan für v0.10.0 starten kann.
+
+**Fragen, die wir uns gestellt haben:**
+- Ist das Grinden zu viel? → Nein, Tobias hat es sich genau so vorgestellt.
+- Passen die Flächenpreise? → Noch nicht genutzt, wirken aber erschwinglich.
+- Was heißt das für v0.10.0? → Die neuen Maschinen sollen mit ein paar weiteren Runden Rohstoffe erreichbar sein.
+
+**Gemacht:**
+- README: Status, Fahrplan, Ausblick v0.10.0, Entscheidungen, offene Fragen, Gesprächsprotokoll. Spiel unverändert; nur die Versionsnummer im Spiel steigt auf v0.9.2.
 
 ### v0.9.1 – Startkapital (06.11.2026)
 
@@ -895,6 +917,16 @@ Stand 06.11.2026.
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 06.11.2026 – Chat 6, Teil 3: Test von v0.9.1
+
+**Tobias** (zwei Screenshots: Fabrik auf Level 3 mit 936 Gold; Laden-Lager mit Waren im Wert von 6.081 Gold, u. a. 38 Holzplatten, 38 Holzstäbe, 36 Steinplatten, 27 Stein-Zahnräder, 24 Mini-Eisenplatten, 23 Eisenstangen): Mit dem alten Spielstand getestet. Etwa 45 Minuten gespielt, bis er Eisen herstellen konnte; dafür musste er ein paar Runden komplett Holz und Stein herstellen, um immer mehr Gold zu bekommen. Nach etwa 60 Minuten lief schon die zweite Runde Eisen, und er hat einiges an Gold verdient. Man muss ein wenig grinden, um voranzukommen – „genauso hab ich es mir auch vorgestellt“. Flächen hat er noch nicht gekauft, sieht sie aber als gute Erweiterung; preislich sollten sie erschwinglich sein, notfalls arbeitet man 1–2 Runden mehr mit Rohstoffen. Feedback in die README; danach neuer Chat für den Plan von v0.10.0.
+
+**Fabrik auf dem Screenshot:** je eine Linie für Holz, Stein und Eisen – Rohstoff-Gebäude → Aufteilung auf 2 Maschinen (beide Einstellungen) → Bänder wieder zusammengeführt in 1 Versandportal; dazu ein Versandportal neben dem Holzfällerlager. Die rechte Hälfte des Grundstücks ist noch frei.
+
+**Claudes Hinweis:** Auf den Screenshots ist der Testmodus (×10) an. Ob die Zeiten (45 und 60 Minuten) in Echtzeit gemessen sind, klären wir beim nächsten Test.
+
+**Umgesetzt:** v0.9.2 (nur README). Der neue Chat beginnt mit dem Plan für v0.10.0 (Techbaum, Teil 2).
 
 ### 06.11.2026 – Chat 6, Teil 2: Test von v0.9.0 in Echtzeit & Startkapital
 
