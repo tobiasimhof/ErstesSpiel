@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.7.0 – Handel |
+| **Aktuelle Version** | v0.7.1 – Startfehler nach Updates behoben |
 | **Phase** | M1 – Fabrik-Grundgerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias spielt v0.7.0 (Theken, Kunden, Händler, Baukosten in Waren) und sagt, wie sich Verkaufstempo, Gold und Baukosten anfühlen. Danach: Feinschliff der Zahlen oder Plan für v0.8.0 – Techbaum, Teil 2 |
+| **Nächster Schritt** | Tobias prüft, ob das Spiel wieder startet, und spielt den Handel (v0.7.0). Offen zur Freigabe: Claudes Plan „Eisenstange statt Eisennägel“ (Abschnitt 6, „Ausblick“) |
 
 ---
 
@@ -282,7 +282,9 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 - **Spielstand** wird im Browser gespeichert, später auf dem Server.
 - **Später als App:** Das Web-Spiel wird in eine App verpackt (z. B. mit Capacitor), oder wir steigen auf eine Engine um. Entscheidung in M7.
 - **Kein Build-Schritt:** Der Browser lädt die Dateien direkt. GitHub Pages veröffentlicht `main` aus dem Hauptordner (`/ (root)`), die Datei `.nojekyll` schaltet die Umwandlung durch GitHub ab.
-- **Zwischenspeicher:** GitHub Pages lässt Browser Dateien bis zu 10 Minuten zwischenspeichern. Nach einem Merge dauert es 1–2 Minuten, bis die neue Version online ist. Zeigt das Spiel oben noch die alte Versionsnummer, kurz warten und neu laden.
+- **Zwischenspeicher:** GitHub Pages lässt Browser Dateien bis zu 10 Minuten zwischenspeichern. Nach einem Merge dauert es einige Minuten, bis die neue Version online ist. Zeigt das Spiel oben noch die alte Versionsnummer, kurz warten und neu laden.
+- **Versionsnummer an jeder Datei (seit v0.7.1):** Eine Import-Map in `index.html` hängt an jede Programmdatei `?v=<Version>`. So lädt der Browser nach einem Update alle Dateien neu und mischt nie alte mit neuen (das hatte v0.7.0 am Start gehindert). `node tools/set-version.mjs A.B.C` schreibt die Map; ein Test prüft, dass keine Datei fehlt.
+- **Startet das Spiel nicht,** erscheint eine Meldung mit dem Fehlertext statt eines schwarzen Bildschirms.
 
 ### 5.1 Projektstruktur
 
@@ -321,6 +323,7 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | `src/view/storage.js` | Speichern und Laden im Browser |
 | `src/style.css` | Aussehen der Oberfläche |
 | `assets/icons/` | App-Symbole (erzeugt mit `tools/make-icons.py`) |
+| `tools/set-version.mjs` | Setzt die Versionsnummer in `src/version.js` und `index.html` (inkl. Import-Map) |
 | `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Speichern, Kamera, Versionsnummer |
 | `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Abreißen, Speichern und Neues Spiel per Touch durch |
 
@@ -355,9 +358,20 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | v0.6.0 | **Techbaum, Teil 1:** Grundmaschinen 2 × 2 mit neuen Modi (Sägewerk, Steinmetz, Schmiede), Eisen-Kette mit Schmelzhütte, Preistabelle | ✅ fertig |
 | v0.6.1 | **Größeres Grundstück:** 22 × 14 statt 16 × 10 Felder, wächst nach rechts und unten | ✅ fertig |
 | v0.7.0 | **Handel:** Händler (Rohstoffe kaufen), Laden mit von Hand bestückten Verkaufstheken, zufällige Kunden mit zufälligen Einkäufen, Gold; Bauen kostet Waren; Start ohne Gold mit Gratis-Holzstamm; Pleiteschutz | ✅ fertig |
+| v0.7.1 | **Fehlerkorrektur:** Spiel startete nach dem Update nicht (alte und neue Dateien gemischt); Meldung statt schwarzem Bildschirm | ✅ fertig |
 | v0.8.0 | **Techbaum, Teil 2:** Kombinations-Maschinen mit zwei Zutaten und die Weiterverarbeitung (Kugellager, Regler, Mini-Schloss …) | |
 | v0.9.0 | **Laden-Level:** Freischalten nach Level (Holz → Stein → Eisen), Laden-Ausbau mit Gold und Waren | |
 | v0.10.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
+
+### Ausblick: Eisenstange statt Eisennägel (Vorschlag von Tobias, Plan noch nicht freigegeben)
+
+Tobias (Chat 5, Teil 2): Die Schmiede macht viel zu viele Nägel (5 Barren → 5 Nägel). Stattdessen erst einmal Metallstangen, auch im Verhältnis 5 : 1, damit das Gleichgewicht am Anfang passt. Claudes Plan dazu steht im Gesprächsprotokoll (Chat 5, Teil 2) und wartet auf Freigabe.
+
+### v0.7.1 – Startfehler behoben (fertig)
+
+- **Fehler:** Nach dem Update auf v0.7.0 blieb das Spiel schwarz, oben stand nur „v“. Der Browser hatte die neue Startdatei geladen, die übrigen Dateien aber noch aus seinem Zwischenspeicher (v0.6.1) genommen; die passten nicht zusammen. Der Spielstand war nie in Gefahr.
+- **Behoben:** Jede Programmdatei trägt jetzt die Versionsnummer (Import-Map), damit der Browser nach jedem Update alle Dateien neu holt.
+- **Neu:** Startet das Spiel trotzdem einmal nicht, erscheint eine Meldung mit Fehlertext und „Neu laden“-Knopf.
 
 ### v0.7.0 – Handel (fertig)
 
@@ -511,6 +525,8 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | 06.11.2026 | Abreißen gibt nur zurück, was beim Bauen bezahlt wurde; Startgebäude und Gebäude von vor v0.7.0 geben nichts zurück | Claudes Wahl: Sonst könnte man Gratis-Gebäude abreißen und hätte Waren umsonst. |
 | 06.11.2026 | „Ware wählen“ füllt die Theke gleich auf; Testpaket nur im Testmodus | Claudes Wahl, spart einen Tipp bzw. hält das normale Spiel sauber. |
 | 06.11.2026 | Kunden-Zufall steckt im Spielstand | Damit sich Abläufe in Tests genau wiederholen lassen. |
+| 06.11.2026 | Jede Programmdatei wird mit `?v=<Version>` geladen (Import-Map in `index.html`, geschrieben von `tools/set-version.mjs`) | v0.7.0 startete bei Tobias nicht, weil der Browser alte und neue Dateien mischte. Ohne Build-Schritt ist die Import-Map der einfachste sichere Weg. |
+| 06.11.2026 | Meldung „Das Spiel konnte nicht starten“ mit Fehlertext | Statt eines schwarzen Bildschirms; Tobias kann den Fehler per Screenshot schicken. |
 
 ---
 
@@ -519,14 +535,30 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 Stand 06.11.2026.
 
 1. **Test von v0.7.0:** Wie fühlen sich Verkaufstempo (2 Theken × 20, ein Kunde alle 10–30 s), Goldertrag und Baukosten an? Danach Zahlen anpassen.
-2. **Laden-Lager 500 Plätze:** Bleibt das so, oder wird es mit dem Laden-Level größer? Volle Lager stoppen die Versandportale.
-3. **Laden-Level (v0.9.0):** Was kostet ein Aufstieg (Gold und Waren)? Gibt es zusätzlich Freischaltpunkte? Vorschlag kommt mit dem Plan für v0.9.0.
-4. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
-5. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
+2. **Eisenstange statt Eisennägel:** Plan von Claude (Gesprächsprotokoll, Chat 5, Teil 2) wartet auf Tobias' Freigabe.
+3. **Laden-Lager 500 Plätze:** Bleibt das so, oder wird es mit dem Laden-Level größer? Volle Lager stoppen die Versandportale.
+4. **Laden-Level (v0.9.0):** Was kostet ein Aufstieg (Gold und Waren)? Gibt es zusätzlich Freischaltpunkte? Vorschlag kommt mit dem Plan für v0.9.0.
+5. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
+6. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.7.1 – Startfehler behoben (06.11.2026)
+
+**Vorgenommen:**
+- Das Spiel startete bei Tobias nach dem Update auf v0.7.0 nicht mehr (schwarzer Bildschirm, oben nur „v“).
+
+**Fragen, die wir uns gestellt haben:**
+- Ist der Spielstand kaputt? → Nein: Ein Browser ohne Zwischenspeicher öffnet Tobias' Fabrik in v0.7.0 problemlos.
+- Warum dann? → Der Browser lud nur die Startdatei neu (sie hatte als einzige eine Versionsnummer) und nahm die übrigen bis zu 10 Minuten aus dem Zwischenspeicher. Neue und alte Dateien passten nicht zusammen. Nachgestellt mit einem Testserver, der wie GitHub Pages zwischenspeichert.
+- Wie verhindern wir das dauerhaft? → Versionsnummer an jeder Datei (Import-Map), ein Werkzeug, das sie schreibt, und ein Test, der prüft, dass keine Datei fehlt.
+
+**Gemacht:**
+- Import-Map in `index.html`, `tools/set-version.mjs`, Meldung bei Startfehlern.
+- Nachgestellt und geprüft: Wechsel v0.6.1 → v0.7.1, v0.7.0 → v0.7.1 und v0.7.1 → eine gedachte v0.7.2 mit geänderter Datentabelle starten alle sauber; ein absichtlich eingebauter Fehler zeigt die Meldung.
+- 101 automatische Tests (neu: Import-Map vollständig) und der Browser-Test (neu: alle Dateien mit Versionsnummer geladen, keine Startfehler-Meldung) – alle bestanden.
 
 ### v0.7.0 – Handel (06.11.2026)
 
@@ -735,6 +767,17 @@ Stand 06.11.2026.
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 06.11.2026 – Chat 5, Teil 2: Startfehler & zu viele Nägel
+
+**Tobias** (Screenshots vom Tablet): Seit v0.7.0 öffnet sich das Spiel nicht mehr (schwarzer Bildschirm). In v0.6.1 hat er vorher alles einmal gebaut (Schmelzhütte, 2 Schmieden, 2 Sägewerke, 2 Steinmetze, Lagerhäuser als Verteiler, 6 Versandportale) und gemerkt, dass extrem viele Nägel entstehen (im Lager 100 Eisennägel, sonst je etwa 20 Teile). Vorschlag: aus den Nägeln erst einmal Metallstangen machen, ebenfalls im Verhältnis 5 : 1, damit das Gleichgewicht am Anfang passt.
+
+**Umgesetzt:** v0.7.1 (Startfehler, siehe Versionshistorie).
+
+**Claudes Plan zu den Nägeln (wartet auf Freigabe):**
+- Schmiede, Einstellung B: **Eisenstange** statt Eisennägel – 5 Eisenbarren → 1 Eisenstange in 5 Sekunden, Wert 72 Gold (wie die Mini-Eisenplatte). Damit laufen alle drei Grundmaschinen gleich: Platte oder ein spezielles Teil, je 5 : 1.
+- Eisennägel fallen vorerst weg (wie damals Holzwinkel und Splitt). Vorhandene Nägel werden umgewandelt: je 5 Nägel → 1 Eisenstange (aufgerundet), auch auf Theken, in Lagerhäusern und Gebäuden; eine Schmiede auf „Nägel“ wird auf „Stangen“ umgestellt.
+- Folge für den Techbaum Teil 2: Wo bisher „2 Eisennägel“ stehen, steht „1 Eisenstange“; die Werte der Kombi-Teile werden neu gerechnet (Plan für Teil 2). Nägel können später als eigene Stufe zurückkommen.
 
 ### 06.11.2026 – Chat 5: Plan und Umsetzung v0.7.0 (Handel)
 
