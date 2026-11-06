@@ -117,6 +117,22 @@ export function drawItem(ctx, type, cx, cy, size) {
       ctx.fillRect(cx - s * 0.3, cy - s * 0.14, s * 0.44, s * 0.08);
       break;
     }
+    case 'bar': {
+      // Eisenstange: kantig, mit hellem Glanzstreifen (Holzstab ist rund)
+      ctx.translate(cx, cy);
+      ctx.rotate(-Math.PI / 4);
+      roundRect(ctx, -s * 0.62, -s * 0.15, s * 1.24, s * 0.3, s * 0.04);
+      ctx.fill();
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.lineWidth = Math.max(1, s * 0.07);
+      ctx.beginPath();
+      ctx.moveTo(-s * 0.48, -s * 0.05);
+      ctx.lineTo(s * 0.48, -s * 0.05);
+      ctx.stroke();
+      break;
+    }
+    // Nagel: derzeit ungenutzt (Nägel kommen vielleicht später zurück)
     case 'nail': {
       ctx.translate(cx, cy);
       ctx.rotate(-Math.PI / 4);

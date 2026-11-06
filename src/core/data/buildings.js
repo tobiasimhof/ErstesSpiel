@@ -82,12 +82,12 @@ export const BUILDINGS = {
     size: [2, 2],
     color: '#5b5f6b',
     description:
-      'Macht aus je 5 Eisenbarren eine Mini-Eisenplatte oder 5 Eisennägel – je nach Einstellung. Eisenbarren kommen am blauen Pfeil hinein.',
+      'Macht aus je 5 Eisenbarren eine Mini-Eisenplatte oder eine Eisenstange – je nach Einstellung. Eisenbarren kommen am blauen Pfeil hinein.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['minieisenplatte', 'eisennagel'] },
+    production: { kind: 'workshop', recipes: ['minieisenplatte', 'eisenstange'] },
   },
   lagerhaus: {
     name: 'Lagerhaus',

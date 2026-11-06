@@ -101,10 +101,10 @@ test('Theke umstellen oder abräumen: Waren kommen zurück ins Lager', () => {
 // ---------- Kunden ----------
 
 test('Kunde kauft 1–3 Stück zum festen Wert und zahlt in Gold', () => {
-  const state = emptyGame({ holzplatte: 20, eisennagel: 20 });
+  const state = emptyGame({ holzplatte: 20, eisenstange: 20 });
   setCounterItem(state, 0, 'holzplatte');
   fillCounter(state, 0);
-  setCounterItem(state, 1, 'eisennagel');
+  setCounterItem(state, 1, 'eisenstange');
   fillCounter(state, 1);
   for (let i = 0; i < 10; i++) {
     const before = { gold: state.gold, a: state.counters[0].count, b: state.counters[1].count };
@@ -112,7 +112,7 @@ test('Kunde kauft 1–3 Stück zum festen Wert und zahlt in Gold', () => {
     const boughtA = before.a - state.counters[0].count;
     const boughtB = before.b - state.counters[1].count;
     assert.ok(boughtA + boughtB >= CUSTOMERS.minItems && boughtA + boughtB <= CUSTOMERS.maxItems);
-    const gold = boughtA * ITEMS.holzplatte.price + boughtB * ITEMS.eisennagel.price;
+    const gold = boughtA * ITEMS.holzplatte.price + boughtB * ITEMS.eisenstange.price;
     assert.equal(state.gold - before.gold, gold);
     assert.equal(sale.gold, gold);
   }
@@ -323,7 +323,7 @@ test('Testpaket: 1.000 Gold und 50 von jeder Ware (ohne Rohstoffe)', () => {
   applyTestPack(state);
   assert.equal(state.gold, TEST_PACK.gold);
   assert.equal(storageCount(state, 'holzplatte'), 50);
-  assert.equal(storageCount(state, 'eisennagel'), 50);
+  assert.equal(storageCount(state, 'eisenstange'), 50);
   assert.equal(storageCount(state, 'holzstamm'), 0);
   for (const type of BUILD_MENU) assert.ok(canAfford(state, BUILDINGS[type].cost), `${type} baubar`);
 });

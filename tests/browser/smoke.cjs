@@ -563,10 +563,10 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(smithy.stock > 0 || smithy.busy || smithy.out, `Eisenbarren kommen in der Schmiede an (${JSON.stringify(smithy)})`);
   await tapTile(page, 22, 9);
   check((await page.textContent('#info-title')) === 'Schmiede', 'Schmiede antippen zeigt Infofenster');
-  await page.locator('#info-actions button', { hasText: 'Nägel' }).tap();
+  await page.locator('#info-actions button', { hasText: 'Stangen' }).tap();
   await sleep(450);
-  check((await game(page, () => window.__game.state.buildings.find((b) => b.type === 'schmiede').prod.recipe)) === 'eisennagel', 'Schmiede auf Nägel umgestellt');
-  check((await page.textContent('#info-status')).includes('5 Eisenbarren → 5 Eisennägel'), 'Rezept zeigt 5 Barren → 5 Nägel');
+  check((await game(page, () => window.__game.state.buildings.find((b) => b.type === 'schmiede').prod.recipe)) === 'eisenstange', 'Schmiede auf Stangen umgestellt');
+  check((await page.textContent('#info-status')).includes('5 Eisenbarren → 1 Eisenstange'), 'Rezept zeigt 5 Barren → 1 Eisenstange');
   await shot('13-eisen');
   await page.tap('#info-close');
 

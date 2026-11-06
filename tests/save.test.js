@@ -174,18 +174,77 @@ test('Spielstand aus v0.6.1 (Version 4): Fabrik, Gold und Lager bleiben, Theken 
   delete v4.counters;
   delete v4.market;
   v4.gold = 100;
-  v4.storage = { holzstamm: 2, holzplatte: 37, eisennagel: 120 };
+  v4.storage = { holzstamm: 2, holzplatte: 37, minieisenplatte: 12 };
   const before = { buildings: JSON.stringify(v4.buildings), belts: JSON.stringify(v4.belts) };
   const loaded = deserializeGame(JSON.stringify({ saveVersion: 4, savedAt: 5, state: v4 }));
   assert.ok(loaded);
   assert.equal(loaded.migratedFrom, 4);
   assert.equal(loaded.state.gold, 100);
-  assert.deepEqual(loaded.state.storage, { holzstamm: 2, holzplatte: 37, eisennagel: 120 });
+  assert.deepEqual(loaded.state.storage, { holzstamm: 2, holzplatte: 37, minieisenplatte: 12 });
   assert.equal(JSON.stringify(loaded.state.buildings), before.buildings, 'Gebäude unverändert, nichts nachträglich berechnet');
   assert.equal(JSON.stringify(loaded.state.belts), before.belts);
   assert.equal(loaded.state.counters.length, 2);
   assert.ok(loaded.state.market.timer > 0);
   assert.deepEqual(loaded.notes, []);
+});
+
+test('Spielstand aus v0.7 (Version 5): je 5 Eisennägel werden zu 1 Eisenstange, überall', () => {
+  // Wie Tobias' Fabrik: Nägel im Lager, auf einer Theke, im Lagerhaus, auf Bändern und in der Schmiede
+  const v5 = createNewGame(9);
+  v5.storage = { holzplatte: 30, eisennagel: 140 };
+  v5.counters[0] = { type: 'eisennagel', count: 0 };
+  v5.counters[1] = { type: 'eisennagel', count: 7 };
+  const smithy = placeBuilding(v5, 'schmiede', 16, 12, 0);
+  smithy.prod.recipe = 'eisennagel';
+  smithy.prod.busy = true;
+  smithy.prod.out = { type: 'eisennagel', count: 5 };
+  smithy.prod.stock = { eisenbarren: 3 };
+  const store = placeBuilding(v5, 'lagerhaus', 20, 12, 0);
+  store.prod.slots = [{ type: 'eisennagel', count: 50 }, { type: 'holzblock', count: 4 }, { type: 'eisennagel', count: 3 }];
+  v5.belts['12,8'] = { outs: ['E'], item: { type: 'eisennagel', progress: 0.5, from: 'W' } };
+  v5.belts['13,8'] = { outs: ['E'], item: { type: 'eisennagel', progress: 1, from: 'W' } };
+  v5.belts['14,8'] = { outs: ['E'], item: { type: 'holzblock', progress: 1, from: 'W' } };
+  v5.market.sales = [
+    { id: 3, items: { eisennagel: 2 }, gold: 28 },
+    { id: 2, items: { eisennagel: 1, steinzahnrad: 2 }, gold: 50 },
+  ];
+  v5.market.nextSaleId = 4;
+  v5.gold = 3100;
+
+  const loaded = deserializeGame(JSON.stringify({ saveVersion: 5, savedAt: 5, state: v5 }));
+  assert.ok(loaded, 'wird angenommen');
+  assert.equal(loaded.migratedFrom, 5);
+  const s = loaded.state;
+  // Lager 140 + Bänder 2 = 142 Nägel → 29 Stangen (aufgerundet)
+  assert.deepEqual(s.storage, { holzplatte: 30, eisenstange: 29 });
+  assert.deepEqual(s.counters, [
+    { type: 'eisenstange', count: 0 },
+    { type: 'eisenstange', count: 2 },
+  ]);
+  const smithyNow = s.buildings.find((b) => b.type === 'schmiede');
+  assert.equal(smithyNow.prod.recipe, 'eisenstange');
+  assert.deepEqual(smithyNow.prod.out, { type: 'eisenstange', count: 1 });
+  assert.deepEqual(smithyNow.prod.stock, { eisenbarren: 3 });
+  assert.deepEqual(s.buildings.find((b) => b.type === 'lagerhaus').prod.slots, [
+    { type: 'eisenstange', count: 10 },
+    { type: 'holzblock', count: 4 },
+    { type: 'eisenstange', count: 1 },
+  ]);
+  assert.equal(s.belts['12,8'].item, null);
+  assert.equal(s.belts['13,8'].item, null);
+  assert.equal(s.belts['14,8'].item.type, 'holzblock');
+  assert.deepEqual(s.market.sales, [{ id: 2, items: { steinzahnrad: 2 }, gold: 50 }]);
+  assert.equal(s.gold, 3100, 'Gold bleibt');
+  // 140 + 2 (Bänder) + 7 (Theke) + 5 (Schmiede) + 53 (Lagerhaus) = 207 Nägel
+  assert.deepEqual(loaded.notes, ['207 Eisennägel wurden zu 43 Eisenstangen.']);
+});
+
+test('Spielstand ohne Nägel: keine Umwandlungs-Meldung', () => {
+  const v5 = createNewGame(4);
+  const loaded = deserializeGame(JSON.stringify({ saveVersion: 5, savedAt: 5, state: v5 }));
+  assert.ok(loaded);
+  assert.deepEqual(loaded.notes, []);
+  assert.deepEqual(loaded.state.storage, v5.storage);
 });
 
 test('Neues Spiel startet mit 22 × 14 Feldern', () => {

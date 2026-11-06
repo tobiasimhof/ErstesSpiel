@@ -10,6 +10,7 @@
 //   4 (v0.6.1): größeres Grundstück (22 × 14) und größere Welt (40 × 26)
 //   5 (v0.7.0): Handel – Verkaufstheken, Kunden (market), bezahlte Baukosten
 //               an Gebäuden (paid) und Bändern (paid: true)
+//   6 (v0.8.0): Eisenstange statt Eisennägel (je 5 Nägel → 1 Stange, aufgerundet)
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
@@ -23,7 +24,7 @@ import { createCounters, createMarket } from './market.js';
 import { addAllToStorage } from './shop.js';
 import { START_PLOT, WORLD_HEIGHT, WORLD_WIDTH, parseTileKey } from './state.js';
 
-export const SAVE_VERSION = 5;
+export const SAVE_VERSION = 6;
 
 // v0.6.0: Waren und Rezepte, die es nicht mehr gibt, und was aus ihnen wird.
 const RENAMED_ITEMS = { holzwinkel: 'holzplatte', splitt: 'steinzahnrad' };
@@ -32,6 +33,8 @@ const RENAMED_RECIPES = { holzwinkel: 'holzplatte', splitt: 'steinzahnrad' };
 const GROWN_MACHINES = { saegewerk: [2, 1], steinmetz: [2, 1] };
 // v0.6.0: Startvorrat an Eisenerz für bestehende Spielstände.
 const IRON_GIFT = 2;
+// v0.8.0: So viele Eisennägel ergeben eine Eisenstange (wie das Rezept: 5 Barren → 1 Stange).
+const NAILS_PER_BAR = 5;
 
 export function serializeGame(state, now = Date.now()) {
   return JSON.stringify({ saveVersion: SAVE_VERSION, savedAt: now, state });
@@ -49,18 +52,19 @@ export function deserializeGame(text) {
   if (!data || typeof data !== 'object' || !data.state || typeof data.state !== 'object') return null;
   const from = data.saveVersion;
   if (!Number.isInteger(from) || from < 1 || from > SAVE_VERSION) return null;
-  const state = migrate(data.state, from);
+  const migrationNotes = [];
+  const state = migrate(data.state, from, migrationNotes);
   if (!isValidState(state)) return null;
   for (const belt of Object.values(state.belts)) belt.outs = sortDirs(belt.outs);
   const result = { state, savedAt: Number(data.savedAt) || 0 };
   if (from < SAVE_VERSION) {
     result.migratedFrom = from;
-    result.notes = from < 3 ? growMachines(state) : [];
+    result.notes = [...migrationNotes, ...(from < 3 ? growMachines(state) : [])];
   }
   return result;
 }
 
-function migrate(state, from) {
+function migrate(state, from, notes = []) {
   if (from < 2) {
     // v0.4 → v0.5: Laden-Lager mit Startvorrat, Gebäude bekommen ihren Zustand
     state.storage = { ...START_STORAGE };
@@ -93,7 +97,70 @@ function migrate(state, from) {
     state.counters = createCounters(isInt(state.shopLevel) ? state.shopLevel : 1);
     state.market = createMarket();
   }
+  if (from < 6) convertNails(state, notes);
   return state;
+}
+
+// v0.7 → v0.8: Eisennägel gibt es nicht mehr. Je 5 Nägel werden zu 1 Eisenstange
+// (aufgerundet) – im Lager, auf Theken, in Lagerhäusern und in der Schmiede.
+// Einzelne Nägel auf Bändern kommen zusammengezählt ins Laden-Lager.
+// Daten werden hier noch nicht geprüft, deshalb vorsichtig.
+function convertNails(state, notes) {
+  const OLD = 'eisennagel';
+  const NEW = 'eisenstange';
+  const bars = (n) => Math.ceil(n / NAILS_PER_BAR);
+  let nails = 0;
+  let made = 0;
+  let loose = 0; // Nägel ohne festen Platz (Lager, Bänder) → zusammen ins Lager
+  const takeLoose = (counts) => {
+    if (!isObj(counts) || !isCount(counts[OLD])) return;
+    loose += counts[OLD];
+    delete counts[OLD];
+  };
+  const convertStack = (stack) => {
+    if (!isObj(stack) || stack.type !== OLD || !isCount(stack.count)) return;
+    nails += stack.count;
+    stack.type = NEW;
+    stack.count = bars(stack.count);
+    made += stack.count;
+  };
+
+  takeLoose(state.storage);
+  if (isObj(state.belts)) {
+    for (const belt of Object.values(state.belts)) {
+      if (isObj(belt) && isObj(belt.item) && belt.item.type === OLD) {
+        loose++;
+        belt.item = null;
+      }
+    }
+  }
+  if (Array.isArray(state.counters)) {
+    for (const counter of state.counters) convertStack(counter);
+  }
+  if (Array.isArray(state.buildings)) {
+    for (const b of state.buildings) {
+      const prod = b?.prod;
+      if (!isObj(prod)) continue;
+      if (prod.recipe === OLD) prod.recipe = NEW;
+      convertStack(prod.out);
+      if (Array.isArray(prod.slots)) prod.slots.forEach(convertStack);
+      takeLoose(prod.stock);
+      takeLoose(b.paid);
+    }
+  }
+  if (isObj(state.market) && Array.isArray(state.market.sales)) {
+    // Alte Verkäufe von Nägeln aus der Liste „Letzte Verkäufe“ nehmen
+    for (const sale of state.market.sales) if (isObj(sale)) delete sale.items?.[OLD];
+    state.market.sales = state.market.sales.filter((sale) => !isObj(sale?.items) || Object.keys(sale.items).length > 0);
+  }
+  if (loose > 0 && isObj(state.storage)) {
+    nails += loose;
+    made += bars(loose);
+    state.storage[NEW] = (isCount(state.storage[NEW]) ? state.storage[NEW] : 0) + bars(loose);
+  }
+  if (nails > 0) {
+    notes.push(`${nails} Eisennägel wurden zu ${made} Eisenstange${made === 1 ? '' : 'n'}.`);
+  }
 }
 
 function renameItems(state) {
