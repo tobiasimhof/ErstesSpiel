@@ -179,7 +179,7 @@ test('Spielstand aus v0.6.1 (Version 4): Fabrik, Gold und Lager bleiben, Theken 
   const loaded = deserializeGame(JSON.stringify({ saveVersion: 4, savedAt: 5, state: v4 }));
   assert.ok(loaded);
   assert.equal(loaded.migratedFrom, 4);
-  assert.equal(loaded.state.gold, 100);
+  assert.equal(loaded.state.gold, 600, 'Gold bleibt, dazu 500 Startkapital (v0.9.1)');
   assert.deepEqual(loaded.state.storage, { holzstamm: 2, holzplatte: 37, minieisenplatte: 12 });
   assert.equal(JSON.stringify(loaded.state.buildings), before.buildings, 'Gebäude unverändert, nichts nachträglich berechnet');
   assert.equal(JSON.stringify(loaded.state.belts), before.belts);
@@ -234,7 +234,7 @@ test('Spielstand aus v0.7 (Version 5): je 5 Eisennägel werden zu 1 Eisenstange,
   assert.equal(s.belts['13,8'].item, null);
   assert.equal(s.belts['14,8'].item.type, 'holzblock');
   assert.deepEqual(s.market.sales, [{ id: 2, items: { steinzahnrad: 2 }, gold: 50 }]);
-  assert.equal(s.gold, 3100, 'Gold bleibt');
+  assert.equal(s.gold, 3600, 'Gold bleibt, dazu 500 Startkapital (v0.9.1)');
   // 140 + 2 (Bänder) + 7 (Theke) + 5 (Schmiede) + 53 (Lagerhaus) = 207 Nägel
   assert.deepEqual(loaded.notes, ['207 Eisennägel wurden zu 43 Eisenstangen.']);
 });
@@ -265,12 +265,33 @@ test('Spielstand aus v0.8 (Version 6): bestehende Fabrik bekommt Level 3, nichts
   assert.equal(s.shopLevel, 3);
   assert.deepEqual(s.produced, {});
   assert.equal(s.landBought, 0);
-  assert.equal(s.gold, 2978);
+  assert.equal(s.gold, 3478, 'Gold bleibt, dazu 500 Startkapital (v0.9.1)');
   assert.deepEqual(s.storage, { holzplatte: 30, eisenstange: 28, felsbrocken: 1 }, 'kein Geschenk, nichts weg');
   assert.equal(JSON.stringify(s.buildings), before.buildings);
   assert.equal(JSON.stringify(s.belts), before.belts);
   assert.deepEqual(s.plot, before.plot);
   assert.deepEqual(loaded.notes, []);
+});
+
+test('Spielstand aus v0.9.0 (Version 7): 500 Gold Startkapital werden einmalig nachgezahlt', () => {
+  // Wie Tobias' Testspiel: Level 2, 372 Gold, Felsbrocken im Lager
+  const v7 = createNewGame(7);
+  v7.gold = 372;
+  v7.shopLevel = 2;
+  v7.produced = { holzblock: 200, holzplatte: 12, holzstab: 11 };
+  v7.storage = { felsbrocken: 1 };
+  const loaded = deserializeGame(JSON.stringify({ saveVersion: 7, savedAt: 5, state: v7 }));
+  assert.ok(loaded);
+  assert.equal(loaded.migratedFrom, 7);
+  assert.equal(loaded.state.gold, 872);
+  assert.equal(loaded.state.shopLevel, 2, 'Level bleibt');
+  assert.deepEqual(loaded.state.produced, v7.produced, 'Zähler bleiben');
+  assert.deepEqual(loaded.state.storage, { felsbrocken: 1 });
+  assert.deepEqual(loaded.notes, []);
+  // Nur einmal: erneut speichern und laden gibt nichts mehr dazu
+  const again = deserializeGame(serializeGame(loaded.state));
+  assert.equal(again.state.gold, 872);
+  assert.equal(again.migratedFrom, undefined);
 });
 
 test('Ungültiges Level, Zähler oder Flächenkäufe werden erkannt', () => {

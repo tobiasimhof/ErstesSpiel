@@ -11,10 +11,12 @@ export const SHOP_LEVELS = {
 // minItems–maxItems Stück von den Theken (zum festen Wert der Ware).
 export const CUSTOMERS = { minInterval: 10, maxInterval: 30, minItems: 1, maxItems: 3 };
 
-// Neues Spiel (v0.7.0): kein Gold, ein Holzstamm gratis, dazu Holzblöcke für
-// die ersten Förderbänder zum Versandportal. Seit v0.9.0 startet man nur mit
-// Holz (Level 1); den Felsbrocken gibt es beim Aufstieg auf Level 2.
-export const START_GOLD = 0;
+// Neues Spiel (v0.7.0): ein Holzstamm gratis, dazu Holzblöcke für die ersten
+// Förderbänder zum Versandportal. Seit v0.9.0 startet man nur mit Holz
+// (Level 1); den Felsbrocken gibt es beim Aufstieg auf Level 2.
+// v0.9.1: 500 Gold Startkapital (Tobias) – der erste Holzstamm muss auch die
+// ersten Gebäude bezahlen und brachte allein nie genug für den zweiten.
+export const START_GOLD = 500;
 export const START_STORAGE = { holzstamm: 1, holzblock: 20 };
 
 // Pleiteschutz: Wer gar nicht mehr weiterkommt, bekommt diesen Rohstoff geschenkt.

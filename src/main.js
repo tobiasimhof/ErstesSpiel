@@ -13,6 +13,7 @@ import { createBuildBar } from './view/buildbar.js';
 import { createController } from './view/controller.js';
 import { createShopView } from './view/shop.js';
 import { applyTestPack } from './core/market.js';
+import { START_GOLD } from './core/data/shop.js';
 import { canLevelUp } from './core/levels.js';
 import { createLevelView, unlockText } from './view/levels.js';
 import { costText } from './view/format.js';
@@ -182,6 +183,7 @@ if (loaded.status === 'ok' && loaded.migratedFrom) {
     from < 5 ? 'Neu: Handel! Im Laden gibt es jetzt Theken und den Händler; Bauen kostet Waren aus dem Laden-Lager.' : '',
     from === 5 ? 'Neu: Die Schmiede macht Eisenstangen statt Nägel.' : '',
     from < 7 ? 'Neu: Fläche kaufen – tippe auf die ＋-Schilder am Rand. Deine Fabrik hat Laden-Level 3, alles bleibt freigeschaltet.' : '',
+    from < 8 ? `Neu: ${START_GOLD} Gold Startkapital – du bekommst es einmalig nachgezahlt.` : '',
     ...(loaded.notes ?? []),
   ].filter(Boolean);
   panels.toast(notes.join(' '), 9000);

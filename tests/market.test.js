@@ -3,7 +3,9 @@ import assert from 'node:assert/strict';
 
 import { BELT_COST, BUILDINGS, BUILD_MENU } from '../src/core/data/buildings.js';
 import { ITEMS } from '../src/core/data/items.js';
-import { CUSTOMERS, SHOP_LEVELS, TEST_PACK } from '../src/core/data/shop.js';
+import { CUSTOMERS, SHOP_LEVELS, START_GOLD, START_STORAGE, TEST_PACK } from '../src/core/data/shop.js';
+
+const START_STORAGE_BLOCKS = START_STORAGE.holzblock;
 import { buildBeltPath, buyBeltPath, extendTrace, removeBelt } from '../src/core/belts.js';
 import { buyBuilding, placeBuilding, removeBuilding } from '../src/core/buildings.js';
 import {
@@ -277,7 +279,19 @@ test('Neues Spiel: Bänder zum Versandportal bauen, Holzblöcke kommen an und la
   setCounterItem(state, 0, 'holzblock');
   fillCounter(state, 0);
   simulate(state, 120);
-  assert.ok(state.gold > 0, 'Kunden haben gekauft');
+  assert.ok(state.gold > START_GOLD, 'Kunden haben gekauft');
+});
+
+// Tobias' Test von v0.9.0 in Echtzeit: Mit nur einem Holzstamm reichte das Gold
+// nach den ersten Gebäuden nicht für den zweiten. Das Startkapital muss das abfangen.
+test('Startkapital: Nach 2 Sägewerken und Bändern reicht es für den zweiten Holzstamm', () => {
+  const state = createNewGame(8);
+  const wood = 200 + START_STORAGE_BLOCKS;
+  const blocksLeft = wood - 2 * BUILDINGS.saegewerk.cost.holzblock - 25; // 25 Felder Band
+  const parts = Math.floor(blocksLeft / 5);
+  const earned = parts * ITEMS.holzplatte.price;
+  assert.ok(earned < ITEMS.holzstamm.buyPrice, `ohne Startkapital zu wenig (${earned} Gold)`);
+  assert.ok(state.gold + earned >= ITEMS.holzstamm.buyPrice, `mit Startkapital genug (${state.gold + earned} Gold)`);
 });
 
 // ---------- Pleiteschutz ----------
