@@ -432,6 +432,53 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await shot('10-saegewerk');
   await page.tap('#info-close');
 
+  // ---------- Eisen-Kette ----------
+  // Schmelzhütte (18,9)-(19,10) gibt rechts bei (20,9) aus → Band bis (21,9) → Schmiede (22,9)-(23,10)
+  async function buildAt(type, x, y) {
+    await page.tap(`.build-item[data-tool="${type}"]`);
+    await sleep(80);
+    const g = await game(page, () => ({ ...window.__game.ui.ghost }));
+    await touchDragTiles(page, cdp, [
+      [g.x, g.y],
+      [x, y],
+    ]);
+    await page.tap('#tool-confirm');
+    await sleep(80);
+  }
+  await page.tap('#btn-build');
+  await buildAt('schmelzhuette', 18, 9);
+  await buildAt('schmiede', 22, 9);
+  await page.tap('.build-item[data-tool="belt"]');
+  await touchDragTiles(page, cdp, [
+    [20, 9],
+    [21, 9],
+  ]);
+  await page.tap('#tool-confirm');
+  await page.tap('#build-close');
+  await sleep(80);
+  const iron = await game(page, () => window.__game.state.buildings.map((b) => `${b.type}@${b.x},${b.y}`));
+  check(iron.includes('schmelzhuette@18,9') && iron.includes('schmiede@22,9'), `Schmelzhütte und Schmiede gebaut (${iron.join(' ')})`);
+  await tapTile(page, 18, 9);
+  check((await page.textContent('#info-title')) === 'Schmelzhütte', 'Schmelzhütte antippen zeigt Infofenster');
+  await page.locator('#info-actions button', { hasText: 'Eisenerz einlegen' }).tap();
+  await sleep(80);
+  check((await game(page, () => window.__game.state.storage.eisenerz)) === 1, 'Eisenerz eingelegt, Vorrat sinkt auf 1');
+  await page.tap('#info-close');
+  await game(page, () => window.__game.simulate(40));
+  const smithy = await game(page, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'schmiede');
+    return { stock: b.prod.stock.eisenbarren ?? 0, busy: b.prod.busy, out: b.prod.out };
+  });
+  check(smithy.stock > 0 || smithy.busy || smithy.out, `Eisenbarren kommen in der Schmiede an (${JSON.stringify(smithy)})`);
+  await tapTile(page, 22, 9);
+  check((await page.textContent('#info-title')) === 'Schmiede', 'Schmiede antippen zeigt Infofenster');
+  await page.locator('#info-actions button', { hasText: 'Nägel' }).tap();
+  await sleep(450);
+  check((await game(page, () => window.__game.state.buildings.find((b) => b.type === 'schmiede').prod.recipe)) === 'eisennagel', 'Schmiede auf Nägel umgestellt');
+  check((await page.textContent('#info-status')).includes('5 Eisenbarren → 5 Eisennägel'), 'Rezept zeigt 5 Barren → 5 Nägel');
+  await shot('11-eisen');
+  await page.tap('#info-close');
+
   await page.tap('#btn-menu');
   await page.tap('#menu-test-mode');
   await sleep(80);

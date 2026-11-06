@@ -5,23 +5,36 @@
 // Versionen:
 //   1 (v0.4.x): Gebäude, Förderbänder
 //   2 (v0.5.0): + Laden-Lager, Zustand der Gebäude, Waren auf Bändern
+//   3 (v0.6.0): Techbaum – Sägewerk und Steinmetz 2 × 2, Holzwinkel → Holzplatte,
+//               Splitt → Stein-Zahnrad, Eisen-Kette
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
 import { RECIPES } from './data/recipes.js';
 import { START_STORAGE } from './data/shop.js';
+import { canPlaceBuilding, findFreeSpot } from './buildings.js';
 import { isDir, sortDirs } from './dirs.js';
-import { createProductionState, productionOf } from './production.js';
+import { footprintSize, rotateLocal } from './geometry.js';
+import { buildingContents, createProductionState, productionOf } from './production.js';
+import { addAllToStorage } from './shop.js';
 import { parseTileKey } from './state.js';
 
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
+
+// v0.6.0: Waren und Rezepte, die es nicht mehr gibt, und was aus ihnen wird.
+const RENAMED_ITEMS = { holzwinkel: 'holzplatte', splitt: 'steinzahnrad' };
+const RENAMED_RECIPES = { holzwinkel: 'holzplatte', splitt: 'steinzahnrad' };
+// v0.6.0: Diese Maschinen waren vorher 2 × 1 und sind jetzt 2 × 2.
+const GROWN_MACHINES = { saegewerk: [2, 1], steinmetz: [2, 1] };
+// v0.6.0: Startvorrat an Eisenerz für bestehende Spielstände.
+const IRON_GIFT = 2;
 
 export function serializeGame(state, now = Date.now()) {
   return JSON.stringify({ saveVersion: SAVE_VERSION, savedAt: now, state });
 }
 
-// Gibt { state, savedAt, migratedFrom? } zurück oder null, wenn der Text kein
-// gültiger Spielstand ist.
+// Gibt { state, savedAt, migratedFrom?, notes? } zurück oder null, wenn der
+// Text kein gültiger Spielstand ist. notes: Hinweise zur Umwandlung (Texte).
 export function deserializeGame(text) {
   let data;
   try {
@@ -36,7 +49,10 @@ export function deserializeGame(text) {
   if (!isValidState(state)) return null;
   for (const belt of Object.values(state.belts)) belt.outs = sortDirs(belt.outs);
   const result = { state, savedAt: Number(data.savedAt) || 0 };
-  if (from < SAVE_VERSION) result.migratedFrom = from;
+  if (from < SAVE_VERSION) {
+    result.migratedFrom = from;
+    result.notes = from < 3 ? growMachines(state) : [];
+  }
   return result;
 }
 
@@ -48,7 +64,85 @@ function migrate(state, from) {
       for (const b of state.buildings) if (b && BUILDINGS[b.type]) b.prod = createProductionState(b.type);
     }
   }
+  if (from < 3) {
+    // v0.5 → v0.6: Holzwinkel → Holzplatte, Splitt → Stein-Zahnrad, dazu Eisenerz.
+    // Daten werden hier noch nicht geprüft, deshalb vorsichtig umbenennen.
+    renameItems(state);
+    if (from >= 2 && isObj(state.storage)) {
+      state.storage.eisenerz = (isCount(state.storage.eisenerz) ? state.storage.eisenerz : 0) + IRON_GIFT;
+    }
+  }
   return state;
+}
+
+function renameItems(state) {
+  const rename = (t) => RENAMED_ITEMS[t] ?? t;
+  const renameStack = (stack) => {
+    if (isObj(stack)) stack.type = rename(stack.type);
+  };
+  const renameCounts = (counts) => {
+    if (!isObj(counts)) return counts;
+    const out = {};
+    for (const [t, n] of Object.entries(counts)) {
+      const key = rename(t);
+      out[key] = isCount(out[key]) && isCount(n) ? out[key] + n : n;
+    }
+    return out;
+  };
+  state.storage = renameCounts(state.storage);
+  if (isObj(state.belts)) for (const belt of Object.values(state.belts)) if (isObj(belt)) renameStack(belt.item);
+  if (!Array.isArray(state.buildings)) return;
+  for (const b of state.buildings) {
+    const prod = b?.prod;
+    if (!isObj(prod)) continue;
+    renameStack(prod.out);
+    if (isObj(prod.stock)) prod.stock = renameCounts(prod.stock);
+    if (Array.isArray(prod.slots)) prod.slots.forEach(renameStack);
+    if (typeof prod.recipe === 'string') prod.recipe = RENAMED_RECIPES[prod.recipe] ?? prod.recipe;
+  }
+}
+
+// v0.5 → v0.6: Sägewerk und Steinmetz wachsen von 2 × 1 auf 2 × 2. Die
+// Anschlüsse bleiben an ihrem Platz, das Gebäude wächst auf der Seite gegenüber
+// den Pfeilen (ungedreht: nach unten). Ist dort kein Platz, rückt es an die
+// nächste freie Stelle; geht auch das nicht, wird es abgerissen und sein
+// Inhalt kommt ins Laden-Lager. Läuft erst, wenn der Spielstand geprüft ist.
+function growMachines(state) {
+  const grown = state.buildings.filter((b) => GROWN_MACHINES[b.type]);
+  if (grown.length === 0) return [];
+  // Erst alle herausnehmen: Mit der neuen Größe würden sie sich sonst
+  // gegenseitig im Weg stehen.
+  state.buildings = state.buildings.filter((b) => !GROWN_MACHINES[b.type]);
+  let moved = 0;
+  let removed = 0;
+  for (const b of grown) {
+    const [oldW, oldH] = GROWN_MACHINES[b.type];
+    const [newW, newH] = BUILDINGS[b.type].size;
+    const oldCorner = rotateLocal(0, 0, oldW, oldH, b.rot);
+    const newCorner = rotateLocal(0, 0, newW, newH, b.rot);
+    const x = b.x + oldCorner.x - newCorner.x;
+    const y = b.y + oldCorner.y - newCorner.y;
+    if (canPlaceBuilding(state, b.type, x, y, b.rot)) {
+      Object.assign(b, { x, y });
+      state.buildings.push(b);
+      continue;
+    }
+    const size = footprintSize(b.type, b.rot);
+    const spot = findFreeSpot(state, b.type, b.rot, x + Math.floor((size.width - 1) / 2), y + Math.floor((size.height - 1) / 2));
+    if (spot) {
+      Object.assign(b, spot);
+      state.buildings.push(b);
+      moved++;
+    } else {
+      addAllToStorage(state, buildingContents(b));
+      removed++;
+    }
+  }
+  state.buildings.sort((a, b) => a.id - b.id);
+  const notes = [];
+  if (moved) notes.push(`${moved} Maschine${moved > 1 ? 'n' : ''} hatte${moved > 1 ? 'n' : ''} keinen Platz zum Wachsen und wurde${moved > 1 ? 'n' : ''} versetzt – bitte neu anschließen.`);
+  if (removed) notes.push(`${removed} Maschine${removed > 1 ? 'n' : ''} passte${removed > 1 ? 'n' : ''} nicht mehr aufs Grundstück und wurde${removed > 1 ? 'n' : ''} abgerissen; der Inhalt liegt im Laden-Lager.`);
+  return notes;
 }
 
 const isInt = (n) => Number.isInteger(n);

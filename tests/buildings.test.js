@@ -19,9 +19,15 @@ function emptyGame() {
 }
 
 test('Drehung vertauscht Breite und Höhe', () => {
-  assert.deepEqual(footprintSize('saegewerk', 0), { width: 2, height: 1 });
-  assert.deepEqual(footprintSize('saegewerk', 1), { width: 1, height: 2 });
-  assert.deepEqual(footprintSize('saegewerk', 2), { width: 2, height: 1 });
+  assert.deepEqual(footprintSize('lagerhaus', 0), { width: 2, height: 1 });
+  assert.deepEqual(footprintSize('lagerhaus', 1), { width: 1, height: 2 });
+  assert.deepEqual(footprintSize('lagerhaus', 2), { width: 2, height: 1 });
+});
+
+test('Maschinen sind 2 × 2 groß', () => {
+  for (const type of ['holzfaeller', 'steinbruch', 'schmelzhuette', 'saegewerk', 'steinmetz', 'schmiede']) {
+    assert.deepEqual(footprintSize(type, 0), { width: 2, height: 2 }, type);
+  }
 });
 
 test('rotateLocal dreht Felder im Uhrzeigersinn', () => {
@@ -42,13 +48,13 @@ test('Ein- und Ausgänge drehen mit dem Gebäude', () => {
       ['out', 'E', 12, 10],
     ],
   );
-  saw.rot = 1; // Eingang oben, Ausgang unten
+  saw.rot = 1; // Eingang oben rechts, Ausgang unten rechts
   ports = buildingPorts(saw);
   assert.deepEqual(
     ports.map((p) => [p.kind, p.side, p.outside.x, p.outside.y]),
     [
-      ['in', 'N', 10, 9],
-      ['out', 'S', 10, 12],
+      ['in', 'N', 11, 9],
+      ['out', 'S', 11, 12],
     ],
   );
 });
@@ -82,18 +88,18 @@ test('Verschieben ignoriert das eigene Gebäude, aber keine anderen', () => {
 
 test('Drehen an Ort und Stelle klappt nur mit Platz', () => {
   const state = emptyGame();
-  const saw = placeBuilding(state, 'saegewerk', 10, 10, 0); // (10,10),(11,10)
+  const saw = placeBuilding(state, 'lagerhaus', 10, 10, 0); // (10,10),(11,10)
   assert.ok(rotateBuilding(state, saw.id)); // jetzt (10,10),(10,11)
   assert.equal(saw.rot, 1);
-  placeBuilding(state, 'saegewerk', 11, 10, 0); // (11,10),(12,10) – blockiert die nächste Drehung
+  placeBuilding(state, 'lagerhaus', 11, 10, 0); // (11,10),(12,10) – blockiert die nächste Drehung
   assert.equal(rotateBuilding(state, saw.id), false);
   assert.equal(saw.rot, 1, 'Drehung bleibt bei fehlgeschlagenem Versuch erhalten');
 });
 
 test('Drehen scheitert, wenn ein anderes Gebäude im Weg ist', () => {
   const state = emptyGame();
-  const saw = placeBuilding(state, 'saegewerk', 10, 10, 0); // belegt (10,10),(11,10)
-  placeBuilding(state, 'saegewerk', 10, 11, 0); // belegt (10,11),(11,11)
+  const saw = placeBuilding(state, 'lagerhaus', 10, 10, 0); // belegt (10,10),(11,10)
+  placeBuilding(state, 'lagerhaus', 10, 11, 0); // belegt (10,11),(11,11)
   assert.equal(rotateBuilding(state, saw.id), false, '1×2 bräuchte (10,11)');
   assert.equal(saw.rot, 0);
 });
@@ -108,11 +114,11 @@ test('Abreißen entfernt das Gebäude', () => {
 
 test('findFreeSpot findet die nächste freie Stelle', () => {
   const state = emptyGame();
-  const spot = findFreeSpot(state, 'saegewerk', 0, 15, 9);
+  const spot = findFreeSpot(state, 'lagerhaus', 0, 15, 9);
   assert.deepEqual(spot, { x: 15, y: 9 });
-  placeBuilding(state, 'saegewerk', 15, 9, 0);
-  const next = findFreeSpot(state, 'saegewerk', 0, 15, 9);
-  assert.ok(next && canPlaceBuilding(state, 'saegewerk', next.x, next.y, 0));
+  placeBuilding(state, 'lagerhaus', 15, 9, 0);
+  const next = findFreeSpot(state, 'lagerhaus', 0, 15, 9);
+  assert.ok(next && canPlaceBuilding(state, 'lagerhaus', next.x, next.y, 0));
   assert.ok(Math.abs(next.x - 15) <= 1 && Math.abs(next.y - 9) <= 1, 'direkt daneben');
-  assert.equal(findFreeSpot(state, 'saegewerk', 0, 0, 0, null, 2), null, 'außerhalb nichts frei');
+  assert.equal(findFreeSpot(state, 'lagerhaus', 0, 0, 0, null, 2), null, 'außerhalb nichts frei');
 });

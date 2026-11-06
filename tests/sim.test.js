@@ -15,7 +15,7 @@ import { beltAt, createNewGame } from '../src/core/state.js';
 function emptyGame() {
   const state = createNewGame();
   state.buildings = [];
-  state.storage = { holzstamm: 5, felsbrocken: 5 };
+  state.storage = { holzstamm: 5, felsbrocken: 5, eisenerz: 2 };
   return state;
 }
 
@@ -144,10 +144,10 @@ test('Zusammenführen nimmt abwechselnd von beiden Seiten', () => {
   assert.ok(Math.abs(used1 - used2) <= 3, `abwechselnd: ${used1} / ${used2}`);
 });
 
-test('Sägewerk macht aus 5 Holzblöcken einen Winkel oder einen Stab', () => {
+test('Sägewerk macht aus 5 Holzblöcken eine Holzplatte oder einen Stab', () => {
   const state = emptyGame();
   const wood = woodLine(state, 13); // Band (12,6),(13,6)
-  const saw = placeBuilding(state, 'saegewerk', 14, 6, 0); // Eingang W bei (14,6), Ausgang E bei (15,6)→(16,6)
+  const saw = placeBuilding(state, 'saegewerk', 14, 6, 0); // 2 × 2: Eingang W bei (14,6), Ausgang E bei (15,6)→(16,6)
   drag(state, [
     [16, 6],
     [17, 6],
@@ -155,7 +155,7 @@ test('Sägewerk macht aus 5 Holzblöcken einen Winkel oder einen Stab', () => {
   placeBuilding(state, 'versandportal', 18, 6, 0);
   loadInput(state, wood);
   simulate(state, 1000);
-  assert.equal(storageCount(state, 'holzwinkel'), 40, '200 Blöcke → 40 Winkel');
+  assert.equal(storageCount(state, 'holzplatte'), 40, '200 Blöcke → 40 Holzplatten');
   assert.equal(storageCount(state, 'holzblock'), 0);
 
   setRecipe(saw, 'holzstab');
@@ -165,7 +165,7 @@ test('Sägewerk macht aus 5 Holzblöcken einen Winkel oder einen Stab', () => {
   assert.equal(storageCount(state, 'holzstab'), 40);
 });
 
-test('Steinmetz macht Platten oder Splitt aus Steinblöcken', () => {
+test('Steinmetz macht Platten oder Stein-Zahnräder aus Steinblöcken', () => {
   const state = emptyGame();
   const stone = placeBuilding(state, 'steinbruch', 10, 6, 0);
   drag(state, [
@@ -173,7 +173,7 @@ test('Steinmetz macht Platten oder Splitt aus Steinblöcken', () => {
     [13, 6],
   ]);
   const mason = placeBuilding(state, 'steinmetz', 14, 6, 0);
-  setRecipe(mason, 'splitt');
+  setRecipe(mason, 'steinzahnrad');
   drag(state, [
     [16, 6],
     [17, 6],
@@ -181,7 +181,45 @@ test('Steinmetz macht Platten oder Splitt aus Steinblöcken', () => {
   placeBuilding(state, 'versandportal', 18, 6, 0);
   loadInput(state, stone);
   simulate(state, 1000);
-  assert.equal(storageCount(state, 'splitt'), 40);
+  assert.equal(storageCount(state, 'steinzahnrad'), 40);
+});
+
+// Schmelzhütte (10,6) → Band (12,6),(13,6) → Schmiede (14,6)-(15,7) → Band (16,6),(17,6) → Versandportal (18,6)
+function ironLine(state) {
+  const smelter = placeBuilding(state, 'schmelzhuette', 10, 6, 0);
+  drag(state, [
+    [12, 6],
+    [13, 6],
+  ]);
+  const smithy = placeBuilding(state, 'schmiede', 14, 6, 0);
+  drag(state, [
+    [16, 6],
+    [17, 6],
+  ]);
+  placeBuilding(state, 'versandportal', 18, 6, 0);
+  return { smelter, smithy };
+}
+
+test('Eisen-Kette: Schmelzhütte macht 200 Eisenbarren, Schmiede 40 Mini-Eisenplatten', () => {
+  const state = emptyGame();
+  const { smelter, smithy } = ironLine(state);
+  assert.equal(smithy.prod.recipe, 'minieisenplatte', 'Schmiede startet mit Platten');
+  assert.ok(loadInput(state, smelter));
+  assert.equal(loadInput(state, smelter), false, 'nur ein Eisenerz auf einmal');
+  assert.equal(storageCount(state, 'eisenerz'), 1);
+  simulate(state, 1000);
+  assert.equal(storageCount(state, 'minieisenplatte'), 40, '200 Barren → 40 Mini-Eisenplatten');
+  assert.equal(storageCount(state, 'eisenbarren'), 0);
+});
+
+test('Schmiede macht aus 5 Eisenbarren 5 Eisennägel', () => {
+  const state = emptyGame();
+  const { smelter, smithy } = ironLine(state);
+  setRecipe(smithy, 'eisennagel');
+  loadInput(state, smelter);
+  simulate(state, 1000);
+  assert.equal(storageCount(state, 'eisennagel'), 200, '200 Barren → 200 Nägel');
+  assert.equal(storageCount(state, 'eisenerz'), 1);
 });
 
 test('Falsche Ware kommt nicht in die Werkstatt – das Band staut sich', () => {
@@ -272,18 +310,43 @@ test('Abreißen gibt Waren ins Laden-Lager zurück, ein angefangener Stamm geht 
   assert.equal(storageCount(state, 'holzstamm'), logs, 'unberührter Stamm kommt zurück');
 });
 
-test('Wirtschaft: Weiterverarbeiten lohnt sich (Platzhalter-Preise)', () => {
-  const logPrice = ITEMS.holzstamm.buyPrice;
-  const blocks = BUILDINGS.holzfaeller.production.amount;
-  const blockValue = blocks * ITEMS.holzblock.price;
-  const recipe = RECIPES.holzwinkel;
-  const parts = blocks / recipe.inputs.holzblock;
-  const partValue = parts * ITEMS.holzwinkel.price;
-  assert.ok(blockValue > logPrice, `200 Holzblöcke (${blockValue}) bringen mehr als ein Holzstamm kostet (${logPrice})`);
-  assert.ok(blockValue < logPrice * 1.25, 'aber nur knapp');
-  assert.ok(partValue > blockValue, `40 Winkel (${partValue}) bringen mehr als 200 Holzblöcke (${blockValue})`);
+test('Wirtschaft: Jede Stufe bringt mehr als ihre Zutaten (Preistabelle)', () => {
+  // Rohstoff → Blöcke: knapp mehr als der Kaufpreis
+  for (const [type, def] of Object.entries(BUILDINGS)) {
+    const p = def.production;
+    if (p?.kind !== 'source') continue;
+    const cost = ITEMS[p.input].buyPrice;
+    const value = p.amount * ITEMS[p.output].price;
+    assert.ok(value > cost, `${type}: ${value} > ${cost}`);
+    assert.ok(value < cost * 1.25, `${type}: aber nur knapp`);
+  }
+  // Jedes Rezept: mehr als die Zutaten, aber nicht übertrieben
   for (const [key, r] of Object.entries(RECIPES)) {
     const inValue = Object.entries(r.inputs).reduce((s, [t, n]) => s + n * ITEMS[t].price, 0);
-    assert.ok(r.amount * ITEMS[r.output].price > inValue, `${key} lohnt sich`);
+    const outValue = r.amount * ITEMS[r.output].price;
+    assert.ok(outValue > inValue, `${key} lohnt sich (${outValue} > ${inValue})`);
+    assert.ok(outValue <= inValue * 1.3, `${key} nicht übertrieben (${outValue})`);
   }
+  // Werte aus der Tabelle (README 4.2)
+  assert.equal(ITEMS.eisenerz.buyPrice, 4 * ITEMS.holzstamm.buyPrice, 'Eisen kostet viermal so viel');
+  assert.equal(200 * ITEMS.holzblock.price, 600);
+  assert.equal(40 * ITEMS.holzplatte.price, 720);
+  assert.equal(200 * ITEMS.eisenbarren.price, 2400);
+  assert.equal(40 * ITEMS.minieisenplatte.price, 2880);
+  assert.equal(200 * ITEMS.eisennagel.price, 2800);
+});
+
+test('Datentabellen passen zusammen: Rezepte, Werkstätten, Waren', () => {
+  for (const [key, r] of Object.entries(RECIPES)) {
+    assert.ok(BUILDINGS[r.building].production.recipes.includes(key), `${key} steht bei ${r.building}`);
+    assert.ok(ITEMS[r.output], `${key}: Ware ${r.output}`);
+    for (const t of Object.keys(r.inputs)) assert.ok(ITEMS[t] && !ITEMS[t].raw, `${key}: Zutat ${t}`);
+  }
+  for (const [type, def] of Object.entries(BUILDINGS)) {
+    const p = def.production;
+    if (p?.kind === 'workshop') for (const k of p.recipes) assert.equal(RECIPES[k]?.building, type, `${type}: ${k}`);
+    if (p?.kind === 'source') assert.ok(ITEMS[p.input].raw && ITEMS[p.output] && !ITEMS[p.output].raw, type);
+  }
+  assert.equal(ITEMS.holzwinkel, undefined, 'Holzwinkel entfällt');
+  assert.equal(ITEMS.splitt, undefined, 'Splitt entfällt');
 });
