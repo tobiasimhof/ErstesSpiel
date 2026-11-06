@@ -212,13 +212,13 @@ test('Eisen-Kette: Schmelzhütte macht 200 Eisenbarren, Schmiede 40 Mini-Eisenpl
   assert.equal(storageCount(state, 'eisenbarren'), 0);
 });
 
-test('Schmiede macht aus 5 Eisenbarren 5 Eisennägel', () => {
+test('Schmiede macht aus 5 Eisenbarren 1 Eisenstange (v0.8.0, vorher 5 Nägel)', () => {
   const state = emptyGame();
   const { smelter, smithy } = ironLine(state);
-  setRecipe(smithy, 'eisennagel');
+  setRecipe(smithy, 'eisenstange');
   loadInput(state, smelter);
   simulate(state, 1000);
-  assert.equal(storageCount(state, 'eisennagel'), 200, '200 Barren → 200 Nägel');
+  assert.equal(storageCount(state, 'eisenstange'), 40, '200 Barren → 40 Eisenstangen');
   assert.equal(storageCount(state, 'eisenerz'), 1);
 });
 
@@ -333,7 +333,7 @@ test('Wirtschaft: Jede Stufe bringt mehr als ihre Zutaten (Preistabelle)', () =>
   assert.equal(40 * ITEMS.holzplatte.price, 720);
   assert.equal(200 * ITEMS.eisenbarren.price, 2400);
   assert.equal(40 * ITEMS.minieisenplatte.price, 2880);
-  assert.equal(200 * ITEMS.eisennagel.price, 2800);
+  assert.equal(40 * ITEMS.eisenstange.price, 2880);
 });
 
 test('Datentabellen passen zusammen: Rezepte, Werkstätten, Waren', () => {
@@ -349,4 +349,12 @@ test('Datentabellen passen zusammen: Rezepte, Werkstätten, Waren', () => {
   }
   assert.equal(ITEMS.holzwinkel, undefined, 'Holzwinkel entfällt');
   assert.equal(ITEMS.splitt, undefined, 'Splitt entfällt');
+  assert.equal(ITEMS.eisennagel, undefined, 'Eisennägel entfallen (v0.8.0)');
+  // Alle Grundmaschinen: 5 Blöcke/Barren → 1 Teil
+  for (const type of ['saegewerk', 'steinmetz', 'schmiede']) {
+    for (const key of BUILDINGS[type].production.recipes) {
+      const r = RECIPES[key];
+      assert.deepEqual([Object.values(r.inputs)[0], r.amount], [5, 1], `${key}: 5 → 1`);
+    }
+  }
 });

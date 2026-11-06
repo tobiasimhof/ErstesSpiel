@@ -24,5 +24,6 @@ export const ITEMS = {
   steinplatte: { name: 'Steinplatte', plural: 'Steinplatten', price: 18, color: '#c3c8ce', shape: 'plate' },
   steinzahnrad: { name: 'Stein-Zahnrad', plural: 'Stein-Zahnräder', price: 18, color: '#9aa1aa', shape: 'gear' },
   minieisenplatte: { name: 'Mini-Eisenplatte', plural: 'Mini-Eisenplatten', price: 72, color: '#a9b4c2', shape: 'smallplate' },
-  eisennagel: { name: 'Eisennagel', plural: 'Eisennägel', price: 14, color: '#b6bec9', shape: 'nail' },
+  // v0.8.0: Eisenstange statt Eisennägel (vorher 5 Barren → 5 Nägel, das gab zu viele Nägel)
+  eisenstange: { name: 'Eisenstange', plural: 'Eisenstangen', price: 72, color: '#9fa9b7', shape: 'bar' },
 };

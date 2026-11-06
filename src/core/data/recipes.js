@@ -13,6 +13,6 @@ export const RECIPES = {
   steinplatte: { building: 'steinmetz', label: 'Platten', inputs: { steinblock: 5 }, output: 'steinplatte', amount: 1, time: 5 },
   steinzahnrad: { building: 'steinmetz', label: 'Zahnräder', inputs: { steinblock: 5 }, output: 'steinzahnrad', amount: 1, time: 5 },
   minieisenplatte: { building: 'schmiede', label: 'Platten', inputs: { eisenbarren: 5 }, output: 'minieisenplatte', amount: 1, time: 5 },
-  // Nägel sind klein und werden oft doppelt gebraucht: aus 5 Barren werden 5 Nägel.
-  eisennagel: { building: 'schmiede', label: 'Nägel', inputs: { eisenbarren: 5 }, output: 'eisennagel', amount: 5, time: 5 },
+  // v0.8.0: Eisenstange statt Eisennägel – wie alle Grundmaschinen 5 : 1 (Tobias).
+  eisenstange: { building: 'schmiede', label: 'Stangen', inputs: { eisenbarren: 5 }, output: 'eisenstange', amount: 1, time: 5 },
 };

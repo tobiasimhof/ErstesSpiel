@@ -152,7 +152,9 @@ hud.update(state);
 
 if (loaded.status === 'ok' && loaded.migratedFrom) {
   const notes = [
-    'Spielstand übernommen. Neu: Handel! Im Laden gibt es jetzt Theken und den Händler; Bauen kostet Waren aus dem Laden-Lager.',
+    loaded.migratedFrom < 5
+      ? 'Spielstand übernommen. Neu: Handel! Im Laden gibt es jetzt Theken und den Händler; Bauen kostet Waren aus dem Laden-Lager.'
+      : 'Spielstand übernommen. Neu: Die Schmiede macht Eisenstangen statt Nägel.',
     ...(loaded.notes ?? []),
   ];
   panels.toast(notes.join(' '), 7000);
@@ -162,7 +164,7 @@ else if (loaded.status === 'invalid') panels.toast('Spielstand war beschädigt �
 // ---------- Takt ----------
 // Die Simulation läuft in festen Takten (TICK). Pro Bild werden so viele Takte
 // gerechnet, wie Zeit vergangen ist. Ist das Spiel im Hintergrund, ruht es
-// (Offline-Produktion folgt in v0.10.0).
+// (Offline-Produktion folgt in v0.11.0).
 
 let lastTime = performance.now();
 let accumulator = 0;

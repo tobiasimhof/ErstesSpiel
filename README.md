@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.7.1 – Startfehler nach Updates behoben |
+| **Aktuelle Version** | v0.8.0 – Eisenstange statt Eisennägel |
 | **Phase** | M1 – Fabrik-Grundgerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias prüft, ob das Spiel wieder startet, und spielt den Handel (v0.7.0). Offen zur Freigabe: Claudes Plan „Eisenstange statt Eisennägel“ (Abschnitt 6, „Ausblick“) |
+| **Nächster Schritt** | Neuer Chat: Tobias spielt kurz v0.8.0 (Eisenstangen; zum Beurteilen des Verkaufstempos den Testmodus ausschalten – er beschleunigt auch die Kunden ×10). Danach stellt Claude den **Plan für v0.9.0 – Techbaum, Teil 2** vor (Entwurf der Rezepte mit Eisenstange in Abschnitt 4.2, Stichpunkte in Abschnitt 6 unter „Ausblick v0.9.0“), Tobias gibt ihn frei, dann wird programmiert |
 
 ---
 
@@ -98,7 +98,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Stau:** Ist ein Band voll (z. B. weil es im Nichts endet), bleibt alles stehen und davor wird nicht weiter produziert.
 - **Lagerhäuser** sind die einzige Möglichkeit, Waren zu lagern. Sie sind Zwischenstationen und eine Art Verteiler: 2 × 1 Felder, 3 Fächer zu je 50 Waren, **Eingang oben links, Ausgang unten rechts** – deshalb lagert man sinnvollerweise nur eine Sorte, z. B. 3 × 50 Holzblöcke. Was hineinläuft, läuft weiter, sobald am Ausgang Platz ist.
 - **Versandportal:** 1 × 1 Feld mit **einem** Eingang (dreht mit). Waren, die hineinlaufen, landen direkt im Laden.
-- **Kombinations-Maschinen** (Techbaum) brauchen zwei verschiedene Zutaten, z. B. Mechanik-Station: 1 Stein-Zahnrad + 2 Eisennägel → Mechanischer Schalter.
+- **Kombinations-Maschinen** (Techbaum) brauchen zwei verschiedene Zutaten, z. B. Mühlenbauer: 1 Stein-Zahnrad + 1 Eisenstange → Mechanischer Schalter (Entwurf, seit v0.8.0 mit Eisenstange statt Nägeln).
 - Eine Werkstatt kann mehrere Rezepte. Man stellt ein, was sie gerade herstellt.
 - **Umbauen ist leicht und günstig** (verschieben, drehen, abreißen mit Rückerstattung), weil man sich ständig an den Markt anpasst. Das gilt für alle Gebäude, auch die Startgebäude, damit man den Schwerpunkt der Fabrik jederzeit neu setzen kann.
 - **Bauen geht sofort**, sofern man die Waren dafür hat. Es gibt keine Bauzeiten.
@@ -175,6 +175,8 @@ Abgeschrieben aus Tobias' Tabelle. Jede Maschine hat zwei Modi (A und B), zwisch
 | Getriebe- & Ketten-Werkstatt | Steinkette (2 Stein-Zahnräder + 2 Eisennägel) | Regler (1 Mechanischer Schalter + 1 Handkurbel) |
 | Sicherheits-Montage | Mini-Schloss (1 Scharnier + 1 Mechanischer Schalter) | frei für spätere Rezepte |
 
+**Seit v0.8.0:** Eisennägel gibt es nicht mehr; die Schmiede macht stattdessen Eisenstangen (5 Eisenbarren → 1). In den Rezepten oben wird „2 Eisennägel“ zu „1 Eisenstange“ (Entwurf in 4.2).
+
 Die Maschinennamen in dieser Tabelle waren nur zur Orientierung gedacht; die endgültigen Namen hat Claude ausgesucht (Abschnitt 4.2). Die Tabelle „Entwurf 1“ (Tür, Kiste, Leiter, Mahlwerk, Brunnen …) ist damit überholt.
 
 ### 4.2 Festgelegter Techbaum (Stand 06.11.2026)
@@ -192,8 +194,8 @@ Von Tobias bestätigt (Chat 3, Teil 2). Mengen, Zeiten und Preise hat Claude vor
 | Schmelzhütte (neu) | 2 × 2 | 1 Eisenerz → 200 Eisenbarren | Level 3 |
 | Sägewerk | 2 × 2 (bisher 2 × 1) | A: Holzplatte · B: Holzstab | Level 1 |
 | Steinmetz | 2 × 2 (bisher 2 × 1) | A: Steinplatte · B: Stein-Zahnrad | Level 2 |
-| Schmiede (neu) | 2 × 2 | A: Mini-Eisenplatte · B: Eisennägel | Level 3 |
-| Mühlenbauer (Kombi) | 2 × 2 | A: Mechanischer Schalter · B: Handkurbel | Level 2 (Schalter braucht Eisennägel, also praktisch ab Level 3) |
+| Schmiede (neu) | 2 × 2 | A: Mini-Eisenplatte · B: Eisenstange (bis v0.7.1: Eisennägel) | Level 3 |
+| Mühlenbauer (Kombi) | 2 × 2 | A: Mechanischer Schalter · B: Handkurbel | Level 2 (Schalter braucht eine Eisenstange, also praktisch ab Level 3) |
 | Zimmerei (Kombi) | 2 × 2 | A: Verstärkte Holzplatte · B: frei | Level 3 |
 | Feinwerkstatt (Kombi) | 2 × 2 | A: Mörser & Stößel · B: Scharnier | Level 3 |
 | Feinschmiede | 2 × 2 | A: Kugellager · B: Eisenfeder | Level 4 |
@@ -207,7 +209,7 @@ Namen aus Tobias' Tabelle → Spiel: Holz-Werkbank → Sägewerk, Steinmetz-Stat
 
 **Anschlüsse der 2 × 2-Maschinen** (Grundmaschinen seit v0.6.0 im Spiel): Grundmaschinen: Eingang links oben, Ausgang rechts oben (gerade Linie; bestehende Bänder am Sägewerk bleiben angeschlossen). Kombi- und Weiterverarbeitungs-Maschinen: zwei Eingänge links oben und links unten (jeder nimmt jede passende Zutat), Ausgang rechts oben. Block-Gebäude unverändert (Ausgang rechts oben).
 
-**Rezepte und Preise** (Holz, Stein und Eisen bis zu den Grundmaschinen seit v0.6.0 im Spiel): Regel: Blöcke bringen knapp mehr als der Rohstoff kostet (+9 %), jedes weitere Teil rund 20 % mehr als seine Zutaten zusammen. So macht man beim Verkaufen in der Anfangsphase nie Minus. Stein kostet und bringt so viel wie Holz; Eisen kostet viermal so viel und bringt entsprechend mehr.
+**Rezepte und Preise** (Holz, Stein und Eisen bis zu den Grundmaschinen im Spiel, Eisenstange seit v0.8.0; alles ab „Handkurbel“ ist ein **Entwurf für v0.9.0**, noch nicht freigegeben): Regel: Blöcke bringen knapp mehr als der Rohstoff kostet (+9 %), jedes weitere Teil rund 20 % mehr als seine Zutaten zusammen. So macht man beim Verkaufen in der Anfangsphase nie Minus. Stein kostet und bringt so viel wie Holz; Eisen kostet viermal so viel und bringt entsprechend mehr.
 
 | Ware | Herstellung | Zeit | Wert (Gold) |
 |---|---|---|---|
@@ -219,21 +221,21 @@ Namen aus Tobias' Tabelle → Spiel: Holz-Werkbank → Sägewerk, Steinmetz-Stat
 | Holzplatte / Holzstab | Sägewerk: 5 Holzblöcke → 1 | 5 s | 18 (40 Stück = 720) |
 | Steinplatte / Stein-Zahnrad | Steinmetz: 5 Steinblöcke → 1 | 5 s | 18 |
 | Mini-Eisenplatte | Schmiede: 5 Eisenbarren → 1 | 5 s | 72 (40 Stück = 2.880) |
-| Eisennägel | Schmiede: 5 Eisenbarren → 5 Eisennägel | 5 s | 14 je Nagel (200 Stück = 2.800) |
+| Eisenstange (seit v0.8.0) | Schmiede: 5 Eisenbarren → 1 | 5 s | 72 (40 Stück = 2.880) |
 | Handkurbel | Mühlenbauer: 1 Holzstab + 1 Stein-Zahnrad | 10 s | 43 (Zutaten 36) |
-| Mechanischer Schalter | Mühlenbauer: 1 Stein-Zahnrad + 2 Eisennägel | 10 s | 55 (Zutaten 46) |
-| Verstärkte Holzplatte | Zimmerei: 1 Holzplatte + 2 Eisennägel | 10 s | 55 (Zutaten 46) |
+| Mechanischer Schalter | Mühlenbauer: 1 Stein-Zahnrad + 1 Eisenstange | 10 s | 108 (Zutaten 90) |
+| Verstärkte Holzplatte | Zimmerei: 1 Holzplatte + 1 Eisenstange | 10 s | 108 (Zutaten 90) |
 | Mörser & Stößel | Feinwerkstatt: 1 Steinplatte + 1 Holzstab | 10 s | 43 (Zutaten 36) |
-| Scharnier | Feinwerkstatt: 1 Mini-Eisenplatte + 2 Eisennägel | 10 s | 120 (Zutaten 100) |
-| Kugellager | Feinschmiede: 1 Scharnier + 2 Eisennägel | 15 s | 178 (Zutaten 148) |
-| Eisenfeder | Feinschmiede: 3 Eisennägel (geändert, siehe Entscheidungen) | 15 s | 50 (Zutaten 42) |
-| Steinkette | Getriebebauer: 2 Stein-Zahnräder + 2 Eisennägel | 15 s | 77 (Zutaten 64) |
-| Regler | Getriebebauer: 1 Mechanischer Schalter + 1 Handkurbel | 15 s | 118 (Zutaten 98) |
-| Mini-Schloss | Schlosserei: 1 Scharnier + 1 Mechanischer Schalter | 15 s | 210 (Zutaten 175) |
+| Scharnier | Feinwerkstatt: 1 Mini-Eisenplatte + 1 Eisenstange | 10 s | 173 (Zutaten 144) |
+| Kugellager | Feinschmiede: 1 Scharnier + 1 Eisenstange | 15 s | 294 (Zutaten 245) |
+| Eisenfeder | Feinschmiede: 1 Eisenstange (nur eine Zutat – im Plan klären) | 15 s | 86 (Zutaten 72) |
+| Steinkette | Getriebebauer: 2 Stein-Zahnräder + 1 Eisenstange | 15 s | 130 (Zutaten 108) |
+| Regler | Getriebebauer: 1 Mechanischer Schalter + 1 Handkurbel | 15 s | 181 (Zutaten 151) |
+| Mini-Schloss | Schlosserei: 1 Scharnier + 1 Mechanischer Schalter | 15 s | 337 (Zutaten 281) |
 
-Warum Eisennägel anders als die übrigen Teile? Nägel sind klein und werden in vielen Rezepten doppelt gebraucht. Kosteten sie wie eine Mini-Eisenplatte 72 Gold, würden alle Kombi-Teile mit Eisennägeln sehr teuer. Deshalb macht die Schmiede aus 5 Barren gleich 5 Nägel.
+**Eisenstange statt Eisennägel (v0.8.0):** Bis v0.7.1 machte die Schmiede aus 5 Barren 5 Nägel zu je 14 Gold. Tobias fiel beim Spielen auf, dass dadurch extrem viele Nägel entstehen (100–140 im Lager, von allem anderen etwa 20), und an der Theke brachten 20 Nägel nur 280 Gold. Jetzt läuft die Schmiede wie Sägewerk und Steinmetz: 5 : 1. Im Entwurf oben ersetzt „1 Eisenstange“ die bisherigen „2 Eisennägel“ (die Werte sind nach der +20-%-Regel neu gerechnet). Damit braucht jedes Eisen-Kombiteil 5 statt 2 Barren – Eisen wird gefragter. Nägel können später als eigene Stufe zurückkommen (z. B. 1 Eisenstange → mehrere Nägel).
 
-**Freischalten nach Laden-Level** (von Tobias bestätigt): Level 1 Holz, Level 2 Stein (+ Mühlenbauer für die Handkurbel), Level 3 Eisen (+ Zimmerei, Feinwerkstatt), Level 4 Feinschmiede, Getriebebauer, Schlosserei. Den ersten Rohstoff jeder Sorte gibt es gratis: den ersten Holzstamm zum Spielstart, den ersten Felsbrocken beim Erreichen von Level 2, das erste Eisenerz bei Level 3. Bis es Laden-Level gibt (v0.9.0), ist alles sofort baubar.
+**Freischalten nach Laden-Level** (von Tobias bestätigt): Level 1 Holz, Level 2 Stein (+ Mühlenbauer für die Handkurbel), Level 3 Eisen (+ Zimmerei, Feinwerkstatt), Level 4 Feinschmiede, Getriebebauer, Schlosserei. Den ersten Rohstoff jeder Sorte gibt es gratis: den ersten Holzstamm zum Spielstart, den ersten Felsbrocken beim Erreichen von Level 2, das erste Eisenerz bei Level 3. Bis es Laden-Level gibt (v0.10.0), ist alles sofort baubar.
 
 **Baukosten** (seit v0.7.0, Platzhalter; Tobias: „erstmal spielen und schauen, ob es nicht zu lange dauert“):
 
@@ -253,7 +255,7 @@ Das Sägewerk kostet nur Holzblöcke, damit die erste Maschine ohne Platten baub
 
 **Holzwinkel und Splitt** fliegen raus (vielleicht kommen sie später wieder). Vorhandene im Spielstand werden umgewandelt: Holzwinkel → Holzplatte, Splitt → Stein-Zahnrad.
 
-### 4.3 Im Spiel (Stand v0.7.0)
+### 4.3 Im Spiel (Stand v0.8.0)
 
 | Stufe | Ware | Woher | Rezept |
 |---|---|---|---|
@@ -261,9 +263,9 @@ Das Sägewerk kostet nur Holzblöcke, damit die erste Maschine ohne Platten baub
 | 1 | Holzblock / Steinblock / Eisenbarren | Holzfällerlager / Steinbruch / Schmelzhütte | 1 Rohstoff → 200 Stück in 15 Minuten |
 | 2 | Holzplatte / Holzstab | Sägewerk, Einstellung „Platten“ / „Stäbe“ | 5 Holzblöcke → 1 Teil (5 Sekunden) |
 | 2 | Steinplatte / Stein-Zahnrad | Steinmetz, Einstellung „Platten“ / „Zahnräder“ | 5 Steinblöcke → 1 Teil (5 Sekunden) |
-| 2 | Mini-Eisenplatte / Eisennägel | Schmiede, Einstellung „Platten“ / „Nägel“ | 5 Eisenbarren → 1 Mini-Eisenplatte oder 5 Eisennägel (5 Sekunden) |
+| 2 | Mini-Eisenplatte / Eisenstange | Schmiede, Einstellung „Platten“ / „Stangen“ | 5 Eisenbarren → 1 Teil (5 Sekunden) |
 
-Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit v0.8.0.
+Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit v0.9.0.
 
 **Ideen für später:** weitere Rohstoffe wie Eisenerz (Schmelze, Schmiede, echte Nägel, Werkzeuge), Lehm (Ziegel), Hanf (Seile), Sand (Glas); größere Waren wie Fässer, Karren, Fenster.
 
@@ -359,13 +361,25 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | v0.6.1 | **Größeres Grundstück:** 22 × 14 statt 16 × 10 Felder, wächst nach rechts und unten | ✅ fertig |
 | v0.7.0 | **Handel:** Händler (Rohstoffe kaufen), Laden mit von Hand bestückten Verkaufstheken, zufällige Kunden mit zufälligen Einkäufen, Gold; Bauen kostet Waren; Start ohne Gold mit Gratis-Holzstamm; Pleiteschutz | ✅ fertig |
 | v0.7.1 | **Fehlerkorrektur:** Spiel startete nach dem Update nicht (alte und neue Dateien gemischt); Meldung statt schwarzem Bildschirm | ✅ fertig |
-| v0.8.0 | **Techbaum, Teil 2:** Kombinations-Maschinen mit zwei Zutaten und die Weiterverarbeitung (Kugellager, Regler, Mini-Schloss …) | |
-| v0.9.0 | **Laden-Level:** Freischalten nach Level (Holz → Stein → Eisen), Laden-Ausbau mit Gold und Waren | |
-| v0.10.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
+| v0.8.0 | **Eisenstange:** Schmiede macht Eisenstangen (5 : 1) statt Eisennägel (5 : 5); vorhandene Nägel werden umgewandelt | ✅ fertig |
+| v0.9.0 | **Techbaum, Teil 2:** Kombinations-Maschinen mit zwei Zutaten und die Weiterverarbeitung (Kugellager, Regler, Mini-Schloss …) | als Nächstes planen |
+| v0.10.0 | **Laden-Level:** Freischalten nach Level (Holz → Stein → Eisen), Laden-Ausbau mit Gold und Waren | |
+| v0.11.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
 
-### Ausblick: Eisenstange statt Eisennägel (Vorschlag von Tobias, Plan noch nicht freigegeben)
+### Ausblick v0.9.0 – Techbaum, Teil 2 (Plan noch nicht besprochen)
 
-Tobias (Chat 5, Teil 2): Die Schmiede macht viel zu viele Nägel (5 Barren → 5 Nägel). Stattdessen erst einmal Metallstangen, auch im Verhältnis 5 : 1, damit das Gleichgewicht am Anfang passt. Claudes Plan dazu steht im Gesprächsprotokoll (Chat 5, Teil 2) und wartet auf Freigabe.
+Was bereits feststeht (Abschnitte 4.2 und 7) und in den Plan gehört:
+- **6 neue Maschinen**, alle 2 × 2, je zwei Einstellungen: Mühlenbauer, Zimmerei, Feinwerkstatt (Kombi aus Grundteilen) sowie Feinschmiede, Getriebebauer, Schlosserei (Weiterverarbeitung).
+- **Anschlüsse:** zwei Eingänge links oben und links unten (jeder nimmt jede passende Zutat), Ausgang rechts oben.
+- **Rezepte und Werte:** Entwurf in Abschnitt 4.2 – seit v0.8.0 mit „1 Eisenstange“ statt „2 Eisennägel“; die Werte sind nach der +20-%-Regel neu gerechnet und müssen noch freigegeben werden.
+- **Offene Punkte für den Plan:** Baukosten der 6 Maschinen in Waren (Tabelle wie in 4.2 fortsetzen); Eisenfeder hat im Entwurf nur eine Zutat (1 Eisenstange) – so lassen oder eine zweite Zutat?; die beiden freien Einstellungen (Zimmerei B, Schlosserei B); wie eine Werkstatt anzeigt, welche Zutat ihr noch fehlt; ob Kunden die teuren Teile genauso oft kaufen wie einfache.
+
+### v0.8.0 – Eisenstange statt Eisennägel (fertig)
+
+- **Schmiede:** Einstellung „Stangen“ statt „Nägel“ – 5 Eisenbarren → 1 Eisenstange in 5 Sekunden, Wert 72 Gold. Alle drei Grundmaschinen laufen jetzt gleich (5 : 1).
+- **Eisenstange** sieht grau und kantig aus, mit hellem Glanzstreifen (der Holzstab ist rund und braun).
+- **Bestehende Spielstände** (Spielstand-Version 5 → 6): Je 5 Eisennägel werden zu 1 Eisenstange, aufgerundet – im Laden-Lager, auf den Theken, in Lagerhäusern und in der Schmiede. Nägel, die gerade auf Bändern liegen, werden zusammengezählt und kommen als Stangen ins Laden-Lager. Eine Schmiede auf „Nägel“ steht danach auf „Stangen“. Beim Öffnen sagt eine Meldung, wie viele Nägel umgewandelt wurden (bei Tobias etwa 140 Nägel → 28 Stangen).
+- Nägel-Verkäufe verschwinden aus „Letzte Verkäufe“.
 
 ### v0.7.1 – Startfehler behoben (fertig)
 
@@ -515,7 +529,7 @@ Tobias (Chat 5, Teil 2): Die Schmiede macht viel zu viele Nägel (5 Barren → 5
 | 06.11.2026 | Reihenfolge: v0.6.0 Techbaum Teil 1 → v0.7.0 Handel → v0.8.0 Techbaum Teil 2 → v0.9.0 Laden-Level → v0.10.0 Offline | Tobias möchte im neuen Chat genau mit diesen Punkten starten. |
 | 06.11.2026 | Reine README-Updates bekommen eine eigene C-Version (z. B. v0.5.2) | Regel 1: jeder Arbeitsschritt ist eine Version; das Spiel zeigt die Nummer mit an. |
 | 06.11.2026 | Plan für v0.6.0 mit Preistabelle und Anschlüssen freigegeben, „erstmal so umsetzen und dann schauen, wie es wirkt“ | Tobias (Chat 4). Preise werden nach dem Test angepasst. |
-| 06.11.2026 | Rezept-Knöpfe heißen kurz „Platten“, „Stäbe“, „Zahnräder“, „Nägel“; Symbole: Schmelzhütte 🔥, Schmiede 🔨 | Claudes Wahl; jederzeit änderbar. |
+| 06.11.2026 | Rezept-Knöpfe heißen kurz „Platten“, „Stäbe“, „Zahnräder“, „Nägel“ (seit v0.8.0 „Stangen“); Symbole: Schmelzhütte 🔥, Schmiede 🔨 | Claudes Wahl; jederzeit änderbar. |
 | 06.11.2026 | Alte Sägewerke und Steinmetze wachsen so, dass ihre Anschlüsse an derselben Stelle bleiben | Bestehende Bänder bleiben angeschlossen; nur wenn kein Platz ist, wird versetzt. |
 | 06.11.2026 | Grundstück 22 × 14 statt 16 × 10 (wächst nach rechts und unten), Welt 40 × 26; gilt auch für bestehende Spielstände | Tobias (Chat 4): Für eine zweite Eisen-Linie fehlte der Platz. Zwischenlösung bis „Fläche kaufen“. |
 | 06.11.2026 | Bauen kostet Waren aus dem Laden-Lager statt Gold (z. B. Förderband 1 Holzblock, Sägewerk 40 Holzblöcke); Gold ist für Rohstoffe | Tobias (Chat 5): Man soll abwägen, ob man Waren verkauft oder damit eine Maschine baut. Mengen sind Platzhalter. |
@@ -527,6 +541,10 @@ Tobias (Chat 5, Teil 2): Die Schmiede macht viel zu viele Nägel (5 Barren → 5
 | 06.11.2026 | Kunden-Zufall steckt im Spielstand | Damit sich Abläufe in Tests genau wiederholen lassen. |
 | 06.11.2026 | Jede Programmdatei wird mit `?v=<Version>` geladen (Import-Map in `index.html`, geschrieben von `tools/set-version.mjs`) | v0.7.0 startete bei Tobias nicht, weil der Browser alte und neue Dateien mischte. Ohne Build-Schritt ist die Import-Map der einfachste sichere Weg. |
 | 06.11.2026 | Meldung „Das Spiel konnte nicht starten“ mit Fehlertext | Statt eines schwarzen Bildschirms; Tobias kann den Fehler per Screenshot schicken. |
+| 06.11.2026 | Eisenstange statt Eisennägel: Schmiede 5 Eisenbarren → 1 Eisenstange (Wert 72); Nägel fallen vorerst weg | Tobias (Chat 5, Teil 3): Es entstanden viel zu viele Nägel. Name „Eisenstange“ von Claude vorgeschlagen, von Tobias bestätigt. |
+| 06.11.2026 | Alte Nägel: je 5 → 1 Eisenstange, aufgerundet; Nägel auf Bändern zusammengezählt ins Laden-Lager | Claudes Wahl: Der Wert bleibt etwa gleich (5 × 14 = 70 ≈ 72), niemand verliert etwas. |
+| 06.11.2026 | Im Techbaum-Entwurf ersetzt „1 Eisenstange“ die bisherigen „2 Eisennägel“; Werte neu nach +20 % | Claudes Entwurf; wird mit dem Plan für v0.9.0 freigegeben. |
+| 06.11.2026 | Eisenstange als eigener Schritt v0.8.0; Fahrplan rückt nach: v0.9.0 Techbaum Teil 2, v0.10.0 Laden-Level, v0.11.0 Offline | Tobias: „Das kann jetzt schon gerne rein, damit wir alles frisch haben.“ |
 
 ---
 
@@ -534,16 +552,32 @@ Tobias (Chat 5, Teil 2): Die Schmiede macht viel zu viele Nägel (5 Barren → 5
 
 Stand 06.11.2026.
 
-1. **Test von v0.7.0:** Wie fühlen sich Verkaufstempo (2 Theken × 20, ein Kunde alle 10–30 s), Goldertrag und Baukosten an? Danach Zahlen anpassen.
-2. **Eisenstange statt Eisennägel:** Plan von Claude (Gesprächsprotokoll, Chat 5, Teil 2) wartet auf Tobias' Freigabe.
+1. **Plan für v0.9.0 (Techbaum, Teil 2)** im neuen Chat vorstellen und freigeben lassen; offene Punkte stehen in Abschnitt 6 unter „Ausblick v0.9.0“.
+2. **Handel im echten Tempo:** Tobias hat v0.7.0 bisher im Testmodus gespielt (Kunden kommen dort 10-mal so oft). Wie fühlen sich Verkaufstempo (2 Theken × 20, ein Kunde alle 10–30 s), Goldertrag und Baukosten in normaler Zeit an? Danach Zahlen anpassen. Erster Eindruck: „Ware verkauft sich und ich nehme Geld ein.“
 3. **Laden-Lager 500 Plätze:** Bleibt das so, oder wird es mit dem Laden-Level größer? Volle Lager stoppen die Versandportale.
-4. **Laden-Level (v0.9.0):** Was kostet ein Aufstieg (Gold und Waren)? Gibt es zusätzlich Freischaltpunkte? Vorschlag kommt mit dem Plan für v0.9.0.
+4. **Laden-Level (v0.10.0):** Was kostet ein Aufstieg (Gold und Waren)? Gibt es zusätzlich Freischaltpunkte? Vorschlag kommt mit dem Plan für v0.10.0.
 5. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
 6. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.8.0 – Eisenstange statt Eisennägel (06.11.2026)
+
+**Vorgenommen:**
+- Tobias' Wunsch: weniger Nägel. Die Schmiede macht Eisenstangen im Verhältnis 5 : 1 wie die anderen Grundmaschinen.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie heißt das neue Teil? → „Eisenstange“, passend zu Eisenerz und Eisenbarren (Tobias: „klingt sehr gut“).
+- Was passiert mit vorhandenen Nägeln? → Je 5 werden zu 1 Stange (aufgerundet), überall, wo sie liegen; eine Meldung sagt, wie viele.
+- Was heißt das für den Techbaum Teil 2? → „2 Eisennägel“ wird zu „1 Eisenstange“; Werte neu gerechnet als Entwurf (Abschnitt 4.2).
+
+**Gemacht:**
+- Datentabellen: Ware Eisenstange (eigene Form), Rezept „Stangen“; Eisennagel entfernt.
+- Spielstand-Version 6 mit Umwandlung von Version 5 (Lager, Theken, Lagerhäuser, Bänder, Schmiede, Verkaufsliste).
+- Nachgestellt: Update von v0.7.1 mit 140 Nägeln im Lager und 12 auf der Theke → 28 und 3 Eisenstangen, Meldung erscheint, kein Startfehler.
+- 103 automatische Tests (neu: Schmiede 200 Barren → 40 Stangen, alle Grundmaschinen 5 : 1, Umwandlung von Version 5 mit Nägeln an allen Stellen) und der Browser-Test (Schmiede auf „Stangen“ umstellen) – alle bestanden.
 
 ### v0.7.1 – Startfehler behoben (06.11.2026)
 
@@ -768,13 +802,21 @@ Stand 06.11.2026.
 
 ## 10. Gesprächsprotokoll
 
+### 06.11.2026 – Chat 5, Teil 3: v0.7.0 läuft, Freigabe Eisenstange
+
+**Tobias** (Screenshots vom Tablet, noch v0.7.0 aus dem Zwischenspeicher, Testmodus an): v0.7.0 ist doch geladen. Ware verkauft sich und er nimmt Geld ein (gut 3.000 Gold). Alle Gratis-Rohstoffe sind verarbeitet; jetzt müsste er Gold in Holzstamm, Felsbrocken oder Eisenerz stecken, damit die Produktion weiterläuft. Im Lager liegen 140 Eisennägel. „Eisenstange klingt sehr gut. Das kann jetzt schon gerne rein, damit wir alles frisch haben.“ Alles in der README festhalten; danach geht es in einem neuen Chat weiter.
+
+**Umgesetzt:** v0.8.0 (siehe Versionshistorie). Der Fahrplan rückt um eine Version nach. Der neue Chat beginnt mit dem Plan für v0.9.0 (Techbaum, Teil 2).
+
+**Claudes Hinweis:** Der Testmodus beschleunigt auch die Kunden (×10). Um das Verkaufstempo zu beurteilen, ihn im Menü ☰ ausschalten.
+
 ### 06.11.2026 – Chat 5, Teil 2: Startfehler & zu viele Nägel
 
 **Tobias** (Screenshots vom Tablet): Seit v0.7.0 öffnet sich das Spiel nicht mehr (schwarzer Bildschirm). In v0.6.1 hat er vorher alles einmal gebaut (Schmelzhütte, 2 Schmieden, 2 Sägewerke, 2 Steinmetze, Lagerhäuser als Verteiler, 6 Versandportale) und gemerkt, dass extrem viele Nägel entstehen (im Lager 100 Eisennägel, sonst je etwa 20 Teile). Vorschlag: aus den Nägeln erst einmal Metallstangen machen, ebenfalls im Verhältnis 5 : 1, damit das Gleichgewicht am Anfang passt.
 
 **Umgesetzt:** v0.7.1 (Startfehler, siehe Versionshistorie).
 
-**Claudes Plan zu den Nägeln (wartet auf Freigabe):**
+**Claudes Plan zu den Nägeln (in Teil 3 freigegeben, umgesetzt als v0.8.0):**
 - Schmiede, Einstellung B: **Eisenstange** statt Eisennägel – 5 Eisenbarren → 1 Eisenstange in 5 Sekunden, Wert 72 Gold (wie die Mini-Eisenplatte). Damit laufen alle drei Grundmaschinen gleich: Platte oder ein spezielles Teil, je 5 : 1.
 - Eisennägel fallen vorerst weg (wie damals Holzwinkel und Splitt). Vorhandene Nägel werden umgewandelt: je 5 Nägel → 1 Eisenstange (aufgerundet), auch auf Theken, in Lagerhäusern und Gebäuden; eine Schmiede auf „Nägel“ wird auf „Stangen“ umgestellt.
 - Folge für den Techbaum Teil 2: Wo bisher „2 Eisennägel“ stehen, steht „1 Eisenstange“; die Werte der Kombi-Teile werden neu gerechnet (Plan für Teil 2). Nägel können später als eigene Stufe zurückkommen.
