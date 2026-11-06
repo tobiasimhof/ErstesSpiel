@@ -4,8 +4,11 @@ import { onPress } from './press.js';
 
 const numberFormat = new Intl.NumberFormat('de-DE');
 
-export function createHud({ version, onNewGame, onToggleTestMode }) {
+export function createHud({ version, onNewGame, onToggleTestMode, onTestPack }) {
   const gold = document.getElementById('hud-gold');
+  const goldGain = document.getElementById('hud-gold-gain');
+  const testPackButton = document.getElementById('menu-test-pack');
+  let lastSaleId = null;
   const level = document.getElementById('hud-level');
   const menuButton = document.getElementById('btn-menu');
   const menu = document.getElementById('menu');
@@ -27,6 +30,10 @@ export function createHud({ version, onNewGame, onToggleTestMode }) {
   onPress(testModeButton, () => {
     closeMenu();
     onToggleTestMode();
+  });
+  onPress(testPackButton, () => {
+    closeMenu();
+    onTestPack();
   });
   onPress(document.getElementById('menu-new-game'), () => {
     closeMenu();
@@ -56,6 +63,16 @@ export function createHud({ version, onNewGame, onToggleTestMode }) {
     update(state) {
       gold.textContent = numberFormat.format(state.gold);
       level.textContent = String(state.shopLevel);
+      // Neuer Verkauf an einen Kunden: kurz „+36“ neben dem Gold zeigen.
+      const sale = state.market.sales[0];
+      const id = sale?.id ?? 0;
+      if (lastSaleId !== null && id > lastSaleId) {
+        goldGain.textContent = `+${numberFormat.format(sale.gold)}`;
+        goldGain.classList.remove('show');
+        void goldGain.offsetWidth; // Animation neu starten
+        goldGain.classList.add('show');
+      }
+      lastSaleId = id;
     },
     hideHint() {
       hint.classList.add('hidden');
@@ -64,6 +81,7 @@ export function createHud({ version, onNewGame, onToggleTestMode }) {
       testModeButton.textContent = `⏩ Testmodus: ${on ? 'an' : 'aus'} (Zeit ×${factor})`;
       speedBadge.textContent = `⏩ ×${factor}`;
       speedBadge.hidden = !on;
+      testPackButton.hidden = !on;
     },
     closeMenu,
   };

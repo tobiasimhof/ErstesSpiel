@@ -11,6 +11,8 @@ import { createHud } from './view/hud.js';
 import { createPanels } from './view/panels.js';
 import { createBuildBar } from './view/buildbar.js';
 import { createController } from './view/controller.js';
+import { createShopView } from './view/shop.js';
+import { applyTestPack } from './core/market.js';
 import { clearGame, loadGame, loadSettings, saveGame, saveSettings } from './view/storage.js';
 
 const loaded = loadGame();
@@ -78,7 +80,14 @@ function toggleTestMode() {
   panels.toast(settings.testMode ? `Testmodus an: Zeit läuft ${TEST_SPEED}-mal schneller.` : 'Testmodus aus: normale Zeit.');
 }
 
-const hud = createHud({ version: VERSION, onNewGame: newGame, onToggleTestMode: toggleTestMode });
+function testPack() {
+  applyTestPack(state);
+  onChange();
+  controller.refresh();
+  panels.toast('Testpaket: 1.000 Gold und von jeder Ware 50 Stück ins Laden-Lager gelegt.');
+}
+
+const hud = createHud({ version: VERSION, onNewGame: newGame, onToggleTestMode: toggleTestMode, onTestPack: testPack });
 hud.setTestMode(Boolean(settings.testMode), TEST_SPEED);
 
 function worldBounds() {
@@ -102,7 +111,8 @@ const buildBar = createBuildBar({
   onRotate: () => controller.rotateTool(),
   onCancel: () => controller.cancelTool(),
 });
-controller = createController({ state, camera, ui, panels, buildBar, onChange, requestDraw, worldBounds });
+const shopView = createShopView({ state, panels, onChange });
+controller = createController({ state, camera, ui, panels, buildBar, shopView, onChange, requestDraw, worldBounds });
 buildBar.setMode('normal');
 panels.setInfoCloseHandler(() => controller.closeInfo());
 
@@ -141,19 +151,23 @@ handleResize();
 hud.update(state);
 
 if (loaded.status === 'ok' && loaded.migratedFrom) {
-  const notes = ['Spielstand übernommen. Neu: Eisen-Kette, 2 Eisenerz im Laden-Lager.', ...(loaded.notes ?? [])];
-  panels.toast(notes.join(' '), 6000);
+  const notes = [
+    'Spielstand übernommen. Neu: Handel! Im Laden gibt es jetzt Theken und den Händler; Bauen kostet Waren aus dem Laden-Lager.',
+    ...(loaded.notes ?? []),
+  ];
+  panels.toast(notes.join(' '), 7000);
 } else if (loaded.status === 'ok') panels.toast('Spielstand geladen.', 1600);
 else if (loaded.status === 'invalid') panels.toast('Spielstand war beschädigt – neues Spiel gestartet.', 3500);
 
 // ---------- Takt ----------
 // Die Simulation läuft in festen Takten (TICK). Pro Bild werden so viele Takte
 // gerechnet, wie Zeit vergangen ist. Ist das Spiel im Hintergrund, ruht es
-// (Offline-Produktion folgt in v0.7.0).
+// (Offline-Produktion folgt in v0.10.0).
 
 let lastTime = performance.now();
 let accumulator = 0;
 let lastRefresh = 0;
+let lastGifts = state.market.gifts;
 
 function frame(now) {
   const realDt = Math.min(0.25, Math.max(0, (now - lastTime) / 1000));
@@ -174,6 +188,14 @@ function frame(now) {
   if (now - lastRefresh > 400) {
     lastRefresh = now;
     controller.refresh();
+    hud.update(state); // Gold ändert sich, wenn Kunden kaufen
+    if (state.market.gifts !== lastGifts) {
+      if (state.market.gifts > lastGifts) {
+        panels.toast('Der Händler hat Mitleid: Du bekommst einen Holzstamm geschenkt. Er liegt im Laden-Lager.', 5000);
+        scheduleSave();
+      }
+      lastGifts = state.market.gifts;
+    }
   }
   requestAnimationFrame(frame);
 }

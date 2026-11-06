@@ -3,7 +3,7 @@
 import { BUILDINGS } from './data/buildings.js';
 import { footprintSize, footprintTiles } from './geometry.js';
 import { buildingContents, createProductionState } from './production.js';
-import { addAllToStorage } from './shop.js';
+import { addAllToStorage, payCost, refundCost } from './shop.js';
 import { beltAt, buildingAt, findBuilding, isOwned } from './state.js';
 
 // Passt ein Gebäude an diese Stelle? Alle Felder müssen zum eigenen
@@ -27,6 +27,18 @@ export function placeBuilding(state, type, x, y, rot = 0) {
   return building;
 }
 
+// Bauen mit Baukosten (v0.7.0): Die Waren kommen aus dem Laden-Lager. Was
+// bezahlt wurde, merkt sich das Gebäude (paid) und gibt es beim Abreißen zurück.
+// Ergebnis: das Gebäude, 'cost' (Waren fehlen) oder null (kein Platz).
+export function buyBuilding(state, type, x, y, rot = 0) {
+  if (!canPlaceBuilding(state, type, x, y, rot)) return null;
+  const cost = BUILDINGS[type].cost ?? {};
+  if (!payCost(state, cost)) return 'cost';
+  const building = placeBuilding(state, type, x, y, rot);
+  if (Object.keys(cost).length > 0) building.paid = { ...cost };
+  return building;
+}
+
 export function moveBuilding(state, id, x, y, rot) {
   const building = findBuilding(state, id);
   if (!building || !canPlaceBuilding(state, building.type, x, y, rot, id)) return false;
@@ -43,12 +55,15 @@ export function rotateBuilding(state, id) {
   return moveBuilding(state, id, building.x, building.y, (building.rot + 1) % 4);
 }
 
-// Reißt ab. Waren im Gebäude kommen ins Laden-Lager (siehe buildingContents).
+// Reißt ab. Waren im Gebäude kommen ins Laden-Lager (siehe buildingContents),
+// ebenso die bezahlten Baukosten. Startgebäude und Gebäude von vor v0.7.0
+// haben nichts gekostet und geben deshalb keine Baukosten zurück.
 export function removeBuilding(state, id) {
   const index = state.buildings.findIndex((b) => b.id === id);
   if (index === -1) return false;
   const [building] = state.buildings.splice(index, 1);
   addAllToStorage(state, buildingContents(building));
+  if (building.paid) refundCost(state, building.paid);
   return true;
 }
 

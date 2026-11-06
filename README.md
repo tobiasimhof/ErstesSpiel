@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.6.1 – Größeres Grundstück (22 × 14) |
+| **Aktuelle Version** | v0.7.0 – Handel |
 | **Phase** | M1 – Fabrik-Grundgerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Neuer Chat: Tobias testet kurz v0.6.1 (Platz für die zweite Eisen-Linie). Danach stellt Claude den **Plan für v0.7.0 – Handel** vor (Abschnitt 6, Stichpunkte unter „Ausblick v0.7.0“), Tobias gibt ihn frei, dann wird programmiert |
+| **Nächster Schritt** | Tobias spielt v0.7.0 (Theken, Kunden, Händler, Baukosten in Waren) und sagt, wie sich Verkaufstempo, Gold und Baukosten anfühlen. Danach: Feinschliff der Zahlen oder Plan für v0.8.0 – Techbaum, Teil 2 |
 
 ---
 
@@ -87,7 +87,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 ### 3.3 Fabrik
 
 - Das Grundstück besteht aus quadratischen Feldern (Raster). Man startet mit **22 × 14 Feldern** (seit v0.6.1, vorher 16 × 10) und kauft später Fläche dazu, immer teurer. Ringsum liegt gesperrte Fläche (Welt 40 × 26), die man später kaufen kann.
-- **Der Laden ist das ganze Grundstück**, kein einzelnes Gebäude. Darauf stehen zu Beginn ein Holzfällerlager und ein Steinbruch.
+- **Der Laden ist das ganze Grundstück**, kein einzelnes Gebäude. Darauf stehen zu Beginn ein Holzfällerlager, ein Steinbruch und (seit v0.7.0) ein Versandportal.
 - Gebäude belegen mehrere Felder und haben Ein- und Ausgänge. **Größen (Tobias, 06.11.2026):** Maschinen 2 × 2 (damit sie später zwei Eingänge für zwei verschiedene Rohstoffe haben können), alles andere kleiner: Förderbänder 1 × 1, Lagerhaus 2 × 1, Versandportal 1 × 1.
 - **Förderbänder** verbinden die Gebäude und transportieren Waren Stück für Stück.
 - **Aufteilen und Zusammenführen durch Ziehen**, ohne Verteiler-Gebäude: Zieht man von einem bestehenden Band aus, teilt es sich auf (bis zu 3 Richtungen pro Feld; mehrfach aufteilen ergibt 4 und mehr Strecken). Zieht man auf ein bestehendes Band, laufen beide zusammen. Abzweigungen verteilen die Waren abwechselnd.
@@ -101,17 +101,18 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Kombinations-Maschinen** (Techbaum) brauchen zwei verschiedene Zutaten, z. B. Mechanik-Station: 1 Stein-Zahnrad + 2 Eisennägel → Mechanischer Schalter.
 - Eine Werkstatt kann mehrere Rezepte. Man stellt ein, was sie gerade herstellt.
 - **Umbauen ist leicht und günstig** (verschieben, drehen, abreißen mit Rückerstattung), weil man sich ständig an den Markt anpasst. Das gilt für alle Gebäude, auch die Startgebäude, damit man den Schwerpunkt der Fabrik jederzeit neu setzen kann.
-- **Bauen geht sofort**, sofern man das Gold und die Waren dafür hat. Es gibt keine Bauzeiten.
+- **Bauen geht sofort**, sofern man die Waren dafür hat. Es gibt keine Bauzeiten.
+- **Bauen kostet Waren statt Gold** (Tobias, v0.7.0): z. B. Förderband 1 Holzblock, Sägewerk 40 Holzblöcke. Die Waren kommen aus dem Laden-Lager. So muss man abwägen: verkaufen oder damit eine weitere Maschine bauen? Abreißen gibt die bezahlten Waren zurück; Verschieben und Drehen sind kostenlos. Tabelle in Abschnitt 4.2.
 
 ### 3.4 Wirtschaft
 
 - **Zuerst feste Preise**, damit die Spielmechanik einfach bleibt. Weiterverarbeiten muss sich lohnen (Beispiel von Tobias): Kostet ein Holzstamm 50 Gold, bringen die 200 Holzblöcke daraus knapp über 50 Gold. Macht man daraus 40 Winkel (oder 20 Winkel und 20 Stäbe), bringt der Verkauf deutlich mehr. So kann man nach und nach die Produktion ausbauen.
 - **Platzhalter-Preise im Spiel** (alles ×10, damit es nur ganze Goldbeträge gibt): Holzstamm/Felsbrocken 550 Gold (Kauf) → 200 Blöcke à 3 Gold = 600 Gold (+9 %) → 40 Teile à 18 Gold = 720 Gold (+31 %). Ein Test prüft, dass jede Stufe mehr bringt als die vorige.
-- **Laden:** Der Knopf „Laden“ unten links öffnet den Laden. Er hat ein eigenes **Lager** (gefüllt über das Versandportal) und **Verkaufstheken**. Die Theken bestückt man **von Hand** mit dem, was man verkaufen möchte; je nach Level bzw. Größe einer Theke passen darauf z. B. 20 Winkel. **Kunden kommen zufällig vorbei und kaufen zufällig viel**, z. B. der eine 2 Zahnräder und 1 Splitt, der nächste 3 Winkel – zu einem „normalen“ Preis. Später darf der Laden interaktiver werden; für den Anfang reicht die Übersicht.
-- **Händler:** Hier kauft man Rohstoffe wie Holzstämme.
+- **Laden:** Der Knopf „Laden“ unten links öffnet den Laden mit den Reitern **Lager**, **Theken** und **Händler** (seit v0.7.0). Er hat ein eigenes **Lager** (gefüllt über das Versandportal) und **Verkaufstheken**. Die Theken bestückt man **von Hand** mit dem, was man verkaufen möchte; je nach Level bzw. Größe einer Theke passen darauf z. B. 20 Winkel. **Kunden kommen zufällig vorbei und kaufen zufällig viel**, z. B. der eine 2 Zahnräder und 1 Splitt, der nächste 3 Winkel – zu einem „normalen“ Preis. Später darf der Laden interaktiver werden; für den Anfang reicht die Übersicht.
+- **Händler:** Hier kauft man Rohstoffe wie Holzstämme. **Verkaufen kann man nur über die Theken**, nicht an den Händler (Tobias, v0.7.0): Was man nicht mehr braucht, verkauft man über die Theken; vieles braucht man später noch, deshalb lohnt sich ein gemischtes Lager.
 - **Nachfrage:** Wer viel von einer Ware verkauft, drückt ihren Preis. Mit der Zeit erholt er sich wieder. Dazu kommen Trends, z. B. „Die Stadt baut eine Mauer: Steinblöcke +50 % für 2 Tage“. Eine Tür bringt also mal mehr, mal weniger Gold, je nachdem, wie gefragt sie gerade ist. So entsteht das Wirtschaftsgefühl, und es lohnt sich, je nach Marktlage umzubauen.
-- **Start:** Kein Startgold. Der erste Holzstamm und der erste Steinfels sind gratis, damit man sofort produzieren kann.
-- **Pleiteschutz:** Bei absoluter Pleite bekommt man einen Holzstamm geschenkt (Idee von Claude, von Tobias für gut befunden).
+- **Start:** Kein Startgold. Der erste Holzstamm und der erste Felsbrocken sind gratis, dazu 20 Holzblöcke für die ersten Förderbänder zum Versandportal.
+- **Pleiteschutz:** Bei absoluter Pleite bekommt man einen Holzstamm geschenkt (Idee von Claude, von Tobias für gut befunden). „Pleite“ heißt: weniger Gold als ein Holzstamm kostet, kein Rohstoff im Lager oder in Arbeit, und alle Waren (Lager, Theken, Fabrik) zusammen sind weniger wert als ein Holzstamm.
 - **Rohstoffe und Erträge:** Stein kostet so viel wie Holz und bringt ähnliche Erträge. Eisen kostet deutlich mehr, bringt aber auch mehr Gold. So verdient man mit jedem neuen Rohstoff mehr – und frühere Produkte verlieren ihren Wert nicht, weil sie für spätere Rezepte gebraucht werden.
 - **Kaufen statt herstellen:** Jede Ware kann man auch kaufen, z. B. eine fertige Tür. Das ist teurer als selbst herstellen, spart aber Platz und Zeit.
 - **Schwarzmarkt** (später, online, noch unsicher): Spieler bieten Waren zu eigenen Preisen an; der Online-Markt bestimmt die Preise. Idee von Tobias: Alle Läden sind verbunden – bieten alle Winkel an, sinkt der Preis für Winkel. Computer-Händler sorgen dafür, dass der Markt auch mit wenigen Spielern lebendig ist.
@@ -234,13 +235,29 @@ Warum Eisennägel anders als die übrigen Teile? Nägel sind klein und werden in
 
 **Freischalten nach Laden-Level** (von Tobias bestätigt): Level 1 Holz, Level 2 Stein (+ Mühlenbauer für die Handkurbel), Level 3 Eisen (+ Zimmerei, Feinwerkstatt), Level 4 Feinschmiede, Getriebebauer, Schlosserei. Den ersten Rohstoff jeder Sorte gibt es gratis: den ersten Holzstamm zum Spielstart, den ersten Felsbrocken beim Erreichen von Level 2, das erste Eisenerz bei Level 3. Bis es Laden-Level gibt (v0.9.0), ist alles sofort baubar.
 
+**Baukosten** (seit v0.7.0, Platzhalter; Tobias: „erstmal spielen und schauen, ob es nicht zu lange dauert“):
+
+| Gebäude | Kosten | entspricht etwa |
+|---|---|---|
+| Förderband (je Feld) | 1 Holzblock | 3 Gold |
+| Versandportal | 10 Holzblöcke | 30 Gold |
+| Sägewerk | 40 Holzblöcke | 120 Gold |
+| Lagerhaus | 8 Holzplatten | 144 Gold |
+| Holzfällerlager | 10 Holzplatten + 10 Holzstäbe | 360 Gold |
+| Steinbruch | 10 Holzplatten + 5 Holzstäbe | 270 Gold |
+| Steinmetz | 30 Steinblöcke + 5 Holzstäbe | 180 Gold |
+| Schmelzhütte | 20 Steinplatten + 10 Holzplatten | 540 Gold |
+| Schmiede | 10 Steinplatten + 30 Eisenbarren | 540 Gold |
+
+Das Sägewerk kostet nur Holzblöcke, damit die erste Maschine ohne Platten baubar ist. Für Stein braucht man Holzteile, für Eisen Steinteile – so behalten frühere Waren ihren Wert. Kein Gebäude kostet mehr, als ein Holzstamm einbringt (ein Test prüft das).
+
 **Holzwinkel und Splitt** fliegen raus (vielleicht kommen sie später wieder). Vorhandene im Spielstand werden umgewandelt: Holzwinkel → Holzplatte, Splitt → Stein-Zahnrad.
 
-### 4.3 Im Spiel (Stand v0.6.0)
+### 4.3 Im Spiel (Stand v0.7.0)
 
 | Stufe | Ware | Woher | Rezept |
 |---|---|---|---|
-| 0 | Holzstamm, Felsbrocken, Eisenerz | Laden-Lager (Startvorrat; Händler ab v0.7.0) | – |
+| 0 | Holzstamm, Felsbrocken, Eisenerz | Händler (550 / 550 / 2.200 Gold); 1 Holzstamm und 1 Felsbrocken gratis zum Start | – |
 | 1 | Holzblock / Steinblock / Eisenbarren | Holzfällerlager / Steinbruch / Schmelzhütte | 1 Rohstoff → 200 Stück in 15 Minuten |
 | 2 | Holzplatte / Holzstab | Sägewerk, Einstellung „Platten“ / „Stäbe“ | 5 Holzblöcke → 1 Teil (5 Sekunden) |
 | 2 | Steinplatte / Stein-Zahnrad | Steinmetz, Einstellung „Platten“ / „Zahnräder“ | 5 Steinblöcke → 1 Teil (5 Sekunden) |
@@ -279,7 +296,7 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | `src/core/data/buildings.js` | Datentabelle der Gebäude (Größe, Ein- und Ausgänge, Texte, Produktion) und Reihenfolge im Baumenü |
 | `src/core/data/items.js` | Datentabelle der Waren (Name, Preise, Aussehen) |
 | `src/core/data/recipes.js` | Datentabelle der Rezepte (Zutaten, Ergebnis, Zeit) |
-| `src/core/data/shop.js` | Laden: Lagergröße je Level, Startvorrat |
+| `src/core/data/shop.js` | Laden: Lagergröße und Theken je Level, Kunden-Takt, Startvorrat, Testpaket |
 | `src/core/state.js` | Spielzustand anlegen, Abfragen auf dem Raster |
 | `src/core/dirs.js` | Himmelsrichtungen (oben, rechts, unten, links) |
 | `src/core/geometry.js` | Größe, Drehung, Felder sowie Ein- und Ausgänge von Gebäuden |
@@ -287,7 +304,8 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | `src/core/belts.js` | Förderbänder legen, aufteilen, zusammenführen, drehen, abreißen |
 | `src/core/production.js` | Was Gebäude tun: einlegen, herstellen, zwischenlagern, versenden, Status |
 | `src/core/sim.js` | Simulation in festen Takten: Waren auf Bändern, Stau, Aufteilen, Zusammenführen |
-| `src/core/shop.js` | Laden-Lager |
+| `src/core/shop.js` | Laden-Lager, Baukosten bezahlen und zurückgeben |
+| `src/core/market.js` | Handel: Händler, Theken, Kunden (mit eigenem Zufall im Spielstand), Pleiteschutz, Testpaket |
 | `src/core/save.js` | Spielstand in Text umwandeln, prüfen und alte Spielstände umwandeln |
 | `src/view/camera.js` | Kamera: verschieben, zoomen, Bildschirm ↔ Welt umrechnen |
 | `src/view/input.js` | Touch, Maus und Mausrad (Antippen, Ziehen, zwei Finger) |
@@ -295,13 +313,15 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | `src/view/renderer.js` | Zeichnet Spielfeld, Bänder, Waren, Gebäude mit Statuslicht, Vorschau |
 | `src/view/itemArt.js` | Aussehen der Waren (auf dem Band und in Listen) |
 | `src/view/hud.js` | Obere Leiste und Menü ☰ |
-| `src/view/panels.js` | Infofenster, Laden-Fenster, Rückfragen, Meldungen |
+| `src/view/panels.js` | Infofenster, großes Fenster, Rückfragen, Meldungen |
+| `src/view/shop.js` | Laden-Fenster mit den Reitern Lager, Theken, Händler |
+| `src/view/format.js` | Texte für Zahlen, Waren und Kosten |
 | `src/view/buildbar.js` | Untere Leisten: Laden/Bauen, Bauleiste, Werkzeugleiste |
 | `src/view/press.js` | Knöpfe reagieren aufs Loslassen des Fingers (siehe Entscheidungen) |
 | `src/view/storage.js` | Speichern und Laden im Browser |
 | `src/style.css` | Aussehen der Oberfläche |
 | `assets/icons/` | App-Symbole (erzeugt mit `tools/make-icons.py`) |
-| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Speichern, Kamera, Versionsnummer |
+| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Speichern, Kamera, Versionsnummer |
 | `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Abreißen, Speichern und Neues Spiel per Touch durch |
 
 **Prüfen vor jedem Merge:** `npm test` (Spielregeln) und `npm run test:browser` (Browser-Test).
@@ -334,20 +354,25 @@ Die Kombinations-Maschinen und die Weiterverarbeitung (Abschnitt 4.2) kommen mit
 | v0.5.2 | **Techbaum festgelegt:** Antworten von Tobias, Namen, Größen, Preistabelle und Plan für v0.6.0 in der README (Spiel unverändert) | ✅ fertig |
 | v0.6.0 | **Techbaum, Teil 1:** Grundmaschinen 2 × 2 mit neuen Modi (Sägewerk, Steinmetz, Schmiede), Eisen-Kette mit Schmelzhütte, Preistabelle | ✅ fertig |
 | v0.6.1 | **Größeres Grundstück:** 22 × 14 statt 16 × 10 Felder, wächst nach rechts und unten | ✅ fertig |
-| v0.7.0 | **Handel:** Händler (Rohstoffe kaufen), Laden mit von Hand bestückten Verkaufstheken, zufällige Kunden mit zufälligen Einkäufen, Gold; Bauen kostet Gold; Start ohne Gold mit Gratis-Holzstamm; Pleiteschutz | als Nächstes planen |
+| v0.7.0 | **Handel:** Händler (Rohstoffe kaufen), Laden mit von Hand bestückten Verkaufstheken, zufällige Kunden mit zufälligen Einkäufen, Gold; Bauen kostet Waren; Start ohne Gold mit Gratis-Holzstamm; Pleiteschutz | ✅ fertig |
 | v0.8.0 | **Techbaum, Teil 2:** Kombinations-Maschinen mit zwei Zutaten und die Weiterverarbeitung (Kugellager, Regler, Mini-Schloss …) | |
 | v0.9.0 | **Laden-Level:** Freischalten nach Level (Holz → Stein → Eisen), Laden-Ausbau mit Gold und Waren | |
 | v0.10.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
 
-### Ausblick v0.7.0 – Handel (Plan noch nicht besprochen)
+### v0.7.0 – Handel (fertig)
 
-Was bereits feststeht (Abschnitte 3.4 und 7) und in den Plan gehört:
-- **Händler:** Rohstoffe kaufen – Holzstamm und Felsbrocken je 550 Gold, Eisenerz 2.200 Gold (Preistabelle 4.2). Später kann man jede Ware kaufen, teurer als selbst herstellen.
-- **Laden mit Verkaufstheken:** zu Beginn 2 Theken, je eine Sorte, bis 20 Stück; von Hand aus dem Laden-Lager bestückt.
-- **Kunden:** alle 10–30 Sekunden einer, kauft 1–3 Waren zum festen Wert aus der Preistabelle.
-- **Gold:** Start ohne Gold (bisher stehen 100 Gold oben – Platzhalter); der erste Holzstamm ist gratis. Pleiteschutz: Bei absoluter Pleite gibt es einen Holzstamm geschenkt.
-- **Bauen kostet Gold** (bisher kostenlos). Abreißen erstattet.
-- **Offene Punkte für den Plan:** Baukosten je Gebäude; was mit dem Startvorrat bestehender Spielstände passiert (z. B. behalten); ob das Laden-Lager (500 Plätze) so bleibt; ob Fläche kaufen schon hier oder erst mit dem Laden-Level (v0.9.0) kommt.
+**Neu im Spiel:**
+- **Laden-Fenster mit drei Reitern:** 📦 Lager, 🛒 Theken, 🧺 Händler.
+- **Händler:** Holzstamm und Felsbrocken je 550 Gold, Eisenerz 2.200 Gold. Gekauftes landet im Laden-Lager. Holzstamm, Felsbrocken und Eisenerz lassen sich auch direkt im Infofenster des Gebäudes kaufen.
+- **2 Verkaufstheken** mit je einer Sorte, bis 20 Stück. „Ware wählen“ stellt eine Ware auf die Theke und füllt sie gleich auf; dazu +1, +5, „Auffüllen“ und „↩ Abräumen“ (zurück ins Lager).
+- **Kunden** kommen alle 10–30 Sekunden und kaufen 1–3 Stück zum festen Wert. Oben erscheint kurz „+Gold“; im Reiter Theken stehen die letzten 5 Verkäufe und wann der nächste Kunde kommt.
+- **Bauen kostet Waren** aus dem Laden-Lager (Tabelle in Abschnitt 4.2). Die Bauleiste zeigt die Kosten als kleine Warenbilder; was nicht reicht, ist ausgegraut und sagt beim Antippen, was fehlt. Förderbänder kosten 1 Holzblock je neues Feld; reichen die Holzblöcke nicht, endet die Strecke früher. Abreißen gibt bezahlte Waren zurück.
+- **Neues Spiel:** 0 Gold, 1 Holzstamm, 1 Felsbrocken, 20 Holzblöcke; ein Versandportal steht schon zwischen Holzfällerlager und Steinbruch.
+- **Pleiteschutz:** geschenkter Holzstamm mit Meldung.
+- **Testmodus:** zusätzlicher Menüpunkt „🎁 Testpaket“ (1.000 Gold + je 50 von jeder Ware). Achtung: Das füllt das Laden-Lager stark (9 Waren × 50 = 450 Plätze).
+- **Bestehende Spielstände** (Version 4 → 5): Fabrik, Gold und Lager bleiben; Theken und Kunden kommen dazu. Was schon stand, wurde nicht nachträglich berechnet – dafür gibt es beim Abreißen auch keine Baukosten zurück (gilt auch für die Startgebäude).
+
+**Was Tobias testet:** Mit einem neuen Spiel (☰ → Neues Spiel) oder der bestehenden Fabrik: Waren auf die Theken stellen, Kunden kaufen lassen, beim Händler Rohstoffe kaufen, mit Waren bauen. Fühlt sich das Verkaufstempo richtig an? Dauert es zu lange, bis man sich ein Gebäude leisten kann? Sind die Baukosten stimmig?
 
 ### v0.6.1 – Größeres Grundstück (fertig)
 
@@ -407,7 +432,7 @@ Was bereits feststeht (Abschnitte 3.4 und 7) und in den Plan gehört:
 | 05.11.2026 | Schwerpunkt ist das Bauen der Fabrik; die Wirtschaft bestimmt, was sich lohnt | Antwort von Tobias auf Frage 2. |
 | 05.11.2026 | Mittelalter mit den Grundstoffen Holz und Stein | Hält Werkzeuge und Waren einfach (Frage 4). |
 | 05.11.2026 | Start mit Laden, Holzfällerlager und Steinbruch | Frage 5. |
-| 05.11.2026 | Verkauf im Laden und (später) auf dem Schwarzmarkt; Holz und Stein immer zum Spottpreis verkäuflich | Fragen 6 und 9. Spieler können nicht pleitegehen. |
+| 05.11.2026 | Verkauf im Laden und (später) auf dem Schwarzmarkt; ~~Holz und Stein immer zum Spottpreis verkäuflich~~ (am 06.11.2026 verworfen, siehe unten) | Fragen 6 und 9. Gegen Pleite hilft stattdessen der Pleiteschutz. |
 | 05.11.2026 | Fortschritt über Laden-Level und Fläche kaufen, wie in Clash of Clans | Fragen 6 und 9. |
 | 05.11.2026 | Echtzeit, Fabrik läuft offline weiter | Fragen 8 und 10: tägliches Reinschauen. |
 | 05.11.2026 | Zuerst als Browser-Spiel (Web) | Frage 11. Erweiterung später. |
@@ -479,6 +504,13 @@ Was bereits feststeht (Abschnitte 3.4 und 7) und in den Plan gehört:
 | 06.11.2026 | Rezept-Knöpfe heißen kurz „Platten“, „Stäbe“, „Zahnräder“, „Nägel“; Symbole: Schmelzhütte 🔥, Schmiede 🔨 | Claudes Wahl; jederzeit änderbar. |
 | 06.11.2026 | Alte Sägewerke und Steinmetze wachsen so, dass ihre Anschlüsse an derselben Stelle bleiben | Bestehende Bänder bleiben angeschlossen; nur wenn kein Platz ist, wird versetzt. |
 | 06.11.2026 | Grundstück 22 × 14 statt 16 × 10 (wächst nach rechts und unten), Welt 40 × 26; gilt auch für bestehende Spielstände | Tobias (Chat 4): Für eine zweite Eisen-Linie fehlte der Platz. Zwischenlösung bis „Fläche kaufen“. |
+| 06.11.2026 | Bauen kostet Waren aus dem Laden-Lager statt Gold (z. B. Förderband 1 Holzblock, Sägewerk 40 Holzblöcke); Gold ist für Rohstoffe | Tobias (Chat 5): Man soll abwägen, ob man Waren verkauft oder damit eine Maschine baut. Mengen sind Platzhalter. |
+| 06.11.2026 | Kein Notverkauf an den Händler; verkauft wird nur über die Theken | Tobias (Chat 5): Man soll das Lager selbst abverkaufen; viele Teile braucht man später noch. Ersetzt die Entscheidung vom 05.11.2026 „Holz und Stein immer zum Spottpreis verkäuflich“. |
+| 06.11.2026 | Verkaufstempo bleibt erst einmal bei 2 Theken × 20 Stück und einem Kunden alle 10–30 s | Tobias (Chat 5): erst spielen und sehen, wie viel Gold man real erwirtschaftet. |
+| 06.11.2026 | Neues Spiel: 0 Gold, 1 Holzstamm, 1 Felsbrocken, 20 Holzblöcke und ein Versandportal auf dem Grundstück | Ohne Portal und Holzblöcke für Bänder käme nie eine Ware in den Laden. |
+| 06.11.2026 | Abreißen gibt nur zurück, was beim Bauen bezahlt wurde; Startgebäude und Gebäude von vor v0.7.0 geben nichts zurück | Claudes Wahl: Sonst könnte man Gratis-Gebäude abreißen und hätte Waren umsonst. |
+| 06.11.2026 | „Ware wählen“ füllt die Theke gleich auf; Testpaket nur im Testmodus | Claudes Wahl, spart einen Tipp bzw. hält das normale Spiel sauber. |
+| 06.11.2026 | Kunden-Zufall steckt im Spielstand | Damit sich Abläufe in Tests genau wiederholen lassen. |
 
 ---
 
@@ -486,8 +518,8 @@ Was bereits feststeht (Abschnitte 3.4 und 7) und in den Plan gehört:
 
 Stand 06.11.2026.
 
-1. **Plan für v0.7.0 (Handel)** im neuen Chat vorstellen und freigeben lassen; offene Punkte dazu stehen in Abschnitt 6 unter „Ausblick v0.7.0“.
-2. **Preise:** Tobias hat v0.6.0 getestet und nichts bemängelt („alles sieht gut aus“). Ob die Preise sich im Spiel gut anfühlen, zeigt sich erst mit dem Verkaufen (v0.7.0).
+1. **Test von v0.7.0:** Wie fühlen sich Verkaufstempo (2 Theken × 20, ein Kunde alle 10–30 s), Goldertrag und Baukosten an? Danach Zahlen anpassen.
+2. **Laden-Lager 500 Plätze:** Bleibt das so, oder wird es mit dem Laden-Level größer? Volle Lager stoppen die Versandportale.
 3. **Laden-Level (v0.9.0):** Was kostet ein Aufstieg (Gold und Waren)? Gibt es zusätzlich Freischaltpunkte? Vorschlag kommt mit dem Plan für v0.9.0.
 4. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
 5. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
@@ -495,6 +527,23 @@ Stand 06.11.2026.
 ---
 
 ## 9. Versionshistorie
+
+### v0.7.0 – Handel (06.11.2026)
+
+**Vorgenommen:**
+- Mit der Fabrik Gold verdienen: Händler, Verkaufstheken, Kunden; Bauen kostet Waren; Start ohne Gold; Pleiteschutz.
+
+**Fragen, die wir uns gestellt haben:**
+- Gold oder Waren als Baukosten? → Waren (Tobias), damit man zwischen Verkaufen und Bauen abwägt.
+- Wie kommt man ohne Gold an die ersten Waren? → Versandportal steht schon, 20 Holzblöcke für die Bänder, das erste Sägewerk kostet nur Holzblöcke.
+- Was bekommt man beim Abreißen zurück? → Genau das, was bezahlt wurde; Gratis-Gebäude geben nichts zurück.
+- Wie bleiben Knöpfe im Laden-Fenster zuverlässig antippbar, obwohl es sich ständig aktualisiert? → Knöpfe werden nicht neu erzeugt, nur ihre Beschriftung geändert.
+
+**Gemacht:**
+- Neue Datei `src/core/market.js` (Händler, Theken, Kunden, Pleiteschutz, Testpaket), Baukosten in der Gebäude-Tabelle, neues Laden-Fenster `src/view/shop.js`.
+- Spielstand-Version 5 mit Umwandlung von Version 4.
+- 100 automatische Tests (neu u. a.: Händler, Theken, Kunden-Takt über eine Stunde, Baukosten und Rückgabe, gekürzte Bänder, Pleiteschutz, neues Spiel bis zum ersten Verkauf, Umwandlung von Version 4) und der Browser-Test (neu: Einstieg ohne Gold, Theke bestücken, Kunden kaufen, Händler, Testpaket) – alle bestanden.
+- Beim Testen gefunden und behoben: Das „+Gold“ überdeckte das Laden-Level-Symbol; der Abräumen-Knopf war ohne Text unklar.
 
 ### v0.6.1 – Größeres Grundstück (06.11.2026)
 
@@ -686,6 +735,21 @@ Stand 06.11.2026.
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 06.11.2026 – Chat 5: Plan und Umsetzung v0.7.0 (Handel)
+
+**Tobias:** v0.6.1 lief sehr gut.
+
+**Claude** hat den Plan für v0.7.0 vorgestellt (Laden mit Reitern, Händler, 2 Theken, Kunden, Baukosten in Gold, Pleiteschutz) und drei Fragen gestellt.
+
+**Tobias' Antworten:**
+1. Verkaufstempo erst einmal so lassen, um zu sehen, wie das Abverkaufen ist und wie viel Gold man beim Spielen real erwirtschaftet.
+2. Kein Notverkauf zum Spottpreis – das war nur eine Online-Idee. Man soll das Lager über die Theken abverkaufen; manche Teile braucht man später noch, deshalb ist es gut, von allem etwas im Lager zu haben.
+3. Baukosten nicht in Gold, sondern in Waren, z. B. ein Förderband kostet einen Holzblock, ein Sägewerk ein paar Holzplatten und Holzblöcke. So muss man abwägen: verkaufe ich meine Holzplatten oder baue ich dafür eine Maschine – ohne ins Minus zu rutschen.
+
+**Claude** hat eine Kostentabelle in Waren vorgeschlagen (Abschnitt 4.2). **Tobias:** Passt so; erst einmal spielen und schauen, ob die Mechanik passt und es nicht zu lange dauert, neue Sachen zu bauen.
+
+**Umgesetzt:** v0.7.0 (siehe Versionshistorie).
 
 ### 06.11.2026 – Chat 4, Teil 2: Test von v0.6.0 & größeres Grundstück
 

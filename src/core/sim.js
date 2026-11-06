@@ -13,6 +13,7 @@
 
 import { DIRS, opposite, step } from './dirs.js';
 import { buildingPorts } from './geometry.js';
+import { updateMarket } from './market.js';
 import { accept, canAccept, peekOutput, takeOutput, updateProduction } from './production.js';
 import { beltAt, buildingAt, parseTileKey, tileKey } from './state.js';
 
@@ -121,6 +122,9 @@ export function tick(state, dt = TICK) {
 
   // 3. Gebäude arbeiten
   for (const building of state.buildings) updateProduction(state, building, dt);
+
+  // 4. Kunden kaufen an den Theken, Pleiteschutz
+  updateMarket(state, dt);
 }
 
 // Mehrere Sekunden am Stück durchrechnen (Tests, später Offline-Produktion).

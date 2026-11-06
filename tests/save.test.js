@@ -169,6 +169,25 @@ test('Spielstand aus v0.6.0 (Version 3): Grundstück wächst nach rechts und unt
   assert.deepEqual(loaded.notes, []);
 });
 
+test('Spielstand aus v0.6.1 (Version 4): Fabrik, Gold und Lager bleiben, Theken und Kunden kommen dazu', () => {
+  const v4 = sampleGame();
+  delete v4.counters;
+  delete v4.market;
+  v4.gold = 100;
+  v4.storage = { holzstamm: 2, holzplatte: 37, eisennagel: 120 };
+  const before = { buildings: JSON.stringify(v4.buildings), belts: JSON.stringify(v4.belts) };
+  const loaded = deserializeGame(JSON.stringify({ saveVersion: 4, savedAt: 5, state: v4 }));
+  assert.ok(loaded);
+  assert.equal(loaded.migratedFrom, 4);
+  assert.equal(loaded.state.gold, 100);
+  assert.deepEqual(loaded.state.storage, { holzstamm: 2, holzplatte: 37, eisennagel: 120 });
+  assert.equal(JSON.stringify(loaded.state.buildings), before.buildings, 'Gebäude unverändert, nichts nachträglich berechnet');
+  assert.equal(JSON.stringify(loaded.state.belts), before.belts);
+  assert.equal(loaded.state.counters.length, 2);
+  assert.ok(loaded.state.market.timer > 0);
+  assert.deepEqual(loaded.notes, []);
+});
+
 test('Neues Spiel startet mit 22 × 14 Feldern', () => {
   const s = createNewGame();
   assert.deepEqual([s.plot.width, s.plot.height], [22, 14]);
