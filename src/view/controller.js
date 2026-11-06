@@ -8,46 +8,47 @@
 //   belt   – Förderbänder ziehen
 //   erase  – Abreißen
 
-import { BUILDINGS } from '../core/data/buildings.js';
+import { BELT_COST, BUILDINGS } from '../core/data/buildings.js';
 import { ITEMS } from '../core/data/items.js';
 import { RECIPES } from '../core/data/recipes.js';
 import { DIR_NAMES } from '../core/dirs.js';
 import { footprintSize } from '../core/geometry.js';
 import {
+  buyBuilding,
   canPlaceBuilding,
   findFreeSpot,
   moveBuilding,
-  placeBuilding,
   removeBuilding,
   rotateBuilding,
 } from '../core/buildings.js';
 import {
-  applyBeltPath,
   buildBeltPath,
+  buyBeltPath,
   extendTrace,
   interpolateTiles,
+  limitBeltPath,
   removeBelt,
   rotateBelt,
 } from '../core/belts.js';
+import { buyRaw } from '../core/market.js';
 import { buildingStatus, loadInput, losesWorkOnRemove, productionOf, setRecipe } from '../core/production.js';
-import { storageCapacity, storageCount, storageTotal } from '../core/shop.js';
+import { affordableCount, canAfford, missingFor, storageCapacity, storageCount, storageTotal } from '../core/shop.js';
 import { beltAt, buildingAt, findBuilding, isInWorld, isOwned } from '../core/state.js';
-import { createItemIcon } from './itemArt.js';
 import { TILE, panBy, screenToWorld } from './camera.js';
+import { costText, numberFormat } from './format.js';
 
 const TEXT = {
-  place: (name) => `${name}: Vorschau mit dem Finger an die gewünschte Stelle schieben.`,
+  place: (name, cost) => `${name} (kostet ${cost}): Vorschau mit dem Finger an die gewünschte Stelle schieben.`,
   move: (name) => `${name} verschieben: Vorschau an die neue Stelle schieben.`,
-  belt: 'Förderband: mit einem Finger ziehen. Von einem Band aus ziehen teilt es auf, auf ein Band ziehen führt zusammen. Antippen dreht.',
+  belt: `Förderband (${costText(BELT_COST)} je Feld): mit einem Finger ziehen. Von einem Band aus ziehen teilt es auf, auf ein Band ziehen führt zusammen. Antippen dreht.`,
   erase: 'Abreißen: über Förderbänder wischen oder ein Gebäude antippen.',
 };
 
-export function createController({ state, camera, ui, panels, buildBar, onChange, requestDraw, worldBounds }) {
+export function createController({ state, camera, ui, panels, buildBar, shopView, onChange, requestDraw, worldBounds }) {
   let mode = 'normal';
   let drag = null;
   let info = null; // { buttons, setStatus } des offenen Infofensters
   let infoRefresh = null; // aktualisiert das offene Infofenster
-  let shopOpen = false;
 
   const changed = () => onChange();
 
@@ -74,7 +75,6 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
   }
 
   const DOT = { work: '🟢', idle: '🟡', blocked: '🔴' };
-  const numberFormat = new Intl.NumberFormat('de-DE');
 
   function formatDuration(seconds) {
     const s = Math.max(0, Math.round(seconds));
@@ -100,6 +100,7 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
       const button = info.buttons.get('load');
       button.textContent = prod.loaded ? `${input.name} wird verarbeitet` : `➕ ${input.name} einlegen`;
       button.disabled = prod.loaded || storageCount(state, p.input) < 1;
+      info.buttons.get('buy').disabled = state.gold < input.buyPrice;
     } else if (p?.kind === 'workshop') {
       const recipe = RECIPES[prod.recipe];
       const [inType, need] = Object.entries(recipe.inputs)[0];
@@ -147,6 +148,19 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
             } else {
               panels.toast(`Kein ${ITEMS[p.input].name} im Laden-Lager.`);
             }
+            infoRefresh?.();
+          },
+        });
+        actions.push({
+          key: 'buy',
+          label: `🧺 ${ITEMS[p.input].name} kaufen · ${numberFormat.format(ITEMS[p.input].buyPrice)} 🪙`,
+          onClick: () => {
+            const result = buyRaw(state, p.input);
+            if (result === 'ok') {
+              changed();
+              panels.toast(`${ITEMS[p.input].name} gekauft. Jetzt einlegen.`);
+            } else if (result === 'gold') panels.toast('Dafür reicht dein Gold nicht.');
+            else if (result === 'full') panels.toast('Dein Laden-Lager ist voll.');
             infoRefresh?.();
           },
         });
@@ -227,11 +241,14 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
 
   async function askRemoveBuilding(b) {
     const def = BUILDINGS[b.type];
+    const refund = b.paid
+      ? `Die Baukosten kommen zurück ins Laden-Lager: ${costText(b.paid)}.`
+      : 'Es hat beim Bauen nichts gekostet, deshalb gibt es keine Baukosten zurück.';
     const ok = await panels.confirm({
       title: `${def.name} abreißen?`,
       text: losesWorkOnRemove(b)
-        ? 'Der angefangene Rohstoff geht dabei verloren. Waren im Gebäude kommen ins Laden-Lager.'
-        : 'Waren im Gebäude kommen ins Laden-Lager. Du kannst es jederzeit über „Bauen“ neu errichten.',
+        ? `Der angefangene Rohstoff geht dabei verloren. Waren im Gebäude kommen ins Laden-Lager. ${refund}`
+        : `Waren im Gebäude kommen ins Laden-Lager. ${refund}`,
       okLabel: 'Abreißen',
       danger: true,
     });
@@ -261,6 +278,7 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
 
   function openMenu() {
     select(null);
+    buildBar.updateCosts(state);
     setMode('menu');
   }
 
@@ -268,10 +286,19 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
     setMode('normal');
   }
 
+  function toastMissing(cost) {
+    panels.toast(`Dir fehlen im Laden-Lager: ${costText(missingFor(state, cost))}.`, 3000);
+  }
+
   function selectTool(tool) {
-    if (tool === 'belt') return setMode('belt', { text: TEXT.belt });
+    if (tool === 'belt') {
+      if (affordableCount(state, BELT_COST) < 1) toastMissing(BELT_COST);
+      return setMode('belt', { text: TEXT.belt });
+    }
     if (tool === 'erase') return setMode('erase', { text: TEXT.erase });
-    if (BUILDINGS[tool]) startPlace(tool, null);
+    if (!BUILDINGS[tool]) return;
+    if (!canAfford(state, BUILDINGS[tool].cost)) return toastMissing(BUILDINGS[tool].cost);
+    startPlace(tool, null);
   }
 
   // ---------- Gebäude platzieren / verschieben ----------
@@ -288,7 +315,7 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
     ui.ghost = { type, x: pos.x, y: pos.y, rot, movingId: existing ? existing.id : null, valid: false };
     const name = BUILDINGS[type].name;
     setMode('place', {
-      text: existing ? TEXT.move(name) : TEXT.place(name),
+      text: existing ? TEXT.move(name) : TEXT.place(name, costText(BUILDINGS[type].cost)),
       confirmLabel: existing ? '✓ Hierhin' : '✓ Bauen',
     });
     validateGhost();
@@ -329,11 +356,14 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
       setMode('normal');
       select({ kind: 'building', id });
     } else {
-      placeBuilding(state, g.type, g.x, g.y, g.rot);
+      const result = buyBuilding(state, g.type, g.x, g.y, g.rot);
+      if (result === 'cost') return toastMissing(BUILDINGS[g.type].cost);
+      if (!result) return;
       ui.ghost = null;
       changed();
       setMode('menu');
-      panels.toast(`${name} gebaut.`);
+      buildBar.updateCosts(state);
+      panels.toast(`${name} gebaut (−${costText(BUILDINGS[g.type].cost)}).`);
     }
   }
 
@@ -355,6 +385,11 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
     validateGhost();
   }
 
+  // Vorschau einer Strecke: nur so weit, wie die Holzblöcke reichen.
+  function beltPreview(trace) {
+    return limitBeltPath(state, buildBeltPath(state, trace), affordableCount(state, BELT_COST));
+  }
+
   // ---------- Abreißen ----------
 
   function eraseBeltAt(tile) {
@@ -363,52 +398,10 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
 
   // ---------- Laden ----------
 
-  function buildShop(box, { el }) {
-    const beltCount = Object.keys(state.belts).length;
-    box.append(
-      el('h2', null, '⚖️ Dein Laden'),
-      el('p', 'modal-meta', `Level ${state.shopLevel} · Fläche ${state.plot.width} × ${state.plot.height} Felder`),
-      el(
-        'p',
-        null,
-        'Waren aus deinem Versandportal landen hier im Laden-Lager. Ab v0.7.0 stellst du sie auf Verkaufstheken und verkaufst sie an Kunden.',
-      ),
-    );
-    const stats = el('div', 'shop-stats');
-    stats.append(
-      el('div', 'stat', `🏗️ Gebäude: ${state.buildings.length}`),
-      el('div', 'stat', `➡️ Förderbänder: ${beltCount}`),
-      el('div', 'stat', `🪙 Gold: ${numberFormat.format(state.gold)}`),
-    );
-    box.append(stats, el('h3', null, `Laden-Lager (${storageTotal(state)} / ${storageCapacity(state)})`));
-
-    const entries = Object.keys(ITEMS).filter((type) => storageCount(state, type) > 0);
-    if (entries.length === 0) {
-      box.append(el('p', 'empty-note', 'Leer. Baue ein Versandportal und lass Waren hineinlaufen.'));
-      return;
-    }
-    const list = el('div', 'item-list');
-    let total = 0;
-    for (const type of entries) {
-      const def = ITEMS[type];
-      const count = storageCount(state, type);
-      const row = el('div', 'item-row');
-      const note = def.raw
-        ? `Rohstoff · Kaufpreis ${numberFormat.format(def.buyPrice)} 🪙`
-        : `Wert ${numberFormat.format(def.price)} 🪙 je Stück`;
-      if (!def.raw) total += count * def.price;
-      row.append(createItemIcon(type, 30), el('span', 'item-name', def.name), el('span', 'item-note', note), el('span', 'item-count', `${numberFormat.format(count)}×`));
-      list.append(row);
-    }
-    box.append(list);
-    if (total > 0) box.append(el('p', 'modal-meta', `Wert aller Waren (ohne Rohstoffe): ${numberFormat.format(total)} 🪙`));
-  }
-
   function openShop(hud) {
     select(null);
     hud?.closeMenu();
-    shopOpen = true;
-    panels.showModal(buildShop);
+    shopView.open();
   }
 
   // ---------- Eingabe ----------
@@ -437,8 +430,8 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
     // Wird regelmäßig aufgerufen, damit offene Fenster aktuell bleiben.
     refresh() {
       infoRefresh?.();
-      if (shopOpen && panels.isModalOpen()) panels.showModal(buildShop);
-      else shopOpen = false;
+      shopView.refresh();
+      if (mode === 'menu') buildBar.updateCosts(state);
     },
 
     back() {
@@ -473,7 +466,7 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
       const tile = tileAtScreen(sx, sy);
       if (mode === 'belt') {
         drag = { kind: 'belt', trace: [tile] };
-        ui.beltPreview = buildBeltPath(state, drag.trace);
+        ui.beltPreview = beltPreview(drag.trace);
       } else if (mode === 'erase') {
         drag = { kind: 'erase', last: tile };
         eraseBeltAt(tile);
@@ -495,7 +488,7 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
       const tile = tileAtScreen(sx, sy);
       if (drag.kind === 'belt') {
         drag.trace = extendTrace(drag.trace, tile);
-        ui.beltPreview = buildBeltPath(state, drag.trace);
+        ui.beltPreview = beltPreview(drag.trace);
       } else if (drag.kind === 'erase') {
         for (const t of interpolateTiles(drag.last, tile)) eraseBeltAt(t);
         drag.last = tile;
@@ -514,10 +507,14 @@ export function createController({ state, camera, ui, panels, buildBar, onChange
 
     onDragEnd() {
       if (drag?.kind === 'belt' && ui.beltPreview) {
-        const path = ui.beltPreview;
+        // Die volle Strecke kaufen: Reicht es nicht, kürzt buyBeltPath sie.
+        const path = buildBeltPath(state, drag.trace);
         if (path.tiles.length > 1 || path.endDir) {
-          applyBeltPath(state, path);
-          changed();
+          const { created, cut } = buyBeltPath(state, path);
+          if (cut > 0) {
+            panels.toast(`Nicht genug Holzblöcke: ${cut} Feld${cut > 1 ? 'er' : ''} fehlt${cut > 1 ? 'en' : ''}. Mehr Holzblöcke ins Laden-Lager schicken.`, 3200);
+          }
+          if (created > 0 || path.tiles.length > 1) changed();
         }
         ui.beltPreview = null;
       }

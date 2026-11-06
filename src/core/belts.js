@@ -12,7 +12,8 @@
 
 import { DIRS, dirBetween, opposite, rotateCW, sortDirs, step } from './dirs.js';
 import { buildingPorts } from './geometry.js';
-import { addToStorage } from './shop.js';
+import { BELT_COST } from './data/buildings.js';
+import { addToStorage, affordableCount, payCost, refundCost } from './shop.js';
 import { beltAt, buildingAt, isInWorld, isOwned, tileKey } from './state.js';
 
 export function canHoldBelt(state, x, y) {
@@ -99,8 +100,43 @@ export function pathDirections(path) {
   });
 }
 
+// Anzahl neuer Band-Felder einer Strecke (bestehende Bänder kosten nichts).
+export function newBeltCount(state, path) {
+  return path.tiles.filter((t) => !beltAt(state, t.x, t.y)).length;
+}
+
+// Kürzt die Strecke so, dass sie höchstens maxNew neue Felder enthält.
+// Ergebnis: { tiles, endDir, cut } – cut: wie viele neue Felder weggefallen sind.
+export function limitBeltPath(state, path, maxNew) {
+  let fresh = 0;
+  for (let i = 0; i < path.tiles.length; i++) {
+    const t = path.tiles[i];
+    if (beltAt(state, t.x, t.y)) continue;
+    fresh++;
+    if (fresh > maxNew) {
+      const cut = newBeltCount(state, path) - maxNew;
+      return { tiles: path.tiles.slice(0, i), endDir: null, cut };
+    }
+  }
+  return { ...path, cut: 0 };
+}
+
+// Legt eine Strecke mit Baukosten (v0.7.0): Jedes neue Feld kostet BELT_COST
+// aus dem Laden-Lager. Reicht es nicht, wird die Strecke gekürzt.
+// Ergebnis: { created, cut }
+export function buyBeltPath(state, path) {
+  const limited = limitBeltPath(state, path, affordableCount(state, BELT_COST));
+  const count = newBeltCount(state, limited);
+  if (!payCost(state, BELT_COST, count)) return { created: 0, cut: limited.cut };
+  const created = applyBeltPath(state, limited, { paid: true });
+  // Wird die Strecke doch nicht gelegt (z. B. nur ein einzelnes Feld), gibt es die Kosten zurück.
+  if (created < count) refundCost(state, BELT_COST, count - created);
+  return { created, cut: limited.cut };
+}
+
 // Legt die Strecke. Gibt die Anzahl neuer Band-Felder zurück.
-export function applyBeltPath(state, path) {
+// paid: neue Bänder wurden bezahlt und geben beim Abreißen ihre Kosten zurück.
+export function applyBeltPath(state, path, { paid = false } = {}) {
   const { tiles, endDir } = path;
   if (tiles.length === 0 || (tiles.length === 1 && !endDir)) return 0;
   const dirs = pathDirections(path);
@@ -110,7 +146,7 @@ export function applyBeltPath(state, path) {
   let created = 0;
   tiles.forEach((t, i) => {
     if (existed[i]) return;
-    state.belts[tileKey(t.x, t.y)] = { outs: [dirs[i]] };
+    state.belts[tileKey(t.x, t.y)] = paid ? { outs: [dirs[i]], paid: true } : { outs: [dirs[i]] };
     created++;
   });
 
@@ -145,13 +181,15 @@ export function rotateBelt(state, x, y) {
   return true;
 }
 
-// Entfernt ein Band. Eine Ware darauf kommt ins Laden-Lager. Nachbarbänder,
+// Entfernt ein Band. Eine Ware darauf kommt ins Laden-Lager, ebenso die
+// Baukosten, falls das Band bezahlt wurde. Nachbarbänder,
 // die hineingezeigt haben, verlieren diesen Ausgang, sofern sie noch einen
 // anderen haben.
 export function removeBelt(state, x, y) {
   const belt = beltAt(state, x, y);
   if (!belt) return false;
   if (belt.item) addToStorage(state, belt.item.type, 1);
+  if (belt.paid) refundCost(state, BELT_COST);
   delete state.belts[tileKey(x, y)];
   for (const dir of DIRS) {
     const n = step({ x, y }, dir);

@@ -4,8 +4,9 @@
 //
 // Der Laden ist kein Gebäude, sondern das ganze eigene Grundstück (plot).
 
-import { START_STORAGE } from './data/shop.js';
+import { START_GOLD, START_STORAGE } from './data/shop.js';
 import { occupies } from './geometry.js';
+import { createCounters, createMarket } from './market.js';
 import { createProductionState } from './production.js';
 
 // Gesamte Welt in Feldern. Alles außerhalb des Grundstücks ist gesperrt
@@ -15,13 +16,15 @@ export const WORLD_WIDTH = 40;
 export const WORLD_HEIGHT = 26;
 
 export const START_PLOT = { x: 8, y: 5, width: 22, height: 14 };
-const START_GOLD = 100;
+// v0.7.0: dazu ein Versandportal zwischen beiden – ohne Portal und ohne Gold
+// käme sonst nie eine Ware in den Laden.
 const START_BUILDINGS = [
   { type: 'holzfaeller', x: 10, y: 6 },
   { type: 'steinbruch', x: 10, y: 12 },
+  { type: 'versandportal', x: 14, y: 9 },
 ];
 
-export function createNewGame() {
+export function createNewGame(seed) {
   const state = {
     gold: START_GOLD,
     shopLevel: 1,
@@ -33,6 +36,10 @@ export function createNewGame() {
     belts: {},
     // Laden-Lager: Ware → Anzahl
     storage: { ...START_STORAGE },
+    // Verkaufstheken (v0.7.0): je eine Sorte, { type, count }
+    counters: createCounters(1),
+    // Kunden, Zufall, letzte Verkäufe, Pleiteschutz (v0.7.0)
+    market: createMarket(seed),
   };
   for (const start of START_BUILDINGS) {
     state.buildings.push({

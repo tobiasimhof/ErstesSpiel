@@ -148,7 +148,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await page.textContent('#hud-version')) === `v${expectedVersion}`, `Versionsnummer v${expectedVersion} sichtbar`);
   check(!(await page.isVisible('#rotate-overlay')), 'Kein Dreh-Hinweis im Querformat');
   const types = await game(page, () => window.__game.state.buildings.map((b) => b.type).sort());
-  check(JSON.stringify(types) === '["holzfaeller","steinbruch"]', 'Start: Holzfällerlager und Steinbruch, kein Laden-Gebäude');
+  check(JSON.stringify(types) === '["holzfaeller","steinbruch","versandportal"]', 'Start: Holzfällerlager, Steinbruch und Versandportal');
+  check((await page.textContent('#hud-gold')) === '0', 'Start ohne Gold');
   check(await page.isVisible('#btn-shop'), 'Knopf „Laden“ sichtbar');
   check(await page.isVisible('#btn-build'), 'Knopf „Bauen“ sichtbar');
 
@@ -174,7 +175,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     ['Holzstamm einlegen', 'Verschieben', 'Drehen', 'Abreißen'].every((t) => actionTexts.some((a) => a.includes(t))),
     'Infofenster hat Einlegen, Verschieben, Drehen, Abreißen',
   );
-  check((await page.textContent('#info-status')).includes('Holzstämme im Laden-Lager: 3'), 'Infofenster zeigt Vorrat im Laden-Lager');
+  check((await page.textContent('#info-status')).includes('Holzstämme im Laden-Lager: 1'), 'Infofenster zeigt Vorrat im Laden-Lager');
+  check(await page.locator('#info-actions button', { hasText: 'Holzstamm kaufen' }).isDisabled(), 'Ohne Gold lässt sich kein Holzstamm kaufen');
   await page.locator('#info-actions button', { hasText: 'Drehen' }).tap();
   await sleep(80);
   check((await game(page, () => window.__game.state.buildings[0].rot)) === 1, 'Drehen dreht das Gebäude');
@@ -186,10 +188,26 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.tap('#btn-shop');
   await sleep(80);
   const shopText = await page.textContent('#modal-content');
-  check(shopText.includes('Dein Laden') && shopText.includes('Laden-Lager') && shopText.includes('Holzstamm'), 'Laden-Fenster zeigt Laden-Lager mit Startvorrat');
+  check(shopText.includes('Dein Laden') && shopText.includes('Holzstamm') && shopText.includes('Holzblock'), 'Laden-Fenster zeigt Laden-Lager mit Startvorrat');
+  check((await page.locator('#modal-content .tab').count()) === 3, 'Laden-Fenster hat drei Reiter');
   await shot('3-laden');
   await page.tap('#modal-close');
   check(!(await page.isVisible('#modal')), 'Laden-Fenster schließt');
+
+  // ---------- Testpaket ----------
+  // Ohne Waren lässt sich nichts bauen. Das Testpaket gibt es nur im Testmodus.
+  check(!(await page.isVisible('#menu-test-pack')), 'Testpaket ist ohne Testmodus versteckt');
+  await page.tap('#btn-menu');
+  await page.tap('#menu-test-mode');
+  await page.tap('#btn-menu');
+  check(await page.isVisible('#menu-test-pack'), 'Testpaket im Testmodus sichtbar');
+  await page.tap('#menu-test-pack');
+  await sleep(80);
+  const pack = await game(page, () => ({ gold: window.__game.state.gold, blocks: window.__game.state.storage.holzblock }));
+  check(pack.gold >= 1000 && pack.blocks >= 70, `Testpaket gibt Gold und Waren (${pack.gold} Gold, ${pack.blocks} Holzblöcke)`);
+  await page.tap('#btn-menu');
+  await page.tap('#menu-test-mode');
+  check(!(await page.isVisible('#hud-speed')), 'Testmodus wieder aus');
 
   // ---------- Bauen: Sägewerk ----------
   await page.tap('#btn-build');
@@ -219,6 +237,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(80);
   const saw = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'saegewerk'));
   check(saw && saw.x === 20 && saw.y === 12, 'Sägewerk wurde gebaut');
+  const blocksAfterSaw = await game(page, () => window.__game.state.storage.holzblock);
+  check(blocksAfterSaw === pack.blocks - 40, `Sägewerk kostet 40 Holzblöcke (${pack.blocks} → ${blocksAfterSaw})`);
   check((await mode(page)) === 'menu', 'Nach dem Bauen ist die Bauleiste wieder offen');
 
   // ---------- Förderbänder ----------
@@ -232,6 +252,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const line = [];
   for (let x = 13; x <= 21; x++) line.push(JSON.stringify(await beltOuts(page, x, 6)));
   check(line.every((o) => o === '["E"]'), 'Gerade Strecke nach rechts gelegt');
+  check((await game(page, () => window.__game.state.storage.holzblock)) === blocksAfterSaw - 9, '9 Felder Förderband kosten 9 Holzblöcke');
 
   await touchDragTiles(page, cdp, [
     [15, 6],
@@ -333,7 +354,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     belts: Object.keys(window.__game.state.belts).length,
     rot: window.__game.state.buildings.find((b) => b.type === 'holzfaeller').rot,
   }));
-  check(after.buildings === 3 && after.belts === beltCountBefore && after.rot === 1, 'Nach dem Neuladen ist alles noch da');
+  check(after.buildings === 4 && after.belts === beltCountBefore && after.rot === 1, 'Nach dem Neuladen ist alles noch da');
   check((await page.textContent('#toast')).includes('Spielstand geladen'), 'Meldung „Spielstand geladen“');
 
   // ---------- Gebäude abreißen ----------
@@ -341,6 +362,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.locator('#info-actions button', { hasText: 'Abreißen' }).tap();
   await sleep(80);
   check(await page.isVisible('#dialog'), 'Abreißen fragt nach');
+  check((await page.textContent('#dialog-text')).includes('nichts gekostet'), 'Startgebäude: keine Baukosten zurück (Hinweis)');
   await shot('7-abreissen-frage');
   await page.tap('#dialog-ok');
   await sleep(80);
@@ -357,47 +379,41 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     buildings: window.__game.state.buildings.length,
     belts: Object.keys(window.__game.state.belts).length,
   }));
-  check(fresh.buildings === 2 && fresh.belts === 0, 'Neues Spiel startet frisch');
+  check(fresh.buildings === 3 && fresh.belts === 0, 'Neues Spiel startet frisch');
 
-  // ---------- Produktion ----------
-  // Holzfäller (10,6) gibt rechts bei (12,6) aus → Band bis (15,6) → Versandportal ab (16,6)
+  // ---------- Einstieg ohne Gold ----------
   await page.tap('#btn-build');
+  await sleep(80);
+  check(
+    await page.locator('.build-item[data-tool="saegewerk"]').evaluate((b) => b.classList.contains('short')),
+    'Sägewerk ausgegraut (zu wenig Holzblöcke)',
+  );
+  await page.tap('.build-item[data-tool="saegewerk"]');
+  await sleep(80);
+  check((await mode(page)) === 'menu' && (await page.textContent('#toast')).includes('fehlen'), 'Sägewerk antippen sagt, was fehlt');
+  await shot('8-bauleiste-kosten');
+  // Holzfäller (10,6) gibt rechts bei (12,6) aus → (13,6) → hinunter bis (13,9) → Versandportal (14,9)
   await page.tap('.build-item[data-tool="belt"]');
   await touchDragTiles(page, cdp, [
     [12, 6],
-    [15, 6],
-  ]);
-  await page.tap('#tool-confirm');
-  await page.tap('.build-item[data-tool="versandportal"]');
-  await sleep(80);
-  const portalGhost = await game(page, () => ({ ...window.__game.ui.ghost }));
-  await touchDragTiles(page, cdp, [
-    [portalGhost.x, portalGhost.y],
-    [16, 6],
-  ]);
-  await page.tap('#tool-confirm');
-  // Sägewerk zum Umstellen des Rezepts
-  await page.tap('.build-item[data-tool="saegewerk"]');
-  await sleep(80);
-  const sawGhost = await game(page, () => ({ ...window.__game.ui.ghost }));
-  await touchDragTiles(page, cdp, [
-    [sawGhost.x, sawGhost.y],
-    [14, 10],
+    [13, 6],
+    [13, 9],
+    [14, 9],
   ]);
   await page.tap('#tool-confirm');
   await page.tap('#build-close');
   await sleep(80);
-  const placed = await game(page, () => window.__game.state.buildings.map((b) => `${b.type}@${b.x},${b.y}`).sort());
-  check(placed.includes('versandportal@16,6') && placed.includes('saegewerk@14,10'), `Versandportal und Sägewerk gebaut (${placed.join(' ')})`);
+  check(JSON.stringify(await beltOuts(page, 13, 9)) === '["E"]', 'Band führt ins Start-Versandportal');
+  check((await game(page, () => window.__game.state.storage.holzblock)) === 15, '5 Felder Band kosten 5 der 20 Start-Holzblöcke');
 
   await tapTile(page, 10, 6);
   await page.locator('#info-actions button', { hasText: 'Holzstamm einlegen' }).tap();
   await sleep(80);
   const afterLoad = await game(page, () => ({
-    logs: window.__game.state.storage.holzstamm,
+    logs: window.__game.state.storage.holzstamm ?? 0,
     loaded: window.__game.state.buildings.find((b) => b.type === 'holzfaeller').prod.loaded,
   }));
-  check(afterLoad.loaded && afterLoad.logs === 2, 'Holzstamm eingelegt, Vorrat sinkt auf 2');
+  check(afterLoad.loaded && afterLoad.logs === 0, 'Gratis-Holzstamm eingelegt');
   check(
     await page.locator('#info-actions button', { hasText: 'wird verarbeitet' }).isDisabled(),
     'Zweiter Holzstamm lässt sich nicht einlegen',
@@ -412,13 +428,74 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
 
   await game(page, () => window.__game.simulate(90));
   const blocks = await game(page, () => window.__game.state.storage.holzblock ?? 0);
-  check(blocks >= 15, `Holzblöcke kommen im Laden-Lager an (${blocks})`);
+  check(blocks >= 30, `Holzblöcke kommen im Laden-Lager an (${blocks})`);
+
+  // ---------- Theken & Kunden ----------
   await page.tap('#btn-shop');
   await sleep(80);
-  const shopNow = await page.textContent('#modal-content');
-  check(shopNow.includes('Holzblock') && shopNow.includes('Holzstamm'), 'Laden-Fenster listet Holzblöcke und Holzstämme');
-  await shot('9-laden-lager');
+  await page.tap('#modal-content .tab[data-tab="theken"]');
+  await sleep(80);
+  check((await page.textContent('#modal-content')).includes('Theke 1'), 'Reiter „Theken“ zeigt die Theken');
+  await page.locator('#modal-content button', { hasText: 'Ware wählen' }).first().tap();
+  await sleep(80);
+  await page.locator('#modal-content .pick-row', { hasText: 'Holzblock' }).tap();
+  await sleep(80);
+  const counter = await game(page, () => window.__game.state.counters[0]);
+  check(counter.type === 'holzblock' && counter.count === 20, `Theke 1 mit 20 Holzblöcken bestückt (${JSON.stringify(counter)})`);
+  await shot('9-theken');
+  await game(page, () => window.__game.simulate(90));
+  await sleep(500);
+  const sold = await game(page, () => ({ gold: window.__game.state.gold, sales: window.__game.state.market.sales.length }));
+  check(sold.gold > 0 && sold.sales > 0, `Kunden kaufen und zahlen (${sold.gold} Gold, ${sold.sales} Verkäufe)`);
+  // Kunden kaufen live weiter; die Leiste zieht spätestens nach 0,4 s nach.
+  const hudSynced = await page
+    .waitForFunction(() => document.getElementById('hud-gold').textContent === new Intl.NumberFormat('de-DE').format(window.__game.state.gold), null, { timeout: 3000 })
+    .then(() => true, () => false);
+  check(hudSynced, 'Gold oben aktualisiert sich');
+  check((await page.textContent('#modal-content')).includes('kaufte'), 'Letzte Verkäufe werden angezeigt');
+  await page.locator('#modal-content .counter-buttons button', { hasText: 'Auffüllen' }).first().tap();
+  await sleep(80);
+  check((await game(page, () => window.__game.state.counters[0].count)) === 20, 'Auffüllen füllt die Theke wieder auf 20');
+  await shot('10-verkauf');
+
+  // ---------- Händler ----------
+  // Für den Rest des Tests genau die nötigen Waren und Gold geben (das
+  // Testpaket mehrfach würde das Laden-Lager füllen).
   await page.tap('#modal-close');
+  await game(page, () => {
+    const s = window.__game.state.storage;
+    window.__game.state.gold += 3000;
+    s.holzblock = (s.holzblock ?? 0) + 45;
+    s.holzplatte = (s.holzplatte ?? 0) + 10;
+    s.steinplatte = (s.steinplatte ?? 0) + 30;
+    s.eisenbarren = (s.eisenbarren ?? 0) + 30;
+  });
+  await page.tap('#btn-shop');
+  await sleep(80);
+  await page.tap('#modal-content .tab[data-tab="haendler"]');
+  await sleep(80);
+  const goldBeforeBuy = await game(page, () => window.__game.state.gold);
+  await page.locator('#modal-content .trade-row', { hasText: 'Eisenerz' }).locator('button').tap();
+  await sleep(80);
+  const bought = await game(page, () => ({ gold: window.__game.state.gold, ore: window.__game.state.storage.eisenerz ?? 0 }));
+  check(bought.ore === 1 && bought.gold === goldBeforeBuy - 2200, `Händler: Eisenerz für 2.200 Gold gekauft (${goldBeforeBuy} → ${bought.gold})`);
+  await shot('11-haendler');
+  await page.tap('#modal-close');
+
+  // Sägewerk zum Umstellen des Rezepts
+  await page.tap('#btn-build');
+  await page.tap('.build-item[data-tool="saegewerk"]');
+  await sleep(80);
+  const sawGhost = await game(page, () => ({ ...window.__game.ui.ghost }));
+  await touchDragTiles(page, cdp, [
+    [sawGhost.x, sawGhost.y],
+    [14, 10],
+  ]);
+  await page.tap('#tool-confirm');
+  await page.tap('#build-close');
+  await sleep(80);
+  const placed = await game(page, () => window.__game.state.buildings.map((b) => `${b.type}@${b.x},${b.y}`).sort());
+  check(placed.includes('saegewerk@14,10'), `Sägewerk gebaut (${placed.join(' ')})`);
 
   await tapTile(page, 14, 10);
   check((await page.textContent('#info-title')) === 'Sägewerk', 'Sägewerk antippen zeigt Infofenster');
@@ -429,7 +506,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     await page.locator('#info-actions button', { hasText: 'Stäbe' }).evaluate((b) => b.classList.contains('primary')),
     'Gewähltes Rezept ist hervorgehoben',
   );
-  await shot('10-saegewerk');
+  await shot('12-saegewerk');
   await page.tap('#info-close');
 
   // ---------- Eisen-Kette ----------
@@ -462,7 +539,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await page.textContent('#info-title')) === 'Schmelzhütte', 'Schmelzhütte antippen zeigt Infofenster');
   await page.locator('#info-actions button', { hasText: 'Eisenerz einlegen' }).tap();
   await sleep(80);
-  check((await game(page, () => window.__game.state.storage.eisenerz)) === 1, 'Eisenerz eingelegt, Vorrat sinkt auf 1');
+  check((await game(page, () => window.__game.state.storage.eisenerz ?? 0)) === 0, 'Gekauftes Eisenerz eingelegt');
   await page.tap('#info-close');
   await game(page, () => window.__game.simulate(40));
   const smithy = await game(page, () => {
@@ -476,7 +553,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(450);
   check((await game(page, () => window.__game.state.buildings.find((b) => b.type === 'schmiede').prod.recipe)) === 'eisennagel', 'Schmiede auf Nägel umgestellt');
   check((await page.textContent('#info-status')).includes('5 Eisenbarren → 5 Eisennägel'), 'Rezept zeigt 5 Barren → 5 Nägel');
-  await shot('11-eisen');
+  await shot('13-eisen');
   await page.tap('#info-close');
 
   await page.tap('#btn-menu');
@@ -490,7 +567,16 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(tBefore - tAfter >= 3, `Im Testmodus läuft die Zeit schneller (${tBefore - tAfter} Blöcke in 3 s)`);
   await page.tap('#btn-menu');
   await page.tap('#menu-test-mode');
-  check(!(await page.isVisible('#hud-speed')), 'Testmodus wieder aus');
+  check(!(await page.isVisible('#hud-speed')), 'Testmodus nach dem Zeittest aus');
+
+  // Holzstamm direkt im Infofenster kaufen
+  await tapTile(page, 10, 6);
+  const goldBeforeLog = await game(page, () => window.__game.state.gold);
+  await page.locator('#info-actions button', { hasText: 'Holzstamm kaufen' }).tap();
+  await sleep(80);
+  const logBought = await game(page, () => ({ gold: window.__game.state.gold, logs: window.__game.state.storage.holzstamm ?? 0 }));
+  check(logBought.logs === 1 && logBought.gold <= goldBeforeLog - 550 + 200, `Holzstamm im Infofenster gekauft (${goldBeforeLog} → ${logBought.gold})`);
+  await page.tap('#info-close');
 
   // Die Fabrik läuft beim Neuladen weiter; beim Verlassen wird der neueste Stand
   // gespeichert. Deshalb: nichts darf verloren gehen (eher kommt etwas dazu).

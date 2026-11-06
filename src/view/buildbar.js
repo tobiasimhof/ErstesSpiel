@@ -1,13 +1,31 @@
 // Untere Leisten: Grundleiste (Laden, Bauen), Bauleiste (Gebäude, Förderband,
 // Abreißen) und Werkzeugleiste (während man baut).
 
-import { BUILDINGS, BUILD_MENU } from '../core/data/buildings.js';
+import { BELT_COST, BUILDINGS, BUILD_MENU } from '../core/data/buildings.js';
+import { canAfford } from '../core/shop.js';
+import { costText } from './format.js';
+import { createItemIcon } from './itemArt.js';
 import { onPress } from './press.js';
 
 const EXTRA_TOOLS = [
-  { tool: 'belt', icon: '➡️', name: 'Förderband', meta: '1 Feld' },
+  { tool: 'belt', icon: '➡️', name: 'Förderband', cost: BELT_COST, suffix: 'je Feld' },
   { tool: 'erase', icon: '🧹', name: 'Abreißen', meta: 'Bänder & Gebäude' },
 ];
+
+// Baukosten als kleine Warenbilder mit Anzahl, z. B. „40 ▣“.
+function costNode(cost, suffix) {
+  const node = document.createElement('span');
+  node.className = 'build-meta build-cost';
+  node.title = costText(cost);
+  for (const [type, n] of Object.entries(cost)) {
+    const part = document.createElement('span');
+    part.className = 'cost-part';
+    part.append(String(n), createItemIcon(type, 15));
+    node.append(part);
+  }
+  if (suffix) node.append(suffix);
+  return node;
+}
 
 export function createBuildBar({ onShop, onOpenMenu, onCloseMenu, onSelectTool, onConfirm, onRotate, onCancel }) {
   const bottomBar = document.getElementById('bottom-bar');
@@ -29,7 +47,7 @@ export function createBuildBar({ onShop, onOpenMenu, onCloseMenu, onSelectTool, 
   const entries = [
     ...BUILD_MENU.map((type) => {
       const def = BUILDINGS[type];
-      return { tool: type, icon: def.icon, name: def.name, meta: `${def.size[0]} × ${def.size[1]} Felder` };
+      return { tool: type, icon: def.icon, name: def.name, cost: def.cost ?? {} };
     }),
     ...EXTRA_TOOLS,
   ];
@@ -44,9 +62,14 @@ export function createBuildBar({ onShop, onOpenMenu, onCloseMenu, onSelectTool, 
     const name = document.createElement('span');
     name.className = 'build-name';
     name.textContent = entry.name;
-    const meta = document.createElement('span');
-    meta.className = 'build-meta';
-    meta.textContent = entry.meta;
+    let meta;
+    if (entry.cost) {
+      meta = costNode(entry.cost, entry.suffix);
+    } else {
+      meta = document.createElement('span');
+      meta.className = 'build-meta';
+      meta.textContent = entry.meta;
+    }
     button.append(icon, name, meta);
     onPress(button, () => onSelectTool(entry.tool));
     items.append(button);
@@ -67,6 +90,15 @@ export function createBuildBar({ onShop, onOpenMenu, onCloseMenu, onSelectTool, 
     },
     setConfirmEnabled(enabled) {
       toolConfirm.disabled = !enabled;
+    },
+    // Graut Gebäude aus, für die die Waren im Laden-Lager nicht reichen.
+    // Sie bleiben antippbar und sagen dann, was fehlt.
+    updateCosts(state) {
+      for (const entry of entries) {
+        if (!entry.cost) continue;
+        const button = items.querySelector(`[data-tool="${entry.tool}"]`);
+        button?.classList.toggle('short', !canAfford(state, entry.cost));
+      }
     },
   };
 }

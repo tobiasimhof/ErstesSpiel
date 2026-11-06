@@ -5,11 +5,13 @@ import { BUILDINGS, BUILD_MENU } from '../src/core/data/buildings.js';
 import { footprintSize, occupies } from '../src/core/geometry.js';
 import { createNewGame, buildingAt, isInWorld, isOwned, parseTileKey, tileKey } from '../src/core/state.js';
 
-test('Neues Spiel startet mit Holzfällerlager und Steinbruch; der Laden ist die Fläche', () => {
+test('Neues Spiel startet mit Holzfällerlager, Steinbruch und Versandportal; der Laden ist die Fläche', () => {
   const state = createNewGame();
-  assert.deepEqual(state.buildings.map((b) => b.type).sort(), ['holzfaeller', 'steinbruch']);
+  assert.deepEqual(state.buildings.map((b) => b.type).sort(), ['holzfaeller', 'steinbruch', 'versandportal']);
   assert.equal(state.shopLevel, 1);
-  assert.ok(state.gold > 0);
+  assert.equal(state.gold, 0, 'Start ohne Gold');
+  assert.deepEqual(state.storage, { holzstamm: 1, felsbrocken: 1, holzblock: 20 });
+  assert.ok(state.buildings.every((b) => !b.paid), 'Startgebäude waren gratis');
   assert.deepEqual(state.belts, {});
   assert.ok(state.buildings.every((b) => b.rot === 0));
 });

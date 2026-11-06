@@ -8,19 +8,22 @@
 //   3 (v0.6.0): Techbaum – Sägewerk und Steinmetz 2 × 2, Holzwinkel → Holzplatte,
 //               Splitt → Stein-Zahnrad, Eisen-Kette
 //   4 (v0.6.1): größeres Grundstück (22 × 14) und größere Welt (40 × 26)
+//   5 (v0.7.0): Handel – Verkaufstheken, Kunden (market), bezahlte Baukosten
+//               an Gebäuden (paid) und Bändern (paid: true)
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
 import { RECIPES } from './data/recipes.js';
-import { START_STORAGE } from './data/shop.js';
+import { SALES_LOG_SIZE, START_STORAGE } from './data/shop.js';
 import { canPlaceBuilding, findFreeSpot } from './buildings.js';
 import { isDir, sortDirs } from './dirs.js';
 import { footprintSize, rotateLocal } from './geometry.js';
 import { buildingContents, createProductionState, productionOf } from './production.js';
+import { createCounters, createMarket } from './market.js';
 import { addAllToStorage } from './shop.js';
 import { START_PLOT, WORLD_HEIGHT, WORLD_WIDTH, parseTileKey } from './state.js';
 
-export const SAVE_VERSION = 4;
+export const SAVE_VERSION = 5;
 
 // v0.6.0: Waren und Rezepte, die es nicht mehr gibt, und was aus ihnen wird.
 const RENAMED_ITEMS = { holzwinkel: 'holzplatte', splitt: 'steinzahnrad' };
@@ -83,6 +86,12 @@ function migrate(state, from) {
     grow(state.world, 'height', WORLD_HEIGHT);
     grow(state.plot, 'width', START_PLOT.width);
     grow(state.plot, 'height', START_PLOT.height);
+  }
+  if (from < 5) {
+    // v0.6.1 → v0.7.0: Theken und Kunden kommen dazu. Gold, Gebäude und Lager
+    // bleiben, wie sie sind; was schon steht, wird nicht nachträglich berechnet.
+    state.counters = createCounters(isInt(state.shopLevel) ? state.shopLevel : 1);
+    state.market = createMarket();
   }
   return state;
 }
@@ -197,6 +206,26 @@ function isValidProduction(b) {
   }
 }
 
+function isValidCost(cost) {
+  return isObj(cost) && Object.entries(cost).every(([t, n]) => isItem(t) && isCount(n));
+}
+
+function isValidMarket(m) {
+  if (!isObj(m)) return false;
+  if (!isCount(m.rng) || m.rng > 0xffffffff || !isNum(m.timer)) return false;
+  if (!isInt(m.nextSaleId) || m.nextSaleId < 1 || !isCount(m.gifts)) return false;
+  if (!Array.isArray(m.sales) || m.sales.length > SALES_LOG_SIZE) return false;
+  return m.sales.every(
+    (sale) => isObj(sale) && isInt(sale.id) && sale.id < m.nextSaleId && isCount(sale.gold) && isValidCost(sale.items),
+  );
+}
+
+function isValidCounter(c) {
+  if (!isObj(c) || !isCount(c.count)) return false;
+  if (c.type === null) return c.count === 0;
+  return isItem(c.type) && !ITEMS[c.type].raw;
+}
+
 export function isValidState(s) {
   if (!isObj(s)) return false;
   if (!isNum(s.gold)) return false;
@@ -215,6 +244,7 @@ export function isValidState(s) {
     if (!b || !isInt(b.id) || ids.has(b.id) || !BUILDINGS[b.type]) return false;
     if (!isInt(b.x) || !isInt(b.y) || !isInt(b.rot) || b.rot < 0 || b.rot > 3) return false;
     if (b.id >= s.nextBuildingId) return false;
+    if (b.paid !== undefined && !isValidCost(b.paid)) return false;
     if (!isValidProduction(b)) return false;
     ids.add(b.id);
   }
@@ -226,6 +256,7 @@ export function isValidState(s) {
     if (!isObj(belt) || !Array.isArray(belt.outs) || belt.outs.length === 0 || belt.outs.length > 4) return false;
     if (!belt.outs.every(isDir) || new Set(belt.outs).size !== belt.outs.length) return false;
     if (belt.rr !== undefined && !isCount(belt.rr)) return false;
+    if (belt.paid !== undefined && belt.paid !== true) return false;
     if (belt.lastFrom !== undefined && belt.lastFrom !== null && !isDir(belt.lastFrom)) return false;
     if (belt.item !== undefined && belt.item !== null) {
       const it = belt.item;
@@ -236,5 +267,8 @@ export function isValidState(s) {
 
   if (!isObj(s.storage)) return false;
   if (!Object.entries(s.storage).every(([t, n]) => isItem(t) && isCount(n))) return false;
+
+  if (!Array.isArray(s.counters) || s.counters.length === 0 || !s.counters.every(isValidCounter)) return false;
+  if (!isValidMarket(s.market)) return false;
   return true;
 }

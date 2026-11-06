@@ -4,6 +4,7 @@
 // ports: Ein- und Ausgänge. x/y = Feld innerhalb des Gebäudes (ungedreht),
 //        side = Seite, an der das Förderband andockt (N, E, S, W).
 //        kind 'in' = Eingang (blauer Pfeil), 'out' = Ausgang (oranger Pfeil).
+// cost:  Baukosten in Waren aus dem Laden-Lager (v0.7.0). Abreißen gibt sie zurück.
 // production: was das Gebäude tut
 //   source   – verarbeitet einen eingelegten Rohstoff nach und nach
 //              (amount Stück in duration Sekunden)
@@ -15,6 +16,7 @@
 export const BUILDINGS = {
   holzfaeller: {
     name: 'Holzfällerlager',
+    cost: { holzplatte: 10, holzstab: 10 },
     icon: '🪓',
     size: [2, 2],
     color: '#4f7f35',
@@ -25,6 +27,7 @@ export const BUILDINGS = {
   },
   steinbruch: {
     name: 'Steinbruch',
+    cost: { holzplatte: 10, holzstab: 5 },
     icon: '⛏️',
     size: [2, 2],
     color: '#7d8590',
@@ -35,6 +38,7 @@ export const BUILDINGS = {
   },
   schmelzhuette: {
     name: 'Schmelzhütte',
+    cost: { steinplatte: 20, holzplatte: 10 },
     icon: '🔥',
     size: [2, 2],
     color: '#8a4b32',
@@ -45,6 +49,7 @@ export const BUILDINGS = {
   },
   saegewerk: {
     name: 'Sägewerk',
+    cost: { holzblock: 40 },
     icon: '🪚',
     size: [2, 2],
     color: '#a0703c',
@@ -58,6 +63,7 @@ export const BUILDINGS = {
   },
   steinmetz: {
     name: 'Steinmetz',
+    cost: { steinblock: 30, holzstab: 5 },
     icon: '⚒️',
     size: [2, 2],
     color: '#68707a',
@@ -71,6 +77,7 @@ export const BUILDINGS = {
   },
   schmiede: {
     name: 'Schmiede',
+    cost: { steinplatte: 10, eisenbarren: 30 },
     icon: '🔨',
     size: [2, 2],
     color: '#5b5f6b',
@@ -84,6 +91,7 @@ export const BUILDINGS = {
   },
   lagerhaus: {
     name: 'Lagerhaus',
+    cost: { holzplatte: 8 },
     icon: '📦',
     size: [2, 1],
     color: '#8b6b4a',
@@ -97,6 +105,7 @@ export const BUILDINGS = {
   },
   versandportal: {
     name: 'Versandportal',
+    cost: { holzblock: 10 },
     icon: '🌀',
     size: [1, 1],
     color: '#5f4b8b',
@@ -118,3 +127,6 @@ export const BUILD_MENU = [
   'lagerhaus',
   'versandportal',
 ];
+
+// Ein Feld Förderband kostet so viel (v0.7.0).
+export const BELT_COST = { holzblock: 1 };

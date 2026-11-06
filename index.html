@@ -14,7 +14,7 @@
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="icon" type="image/png" href="assets/icons/icon-192.png" />
     <link rel="apple-touch-icon" href="assets/icons/icon-192.png" />
-    <link rel="stylesheet" href="src/style.css?v=0.6.1" />
+    <link rel="stylesheet" href="src/style.css?v=0.7.0" />
   </head>
   <body>
     <div id="app">
@@ -22,6 +22,7 @@
         <div class="hud-item" title="Gold">
           <span class="hud-icon" aria-hidden="true">🪙</span>
           <span id="hud-gold">0</span>
+          <span id="hud-gold-gain" class="gold-gain" aria-hidden="true"></span>
         </div>
         <div class="hud-item">
           <span class="hud-icon" aria-hidden="true">⚖️</span>
@@ -34,6 +35,7 @@
         <div id="hud-version" class="hud-version">v</div>
         <div id="menu" class="menu" hidden>
           <button id="menu-test-mode" type="button">⏩ Testmodus: aus</button>
+          <button id="menu-test-pack" type="button" hidden>🎁 Testpaket: 1.000 Gold + je 50 Waren</button>
           <button id="menu-new-game" type="button">🔄 Neues Spiel</button>
         </div>
       </header>
@@ -104,6 +106,6 @@
     </div>
 
     <noscript>Dieses Spiel braucht JavaScript.</noscript>
-    <script type="module" src="src/main.js?v=0.6.1"></script>
+    <script type="module" src="src/main.js?v=0.7.0"></script>
   </body>
 </html>

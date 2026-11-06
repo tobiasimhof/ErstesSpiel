@@ -36,3 +36,39 @@ export function takeFromStorage(state, type, count = 1) {
 export function addAllToStorage(state, contents) {
   for (const [type, count] of Object.entries(contents)) addToStorage(state, type, count);
 }
+
+// ---------- Baukosten (v0.7.0) ----------
+// Kosten sind Waren aus dem Laden-Lager, z. B. { holzblock: 40 }.
+
+// Was fehlt noch? { Ware: Anzahl } – leer, wenn alles da ist.
+export function missingFor(state, cost, times = 1) {
+  const missing = {};
+  for (const [type, n] of Object.entries(cost ?? {})) {
+    const lack = n * times - storageCount(state, type);
+    if (lack > 0) missing[type] = lack;
+  }
+  return missing;
+}
+
+export function canAfford(state, cost, times = 1) {
+  return Object.keys(missingFor(state, cost, times)).length === 0;
+}
+
+// Wie oft lassen sich die Kosten bezahlen? (z. B. Förderband-Felder)
+export function affordableCount(state, cost) {
+  let count = Infinity;
+  for (const [type, n] of Object.entries(cost ?? {})) {
+    if (n > 0) count = Math.min(count, Math.floor(storageCount(state, type) / n));
+  }
+  return count;
+}
+
+export function payCost(state, cost, times = 1) {
+  if (!canAfford(state, cost, times)) return false;
+  for (const [type, n] of Object.entries(cost ?? {})) takeFromStorage(state, type, n * times);
+  return true;
+}
+
+export function refundCost(state, cost, times = 1) {
+  for (const [type, n] of Object.entries(cost ?? {})) addToStorage(state, type, n * times);
+}

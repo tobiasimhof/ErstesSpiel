@@ -119,6 +119,46 @@ button.danger {
   font-size: 18px;
 }
 
+/* „+36“ neben dem Gold, wenn ein Kunde etwas kauft */
+.hud-item:first-child {
+  position: relative;
+}
+
+.gold-gain {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 26px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(42, 29, 18, 0.85);
+  color: var(--accent);
+  font-weight: 800;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gold-gain.show {
+  animation: gold-gain 1.6s ease-out;
+}
+
+@keyframes gold-gain {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
 .hud-spacer {
   flex: 1;
 }
@@ -365,6 +405,32 @@ button.danger {
   opacity: 0.7;
 }
 
+.build-cost {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2px 6px;
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.cost-part {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+}
+
+/* Waren reichen nicht: ausgegraut, aber antippbar (sagt dann, was fehlt) */
+.build-item.short {
+  opacity: 0.5;
+}
+
+.build-item.short .build-cost {
+  color: var(--danger);
+}
+
 #build-close {
   flex: 0 0 auto;
   width: 44px;
@@ -513,6 +579,113 @@ button.danger {
   width: min(400px, 100%);
 }
 
+/* ---------- Laden-Fenster: Reiter, Theken, Händler ---------- */
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin: 8px 0 4px;
+}
+
+.tabs .tab {
+  flex: 1;
+  min-height: 42px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.tabs .tab.active {
+  background: var(--wood-light);
+  border-color: var(--wood-dark);
+  color: var(--parchment);
+}
+
+.counters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+}
+
+.counter-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.45);
+  border: 2px solid rgba(138, 106, 63, 0.45);
+  border-radius: 10px;
+}
+
+.counter-head {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+}
+
+.counter-ware {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+}
+
+.counter-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.counter-amount {
+  font-size: 18px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.counter-empty {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.counter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.counter-buttons button {
+  min-height: 40px;
+  padding: 0 10px;
+  font-weight: 700;
+}
+
+.sales {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sale-line {
+  padding: 4px 10px;
+  background: rgba(47, 158, 68, 0.12);
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Ware für eine Theke wählen: ganze Zeile ist ein Knopf */
+button.pick-row {
+  width: 100%;
+  min-height: 48px;
+  text-align: left;
+}
+
+.trade-row .item-count {
+  font-size: 15px;
+  min-height: 42px;
+}
+
 .dialog-box .panel-actions {
   justify-content: flex-end;
 }
@@ -627,5 +800,26 @@ button.danger {
   .modal-box {
     padding: 12px 16px;
     font-size: 14px;
+  }
+
+  .modal-box h2 {
+    font-size: 18px;
+  }
+
+  .modal-box p {
+    margin: 6px 0;
+  }
+
+  .tabs .tab {
+    min-height: 38px;
+  }
+
+  .counter-card {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .counter-buttons button {
+    min-height: 38px;
   }
 }
