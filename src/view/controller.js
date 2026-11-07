@@ -30,6 +30,16 @@ import {
   removeBelt,
   rotateBelt,
 } from '../core/belts.js';
+import {
+  areaLosesWork,
+  cleanSelection,
+  isEmptySelection,
+  moveArea,
+  planAreaMove,
+  removeArea,
+  selectArea,
+  selectionBounds,
+} from '../core/area.js';
 import { buyLand, landBuysLeft, landOffer, landSideAt } from '../core/land.js';
 import { buildingLevel, isBuildingUnlocked, isItemUnlocked, itemLevel } from '../core/levels.js';
 import { buyRaw } from '../core/market.js';
@@ -53,7 +63,19 @@ const TEXT = {
   move: (name) => `${name} verschieben: Vorschau an die neue Stelle schieben.`,
   belt: `Förderband (${costText(BELT_COST)} je Feld): mit einem Finger ziehen. Von einem Band aus ziehen teilt es auf, auf ein Band ziehen führt zusammen. Antippen dreht.`,
   erase: 'Abreißen: über Förderbänder wischen oder ein Gebäude antippen.',
+  // v0.11.0: Bereich markieren und verschieben
+  area: 'Bereich markieren: mit einem Finger ein Rechteck ziehen oder ein Teil antippen. Zwei Finger bewegen die Karte.',
+  areaMarked: (summary) => `Markiert: ${summary}. Verschieben, abreißen oder neu markieren.`,
+  areaMove: 'An die neue Stelle ziehen oder dorthin tippen. ↻ Drehen (Taste R) dreht die ganze Gruppe.',
 };
+
+// "2 Gebäude und 14 Bänder"
+function areaSummary(sel) {
+  const parts = [];
+  if (sel.buildings.length > 0) parts.push(`${sel.buildings.length} Gebäude`);
+  if (sel.belts.length > 0) parts.push(`${sel.belts.length} ${sel.belts.length === 1 ? 'Band' : 'Bänder'}`);
+  return parts.join(' und ');
+}
 
 // Fläche kaufen (v0.9.0): Seiten und Streifen in Worten
 const SIDE_TEXT = { N: 'oben', E: 'rechts', S: 'unten', W: 'links' };
@@ -79,6 +101,8 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
   function setMode(next, options) {
     mode = next;
     ui.mode = next;
+    // Die Markierung gibt es nur in den Bereich-Modi (v0.11.0).
+    if (next !== 'area' && next !== 'areaMove') ui.area = null;
     buildBar.setMode(next, options);
     requestDraw();
   }
@@ -241,17 +265,7 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
       }
       actions.push(
         { label: '↔ Verschieben', group: actions.length > 0, onClick: () => startPlace(b.type, b) },
-        {
-          label: '↻ Drehen',
-          onClick: () => {
-            if (rotateBuilding(state, b.id)) {
-              changed();
-              infoRefresh?.();
-            } else {
-              panels.toast('Zum Drehen fehlt hier der Platz.');
-            }
-          },
-        },
+        { label: '↻ Drehen', onClick: () => rotateBuildingInPlace(b) },
         { label: '🗑 Abreißen', danger: true, onClick: () => askRemoveBuilding(b) },
       );
       info = panels.showInfo({
@@ -348,6 +362,15 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
     infoRefresh();
   }
 
+  function rotateBuildingInPlace(b) {
+    if (rotateBuilding(state, b.id)) {
+      changed();
+      infoRefresh?.();
+    } else {
+      panels.toast('Zum Drehen fehlt hier der Platz.');
+    }
+  }
+
   async function askRemoveBuilding(b) {
     const def = BUILDINGS[b.type];
     const refund = b.paid
@@ -413,6 +436,7 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
       return setMode('belt', { text: TEXT.belt });
     }
     if (tool === 'erase') return setMode('erase', { text: TEXT.erase });
+    if (tool === 'area') return startArea();
     if (!BUILDINGS[tool]) return;
     if (!isBuildingUnlocked(state, tool)) return toastLocked(tool);
     if (!canAfford(state, BUILDINGS[tool].cost)) return toastMissing(BUILDINGS[tool].cost);
@@ -515,6 +539,153 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
     if (removeBelt(state, tile.x, tile.y)) changed();
   }
 
+  // ---------- Bereich markieren, verschieben, abreißen (v0.11.0) ----------
+  // ui.area = { sel, rect, ghost }: sel = markierte Gebäude und Bänder,
+  // rect = Rechteck, das gerade gezogen wird, ghost = Vorschau beim Verschieben
+  // ({ x, y, turns, plan }).
+
+  function startArea() {
+    select(null);
+    setMode('area', { text: TEXT.area });
+    ui.area = { sel: { buildings: [], belts: [] }, rect: null, ghost: null };
+    updateAreaBar();
+  }
+
+  function updateAreaBar() {
+    if (!ui.area) return;
+    ui.area.sel = cleanSelection(state, ui.area.sel);
+    const empty = isEmptySelection(ui.area.sel);
+    buildBar.setAreaEnabled(!empty);
+    if (mode === 'area') buildBar.setText(empty ? TEXT.area : TEXT.areaMarked(areaSummary(ui.area.sel)));
+    requestDraw();
+  }
+
+  function markArea(a, b) {
+    ui.area.sel = selectArea(state, a, b);
+    updateAreaBar();
+  }
+
+  function startAreaMove() {
+    if (!ui.area) return;
+    const sel = cleanSelection(state, ui.area.sel);
+    const box = selectionBounds(state, sel);
+    if (!box) return;
+    const area = ui.area;
+    setMode('areaMove', { text: TEXT.areaMove, confirmLabel: '✓ Hierhin' });
+    ui.area = area;
+    area.sel = sel;
+    area.rect = null;
+    area.ghost = { x: box.x, y: box.y, turns: 0, plan: null };
+    validateAreaGhost();
+  }
+
+  function validateAreaGhost() {
+    const g = ui.area?.ghost;
+    if (!g) return;
+    g.plan = planAreaMove(state, ui.area.sel, g.x, g.y, g.turns);
+    buildBar.setConfirmEnabled(Boolean(g.plan?.valid));
+    requestDraw();
+  }
+
+  // Dreht die Vorschau um 90° im Uhrzeigersinn, ungefähr um ihre Mitte.
+  function rotateAreaGhost() {
+    const g = ui.area?.ghost;
+    if (!g?.plan) return;
+    const cx = g.x + g.plan.width / 2;
+    const cy = g.y + g.plan.height / 2;
+    g.turns = (g.turns + 1) % 4;
+    g.x = Math.round(cx - g.plan.height / 2);
+    g.y = Math.round(cy - g.plan.width / 2);
+    validateAreaGhost();
+  }
+
+  function areaGhostContains(tile) {
+    const g = ui.area?.ghost;
+    if (!g?.plan) return false;
+    return tile.x >= g.x && tile.x < g.x + g.plan.width && tile.y >= g.y && tile.y < g.y + g.plan.height;
+  }
+
+  function moveAreaGhostCenterTo(tile) {
+    const g = ui.area.ghost;
+    g.x = tile.x - Math.floor((g.plan.width - 1) / 2);
+    g.y = tile.y - Math.floor((g.plan.height - 1) / 2);
+    validateAreaGhost();
+  }
+
+  function confirmAreaMove() {
+    const g = ui.area?.ghost;
+    if (!g?.plan?.valid) return;
+    const moved = moveArea(state, ui.area.sel, g.x, g.y, g.turns);
+    if (!moved) {
+      validateAreaGhost();
+      return panels.toast('Hier ist kein Platz.');
+    }
+    const area = ui.area;
+    changed();
+    setMode('area', { text: TEXT.area });
+    ui.area = area;
+    area.sel = moved;
+    area.ghost = null;
+    updateAreaBar();
+    panels.toast(`Verschoben: ${areaSummary(moved)}.`, 2000);
+  }
+
+  function cancelAreaMove() {
+    const area = ui.area;
+    setMode('area', { text: TEXT.area });
+    ui.area = area ?? { sel: { buildings: [], belts: [] }, rect: null, ghost: null };
+    ui.area.ghost = null;
+    updateAreaBar();
+  }
+
+  async function askRemoveArea() {
+    if (!ui.area) return;
+    const sel = cleanSelection(state, ui.area.sel);
+    if (isEmptySelection(sel)) return;
+    const summary = areaSummary(sel);
+    const lost = areaLosesWork(state, sel) ? ' Ein angefangener Rohstoff geht dabei verloren.' : '';
+    const ok = await panels.confirm({
+      title: 'Bereich abreißen?',
+      text: `Alles Markierte wird abgerissen: ${summary}.${lost} Waren darin und bezahlte Baukosten kommen ins Laden-Lager.`,
+      okLabel: 'Abreißen',
+      danger: true,
+    });
+    if (!ok || mode !== 'area' || !ui.area) return;
+    removeArea(state, sel);
+    changed();
+    updateAreaBar();
+    panels.toast(`Abgerissen: ${summary}.`, 2500);
+  }
+
+  // ---------- Taste R: drehen (v0.11.0) ----------
+  // Dreht, was gerade dran ist: die Vorschau beim Bauen oder Verschieben, sonst
+  // das ausgewählte Gebäude oder Band. true, wenn etwas gedreht wurde.
+  function rotateKey() {
+    if (panels.isModalOpen()) return false;
+    if (mode === 'place') {
+      rotateGhost();
+      return true;
+    }
+    if (mode === 'areaMove') {
+      rotateAreaGhost();
+      return true;
+    }
+    if (mode !== 'normal' && mode !== 'menu') return false;
+    const sel = ui.selected;
+    if (sel?.kind === 'building') {
+      const b = findBuilding(state, sel.id);
+      if (!b) return false;
+      rotateBuildingInPlace(b);
+      return true;
+    }
+    if (sel?.kind === 'belt' && rotateBelt(state, sel.x, sel.y)) {
+      changed();
+      infoRefresh?.();
+      return true;
+    }
+    return false;
+  }
+
   // ---------- Laden ----------
 
   function openShop(hud) {
@@ -530,17 +701,27 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
     closeMenu,
     selectTool,
     openShop,
+    rotateKey,
 
     confirmTool() {
       if (mode === 'place') confirmPlace();
-      else if (mode === 'belt' || mode === 'erase') setMode('menu');
+      else if (mode === 'areaMove') confirmAreaMove();
+      else if (mode === 'belt' || mode === 'erase' || mode === 'area') setMode('menu');
     },
     rotateTool() {
       if (mode === 'place') rotateGhost();
+      else if (mode === 'areaMove') rotateAreaGhost();
     },
     cancelTool() {
       if (mode === 'place') cancelPlace();
-      else if (mode === 'belt' || mode === 'erase') setMode('menu');
+      else if (mode === 'areaMove') cancelAreaMove();
+      else if (mode === 'belt' || mode === 'erase' || mode === 'area') setMode('menu');
+    },
+    areaMoveTool() {
+      if (mode === 'area') startAreaMove();
+    },
+    areaEraseTool() {
+      if (mode === 'area') askRemoveArea();
     },
     closeInfo() {
       select(null);
@@ -556,7 +737,8 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
     back() {
       if (panels.isModalOpen()) return panels.closeTopmost();
       if (mode === 'place') return cancelPlace();
-      if (mode === 'belt' || mode === 'erase') return setMode('menu');
+      if (mode === 'areaMove') return cancelAreaMove();
+      if (mode === 'belt' || mode === 'erase' || mode === 'area') return setMode('menu');
       if (mode === 'menu') return closeMenu();
       select(null);
     },
@@ -567,6 +749,10 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
         tapNormal(tile);
       } else if (mode === 'place') {
         if (isOwned(state, tile.x, tile.y)) moveGhostCenterTo(tile);
+      } else if (mode === 'area') {
+        markArea(tile, tile);
+      } else if (mode === 'areaMove') {
+        if (isOwned(state, tile.x, tile.y)) moveAreaGhostCenterTo(tile);
       } else if (mode === 'belt') {
         if (rotateBelt(state, tile.x, tile.y)) {
           changed();
@@ -591,6 +777,13 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
         eraseBeltAt(tile);
       } else if (mode === 'place' && ghostContains(tile)) {
         drag = { kind: 'ghost', offsetX: tile.x - ui.ghost.x, offsetY: tile.y - ui.ghost.y };
+      } else if (mode === 'area') {
+        drag = { kind: 'area', start: tile };
+        ui.area.rect = { a: tile, b: tile };
+        markArea(tile, tile);
+      } else if (mode === 'areaMove' && areaGhostContains(tile)) {
+        const g = ui.area.ghost;
+        drag = { kind: 'areaGhost', offsetX: tile.x - g.x, offsetY: tile.y - g.y };
       } else {
         drag = { kind: 'pan' };
       }
@@ -620,6 +813,21 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
           g.y = y;
           validateGhost();
         }
+      } else if (drag.kind === 'area' && ui.area) {
+        const r = ui.area.rect;
+        if (r && (r.b.x !== tile.x || r.b.y !== tile.y)) {
+          r.b = tile;
+          markArea(drag.start, tile);
+        }
+      } else if (drag.kind === 'areaGhost' && ui.area?.ghost) {
+        const g = ui.area.ghost;
+        const x = tile.x - drag.offsetX;
+        const y = tile.y - drag.offsetY;
+        if (x !== g.x || y !== g.y) {
+          g.x = x;
+          g.y = y;
+          validateAreaGhost();
+        }
       }
       requestDraw();
     },
@@ -637,12 +845,14 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
         }
         ui.beltPreview = null;
       }
+      if (drag?.kind === 'area' && ui.area) ui.area.rect = null;
       drag = null;
       requestDraw();
     },
 
     onDragCancel() {
       ui.beltPreview = null;
+      if (ui.area) ui.area.rect = null;
       drag = null;
       requestDraw();
     },

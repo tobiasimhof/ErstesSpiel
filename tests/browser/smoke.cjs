@@ -268,7 +268,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(icons.painted === icons.total, `Zurück ins Spiel: Warenbilder wieder da (${icons.painted}/${icons.total})`);
   const barOrder = await page.locator('#build-items .build-item').evaluateAll((items) => items.map((b) => b.dataset.tool));
   check(
-    JSON.stringify(barOrder.slice(0, 6)) === '["holzfaeller","saegewerk","lagerhaus","versandportal","belt","erase"]',
+    JSON.stringify(barOrder.slice(0, 7)) === '["holzfaeller","saegewerk","lagerhaus","versandportal","belt","area","erase"]',
     `Bauleiste: erst Holz-Gebäude und Werkzeuge, dann gesperrte (${barOrder.join(', ')})`,
   );
   const quarryItem = page.locator('.build-item[data-tool="steinbruch"]');
@@ -451,6 +451,95 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(80);
   check(!(await game(page, () => window.__game.state.buildings.some((b) => b.type === 'versandportal'))), 'Versandportal abgerissen');
 
+  // ---------- Bereich markieren, verschieben, drehen, abreißen (v0.11.0) ----------
+  // Sägewerk (20,12) mit seiner Zuleitung (15,11)–(19,12) als Gruppe umsetzen
+  const area = () =>
+    game(page, () => {
+      const a = window.__game.ui.area;
+      const g = a?.ghost;
+      return a
+        ? {
+            buildings: a.sel.buildings.length,
+            belts: a.sel.belts.length,
+            ghost: g ? { x: g.x, y: g.y, turns: g.turns, valid: g.plan?.valid, w: g.plan?.width, h: g.plan?.height } : null,
+          }
+        : null;
+    });
+  const sawNow = () => game(page, () => ({ ...window.__game.state.buildings.find((b) => b.type === 'saegewerk') }));
+  const beltTotal = () => game(page, () => Object.keys(window.__game.state.belts).length);
+  const sawBefore = await sawNow();
+  const beltsBefore = await beltTotal();
+  await page.tap('#btn-build');
+  await sleep(80);
+  await page.tap('.build-item[data-tool="area"]');
+  await sleep(80);
+  check((await mode(page)) === 'area', 'Werkzeug „Verschieben“: Bereich markieren');
+  check(await page.locator('#tool-area-move').isDisabled(), 'Verschieben erst, wenn etwas markiert ist');
+  await touchDragTiles(page, cdp, [
+    [15, 11],
+    [21, 13],
+  ]);
+  let marked = await area();
+  check(marked.buildings === 1 && marked.belts === 6, `Rechteck ziehen markiert Sägewerk und Zuleitung (${marked.buildings} Gebäude, ${marked.belts} Bänder)`);
+  check((await page.textContent('#tool-text')).includes('1 Gebäude und 6 Bänder'), 'Unten steht, was markiert ist');
+  await shot('18-bereich-markiert');
+  await page.tap('#tool-area-move');
+  await sleep(80);
+  marked = await area();
+  check((await mode(page)) === 'areaMove' && marked.ghost.valid && marked.ghost.w === 7 && marked.ghost.h === 3, 'Verschieben: Vorschau 7 × 3 an der alten Stelle');
+  await page.keyboard.press('r');
+  await sleep(60);
+  marked = await area();
+  check(marked.ghost.turns === 1 && marked.ghost.w === 3 && marked.ghost.h === 7, 'Taste R dreht die ganze Gruppe (jetzt 3 × 7)');
+  await touchDragTiles(page, cdp, [
+    [marked.ghost.x + 1, marked.ghost.y + 3],
+    [24, 14],
+  ]);
+  marked = await area();
+  check(marked.ghost.x === 23 && marked.ghost.y === 11 && marked.ghost.valid, `Gruppe mit dem Finger verschoben (${marked.ghost.x},${marked.ghost.y}, grün)`);
+  await shot('19-bereich-verschieben');
+  await page.tap('#tool-confirm');
+  await sleep(80);
+  const sawMoved = await sawNow();
+  check(
+    sawMoved.x === 23 && sawMoved.y === 16 && sawMoved.rot === (sawBefore.rot + 1) % 4 && sawMoved.id === sawBefore.id,
+    `Sägewerk gedreht und umgesetzt (${sawBefore.x},${sawBefore.y} → ${sawMoved.x},${sawMoved.y})`,
+  );
+  check((await beltTotal()) === beltsBefore, 'Alle Bänder sind mitgekommen');
+  check(
+    (await game(page, () => window.__game.state.belts['24,15']?.outs.join(''))) === 'S',
+    'Zuleitung zeigt nach dem Drehen nach unten in den Eingang des Sägewerks',
+  );
+  check((await mode(page)) === 'area' && (await area()).buildings === 1, 'Danach bleibt die Gruppe markiert');
+  // Bereich abreißen
+  const blocksBeforeErase = await game(page, () => window.__game.state.storage.holzblock ?? 0);
+  await page.tap('#tool-area-erase');
+  await sleep(80);
+  check(
+    (await page.isVisible('#dialog')) && (await page.textContent('#dialog-text')).includes('1 Gebäude und 6 Bänder'),
+    'Bereich abreißen fragt nach',
+  );
+  await page.tap('#dialog-ok');
+  await sleep(80);
+  const blocksAfterErase = await game(page, () => window.__game.state.storage.holzblock ?? 0);
+  check(
+    !(await game(page, () => window.__game.state.buildings.some((b) => b.type === 'saegewerk'))) && (await beltTotal()) === beltsBefore - 6,
+    'Bereich abgerissen: Sägewerk und 6 Bänder weg',
+  );
+  check(blocksAfterErase - blocksBeforeErase >= 46, `Baukosten zurück ins Laden-Lager (+${blocksAfterErase - blocksBeforeErase} Holzblöcke)`);
+  check(await page.locator('#tool-area-move').isDisabled(), 'Danach ist nichts mehr markiert');
+  await page.tap('#tool-confirm');
+  await page.tap('#build-close');
+  await sleep(80);
+  // Taste R dreht auch ein ausgewähltes Gebäude
+  const rotBefore = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'holzfaeller').rot);
+  await tapTile(page, 10, 6);
+  await page.keyboard.press('R');
+  await sleep(60);
+  const rotAfter = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'holzfaeller').rot);
+  check(rotAfter === (rotBefore + 1) % 4, `Taste R dreht das ausgewählte Gebäude (${rotBefore} → ${rotAfter})`);
+  await page.tap('#info-close');
+
   // ---------- Neues Spiel ----------
   await page.tap('#btn-menu');
   await page.tap('#menu-new-game');
@@ -532,17 +621,29 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await page.textContent('#modal-content .amount-number')) === '8', 'Menge auf 8 gestellt');
   await shot('9a-menge');
   const blocksBefore = await game(page, () => window.__game.state.storage.holzblock ?? 0);
+  // Kunden kaufen in Echtzeit weiter: Was sie seitdem von der Theke gekauft
+  // haben, zählt mit (sonst schwankt die Prüfung, wenn genau jetzt jemand kauft).
+  const saleIdBefore = await game(page, () => window.__game.state.market.nextSaleId);
   await page.locator('#modal-content button', { hasText: 'Auf die Theke' }).tap();
   await sleep(80);
-  const counter8 = await game(page, () => ({ ...window.__game.state.counters[0], store: window.__game.state.storage.holzblock ?? 0 }));
+  const counter8 = await game(
+    page,
+    (since) => {
+      const s = window.__game.state;
+      const sold = s.market.sales.filter((sale) => sale.id >= since).reduce((n, sale) => n + (sale.items.holzblock ?? 0), 0);
+      return { ...s.counters[0], sold, store: s.storage.holzblock ?? 0 };
+    },
+    saleIdBefore,
+  );
   check(
-    counter8.type === 'holzblock' && counter8.count === 8 && counter8.store >= blocksBefore - 8,
+    counter8.type === 'holzblock' && counter8.count + counter8.sold === 8 && counter8.store >= blocksBefore - 8,
     `Theke 1 mit genau 8 Holzblöcken bestückt (${JSON.stringify(counter8)})`,
   );
   // Über „Menge“ lässt sich die Anzahl später ändern
   await page.locator('#modal-content .counter-buttons button', { hasText: 'Menge' }).first().tap();
   await sleep(80);
-  check((await page.textContent('#modal-content .amount-number')) === '8', 'Menge öffnet mit der aktuellen Anzahl');
+  const counterNow = await game(page, () => window.__game.state.counters[0].count);
+  check((await page.textContent('#modal-content .amount-number')) === String(counterNow), `Menge öffnet mit der aktuellen Anzahl (${counterNow})`);
   await page.locator('#modal-content .amount-stepper button', { hasText: 'Alle' }).tap();
   await page.locator('#modal-content button', { hasText: 'Auf die Theke' }).tap();
   await sleep(80);

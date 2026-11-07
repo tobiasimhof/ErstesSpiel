@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.10.2 – Fläche für 500 Gold & Warenbilder in der Bauleiste |
+| **Aktuelle Version** | v0.11.0 – Umbauen: Bereiche markieren, verschieben, drehen, abreißen; Taste R dreht |
 | **Phase** | M2 – Produktionsketten |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias testet v0.10.2 (Abschnitt 6, „v0.10.2 – Was Tobias testet“) und schreibt sein Feedback in einen **neuen Chat**. Claude hält es fest, nimmt bei Bedarf noch Feinschliff vor; danach Plan für **v0.11.0 – Aufgaben** |
+| **Nächster Schritt** | Tobias testet v0.11.0 (Abschnitt 6, „v0.11.0 – Was Tobias testet“) und schreibt sein Feedback in einen **neuen Chat**. Claude hält es fest, nimmt bei Bedarf noch Feinschliff vor; danach Plan für **v0.12.0 – Aufgaben** |
 
 ---
 
@@ -101,6 +101,8 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Kombi-Maschinen** (seit v0.10.0) haben zwei Eingänge und brauchen zwei verschiedene Zutaten, z. B. Zimmerei: 10 Holzstäbe + 5 Stein-Zahnräder → 1 Handkurbel. Jeder Eingang nimmt jede passende Zutat; am sichersten kommt jede Zutat über ihren eigenen Eingang. Fehlt eine Zutat, zeigt die Maschine ein kleines Bild davon; das Infofenster sagt, wie viel fehlt. Laufen beide Zutaten gemischt über ein Band und eine nimmt überhand, staut sich der Eingang (rotes Licht, „Eingang blockiert“).
 - Eine Werkstatt kann mehrere Rezepte (Grundmaschinen zwei, Kombi-Maschinen drei). Man stellt ein, was sie gerade herstellt. Das Infofenster zeigt auch die Rezepte der anderen Einstellungen. Beim Umstellen bleiben alle Teile in der Maschine (seit v0.10.1) und werden wieder gebraucht, wenn man zurückstellt; mit „↩ Reste ins Laden-Lager“ holt man nicht gebrauchte Teile heraus.
 - **Umbauen ist leicht und günstig** (verschieben, drehen, abreißen mit Rückerstattung), weil man sich ständig an den Markt anpasst. Das gilt für alle Gebäude, auch die Startgebäude, damit man den Schwerpunkt der Fabrik jederzeit neu setzen kann.
+- **Bereiche umbauen (seit v0.11.0, Wunsch von Tobias):** Mit dem Werkzeug „✥ Verschieben“ in der Bauleiste markiert man einen Bereich (Rechteck ziehen oder ein Teil antippen). Alles darin – Bänder, Maschinen, Lager, Portale; auch Gebäude, die nur zum Teil im Rechteck liegen – lässt sich auf einmal verschieben, um 90° drehen oder abreißen. Innerhalb der Gruppe bleibt alles verbunden, Waren ziehen mit um, die Fabrik läuft sofort weiter. So setzt man z. B. eine ganze Eisen-Linie in eine andere Ecke, ohne ein Band neu zu legen.
+- **Taste R (seit v0.11.0):** Mit angeschlossener Tastatur dreht R die Vorschau beim Bauen und Verschieben, sonst das angetippte Gebäude oder Band.
 - **Bauen geht sofort**, sofern man die Waren dafür hat. Es gibt keine Bauzeiten.
 - **Bauen kostet Waren statt Gold** (Tobias, v0.7.0): z. B. Förderband 1 Holzblock, Sägewerk 40 Holzblöcke. Die Waren kommen aus dem Laden-Lager. So muss man abwägen: verkaufen oder damit eine weitere Maschine bauen? Abreißen gibt die bezahlten Waren zurück; Verschieben und Drehen sind kostenlos. Tabelle in Abschnitt 4.2.
 
@@ -320,6 +322,7 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/core/geometry.js` | Größe, Drehung, Felder sowie Ein- und Ausgänge von Gebäuden |
 | `src/core/buildings.js` | Gebäude bauen, verschieben, drehen, abreißen, freie Stelle suchen |
 | `src/core/belts.js` | Förderbänder legen, aufteilen, zusammenführen, drehen, abreißen |
+| `src/core/area.js` | Bereich markieren und alles darin verschieben, drehen oder abreißen (v0.11.0) |
 | `src/core/production.js` | Was Gebäude tun: einlegen, herstellen, zwischenlagern, versenden, Status |
 | `src/core/sim.js` | Simulation in festen Takten: Waren auf Bändern, Stau, Aufteilen, Zusammenführen |
 | `src/core/shop.js` | Laden-Lager, Baukosten bezahlen und zurückgeben |
@@ -329,7 +332,7 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/core/save.js` | Spielstand in Text umwandeln, prüfen und alte Spielstände umwandeln |
 | `src/view/camera.js` | Kamera: verschieben, zoomen, Bildschirm ↔ Welt umrechnen |
 | `src/view/input.js` | Touch, Maus und Mausrad (Antippen, Ziehen, zwei Finger) |
-| `src/view/controller.js` | Modi (Ansehen, Bauleiste, Platzieren, Förderband, Abreißen) und was Gesten darin tun |
+| `src/view/controller.js` | Modi (Ansehen, Bauleiste, Platzieren, Förderband, Abreißen, Bereich markieren und verschieben) und was Gesten und die Taste R darin tun |
 | `src/view/renderer.js` | Zeichnet Spielfeld, Bänder, Waren, Gebäude mit Statuslicht, Vorschau |
 | `src/view/itemArt.js` | Aussehen der Waren (auf dem Band und in Listen); kleine Warenbilder lassen sich neu zeichnen |
 | `src/view/hud.js` | Obere Leiste und Menü ☰ |
@@ -343,8 +346,8 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/style.css` | Aussehen der Oberfläche |
 | `assets/icons/` | App-Symbole (erzeugt mit `tools/make-icons.py`) |
 | `tools/set-version.mjs` | Setzt die Versionsnummer in `src/version.js` und `index.html` (inkl. Import-Map) |
-| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`) |
-| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufsteigen bis Level 6, die Eisen-Kette und die Zimmerei per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
+| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`), Bereiche verschieben (`area.test.js`) |
+| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Bereich markieren/verschieben/drehen (auch mit Taste R)/abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufsteigen bis Level 6, die Eisen-Kette und die Zimmerei per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
 
 **Prüfen vor jedem Merge:** `npm test` (Spielregeln) und `npm run test:browser` (Browser-Test).
 
@@ -385,8 +388,30 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | v0.10.0 | **Techbaum, Teil 2:** 3 Kombi-Maschinen mit je 2 Eingängen und 3 Einstellungen (9 neue Waren), Level 4–6, je Level eine Verkaufstheke mehr, Menge auf der Theke einstellbar | ✅ fertig |
 | v0.10.1 | **Feinschliff nach Tobias' Test:** alle Theken wachsen mit (20 → 25 → 30), Laden-Lager 1.000 ab Level 4, Flächen-Streifen 4 tief ab Level 4, Teile bleiben beim Umstellen in der Maschine, Rezepte aller Einstellungen im Infofenster | ✅ fertig |
 | v0.10.2 | **Fläche & Warenbilder:** jeder Flächenkauf 500 Gold für 4 Reihen (schon ab Level 1), jede Seite 2×; Warenbilder in der Bauleiste bleiben nach dem Minimieren sichtbar | ✅ fertig |
-| v0.11.0 | **Aufgaben:** Aufgaben mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen (Modell von Tobias, Abschnitt 3.5) | nach Tobias' Test von v0.10.2 planen |
-| v0.12.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
+| v0.11.0 | **Umbauen:** Bereich markieren und alles darin auf einmal verschieben, drehen oder abreißen; Taste R dreht | ✅ fertig |
+| v0.12.0 | **Aufgaben:** Aufgaben mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen (Modell von Tobias, Abschnitt 3.5) | nach Tobias' Test von v0.11.0 planen |
+| v0.13.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
+
+### v0.11.0 – Umbauen: Bereiche verschieben (fertig)
+
+Tobias' Test von v0.10.2 und sein Wunsch stehen in Abschnitt 10 (Chat 8, Teil 2). Die Aufgaben rücken auf v0.12.0, das Weiterlaufen bei geschlossenem Spiel auf v0.13.0.
+
+**Neu im Spiel:**
+- **Werkzeug „✥ Verschieben“** in der Bauleiste (zwischen Förderband und Abreißen).
+- **Markieren:** Mit einem Finger ein Rechteck ziehen. Alles darin leuchtet gelb – Bänder, Maschinen, Lager, Portale. Gebäude gehören dazu, sobald ein Feld von ihnen im Rechteck liegt. Antippen markiert nur dieses eine Teil (z. B. ein einzelnes Band); ein neues Rechteck ersetzt die Markierung. Zwei Finger bewegen und zoomen die Karte. Unten steht, was markiert ist, z. B. „Markiert: 1 Gebäude und 6 Bänder“.
+- **Verschieben:** „✥ Verschieben“ antippen; die Gruppe hängt dann am Finger (oder man tippt an die neue Stelle). Gestrichelter Rahmen grün = passt, rot = ein Feld ist belegt oder gehört nicht zum Grundstück (rote Felder zeigen, wo). Die alte Stelle bleibt blass sichtbar. „↻ Drehen“ (oder Taste R) dreht die ganze Gruppe um 90° um ihre Mitte. „✓ Hierhin“ setzt sie ab, „✕ Abbrechen“ geht zurück zum Markieren.
+- **Was mitkommt:** Innerhalb der Gruppe bleibt alles verbunden, auch nach dem Drehen. Waren auf den Bändern, Teile in den Maschinen und ein angefangener Rohstoff ziehen mit um; die Fabrik läuft sofort weiter. Verschieben kostet nichts. Bänder außerhalb, die hinein- oder herausführen, bleiben, wo sie sind (dort neu anschließen); wie beim Abreißen verliert ein Abzweig außerhalb seinen Ausgang ins nun leere Feld.
+- **Bereich abreißen:** „🧹 Abreißen“ reißt alles Markierte auf einmal ab, nach einer Rückfrage (mit Hinweis, falls ein angefangener Rohstoff verloren geht). Waren und bezahlte Baukosten kommen ins Laden-Lager.
+- Nach dem Verschieben bleibt die Gruppe markiert, damit man sie gleich noch einmal versetzen kann; „✓ Fertig“ führt zurück zur Bauleiste.
+- **Taste R:** Mit Tastatur (Tobias spielt mit Tastatur am Tablet) dreht R die Vorschau beim Bauen und beim Verschieben eines Bereichs, sonst das angetippte Gebäude oder Band. Strg+R lädt weiterhin neu.
+- **Tipp (schon vorher im Spiel):** Mit „🧹 Abreißen“ in der Bauleiste wischt man mit dem Finger über viele Bänder auf einmal.
+- **Spielstand:** Format unverändert, keine Umwandlung nötig.
+
+**Was Tobias testet:**
+- Eine ganze Linie (z. B. die Eisen-Produktion) markieren, an eine andere Stelle ziehen, mit R drehen und absetzen. Läuft sie danach wie vorher weiter?
+- Einzelne Bänder durch Antippen markieren und verschieben; einen Bereich auf einmal abreißen.
+- Taste R beim Bauen einer Maschine und bei einer angetippten Maschine.
+- Ist das Markieren mit dem Finger angenehm (ein Finger markiert, zwei Finger bewegen die Karte)? Feedback bitte in einen neuen Chat; danach Plan für v0.12.0 (Aufgaben).
 
 ### v0.10.2 – Fläche für 500 Gold & Warenbilder in der Bauleiste (fertig)
 
@@ -700,6 +725,11 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 | 07.11.2026 | Die Welt ist genau so groß, wie man Fläche kaufen kann (38 × 30), und hat eine eigene Ecke: Sie beginnt oben bei Reihe −3 | Claudes Wahl: So hat jede Seite Platz für 2 Streifen, und Gebäude und Bänder bestehender Fabriken behalten ihre Felder (nichts muss verschoben werden). |
 | 07.11.2026 | Bestehende Spielstände: Gekaufte Fläche zählt mit (jede Seite bis 8 Reihen über das Startgrundstück hinaus); ein Rest-Streifen kostet anteilig weniger (z. B. 2 Reihen 250 Gold); was schon weiter reicht, bleibt | Claudes Plan, von Tobias freigegeben. |
 | 07.11.2026 | Warenbilder werden beim Öffnen der Bauleiste und beim Zurückkehren ins Spiel neu gezeichnet | Tobias (Chat 8): Die Bilder waren erst weg, nachdem er die App minimiert hatte, um Claude zu öffnen. Der Browser darf solche Zeichnungen im Hintergrund wegwerfen. |
+| 07.11.2026 | Werkzeug „Verschieben“: Bereich markieren (Rechteck oder Antippen) und alles darin auf einmal verschieben, um 90° drehen oder abreißen; Gebäude, die nur zum Teil im Rechteck liegen, gehören dazu | Tobias (Chat 8, Teil 2): Bänder einzeln abreißen und neu legen dauert zu lange; er möchte z. B. die ganze Eisen-Produktion als Ganzes in eine Ecke verschieben. Halb markierte Teile und Drehen der Gruppe hat er bestätigt. |
+| 07.11.2026 | Ein Finger markiert, zwei Finger bewegen die Karte; nach dem Verschieben bleibt die Gruppe markiert | Claudes Wahl: wie beim Förderband-Werkzeug; so lässt sich eine Gruppe mehrmals nachjustieren. |
+| 07.11.2026 | Bänder außerhalb der Gruppe bleiben beim Verschieben, wo sie sind; ein Abzweig ins nun leere Feld verliert diesen Ausgang (wie beim Abreißen) | Claudes Wahl: Man schließt an der neuen Stelle selbst wieder an. |
+| 07.11.2026 | Taste R dreht (Vorschau beim Bauen und Verschieben, sonst das angetippte Gebäude oder Band) | Tobias (Chat 8, Teil 2): Er spielt mit angeschlossener Tastatur am Tablet. |
+| 07.11.2026 | Bereich verschieben wird v0.11.0; Aufgaben rücken auf v0.12.0, Offline auf v0.13.0 | Tobias: „Wir können das auch gerne v11 nennen.“ |
 
 ---
 
@@ -707,10 +737,10 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 
 Stand 07.11.2026.
 
-1. **Test von v0.10.2:** Tobias testet und schreibt sein Feedback in einen neuen Chat (Abschnitt 6, „v0.10.2 – Was Tobias testet“). Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Mini-Schlössern sehr viel Gold. Danach Plan für v0.11.0 (Aufgaben).
+1. **Test von v0.11.0:** Tobias testet und schreibt sein Feedback in einen neuen Chat (Abschnitt 6, „v0.11.0 – Was Tobias testet“). Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Mini-Schlössern sehr viel Gold. Danach Plan für v0.12.0 (Aufgaben).
 2. **Handel im echten Tempo:** geklärt – Tobias' Zeiten (bis Eisen etwa 45 Minuten, zweite Runde Eisen nach etwa 60 Minuten) sind in echter Zeit gemessen; nur die Eisen-Runden hat er im Testmodus beschleunigt. Früher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10).
 3. **Laden-Lager:** seit v0.10.1 500 Plätze bis Level 3, 1.000 ab Level 4 (Tobias). Claudes Lesart: erst ab Level 4, weil es dort eng wird. Soll es schon ab Level 1 1.000 sein, ist das eine Zahl in der Datentabelle.
-4. **Aufgaben (v0.11.0):** Werden die Waren für eine Aufgabe abgegeben (verbraucht), oder zählt nur, dass man sie hergestellt hat? Wie viel Erfahrung braucht ein Level, was kostet ein Aufstieg? Kostet der Laden-Ausbau zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Was bringen Level 7 bis 10 (Ende der Einführung)? Vorschlag kommt mit dem Plan für v0.11.0.
+4. **Aufgaben (v0.12.0):** Werden die Waren für eine Aufgabe abgegeben (verbraucht), oder zählt nur, dass man sie hergestellt hat? Wie viel Erfahrung braucht ein Level, was kostet ein Aufstieg? Kostet der Laden-Ausbau zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Was bringen Level 7 bis 10 (Ende der Einführung)? Vorschlag kommt mit dem Plan für v0.12.0.
 5. **Einstieg:** Tobias' Idee, am Anfang vor allem die Massenproduktion auszubauen, damit man schnell genug Ware von allem hat – später austesten. Die 500 Gold Startkapital reichen für den Weg zu Stein und Eisen (Test von v0.9.1).
 6. **Pleiteschutz:** Ein Rohstoff ohne passendes Gebäude (z. B. Felsbrocken ohne Steinbruch) verhindert das Geschenk. Vorerst bewusst so gelassen; beobachten.
 7. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
@@ -722,6 +752,23 @@ Stand 07.11.2026.
 ---
 
 ## 9. Versionshistorie
+
+### v0.11.0 – Umbauen: Bereiche verschieben (07.11.2026)
+
+**Vorgenommen:**
+- Tobias' Wunsch nach dem Test von v0.10.2: Umbauen ist umständlich, weil man jedes Band einzeln abreißen und neu legen muss. Teile sollen sich verschieben lassen, und ein markierter Bereich – z. B. die ganze Eisen-Produktion – soll sich als Ganzes versetzen lassen. Dazu die Taste R zum Drehen.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie markiert man mit dem Finger, ohne dass die Karte mitwandert? → Wie beim Förderband: Ein Finger zieht das Rechteck, zwei Finger bewegen die Karte.
+- Was gehört zur Markierung? → Alles im Rechteck, auch Gebäude, die nur zum Teil darin liegen (Tobias); das gelbe Leuchten zeigt genau, was dabei ist.
+- Bleibt die Linie beim Drehen verbunden? → Ja: Bänder drehen ihre Richtungen mit, Gebäude ihre Ein- und Ausgänge; auch Waren auf den Bändern drehen mit. Ein Test lässt eine gedrehte Linie in allen drei Drehungen bis ins Versandportal laufen.
+- Was ist mit Bändern, die von außen hineinführen? → Sie bleiben stehen; an der neuen Stelle schließt man neu an.
+
+**Gemacht:**
+- Neue Spielregeln `src/core/area.js`: markieren, Vorschau mit belegten Feldern, verschieben mit Drehung, abreißen mit Rückerstattung.
+- Bauleiste mit dem Werkzeug „✥ Verschieben“, Werkzeugleiste mit „🧹 Abreißen“ und „✥ Verschieben“, gelbe Markierung, gestrichelter Rahmen beim Ziehen, Vorschau der Gruppe mit grünen und roten Feldern, Taste R.
+- 163 automatische Tests (neu in `area.test.js`: Markieren mit halb erfassten Gebäuden, Linie verschieben mit Waren und angefangenem Holzstamm, gedreht verschieben um 90°/180°/270° mit laufender Produktion bis ins Laden-Lager, Ware dreht mit, belegte Felder und Grundstücksrand, Abzweig ins Leere, Bereich abreißen mit Rückerstattung, Speichern nach dem Verschieben) und der Browser-Test (neu: Rechteck per Touch ziehen, Gruppe mit Taste R drehen und mit dem Finger verschieben, Zuleitung zeigt danach in den Eingang, Bereich abreißen mit Rückfrage, Taste R dreht ein angetipptes Gebäude) in Tablet- und Handygröße – alle bestanden.
+- Beim Testen gefunden und behoben: Eine Prüfung im Browser-Test (Theke mit genau 8 Holzblöcken) schwankte, wenn genau in diesem Moment ein Kunde kaufte; sie rechnet seine Einkäufe jetzt mit.
 
 ### v0.10.2 – Fläche für 500 Gold & Warenbilder in der Bauleiste (07.11.2026)
 
@@ -1065,6 +1112,16 @@ Stand 07.11.2026.
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 07.11.2026 – Chat 8, Teil 2: Test von v0.10.2, Plan und Umsetzung v0.11.0
+
+**Tobias:** Fabrik ist unverändert. Fläche kaufen fühlt sich richtig an, um alles besser auf Masse auszurichten. App minimieren und zurückkommen hat geklappt, alle Bilder sind noch da. Ein Anliegen noch: Das Umbauen ist umständlich geworden, weil er jedes Förderband einzeln antippen muss, um es abzureißen und neu zu bauen; genauso bei Maschinen und Portalen. Wunsch: jedes Teil auf der Fläche verschieben können und zusätzlich einen Bereich markieren, um ihn komplett zu verschieben – z. B. die Eisen-Produktion als gesamten „Prozess“ in die untere Ecke, statt jedes Band und jede Maschine einzeln.
+
+**Claude** hat den Plan vorgestellt: Werkzeug „✥ Verschieben“ – Rechteck ziehen oder Teil antippen, dann die Gruppe verschieben (grün/rot), drehen oder abreißen; alles in der Gruppe bleibt verbunden und Waren ziehen mit um. Dazu der Tipp, dass man im Abreiß-Werkzeug schon über viele Bänder wischen kann. Fragen: Gehören halb markierte Maschinen dazu? Drehen der ganzen Gruppe gleich mit einbauen?
+
+**Tobias:** Guter Tipp, das hatte er noch nicht gesehen. Genau so umsetzen, gerne als v0.11.0. Halb markierte Maschinen oder Teile sind ebenfalls markiert; Drehen der ganzen Gruppe gerne mit einbauen. Er spielt auf dem Galaxy Tab S9 fast immer mit angeschlossener Tastatur – deshalb soll man zusätzlich mit R drehen können, auch einzelne Gebäude und Maschinen.
+
+**Umgesetzt:** v0.11.0 (siehe Versionshistorie).
 
 ### 07.11.2026 – Chat 8: Feedback zu v0.10.1, Plan und Umsetzung v0.10.2
 
