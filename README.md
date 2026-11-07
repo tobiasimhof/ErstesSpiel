@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.11.1 – Test-Feedback zu v0.11.0 (nur README); im Spiel wie v0.11.0 |
+| **Aktuelle Version** | v0.12.0 – Nachschub aus dem Laden-Lager & Bänder leeren |
 | **Phase** | M2 – Produktionsketten |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | **Pause.** Tobias spielt in Echtzeit weiter bis Level 6 und schreibt dann sein gesammeltes Feedback in einen **neuen Chat**. Claude hält es fest und schlägt einen Schritt vor, der das Feedback und den vorgemerkten Knopf „🧺 Strecke leeren“ (Abschnitt 6, „Vorgemerkt“) zusammenfasst; danach Plan für **v0.12.0 – Aufgaben** |
+| **Nächster Schritt** | Tobias testet v0.12.0 im echten Spiel (Lagerhaus befüllen, Nachschub mit Rest, Strecke und Zulauf leeren; Punkte unter „Was Tobias testet“ in Abschnitt 6) und schreibt sein Feedback in einen **neuen Chat**. Danach Plan für **v0.13.0 – Aufgaben** |
 
 ---
 
@@ -96,8 +96,14 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Maschinen** verarbeiten nach Rezept. Man stellt ein, was sie herstellen (Modus A oder B), z. B. Sägewerk → Holzplatte oder Holzstab (5 Blöcke → 1 Teil). Der festgelegte Techbaum steht in Abschnitt 4.2. Später kann es auch Maschinen geben, die mehrere Rohstoffe verarbeiten.
 - **Typischer Aufbau:** Ein Holzfällerlager wird auf 4 Strecken verteilt. Zwei davon gehen in Sägewerke (eins auf Winkel, eins auf Stäbe eingestellt), zwei laufen weiter für spätere Rezepte, die Holzblöcke direkt brauchen (z. B. zusammen mit Splitt).
 - **Stau:** Ist ein Band voll (z. B. weil es im Nichts endet), bleibt alles stehen und davor wird nicht weiter produziert.
-- **Lagerhäuser** sind die einzige Möglichkeit, Waren zu lagern. Sie sind Zwischenstationen und eine Art Verteiler: 2 × 1 Felder, 3 Fächer zu je 50 Waren, **Eingang oben links, Ausgang unten rechts** – deshalb lagert man sinnvollerweise nur eine Sorte, z. B. 3 × 50 Holzblöcke. Was hineinläuft, läuft weiter, sobald am Ausgang Platz ist.
+- **Lagerhäuser** sind die einzige Möglichkeit, Waren auf dem Grundstück zu lagern. Sie sind Zwischenstationen und eine Art Verteiler: 2 × 1 Felder, 3 Fächer zu je 50 Waren, **Eingang oben links, Ausgang unten rechts** – deshalb lagert man sinnvollerweise nur eine Sorte, z. B. 3 × 50 Holzblöcke. Was hineinläuft, läuft weiter, sobald am Ausgang Platz ist. Bleibt der Ausgang frei, sammelt das Lagerhaus bis zu 150 Stück; ein Abzweig davor schickt dann alles Weitere in die anderen Richtungen (z. B. ins Versandportal).
 - **Versandportal:** 1 × 1 Feld mit **einem** Eingang (dreht mit). Waren, die hineinlaufen, landen direkt im Laden.
+- **Lagerhaus als Gegenstück zum Versandportal (seit v0.12.0, Wunsch von Tobias):** Das Versandportal bringt Waren vom Band ins Laden-Lager, das Lagerhaus holt sie zurück aufs Band. Im Infofenster des Lagerhauses:
+  - **📥 Befüllen:** Ware aus dem Laden-Lager wählen und die Menge einstellen wie bei der Theke (0, −5, −1, +1, +5, Alle), bis zu 150 Stück. Beispiel: 120 Eisenbarren, die an der Theke nur 1.440 Gold bringen würden, laufen in eine Schmiede und werden zu 24 Eisenstangen (1.728 Gold oder Zutat für Kombi-Teile).
+  - **🔁 Nachschub:** Das Lagerhaus holt dauerhaft eine Ware aus dem Laden-Lager. Es hält nur bis zu 10 Stück bereit, der Rest bleibt sichtbar im Laden-Lager. Ein einstellbarer **Rest** bleibt immer dort (z. B. 20 Holzplatten zum Bauen – der „eiserne Bestand“). Am Spielfeld zeigt das Lagerhaus einen blauen Kreispfeil und das Bild seiner Ware. „✕ Nachschub aus“ beendet es.
+  - **↩ Ausräumen:** Alles aus dem Lagerhaus zurück ins Laden-Lager; der Nachschub geht dabei aus.
+  - Rohstoffe (Holzstamm, Felsbrocken, Eisenerz) kommen nicht ins Lagerhaus; die legt man direkt in ihr Gebäude ein.
+- **Bänder leeren (seit v0.12.0):** Band antippen → **„🧺 Strecke leeren“**: Alle Waren der zusammenhängenden Strecke (hell markiert; alle direkt verbundenen Bänder, auch über Abzweige und Zusammenführungen; an Gebäuden endet sie) kommen ins Laden-Lager, die Bänder bleiben liegen. Staut sich der Eingang einer Maschine (rotes Licht), steht im Infofenster **„🧺 Zulauf leeren“**: Bringt eine Zuleitung eine Ware, die die Maschine gar nicht braucht, wird nur diese geleert, sonst alle gestauten.
 - **Kombi-Maschinen** (seit v0.10.0) haben zwei Eingänge und brauchen zwei verschiedene Zutaten, z. B. Zimmerei: 10 Holzstäbe + 5 Stein-Zahnräder → 1 Handkurbel. Jeder Eingang nimmt jede passende Zutat; am sichersten kommt jede Zutat über ihren eigenen Eingang. Fehlt eine Zutat, zeigt die Maschine ein kleines Bild davon; das Infofenster sagt, wie viel fehlt. Laufen beide Zutaten gemischt über ein Band und eine nimmt überhand, staut sich der Eingang (rotes Licht, „Eingang blockiert“).
 - Eine Werkstatt kann mehrere Rezepte (Grundmaschinen zwei, Kombi-Maschinen drei). Man stellt ein, was sie gerade herstellt. Das Infofenster zeigt auch die Rezepte der anderen Einstellungen. Beim Umstellen bleiben alle Teile in der Maschine (seit v0.10.1) und werden wieder gebraucht, wenn man zurückstellt; mit „↩ Reste ins Laden-Lager“ holt man nicht gebrauchte Teile heraus.
 - **Umbauen ist leicht und günstig** (verschieben, drehen, abreißen mit Rückerstattung), weil man sich ständig an den Markt anpasst. Das gilt für alle Gebäude, auch die Startgebäude, damit man den Schwerpunkt der Fabrik jederzeit neu setzen kann.
@@ -206,7 +212,7 @@ Von Tobias bestätigt (Chat 3, Teil 2). Mengen, Zeiten und Preise hat Claude vor
 | Zimmerei (Kombi, seit v0.10.0) | 2 × 2 | Handkurbel · Mechanischer Schalter · Verstärkte Holzplatte | Level 4 |
 | Feinschmiede (Kombi, seit v0.10.0) | 2 × 2 | Scharnier · Eisenfeder · Kugellager | Level 5 |
 | Schlosserei (Kombi, seit v0.10.0) | 2 × 2 | Steinkette · Regler · Mini-Schloss | Level 6 |
-| Lagerhaus | 2 × 1 | Zwischenlager, 3 × 50 | Level 1 |
+| Lagerhaus | 2 × 1 | Zwischenlager, 3 × 50; seit v0.12.0 aus dem Laden-Lager befüllen oder mit Nachschub | Level 1 |
 | Versandportal | 1 × 1 | schickt Waren ins Laden-Lager | Level 1 |
 | Förderband | 1 × 1 | transportiert | Level 1 |
 
@@ -321,9 +327,10 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/core/dirs.js` | Himmelsrichtungen (oben, rechts, unten, links) |
 | `src/core/geometry.js` | Größe, Drehung, Felder sowie Ein- und Ausgänge von Gebäuden |
 | `src/core/buildings.js` | Gebäude bauen, verschieben, drehen, abreißen, freie Stelle suchen |
-| `src/core/belts.js` | Förderbänder legen, aufteilen, zusammenführen, drehen, abreißen |
+| `src/core/belts.js` | Förderbänder legen, aufteilen, zusammenführen, drehen, abreißen; Strecke finden und leeren, Zulauf leeren (v0.12.0) |
 | `src/core/area.js` | Bereich markieren und alles darin verschieben, drehen oder abreißen (v0.11.0) |
 | `src/core/production.js` | Was Gebäude tun: einlegen, herstellen, zwischenlagern, versenden, Status |
+| `src/core/warehouse.js` | Lagerhaus und Laden-Lager (v0.12.0): befüllen, Nachschub mit Rest, ausräumen |
 | `src/core/sim.js` | Simulation in festen Takten: Waren auf Bändern, Stau, Aufteilen, Zusammenführen |
 | `src/core/shop.js` | Laden-Lager, Baukosten bezahlen und zurückgeben |
 | `src/core/market.js` | Handel: Händler, Theken, Kunden (mit eigenem Zufall im Spielstand), Pleiteschutz, Testpaket |
@@ -338,6 +345,7 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/view/hud.js` | Obere Leiste und Menü ☰ |
 | `src/view/panels.js` | Infofenster, großes Fenster, Rückfragen, Meldungen |
 | `src/view/shop.js` | Laden-Fenster mit den Reitern Lager, Theken, Händler |
+| `src/view/warehouse.js` | Lagerhaus-Fenster (v0.12.0): Ware wählen, dann Menge (Befüllen) oder Rest im Laden-Lager (Nachschub) |
 | `src/view/levels.js` | Level-Fenster: Freigeschaltetes, nächstes Ziel mit Häkchen, Knopf „Aufsteigen“ |
 | `src/view/format.js` | Texte für Zahlen, Waren und Kosten |
 | `src/view/buildbar.js` | Untere Leisten: Laden/Bauen, Bauleiste, Werkzeugleiste |
@@ -346,8 +354,8 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/style.css` | Aussehen der Oberfläche |
 | `assets/icons/` | App-Symbole (erzeugt mit `tools/make-icons.py`) |
 | `tools/set-version.mjs` | Setzt die Versionsnummer in `src/version.js` und `index.html` (inkl. Import-Map) |
-| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`), Bereiche verschieben (`area.test.js`) |
-| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Bereich markieren/verschieben/drehen (auch mit Taste R)/abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufsteigen bis Level 6, die Eisen-Kette und die Zimmerei per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
+| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`), Bereiche verschieben (`area.test.js`), Lagerhaus-Nachschub und Bänder leeren (`warehouse.test.js`) |
+| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Bereich markieren/verschieben/drehen (auch mit Taste R)/abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufsteigen bis Level 6, die Eisen-Kette, die Zimmerei, Strecke und Zulauf leeren sowie Lagerhaus befüllen, Nachschub und Ausräumen per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
 
 **Prüfen vor jedem Merge:** `npm test` (Spielregeln) und `npm run test:browser` (Browser-Test).
 
@@ -390,13 +398,13 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | v0.10.2 | **Fläche & Warenbilder:** jeder Flächenkauf 500 Gold für 4 Reihen (schon ab Level 1), jede Seite 2×; Warenbilder in der Bauleiste bleiben nach dem Minimieren sichtbar | ✅ fertig |
 | v0.11.0 | **Umbauen:** Bereich markieren und alles darin auf einmal verschieben, drehen oder abreißen; Taste R dreht | ✅ fertig |
 | v0.11.1 | **Test-Feedback (nur README):** Tobias' Test von v0.11.0 festgehalten, „Strecke leeren“ vorgemerkt | ✅ fertig |
-| – | **Vorgemerkt:** „🧺 Strecke leeren“ am Band und „🧺 Zulauf leeren“ an blockierten Maschinen (Abschnitt 6, „Vorgemerkt“) | mit dem nächsten Feedback umsetzen |
-| v0.12.0 | **Aufgaben:** Aufgaben mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen (Modell von Tobias, Abschnitt 3.5) | nach Tobias' Feedback (Level 6) planen |
-| v0.13.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
+| v0.12.0 | **Nachschub & Bänder leeren:** Lagerhaus als Gegenstück zum Versandportal (befüllen, Nachschub mit Rest, ausräumen), „Strecke leeren“ und „Zulauf leeren“ | ✅ fertig |
+| v0.13.0 | **Aufgaben:** Aufgaben mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen (Modell von Tobias, Abschnitt 3.5) | nach Tobias' Test von v0.12.0 planen |
+| v0.14.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
 
-### Vorgemerkt: Bänder leeren (noch nicht umgesetzt)
+### Bänder leeren (vorgemerkt in v0.11.1, umgesetzt in v0.12.0)
 
-Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich eigentlich eine gute Idee. Die können wir erstmal so festhalten.“ Wird zusammen mit dem nächsten Feedback umgesetzt, damit nicht für eine Kleinigkeit programmiert wird.
+Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich eigentlich eine gute Idee. Die können wir erstmal so festhalten.“ Umgesetzt zusammen mit dem Feedback nach Level 6 (v0.12.0).
 
 - **Problem:** Landen falsche Waren auf einer Strecke (z. B. Holzplatten auf der Strecke, die nur Holzstäbe zur Zimmerei bringen soll), nimmt die Maschine sie nicht an und alles staut sich. Bisher hilft nur Abreißen und neu Bauen.
 - **Am Band:** Band antippen → im Infofenster **„🧺 Strecke leeren“**. Alle Waren auf der zusammenhängenden Strecke (alle direkt verbundenen Bänder, auch über Abzweige und Zusammenführungen; an einer Maschine endet die Strecke) kommen ins Laden-Lager.
@@ -405,6 +413,30 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 - Spielstand-Format bleibt gleich.
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
+
+### v0.12.0 – Nachschub aus dem Laden-Lager & Bänder leeren (fertig)
+
+Tobias' Feedback nach Level 6 steht in Abschnitt 10 (Chat 9). Die Aufgaben rücken auf v0.13.0, das Weiterlaufen bei geschlossenem Spiel auf v0.14.0.
+
+**Neu im Spiel:**
+- **Lagerhaus = Gegenstück zum Versandportal.** Lagerhaus antippen; im Infofenster stehen drei neue Knöpfe:
+  - **📥 Befüllen:** Ware aus dem Laden-Lager wählen (Rohstoffe stehen nicht zur Wahl), dann die Menge wie bei der Theke (0, −5, −1, +1, +5, „Alle“), höchstens so viel, wie ins Lagerhaus passt (3 × 50). Die Waren laufen sofort am orangen Pfeil aufs Band.
+  - **🔁 Nachschub:** Ware wählen, dann einstellen, wie viele davon **immer im Laden-Lager bleiben** (0, −5, −1, +1, +5, +20; z. B. 20 Holzplatten zum Bauen). Das Lagerhaus holt die Ware dann dauerhaft nach, solange im Laden-Lager mehr als dieser Rest liegt. Es hält dabei nur bis zu 10 Stück bereit; der Rest bleibt sichtbar im Laden-Lager (zum Bauen, Verkaufen oder für ein zweites Lagerhaus). Am Spielfeld: blauer Kreispfeil mit dem Bild der Ware. Licht grün = holt, gelb = wartet (nichts mehr über dem Rest im Laden-Lager). Danach heißt der Knopf „✕ Nachschub aus“.
+  - **↩ Ausräumen:** alles aus dem Lagerhaus ins Laden-Lager, der Nachschub geht dabei aus.
+- **🧺 Strecke leeren:** Band antippen – die ganze zusammenhängende Strecke wird hell markiert, das Infofenster zeigt, was darauf liegt. Der Knopf bringt alle Waren der Strecke ins Laden-Lager; die Bänder bleiben liegen.
+- **🧺 Zulauf leeren:** erscheint im Infofenster einer Maschine mit rotem Licht („Eingang blockiert“). Bringt eine Zuleitung eine Ware, die die Maschine gar nicht braucht (z. B. Holzplatten auf der Stäbe-Strecke zur Zimmerei), wird nur diese Strecke geleert; die anderen warten ja nur auf ihre Zutat. Sonst (gemischtes Band, eine Zutat nimmt überhand) werden alle gestauten Zuleitungen geleert. Kommt weiter Falsches nach, muss man die Zuleitung umlegen.
+- Nichts geht verloren: Wie beim Abreißen darf das Laden-Lager dabei übervoll werden.
+- **Spielstand** (Version 9 → 10): Lagerhäuser bekommen „kein Nachschub“ und laufen weiter wie bisher. Beim Öffnen erscheint eine kurze Meldung zu den neuen Knöpfen.
+
+**Tipp für Tobias' Lage (Holz oben, Eisen unten):** Für Verstärkte Holzplatten braucht es keine neue Holz-Linie mehr: Holzplatten und Eisenstangen per Versandportal ins Laden-Lager schicken und an einer freien Stelle zwei Lagerhäuser mit Nachschub (Holzplatten mit Rest 20, Eisenstangen) über kurze Bänder an die beiden Eingänge einer Zimmerei anschließen.
+
+**Zur Balance:** Versandportal an einer Stelle, Lagerhaus mit Nachschub an einer anderen – so wandern Waren quer übers Grundstück, ohne Band. Das macht Umbauen leichter; es entsteht aber nichts dazu, die Rohstoffe bleiben die Grenze. Erst einmal ohne Bremse; wird es zu leicht, lässt sich der Nachschub verlangsamen (eine Zahl in der Datentabelle).
+
+**Was Tobias testet:**
+- Die 120 Eisenbarren: Lagerhaus vor eine Schmiede (Ausgang unten rechts aufs Band zur Schmiede), „📥 Befüllen“, Eisenbarren, „Alle“. Kommen die Eisenstangen an?
+- Nachschub mit Rest: z. B. Holzplatten für eine Zimmerei, Rest 20. Bleiben immer genug Holzplatten zum Bauen?
+- Band antippen und „Strecke leeren“; an einer Zimmerei mit rotem Licht „Zulauf leeren“.
+- Wird das Spiel durch den Nachschub zu leicht, oder fühlt es sich gut an? Feedback bitte in einen neuen Chat; danach Plan für v0.13.0 (Aufgaben).
 
 ### v0.11.1 – Test-Feedback (fertig, nur README)
 
@@ -752,17 +784,24 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 | 07.11.2026 | Umbauen, Abreißen und Neubauen sind ein wesentlicher Bestandteil des Spiels | Tobias (Chat 8, Teil 3): Er spielt in Echtzeit und baut ständig um – mal fehlen Blöcke, mal Platten für neue Gebäude; man konzentriert sich erst auf eine Produktion, um dann andere anzugehen. |
 | 07.11.2026 | „Strecke leeren“ (am Band) und „Zulauf leeren“ (an blockierten Maschinen) vorgemerkt, noch nicht umgesetzt | Claudes Vorschlag; Tobias findet die Idee gut, möchte sie aber zusammen mit weiterem Feedback umsetzen. |
 | 07.11.2026 | Pause: Erst bis Level 6 spielen und Feedback sammeln, dann den nächsten Schritt programmieren | Tobias (Chat 8, Teil 3): „damit wir nicht nur für eine Kleinigkeit codieren“. |
+| 07.11.2026 | Das Lagerhaus wird das Gegenstück zum Versandportal: aus dem Laden-Lager befüllen (Menge wie bei der Theke), dauerhaft Nachschub holen, ausräumen | Tobias (Chat 9): 120 Eisenbarren im Laden-Lager für 12 Gold das Stück zu verkaufen ist schade, wenn man sie in die Produktion einschleusen könnte; er schlug selbst vor, dafür das Zwischenlager zu nutzen. Kein neues Gebäude. |
+| 07.11.2026 | Nachschub mit einstellbarem Rest, der immer im Laden-Lager bleibt | Claudes Vorschlag, von Tobias angenommen: Sonst zieht der Nachschub das Baumaterial ab – genau das Problem mit dem „eisernen Bestand“ (offene Frage 13). |
+| 07.11.2026 | Nachschub hält nur bis zu 10 Stück im Lagerhaus bereit (Datentabelle `supplyBuffer`); Befüllen geht bis 150 | Claudes Wahl: Der Vorrat bleibt sichtbar im Laden-Lager, man kann weiter damit bauen und verkaufen, und mehrere Lagerhäuser teilen sich eine Ware. |
+| 07.11.2026 | Nachschub erst einmal ungebremst (so schnell, wie das Band abnimmt) | Claudes Vorschlag; Tobias: „Wir müssen das mal probieren und spielen, damit ich sehe, wie das läuft.“ Wird es zu leicht, lässt er sich verlangsamen. |
+| 07.11.2026 | „Ausräumen“ schaltet den Nachschub aus; Rohstoffe kommen nicht ins Lagerhaus | Claudes Wahl: Sonst wäre das Lagerhaus sofort wieder voll; Rohstoffe legt man direkt in ihr Gebäude ein. |
+| 07.11.2026 | „Strecke leeren“ und „Zulauf leeren“ umgesetzt; „Zulauf leeren“ leert nur Zuleitungen mit einer Ware, die die Maschine gar nicht braucht (gibt es keine, alle gestauten) | Vorgemerkt in v0.11.1. Die genaue Regel ist Claudes Wahl: Die richtige Zuleitung wartet nur auf ihre Zutat und soll nicht mitgeleert werden. |
+| 07.11.2026 | Nachschub & Bänder leeren werden v0.12.0; Aufgaben rücken auf v0.13.0, Offline auf v0.14.0 | Tobias: „Ja, der Plan passt so.“ |
 
 ---
 
 ## 8. Offene Fragen
 
-Stand 07.11.2026.
+Stand 07.11.2026 (nach v0.12.0).
 
-1. **Nächstes Feedback:** Tobias spielt in Echtzeit bis Level 6 und schreibt sein gesammeltes Feedback in einen neuen Chat. Stand nach 2–3 Stunden: erstes Scharnier (Level 5). Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Mini-Schlössern sehr viel Gold. Danach Plan für v0.12.0 (Aufgaben).
+1. **Nächstes Feedback:** Tobias testet v0.12.0 (Lagerhaus befüllen, Nachschub mit Rest, Bänder leeren) und schreibt sein Feedback in einen neuen Chat. Stand: Level 6 erreicht, die Schlosserei noch nicht gebaut (es fehlten die Verstärkten Holzplatten, siehe Abschnitt 10, Chat 9). Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Mini-Schlössern sehr viel Gold. Danach Plan für v0.13.0 (Aufgaben).
 2. **Handel im echten Tempo:** geklärt – Tobias' Zeiten (bis Eisen etwa 45 Minuten, zweite Runde Eisen nach etwa 60 Minuten) sind in echter Zeit gemessen; nur die Eisen-Runden hat er im Testmodus beschleunigt. Früher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10).
 3. **Laden-Lager:** seit v0.10.1 500 Plätze bis Level 3, 1.000 ab Level 4 (Tobias). Claudes Lesart: erst ab Level 4, weil es dort eng wird. Soll es schon ab Level 1 1.000 sein, ist das eine Zahl in der Datentabelle.
-4. **Aufgaben (v0.12.0):** Werden die Waren für eine Aufgabe abgegeben (verbraucht), oder zählt nur, dass man sie hergestellt hat? Wie viel Erfahrung braucht ein Level, was kostet ein Aufstieg? Kostet der Laden-Ausbau zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Was bringen Level 7 bis 10 (Ende der Einführung)? Vorschlag kommt mit dem Plan für v0.12.0.
+4. **Aufgaben (v0.13.0):** Werden die Waren für eine Aufgabe abgegeben (verbraucht), oder zählt nur, dass man sie hergestellt hat? Wie viel Erfahrung braucht ein Level, was kostet ein Aufstieg? Kostet der Laden-Ausbau zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Was bringen Level 7 bis 10 (Ende der Einführung)? Vorschlag kommt mit dem Plan für v0.13.0. Tobias' Erkenntnis aus Chat 9 gehört dazu: Man muss die Mitte finden zwischen Verkaufen (Gold für Rohstoffe) und Weiterverarbeiten; Gold aus Aufgaben kann helfen, dabei nicht ins Minus zu rutschen.
 5. **Einstieg:** Tobias' Idee, am Anfang vor allem die Massenproduktion auszubauen, damit man schnell genug Ware von allem hat – später austesten. Die 500 Gold Startkapital reichen für den Weg zu Stein und Eisen (Test von v0.9.1).
 6. **Pleiteschutz:** Ein Rohstoff ohne passendes Gebäude (z. B. Felsbrocken ohne Steinbruch) verhindert das Geschenk. Vorerst bewusst so gelassen; beobachten.
 7. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
@@ -770,12 +809,34 @@ Stand 07.11.2026.
 9. **Theken-Größen:** geklärt (v0.10.1) – alle Theken wachsen mit: klein 20 (bis Level 3), mittel 25 (Level 4), groß 30 (ab Level 5). Claudes Lesart der Level-Zuordnung; falls mittel erst ab Level 5 und groß ab Level 6 gemeint war, ist das eine Zeile in der Datentabelle.
 10. **Tempo ab Level 4 (Feinschliff):** Bei Tobias dauerte es etwa 5 Minuten, bis ein Stein-Zahnrad in der Zimmerei ankam. Das ist gewollt: Am Anfang geht es schnell, danach muss man auf Masse gehen (mehr Holzfäller und Steinbrüche), um die Kombi-Maschinen zu versorgen. Beobachten, ob die Balance stimmt – Stellschrauben sind die Mengen in den Rezepten (10 + 5), die Dauer eines Rohstoffs (15 Minuten) und die Fläche (seit v0.10.2 fester Preis, 500 Gold je Streifen). Stand v0.11.0 (Tobias, Echtzeit): nach über einer Stunde noch nicht Level 6, nach 2–3 Stunden das erste Scharnier; der Flow fühlt sich gut an (schnell drin, ständig Rohstoffe nachlegen und produzieren).
 11. **Größe der Welt:** Seit v0.10.2 kann das Grundstück bis 38 × 30 Felder wachsen (jede Seite 2×). Reicht das für die Massenproduktion der höheren Level, oder gibt es später mehr Fläche, z. B. weitere Käufe je Seite mit dem Level oder über Aufgaben? Das ist dann nur eine Zahl in der Datentabelle (`perSide`).
-12. **Weiche mit Filter (Idee von Claude):** Ein Band-Feld, das eine bestimmte Ware abzweigt und den Rest geradeaus schickt, um gemischte Bänder zu sortieren. Will Tobias das, und wenn ja, wann?
-13. **„Eiserner Bestand“:** Tobias' Erkenntnis: Am Anfang verkauft man alles, weil man Gold braucht, und später fehlen Baumaterialien (Blöcke, Platten), weil sie in die Produktion gehen. Wer strukturiert spielt und immer einen Grundvorrat im Laden-Lager behält, kommt nicht in Not. Erst einmal beobachten; denkbar wäre später eine Hilfe im Spiel (z. B. ein Mindestbestand, den die Theken nicht anrühren) – nur, wenn Tobias das möchte.
+12. **Weiche mit Filter (Idee von Claude):** Ein Band-Feld, das eine bestimmte Ware abzweigt und den Rest geradeaus schickt, um gemischte Bänder zu sortieren. Will Tobias das, und wenn ja, wann? Seit v0.12.0 helfen „Strecke leeren“ und „Zulauf leeren“ bei falschen Waren.
+13. **„Eiserner Bestand“:** Tobias' Erkenntnis: Am Anfang verkauft man alles, weil man Gold braucht, und später fehlen Baumaterialien (Blöcke, Platten), weil sie in die Produktion gehen. Wer strukturiert spielt und immer einen Grundvorrat im Laden-Lager behält, kommt nicht in Not. Nach Level 6 (Chat 9): Wer am Anfang nicht auf das „Makro“ achtet, muss am Ende z. B. eine eigene Holz-Linie nur für Baumaterial nachbauen. Erste Hilfe seit v0.12.0: der **Rest beim Nachschub** (bleibt immer im Laden-Lager). Denkbar wäre später noch ein Mindestbestand, den die Theken nicht anrühren – nur, wenn Tobias das möchte.
+14. **Nachschub bremsen? (seit v0.12.0)** Mit Versandportal und Lagerhaus mit Nachschub wandern Waren quer übers Grundstück, ohne Band. Erst einmal ungebremst; macht es das Spiel zu leicht (die Bänder verlieren an Bedeutung), lässt sich der Nachschub verlangsamen, z. B. auf 1 Ware pro Sekunde. Tobias: Wer am Anfang ordentlich plant, braucht es kaum – es hilft aber, wenn zu viel im Lager liegt und man ein Band füllen möchte.
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.12.0 – Nachschub aus dem Laden-Lager & Bänder leeren (07.11.2026)
+
+**Vorgenommen:**
+- Tobias' Wunsch nach Level 6: Waren aus dem Laden-Lager zurück auf ein Band bringen – ein Gegenstück zum Versandportal, am besten über das Zwischenlager (Lagerhaus). Dazu die in v0.11.1 vorgemerkten Knöpfe „Strecke leeren“ und „Zulauf leeren“.
+
+**Fragen, die wir uns gestellt haben:**
+- Neues Gebäude oder das Lagerhaus? → Das Lagerhaus (Tobias' Idee): Es kann ohnehin lagern und ausgeben und bekommt so eine klare Aufgabe.
+- Einmal befüllen oder dauerhaft nachholen? → Beides: „Befüllen“ für einen Vorrat (z. B. 120 Eisenbarren), „Nachschub“ als echtes Gegenstück zum Versandportal.
+- Wie verhindert man, dass der Nachschub das Baumaterial leer zieht? → Ein einstellbarer Rest bleibt immer im Laden-Lager.
+- Wie viel holt der Nachschub auf einmal? → Nur bis zu 10 Stück; der Rest bleibt im Laden-Lager sichtbar und nutzbar, mehrere Lagerhäuser teilen sich eine Ware.
+- Welche Zuleitung leert „Zulauf leeren“? → Die mit der falschen Ware; die richtige wartet nur auf ihre Zutat.
+- Muss Tobias' Spielstand umgewandelt werden? → Ja, kurz: Lagerhäuser bekommen „kein Nachschub“ (Version 10); sonst bleibt alles, wie es ist.
+
+**Gemacht:**
+- Neue Spielregeln `src/core/warehouse.js` (befüllen, Nachschub mit Rest, ausräumen), Nachschub im Takt der Simulation und im Statuslicht; Datentabelle `supplyBuffer: 10` beim Lagerhaus.
+- `src/core/belts.js`: zusammenhängende Strecke finden, Strecke leeren, gestaute Zuleitungen einer Maschine erkennen und leeren.
+- Neues Fenster `src/view/warehouse.js` (Ware wählen, Menge bzw. Rest), Knöpfe in den Infofenstern von Lagerhaus, Band und Maschinen, Kreispfeil mit Warenbild am Lagerhaus, hell markierte Strecke beim angetippten Band.
+- Spielstand-Version 10 mit Umwandlung von Version 9 und Meldung beim Öffnen.
+- 184 automatische Tests (neu in `warehouse.test.js`: Befüllen auf 3 Fächer, Grenzen durch Laden-Lager und Platz, keine Rohstoffe, 120 Eisenbarren → 24 Eisenstangen, Nachschub hält 10 bereit, Nachschub durch die Fabrik und weiter, sobald Neues ins Laden-Lager kommt, Rest bleibt liegen, zwei Lagerhäuser teilen sich eine Ware, Ausräumen schaltet ab, Abreißen, Speichern, Umwandlung von Version 9, ungültiger Nachschub, Strecke über Abzweig und Zusammenführung, Band daneben bleibt, Strecke endet am Gebäude, Zulauf leeren nur bei falscher Ware, gemischtes Band, ohne Stau nichts) und der Browser-Test (neu: Zuleitung per Touch, Strecke antippen und leeren, Zulauf leeren an der Zimmerei, Lagerhaus mit Band zum Versandportal per Touch bauen, Befüllen mit Mengenwahl, 120 Eisenbarren laufen über das Band zurück ins Laden-Lager, Nachschub mit Rest 20, „Nachschub aus“, Ausräumen) in Tablet- und Handygröße – alle bestanden.
+- Beim Testen gefunden und behoben: Eine ältere Prüfung im Browser-Test („Alle“ auf die Theke) schwankte, wenn genau dann ein Kunde kaufte; sie rechnet seine Einkäufe jetzt mit (wie schon die Prüfung mit 8 Stück).
 
 ### v0.11.1 – Test-Feedback (07.11.2026, nur README)
 
@@ -1149,6 +1210,18 @@ Stand 07.11.2026.
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 07.11.2026 – Chat 9: Feedback nach Level 6, Plan und Umsetzung v0.12.0
+
+**Tobias:** Level 6 erreicht, die Schlosserei aber noch nicht gebaut. Ihm ist aufgefallen, dass man schon am Anfang auf das „Makro-Game“ achten muss – sonst muss man wie er am Ende noch einmal Holzfäller bauen, um eine eigene Strecke für Stäbe und Platten einzurichten und die Produktion erweitern zu können. Gefehlt hat ihm, Sachen aus dem Lager wieder zurück aufs Band zu nehmen: z. B. 120 Eisenbarren im Lager, die er zu schade findet, für 12 Gold zu verkaufen, wenn er sie in die Produktion einschleusen könnte. Idee: ein Gegenspieler zum Versandportal, der Sachen aus dem Lager auf ein Band schickt – eventuell das Zwischenlager, das man aus dem Lager befüllen kann. So dient es am Anfang als Station, die man befüllt, und lässt sich auch in den Kreislauf einbinden, um Sachen zwischenzulagern, die man viel baut (am Anfang z. B. viel Holz), damit nicht alles direkt im Versandportal landet. Sonst ist er mit der Art und Weise des Spiels sehr zufrieden.
+
+**Claude** hat den Plan für v0.12.0 vorgestellt: Lagerhaus mit „📥 Befüllen“ (Menge wie bei der Theke), „🔁 Nachschub“ mit einstellbarem Rest im Laden-Lager („eiserner Bestand“) und „↩ Ausräumen“; Kreispfeil mit Warenbild am Lagerhaus; dazu „Strecke leeren“ und „Zulauf leeren“. Hinweis zur Balance: Versandportal plus Nachschub schickt Waren quer übers Grundstück – erst einmal ohne Bremse. Frage: Woran hing die Schlosserei?
+
+**Tobias:** Der Plan passt so; man muss es spielen, um zu sehen, wie es läuft. Wer am Anfang mehr auf das Makro achtet und ordentlich arbeitet, kann darauf verzichten, aber es hilft, wenn man zu viel im Lager hat und gerade das Band voll bekommen will. Zur Schlosserei: Er musste Verstärkte Holzplatten bauen, aber seine Holzfarm liegt ganz oben und die Eisenfarm ganz unten. Er wollte die Produktion nicht stören und eine neue Kette für Verstärkte Holzplatten einrichten; dafür fehlten ihm die Materialien, weil er nicht genug „Materialdruck“ hatte, und dann auch das Gold für neue Rohstoffe – entweder produziert man Neues, oder man verkauft. Er muss die Mitte finden, damit zwischen Verkaufen und Produzieren immer noch ein Plus bleibt, um weiter Rohstoffe zu kaufen.
+
+**Claudes Einordnung:** Genau dafür hilft der Nachschub: Holzplatten und Eisenstangen laufen über Versandportale ins Laden-Lager, und an einer freien Stelle holen zwei Lagerhäuser mit Nachschub sie an die Zimmerei – ohne neue Holz-Linie und ohne die beiden Farmen zu verbinden. Die Balance zwischen Verkaufen und Weiterverarbeiten nehmen wir in den Plan für die Aufgaben (v0.13.0) mit.
+
+**Umgesetzt:** v0.12.0 (siehe Versionshistorie).
 
 ### 07.11.2026 – Chat 8, Teil 3: Test von v0.11.0 & Pause
 

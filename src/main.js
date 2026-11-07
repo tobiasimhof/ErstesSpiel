@@ -12,6 +12,7 @@ import { createPanels } from './view/panels.js';
 import { createBuildBar } from './view/buildbar.js';
 import { createController } from './view/controller.js';
 import { createShopView } from './view/shop.js';
+import { createWarehouseView } from './view/warehouse.js';
 import { applyTestPack } from './core/market.js';
 import { START_GOLD } from './core/data/shop.js';
 import { LAND } from './core/data/land.js';
@@ -142,7 +143,8 @@ const buildBar = createBuildBar({
   onAreaErase: () => controller.areaEraseTool(),
 });
 const shopView = createShopView({ state, panels, onChange });
-controller = createController({ state, camera, ui, panels, buildBar, shopView, onChange, requestDraw, worldBounds });
+const warehouseView = createWarehouseView({ state, panels, onChange });
+controller = createController({ state, camera, ui, panels, buildBar, shopView, warehouseView, onChange, requestDraw, worldBounds });
 buildBar.setMode('normal');
 panels.setInfoCloseHandler(() => controller.closeInfo());
 
@@ -204,6 +206,7 @@ if (loaded.status === 'ok' && loaded.migratedFrom) {
     from < 7 ? 'Neu: Fläche kaufen – tippe auf die ＋-Schilder am Rand. Deine Fabrik hat Laden-Level 3, alles bleibt freigeschaltet.' : '',
     from < 8 ? `Neu: ${START_GOLD} Gold Startkapital – du bekommst es einmalig nachgezahlt.` : '',
     from < 9 ? `Neu: Fläche kostet jetzt immer ${numberFormat.format(LAND.price)} Gold für ${LAND.depth} Reihen; jede Seite lässt sich ${LAND.perSide}× erweitern.` : '',
+    from < 10 ? 'Neu: Lagerhäuser lassen sich aus dem Laden-Lager befüllen und holen mit Nachschub Waren von dort aufs Band. Bänder lassen sich leeren.' : '',
     ...(loaded.notes ?? []),
     loaded.counterNote ?? '',
   ].filter(Boolean);
@@ -215,7 +218,7 @@ else if (loaded.status === 'invalid') panels.toast('Spielstand war beschädigt �
 // ---------- Takt ----------
 // Die Simulation läuft in festen Takten (TICK). Pro Bild werden so viele Takte
 // gerechnet, wie Zeit vergangen ist. Ist das Spiel im Hintergrund, ruht es
-// (Offline-Produktion folgt in v0.13.0).
+// (Offline-Produktion folgt in v0.14.0).
 
 let lastTime = performance.now();
 let accumulator = 0;

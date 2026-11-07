@@ -20,6 +20,9 @@
 //               auf jeder Seite 8 Felder über das Startgrundstück hinaus
 //               (2 Flächenkäufe à 4). Gebäude, Bänder und Grundstück behalten
 //               ihre Felder; schon gekaufte Fläche bleibt.
+//  10 (v0.12.0): Lagerhäuser merken sich ihren Nachschub aus dem Laden-Lager
+//               (prod.supply: { type, keep } oder null). Bestehende Lagerhäuser
+//               bekommen null – sie laufen weiter wie bisher.
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
@@ -34,7 +37,7 @@ import { createCounters, createMarket } from './market.js';
 import { addAllToStorage, counterSizeFor, fitCounters } from './shop.js';
 import { START_PLOT, WORLD, parseTileKey } from './state.js';
 
-export const SAVE_VERSION = 9;
+export const SAVE_VERSION = 10;
 
 // v0.6.0: Waren und Rezepte, die es nicht mehr gibt, und was aus ihnen wird.
 const RENAMED_ITEMS = { holzwinkel: 'holzplatte', splitt: 'steinzahnrad' };
@@ -132,6 +135,12 @@ function migrate(state, from, notes = []) {
     state.gold += START_GOLD;
   }
   if (from < 9) fitWorld(state);
+  if (from < 10 && Array.isArray(state.buildings)) {
+    // v0.11 → v0.12: Lagerhäuser ohne Nachschub
+    for (const b of state.buildings) {
+      if (isObj(b?.prod) && productionOf(b.type)?.kind === 'storage' && b.prod.supply === undefined) b.prod.supply = null;
+    }
+  }
   return state;
 }
 
@@ -311,7 +320,9 @@ function isValidProduction(b) {
       return (
         Array.isArray(prod.slots) &&
         prod.slots.length <= p.slots &&
-        prod.slots.every((s) => isObj(s) && isItem(s.type) && isInt(s.count) && s.count > 0 && s.count <= p.slotSize)
+        prod.slots.every((s) => isObj(s) && isItem(s.type) && isInt(s.count) && s.count > 0 && s.count <= p.slotSize) &&
+        // v0.12.0: Nachschub (fehlt er, läuft das Lagerhaus wie bisher)
+        (prod.supply == null || (isObj(prod.supply) && isItem(prod.supply.type) && !ITEMS[prod.supply.type].raw && isCount(prod.supply.keep)))
       );
     case 'shipping':
       return isCount(prod.shipped);
