@@ -1,6 +1,7 @@
 // Obere Leiste: Gold, Laden-Level, Vollbild, Menü und Versionsnummer.
 
 import { canLevelUp } from '../core/levels.js';
+import { canDeliver, levelXp, xpNeeded } from '../core/quests.js';
 import { onPress } from './press.js';
 
 const numberFormat = new Intl.NumberFormat('de-DE');
@@ -13,6 +14,8 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
   const level = document.getElementById('hud-level');
   const levelButton = document.getElementById('btn-level');
   const levelReady = document.getElementById('hud-level-ready');
+  const questReady = document.getElementById('hud-quest-ready');
+  const xpFill = document.getElementById('hud-xp-fill');
   const menuButton = document.getElementById('btn-menu');
   const menu = document.getElementById('menu');
   const hint = document.getElementById('hint');
@@ -71,10 +74,15 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
     update(state) {
       gold.textContent = numberFormat.format(state.gold);
       level.textContent = String(state.shopLevel);
-      // Ziel erreicht: ⬆ zeigt, dass man aufsteigen kann
+      // Genug Erfahrung und Gold: ⬆ zeigt, dass man aufsteigen kann
       const ready = canLevelUp(state);
       levelReady.hidden = !ready;
       levelButton.classList.toggle('ready', ready);
+      // v0.13.0: ❗ – der aktuelle Auftrag lässt sich abgeben; dazu eine
+      // kleine Erfahrungsleiste unten im Knopf
+      questReady.hidden = ready || !canDeliver(state);
+      const need = xpNeeded(state.shopLevel);
+      xpFill.style.width = `${need > 0 ? Math.min(100, (levelXp(state) / need) * 100) : 100}%`;
       // Neuer Verkauf an einen Kunden: kurz „+36“ neben dem Gold zeigen.
       const sale = state.market.sales[0];
       const id = sale?.id ?? 0;

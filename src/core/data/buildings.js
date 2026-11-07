@@ -91,12 +91,12 @@ export const BUILDINGS = {
     size: [2, 2],
     color: '#5b5f6b',
     description:
-      'Macht aus je 5 Eisenbarren eine Mini-Eisenplatte oder eine Eisenstange – je nach Einstellung. Eisenbarren kommen am blauen Pfeil hinein.',
+      'Macht aus je 5 Eisenbarren ein Eisenblech oder eine Eisenstange – je nach Einstellung. Eisenbarren kommen am blauen Pfeil hinein.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['minieisenplatte', 'eisenstange'] },
+    production: { kind: 'workshop', recipes: ['eisenblech', 'eisenstange'] },
   },
   // v0.10.0: Kombi-Maschinen (Techbaum, Teil 2) – zwei Eingänge links oben und
   // links unten (jeder nimmt jede passende Zutat), Ausgang rechts oben.
@@ -108,29 +108,29 @@ export const BUILDINGS = {
     size: [2, 2],
     color: '#7a5636',
     description:
-      'Baut Handkurbeln, Mechanische Schalter oder Verstärkte Holzplatten. Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
+      'Baut Zahnradwellen, Räderwerke oder Verstärkte Holzplatten. Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'in', x: 0, y: 1, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['handkurbel', 'schalter', 'verstaerkteholzplatte'] },
+    production: { kind: 'workshop', recipes: ['zahnradwelle', 'raederwerk', 'verstaerkteholzplatte'] },
   },
   feinschmiede: {
     level: 5,
     name: 'Feinschmiede',
-    cost: { minieisenplatte: 10, schalter: 2 },
+    cost: { eisenblech: 10, raederwerk: 2 },
     icon: '⚙️',
     size: [2, 2],
     color: '#4c5a70',
     description:
-      'Fertigt Scharniere, Eisenfedern oder Kugellager. Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
+      'Fertigt Scharniere, Schlüssel oder Zirkel. Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'in', x: 0, y: 1, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['scharnier', 'eisenfeder', 'kugellager'] },
+    production: { kind: 'workshop', recipes: ['scharnier', 'schluessel', 'zirkel'] },
   },
   schlosserei: {
     level: 6,
@@ -140,13 +140,13 @@ export const BUILDINGS = {
     size: [2, 2],
     color: '#6e5a2c',
     description:
-      'Stellt Steinketten, Regler oder Mini-Schlösser her. Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
+      'Stellt Gewichtsteine, Uhrwerke oder Vorhängeschlösser her. Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'in', x: 0, y: 1, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['steinkette', 'regler', 'minischloss'] },
+    production: { kind: 'workshop', recipes: ['gewichtstein', 'uhrwerk', 'vorhaengeschloss'] },
   },
   lagerhaus: {
     level: 1,

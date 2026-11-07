@@ -12,7 +12,7 @@ export const RECIPES = {
   holzstab: { building: 'saegewerk', label: 'Stäbe', inputs: { holzblock: 5 }, output: 'holzstab', amount: 1, time: 5 },
   steinplatte: { building: 'steinmetz', label: 'Platten', inputs: { steinblock: 5 }, output: 'steinplatte', amount: 1, time: 5 },
   steinzahnrad: { building: 'steinmetz', label: 'Zahnräder', inputs: { steinblock: 5 }, output: 'steinzahnrad', amount: 1, time: 5 },
-  minieisenplatte: { building: 'schmiede', label: 'Platten', inputs: { eisenbarren: 5 }, output: 'minieisenplatte', amount: 1, time: 5 },
+  eisenblech: { building: 'schmiede', label: 'Bleche', inputs: { eisenbarren: 5 }, output: 'eisenblech', amount: 1, time: 5 },
   // v0.8.0: Eisenstange statt Eisennägel – wie alle Grundmaschinen 5 : 1 (Tobias).
   eisenstange: { building: 'schmiede', label: 'Stangen', inputs: { eisenbarren: 5 }, output: 'eisenstange', amount: 1, time: 5 },
 
@@ -20,16 +20,17 @@ export const RECIPES = {
   // 3 Einstellungen. Jedes Produkt hat ein eigenes Rezept; aus Grundteilen
   // meist 10 + 5 Stück, damit alle Rohstoffe etwa gleich viel gebraucht werden.
   // Die erste Zutat ist die Hauptzutat.
-  // Zimmerei
-  handkurbel: { building: 'zimmerei', label: 'Handkurbeln', inputs: { holzstab: 10, steinzahnrad: 5 }, output: 'handkurbel', amount: 1, time: 20 },
-  schalter: { building: 'zimmerei', label: 'Schalter', inputs: { steinzahnrad: 10, holzstab: 5 }, output: 'schalter', amount: 1, time: 20 },
+  // v0.13.0: neue Namen, die zu den Zutaten passen – Mengen und Zeiten wie bisher.
+  // Zimmerei: Zahnräder auf einer Holzachse; viele ineinandergreifende Räder; Holz mit Eisen
+  zahnradwelle: { building: 'zimmerei', label: 'Wellen', inputs: { holzstab: 10, steinzahnrad: 5 }, output: 'zahnradwelle', amount: 1, time: 20 },
+  raederwerk: { building: 'zimmerei', label: 'Räderwerke', inputs: { steinzahnrad: 10, holzstab: 5 }, output: 'raederwerk', amount: 1, time: 20 },
   verstaerkteholzplatte: { building: 'zimmerei', label: 'Verst. Platten', inputs: { holzplatte: 10, eisenstange: 5 }, output: 'verstaerkteholzplatte', amount: 1, time: 20 },
-  // Feinschmiede
-  scharnier: { building: 'feinschmiede', label: 'Scharniere', inputs: { minieisenplatte: 10, eisenstange: 5 }, output: 'scharnier', amount: 1, time: 20 },
-  eisenfeder: { building: 'feinschmiede', label: 'Federn', inputs: { eisenstange: 10, minieisenplatte: 5 }, output: 'eisenfeder', amount: 1, time: 20 },
-  kugellager: { building: 'feinschmiede', label: 'Kugellager', inputs: { scharnier: 1, eisenstange: 5 }, output: 'kugellager', amount: 1, time: 30 },
-  // Schlosserei
-  steinkette: { building: 'schlosserei', label: 'Steinketten', inputs: { steinplatte: 10, eisenstange: 5 }, output: 'steinkette', amount: 1, time: 20 },
-  regler: { building: 'schlosserei', label: 'Regler', inputs: { handkurbel: 1, schalter: 1 }, output: 'regler', amount: 1, time: 30 },
-  minischloss: { building: 'schlosserei', label: 'Schlösser', inputs: { scharnier: 1, schalter: 1 }, output: 'minischloss', amount: 1, time: 30 },
+  // Feinschmiede: zwei Bleche und ein Stift; Schaft aus der Stange, Bart aus dem Blech; zwei Schenkel am Gelenk
+  scharnier: { building: 'feinschmiede', label: 'Scharniere', inputs: { eisenblech: 10, eisenstange: 5 }, output: 'scharnier', amount: 1, time: 20 },
+  schluessel: { building: 'feinschmiede', label: 'Schlüssel', inputs: { eisenstange: 10, eisenblech: 5 }, output: 'schluessel', amount: 1, time: 20 },
+  zirkel: { building: 'feinschmiede', label: 'Zirkel', inputs: { scharnier: 1, eisenstange: 5 }, output: 'zirkel', amount: 1, time: 30 },
+  // Schlosserei: Stein mit Eisenhaken; Wellen und Räder; Bügel am Gelenk und Schließwerk
+  gewichtstein: { building: 'schlosserei', label: 'Gewichte', inputs: { steinplatte: 10, eisenstange: 5 }, output: 'gewichtstein', amount: 1, time: 20 },
+  uhrwerk: { building: 'schlosserei', label: 'Uhrwerke', inputs: { zahnradwelle: 1, raederwerk: 1 }, output: 'uhrwerk', amount: 1, time: 30 },
+  vorhaengeschloss: { building: 'schlosserei', label: 'Schlösser', inputs: { scharnier: 1, raederwerk: 1 }, output: 'vorhaengeschloss', amount: 1, time: 30 },
 };

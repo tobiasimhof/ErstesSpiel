@@ -677,31 +677,66 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
 
   await page.tap('#modal-close');
 
-  // ---------- Laden-Level ----------
-  // Das Zählen hergestellter Waren prüfen die automatischen Tests; hier wird
-  // das Ziel direkt gesetzt und der Aufstieg per Touch durchgespielt.
-  await game(page, () => Object.assign(window.__game.state.produced, { holzplatte: 1, holzstab: 1 }));
-  const readyShown = await page
-    .waitForFunction(() => !document.getElementById('hud-level-ready').hidden, null, { timeout: 3000 })
+  // ---------- Laden-Level und Aufträge (v0.13.0) ----------
+  // Aufträge der Bewohner per Touch abgeben (Waren aus dem Laden-Lager), dann
+  // mit Erfahrung und Gold aufsteigen. Weitere Level: Erfahrung direkt setzen.
+  const quest1 = await game(page, () => window.__game.currentQuest());
+  check(quest1.from === 'Zimmermann Jakob' && quest1.items.holzplatte === 5, `Erster Auftrag: Jakob will 5 Holzplatten (${JSON.stringify(quest1.items)})`);
+  check(await page.isVisible('#btn-level .hud-xp'), 'Erfahrungsleiste oben im Knopf „Laden-Level“');
+  await game(page, () => {
+    const s = window.__game.state.storage;
+    s.holzplatte = (s.holzplatte ?? 0) + 15;
+    s.holzstab = (s.holzstab ?? 0) + 30;
+  });
+  const questShown = await page
+    .waitForFunction(() => !document.getElementById('hud-quest-ready').hidden, null, { timeout: 3000 })
     .then(() => true, () => false);
-  check(readyShown, 'Ziel erreicht: oben erscheint ⬆');
-  await shot('10b-level-bereit');
+  check(questShown, 'Auftrag lässt sich abgeben: oben erscheint ❗');
   await page.tap('#btn-level');
-  await sleep(120);
-  const levelText = await page.textContent('#modal-content');
-  check(levelText.includes('Laden-Level 1') && levelText.includes('Nächstes Ziel: Level 2 · Stein'), 'Level-Fenster zeigt Level 1 und das nächste Ziel');
-  check((await page.locator('#modal-content .goal-row.done').count()) === 2, 'Beide Ziele abgehakt');
-  await shot('10c-level-fenster');
-  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 2' }).tap();
   await sleep(150);
-  const lvl2 = await game(page, () => ({ level: window.__game.state.shopLevel, rocks: window.__game.state.storage.felsbrocken ?? 0 }));
+  const levelText = await page.textContent('#modal-content');
+  check(
+    levelText.includes('Laden-Level 1 · Die ersten Hütten') && levelText.includes('Zimmermann Jakob') && levelText.includes('Auftrag 1 von 3'),
+    'Level-Fenster zeigt Bauabschnitt und den ersten Auftrag',
+  );
+  check(
+    levelText.includes('Erfahrung für Level 2') && levelText.includes('0 / 81') && levelText.includes('Belohnung: +9 Erfahrung · +90'),
+    'Erfahrungsleiste 0 / 81 und Belohnung',
+  );
+  check((await page.locator('#modal-content .goal-row.done').count()) === 1, 'Ware liegt im Laden-Lager (abgehakt)');
+  check(await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 2' }).isDisabled(), 'Aufsteigen noch gesperrt (zu wenig Erfahrung)');
+  await shot('10b-auftrag');
+  const before1 = await game(page, () => ({ plates: window.__game.state.storage.holzplatte, gold: window.__game.state.gold }));
+  await page.locator('#modal-content button', { hasText: 'Abgeben' }).tap();
+  await sleep(200);
+  const after1 = await game(page, () => ({ plates: window.__game.state.storage.holzplatte, gold: window.__game.state.gold, quest: window.__game.state.quest }));
+  check(
+    after1.plates === before1.plates - 5 && after1.gold >= before1.gold + 90 && after1.quest.index === 1 && after1.quest.xp === 9,
+    `Abgeben: 5 Holzplatten weg, +90 Gold, +9 Erfahrung (${JSON.stringify(after1)})`,
+  );
+  const text2 = await page.textContent('#modal-content');
+  check(text2.includes('Auftrag erledigt') && text2.includes('Auftrag 2 von 3') && text2.includes('9 / 81'), 'Nächster Auftrag rückt nach, Leiste wächst');
+  await page.locator('#modal-content button', { hasText: 'Abgeben' }).tap();
+  await sleep(200);
+  await page.locator('#modal-content button', { hasText: 'Abgeben' }).tap();
+  await sleep(450);
+  const done1 = await page.textContent('#modal-content');
+  check(done1.includes('Alle Aufträge dieses Bauabschnitts sind erledigt') && done1.includes('81 / 81'), 'Alle drei Aufträge erledigt, Erfahrung voll');
+  check(done1.includes('du kannst aufsteigen'), 'Genug Erfahrung und Gold');
+  await shot('10c-level-bereit');
+  const goldBeforeUp = await game(page, () => window.__game.state.gold);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 2 · 100' }).tap();
+  await sleep(150);
+  const lvl2 = await game(page, () => ({ level: window.__game.state.shopLevel, rocks: window.__game.state.storage.felsbrocken ?? 0, gold: window.__game.state.gold }));
   check(lvl2.level === 2 && lvl2.rocks === 1, `Aufgestiegen auf Level 2, Gratis-Felsbrocken im Lager (${JSON.stringify(lvl2)})`);
-  check((await page.textContent('#modal-content')).includes('Level 2 erreicht'), 'Level-Fenster gratuliert');
+  check(lvl2.gold >= goldBeforeUp - 100 && lvl2.gold <= goldBeforeUp - 100 + 200, `Der Aufstieg kostet 100 Gold (${goldBeforeUp} → ${lvl2.gold})`);
+  const text3 = await page.textContent('#modal-content');
+  check(text3.includes('Level 2 erreicht') && text3.includes('Wege und Brunnen') && text3.includes('Steinmetzin Berta'), 'Level-Fenster gratuliert, Aufträge von Level 2');
   check((await page.textContent('#hud-level')) === '2', 'Oben steht Level 2');
-  const upButton3 = page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 3' });
-  check(await upButton3.isDisabled(), 'Level 3 noch gesperrt (Ziel nicht erreicht)');
   await shot('10d-level-2');
-  await game(page, () => Object.assign(window.__game.state.produced, { steinplatte: 1, steinzahnrad: 1 }));
+  const upButton3 = page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 3' });
+  check(await upButton3.isDisabled(), 'Level 3 noch gesperrt (zu wenig Erfahrung)');
+  await game(page, () => (window.__game.state.quest.xp = window.__game.xpNeeded()));
   const enabled3 = await page
     .waitForFunction(() => [...document.querySelectorAll('#modal-content button')].some((b) => b.textContent.includes('Level 3') && !b.disabled), null, { timeout: 3000 })
     .then(() => true, () => false);
@@ -710,13 +745,21 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(150);
   const lvl3 = await game(page, () => ({ level: window.__game.state.shopLevel, ore: window.__game.state.storage.eisenerz ?? 0 }));
   check(lvl3.level === 3 && lvl3.ore === 1, `Aufgestiegen auf Level 3, Gratis-Eisenerz im Lager (${JSON.stringify(lvl3)})`);
-  check((await page.textContent('#modal-content')).includes('Nächstes Ziel: Level 4 · Zimmerei'), 'Nach Level 3 kommt Level 4 (Zimmerei)');
   const next4 = await page.textContent('#modal-content');
+  check(next4.includes('Nächstes Level: Level 4 · Die Mühle am Fluss'), 'Nach Level 3 kommt Level 4 (Die Mühle am Fluss)');
   check(
     next4.includes('Theke 3') && next4.includes('mittlere Theken (25 Plätze)') && next4.includes('Laden-Lager 1.000 Plätze'),
     'Level 4 kündigt dritte Theke, mittlere Theken und 1.000 Lagerplätze an',
   );
   await shot('10e-level-3');
+  await page.tap('#modal-content .tab[data-tab="town"]');
+  await sleep(120);
+  const town = await page.textContent('#modal-content');
+  check(
+    town.includes('✅ Level 2 · Wege und Brunnen') && town.includes('▶ Level 3 · Die Dorfschmiede') && town.includes('🔒 Level 6 · Das Stadttor'),
+    'Reiter „Ort & Level“ zeigt die Bauabschnitte des Ortes',
+  );
+  await shot('10f-ort');
   await page.tap('#modal-close');
 
   // ---------- Händler ----------
@@ -820,7 +863,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.tap('#info-close');
 
   // ---------- Level 4: Zimmerei mit zwei Eingängen (v0.10.0) ----------
-  await game(page, () => Object.assign(window.__game.state.produced, { minieisenplatte: 1, eisenstange: 1 }));
+  await game(page, () => (window.__game.state.quest.xp = window.__game.xpNeeded()));
   await page.tap('#btn-level');
   await sleep(120);
   await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 4' }).tap();
@@ -855,17 +898,17 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await page.textContent('#info-title')) === 'Zimmerei', 'Zimmerei antippen zeigt Infofenster');
   const zimButtons = await page.locator('#info-actions button').allTextContents();
   check(
-    ['Handkurbeln', 'Schalter', 'Verst. Platten'].every((t) => zimButtons.some((b) => b.includes(t))),
+    ['Wellen', 'Räderwerke', 'Verst. Platten'].every((t) => zimButtons.some((b) => b.includes(t))),
     `Drei Einstellungen (${zimButtons.slice(0, 3).join(', ')})`,
   );
   const zimStatus = await page.textContent('#info-status');
   check(
-    zimStatus.includes('10 Holzstäbe + 5 Stein-Zahnräder → 1 Handkurbel') && zimStatus.includes('Stein-Zahnrad: 2 / 5 – fehlt noch 3'),
+    zimStatus.includes('10 Holzstäbe + 5 Stein-Zahnräder → 1 Zahnradwelle') && zimStatus.includes('Stein-Zahnrad: 2 / 5 – fehlt noch 3'),
     'Infofenster zeigt Rezept und welche Zutat wie viel fehlt',
   );
   check(zimStatus.includes('Wartet auf Stein-Zahnrad (2 / 5)'), 'Status nennt die fehlende Zutat');
   check(
-    zimStatus.includes('Andere Einstellungen') && zimStatus.includes('Schalter: 10 Stein-Zahnräder + 5 Holzstäbe'),
+    zimStatus.includes('Andere Einstellungen') && zimStatus.includes('Räderwerke: 10 Stein-Zahnräder + 5 Holzstäbe'),
     'Infofenster zeigt die Rezepte der anderen Einstellungen',
   );
   check(!(await page.locator('#info-actions button', { hasText: 'Reste' }).isVisible()), 'Ohne Reste kein Knopf „Reste ins Laden-Lager“');
@@ -889,10 +932,10 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     'Infofenster zeigt, was noch in der Maschine liegt',
   );
   await shot('14b-zimmerei-umgestellt');
-  await page.locator('#info-actions button', { hasText: 'Handkurbeln' }).tap();
+  await page.locator('#info-actions button', { hasText: 'Wellen' }).tap();
   await sleep(450);
   const back = await zimStock();
-  check(back.recipe === 'handkurbel' && back.stock.holzstab === 10, `Zurückgestellt: die Holzstäbe sind noch da (${JSON.stringify(back)})`);
+  check(back.recipe === 'zahnradwelle' && back.stock.holzstab === 10, `Zurückgestellt: die Holzstäbe sind noch da (${JSON.stringify(back)})`);
   await page.locator('#info-actions button', { hasText: 'Verst. Platten' }).tap();
   await sleep(450);
   await page.locator('#info-actions button', { hasText: 'Reste ins Laden-Lager' }).tap();
@@ -1114,16 +1157,23 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.tap('#info-close');
 
   // ---------- Level 5 und 6: je eine Theke mehr, 5 Theken auf Level 6 ----------
-  await game(page, () => Object.assign(window.__game.state.produced, { handkurbel: 1, schalter: 1, scharnier: 1, eisenfeder: 1 }));
+  const levelUpWithXp = async (level) => {
+    await game(page, () => {
+      window.__game.state.quest.xp = window.__game.xpNeeded();
+      window.__game.state.gold += 3000;
+    });
+    await sleep(450);
+    await page.locator('#modal-content button', { hasText: `Aufsteigen auf Level ${level}` }).tap();
+    await sleep(150);
+  };
   await page.tap('#btn-level');
   await sleep(120);
-  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 5' }).tap();
-  await sleep(150);
-  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 6' }).tap();
-  await sleep(150);
+  await levelUpWithXp(5);
+  await levelUpWithXp(6);
   const lvl6 = await game(page, () => ({ level: window.__game.state.shopLevel, counters: window.__game.state.counters.length }));
   check(lvl6.level === 6 && lvl6.counters === 5, `Level 6 mit 5 Verkaufstheken (${JSON.stringify(lvl6)})`);
-  check((await page.textContent('#modal-content')).includes('höchste Level'), 'Level 6 ist vorerst das höchste');
+  const lvl6Text = await page.textContent('#modal-content');
+  check(lvl6Text.includes('höchste Level') && lvl6Text.includes('Torwächter Ulrich') && lvl6Text.includes('Gewichtsteine'), 'Level 6 ist vorerst das höchste; Aufträge fürs Stadttor');
   await shot('15-level-6');
   await page.tap('#modal-close');
   await page.tap('#btn-shop');

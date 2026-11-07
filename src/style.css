@@ -1056,3 +1056,148 @@ button.level-up {
     font-size: 24px;
   }
 }
+
+/* ---------- Aufträge und Erfahrung (v0.13.0) ---------- */
+
+/* Kleine Erfahrungsleiste unten im Knopf „Laden-Level“ */
+button.hud-level {
+  position: relative;
+  overflow: hidden;
+}
+
+.hud-xp {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 3px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+#hud-xp-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.quest-ready {
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--parchment);
+  color: #c92a2a;
+  font-weight: 800;
+}
+
+.level-story {
+  margin: 4px 0 10px;
+  font-style: italic;
+}
+
+.xp-box {
+  margin-bottom: 10px;
+}
+
+.xp-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.xp-bar {
+  height: 14px;
+  margin-top: 4px;
+  overflow: hidden;
+  background: rgba(138, 106, 63, 0.2);
+  border: 1px solid rgba(138, 106, 63, 0.5);
+  border-radius: 999px;
+}
+
+.xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f2c94c, #f08c00);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.quest-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(138, 106, 63, 0.5);
+  border-radius: 10px;
+}
+
+.quest-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.quest-from {
+  font-weight: 800;
+}
+
+.quest-number {
+  font-size: 13px;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+.quest-card p.quest-text {
+  margin: 0;
+}
+
+.quest-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.quest-reward {
+  font-weight: 700;
+}
+
+button.quest-deliver {
+  min-height: 46px;
+  padding: 0 22px;
+}
+
+.quest-card p.quest-note {
+  margin: 0;
+  font-size: 13px;
+}
+
+.level-reward {
+  margin-top: 12px;
+}
+
+.level-next {
+  font-weight: 800;
+}
+
+.level-reward .panel-actions {
+  margin-top: 8px;
+}
+
+.level-reward p.level-hint {
+  margin: 6px 0 0;
+}
+
+.level-row.current {
+  background: rgba(255, 212, 59, 0.25);
+  border-color: rgba(240, 140, 0, 0.6);
+}
+
+.level-row.future {
+  opacity: 0.65;
+}

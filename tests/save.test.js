@@ -181,7 +181,8 @@ test('Spielstand aus v0.6.1 (Version 4): Fabrik, Gold und Lager bleiben, Theken 
   assert.ok(loaded);
   assert.equal(loaded.migratedFrom, 4);
   assert.equal(loaded.state.gold, 600, 'Gold bleibt, dazu 500 Startkapital (v0.9.1)');
-  assert.deepEqual(loaded.state.storage, { holzstamm: 2, holzplatte: 37, minieisenplatte: 12 });
+  // v0.13.0: Mini-Eisenplatte heißt jetzt Eisenblech
+  assert.deepEqual(loaded.state.storage, { holzstamm: 2, holzplatte: 37, eisenblech: 12 });
   assert.equal(JSON.stringify(loaded.state.buildings), before.buildings, 'Gebäude unverändert, nichts nachträglich berechnet');
   assert.equal(JSON.stringify(loaded.state.belts), before.belts);
   assert.equal(loaded.state.counters.length, 2);

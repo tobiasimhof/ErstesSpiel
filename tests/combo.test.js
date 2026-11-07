@@ -10,6 +10,7 @@ import { ITEMS } from '../src/core/data/items.js';
 import { RECIPES } from '../src/core/data/recipes.js';
 import { buildingPorts } from '../src/core/geometry.js';
 import { levelUp, producedCount } from '../src/core/levels.js';
+import { xpNeeded } from '../src/core/quests.js';
 import {
   counterMaxFor,
   counterSize,
@@ -98,13 +99,13 @@ test('3 Kombi-Maschinen: 2 × 2, zwei Eingänge links, Ausgang rechts oben, je 3
     );
     assert.equal(def.production.recipes.length, 3, type);
   }
-  assert.deepEqual(BUILDINGS.zimmerei.production.recipes, ['handkurbel', 'schalter', 'verstaerkteholzplatte']);
-  assert.deepEqual(BUILDINGS.feinschmiede.production.recipes, ['scharnier', 'eisenfeder', 'kugellager']);
-  assert.deepEqual(BUILDINGS.schlosserei.production.recipes, ['steinkette', 'regler', 'minischloss']);
+  assert.deepEqual(BUILDINGS.zimmerei.production.recipes, ['zahnradwelle', 'raederwerk', 'verstaerkteholzplatte']);
+  assert.deepEqual(BUILDINGS.feinschmiede.production.recipes, ['scharnier', 'schluessel', 'zirkel']);
+  assert.deepEqual(BUILDINGS.schlosserei.production.recipes, ['gewichtstein', 'uhrwerk', 'vorhaengeschloss']);
 });
 
 test('Rezepte aus Grundteilen: 10 + 5 Stück, zwei verschiedene Zutaten, jedes Rezept anders', () => {
-  const basic = ['handkurbel', 'schalter', 'verstaerkteholzplatte', 'scharnier', 'eisenfeder', 'steinkette'];
+  const basic = ['zahnradwelle', 'raederwerk', 'verstaerkteholzplatte', 'scharnier', 'schluessel', 'gewichtstein'];
   const seen = new Set();
   for (const key of basic) {
     const r = RECIPES[key];
@@ -114,27 +115,27 @@ test('Rezepte aus Grundteilen: 10 + 5 Stück, zwei verschiedene Zutaten, jedes R
     seen.add(sig);
   }
   // Tobias' Beispiel
-  assert.deepEqual(RECIPES.handkurbel.inputs, { holzstab: 10, steinzahnrad: 5 });
-  assert.deepEqual(RECIPES.schalter.inputs, { steinzahnrad: 10, holzstab: 5 });
-  // Steinkette aus Steinplatten – sonst bräuchte kein neues Rezept die Steinplatte
-  assert.deepEqual(RECIPES.steinkette.inputs, { steinplatte: 10, eisenstange: 5 });
+  assert.deepEqual(RECIPES.zahnradwelle.inputs, { holzstab: 10, steinzahnrad: 5 });
+  assert.deepEqual(RECIPES.raederwerk.inputs, { steinzahnrad: 10, holzstab: 5 });
+  // Gewichtstein (bis v0.12: Steinkette) aus Steinplatten – sonst bräuchte kein neues Rezept die Steinplatte
+  assert.deepEqual(RECIPES.gewichtstein.inputs, { steinplatte: 10, eisenstange: 5 });
   // Jedes Grundteil wird von mindestens einem neuen Rezept gebraucht
-  for (const part of ['holzplatte', 'holzstab', 'steinplatte', 'steinzahnrad', 'minieisenplatte', 'eisenstange']) {
+  for (const part of ['holzplatte', 'holzstab', 'steinplatte', 'steinzahnrad', 'eisenblech', 'eisenstange']) {
     assert.ok(basic.some((key) => RECIPES[key].inputs[part]), `${part} wird gebraucht`);
   }
 });
 
 test('Werte der neuen Waren: Zutaten + 20 % (Tabelle in der README)', () => {
   const expected = {
-    handkurbel: 324,
-    schalter: 324,
+    zahnradwelle: 324,
+    raederwerk: 324,
     verstaerkteholzplatte: 648,
     scharnier: 1296,
-    eisenfeder: 1296,
-    kugellager: 1987,
-    steinkette: 648,
-    regler: 778,
-    minischloss: 1944,
+    schluessel: 1296,
+    zirkel: 1987,
+    gewichtstein: 648,
+    uhrwerk: 778,
+    vorhaengeschloss: 1944,
   };
   for (const [type, price] of Object.entries(expected)) {
     assert.equal(ITEMS[type].price, price, type);
@@ -146,40 +147,40 @@ test('Werte der neuen Waren: Zutaten + 20 % (Tabelle in der README)', () => {
 
 // ---------- Zwei Eingänge ----------
 
-test('Zimmerei: Holzstäbe oben, Stein-Zahnräder unten → Handkurbeln', () => {
-  const { state, machine } = comboLine('zimmerei', 'handkurbel', [['holzstab', 30]], [['steinzahnrad', 15]]);
-  assert.equal(machine.prod.recipe, 'handkurbel');
+test('Zimmerei: Holzstäbe oben, Stein-Zahnräder unten → Zahnradwellen', () => {
+  const { state, machine } = comboLine('zimmerei', 'zahnradwelle', [['holzstab', 30]], [['steinzahnrad', 15]]);
+  assert.equal(machine.prod.recipe, 'zahnradwelle');
   simulate(state, 200);
-  assert.equal(storageCount(state, 'handkurbel'), 3, '30 Stäbe + 15 Zahnräder → 3 Handkurbeln');
-  assert.equal(producedCount(state, 'handkurbel'), 3, 'zählt fürs Level');
+  assert.equal(storageCount(state, 'zahnradwelle'), 3, '30 Stäbe + 15 Zahnräder → 3 Zahnradwellen');
+  assert.equal(producedCount(state, 'zahnradwelle'), 3, 'zählt fürs Level');
   assert.deepEqual(machine.prod.stock, { holzstab: 0, steinzahnrad: 0 });
   assert.equal(buildingStatus(state, machine).level, 'idle');
 });
 
 test('Jeder Eingang nimmt jede passende Zutat (auch vertauscht)', () => {
-  const { state } = comboLine('zimmerei', 'schalter', [['steinzahnrad', 10]], [['holzstab', 5]]);
+  const { state } = comboLine('zimmerei', 'raederwerk', [['steinzahnrad', 10]], [['holzstab', 5]]);
   simulate(state, 100);
-  assert.equal(storageCount(state, 'schalter'), 1);
+  assert.equal(storageCount(state, 'raederwerk'), 1);
 });
 
-test('Schlosserei: Mini-Schloss aus Scharnier + Schalter, Regler aus Handkurbel + Schalter', () => {
-  const lock = comboLine('schlosserei', 'minischloss', [['scharnier', 2]], [['schalter', 2]]);
+test('Schlosserei: Vorhängeschloss aus Scharnier + Räderwerk, Uhrwerk aus Zahnradwelle + Räderwerk', () => {
+  const lock = comboLine('schlosserei', 'vorhaengeschloss', [['scharnier', 2]], [['raederwerk', 2]]);
   simulate(lock.state, 120);
-  assert.equal(storageCount(lock.state, 'minischloss'), 2);
+  assert.equal(storageCount(lock.state, 'vorhaengeschloss'), 2);
 
-  const reg = comboLine('schlosserei', 'regler', [['handkurbel', 1]], [['schalter', 1]]);
+  const reg = comboLine('schlosserei', 'uhrwerk', [['zahnradwelle', 1]], [['raederwerk', 1]]);
   simulate(reg.state, 60);
-  assert.equal(storageCount(reg.state, 'regler'), 1);
+  assert.equal(storageCount(reg.state, 'uhrwerk'), 1);
 });
 
-test('Feinschmiede: Kugellager aus 1 Scharnier + 5 Eisenstangen', () => {
-  const { state } = comboLine('feinschmiede', 'kugellager', [['eisenstange', 10]], [['scharnier', 2]]);
+test('Feinschmiede: Zirkel aus 1 Scharnier + 5 Eisenstangen', () => {
+  const { state } = comboLine('feinschmiede', 'zirkel', [['eisenstange', 10]], [['scharnier', 2]]);
   simulate(state, 120);
-  assert.equal(storageCount(state, 'kugellager'), 2);
+  assert.equal(storageCount(state, 'zirkel'), 2);
 });
 
 test('Fehlt eine Zutat, zeigt die Maschine welche und wie viel – ohne Stau', () => {
-  const { state, machine } = comboLine('zimmerei', 'handkurbel', [['holzstab', 30]], [['steinzahnrad', 2]]);
+  const { state, machine } = comboLine('zimmerei', 'zahnradwelle', [['holzstab', 30]], [['steinzahnrad', 2]]);
   simulate(state, 60);
   assert.deepEqual(workshopInputs(machine), [
     { type: 'holzstab', need: 10, have: 20, done: true },
@@ -194,7 +195,7 @@ test('Fehlt eine Zutat, zeigt die Maschine welche und wie viel – ohne Stau', (
 
 test('Gemischtes Band an einem Eingang: zu viele Holzstäbe stauen sich, es fehlen Zahnräder', () => {
   // Erst 30 Holzstäbe, dahinter 5 Zahnräder – alles über den oberen Eingang
-  const { state, machine } = comboLine('zimmerei', 'handkurbel', [['holzstab', 30], ['steinzahnrad', 5]], null);
+  const { state, machine } = comboLine('zimmerei', 'zahnradwelle', [['holzstab', 30], ['steinzahnrad', 5]], null);
   simulate(state, 120);
   assert.equal(machine.prod.stock.holzstab, 20, 'mehr Stäbe nimmt sie nicht auf');
   assert.equal(machine.prod.stock.steinzahnrad ?? 0, 0, 'die Zahnräder kommen nie an');
@@ -205,7 +206,7 @@ test('Gemischtes Band an einem Eingang: zu viele Holzstäbe stauen sich, es fehl
 });
 
 test('Falsche Ware am Eingang: Das Infofenster sagt, dass sie hier nicht gebraucht wird', () => {
-  const { state, machine } = comboLine('zimmerei', 'handkurbel', [['holzblock', 5]], null);
+  const { state, machine } = comboLine('zimmerei', 'zahnradwelle', [['holzblock', 5]], null);
   simulate(state, 30);
   assert.equal(inputJam(state, machine), 'holzblock');
   assert.deepEqual(buildingStatus(state, machine), {
@@ -218,13 +219,13 @@ test('Umstellen: Zutaten bleiben in der Maschine und werden beim Zurückstellen 
   const state = emptyGame();
   const machine = placeBuilding(state, 'zimmerei', 20, 10, 0);
   machine.prod.stock = { holzstab: 10, steinzahnrad: 3 };
-  setRecipe(machine, 'schalter');
-  assert.deepEqual(unusedStock(machine), {}, 'Schalter braucht beides');
+  setRecipe(machine, 'raederwerk');
+  assert.deepEqual(unusedStock(machine), {}, 'Räderwerk braucht beides');
   setRecipe(machine, 'verstaerkteholzplatte');
   assert.deepEqual(machine.prod.stock, { holzstab: 10, steinzahnrad: 3 }, 'nichts verschwindet');
   assert.deepEqual(unusedStock(machine), { holzstab: 10, steinzahnrad: 3 });
   assert.deepEqual(state.storage, {}, 'nichts wandert ungefragt ins Laden-Lager');
-  setRecipe(machine, 'handkurbel');
+  setRecipe(machine, 'zahnradwelle');
   assert.deepEqual(unusedStock(machine), {});
   machine.prod.stock.steinzahnrad = 5;
   simulate(state, 1);
@@ -254,7 +255,7 @@ test('Knopf „Reste ins Laden-Lager“: nur Zutaten, die die Einstellung nicht 
 });
 
 test('Abreißen einer Kombi-Maschine gibt Zutaten und Fertiges zurück', () => {
-  const { state, machine } = comboLine('zimmerei', 'handkurbel', [['holzstab', 30]], [['steinzahnrad', 2]]);
+  const { state, machine } = comboLine('zimmerei', 'zahnradwelle', [['holzstab', 30]], [['steinzahnrad', 2]]);
   simulate(state, 60);
   assert.deepEqual(buildingContents(machine), { holzstab: 20, steinzahnrad: 2 });
 });
@@ -275,9 +276,11 @@ test('Theken: 2 bis Level 3, dann je Aufstieg eine mehr; alle wachsen mit: klein
   assert.equal(counterSize(state), 20);
   state.shopLevel = 3;
   assert.equal(counterSize(state), 20, 'kleine Theken bis Level 3');
-  state.produced = { minieisenplatte: 1, eisenstange: 1, handkurbel: 1, schalter: 1, scharnier: 1, eisenfeder: 1 };
   const sizes = [];
   for (let i = 0; i < 3; i++) {
+    // v0.13.0: Aufsteigen braucht Erfahrung aus den Aufträgen und Gold
+    state.quest.xp = xpNeeded(state.shopLevel);
+    state.gold = 10000;
     levelUp(state);
     sizes.push([state.shopLevel, state.counters.length, counterSize(state)]);
   }
@@ -317,13 +320,13 @@ test('Spielstand aus v0.10.0: Was nicht mehr auf eine Theke passt, kommt ins Lad
   const state = createNewGame(6);
   state.shopLevel = 6;
   state.counters = [0, 1, 2, 3, 4].map(() => ({ type: null, count: 0 }));
-  state.counters[3] = { type: 'schalter', count: 30 };
-  state.counters[4] = { type: 'handkurbel', count: 35 };
+  state.counters[3] = { type: 'raederwerk', count: 30 };
+  state.counters[4] = { type: 'zahnradwelle', count: 35 };
   state.storage = {};
   const loaded = deserializeGame(serializeGame(state));
-  assert.deepEqual(loaded.state.counters[3], { type: 'schalter', count: 30 });
-  assert.deepEqual(loaded.state.counters[4], { type: 'handkurbel', count: 30 });
-  assert.equal(loaded.state.storage.handkurbel, 5, 'nichts geht verloren');
+  assert.deepEqual(loaded.state.counters[3], { type: 'raederwerk', count: 30 });
+  assert.deepEqual(loaded.state.counters[4], { type: 'zahnradwelle', count: 30 });
+  assert.equal(loaded.state.storage.zahnradwelle, 5, 'nichts geht verloren');
   assert.match(loaded.counterNote, /30 Stück – 5 Waren/);
   assert.equal(deserializeGame(serializeGame(loaded.state)).counterNote, undefined, 'nur einmal');
 });

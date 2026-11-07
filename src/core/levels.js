@@ -3,13 +3,16 @@
 //
 // - Gebäude und Rohstoffe haben in ihrer Datentabelle ein Level.
 // - Waren gehören zum Level des Gebäudes, das sie herstellt.
-// - Das Spiel zählt alles, was hergestellt wird (state.produced). Darauf
-//   bauen die Ziele für den Aufstieg auf – und später die Aufgaben.
+// - Das Spiel zählt alles, was hergestellt wird (state.produced).
+// - v0.13.0 (Tobias): Aufsteigen braucht Erfahrung aus den Aufträgen der
+//   Bewohner (quests.js) und kostet Gold. Die alten Ziele („1 Holzplatte und
+//   1 Holzstab hergestellt“) gibt es nicht mehr.
 
 import { BUILDINGS, BUILD_MENU } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
 import { LEVELS, MAX_LEVEL } from './data/levels.js';
 import { RECIPES } from './data/recipes.js';
+import { createQuestState, levelXp, xpNeeded } from './quests.js';
 import { addAllToStorage, addMissingCounters } from './shop.js';
 
 export { LEVELS, MAX_LEVEL };
@@ -64,29 +67,43 @@ export function countProduced(state, type, n = 1) {
 
 // ---------- Aufsteigen ----------
 
-// Ziel für das nächste Level: [{ type, need, have, done }] oder null (höchstes Level).
-export function nextLevelGoal(state) {
+// Preis des Aufstiegs auf das nächste Level (null: höchstes Level).
+export function nextLevelCost(state) {
   const next = LEVELS[state.shopLevel + 1];
-  if (!next) return null;
-  return Object.entries(next.goal ?? {}).map(([type, need]) => {
-    const have = Math.min(need, producedCount(state, type));
-    return { type, need, have, done: have >= need };
-  });
+  return next ? (next.cost ?? 0) : null;
+}
+
+// Erfahrung genug für das nächste Level?
+export function hasEnoughXp(state) {
+  return Boolean(LEVELS[state.shopLevel + 1]) && levelXp(state) >= xpNeeded(state.shopLevel);
+}
+
+// Was fehlt noch zum Aufstieg? 'max' (es gibt kein höheres Level), 'xp',
+// 'gold' oder null (es geht).
+export function levelUpBlocker(state) {
+  if (!LEVELS[state.shopLevel + 1]) return 'max';
+  if (!hasEnoughXp(state)) return 'xp';
+  if (state.gold < nextLevelCost(state)) return 'gold';
+  return null;
 }
 
 export function canLevelUp(state) {
-  const goal = nextLevelGoal(state);
-  return Boolean(goal) && goal.every((g) => g.done);
+  return levelUpBlocker(state) === null;
 }
 
-// Steigt auf, legt das Geschenk ins Laden-Lager und stellt neue Theken auf
-// (v0.10.0). Ergebnis: { level, gift, counters } oder null.
+// Steigt auf (kostet Gold), legt das Geschenk ins Laden-Lager und stellt neue
+// Theken auf (v0.10.0). Die Aufträge des neuen Levels beginnen von vorn.
+// Ergebnis: { level, gift, counters, cost } oder null.
 // counters: Anzahl neuer Verkaufstheken.
 export function levelUp(state) {
   if (!canLevelUp(state)) return null;
+  const cost = nextLevelCost(state);
+  const rest = Math.max(0, levelXp(state) - xpNeeded(state.shopLevel));
+  state.gold -= cost;
   state.shopLevel++;
+  state.quest = { ...createQuestState(), xp: rest };
   const gift = { ...(LEVELS[state.shopLevel].gift ?? {}) };
   addAllToStorage(state, gift);
   const counters = addMissingCounters(state);
-  return { level: state.shopLevel, gift, counters };
+  return { level: state.shopLevel, gift, counters, cost };
 }

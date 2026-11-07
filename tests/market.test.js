@@ -347,7 +347,7 @@ test('Testpaket: 1.000 Gold und 50 von jeder Ware (ohne Rohstoffe)', () => {
   assert.equal(storageCount(state, 'holzplatte'), 50);
   assert.equal(storageCount(state, 'eisenstange'), 50);
   assert.equal(storageCount(state, 'holzstamm'), 0);
-  assert.equal(storageCount(state, 'handkurbel'), 0, 'Kombi-Teile erst ab Level 4');
+  assert.equal(storageCount(state, 'zahnradwelle'), 0, 'Kombi-Teile erst ab Level 4');
   for (const type of BUILD_MENU) {
     if (BUILDINGS[type].level <= 3) assert.ok(canAfford(state, BUILDINGS[type].cost), `${type} baubar`);
   }
@@ -358,8 +358,8 @@ test('Testpaket auf Level 6: Kombi-Teile nur je 5 Stück, alle Gebäude baubar',
   state.shopLevel = 6;
   applyTestPack(state);
   assert.equal(storageCount(state, 'eisenstange'), 50);
-  assert.equal(storageCount(state, 'handkurbel'), TEST_PACK.eachAdvanced);
-  assert.equal(storageCount(state, 'minischloss'), TEST_PACK.eachAdvanced);
+  assert.equal(storageCount(state, 'zahnradwelle'), TEST_PACK.eachAdvanced);
+  assert.equal(storageCount(state, 'vorhaengeschloss'), TEST_PACK.eachAdvanced);
   for (const type of BUILD_MENU) assert.ok(canAfford(state, BUILDINGS[type].cost), `${type} baubar`);
 });
 

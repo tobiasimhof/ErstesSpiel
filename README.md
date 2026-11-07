@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.12.0 – Nachschub aus dem Laden-Lager & Bänder leeren |
+| **Aktuelle Version** | v0.13.0 – Aufträge aus dem Ort & neue Warennamen |
 | **Phase** | M2 – Produktionsketten |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias testet v0.12.0 im echten Spiel (Lagerhaus befüllen, Nachschub mit Rest, Strecke und Zulauf leeren; Punkte unter „Was Tobias testet“ in Abschnitt 6) und schreibt sein Feedback in einen **neuen Chat**. Danach Plan für **v0.13.0 – Aufgaben** |
+| **Nächster Schritt** | Tobias testet v0.13.0 (Aufträge im Level-Fenster, neue Warennamen; Punkte unter „Was Tobias testet“ in Abschnitt 6) und schreibt sein Feedback in einen **neuen Chat**. Danach planen wir gemeinsam den **weiteren Techbaum** (Tobias' Kräuter-Idee, Level 7–10, Abschnitt 4.4) |
 
 ---
 
@@ -71,6 +71,8 @@ Festgelegt am 05.11.2026.
 - **Schwerpunkt: die optimale Fabrik bauen.** Die Wirtschaft gibt vor, *was* sich gerade zu bauen lohnt: Was wird gebraucht, zu welchem Preis, und womit verdiene ich genug, um weiter zu wachsen?
 - **Leitidee (Tobias):** Das Spiel lebt von der optimalen Produktionsstätte. Am Anfang braucht man vieles aus Holz, also lohnen sich Sägewerke. Später braucht man nur noch einzelne Holzteile und dafür mehr von anderem, also baut man die Holzproduktion zurück und anderes aus. So bleibt das Spiel bis in hohe Level spannend.
 - **Setting:** Mittelalter. Werkzeuge und Waren bleiben einfach. Es gibt drei Grundstoffe, die nach und nach dazukommen: **Holz** (Level 1), **Stein** (Level 2) und **Eisen** (Level 3).
+- **Roter Faden (seit v0.13.0, Tobias):** Dein Laden liegt in einem kleinen Ort am Fluss, der wächst. Jedes Level ist ein Bauabschnitt des Ortes (Abschnitt 3.8), die Bewohner geben Aufträge. So ergibt jedes Produkt einen Sinn, und neue Maschinen und Waren passen später in die nächste Bauphase.
+- **Kleine Waren (Tobias):** Alle Produkte sind auch im echten Leben klein (Schlüssel, Zirkel, Uhrwerk …), damit sie auf dem Band gut darstellbar sind – keine Türen, Truhen oder Tore. Jedes Produkt soll logisch aus seinen Zutaten entstehen.
 - **Plattform:** Handy und Tablet, **nur Querformat**. Zuerst als Browser-Spiel, später als App.
 - **Sprache:** vorerst nur Deutsch.
 - **Vorbilder** (nur einzelne Mechaniken, kein Nachbau; eigene Welt, eigene Namen, eigene Rezepte, eigene Grafik):
@@ -104,7 +106,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
   - **↩ Ausräumen:** Alles aus dem Lagerhaus zurück ins Laden-Lager; der Nachschub geht dabei aus.
   - Rohstoffe (Holzstamm, Felsbrocken, Eisenerz) kommen nicht ins Lagerhaus; die legt man direkt in ihr Gebäude ein.
 - **Bänder leeren (seit v0.12.0):** Band antippen → **„🧺 Strecke leeren“**: Alle Waren der zusammenhängenden Strecke (hell markiert; alle direkt verbundenen Bänder, auch über Abzweige und Zusammenführungen; an Gebäuden endet sie) kommen ins Laden-Lager, die Bänder bleiben liegen. Staut sich der Eingang einer Maschine (rotes Licht), steht im Infofenster **„🧺 Zulauf leeren“**: Bringt eine Zuleitung eine Ware, die die Maschine gar nicht braucht, wird nur diese geleert, sonst alle gestauten.
-- **Kombi-Maschinen** (seit v0.10.0) haben zwei Eingänge und brauchen zwei verschiedene Zutaten, z. B. Zimmerei: 10 Holzstäbe + 5 Stein-Zahnräder → 1 Handkurbel. Jeder Eingang nimmt jede passende Zutat; am sichersten kommt jede Zutat über ihren eigenen Eingang. Fehlt eine Zutat, zeigt die Maschine ein kleines Bild davon; das Infofenster sagt, wie viel fehlt. Laufen beide Zutaten gemischt über ein Band und eine nimmt überhand, staut sich der Eingang (rotes Licht, „Eingang blockiert“).
+- **Kombi-Maschinen** (seit v0.10.0) haben zwei Eingänge und brauchen zwei verschiedene Zutaten, z. B. Zimmerei: 10 Holzstäbe + 5 Stein-Zahnräder → 1 Zahnradwelle. Jeder Eingang nimmt jede passende Zutat; am sichersten kommt jede Zutat über ihren eigenen Eingang. Fehlt eine Zutat, zeigt die Maschine ein kleines Bild davon; das Infofenster sagt, wie viel fehlt. Laufen beide Zutaten gemischt über ein Band und eine nimmt überhand, staut sich der Eingang (rotes Licht, „Eingang blockiert“).
 - Eine Werkstatt kann mehrere Rezepte (Grundmaschinen zwei, Kombi-Maschinen drei). Man stellt ein, was sie gerade herstellt. Das Infofenster zeigt auch die Rezepte der anderen Einstellungen. Beim Umstellen bleiben alle Teile in der Maschine (seit v0.10.1) und werden wieder gebraucht, wenn man zurückstellt; mit „↩ Reste ins Laden-Lager“ holt man nicht gebrauchte Teile heraus.
 - **Umbauen ist leicht und günstig** (verschieben, drehen, abreißen mit Rückerstattung), weil man sich ständig an den Markt anpasst. Das gilt für alle Gebäude, auch die Startgebäude, damit man den Schwerpunkt der Fabrik jederzeit neu setzen kann.
 - **Bereiche umbauen (seit v0.11.0, Wunsch von Tobias):** Mit dem Werkzeug „✥ Verschieben“ in der Bauleiste markiert man einen Bereich (Rechteck ziehen oder ein Teil antippen). Alles darin – Bänder, Maschinen, Lager, Portale; auch Gebäude, die nur zum Teil im Rechteck liegen – lässt sich auf einmal verschieben, um 90° drehen oder abreißen. Innerhalb der Gruppe bleibt alles verbunden, Waren ziehen mit um, die Fabrik läuft sofort weiter. So setzt man z. B. eine ganze Eisen-Linie in eine andere Ecke, ohne ein Band neu zu legen.
@@ -128,10 +130,11 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 ### 3.5 Fortschritt
 
 - **Laden-Level**, ähnlich dem Rathaus in Clash of Clans: Jede Stufe schaltet neue Werkstätten, Rezepte, Lagerplatz und Fläche frei. Jede Stufe wird teurer. **Rohstoffe nach Level:** Holz ab Level 1, Stein ab Level 2, Eisen ab Level 3.
-- **Erste einfache Level (seit v0.9.0):** Level 1 startet nur mit Holz. Wer 1 Holzplatte und 1 Holzstab hergestellt hat, kann auf Level 2 (Stein) aufsteigen; nach 1 Steinplatte und 1 Stein-Zahnrad auf Level 3 (Eisen). Aufsteigen geht per Knopf im Level-Fenster (oben auf „Laden-Level“ tippen) und kostet vorerst nichts. **Zu Beginn jedes Levels gibt es einen Rohstoff gratis** (Tobias).
-- **Level 4–6 (seit v0.10.0):** Jedes Level schaltet eine Kombi-Maschine und eine weitere Verkaufstheke frei: Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei. Dazu wächst der Laden (seit v0.10.1): Level 4 bringt mittlere Theken (25) und 1.000 Plätze im Laden-Lager, Level 5 große Theken (30). (Die doppelt so tiefen Flächen-Streifen ab Level 4 aus v0.10.1 gelten seit v0.10.2 schon ab Level 1.) Ziel ist jeweils, die Produkte der zuletzt freigeschalteten Maschine einmal herzustellen; Geschenk ist 1 Eisenerz.
+- **Erste einfache Level (v0.9.0 bis v0.12.0):** Level 1 startete nur mit Holz; wer 1 Holzplatte und 1 Holzstab hergestellt hatte, konnte kostenlos auf Level 2 aufsteigen usw. *Seit v0.13.0 ersetzt durch Aufträge (siehe unten).* **Zu Beginn jedes Levels gibt es einen Rohstoff gratis** (Tobias).
+- **Level 4–6 (seit v0.10.0):** Jedes Level schaltet eine Kombi-Maschine und eine weitere Verkaufstheke frei: Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei. Dazu wächst der Laden (seit v0.10.1): Level 4 bringt mittlere Theken (25) und 1.000 Plätze im Laden-Lager, Level 5 große Theken (30). (Die doppelt so tiefen Flächen-Streifen ab Level 4 aus v0.10.1 gelten seit v0.10.2 schon ab Level 1.) Geschenk ist jeweils 1 Eisenerz.
 - **Einführung bis etwa Level 10 (Tobias):** Die ersten Level konzentrieren sich darauf, eine coole Produktionsstätte aufzubauen. Man kommt mit jedem Level ein Stück weiter und lernt nach und nach alles kennen; bis etwa Level 10 ist sozusagen das „Intro“ abgeschlossen.
-- **Später: Aufgaben, Erfahrung und Gold (Modell von Tobias):** Für jedes Level gibt es Aufgaben, z. B. „50 Blöcke und 20 Holzplatten herstellen“. Dafür bekommt man z. B. 100 Erfahrungspunkte (XP) und 250 Gold. Mit genug Erfahrung schaltet man das nächste Level frei und kauft den Aufstieg dann mit Gold, z. B. 100 Gold für Level 2. So gibt es mehrere Handlungsstränge – Ware produzieren, Ware verkaufen, Ware für Aufgaben herstellen – und man setzt den Schwerpunkt seiner Produktion je nachdem anders.
+- **Aufträge, Erfahrung und Gold (seit v0.13.0, Modell von Tobias):** Im Level-Fenster (oben auf „Laden-Level“ tippen) steht im Reiter „📜 Aufträge“ immer **genau ein Auftrag** eines Bewohners, z. B. „Müllerin Grete: Für das Mahlwerk brauche ich Räderwerke – 4 Räderwerke“. **„✓ Abgeben“** nimmt die Waren aus dem Laden-Lager und gibt **Erfahrung (XP)** und **Gold** – Gold genau so viel, wie die Waren an der Theke bringen (nicht mehr: Man macht die Aufträge wegen der Erfahrung, der Ladenverkauf bleibt im Vordergrund). Dann kommt der nächste Auftrag; **2–5 Aufträge je Level**, überspringen geht nicht. Die Erfahrung aller Aufträge eines Levels reicht genau für den Aufstieg; **aufsteigen kostet dann Gold** (Level 2: 100, Level 3: 250, Level 4: 500, Level 5: 1.000, Level 6: 2.000). Danach braucht man Bauteile für die neuen Maschinen. So bleibt alles schlüssig: Erfahrung schaltet frei, Gold kauft das Level, Waren bauen die Maschinen. Die Stückzahlen sind so gewählt, dass man ab Level 4 auf Masse gehen muss (z. B. 8 Räderwerke + 4 Zahnradwellen). Eine Erfahrungsleiste steht im Level-Fenster und klein im Knopf „Laden-Level“; ein ❗ dort heißt: Der Auftrag lässt sich abgeben. Tabelle aller Aufträge in Abschnitt 3.8.
+- **Idee für später (Tobias, noch offen):** Mit Erfahrung Verbesserungen freischalten, z. B. schneller Holz verarbeiten oder schnellere Förderbänder (offene Frage 15).
 - **Laden-Ausbau** geht sofort, kostet aber Gold **und** Waren, z. B. 200 Holzzahnräder + 200 Splitt + 500 Gold. So muss man ständig Neues produzieren, und das Produzieren ersetzt das Warten.
 - **Fläche kaufen:** Das Grundstück wird stückweise mit Gold erweitert (seit v0.9.0 im Spiel). Seit v0.10.2 zum festen Preis (500 Gold für 4 Reihen, jede Seite 2×), damit man am Anfang gut skalieren kann und nicht am Platz scheitert (Tobias). Ob es später mehr Fläche gibt, z. B. mit Level oder Aufgaben, entscheiden wir mit den Aufgaben.
 - **Freischaltpunkte (Idee, später entscheiden):** Jeder Laden-Aufstieg gibt Punkte, z. B. 10 Punkte für Level 2. Mit den Punkten schaltet man neue Werkstätten frei, etwa das Sägewerk, und kann sie danach sofort bauen.
@@ -152,6 +155,21 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Geschäftsmodell:** Das Spiel ist kostenlos. Geld kommt später über einen Season Pass und Skins herein. „Pay2Win“ steht nicht im Fokus.
 
 **Was das bedeutet:** Für den Online-Teil brauchen wir einen Server mit Datenbank. Das bringt mit sich: laufende Kosten, Datenschutz (DSGVO), Schutz vor Schummeln (der Server muss die Wirtschaft kontrollieren, nicht das Handy), Moderation von Clan-Chats und Gebühren für die App-Stores (derzeit Google einmalig 25 US-Dollar, Apple 99 US-Dollar pro Jahr). Deshalb bauen wir zuerst das Einzelspieler-Spiel und legen den Code so an, dass der Online-Teil später angedockt werden kann.
+
+### 3.8 Der Ort und seine Bauabschnitte (seit v0.13.0)
+
+Rahmen von Claude, von Tobias angenommen („gefällt mir sehr gut“). Namen der Bewohner hat Claude gewählt (Tobias: „erstmal nicht so wichtig“). Alle Mengen sind Platzhalter (Datentabelle `src/core/data/levels.js`). Erfahrung = 1 je 10 Gold Warenwert, Gold = Warenwert.
+
+| Level | Bauabschnitt | Aufträge (der Reihe nach) | Erfahrung fürs nächste Level | Aufstieg kostet |
+|---|---|---|---|---|
+| 1 | Die ersten Hütten | Zimmermann Jakob: 5 Holzplatten (Hüttenwände) · Jakob: 10 Holzstäbe (Dach) · Bürgermeisterin Hilde: 20 Holzstäbe + 10 Holzplatten (Zaun um die Weide) | 81 | – (Start) |
+| 2 | Wege und Brunnen | Steinmetzin Berta: 10 Steinplatten (Pflaster) · Berta: 10 Stein-Zahnräder (Brunnenwinde) · Hilde: 20 Steinplatten + 10 Holzstäbe (Brunnen mit Holzdach) | 90 | 100 Gold |
+| 3 | Die Dorfschmiede | Schmied Konrad: 5 Eisenstangen (Werkzeug) · Konrad: 5 Eisenbleche (Beschläge) · Hilde: 10 Eisenstangen + 10 Holzplatten (Pflüge) | 162 | 250 Gold |
+| 4 | Die Mühle am Fluss | Müllerin Grete: 2 Zahnradwellen · Grete: 4 Räderwerke (Mahlwerk) · Grete: 2 Verstärkte Holzplatten (Mühlentür) · Hilde: 8 Räderwerke + 4 Zahnradwellen (zweite Mühle) | 714 | 500 Gold |
+| 5 | Der Markt | Händlerin Marta: 2 Scharniere (Klappen der Stände) · Marta: 2 Schlüssel (Kassen) · Baumeister Anton: 1 Zirkel (Marktplatz vermessen) · Marta: 3 Scharniere + 3 Schlüssel (Markttag) | 1.495 | 1.000 Gold |
+| 6 | Das Stadttor | Torwächter Ulrich: 4 Gewichtsteine (Gegengewichte der Zugbrücke) · Ulrich: 2 Vorhängeschlösser (Tor) · Hilde: 2 Uhrwerke (Torturm) · Ulrich: 4 Vorhängeschlösser + 4 Gewichtsteine (Pforten der Stadtmauer) | 1.841 (sammelt sich bis Level 7) | 2.000 Gold |
+
+Der Reiter „🏘️ Ort & Level“ im Level-Fenster zeigt alle Bauabschnitte mit dem, was sie freischalten. Level 7 und weiter kommen mit dem nächsten Techbaum (Abschnitt 4.4).
 
 ---
 
@@ -208,10 +226,10 @@ Von Tobias bestätigt (Chat 3, Teil 2). Mengen, Zeiten und Preise hat Claude vor
 | Schmelzhütte (neu) | 2 × 2 | 1 Eisenerz → 200 Eisenbarren | Level 3 |
 | Sägewerk | 2 × 2 (bisher 2 × 1) | A: Holzplatte · B: Holzstab | Level 1 |
 | Steinmetz | 2 × 2 (bisher 2 × 1) | A: Steinplatte · B: Stein-Zahnrad | Level 2 |
-| Schmiede (neu) | 2 × 2 | A: Mini-Eisenplatte · B: Eisenstange (bis v0.7.1: Eisennägel) | Level 3 |
-| Zimmerei (Kombi, seit v0.10.0) | 2 × 2 | Handkurbel · Mechanischer Schalter · Verstärkte Holzplatte | Level 4 |
-| Feinschmiede (Kombi, seit v0.10.0) | 2 × 2 | Scharnier · Eisenfeder · Kugellager | Level 5 |
-| Schlosserei (Kombi, seit v0.10.0) | 2 × 2 | Steinkette · Regler · Mini-Schloss | Level 6 |
+| Schmiede (neu) | 2 × 2 | A: Eisenblech (bis v0.12: Mini-Eisenplatte) · B: Eisenstange (bis v0.7.1: Eisennägel) | Level 3 |
+| Zimmerei (Kombi, seit v0.10.0) | 2 × 2 | Zahnradwelle · Räderwerk · Verstärkte Holzplatte | Level 4 |
+| Feinschmiede (Kombi, seit v0.10.0) | 2 × 2 | Scharnier · Schlüssel · Zirkel | Level 5 |
+| Schlosserei (Kombi, seit v0.10.0) | 2 × 2 | Gewichtstein · Uhrwerk · Vorhängeschloss | Level 6 |
 | Lagerhaus | 2 × 1 | Zwischenlager, 3 × 50; seit v0.12.0 aus dem Laden-Lager befüllen oder mit Nachschub | Level 1 |
 | Versandportal | 1 × 1 | schickt Waren ins Laden-Lager | Level 1 |
 | Förderband | 1 × 1 | transportiert | Level 1 |
@@ -220,7 +238,22 @@ Namen aus Tobias' Tabelle → Spiel: Holz-Werkbank → Sägewerk, Steinmetz-Stat
 
 **Anschlüsse der 2 × 2-Maschinen:** Grundmaschinen (seit v0.6.0): Eingang links oben, Ausgang rechts oben (gerade Linie; bestehende Bänder am Sägewerk bleiben angeschlossen). Kombi-Maschinen (seit v0.10.0): zwei Eingänge links oben und links unten (jeder nimmt jede passende Zutat), Ausgang rechts oben. Block-Gebäude unverändert (Ausgang rechts oben).
 
-**Rezepte und Preise** (alle im Spiel; Eisenstange seit v0.8.0, die Kombi-Teile ab „Handkurbel“ seit v0.10.0): Regel: Blöcke bringen knapp mehr als der Rohstoff kostet (+9 %), jedes weitere Teil rund 20 % mehr als seine Zutaten zusammen. So macht man beim Verkaufen in der Anfangsphase nie Minus. Stein kostet und bringt so viel wie Holz; Eisen kostet viermal so viel und bringt entsprechend mehr. **Kombi-Teile (Tobias):** Jedes Produkt hat ein eigenes Rezept; aus Grundteilen meist 10 + 5 Stück, damit alle Rohstoffe etwa gleich viel gebraucht werden. Aus einem Holzstamm und einem Felsbrocken werden so etwa 5 Handkurbeln oder Schalter – wer viel herstellen will, braucht mehr Rohstoff-Linien.
+**Neue Namen (seit v0.13.0, Tobias):** Jedes Produkt heißt so, wie es logisch aus seinen Zutaten entsteht, und bleibt klein. Rezepte, Mengen und Werte sind unverändert; bestehende Spielstände werden umbenannt.
+
+| Bis v0.12 | Seit v0.13.0 | Warum es passt |
+|---|---|---|
+| Mini-Eisenplatte | Eisenblech | gewalztes Blech aus Eisenbarren |
+| Handkurbel | Zahnradwelle | Zahnräder auf einer Holzachse |
+| Mechanischer Schalter | Räderwerk | viele ineinandergreifende Räder |
+| Eisenfeder | Schlüssel | Schaft aus der Eisenstange, Bart aus dem Blech |
+| Kugellager | Zirkel | zwei Schenkel (Stangen) an einem Gelenk (Scharnier) |
+| Steinkette | Gewichtstein | Stein mit Eisenhaken (für Waage, Uhr, Zugbrücke) |
+| Regler | Uhrwerk | Wellen und Räder ergeben ein Uhrwerk |
+| Mini-Schloss | Vorhängeschloss | Bügel am Gelenk und Schließwerk aus Rädern |
+
+Verstärkte Holzplatte und Scharnier heißen weiter so.
+
+**Rezepte und Preise** (alle im Spiel; Eisenstange seit v0.8.0, die Kombi-Teile ab „Zahnradwelle“ seit v0.10.0, Namen seit v0.13.0): Regel: Blöcke bringen knapp mehr als der Rohstoff kostet (+9 %), jedes weitere Teil rund 20 % mehr als seine Zutaten zusammen. So macht man beim Verkaufen in der Anfangsphase nie Minus. Stein kostet und bringt so viel wie Holz; Eisen kostet viermal so viel und bringt entsprechend mehr. **Kombi-Teile (Tobias):** Jedes Produkt hat ein eigenes Rezept; aus Grundteilen meist 10 + 5 Stück, damit alle Rohstoffe etwa gleich viel gebraucht werden. Aus einem Holzstamm und einem Felsbrocken werden so etwa 5 Zahnradwellen oder Räderwerke – wer viel herstellen will, braucht mehr Rohstoff-Linien.
 
 | Ware | Herstellung | Zeit | Wert (Gold) |
 |---|---|---|---|
@@ -231,23 +264,23 @@ Namen aus Tobias' Tabelle → Spiel: Holz-Werkbank → Sägewerk, Steinmetz-Stat
 | Eisenbarren | Schmelzhütte | 4,5 s je Barren | 12 (200 Stück = 2.400) |
 | Holzplatte / Holzstab | Sägewerk: 5 Holzblöcke → 1 | 5 s | 18 (40 Stück = 720) |
 | Steinplatte / Stein-Zahnrad | Steinmetz: 5 Steinblöcke → 1 | 5 s | 18 |
-| Mini-Eisenplatte | Schmiede: 5 Eisenbarren → 1 | 5 s | 72 (40 Stück = 2.880) |
+| Eisenblech | Schmiede: 5 Eisenbarren → 1 | 5 s | 72 (40 Stück = 2.880) |
 | Eisenstange (seit v0.8.0) | Schmiede: 5 Eisenbarren → 1 | 5 s | 72 (40 Stück = 2.880) |
-| Handkurbel | Zimmerei: 10 Holzstäbe + 5 Stein-Zahnräder | 20 s | 324 (Zutaten 270) |
-| Mechanischer Schalter | Zimmerei: 10 Stein-Zahnräder + 5 Holzstäbe | 20 s | 324 (Zutaten 270) |
+| Zahnradwelle | Zimmerei: 10 Holzstäbe + 5 Stein-Zahnräder | 20 s | 324 (Zutaten 270) |
+| Räderwerk | Zimmerei: 10 Stein-Zahnräder + 5 Holzstäbe | 20 s | 324 (Zutaten 270) |
 | Verstärkte Holzplatte | Zimmerei: 10 Holzplatten + 5 Eisenstangen | 20 s | 648 (Zutaten 540) |
-| Scharnier | Feinschmiede: 10 Mini-Eisenplatten + 5 Eisenstangen | 20 s | 1.296 (Zutaten 1.080) |
-| Eisenfeder | Feinschmiede: 10 Eisenstangen + 5 Mini-Eisenplatten | 20 s | 1.296 (Zutaten 1.080) |
-| Kugellager | Feinschmiede: 1 Scharnier + 5 Eisenstangen | 30 s | 1.987 (Zutaten 1.656) |
-| Steinkette | Schlosserei: 10 Steinplatten + 5 Eisenstangen | 20 s | 648 (Zutaten 540) |
-| Regler | Schlosserei: 1 Handkurbel + 1 Mechanischer Schalter | 30 s | 778 (Zutaten 648) |
-| Mini-Schloss | Schlosserei: 1 Scharnier + 1 Mechanischer Schalter | 30 s | 1.944 (Zutaten 1.620) |
+| Scharnier | Feinschmiede: 10 Eisenbleche + 5 Eisenstangen | 20 s | 1.296 (Zutaten 1.080) |
+| Schlüssel | Feinschmiede: 10 Eisenstangen + 5 Eisenbleche | 20 s | 1.296 (Zutaten 1.080) |
+| Zirkel | Feinschmiede: 1 Scharnier + 5 Eisenstangen | 30 s | 1.987 (Zutaten 1.656) |
+| Gewichtstein | Schlosserei: 10 Steinplatten + 5 Eisenstangen | 20 s | 648 (Zutaten 540) |
+| Uhrwerk | Schlosserei: 1 Zahnradwelle + 1 Räderwerk | 30 s | 778 (Zutaten 648) |
+| Vorhängeschloss | Schlosserei: 1 Scharnier + 1 Räderwerk | 30 s | 1.944 (Zutaten 1.620) |
 
 **Eisenstange statt Eisennägel (v0.8.0):** Bis v0.7.1 machte die Schmiede aus 5 Barren 5 Nägel zu je 14 Gold. Tobias fiel beim Spielen auf, dass dadurch extrem viele Nägel entstehen (100–140 im Lager, von allem anderen etwa 20), und an der Theke brachten 20 Nägel nur 280 Gold. Jetzt läuft die Schmiede wie Sägewerk und Steinmetz: 5 : 1. Nägel können später als eigene Stufe zurückkommen (z. B. 1 Eisenstange → mehrere Nägel).
 
-**Steinkette aus Steinplatten (v0.10.0):** Sonst bräuchte kein Kombi-Rezept die Steinplatte. So wird jedes der 6 Grundteile gebraucht; Eisen etwas mehr als Holz und Stein, weil es auch mehr bringt.
+**Steinkette (seit v0.13.0 Gewichtstein) aus Steinplatten (v0.10.0):** Sonst bräuchte kein Kombi-Rezept die Steinplatte. So wird jedes der 6 Grundteile gebraucht; Eisen etwas mehr als Holz und Stein, weil es auch mehr bringt.
 
-**Freischalten nach Laden-Level** (von Tobias bestätigt): Level 1 Holz, Level 2 Stein, Level 3 Eisen, Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei (seit v0.10.0 je Level eine Kombi-Maschine). Den ersten Rohstoff jeder Sorte gibt es gratis: den ersten Holzstamm zum Spielstart, den ersten Felsbrocken beim Erreichen von Level 2, das erste Eisenerz bei Level 3; ab Level 4 gibt es bei jedem Aufstieg 1 Eisenerz (einen vierten Rohstoff gibt es nicht).
+**Freischalten nach Laden-Level** (von Tobias bestätigt): Level 1 Holz, Level 2 Stein, Level 3 Eisen, Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei (seit v0.10.0 je Level eine Kombi-Maschine). Seit v0.13.0 braucht der Aufstieg Erfahrung aus Aufträgen und kostet Gold (Abschnitt 3.5 und 3.8). Den ersten Rohstoff jeder Sorte gibt es gratis: den ersten Holzstamm zum Spielstart, den ersten Felsbrocken beim Erreichen von Level 2, das erste Eisenerz bei Level 3; ab Level 4 gibt es bei jedem Aufstieg 1 Eisenerz (einen vierten Rohstoff gibt es nicht).
 
 **Baukosten** (seit v0.7.0, Platzhalter; Tobias: „erstmal spielen und schauen, ob es nicht zu lange dauert“):
 
@@ -263,14 +296,14 @@ Namen aus Tobias' Tabelle → Spiel: Holz-Werkbank → Sägewerk, Steinmetz-Stat
 | Schmelzhütte | 20 Steinplatten + 10 Holzplatten | 540 Gold |
 | Schmiede | 10 Steinplatten + 30 Eisenbarren | 540 Gold |
 | Zimmerei (v0.10.0) | 20 Holzplatten + 10 Eisenstangen | 1.080 Gold |
-| Feinschmiede (v0.10.0) | 10 Mini-Eisenplatten + 2 Mechanische Schalter | 1.368 Gold |
+| Feinschmiede (v0.10.0) | 10 Eisenbleche + 2 Räderwerke | 1.368 Gold |
 | Schlosserei (v0.10.0) | 1 Scharnier + 2 Verstärkte Holzplatten | 2.592 Gold |
 
 Das Sägewerk kostet nur Holzblöcke, damit die erste Maschine ohne Platten baubar ist. Für Stein braucht man Holzteile, für Eisen Steinteile, für die Kombi-Maschinen Teile aus den vorigen – so behalten frühere Waren ihren Wert. Kein Gebäude kostet mehr, als ein Rohstoff seines Levels als Teile einbringt (Holz und Stein 720 Gold, Eisen und ab Level 4: 2.880 Gold; ein Test prüft das). Eine Level-4-bis-6-Maschine kostet also höchstens etwa eine Runde Eisen.
 
 **Holzwinkel und Splitt** fliegen raus (vielleicht kommen sie später wieder). Vorhandene im Spielstand werden umgewandelt: Holzwinkel → Holzplatte, Splitt → Stein-Zahnrad.
 
-### 4.3 Im Spiel (Stand v0.10.0)
+### 4.3 Im Spiel (Stand v0.13.0)
 
 | Stufe | Ware | Woher | Rezept |
 |---|---|---|---|
@@ -278,16 +311,26 @@ Das Sägewerk kostet nur Holzblöcke, damit die erste Maschine ohne Platten baub
 | 1 | Holzblock / Steinblock / Eisenbarren | Holzfällerlager / Steinbruch / Schmelzhütte | 1 Rohstoff → 200 Stück in 15 Minuten |
 | 2 | Holzplatte / Holzstab | Sägewerk, Einstellung „Platten“ / „Stäbe“ | 5 Holzblöcke → 1 Teil (5 Sekunden) |
 | 2 | Steinplatte / Stein-Zahnrad | Steinmetz, Einstellung „Platten“ / „Zahnräder“ | 5 Steinblöcke → 1 Teil (5 Sekunden) |
-| 2 | Mini-Eisenplatte / Eisenstange | Schmiede, Einstellung „Platten“ / „Stangen“ | 5 Eisenbarren → 1 Teil (5 Sekunden) |
-| 3 | Handkurbel / Mechanischer Schalter / Verstärkte Holzplatte | Zimmerei (ab Level 4) | aus je 10 + 5 Grundteilen (20 Sekunden) |
-| 3 | Scharnier / Eisenfeder | Feinschmiede (ab Level 5) | aus je 10 + 5 Eisen-Teilen (20 Sekunden) |
-| 3 | Steinkette | Schlosserei (ab Level 6) | 10 Steinplatten + 5 Eisenstangen (20 Sekunden) |
-| 4 | Kugellager | Feinschmiede | 1 Scharnier + 5 Eisenstangen (30 Sekunden) |
-| 4 | Regler / Mini-Schloss | Schlosserei | 1 Handkurbel bzw. 1 Scharnier + 1 Mechanischer Schalter (30 Sekunden) |
+| 2 | Eisenblech / Eisenstange | Schmiede, Einstellung „Bleche“ / „Stangen“ | 5 Eisenbarren → 1 Teil (5 Sekunden) |
+| 3 | Zahnradwelle / Räderwerk / Verstärkte Holzplatte | Zimmerei (ab Level 4), Einstellungen „Wellen“, „Räderwerke“, „Verst. Platten“ | aus je 10 + 5 Grundteilen (20 Sekunden) |
+| 3 | Scharnier / Schlüssel | Feinschmiede (ab Level 5) | aus je 10 + 5 Eisen-Teilen (20 Sekunden) |
+| 3 | Gewichtstein | Schlosserei (ab Level 6), Einstellung „Gewichte“ | 10 Steinplatten + 5 Eisenstangen (20 Sekunden) |
+| 4 | Zirkel | Feinschmiede | 1 Scharnier + 5 Eisenstangen (30 Sekunden) |
+| 4 | Uhrwerk / Vorhängeschloss | Schlosserei | 1 Zahnradwelle bzw. 1 Scharnier + 1 Räderwerk (30 Sekunden) |
 
 Genaue Rezepte und Werte: Abschnitt 4.2.
 
-**Ideen für später:** weitere Rohstoffe wie Eisenerz (Schmelze, Schmiede, echte Nägel, Werkzeuge), Lehm (Ziegel), Hanf (Seile), Sand (Glas); größere Waren wie Fässer, Karren, Fenster.
+**Ideen für später:** weitere Rohstoffe wie Lehm (Ziegel), Hanf (Seile), Sand (Glas). *Größere Waren wie Fässer, Karren, Fenster passen nicht mehr (Tobias, v0.13.0: nur kleine Waren, die auf dem Band darstellbar sind).*
+
+### 4.4 Ideen für den weiteren Techbaum (Tobias, Chat 9 – noch nicht geplant)
+
+Erst nach dem Test der Aufträge (v0.13.0) gemeinsam planen.
+
+- **Kräuter anbauen:** Kräuter anpflanzen; nach einer bestimmten Zeit wächst die fertige Pflanze, die man ernten kann.
+- **Mörser:** Pflanzen durch einen Mörser schicken (Kräutermixtur).
+- **Verbände:** Aus Farn oder Hanf werden Verbände; Verband + Kräutermixtur = Heilender Verband.
+- **Tränke:** Kräuter mit Kohle und anderen Dingen mischen – erste Produkte in Richtung Lebenstrank, Manatrank, Alterstrank und Ähnliches.
+- **Leitlinien (Tobias):** nur kleine Waren; aus zwei Produkten entsteht immer das nächstmögliche, sinnvolle Produkt; die neuen Level (7 bis etwa 10) erzählen die Geschichte des Ortes weiter (z. B. eine Heilerin oder Kräuterkundige als neue Bewohnerin – Claudes Idee).
 
 ---
 
@@ -321,7 +364,7 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/core/data/items.js` | Datentabelle der Waren (Name, Preise, Aussehen) |
 | `src/core/data/recipes.js` | Datentabelle der Rezepte (Zutaten, Ergebnis, Zeit) |
 | `src/core/data/shop.js` | Laden: Lagergröße und Theken je Level, Kunden-Takt, Startvorrat, Testpaket |
-| `src/core/data/levels.js` | Laden-Level: Name, Ziel für den Aufstieg, Gratis-Rohstoff (was ein Level freischaltet, steht als `level` bei Gebäuden und Rohstoffen) |
+| `src/core/data/levels.js` | Laden-Level: Bauabschnitt des Ortes, Geschichte, Aufträge der Bewohner, Preis des Aufstiegs, Gratis-Rohstoff; Belohnungs-Regel der Aufträge (was ein Level freischaltet, steht als `level` bei Gebäuden und Rohstoffen) |
 | `src/core/data/land.js` | Fläche kaufen: Streifentiefe, Käufe je Seite, Preis je Streifen |
 | `src/core/state.js` | Spielzustand anlegen, Größe von Grundstück und Welt, Abfragen auf dem Raster |
 | `src/core/dirs.js` | Himmelsrichtungen (oben, rechts, unten, links) |
@@ -334,7 +377,8 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/core/sim.js` | Simulation in festen Takten: Waren auf Bändern, Stau, Aufteilen, Zusammenführen |
 | `src/core/shop.js` | Laden-Lager, Baukosten bezahlen und zurückgeben |
 | `src/core/market.js` | Handel: Händler, Theken, Kunden (mit eigenem Zufall im Spielstand), Pleiteschutz, Testpaket |
-| `src/core/levels.js` | Laden-Level: was freigeschaltet ist, hergestellte Waren zählen, Ziel prüfen, aufsteigen |
+| `src/core/levels.js` | Laden-Level: was freigeschaltet ist, hergestellte Waren zählen, aufsteigen (Erfahrung und Gold) |
+| `src/core/quests.js` | Aufträge der Bewohner (v0.13.0): aktueller Auftrag, Belohnung, abgeben, Erfahrung je Level |
 | `src/core/land.js` | Fläche kaufen: Streifen und Preis je Seite, wie oft noch, Kauf, welche Seite ein Feld der gesperrten Fläche ist |
 | `src/core/save.js` | Spielstand in Text umwandeln, prüfen und alte Spielstände umwandeln |
 | `src/view/camera.js` | Kamera: verschieben, zoomen, Bildschirm ↔ Welt umrechnen |
@@ -342,11 +386,11 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/view/controller.js` | Modi (Ansehen, Bauleiste, Platzieren, Förderband, Abreißen, Bereich markieren und verschieben) und was Gesten und die Taste R darin tun |
 | `src/view/renderer.js` | Zeichnet Spielfeld, Bänder, Waren, Gebäude mit Statuslicht, Vorschau |
 | `src/view/itemArt.js` | Aussehen der Waren (auf dem Band und in Listen); kleine Warenbilder lassen sich neu zeichnen |
-| `src/view/hud.js` | Obere Leiste und Menü ☰ |
+| `src/view/hud.js` | Obere Leiste (Gold, Knopf „Laden-Level“ mit kleiner Erfahrungsleiste, ⬆ und ❗) und Menü ☰ |
 | `src/view/panels.js` | Infofenster, großes Fenster, Rückfragen, Meldungen |
 | `src/view/shop.js` | Laden-Fenster mit den Reitern Lager, Theken, Händler |
 | `src/view/warehouse.js` | Lagerhaus-Fenster (v0.12.0): Ware wählen, dann Menge (Befüllen) oder Rest im Laden-Lager (Nachschub) |
-| `src/view/levels.js` | Level-Fenster: Freigeschaltetes, nächstes Ziel mit Häkchen, Knopf „Aufsteigen“ |
+| `src/view/levels.js` | Level-Fenster mit den Reitern „📜 Aufträge“ (Geschichte, Erfahrungsleiste, Auftrag mit „Abgeben“, Aufstieg) und „🏘️ Ort & Level“ (alle Bauabschnitte) |
 | `src/view/format.js` | Texte für Zahlen, Waren und Kosten |
 | `src/view/buildbar.js` | Untere Leisten: Laden/Bauen, Bauleiste, Werkzeugleiste |
 | `src/view/press.js` | Knöpfe reagieren aufs Loslassen des Fingers (siehe Entscheidungen) |
@@ -354,8 +398,8 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/style.css` | Aussehen der Oberfläche |
 | `assets/icons/` | App-Symbole (erzeugt mit `tools/make-icons.py`) |
 | `tools/set-version.mjs` | Setzt die Versionsnummer in `src/version.js` und `index.html` (inkl. Import-Map) |
-| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`), Bereiche verschieben (`area.test.js`), Lagerhaus-Nachschub und Bänder leeren (`warehouse.test.js`) |
-| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Bereich markieren/verschieben/drehen (auch mit Taste R)/abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufsteigen bis Level 6, die Eisen-Kette, die Zimmerei, Strecke und Zulauf leeren sowie Lagerhaus befüllen, Nachschub und Ausräumen per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
+| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`), Bereiche verschieben (`area.test.js`), Lagerhaus-Nachschub und Bänder leeren (`warehouse.test.js`), Aufträge und neue Warennamen (`quests.test.js`) |
+| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Bereich markieren/verschieben/drehen (auch mit Taste R)/abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufträge abgeben und Aufsteigen bis Level 6 (mit Reiter „Ort & Level“), die Eisen-Kette, die Zimmerei, Strecke und Zulauf leeren sowie Lagerhaus befüllen, Nachschub und Ausräumen per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
 
 **Prüfen vor jedem Merge:** `npm test` (Spielregeln) und `npm run test:browser` (Browser-Test).
 
@@ -399,8 +443,9 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | v0.11.0 | **Umbauen:** Bereich markieren und alles darin auf einmal verschieben, drehen oder abreißen; Taste R dreht | ✅ fertig |
 | v0.11.1 | **Test-Feedback (nur README):** Tobias' Test von v0.11.0 festgehalten, „Strecke leeren“ vorgemerkt | ✅ fertig |
 | v0.12.0 | **Nachschub & Bänder leeren:** Lagerhaus als Gegenstück zum Versandportal (befüllen, Nachschub mit Rest, ausräumen), „Strecke leeren“ und „Zulauf leeren“ | ✅ fertig |
-| v0.13.0 | **Aufgaben:** Aufgaben mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen (Modell von Tobias, Abschnitt 3.5) | nach Tobias' Test von v0.12.0 planen |
-| v0.14.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
+| v0.13.0 | **Aufträge & neue Namen:** Aufträge der Bewohner im Level-Fenster mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen, Bauabschnitte des Ortes, 8 Waren mit neuen Namen und Bildern | ✅ fertig |
+| v0.14.0 | **Techbaum, Teil 3:** z. B. Kräuter anbauen, Mörser, Verbände, Tränke; Level 7 bis etwa 10 (Tobias' Ideen, Abschnitt 4.4) | nach Tobias' Test von v0.13.0 gemeinsam planen |
+| später | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | Reihenfolge mit Tobias klären |
 
 ### Bänder leeren (vorgemerkt in v0.11.1, umgesetzt in v0.12.0)
 
@@ -413,6 +458,31 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 - Spielstand-Format bleibt gleich.
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
+
+### v0.13.0 – Aufträge aus dem Ort & neue Warennamen (fertig)
+
+Tobias' Feedback nach v0.12.0 und die Planung stehen in Abschnitt 10 (Chat 9, Teil 2). Das Gesamtbild (Ort, Bauabschnitte, alle Aufträge) steht in Abschnitt 3.8, die neuen Namen in Abschnitt 4.2.
+
+**Neu im Spiel:**
+- **Aufträge im Level-Fenster** (oben auf „Laden-Level“ tippen), Reiter **„📜 Aufträge“**:
+  - oben die Geschichte des Bauabschnitts, z. B. „Das Korn muss gemahlen werden …“,
+  - eine **Erfahrungsleiste** („Erfahrung für Level 5: 320 / 714“),
+  - **genau ein Auftrag**: Bewohner, wofür er die Waren braucht, die Waren mit „im Laden-Lager 2 / 4“, die Belohnung („+130 Erfahrung · +1.296 🪙“) und **„✓ Abgeben“**. Die Waren kommen aus dem Laden-Lager (nicht von den Theken). Danach rückt der nächste Auftrag nach („Auftrag 2 von 4“).
+  - darunter das **nächste Level** mit dem, was es freischaltet, dem Gratis-Rohstoff und dem Knopf **„⬆ Aufsteigen auf Level 5 · 1.000 🪙“**. Er geht erst, wenn die Erfahrung voll ist und das Gold reicht; darunter steht, was noch fehlt.
+- Reiter **„🏘️ Ort & Level“**: alle Bauabschnitte des Ortes (✅ erreicht, ▶ jetzt, 🔒 kommt) mit dem, was sie freischalten.
+- **Obere Leiste:** Im Knopf „Laden-Level“ eine kleine Erfahrungsleiste; **❗** heißt „Auftrag lässt sich abgeben“, **⬆** „Aufsteigen möglich“. Dazu je einmal eine kurze Meldung.
+- **Die alten Level-Ziele** („1 Holzplatte und 1 Holzstab hergestellt“) gibt es nicht mehr; Aufsteigen kostet jetzt Gold (Level 2: 100 … Level 6: 2.000).
+- **Neue Namen und Bilder** für 8 Waren (Rezepte und Werte unverändert): Eisenblech, Zahnradwelle, Räderwerk, Schlüssel, Zirkel, Gewichtstein, Uhrwerk, Vorhängeschloss. Die Einstellungen der Maschinen heißen jetzt „Bleche“, „Wellen“, „Räderwerke“, „Schlüssel“, „Zirkel“, „Gewichte“, „Uhrwerke“, „Schlösser“.
+- **Spielstand** (Version 10 → 11): Alle Waren werden überall umbenannt (Laden-Lager, Theken, Bänder, Maschinen samt Einstellung, Lagerhäuser samt Nachschub, Baukosten, Zähler, letzte Verkäufe). Das Level bleibt; die Aufträge des aktuellen Levels beginnen von vorn, die Erfahrung bei 0. Beim Öffnen erscheint eine kurze Meldung.
+
+**Für Tobias' Fabrik (Level 6):** Es erscheinen die Aufträge vom Stadttor – Torwächter Ulrich will zuerst 4 Gewichtsteine (Schlosserei, Einstellung „Gewichte“: 10 Steinplatten + 5 Eisenstangen je Stück). Level 7 gibt es noch nicht; die Erfahrung sammelt sich bis dahin, das Gold gibt es sofort.
+
+**Was Tobias testet:**
+- Level-Fenster öffnen: Sind Geschichte, Erfahrungsleiste und Auftrag verständlich? Passt es, dass immer nur ein Auftrag dasteht?
+- Die Aufträge vom Stadttor abgeben: Sind die Stückzahlen ein gutes Gleichgewicht (man muss etwas arbeiten, aber nicht ewig)?
+- Die neuen Namen und Bilder: Ergeben die Produkte jetzt mehr Sinn? Erkennt man sie auf dem Band?
+- Optional mit einem neuen Spiel (☰ → Neues Spiel; die jetzige Fabrik geht dabei verloren): Fühlt sich der Weg von Level 1 bis 4 mit Aufträgen und Aufstiegskosten gut an?
+- Feedback bitte in einen neuen Chat; danach planen wir den weiteren Techbaum (Abschnitt 4.4).
 
 ### v0.12.0 – Nachschub aus dem Laden-Lager & Bänder leeren (fertig)
 
@@ -791,17 +861,29 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 | 07.11.2026 | „Ausräumen“ schaltet den Nachschub aus; Rohstoffe kommen nicht ins Lagerhaus | Claudes Wahl: Sonst wäre das Lagerhaus sofort wieder voll; Rohstoffe legt man direkt in ihr Gebäude ein. |
 | 07.11.2026 | „Strecke leeren“ und „Zulauf leeren“ umgesetzt; „Zulauf leeren“ leert nur Zuleitungen mit einer Ware, die die Maschine gar nicht braucht (gibt es keine, alle gestauten) | Vorgemerkt in v0.11.1. Die genaue Regel ist Claudes Wahl: Die richtige Zuleitung wartet nur auf ihre Zutat und soll nicht mitgeleert werden. |
 | 07.11.2026 | Nachschub & Bänder leeren werden v0.12.0; Aufgaben rücken auf v0.13.0, Offline auf v0.14.0 | Tobias: „Ja, der Plan passt so.“ |
+| 07.11.2026 | Roter Faden: Der Laden liegt in einem wachsenden Ort am Fluss; jedes Level ist ein Bauabschnitt, die Bewohner geben Aufträge | Tobias (Chat 9, Teil 2): Die einzelnen Produkte ergaben Sinn, gingen in der Masse aber unter; alles soll in der Gesamtheit Sinn ergeben, damit sich die Geschichte mit weiteren Maschinen und Produkten weiterspinnen lässt. Rahmen von Claude, Tobias: „gefällt mir sehr gut“. |
+| 07.11.2026 | 8 Waren bekommen Namen, die logisch zu ihren Zutaten passen (Eisenblech, Zahnradwelle, Räderwerk, Schlüssel, Zirkel, Gewichtstein, Uhrwerk, Vorhängeschloss); Rezepte, Mengen und Werte bleiben | Tobias: Aus zwei Produkten soll das nächstmögliche, sinnvolle Produkt entstehen. Tabelle von Claude, Tobias: „passt so und gefällt mir“. Gleiche Rezepte halten die Balance und Tobias' Fabrik läuft weiter. |
+| 07.11.2026 | Nur kleine Waren, keine Fertigwaren wie Türen oder Truhen | Tobias: Große Dinge sind auf dem Band nicht darstellbar; bei uns ist alles winzig. |
+| 07.11.2026 | Aufträge stehen im Level-Fenster (eigener Reiter) mit Erfahrungsleiste – nicht im Laden-Fenster | Tobias: Die Erfahrung wird für das Level gebraucht, deshalb gehören die Aufträge zum Laden-Level. |
+| 07.11.2026 | Waren werden abgegeben (aus dem Laden-Lager entfernt) | Tobias: „Ich finde, man sollte die Sachen abgeben.“ |
+| 07.11.2026 | Immer nur ein Auftrag, 2–5 je Level, nicht überspringbar; keine weiteren Bestellungen | Tobias: Man braucht die Erfahrung zum Leveln; der Ladenverkauf soll im Vordergrund stehen, nicht irgendwelche Anfragen. |
+| 07.11.2026 | Belohnung je nach Waren: Gold = Thekenwert der Waren (nicht mehr), Erfahrung = 1 je 10 Gold Warenwert | Tobias: Mehr Gold soll es nicht geben, weil die Erfahrung im Vordergrund steht (Ersatz für die früheren Ziele). Die Rechenregel ist Claudes Wahl. |
+| 07.11.2026 | Die Erfahrung aller Aufträge eines Levels reicht genau für den Aufstieg; der Aufstieg kostet Gold (100, 250, 500, 1.000, 2.000) | Modell von Tobias: Erfahrung schaltet frei, Gold kauft das Level, Bauteile bauen die Maschinen. Preise sind Claudes Platzhalter. |
+| 07.11.2026 | Stückzahlen der Aufträge so, dass man ab Level 4 auf Masse gehen muss (z. B. 8 Räderwerke + 4 Zahnradwellen) | Tobias: Man soll für die Stückzahl schon ein wenig arbeiten müssen. Zahlen sind Platzhalter. |
+| 07.11.2026 | Bestehende Spielstände behalten ihr Level; die Aufträge des aktuellen Levels beginnen von vorn | Claudes Wahl: Tobias' Fabrik (Level 6) bekommt die Aufträge vom Stadttor; nichts wird zurückgestuft. |
+| 07.11.2026 | Bewohner-Namen wählt Claude | Tobias: „Namen kannst du gerne aussuchen, das ist erstmal nicht so wichtig.“ |
+| 07.11.2026 | Nach den Aufträgen kommt der weitere Techbaum (Kräuter, Mörser, Verbände, Tränke) | Tobias: „Lass uns zuerst die Aufgaben machen, damit diese sinnig sind, und dann planen wir den weiteren Techbaum.“ |
 
 ---
 
 ## 8. Offene Fragen
 
-Stand 07.11.2026 (nach v0.12.0).
+Stand 07.11.2026 (nach v0.13.0).
 
-1. **Nächstes Feedback:** Tobias testet v0.12.0 (Lagerhaus befüllen, Nachschub mit Rest, Bänder leeren) und schreibt sein Feedback in einen neuen Chat. Stand: Level 6 erreicht, die Schlosserei noch nicht gebaut (es fehlten die Verstärkten Holzplatten, siehe Abschnitt 10, Chat 9). Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Mini-Schlössern sehr viel Gold. Danach Plan für v0.13.0 (Aufgaben).
+1. **Nächstes Feedback:** Tobias testet v0.13.0 (Aufträge, neue Namen) und schreibt sein Feedback in einen neuen Chat. Stand: Level 6, Schlosserei gebaut, Lagerhaus-Nachschub getestet. Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Vorhängeschlössern sehr viel Gold. Danach Plan für den weiteren Techbaum.
 2. **Handel im echten Tempo:** geklärt – Tobias' Zeiten (bis Eisen etwa 45 Minuten, zweite Runde Eisen nach etwa 60 Minuten) sind in echter Zeit gemessen; nur die Eisen-Runden hat er im Testmodus beschleunigt. Früher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10).
 3. **Laden-Lager:** seit v0.10.1 500 Plätze bis Level 3, 1.000 ab Level 4 (Tobias). Claudes Lesart: erst ab Level 4, weil es dort eng wird. Soll es schon ab Level 1 1.000 sein, ist das eine Zahl in der Datentabelle.
-4. **Aufgaben (v0.13.0):** Werden die Waren für eine Aufgabe abgegeben (verbraucht), oder zählt nur, dass man sie hergestellt hat? Wie viel Erfahrung braucht ein Level, was kostet ein Aufstieg? Kostet der Laden-Ausbau zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Was bringen Level 7 bis 10 (Ende der Einführung)? Vorschlag kommt mit dem Plan für v0.13.0. Tobias' Erkenntnis aus Chat 9 gehört dazu: Man muss die Mitte finden zwischen Verkaufen (Gold für Rohstoffe) und Weiterverarbeiten; Gold aus Aufgaben kann helfen, dabei nicht ins Minus zu rutschen.
+4. **Aufträge (seit v0.13.0 im Spiel):** geklärt – Waren werden abgegeben, ein Auftrag nach dem anderen, Gold = Thekenwert, Erfahrung reicht genau fürs Level, Aufstieg kostet Gold. Noch offen: Passen Stückzahlen und Aufstiegspreise (Platzhalter)? Was bringen Level 7 bis 10 (Ende der Einführung) – kommt mit dem Techbaum Teil 3. Kostet der Laden-Ausbau später zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Tobias' Erkenntnis bleibt wichtig: Man muss die Mitte finden zwischen Verkaufen (Gold für Rohstoffe) und Weiterverarbeiten.
 5. **Einstieg:** Tobias' Idee, am Anfang vor allem die Massenproduktion auszubauen, damit man schnell genug Ware von allem hat – später austesten. Die 500 Gold Startkapital reichen für den Weg zu Stein und Eisen (Test von v0.9.1).
 6. **Pleiteschutz:** Ein Rohstoff ohne passendes Gebäude (z. B. Felsbrocken ohne Steinbruch) verhindert das Geschenk. Vorerst bewusst so gelassen; beobachten.
 7. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
@@ -811,11 +893,35 @@ Stand 07.11.2026 (nach v0.12.0).
 11. **Größe der Welt:** Seit v0.10.2 kann das Grundstück bis 38 × 30 Felder wachsen (jede Seite 2×). Reicht das für die Massenproduktion der höheren Level, oder gibt es später mehr Fläche, z. B. weitere Käufe je Seite mit dem Level oder über Aufgaben? Das ist dann nur eine Zahl in der Datentabelle (`perSide`).
 12. **Weiche mit Filter (Idee von Claude):** Ein Band-Feld, das eine bestimmte Ware abzweigt und den Rest geradeaus schickt, um gemischte Bänder zu sortieren. Will Tobias das, und wenn ja, wann? Seit v0.12.0 helfen „Strecke leeren“ und „Zulauf leeren“ bei falschen Waren.
 13. **„Eiserner Bestand“:** Tobias' Erkenntnis: Am Anfang verkauft man alles, weil man Gold braucht, und später fehlen Baumaterialien (Blöcke, Platten), weil sie in die Produktion gehen. Wer strukturiert spielt und immer einen Grundvorrat im Laden-Lager behält, kommt nicht in Not. Nach Level 6 (Chat 9): Wer am Anfang nicht auf das „Makro“ achtet, muss am Ende z. B. eine eigene Holz-Linie nur für Baumaterial nachbauen. Erste Hilfe seit v0.12.0: der **Rest beim Nachschub** (bleibt immer im Laden-Lager). Denkbar wäre später noch ein Mindestbestand, den die Theken nicht anrühren – nur, wenn Tobias das möchte.
-14. **Nachschub bremsen? (seit v0.12.0)** Mit Versandportal und Lagerhaus mit Nachschub wandern Waren quer übers Grundstück, ohne Band. Erst einmal ungebremst; macht es das Spiel zu leicht (die Bänder verlieren an Bedeutung), lässt sich der Nachschub verlangsamen, z. B. auf 1 Ware pro Sekunde. Tobias: Wer am Anfang ordentlich plant, braucht es kaum – es hilft aber, wenn zu viel im Lager liegt und man ein Band füllen möchte.
+14. **Nachschub bremsen? (seit v0.12.0)** Tobias hat v0.12.0 getestet und die Schlosserei gebaut; bisher kein Wunsch nach einer Bremse. Mit Versandportal und Lagerhaus mit Nachschub wandern Waren quer übers Grundstück, ohne Band. Erst einmal ungebremst; macht es das Spiel zu leicht (die Bänder verlieren an Bedeutung), lässt sich der Nachschub verlangsamen, z. B. auf 1 Ware pro Sekunde. Tobias: Wer am Anfang ordentlich plant, braucht es kaum – es hilft aber, wenn zu viel im Lager liegt und man ein Band füllen möchte.
+15. **Verbesserungen mit Erfahrung (Idee von Tobias):** Mit XP z. B. schneller Holz verarbeiten oder schnellere Förderbänder freischalten. Tobias ist sich noch nicht sicher, in welche Richtung; vorerst dient die Erfahrung nur dem Aufstieg. Das Spiel zählt schon alle Erfahrung mit (`xpTotal`), damit das später möglich ist.
+16. **Reihenfolge nach v0.13.0:** Techbaum Teil 3 (Kräuter) oder zuerst Offline (Fabrik läuft weiter, wenn das Spiel geschlossen ist)? Tobias wollte nach den Aufgaben den Techbaum planen; Offline steht seit v0.5.0 im Fahrplan.
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.13.0 – Aufträge aus dem Ort & neue Warennamen (07.11.2026)
+
+**Vorgenommen:**
+- Tobias' Wunsch nach v0.12.0: Das Spiel soll in der Gesamtheit mehr Sinn ergeben. Ein roter Faden (wachsender Ort, Bewohner, Bauabschnitte), Produktnamen, die zu ihren Zutaten passen, und Aufträge mit Erfahrung als Weg zum nächsten Level (Modell von Tobias).
+
+**Fragen, die wir uns gestellt haben:**
+- Ist es logisch, was aus zwei Produkten entsteht? → Nicht immer (z. B. Kugellager aus einem Scharnier). Lösung: Namen ändern, Rezepte behalten – so bleibt die Balance, und Tobias' Fabrik läuft weiter.
+- Wo stehen die Aufträge? → Im Level-Fenster, weil die Erfahrung fürs Level gebraucht wird (Tobias).
+- Wie viele gleichzeitig, und gibt es weitere Bestellungen? → Immer genau einer, 2–5 je Level, keine weiteren Anfragen – der Ladenverkauf bleibt im Vordergrund (Tobias).
+- Wie viel Gold? → So viel wie an der Theke, nicht mehr; die Erfahrung steht im Vordergrund (Tobias).
+- Wie passen Erfahrung und Aufstieg zusammen? → Die Aufträge eines Levels bringen genau die nötige Erfahrung; der Aufstieg kostet dann Gold.
+- Was passiert mit Tobias' Fabrik auf Level 6? → Sie behält ihr Level und bekommt die Aufträge vom Stadttor; die Erfahrung sammelt sich bis Level 7.
+
+**Gemacht:**
+- Datentabellen: neue Namen, Bilder und Einstellungs-Namen für 8 Waren; `data/levels.js` mit Bauabschnitten, Geschichte, 21 Aufträgen, Aufstiegspreisen und Belohnungs-Regel.
+- Neue Spielregeln `src/core/quests.js` (aktueller Auftrag, Belohnung, abgeben, Erfahrung je Level); `src/core/levels.js`: Aufsteigen mit Erfahrung und Gold, Grund, warum es noch nicht geht.
+- Level-Fenster neu mit den Reitern „📜 Aufträge“ und „🏘️ Ort & Level“; Erfahrungsleiste und ❗ im Knopf „Laden-Level“; Meldungen, wenn ein Auftrag bereit ist oder man aufsteigen kann.
+- Neue Warenbilder: Zahnradwelle, Räderwerk, Schlüssel, Zirkel, Gewichtstein, Uhrwerk.
+- Spielstand-Version 11 mit Umwandlung von Version 10 (Namen überall, Aufträge von vorn) und Meldung beim Öffnen.
+- 195 automatische Tests (neu in `quests.test.js`: neue Namen mit gleichen Rezepten und Werten, Belohnung, Erfahrung eines Levels reicht genau, Abgeben aus dem Laden-Lager, Theken zählen nicht, letzter Auftrag, höchstes Level, Speichern, Umwandlung von Version 10 mit alten Namen an allen Stellen, ungültige Aufträge; in `levels.test.js`: jedes Level mit 2–5 Aufträgen aus herstellbaren Waren, jedes Kombi-Produkt kommt in einem Auftrag vor, Aufstieg erst mit Erfahrung, dann mit Gold, neues Spiel mit echter Produktion bis Eisen) und der Browser-Test (neu: ❗ erscheint, Auftrag per Touch abgeben, Erfahrungsleiste, Aufstieg kostet 100 Gold, Reiter „Ort & Level“, Aufträge vom Stadttor auf Level 6) in Tablet- und Handygröße – alle bestanden.
+- Beim Testen gefunden und behoben: Auf dem höchsten Level war die Erfahrungsleiste voll, obwohl „0“ dastand; sie zeigt jetzt den Fortschritt im Bauabschnitt.
 
 ### v0.12.0 – Nachschub aus dem Laden-Lager & Bänder leeren (07.11.2026)
 
@@ -1210,6 +1316,20 @@ Stand 07.11.2026 (nach v0.12.0).
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 07.11.2026 – Chat 9, Teil 2: Test von v0.12.0, Gesamtbild, Plan und Umsetzung v0.13.0
+
+**Tobias:** v0.12.0 getestet und die Schlosserei gebaut. Wer bis Level 6 gekommen ist, hat das Grundprinzip des Spiels verstanden. Die einzelnen Komponenten und Produkte ergeben größtenteils Sinn, aber in der Hauptmasse geht alles irgendwie unter – am Ende stellen wir Ketten, Schlösser und Regler her. Alles soll in der Gesamtheit mehr Sinn ergeben, damit wir die Geschichte mit weiteren Maschinen und Produkten immer besser spinnen können. Als Nächstes stehen die Aufgaben auf dem Plan?
+
+**Claude** hat einen roten Faden vorgeschlagen: wachsender Ort am Fluss, jedes Level ein Bauabschnitt (Hütten, Wege und Brunnen, Schmiede, Mühle, Markt, Stadttor), Aufträge der Bewohner statt nackter Ziele; später eventuell Fertigwaren.
+
+**Tobias:** Der Rahmen gefällt ihm sehr gut. Die Sachen sollen abgegeben werden: ein eigener Reiter mit den Aufträgen, „Abgeben“ entfernt die Waren aus dem Lager, dafür gibt es XP und Gold. Keine Fertigwaren wie Türen oder Truhen, die sind auf dem Band nicht darstellbar – weiterhin kleine Produkte, die im echten Leben klein sind. Bei den Produkten ging es ihm um die Logik: Ist es logisch, dass zwei Verstärkte Platten und ein Scharnier eine Uhr ergeben? Aus zwei Produkten soll das nächstmögliche, sinnvolle Produkt entstehen. Idee für den weiteren Techbaum: Kräuter anpflanzen, die nach einer Zeit wachsen und geerntet werden; durch den Mörser; aus Farn oder Hanf Verbände, Verband + Kräutermixtur = Heilender Verband; Kräuter mit Kohle und anderem gemischt ergeben erste Tränke (Lebenstrank, Manatrank, Alterstrank …). Aber zuerst die Aufgaben, dann den Techbaum. Nächster Schritt: besprechen, wie wir die Aufgaben planen und die Artikel umbenennen.
+
+**Claude** hat geantwortet: 1 Scharnier + 2 Verstärkte Holzplatten sind die Baukosten der Schlosserei, kein Rezept – aber einige Rezepte sind tatsächlich nicht logisch. Vorschlag Teil 1: Rezepte und Werte bleiben, nur Namen und Bilder ändern sich (Tabelle in Abschnitt 4.2). Teil 2: Reiter „Aufträge“ im Laden, bis zu 3 Aufträge, +50 % Gold, danach zufällige Bestellungen, Aufstieg mit Gold.
+
+**Tobias:** Teil 1 passt und gefällt ihm. Teil 2 teilweise: Der Reiter gehört zum Laden-Level, weil die XP für das Level gebraucht werden – deshalb auch eine Level-Leiste, die zeigt, wie viel XP noch fehlen. Aufträge geben unterschiedlich viel XP und Gold, je nachdem, was gebraucht wird; mehr Gold soll es nicht geben, weil die XP im Vordergrund stehen (Ersatz für die Produkte, die man früher für ein Level herstellen musste). Immer nur ein Auftrag; ist er geschafft, kommt der nächste; 2–5 je Level; nicht ignorierbar. Die Produktion soll durch die Aufträge mehr in die Masse gehen – nicht 3 Räderwerke, sondern ein gutes Gleichgewicht, für das man arbeiten muss (z. B. 20 Räderwerke). Idee: mit XP Verbesserungen freischalten (schneller Holz verarbeiten, schnellere Förderbänder) – noch unsicher, vorerst nur Aufträge fürs Level. Die Level erzählen die Geschichte des Dorfes, die Aufträge verpacken sie. Nur diese Aufträge, keine weiteren Anfragen – der Ladenverkauf steht im Vordergrund. Aufsteigen: XP schaltet frei, Gold kauft das Level, Bauteile bauen die Maschinen. Namen darf Claude aussuchen. Alles in der README festhalten, damit er danach einen neuen Chat beginnen kann.
+
+**Umgesetzt:** v0.13.0 (siehe Versionshistorie). Der nächste Chat beginnt mit Tobias' Test von v0.13.0; danach planen wir den weiteren Techbaum.
 
 ### 07.11.2026 – Chat 9: Feedback nach Level 6, Plan und Umsetzung v0.12.0
 
