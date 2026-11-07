@@ -1,22 +1,25 @@
 // Laden: Lagergröße und Theken je Level, Kunden, Startvorrat. Platzhalter.
 
-// storage:  Plätze im Laden-Lager
-// counters: Anzahl Verkaufstheken
+// storage:     Plätze im Laden-Lager
+// counters:    Anzahl Verkaufstheken
+// counterSize: Plätze auf jeder Theke (alle Theken gleich groß)
 // v0.9.0: Level 2 und 3 vorerst wie Level 1.
 // v0.10.0: Ab Level 4 kommt mit jedem Aufstieg eine Theke dazu (Tobias),
 // weil die Waren wertvoller werden – auf Level 6 sind es 5 Theken.
+// v0.10.1 (Tobias): Alle Theken wachsen mit – kleine Theken (20), mittlere
+// (25), große (30), dann bleibt es erst einmal so. Das Laden-Lager fasst ab
+// Level 4 1.000 Waren, weil man dort auf Masse produzieren muss.
 export const SHOP_LEVELS = {
-  1: { storage: 500, counters: 2 },
-  2: { storage: 500, counters: 2 },
-  3: { storage: 500, counters: 2 },
-  4: { storage: 500, counters: 3 },
-  5: { storage: 500, counters: 4 },
-  6: { storage: 500, counters: 5 },
+  1: { storage: 500, counters: 2, counterSize: 20 },
+  2: { storage: 500, counters: 2, counterSize: 20 },
+  3: { storage: 500, counters: 2, counterSize: 20 },
+  4: { storage: 1000, counters: 3, counterSize: 25 },
+  5: { storage: 1000, counters: 4, counterSize: 30 },
+  6: { storage: 1000, counters: 5, counterSize: 30 },
 };
 
-// Plätze je Theke (v0.10.0): Die ersten beiden fassen 20 Stück, jede neue
-// Theke 5 mehr als die vorige (Tobias). Theke 3 = 25, Theke 4 = 30, Theke 5 = 35.
-export const COUNTER_SIZES = [20, 20, 25, 30, 35];
+// Namen der Theken-Größen für Texte (v0.10.1)
+export const COUNTER_SIZE_NAMES = { 20: 'kleine', 25: 'mittlere', 30: 'große' };
 
 // Kunden: kommen alle minInterval–maxInterval Sekunden und kaufen
 // minItems–maxItems Stück von den Theken (zum festen Wert der Ware).

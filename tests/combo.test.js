@@ -8,7 +8,6 @@ import { placeBuilding } from '../src/core/buildings.js';
 import { BUILDINGS } from '../src/core/data/buildings.js';
 import { ITEMS } from '../src/core/data/items.js';
 import { RECIPES } from '../src/core/data/recipes.js';
-import { COUNTER_SIZES } from '../src/core/data/shop.js';
 import { buildingPorts } from '../src/core/geometry.js';
 import { levelUp, producedCount } from '../src/core/levels.js';
 import {
@@ -26,10 +25,11 @@ import {
   missingInputs,
   returnUnusedStock,
   setRecipe,
+  unusedStock,
   workshopInputs,
 } from '../src/core/production.js';
 import { deserializeGame, serializeGame } from '../src/core/save.js';
-import { storageCount } from '../src/core/shop.js';
+import { storageCapacity, storageCount } from '../src/core/shop.js';
 import { simulate } from '../src/core/sim.js';
 import { createNewGame } from '../src/core/state.js';
 
@@ -214,15 +214,41 @@ test('Falsche Ware am Eingang: Das Infofenster sagt, dass sie hier nicht gebrauc
   });
 });
 
-test('Umstellen: Zutaten, die das neue Rezept nicht braucht, kommen ins Laden-Lager', () => {
+test('Umstellen: Zutaten bleiben in der Maschine und werden beim Zurückstellen wieder gebraucht (v0.10.1)', () => {
   const state = emptyGame();
   const machine = placeBuilding(state, 'zimmerei', 20, 10, 0);
-  machine.prod.stock = { holzstab: 7, steinzahnrad: 3 };
+  machine.prod.stock = { holzstab: 10, steinzahnrad: 3 };
   setRecipe(machine, 'schalter');
-  assert.deepEqual(returnUnusedStock(state, machine), {}, 'Schalter braucht beides');
+  assert.deepEqual(unusedStock(machine), {}, 'Schalter braucht beides');
+  setRecipe(machine, 'verstaerkteholzplatte');
+  assert.deepEqual(machine.prod.stock, { holzstab: 10, steinzahnrad: 3 }, 'nichts verschwindet');
+  assert.deepEqual(unusedStock(machine), { holzstab: 10, steinzahnrad: 3 });
+  assert.deepEqual(state.storage, {}, 'nichts wandert ungefragt ins Laden-Lager');
+  setRecipe(machine, 'handkurbel');
+  assert.deepEqual(unusedStock(machine), {});
+  machine.prod.stock.steinzahnrad = 5;
+  simulate(state, 1);
+  assert.equal(machine.prod.busy, true, 'mit den alten Zutaten geht es sofort weiter');
+});
+
+test('Umstellen mitten im Durchgang: die Zutaten kommen zurück in die Maschine', () => {
+  const state = emptyGame();
+  const machine = placeBuilding(state, 'zimmerei', 20, 10, 0);
+  machine.prod.stock = { holzstab: 10, steinzahnrad: 5 };
+  simulate(state, 1);
+  assert.equal(machine.prod.busy, true);
+  setRecipe(machine, 'verstaerkteholzplatte');
+  assert.deepEqual(machine.prod.stock, { holzstab: 10, steinzahnrad: 5 });
+  assert.deepEqual(buildingContents(machine), { holzstab: 10, steinzahnrad: 5 });
+});
+
+test('Knopf „Reste ins Laden-Lager“: nur Zutaten, die die Einstellung nicht braucht', () => {
+  const state = emptyGame();
+  const machine = placeBuilding(state, 'zimmerei', 20, 10, 0);
+  machine.prod.stock = { holzstab: 7, steinzahnrad: 3, holzplatte: 4 };
   setRecipe(machine, 'verstaerkteholzplatte');
   assert.deepEqual(returnUnusedStock(state, machine), { holzstab: 7, steinzahnrad: 3 });
-  assert.deepEqual(machine.prod.stock, {});
+  assert.deepEqual(machine.prod.stock, { holzplatte: 4 }, 'Holzplatten werden gebraucht und bleiben');
   assert.equal(storageCount(state, 'holzstab'), 7);
   assert.equal(storageCount(state, 'steinzahnrad'), 3);
 });
@@ -243,35 +269,63 @@ test('Anschlüsse drehen mit: gedrehte Zimmerei hat zwei Eingänge oben', () => 
 
 // ---------- Theken ----------
 
-test('Theken: 2 bis Level 3, dann je Aufstieg eine mehr – auf Level 6 sind es 5', () => {
+test('Theken: 2 bis Level 3, dann je Aufstieg eine mehr; alle wachsen mit: klein 20, mittel 25, groß 30 (v0.10.1)', () => {
   const state = createNewGame(1);
   assert.equal(state.counters.length, 2);
+  assert.equal(counterSize(state), 20);
   state.shopLevel = 3;
+  assert.equal(counterSize(state), 20, 'kleine Theken bis Level 3');
   state.produced = { minieisenplatte: 1, eisenstange: 1, handkurbel: 1, schalter: 1, scharnier: 1, eisenfeder: 1 };
-  levelUp(state);
-  assert.equal(state.counters.length, 3);
-  levelUp(state);
-  levelUp(state);
-  assert.equal(state.shopLevel, 6);
-  assert.equal(state.counters.length, 5);
-  assert.deepEqual(
-    state.counters.map((_, i) => counterSize(state, i)),
-    [20, 20, 25, 30, 35],
-    'jede neue Theke fasst 5 mehr',
-  );
-  assert.deepEqual(COUNTER_SIZES, [20, 20, 25, 30, 35]);
+  const sizes = [];
+  for (let i = 0; i < 3; i++) {
+    levelUp(state);
+    sizes.push([state.shopLevel, state.counters.length, counterSize(state)]);
+  }
+  assert.deepEqual(sizes, [
+    [4, 3, 25],
+    [5, 4, 30],
+    [6, 5, 30],
+  ]);
 });
 
-test('Theke 5 fasst 35 Stück, Kunden kaufen auch dort', () => {
+test('Auf Level 6 fasst jede Theke 30 Stück – auch die erste', () => {
   const state = createNewGame(5);
   state.shopLevel = 6;
   state.counters = [0, 1, 2, 3, 4].map(() => ({ type: null, count: 0 }));
-  state.storage = { holzplatte: 100 };
-  setCounterItem(state, 4, 'holzplatte');
-  assert.equal(fillCounter(state, 4), 35);
+  state.storage = { holzplatte: 100, holzstab: 100 };
+  setCounterItem(state, 0, 'holzplatte');
+  setCounterItem(state, 4, 'holzstab');
+  assert.equal(fillCounter(state, 0), 30);
+  assert.equal(fillCounter(state, 4), 30);
   const before = state.gold;
   serveCustomer(state);
   assert.ok(state.gold > before);
+});
+
+test('Laden-Lager: 500 Plätze bis Level 3, ab Level 4 1.000 (v0.10.1)', () => {
+  const state = createNewGame(5);
+  assert.equal(storageCapacity(state), 500);
+  state.shopLevel = 3;
+  assert.equal(storageCapacity(state), 500);
+  for (const level of [4, 5, 6]) {
+    state.shopLevel = level;
+    assert.equal(storageCapacity(state), 1000, `Level ${level}`);
+  }
+});
+
+test('Spielstand aus v0.10.0: Was nicht mehr auf eine Theke passt, kommt ins Laden-Lager', () => {
+  const state = createNewGame(6);
+  state.shopLevel = 6;
+  state.counters = [0, 1, 2, 3, 4].map(() => ({ type: null, count: 0 }));
+  state.counters[3] = { type: 'schalter', count: 30 };
+  state.counters[4] = { type: 'handkurbel', count: 35 };
+  state.storage = {};
+  const loaded = deserializeGame(serializeGame(state));
+  assert.deepEqual(loaded.state.counters[3], { type: 'schalter', count: 30 });
+  assert.deepEqual(loaded.state.counters[4], { type: 'handkurbel', count: 30 });
+  assert.equal(loaded.state.storage.handkurbel, 5, 'nichts geht verloren');
+  assert.match(loaded.counterNote, /30 Stück – 5 Waren/);
+  assert.equal(deserializeGame(serializeGame(loaded.state)).counterNote, undefined, 'nur einmal');
 });
 
 test('Menge einstellen: genau 8 Stück auf die Theke, zu viel kommt zurück ins Lager', () => {

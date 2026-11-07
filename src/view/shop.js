@@ -94,7 +94,7 @@ export function createShopView({ state, panels, onChange }) {
   function thekenSig() {
     if (amountFor) return `amount|${amountFor.index}|${amountFor.type}`;
     if (picking !== null) return `pick|${picking}|${sellableInStorage().join(',')}`;
-    return `theken|${state.counters.map((c) => c.type ?? '-').join(',')}`;
+    return `theken|${state.shopLevel}|${state.counters.map((c) => c.type ?? '-').join(',')}`;
   }
 
   // Öffnet die Mengenwahl. draft: vorgeschlagene Anzahl (null = so viele wie möglich).
@@ -154,7 +154,7 @@ export function createShopView({ state, panels, onChange }) {
   function buildAmount(body, { makeButton }) {
     const { index, type } = amountFor;
     const def = ITEMS[type];
-    const size = counterSize(state, index);
+    const size = counterSize(state);
     body.append(el('h3', null, `Theke ${index + 1}: Wie viele ${def.plural}?`));
     const ware = el('div', 'counter-ware');
     const text = el('div', 'counter-text');
@@ -244,7 +244,7 @@ export function createShopView({ state, panels, onChange }) {
     const grid = el('div', 'counters');
     const cards = state.counters.map((counter, index) => {
       const card = el('div', 'counter-card');
-      const head = el('div', 'counter-head', `Theke ${index + 1} · ${counterSize(state, index)} Plätze`);
+      const head = el('div', 'counter-head', `Theke ${index + 1} · ${counterSize(state)} Plätze`);
       const ware = el('div', 'counter-ware');
       const amount = el('span', 'counter-amount');
       if (counter.type) {
@@ -298,7 +298,7 @@ export function createShopView({ state, panels, onChange }) {
       state.counters.forEach((counter, index) => {
         const c = cards[index];
         if (!counter.type) return;
-        const size = counterSize(state, index);
+        const size = counterSize(state);
         c.amount.textContent = `${counter.count} / ${size}`;
         const room = counter.count < size && storageCount(state, counter.type) > 0;
         c.full.disabled = !room;

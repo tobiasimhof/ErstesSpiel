@@ -7,6 +7,13 @@ import { isInWorld, isOwned } from './state.js';
 
 export const LAND_SIDES = ['N', 'E', 'S', 'W'];
 
+// So viele Felder tief ist ein Streifen auf dem aktuellen Laden-Level (v0.10.1).
+export function stripDepth(state) {
+  let depth = LAND.strips[0].depth;
+  for (const s of LAND.strips) if (s.level <= (state.shopLevel ?? 1)) depth = s.depth;
+  return depth;
+}
+
 // Der Streifen, den man an dieser Seite als Nächstes kaufen kann:
 // { side, depth, x, y, width, height, fields } oder null am Rand der Welt.
 export function landStrip(state, side) {
@@ -19,7 +26,7 @@ export function landStrip(state, side) {
     E: w.width - (p.x + p.width),
   }[side];
   if (room === undefined) return null;
-  const depth = Math.min(LAND.strip, room);
+  const depth = Math.min(stripDepth(state), room);
   if (depth <= 0) return null;
   const rect = {
     N: { x: p.x, y: p.y - depth, width: p.width, height: depth },

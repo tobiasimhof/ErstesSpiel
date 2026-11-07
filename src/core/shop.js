@@ -1,6 +1,6 @@
 // Laden-Lager: hier landen Waren aus dem Versandportal und gekaufte Rohstoffe.
 
-import { COUNTER_SIZES, SHOP_LEVELS } from './data/shop.js';
+import { SHOP_LEVELS } from './data/shop.js';
 
 export function storageCapacity(state) {
   return SHOP_LEVELS[state.shopLevel]?.storage ?? SHOP_LEVELS[1].storage;
@@ -12,9 +12,9 @@ export function counterCountFor(level) {
   return (SHOP_LEVELS[level] ?? SHOP_LEVELS[1]).counters;
 }
 
-// Plätze auf Theke Nummer index (0 = erste Theke).
-export function counterSizeAt(index) {
-  return COUNTER_SIZES[Math.min(index, COUNTER_SIZES.length - 1)];
+// Plätze auf jeder Theke auf diesem Level (v0.10.1: alle Theken gleich groß).
+export function counterSizeFor(level) {
+  return (SHOP_LEVELS[level] ?? SHOP_LEVELS[1]).counterSize;
 }
 
 export function emptyCounter() {
@@ -30,6 +30,23 @@ export function addMissingCounters(state) {
     added++;
   }
   return added;
+}
+
+// Beim Laden eines Spielstands: fehlende Theken dazu, und was nicht mehr auf
+// eine Theke passt, zurück ins Laden-Lager (v0.10.1: In v0.10.0 fasste
+// Theke 5 noch 35 Stück, jetzt höchstens 30). Gibt zurück, was zurückkam.
+export function fitCounters(state) {
+  addMissingCounters(state);
+  const size = counterSizeFor(state.shopLevel);
+  const returned = {};
+  for (const counter of state.counters) {
+    if (!counter.type || counter.count <= size) continue;
+    const extra = counter.count - size;
+    addToStorage(state, counter.type, extra);
+    returned[counter.type] = (returned[counter.type] ?? 0) + extra;
+    counter.count = size;
+  }
+  return returned;
 }
 
 export function storageTotal(state) {

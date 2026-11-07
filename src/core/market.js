@@ -15,7 +15,7 @@ import { productionOf, buildingContents } from './production.js';
 import {
   addToStorage,
   counterCountFor,
-  counterSizeAt,
+  counterSizeFor,
   emptyCounter,
   storageCount,
   storageFree,
@@ -77,9 +77,9 @@ export function buyRaw(state, type) {
 
 // ---------- Theken ----------
 
-// Plätze auf Theke index (v0.10.0: jede Theke hat ihre eigene Größe).
-export function counterSize(state, index) {
-  return counterSizeAt(index);
+// Plätze auf einer Theke (v0.10.1: alle Theken gleich groß, wachsen mit dem Level).
+export function counterSize(state) {
+  return counterSizeFor(state.shopLevel);
 }
 
 // Stellt eine Sorte auf die Theke. Liegt dort eine andere, kommt sie ins Lager zurück.
@@ -96,7 +96,7 @@ export function setCounterItem(state, index, type) {
 export function fillCounter(state, index, n = Infinity) {
   const counter = state.counters[index];
   if (!counter?.type) return 0;
-  const moved = Math.max(0, Math.min(n, counterSize(state, index) - counter.count, storageCount(state, counter.type)));
+  const moved = Math.max(0, Math.min(n, counterSize(state) - counter.count, storageCount(state, counter.type)));
   if (moved > 0) {
     takeFromStorage(state, counter.type, moved);
     counter.count += moved;
@@ -110,7 +110,7 @@ export function counterMaxFor(state, index, type) {
   const counter = state.counters[index];
   if (!counter || !isSellable(type)) return 0;
   const onCounter = counter.type === type ? counter.count : 0;
-  return Math.min(counterSize(state, index), onCounter + storageCount(state, type));
+  return Math.min(counterSize(state), onCounter + storageCount(state, type));
 }
 
 // Stellt genau target Stück auf die Theke (v0.10.0, Tobias: „nur 8 davon
@@ -119,7 +119,7 @@ export function counterMaxFor(state, index, type) {
 export function setCounterAmount(state, index, target) {
   const counter = state.counters[index];
   if (!counter?.type) return 0;
-  const want = Math.max(0, Math.min(Math.floor(target), counterSize(state, index)));
+  const want = Math.max(0, Math.min(Math.floor(target), counterSize(state)));
   if (want > counter.count) fillCounter(state, index, want - counter.count);
   else if (want < counter.count) {
     addToStorage(state, counter.type, counter.count - want);
