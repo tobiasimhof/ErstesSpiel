@@ -40,6 +40,7 @@ import {
   productionOf,
   returnUnusedStock,
   setRecipe,
+  unusedStock,
   workshopInputs,
 } from '../core/production.js';
 import { affordableCount, canAfford, missingFor, storageCapacity, storageCount, storageTotal } from '../core/shop.js';
@@ -137,6 +138,23 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
         }
         lines.push(`Wert: ${numberFormat.format(ITEMS[recipe.output].price)} 🪙 je ${ITEMS[recipe.output].name}`);
       }
+      // v0.10.1 (Tobias): Rezepte der anderen Einstellungen ansehen, ohne umzustellen
+      const others = p.recipes.filter((key) => key !== prod.recipe);
+      if (others.length > 0) {
+        lines.push('Andere Einstellungen:');
+        for (const key of others) {
+          const r = RECIPES[key];
+          const out = ITEMS[r.output];
+          const ins = Object.entries(r.inputs).map(([type, n]) => itemCount(type, n)).join(' + ');
+          lines.push(`• ${r.label}: ${ins} · ${numberFormat.format(out.price * r.amount)} 🪙`);
+        }
+      }
+      // Zutaten für eine andere Einstellung bleiben in der Maschine
+      const rest = unusedStock(b);
+      const hasRest = Object.keys(rest).length > 0;
+      if (hasRest) lines.push(`Liegt noch in der Maschine: ${costText(rest)} – für eine andere Einstellung.`);
+      const restButton = info.buttons.get('leftovers');
+      if (restButton) restButton.hidden = !hasRest;
       for (const key of p.recipes) info.buttons.get(`recipe:${key}`)?.classList.toggle('primary', key === prod.recipe);
     } else if (p?.kind === 'storage') {
       for (let i = 0; i < p.slots; i++) {
@@ -202,15 +220,24 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
             key: `recipe:${key}`,
             label: RECIPES[key].label,
             onClick: () => {
+              // v0.10.1: Zutaten bleiben in der Maschine (vorher kamen sie
+              // ins Laden-Lager – das sah aus, als wären sie verschwunden).
               setRecipe(b, key);
-              // v0.10.0: Zutaten, die das neue Rezept nicht braucht, ins Laden-Lager
-              const returned = returnUnusedStock(state, b);
-              if (Object.keys(returned).length > 0) panels.toast(`Zurück ins Laden-Lager: ${costText(returned)}.`);
               changed();
               infoRefresh?.();
             },
           });
         }
+        actions.push({
+          key: 'leftovers',
+          label: '↩ Reste ins Laden-Lager',
+          onClick: () => {
+            const returned = returnUnusedStock(state, b);
+            if (Object.keys(returned).length > 0) panels.toast(`Ins Laden-Lager gelegt: ${costText(returned)}.`);
+            changed();
+            infoRefresh?.();
+          },
+        });
       }
       actions.push(
         { label: '↔ Verschieben', group: actions.length > 0, onClick: () => startPlace(b.type, b) },

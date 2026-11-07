@@ -185,9 +185,11 @@ if (loaded.status === 'ok' && loaded.migratedFrom) {
     from < 7 ? 'Neu: Fläche kaufen – tippe auf die ＋-Schilder am Rand. Deine Fabrik hat Laden-Level 3, alles bleibt freigeschaltet.' : '',
     from < 8 ? `Neu: ${START_GOLD} Gold Startkapital – du bekommst es einmalig nachgezahlt.` : '',
     ...(loaded.notes ?? []),
+    loaded.counterNote ?? '',
   ].filter(Boolean);
   panels.toast(notes.join(' '), 9000);
-} else if (loaded.status === 'ok') panels.toast('Spielstand geladen.', 1600);
+} else if (loaded.status === 'ok' && loaded.counterNote) panels.toast(`Spielstand geladen. ${loaded.counterNote}`, 6000);
+else if (loaded.status === 'ok') panels.toast('Spielstand geladen.', 1600);
 else if (loaded.status === 'invalid') panels.toast('Spielstand war beschädigt – neues Spiel gestartet.', 3500);
 
 // ---------- Takt ----------

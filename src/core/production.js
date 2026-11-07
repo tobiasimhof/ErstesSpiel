@@ -189,22 +189,29 @@ export function inputJam(state, building) {
   return jam;
 }
 
-// Nach dem Umstellen: Zutaten, die das neue Rezept nicht braucht, kommen ins
-// Laden-Lager (sonst lägen sie unsichtbar in der Maschine fest). Gibt zurück,
-// was zurückgelegt wurde: { Ware: Anzahl }.
-export function returnUnusedStock(state, building) {
+// Zutaten in der Maschine, die die aktuelle Einstellung nicht braucht (z. B.
+// nach dem Umstellen): { Ware: Anzahl }. v0.10.1 (Tobias): Sie bleiben in der
+// Maschine und werden wieder gebraucht, wenn man zurückstellt.
+export function unusedStock(building) {
   const p = productionOf(building.type);
   if (p?.kind !== 'workshop') return {};
-  const prod = building.prod;
-  const needed = RECIPES[prod.recipe].inputs;
-  const returned = {};
-  for (const [type, n] of Object.entries(prod.stock)) {
-    if (needed[type] || n <= 0) continue;
-    addToStorage(state, type, n);
-    returned[type] = n;
-    delete prod.stock[type];
+  const needed = RECIPES[building.prod.recipe].inputs;
+  const rest = {};
+  for (const [type, n] of Object.entries(building.prod.stock)) {
+    if (!needed[type] && n > 0) rest[type] = n;
   }
-  return returned;
+  return rest;
+}
+
+// Knopf „Reste ins Laden-Lager“: legt die nicht gebrauchten Zutaten ins
+// Laden-Lager. Gibt zurück, was zurückgelegt wurde: { Ware: Anzahl }.
+export function returnUnusedStock(state, building) {
+  const rest = unusedStock(building);
+  for (const [type, n] of Object.entries(rest)) {
+    addToStorage(state, type, n);
+    delete building.prod.stock[type];
+  }
+  return rest;
 }
 
 // ---------- Aktionen ----------

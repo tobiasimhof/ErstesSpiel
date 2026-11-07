@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 
 import { LAND } from '../src/core/data/land.js';
 import { buyBuilding } from '../src/core/buildings.js';
-import { LAND_SIDES, buyLand, landOffer, landOffers, landSideAt, pricePerField } from '../src/core/land.js';
+import { LAND_SIDES, buyLand, landOffer, landOffers, landSideAt, pricePerField, stripDepth } from '../src/core/land.js';
 import { deserializeGame, serializeGame } from '../src/core/save.js';
 import { createNewGame, isOwned } from '../src/core/state.js';
 
@@ -17,12 +17,34 @@ test('Erster Streifen rechts: 2 × 14 = 28 Felder für 280 Gold', () => {
   const state = richGame(1000);
   const offer = landOffer(state, 'E');
   assert.deepEqual(offer, { side: 'E', depth: 2, x: 30, y: 5, width: 2, height: 14, fields: 28, price: 280 });
-  assert.equal(LAND.strip, 2);
+  assert.equal(stripDepth(state), 2);
   assert.equal(buyLand(state, 'E'), 'ok');
   assert.equal(state.gold, 720);
   assert.deepEqual(state.plot, { x: 8, y: 5, width: 24, height: 14 });
   assert.equal(state.landBought, 1);
   assert.ok(isOwned(state, 31, 10), 'neue Felder gehören dazu');
+});
+
+test('Ab Level 4 sind Streifen 4 Felder tief (v0.10.1), der Preis je Feld bleibt', () => {
+  const state = richGame(10000);
+  assert.deepEqual(LAND.strips, [
+    { level: 1, depth: 2 },
+    { level: 4, depth: 4 },
+  ]);
+  state.shopLevel = 3;
+  assert.equal(stripDepth(state), 2);
+  state.shopLevel = 4;
+  assert.equal(stripDepth(state), 4);
+  state.shopLevel = 6;
+  assert.equal(stripDepth(state), 4);
+  const offer = landOffer(state, 'E');
+  assert.deepEqual([offer.depth, offer.fields, offer.price], [4, 56, 560], 'rechts 4 × 14 Felder à 10 Gold');
+  assert.equal(buyLand(state, 'E'), 'ok');
+  assert.deepEqual(state.plot, { x: 8, y: 5, width: 26, height: 14 });
+  // oben ist nur Platz für 5 Reihen: erst 4, dann noch 1
+  assert.equal(landOffer(state, 'N').depth, 4);
+  buyLand(state, 'N');
+  assert.equal(landOffer(state, 'N').depth, 1, 'am Rand der Welt weniger');
 });
 
 test('Jeder Kauf macht jedes Feld 20 % teurer', () => {

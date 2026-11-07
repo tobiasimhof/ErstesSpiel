@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.10.0 – Techbaum, Teil 2 (3 Kombi-Maschinen, Level 4–6, mehr Theken) |
+| **Aktuelle Version** | v0.10.1 – Feinschliff nach Tobias' Test (Theken, Laden-Lager, Fläche, Umstellen) |
 | **Phase** | M2 – Produktionsketten |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias testet v0.10.0 (Abschnitt 6, „v0.10.0 – Was Tobias testet“) und gibt Feedback; danach Plan für **v0.11.0 – Aufgaben** |
+| **Nächster Schritt** | Tobias testet v0.10.1 (Abschnitt 6, „v0.10.1 – Was Tobias testet“) und schreibt sein Feedback in einen **neuen Chat**. Claude hält es fest, nimmt bei Bedarf noch Feinschliff vor; danach Plan für **v0.11.0 – Aufgaben** |
 
 ---
 
@@ -86,7 +86,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 
 ### 3.3 Fabrik
 
-- Das Grundstück besteht aus quadratischen Feldern (Raster). Man startet mit **22 × 14 Feldern** (seit v0.6.1, vorher 16 × 10). Ringsum liegt gesperrte Fläche (Welt 40 × 26). **Seit v0.9.0 kauft man Fläche dazu:** An jeder Seite des Grundstücks steht ein Schild mit dem Preis; ein Streifen ist 2 Felder tief und reicht über die ganze Seite. Jeder Kauf wird teurer (Abschnitt 6, v0.9.0).
+- Das Grundstück besteht aus quadratischen Feldern (Raster). Man startet mit **22 × 14 Feldern** (seit v0.6.1, vorher 16 × 10). Ringsum liegt gesperrte Fläche (Welt 40 × 26). **Seit v0.9.0 kauft man Fläche dazu:** An jeder Seite des Grundstücks steht ein Schild mit dem Preis; ein Streifen ist 2 Felder tief (ab Level 4: 4 Felder, seit v0.10.1) und reicht über die ganze Seite. Jeder Kauf wird teurer (Abschnitt 6, v0.9.0).
 - **Der Laden ist das ganze Grundstück**, kein einzelnes Gebäude. Darauf stehen zu Beginn ein Holzfällerlager und (seit v0.7.0) ein Versandportal. Bis v0.8.0 stand dort auch ein Steinbruch; seit v0.9.0 baut man ihn ab Level 2 selbst.
 - Gebäude belegen mehrere Felder und haben Ein- und Ausgänge. **Größen (Tobias, 06.11.2026):** Maschinen 2 × 2 (damit sie später zwei Eingänge für zwei verschiedene Rohstoffe haben können), alles andere kleiner: Förderbänder 1 × 1, Lagerhaus 2 × 1, Versandportal 1 × 1.
 - **Förderbänder** verbinden die Gebäude und transportieren Waren Stück für Stück.
@@ -99,7 +99,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Lagerhäuser** sind die einzige Möglichkeit, Waren zu lagern. Sie sind Zwischenstationen und eine Art Verteiler: 2 × 1 Felder, 3 Fächer zu je 50 Waren, **Eingang oben links, Ausgang unten rechts** – deshalb lagert man sinnvollerweise nur eine Sorte, z. B. 3 × 50 Holzblöcke. Was hineinläuft, läuft weiter, sobald am Ausgang Platz ist.
 - **Versandportal:** 1 × 1 Feld mit **einem** Eingang (dreht mit). Waren, die hineinlaufen, landen direkt im Laden.
 - **Kombi-Maschinen** (seit v0.10.0) haben zwei Eingänge und brauchen zwei verschiedene Zutaten, z. B. Zimmerei: 10 Holzstäbe + 5 Stein-Zahnräder → 1 Handkurbel. Jeder Eingang nimmt jede passende Zutat; am sichersten kommt jede Zutat über ihren eigenen Eingang. Fehlt eine Zutat, zeigt die Maschine ein kleines Bild davon; das Infofenster sagt, wie viel fehlt. Laufen beide Zutaten gemischt über ein Band und eine nimmt überhand, staut sich der Eingang (rotes Licht, „Eingang blockiert“).
-- Eine Werkstatt kann mehrere Rezepte (Grundmaschinen zwei, Kombi-Maschinen drei). Man stellt ein, was sie gerade herstellt. Beim Umstellen kommen Zutaten, die das neue Rezept nicht braucht, ins Laden-Lager.
+- Eine Werkstatt kann mehrere Rezepte (Grundmaschinen zwei, Kombi-Maschinen drei). Man stellt ein, was sie gerade herstellt. Das Infofenster zeigt auch die Rezepte der anderen Einstellungen. Beim Umstellen bleiben alle Teile in der Maschine (seit v0.10.1) und werden wieder gebraucht, wenn man zurückstellt; mit „↩ Reste ins Laden-Lager“ holt man nicht gebrauchte Teile heraus.
 - **Umbauen ist leicht und günstig** (verschieben, drehen, abreißen mit Rückerstattung), weil man sich ständig an den Markt anpasst. Das gilt für alle Gebäude, auch die Startgebäude, damit man den Schwerpunkt der Fabrik jederzeit neu setzen kann.
 - **Bauen geht sofort**, sofern man die Waren dafür hat. Es gibt keine Bauzeiten.
 - **Bauen kostet Waren statt Gold** (Tobias, v0.7.0): z. B. Förderband 1 Holzblock, Sägewerk 40 Holzblöcke. Die Waren kommen aus dem Laden-Lager. So muss man abwägen: verkaufen oder damit eine weitere Maschine bauen? Abreißen gibt die bezahlten Waren zurück; Verschieben und Drehen sind kostenlos. Tabelle in Abschnitt 4.2.
@@ -108,7 +108,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 
 - **Zuerst feste Preise**, damit die Spielmechanik einfach bleibt. Weiterverarbeiten muss sich lohnen (Beispiel von Tobias): Kostet ein Holzstamm 50 Gold, bringen die 200 Holzblöcke daraus knapp über 50 Gold. Macht man daraus 40 Winkel (oder 20 Winkel und 20 Stäbe), bringt der Verkauf deutlich mehr. So kann man nach und nach die Produktion ausbauen.
 - **Platzhalter-Preise im Spiel** (alles ×10, damit es nur ganze Goldbeträge gibt): Holzstamm/Felsbrocken 550 Gold (Kauf) → 200 Blöcke à 3 Gold = 600 Gold (+9 %) → 40 Teile à 18 Gold = 720 Gold (+31 %). Ein Test prüft, dass jede Stufe mehr bringt als die vorige.
-- **Laden:** Der Knopf „Laden“ unten links öffnet den Laden mit den Reitern **Lager**, **Theken** und **Händler** (seit v0.7.0). Er hat ein eigenes **Lager** (gefüllt über das Versandportal) und **Verkaufstheken**. Die Theken bestückt man **von Hand** mit dem, was man verkaufen möchte, und stellt dabei genau ein, wie viele Stück darauf kommen (seit v0.10.0, z. B. nur 8). Bis Level 3 gibt es 2 Theken mit je 20 Plätzen; ab Level 4 kommt mit jedem Aufstieg eine Theke dazu, jede 5 Plätze größer als die vorige (Level 6: 5 Theken mit 20, 20, 25, 30 und 35 Plätzen). **Kunden kommen zufällig vorbei und kaufen zufällig viel**, z. B. der eine 2 Zahnräder und 1 Splitt, der nächste 3 Winkel – zu einem „normalen“ Preis. Später darf der Laden interaktiver werden; für den Anfang reicht die Übersicht.
+- **Laden:** Der Knopf „Laden“ unten links öffnet den Laden mit den Reitern **Lager**, **Theken** und **Händler** (seit v0.7.0). Er hat ein eigenes **Lager** (gefüllt über das Versandportal) und **Verkaufstheken**. Die Theken bestückt man **von Hand** mit dem, was man verkaufen möchte, und stellt dabei genau ein, wie viele Stück darauf kommen (seit v0.10.0, z. B. nur 8). Bis Level 3 gibt es 2 Theken; ab Level 4 kommt mit jedem Aufstieg eine Theke dazu (Level 6: 5 Theken). Alle Theken wachsen mit (seit v0.10.1): kleine Theken mit 20 Plätzen bis Level 3, mittlere mit 25 auf Level 4, große mit 30 ab Level 5 – dann bleibt es erst einmal so. Das Laden-Lager fasst bis Level 3 500 Waren, ab Level 4 1.000. **Kunden kommen zufällig vorbei und kaufen zufällig viel**, z. B. der eine 2 Zahnräder und 1 Splitt, der nächste 3 Winkel – zu einem „normalen“ Preis. Später darf der Laden interaktiver werden; für den Anfang reicht die Übersicht.
 - **Händler:** Hier kauft man Rohstoffe wie Holzstämme. **Verkaufen kann man nur über die Theken**, nicht an den Händler (Tobias, v0.7.0): Was man nicht mehr braucht, verkauft man über die Theken; vieles braucht man später noch, deshalb lohnt sich ein gemischtes Lager.
 - **Nachfrage:** Wer viel von einer Ware verkauft, drückt ihren Preis. Mit der Zeit erholt er sich wieder. Dazu kommen Trends, z. B. „Die Stadt baut eine Mauer: Steinblöcke +50 % für 2 Tage“. Eine Tür bringt also mal mehr, mal weniger Gold, je nachdem, wie gefragt sie gerade ist. So entsteht das Wirtschaftsgefühl, und es lohnt sich, je nach Marktlage umzubauen.
 - **Start:** 500 Gold Startkapital (seit v0.9.1, vorher kein Gold). Der erste Holzstamm ist gratis, dazu 20 Holzblöcke für die ersten Förderbänder zum Versandportal. Das Startkapital sorgt dafür, dass nach den ersten Gebäuden genug Gold für den zweiten Holzstamm da ist. Den ersten Felsbrocken gibt es beim Aufstieg auf Level 2, das erste Eisenerz bei Level 3 (seit v0.9.0).
@@ -121,7 +121,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 
 - **Laden-Level**, ähnlich dem Rathaus in Clash of Clans: Jede Stufe schaltet neue Werkstätten, Rezepte, Lagerplatz und Fläche frei. Jede Stufe wird teurer. **Rohstoffe nach Level:** Holz ab Level 1, Stein ab Level 2, Eisen ab Level 3.
 - **Erste einfache Level (seit v0.9.0):** Level 1 startet nur mit Holz. Wer 1 Holzplatte und 1 Holzstab hergestellt hat, kann auf Level 2 (Stein) aufsteigen; nach 1 Steinplatte und 1 Stein-Zahnrad auf Level 3 (Eisen). Aufsteigen geht per Knopf im Level-Fenster (oben auf „Laden-Level“ tippen) und kostet vorerst nichts. **Zu Beginn jedes Levels gibt es einen Rohstoff gratis** (Tobias).
-- **Level 4–6 (seit v0.10.0):** Jedes Level schaltet eine Kombi-Maschine und eine weitere Verkaufstheke frei: Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei. Ziel ist jeweils, die Produkte der zuletzt freigeschalteten Maschine einmal herzustellen; Geschenk ist 1 Eisenerz.
+- **Level 4–6 (seit v0.10.0):** Jedes Level schaltet eine Kombi-Maschine und eine weitere Verkaufstheke frei: Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei. Dazu wächst der Laden (seit v0.10.1): Level 4 bringt mittlere Theken (25), 1.000 Plätze im Laden-Lager und doppelt so tiefe Flächen-Streifen, Level 5 große Theken (30). Ziel ist jeweils, die Produkte der zuletzt freigeschalteten Maschine einmal herzustellen; Geschenk ist 1 Eisenerz.
 - **Einführung bis etwa Level 10 (Tobias):** Die ersten Level konzentrieren sich darauf, eine coole Produktionsstätte aufzubauen. Man kommt mit jedem Level ein Stück weiter und lernt nach und nach alles kennen; bis etwa Level 10 ist sozusagen das „Intro“ abgeschlossen.
 - **Später: Aufgaben, Erfahrung und Gold (Modell von Tobias):** Für jedes Level gibt es Aufgaben, z. B. „50 Blöcke und 20 Holzplatten herstellen“. Dafür bekommt man z. B. 100 Erfahrungspunkte (XP) und 250 Gold. Mit genug Erfahrung schaltet man das nächste Level frei und kauft den Aufstieg dann mit Gold, z. B. 100 Gold für Level 2. So gibt es mehrere Handlungsstränge – Ware produzieren, Ware verkaufen, Ware für Aufgaben herstellen – und man setzt den Schwerpunkt seiner Produktion je nachdem anders.
 - **Laden-Ausbau** geht sofort, kostet aber Gold **und** Waren, z. B. 200 Holzzahnräder + 200 Splitt + 500 Gold. So muss man ständig Neues produzieren, und das Produzieren ersetzt das Warten.
@@ -383,8 +383,27 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | v0.9.1 | **Startkapital:** 500 Gold zum Start, bestehende Spielstände bekommen sie einmalig nachgezahlt | ✅ fertig |
 | v0.9.2 | **Test-Feedback (nur README):** Tobias' Test von v0.9.1 festgehalten, Plan für v0.10.0 vorbereitet | ✅ fertig |
 | v0.10.0 | **Techbaum, Teil 2:** 3 Kombi-Maschinen mit je 2 Eingängen und 3 Einstellungen (9 neue Waren), Level 4–6, je Level eine Verkaufstheke mehr, Menge auf der Theke einstellbar | ✅ fertig |
-| v0.11.0 | **Aufgaben:** Aufgaben mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen (Modell von Tobias, Abschnitt 3.5) | als Nächstes planen |
+| v0.10.1 | **Feinschliff nach Tobias' Test:** alle Theken wachsen mit (20 → 25 → 30), Laden-Lager 1.000 ab Level 4, Flächen-Streifen 4 tief ab Level 4, Teile bleiben beim Umstellen in der Maschine, Rezepte aller Einstellungen im Infofenster | ✅ fertig |
+| v0.11.0 | **Aufgaben:** Aufgaben mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen (Modell von Tobias, Abschnitt 3.5) | nach Tobias' Test von v0.10.1 planen |
 | v0.12.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
+
+### v0.10.1 – Feinschliff nach Tobias' Test (fertig)
+
+Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
+
+- **Theken wachsen alle mit** (statt nur der neuen): kleine Theken mit 20 Plätzen bis Level 3, mittlere mit 25 auf Level 4, große mit 30 ab Level 5; danach bleibt es erst einmal so. Anzahl wie bisher: 2 Theken bis Level 3, dann je Level eine mehr (Level 6: 5 Theken). Lag auf einer Theke mehr, als jetzt passt (in v0.10.0 fasste Theke 5 noch 35), kommt der Rest beim Öffnen ins Laden-Lager, mit Meldung.
+- **Laden-Lager ab Level 4: 1.000 Plätze** (bis Level 3 weiter 500), weil man ab Level 4 auf Masse produziert und schon 50 von jeder Ware das alte Lager füllen würden.
+- **Fläche kaufen ab Level 4: Streifen 4 Felder tief** statt 2 (am Rand der Welt notfalls weniger). Der Preis je Feld bleibt (10 Gold, jeder Kauf +20 %); ein Streifen kostet also etwa doppelt so viel, bringt aber doppelt so viel Platz. Beispiel: erster Kauf rechts 4 × 14 = 56 Felder für 560 Gold.
+- **Umstellen ohne Verlust:** Bisher kamen beim Umstellen die Teile, die die neue Einstellung nicht braucht, ins Laden-Lager (mit kurzer Meldung) – in der Maschine sah es aus, als wären sie verschwunden. Jetzt bleiben alle Teile in der Maschine und werden wieder gebraucht, sobald man zurückstellt. Das Infofenster zeigt „Liegt noch in der Maschine: …“ und einen Knopf „↩ Reste ins Laden-Lager“.
+- **Rezepte ansehen ohne Umstellen:** Das Infofenster zeigt unter „Andere Einstellungen“ die Zutaten und den Wert der übrigen Einstellungen.
+- Das Level-Fenster nennt den Laden-Ausbau mit, z. B. „🛒 Theke 3 · mittlere Theken (25 Plätze) · 📦 Laden-Lager 1.000 Plätze“.
+
+**Was Tobias testet:**
+- Theken im Laden: Auf Level 4 haben alle Theken 25 Plätze, ab Level 5 30. Passt die Einteilung klein/mittel/groß?
+- Zimmerei antippen und die Rezepte der anderen Einstellungen ansehen; umstellen und zurückstellen – die Teile bleiben in der Maschine.
+- Fläche kaufen auf Level 4 oder höher: Reichen 4 Reihen pro Kauf, passt der Preis?
+- Laden-Lager mit 1.000 Plätzen bei Massenproduktion.
+- Allgemein: Wie fühlt sich das Tempo ab Level 4 an (mehr Holzfäller und Steinbrüche, um die Zimmerei zu versorgen)? Feedback bitte in einen neuen Chat.
 
 ### v0.10.0 – Techbaum, Teil 2 (fertig)
 
@@ -399,9 +418,9 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 
 - **9 neue Waren** mit eigenem Bild und eigenem Rezept (Tabelle in Abschnitt 4.2), z. B. Handkurbel = 10 Holzstäbe + 5 Stein-Zahnräder (324 Gold), Mini-Schloss = 1 Scharnier + 1 Mechanischer Schalter (1.944 Gold).
 - **Was fehlt, sieht man sofort:** Wartet eine Kombi-Maschine auf eine Zutat, zeigt sie oben eine kleine Sprechblase mit dem Bild der fehlenden Ware. Im Infofenster steht jede Zutat mit Häkchen und „fehlt noch …“. Staut sich ein Eingang (z. B. gemischtes Band, auf dem eine Zutat überhandnimmt, oder eine Ware, die hier nicht gebraucht wird), leuchtet das Licht rot: „Eingang blockiert …“. Das gilt auch für Sägewerk, Steinmetz und Schmiede.
-- **Umstellen:** Zutaten, die die neue Einstellung nicht braucht, kommen ins Laden-Lager (mit Meldung).
+- **Umstellen:** Zutaten, die die neue Einstellung nicht braucht, kommen ins Laden-Lager (mit Meldung). *Seit v0.10.1 bleiben sie in der Maschine.*
 - **Level 4–6:** Ziel sind jeweils die Produkte der zuletzt freigeschalteten Maschine (Level 4: 1 Mini-Eisenplatte + 1 Eisenstange, Level 5: 1 Handkurbel + 1 Mechanischer Schalter, Level 6: 1 Scharnier + 1 Eisenfeder). Geschenk: je 1 Eisenerz.
-- **Mehr Verkaufstheken:** Mit Level 4, 5 und 6 kommt je eine Theke dazu, jede 5 Plätze größer: Theke 3 = 25, Theke 4 = 30, Theke 5 = 35 Plätze. Das Level-Fenster kündigt die neue Theke an.
+- **Mehr Verkaufstheken:** Mit Level 4, 5 und 6 kommt je eine Theke dazu, jede 5 Plätze größer: Theke 3 = 25, Theke 4 = 30, Theke 5 = 35 Plätze. Das Level-Fenster kündigt die neue Theke an. *Seit v0.10.1 wachsen alle Theken mit (20 → 25 → 30).*
 - **Menge auf der Theke einstellen:** Nach „Ware wählen“ (und über den neuen Knopf „🔢 Menge“) stellt man mit 0, −5, −1, +1, +5 und „Alle“ genau ein, wie viele Stück auf die Theke kommen; darunter steht der Wert. Zu viel kommt zurück ins Laden-Lager. „Menge“ ersetzt die Knöpfe +1 und +5.
 - **Testpaket:** Kombi-Teile gibt es darin nur je 5 Stück (sonst wäre das Laden-Lager sofort voll).
 - **Bestehende Spielstände** bleiben unverändert (Format gleich, keine Umwandlung nötig). Tobias' Fabrik steht auf Level 3; das Ziel für Level 4 (1 Mini-Eisenplatte + 1 Eisenstange, gezählt seit v0.9.0) ist vermutlich schon erreicht.
@@ -649,26 +668,50 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | 06.11.2026 | Beim Umstellen kommen nicht gebrauchte Zutaten ins Laden-Lager; ein gestauter Eingang zeigt rotes Licht („Eingang blockiert“) | Claudes Wahl: Sonst lägen Waren unsichtbar in der Maschine fest bzw. man sähe den Stau nicht. |
 | 06.11.2026 | Kein Gebäude kostet mehr, als ein Rohstoff seines Levels als Teile einbringt (ab Level 4: ein Eisenerz, 2.880 Gold) | Claudes Wahl; ersetzt „höchstens ein Holzstamm“, damit die Kombi-Maschinen etwas kosten dürfen. |
 | 06.11.2026 | Fenster (Laden, Level) 600 statt 520 Pixel breit | Claudes Wahl: Mit 5 Theken wurden die Knöpfe auf dem Tablet zu eng. |
+| 07.11.2026 | Alle Theken wachsen mit dem Level: kleine Theken 20 (bis Level 3), mittlere 25 (Level 4), große 30 (ab Level 5), dann erst einmal fest | Tobias (Chat 7, Teil 2): Die Waren wachsen stetig mit. Ersetzt „jede neue Theke 5 Plätze größer“ vom 06.11.2026. Zuordnung zu den Leveln: Claudes Lesart. |
+| 07.11.2026 | Laden-Lager 1.000 Plätze ab Level 4 (bis Level 3 weiter 500) | Tobias (Chat 7, Teil 2): Bei Massenproduktion würden schon 50 von jeder Ware das Lager füllen. „Ab Level 4“ ist Claudes Lesart. |
+| 07.11.2026 | Flächen-Streifen ab Level 4 doppelt so tief (4 statt 2 Felder), Preis je Feld unverändert | Tobias (Chat 7, Teil 2): Ab Level 4 muss man die Produktion deutlich steigern; 2 Reihen pro Kauf sind zu wenig. Die genaue Tiefe ist Claudes Vorschlag. |
+| 07.11.2026 | Beim Umstellen bleiben alle Teile in der Maschine; Knopf „↩ Reste ins Laden-Lager“; Infofenster zeigt die Rezepte aller Einstellungen | Tobias (Chat 7, Teil 2): Beim Umstellen „verschwanden“ die Teile (sie lagen im Laden-Lager). Ersetzt „nicht gebrauchte Zutaten ins Laden-Lager“ vom 06.11.2026. |
 
 ---
 
 ## 8. Offene Fragen
 
-Stand 06.11.2026.
+Stand 07.11.2026.
 
-1. **Test von v0.10.0:** Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Mini-Schlössern sehr viel Gold. Beobachten, ob das zu schnell geht. Danach Plan für v0.11.0 (Aufgaben).
+1. **Test von v0.10.1:** Tobias testet und schreibt sein Feedback in einen neuen Chat (Abschnitt 6, „v0.10.1 – Was Tobias testet“). Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Mini-Schlössern sehr viel Gold. Danach Plan für v0.11.0 (Aufgaben).
 2. **Handel im echten Tempo:** geklärt – Tobias' Zeiten (bis Eisen etwa 45 Minuten, zweite Runde Eisen nach etwa 60 Minuten) sind in echter Zeit gemessen; nur die Eisen-Runden hat er im Testmodus beschleunigt. Früher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10).
-3. **Laden-Lager 500 Plätze:** Bleibt das so, oder wird es mit dem Laden-Level größer? Volle Lager stoppen die Versandportale.
+3. **Laden-Lager:** seit v0.10.1 500 Plätze bis Level 3, 1.000 ab Level 4 (Tobias). Claudes Lesart: erst ab Level 4, weil es dort eng wird. Soll es schon ab Level 1 1.000 sein, ist das eine Zahl in der Datentabelle.
 4. **Aufgaben (v0.11.0):** Werden die Waren für eine Aufgabe abgegeben (verbraucht), oder zählt nur, dass man sie hergestellt hat? Wie viel Erfahrung braucht ein Level, was kostet ein Aufstieg? Kostet der Laden-Ausbau zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Was bringen Level 7 bis 10 (Ende der Einführung)? Vorschlag kommt mit dem Plan für v0.11.0.
 5. **Einstieg:** Tobias' Idee, am Anfang vor allem die Massenproduktion auszubauen, damit man schnell genug Ware von allem hat – später austesten. Die 500 Gold Startkapital reichen für den Weg zu Stein und Eisen (Test von v0.9.1).
 6. **Pleiteschutz:** Ein Rohstoff ohne passendes Gebäude (z. B. Felsbrocken ohne Steinbruch) verhindert das Geschenk. Vorerst bewusst so gelassen; beobachten.
 7. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
 8. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
-9. **Theken-Größen:** Claude hat „das Volumen soll für jede neue Theke um 5 steigen“ so umgesetzt, dass nur die neuen Theken größer sind (20, 20, 25, 30, 35). Falls alle Theken mit jedem Level wachsen sollen (z. B. auf Level 6 alle 35), ist das eine Zeile in der Datentabelle.
+9. **Theken-Größen:** geklärt (v0.10.1) – alle Theken wachsen mit: klein 20 (bis Level 3), mittel 25 (Level 4), groß 30 (ab Level 5). Claudes Lesart der Level-Zuordnung; falls mittel erst ab Level 5 und groß ab Level 6 gemeint war, ist das eine Zeile in der Datentabelle.
+10. **Tempo ab Level 4 (Feinschliff):** Bei Tobias dauerte es etwa 5 Minuten, bis ein Stein-Zahnrad in der Zimmerei ankam. Das ist gewollt: Am Anfang geht es schnell, danach muss man auf Masse gehen (mehr Holzfäller und Steinbrüche), um die Kombi-Maschinen zu versorgen. Beobachten, ob die Balance stimmt – Stellschrauben sind die Mengen in den Rezepten (10 + 5), die Dauer eines Rohstoffs (15 Minuten) und die Flächenpreise.
+11. **Größe der Welt:** Das Grundstück kann bis zum Rand der Welt (40 × 26 Felder) wachsen. Reicht das für die Massenproduktion der höheren Level, oder muss die Welt später größer werden?
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.10.1 – Feinschliff nach Tobias' Test (07.11.2026)
+
+**Vorgenommen:**
+- Tobias' Rückmeldungen zu v0.10.0 umsetzen: Theken, Laden-Lager, Fläche, Umstellen von Maschinen.
+
+**Fragen, die wir uns gestellt haben:**
+- Wohin waren die Teile beim Umstellen „verschwunden“? → Ins Laden-Lager (es gab nur eine kurze Meldung). Verloren ging nichts, aber es war verwirrend. Jetzt bleiben sie in der Maschine.
+- Wie sieht man die Rezepte der anderen Einstellungen, ohne umzustellen? → Im Infofenster unter „Andere Einstellungen“.
+- Wann werden die Theken größer? → Alle gemeinsam: 20 bis Level 3, 25 auf Level 4, 30 ab Level 5.
+- Was passiert mit Theken, auf denen mehr liegt, als jetzt passt? → Der Rest kommt beim Öffnen ins Laden-Lager, mit Meldung.
+- Wie viel mehr Fläche? → Ab Level 4 doppelt so tiefe Streifen bei gleichem Preis je Feld.
+
+**Gemacht:**
+- Datentabellen: Theken-Größe je Level, Laden-Lager 1.000 ab Level 4, Streifentiefe je Level.
+- Spielregeln: Teile bleiben beim Umstellen in der Maschine, „Reste ins Laden-Lager“, Theken beim Laden anpassen.
+- Anzeige: Infofenster mit den Rezepten aller Einstellungen und dem, was noch in der Maschine liegt; Level-Fenster nennt größere Theken und Laden-Lager.
+- 150 automatische Tests (neu u. a.: Theken 20/25/30 bis Level 6, Laden-Lager 500/1.000, Streifen 4 tief ab Level 4 und am Rand der Welt kürzer, Teile bleiben beim Umstellen und mitten im Durchgang, Reste-Knopf, Spielstand mit 35 Stück auf einer Theke) und der Browser-Test (neu: andere Einstellungen im Infofenster, Umstellen und Zurückstellen ohne Verlust, Reste-Knopf, fünf Theken mit je 30 Plätzen, Laden-Lager 1.000, Fläche 4 Spalten auf Level 6) in Tablet- und Handygröße – alle bestanden.
 
 ### v0.10.0 – Techbaum, Teil 2 (06.11.2026)
 
@@ -976,6 +1019,19 @@ Stand 06.11.2026.
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 07.11.2026 – Chat 7, Teil 2: Test von v0.10.0
+
+**Tobias:**
+- **Theken:** Gemeint war, dass die Menge jeder Theke steigt – alle wachsen mit, weil die Ware stetig mitwächst. Idee: zuerst kleine Theken mit 20, dann mittlere mit 25 und große mit 30, dann bleibt es erst einmal fest.
+- **Zimmerei:** gebaut und umgestellt, um zu sehen, welche Teile die anderen Produkte brauchen. Dabei sind alle Einzelteile in der Maschine „verschwunden“.
+- **Fläche:** Für mehr Platz hat er Fläche gekauft, aber nur 2 Reihen für 430 Gold bekommen. Die Menge pro Kauf sollte größer werden, weil man ab Level 4 die Produktion deutlich steigern muss: mehr Holzfäller und Steinbrüche, um schneller an die Einzelteile zu kommen und die Zimmerei massenhaft zu versorgen. Im Moment dauert es etwa 5 Minuten, bis ein Stein-Zahnrad in der Zimmerei ankommt. Das ist das Feintuning, von dem er gesprochen hat: Am Anfang läuft es relativ schnell, danach wird es immer langwieriger, weil man hier und dort auf Masse gehen muss, um genug zu produzieren.
+- **Laden-Lager:** Bei Massenproduktion wird es schnell voll – schon 50 von jedem Artikel auf Level 4 machen es eng. Wunsch: 1.000 Plätze.
+- Die Punkte ändern und in der README festhalten; danach testet Tobias erneut und schreibt das Feedback in einen neuen Chat, bevor es mit v0.11.0 weitergeht.
+
+**Claude:** Die Teile waren nicht verloren, sondern lagen im Laden-Lager (es gab nur eine kurze Meldung) – trotzdem verwirrend. Umgesetzt mit Claudes Lesart: Theken 20 → 25 (Level 4) → 30 (ab Level 5); Laden-Lager 1.000 ab Level 4; Flächen-Streifen ab Level 4 doppelt so tief bei gleichem Preis je Feld; Teile bleiben beim Umstellen in der Maschine, die Rezepte aller Einstellungen stehen im Infofenster.
+
+**Umgesetzt:** v0.10.1 (siehe Versionshistorie).
 
 ### 06.11.2026 – Chat 7: Plan und Umsetzung v0.10.0 (Techbaum, Teil 2)
 

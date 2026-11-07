@@ -8,7 +8,8 @@
 import { BUILDINGS } from '../core/data/buildings.js';
 import { ITEMS } from '../core/data/items.js';
 import { LEVELS, MAX_LEVEL, canLevelUp, levelUp, nextLevelGoal, unlocksOf } from '../core/levels.js';
-import { counterCountFor, counterSizeAt } from '../core/shop.js';
+import { COUNTER_SIZE_NAMES, SHOP_LEVELS } from '../core/data/shop.js';
+import { numberFormat } from './format.js';
 import { itemCount } from './format.js';
 import { createItemIcon } from './itemArt.js';
 
@@ -20,17 +21,24 @@ function el(tag, className, text) {
 }
 
 // „🪓 Holzfällerlager, 🪚 Sägewerk · Holzstamm beim Händler“
-// v0.10.0: dazu neue Verkaufstheken, z. B. „🛒 Theke 3 (25 Plätze)“
+// v0.10.0/v0.10.1: dazu der Laden-Ausbau, z. B.
+// „🛒 Theke 3 · mittlere Theken (25 Plätze) · 📦 Laden-Lager 1.000 Plätze“
 export function unlockText(level) {
   const { buildings, raws } = unlocksOf(level);
   const parts = buildings.map((type) => `${BUILDINGS[type].icon} ${BUILDINGS[type].name}`);
   const rawText = raws.map((type) => `${ITEMS[type].name} beim Händler`);
-  const counters = [];
-  const before = level > 1 ? counterCountFor(level - 1) : 0;
-  if (level > 1) {
-    for (let i = before; i < counterCountFor(level); i++) counters.push(`🛒 Theke ${i + 1} (${counterSizeAt(i)} Plätze)`);
+  const shop = [];
+  const now = SHOP_LEVELS[level];
+  const before = SHOP_LEVELS[level - 1];
+  if (now && before) {
+    for (let i = before.counters; i < now.counters; i++) shop.push(`🛒 Theke ${i + 1}`);
+    if (now.counterSize > before.counterSize) {
+      const name = COUNTER_SIZE_NAMES[now.counterSize];
+      shop.push(`${name ? `${name} Theken` : 'größere Theken'} (${now.counterSize} Plätze)`);
+    }
+    if (now.storage > before.storage) shop.push(`📦 Laden-Lager ${numberFormat.format(now.storage)} Plätze`);
   }
-  return [parts.join(', '), ...rawText, ...counters].filter(Boolean).join(' · ');
+  return [parts.join(', '), ...rawText, ...shop].filter(Boolean).join(' · ');
 }
 
 export function levelTitle(level) {
@@ -55,7 +63,7 @@ export function createLevelView({ state, panels, onLevelUp }) {
     }
     box.append(
       el('h2', null, `⚖️ Laden-Level ${state.shopLevel}`),
-      el('p', 'modal-meta', 'Jedes Level schaltet Neues frei – Gebäude, Rohstoffe und ab Level 4 eine weitere Verkaufstheke. Zu Beginn jedes Levels gibt es einen Rohstoff gratis.'),
+      el('p', 'modal-meta', 'Jedes Level schaltet Neues frei – Gebäude, Rohstoffe und ab Level 4 eine weitere Verkaufstheke, größere Theken und mehr Platz im Laden-Lager. Zu Beginn jedes Levels gibt es einen Rohstoff gratis.'),
       el('h3', null, 'Freigeschaltet'),
     );
     const unlocked = el('div', 'level-list');

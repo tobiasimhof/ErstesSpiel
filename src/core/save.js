@@ -27,7 +27,7 @@ import { isDir, sortDirs } from './dirs.js';
 import { footprintSize, rotateLocal } from './geometry.js';
 import { buildingContents, createProductionState, productionOf } from './production.js';
 import { createCounters, createMarket } from './market.js';
-import { addAllToStorage, addMissingCounters } from './shop.js';
+import { addAllToStorage, counterSizeFor, fitCounters } from './shop.js';
 import { START_PLOT, WORLD_HEIGHT, WORLD_WIDTH, parseTileKey } from './state.js';
 
 export const SAVE_VERSION = 8;
@@ -65,13 +65,17 @@ export function deserializeGame(text) {
   const state = migrate(data.state, from, migrationNotes);
   if (!isValidState(state)) return null;
   for (const belt of Object.values(state.belts)) belt.outs = sortDirs(belt.outs);
-  // v0.10.0: Theken passend zum Level (z. B. nach einem Aufstieg in einer
-  // älteren Version) – fehlende kommen leer dazu. Format unverändert.
-  addMissingCounters(state);
+  // v0.10.0/v0.10.1: Theken passend zum Level – fehlende kommen leer dazu,
+  // was nicht mehr auf eine Theke passt, ins Laden-Lager. Format unverändert.
+  const trimmed = fitCounters(state);
   const result = { state, savedAt: Number(data.savedAt) || 0 };
   if (from < SAVE_VERSION) {
     result.migratedFrom = from;
     result.notes = [...migrationNotes, ...(from < 3 ? growMachines(state) : [])];
+  }
+  if (Object.keys(trimmed).length > 0) {
+    const n = Object.values(trimmed).reduce((a, b) => a + b, 0);
+    result.counterNote = `Die Theken fassen jetzt ${counterSizeFor(state.shopLevel)} Stück – ${n} Waren liegen wieder im Laden-Lager.`;
   }
   return result;
 }
