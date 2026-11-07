@@ -30,7 +30,7 @@ import {
   removeBelt,
   rotateBelt,
 } from '../core/belts.js';
-import { buyLand, landOffer, landSideAt } from '../core/land.js';
+import { buyLand, landBuysLeft, landOffer, landSideAt } from '../core/land.js';
 import { buildingLevel, isBuildingUnlocked, isItemUnlocked, itemLevel } from '../core/levels.js';
 import { buyRaw } from '../core/market.js';
 import {
@@ -304,6 +304,13 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
 
   // ---------- Fläche kaufen (v0.9.0) ----------
 
+  // v0.10.2: Jeder Streifen kostet gleich viel; jede Seite geht 2×.
+  function landInfoText(side) {
+    const left = landBuysLeft(state, side);
+    const more = left === 1 ? 'Das ist der letzte Kauf an dieser Seite.' : `An dieser Seite geht das noch ${left}×.`;
+    return `Vergrößert dein Grundstück an dieser Seite. Gebäude und Bänder bleiben, wo sie sind. Jeder Kauf kostet gleich viel. ${more}`;
+  }
+
   function showLandInfo(side) {
     const offer = landOffer(state, side);
     if (!offer) return select(null);
@@ -312,7 +319,7 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
       icon: '🗺️',
       title: 'Fläche kaufen',
       meta: `${stripText(offer)} · ${offer.fields} Felder`,
-      text: 'Vergrößert dein Grundstück an dieser Seite. Gebäude und Bänder bleiben, wo sie sind. Jeder Kauf macht weitere Fläche teurer.',
+      text: landInfoText(side),
       actions: [
         {
           key: 'buy',

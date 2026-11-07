@@ -128,11 +128,12 @@ export function createRenderer(canvas) {
   // ---------- Boden ----------
 
   function drawGround(state, cam) {
-    const { width, height } = state.world;
-    for (let ty = 0; ty < height; ty++) {
-      for (let tx = 0; tx < width; tx++) {
+    // Die Welt beginnt seit v0.10.2 nicht mehr bei Feld 0, 0 (oben bei y = −3).
+    const w = state.world;
+    for (let ty = w.y; ty < w.y + w.height; ty++) {
+      for (let tx = w.x; tx < w.x + w.width; tx++) {
         const owned = isOwned(state, tx, ty);
-        const alt = (tx + ty) % 2 === 1;
+        const alt = Math.abs(tx + ty) % 2 === 1;
         ctx.fillStyle = owned ? (alt ? COLORS.ownedAlt : COLORS.owned) : alt ? COLORS.lockedAlt : COLORS.locked;
         ctx.fillRect(tx * TILE, ty * TILE, TILE, TILE);
         if (!owned) {

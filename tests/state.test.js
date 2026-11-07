@@ -27,9 +27,9 @@ test('Jedes Gebäude hat eine eindeutige ID, nextBuildingId ist größer', () =>
 
 test('Das Grundstück liegt vollständig in der Welt', () => {
   const { plot, world } = createNewGame();
-  assert.ok(plot.x >= 0 && plot.y >= 0);
-  assert.ok(plot.x + plot.width <= world.width);
-  assert.ok(plot.y + plot.height <= world.height);
+  assert.ok(plot.x >= world.x && plot.y >= world.y);
+  assert.ok(plot.x + plot.width <= world.x + world.width);
+  assert.ok(plot.y + plot.height <= world.y + world.height);
 });
 
 test('Startgebäude stehen komplett auf dem Grundstück und überlappen nicht', () => {
@@ -42,8 +42,9 @@ test('Startgebäude stehen komplett auf dem Grundstück und überlappen nicht', 
       }
     }
   }
-  for (let ty = 0; ty < state.world.height; ty++) {
-    for (let tx = 0; tx < state.world.width; tx++) {
+  const w = state.world;
+  for (let ty = w.y; ty < w.y + w.height; ty++) {
+    for (let tx = w.x; tx < w.x + w.width; tx++) {
       const count = state.buildings.filter((b) => occupies(b, tx, ty)).length;
       assert.ok(count <= 1, `Feld (${tx}, ${ty}) ist ${count}-mal belegt`);
     }
@@ -70,6 +71,10 @@ test('isOwned und isInWorld erkennen die Ränder richtig', () => {
   assert.equal(isInWorld(state, 0, 0), true);
   assert.equal(isInWorld(state, -1, 0), false);
   assert.equal(isInWorld(state, state.world.width, 0), false);
+  // v0.10.2: Die Welt beginnt oben bei y = −3
+  assert.equal(isInWorld(state, 0, -3), true);
+  assert.equal(isInWorld(state, 0, -4), false);
+  assert.equal(isInWorld(state, 0, state.world.y + state.world.height), false);
 });
 
 test('tileKey und parseTileKey passen zusammen', () => {
