@@ -10,6 +10,8 @@ import { onPress } from './press.js';
 
 const EXTRA_TOOLS = [
   { tool: 'belt', icon: '➡️', name: 'Förderband', cost: BELT_COST, suffix: 'je Feld' },
+  // v0.11.0: Bereich markieren und verschieben, drehen oder abreißen
+  { tool: 'area', icon: '✥', name: 'Verschieben', meta: 'Bereich markieren' },
   { tool: 'erase', icon: '🧹', name: 'Abreißen', meta: 'Bänder & Gebäude' },
 ];
 
@@ -28,7 +30,17 @@ function costNode(cost, suffix) {
   return node;
 }
 
-export function createBuildBar({ onShop, onOpenMenu, onCloseMenu, onSelectTool, onConfirm, onRotate, onCancel }) {
+export function createBuildBar({
+  onShop,
+  onOpenMenu,
+  onCloseMenu,
+  onSelectTool,
+  onConfirm,
+  onRotate,
+  onCancel,
+  onAreaMove,
+  onAreaErase,
+}) {
   const bottomBar = document.getElementById('bottom-bar');
   const buildBar = document.getElementById('build-bar');
   const toolBar = document.getElementById('tool-bar');
@@ -37,6 +49,8 @@ export function createBuildBar({ onShop, onOpenMenu, onCloseMenu, onSelectTool, 
   const toolRotate = document.getElementById('tool-rotate');
   const toolCancel = document.getElementById('tool-cancel');
   const toolConfirm = document.getElementById('tool-confirm');
+  const toolAreaMove = document.getElementById('tool-area-move');
+  const toolAreaErase = document.getElementById('tool-area-erase');
 
   onPress(document.getElementById('btn-shop'), onShop);
   onPress(document.getElementById('btn-build'), onOpenMenu);
@@ -44,6 +58,8 @@ export function createBuildBar({ onShop, onOpenMenu, onCloseMenu, onSelectTool, 
   onPress(toolRotate, onRotate);
   onPress(toolCancel, onCancel);
   onPress(toolConfirm, onConfirm);
+  onPress(toolAreaMove, onAreaMove);
+  onPress(toolAreaErase, onAreaErase);
 
   const entries = [
     ...BUILD_MENU.map((type) => {
@@ -104,23 +120,34 @@ export function createBuildBar({ onShop, onOpenMenu, onCloseMenu, onSelectTool, 
   }
 
   return {
-    // mode: normal | menu | place | belt | erase
+    // mode: normal | menu | place | belt | erase | area | areaMove
     setMode(mode, { text = '', confirmLabel = '✓ Fertig' } = {}) {
       bottomBar.hidden = mode !== 'normal';
       // v0.10.2: Warenbilder bei jedem Öffnen neu zeichnen – der Browser darf
       // sie wegwerfen, wenn die App im Hintergrund war.
       if (mode === 'menu' && buildBar.hidden) redrawItemIcons(buildBar);
       buildBar.hidden = mode !== 'menu';
-      const toolMode = mode === 'place' || mode === 'belt' || mode === 'erase';
+      const toolMode = ['place', 'belt', 'erase', 'area', 'areaMove'].includes(mode);
       toolBar.hidden = !toolMode;
       toolText.textContent = text;
-      toolRotate.hidden = mode !== 'place';
-      toolCancel.hidden = mode !== 'place';
+      const moving = mode === 'place' || mode === 'areaMove';
+      toolRotate.hidden = !moving;
+      toolCancel.hidden = !moving;
+      toolAreaMove.hidden = mode !== 'area';
+      toolAreaErase.hidden = mode !== 'area';
       toolConfirm.textContent = confirmLabel;
       toolConfirm.disabled = false;
     },
     setConfirmEnabled(enabled) {
       toolConfirm.disabled = !enabled;
+    },
+    setText(text) {
+      toolText.textContent = text;
+    },
+    // Bereich (v0.11.0): Verschieben und Abreißen erst, wenn etwas markiert ist.
+    setAreaEnabled(enabled) {
+      toolAreaMove.disabled = !enabled;
+      toolAreaErase.disabled = !enabled;
     },
     // Graut Gebäude aus, für die die Waren im Laden-Lager nicht reichen, und
     // zeigt gesperrte Gebäude mit Schloss. Beide bleiben antippbar und sagen

@@ -43,6 +43,10 @@ const COLORS = {
   landSignText: '#ffe066',
   landSignPoor: 'rgba(243, 230, 196, 0.6)',
   landPick: 'rgba(255, 212, 59, 0.28)',
+  areaMark: 'rgba(255, 212, 59, 0.38)',
+  areaRect: '#fff8dc',
+  areaOk: 'rgba(81, 207, 102, 0.3)',
+  areaBad: 'rgba(255, 107, 107, 0.6)',
 };
 
 const EMOJI_FONT = '"Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", sans-serif';
@@ -71,7 +75,21 @@ export function createRenderer(canvas) {
 
     drawGround(state, cam);
 
-    drawBelts(state, ui.simAlpha ?? 0);
+    // v0.11.0: Beim Verschieben eines Bereichs bleibt er an der alten Stelle
+    // blass stehen, die Vorschau zeigt die neue.
+    const simAlpha = ui.simAlpha ?? 0;
+    const area = ui.area ?? null;
+    const areaGhost = ui.mode === 'areaMove' ? area?.ghost : null;
+    const dimBelts = areaGhost ? new Set(area.sel.belts) : null;
+    const dimBuildings = areaGhost ? new Set(area.sel.buildings) : null;
+    if (dimBelts) {
+      drawBelts(state, simAlpha, (key) => !dimBelts.has(key));
+      ctx.globalAlpha = 0.3;
+      drawBelts(state, simAlpha, (key) => dimBelts.has(key));
+      ctx.globalAlpha = 1;
+    } else {
+      drawBelts(state, simAlpha);
+    }
 
     // Auswahlrahmen vor den Gebäuden zeichnen: er liegt in der Lücke um das
     // Gebäude und verdeckt so weder Namen noch Pfeile.
@@ -79,11 +97,14 @@ export function createRenderer(canvas) {
 
     const movingId = ui.ghost?.movingId ?? null;
     for (const building of state.buildings) {
-      drawBuilding(building, cam, { alpha: building.id === movingId ? 0.3 : 1, state });
+      const dim = building.id === movingId || Boolean(dimBuildings?.has(building.id));
+      drawBuilding(building, cam, { alpha: dim ? 0.3 : 1, state });
     }
 
     if (ui.beltPreview) drawBeltPreview(state, ui.beltPreview);
     if (ui.ghost) drawBuilding(ui.ghost, cam, { alpha: 0.7, outline: ui.ghost.valid ? COLORS.ghostOk : COLORS.ghostBad });
+    if (area && ui.mode === 'area') drawAreaMarks(state, cam, area);
+    if (areaGhost?.plan) drawAreaGhost(cam, areaGhost, simAlpha);
 
     drawPlotLabel(state, cam);
     // Schilder „＋ Preis“ zum Flächenkauf, nur beim Ansehen und in der Bauleiste
@@ -192,8 +213,11 @@ export function createRenderer(canvas) {
   // alle Pfeile. So malt kein Feld über die Lauffläche seines Nachbarn. Arme zu
   // Nachbarbändern ragen ein kleines Stück über die Feldgrenze, damit dort
   // keine feine Fuge durchscheint.
-  function drawBelts(state, simAlpha) {
-    const tiles = Object.entries(state.belts).map(([key, belt]) => {
+  // filter(key): nur diese Bänder zeichnen (v0.11.0); Form und Anschlüsse
+  // richten sich trotzdem nach allen Bändern.
+  function drawBelts(state, simAlpha, filter = null) {
+    const entries = Object.entries(state.belts).filter(([key]) => !filter || filter(key));
+    const tiles = entries.map(([key, belt]) => {
       const { x, y } = parseTileKey(key);
       let ins = inputSides(state, x, y);
       // Bandanfang ohne Zulauf: als gerades Stück zeichnen
@@ -219,7 +243,7 @@ export function createRenderer(canvas) {
 
     // Waren: vom Eingang zur Feldmitte, dann zum geplanten Ausgang. simAlpha
     // schiebt sie zwischen zwei Takten weich weiter.
-    for (const [key, belt] of Object.entries(state.belts)) {
+    for (const [key, belt] of entries) {
       if (!belt.item) continue;
       const { x, y } = parseTileKey(key);
       const item = belt.item;
@@ -500,6 +524,57 @@ export function createRenderer(canvas) {
     ctx.strokeStyle = COLORS.portStroke;
     ctx.lineWidth = 2;
     ctx.stroke();
+  }
+
+  // ---------- Bereich (v0.11.0) ----------
+
+  // Markierte Gebäude und Bänder leuchten gelb; beim Ziehen ein gestrichelter Rahmen.
+  function drawAreaMarks(state, cam, area) {
+    ctx.fillStyle = COLORS.areaMark;
+    ctx.strokeStyle = COLORS.selection;
+    ctx.lineWidth = 3 / cam.zoom;
+    for (const key of area.sel.belts) {
+      const { x, y } = parseTileKey(key);
+      ctx.fillRect(x * TILE, y * TILE, TILE, TILE);
+    }
+    for (const id of area.sel.buildings) {
+      const b = state.buildings.find((item) => item.id === id);
+      if (!b) continue;
+      const { width, height } = footprintSize(b.type, b.rot);
+      roundRect(b.x * TILE + 2, b.y * TILE + 2, width * TILE - 4, height * TILE - 4, 12);
+      ctx.fill();
+      ctx.stroke();
+    }
+    if (area.rect) {
+      const { a, b } = area.rect;
+      const x = Math.min(a.x, b.x);
+      const y = Math.min(a.y, b.y);
+      const w = Math.abs(a.x - b.x) + 1;
+      const h = Math.abs(a.y - b.y) + 1;
+      ctx.strokeStyle = COLORS.areaRect;
+      ctx.setLineDash([10 / cam.zoom, 6 / cam.zoom]);
+      ctx.strokeRect(x * TILE, y * TILE, w * TILE, h * TILE);
+      ctx.setLineDash([]);
+    }
+  }
+
+  // Vorschau beim Verschieben: grüne Felder passen, rote sind belegt oder
+  // gehören nicht zum Grundstück (rot liegt obenauf, damit man es sieht).
+  function drawAreaGhost(cam, ghost, simAlpha) {
+    const { plan } = ghost;
+    ctx.fillStyle = COLORS.areaOk;
+    for (const t of plan.tiles) if (t.ok) ctx.fillRect(t.x * TILE, t.y * TILE, TILE, TILE);
+    ctx.globalAlpha = 0.8;
+    drawBelts({ belts: plan.belts, buildings: plan.buildings }, simAlpha);
+    ctx.globalAlpha = 1;
+    for (const b of plan.buildings) drawBuilding(b, cam, { alpha: 0.8 });
+    ctx.fillStyle = COLORS.areaBad;
+    for (const t of plan.tiles) if (!t.ok) ctx.fillRect(t.x * TILE, t.y * TILE, TILE, TILE);
+    ctx.strokeStyle = plan.valid ? COLORS.ghostOk : COLORS.ghostBad;
+    ctx.lineWidth = 4 / cam.zoom;
+    ctx.setLineDash([12 / cam.zoom, 6 / cam.zoom]);
+    ctx.strokeRect(ghost.x * TILE, ghost.y * TILE, plan.width * TILE, plan.height * TILE);
+    ctx.setLineDash([]);
   }
 
   function drawSelection(state, cam, selected) {

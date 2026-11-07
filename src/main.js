@@ -138,6 +138,8 @@ const buildBar = createBuildBar({
   onConfirm: () => controller.confirmTool(),
   onRotate: () => controller.rotateTool(),
   onCancel: () => controller.cancelTool(),
+  onAreaMove: () => controller.areaMoveTool(),
+  onAreaErase: () => controller.areaEraseTool(),
 });
 const shopView = createShopView({ state, panels, onChange });
 controller = createController({ state, camera, ui, panels, buildBar, shopView, onChange, requestDraw, worldBounds });
@@ -163,6 +165,13 @@ attachInput(canvas, {
 
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') controller.back();
+  // v0.11.0 (Tobias spielt mit Tastatur am Tablet): R dreht die Vorschau beim
+  // Bauen und Verschieben, sonst das ausgewählte Gebäude oder Band.
+  // Strg+R (neu laden) bleibt, wie es ist.
+  const typing = event.target instanceof HTMLElement && event.target.closest('input, textarea, select, [contenteditable]');
+  if (event.key.toLowerCase() === 'r' && !event.ctrlKey && !event.metaKey && !event.altKey && !event.repeat && !typing) {
+    if (controller.rotateKey()) event.preventDefault();
+  }
 });
 
 // v0.10.2: Zurück aus dem Hintergrund (z. B. App minimiert) – der Browser kann
@@ -206,7 +215,7 @@ else if (loaded.status === 'invalid') panels.toast('Spielstand war beschädigt �
 // ---------- Takt ----------
 // Die Simulation läuft in festen Takten (TICK). Pro Bild werden so viele Takte
 // gerechnet, wie Zeit vergangen ist. Ist das Spiel im Hintergrund, ruht es
-// (Offline-Produktion folgt in v0.12.0).
+// (Offline-Produktion folgt in v0.13.0).
 
 let lastTime = performance.now();
 let accumulator = 0;
