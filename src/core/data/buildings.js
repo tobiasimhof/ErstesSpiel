@@ -10,7 +10,9 @@
 //   source   – verarbeitet einen eingelegten Rohstoff nach und nach
 //              (amount Stück in duration Sekunden)
 //   workshop – verarbeitet Waren vom Band nach einem einstellbaren Rezept
-//   storage  – Zwischenlager mit Fächern (slots × slotSize)
+//   storage  – Zwischenlager mit Fächern (slots × slotSize). v0.12.0: lässt
+//              sich aus dem Laden-Lager befüllen; mit Nachschub hält es bis
+//              zu supplyBuffer Stück seiner Ware bereit (src/core/warehouse.js)
 //   shipping – schickt alles ins Laden-Lager
 // Alle Zahlen sind Platzhalter. Maschinen sind 2 × 2 (README, Abschnitt 4.2).
 
@@ -154,12 +156,12 @@ export const BUILDINGS = {
     size: [2, 1],
     color: '#8b6b4a',
     description:
-      'Zwischenlager mit 3 Fächern zu je 50 Waren. Eingang oben links (blauer Pfeil), Ausgang unten rechts (oranger Pfeil). Was hineinläuft, wird gelagert und weitergegeben, sobald am Ausgang Platz ist.',
+      'Zwischenlager mit 3 Fächern zu je 50 Waren. Eingang oben links (blauer Pfeil), Ausgang unten rechts (oranger Pfeil). Was hineinläuft, wird gelagert und weitergegeben, sobald am Ausgang Platz ist. Lässt sich auch aus dem Laden-Lager befüllen – oder holt mit Nachschub dauerhaft Waren von dort aufs Band.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'N' },
       { kind: 'out', x: 1, y: 0, side: 'S' },
     ],
-    production: { kind: 'storage', slots: 3, slotSize: 50 },
+    production: { kind: 'storage', slots: 3, slotSize: 50, supplyBuffer: 10 },
   },
   versandportal: {
     level: 1,

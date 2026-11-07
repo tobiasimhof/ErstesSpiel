@@ -5,7 +5,7 @@ import { TILE } from './camera.js';
 import { BUILDINGS } from '../core/data/buildings.js';
 import { DELTA, opposite, step } from '../core/dirs.js';
 import { buildingPorts, footprintSize } from '../core/geometry.js';
-import { inputSides, pathDirections } from '../core/belts.js';
+import { beltLine, inputSides, pathDirections } from '../core/belts.js';
 import { landOffer, landOffers } from '../core/land.js';
 import { buildingProgress, buildingStatus, missingInputs } from '../core/production.js';
 import { BELT_SPEED, TICK } from '../core/sim.js';
@@ -47,6 +47,7 @@ const COLORS = {
   areaRect: '#fff8dc',
   areaOk: 'rgba(81, 207, 102, 0.3)',
   areaBad: 'rgba(255, 107, 107, 0.6)',
+  lineMark: 'rgba(255, 212, 59, 0.3)',
 };
 
 const EMOJI_FONT = '"Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", sans-serif';
@@ -447,6 +448,10 @@ export function createRenderer(canvas) {
       // v0.10.0: Kombi-Maschine wartet – kleines Bild der fehlenden Zutat(en)
       const missing = missingInputs(building);
       if (missing.length > 0 && cam.zoom >= 0.3) drawMissing(missing, ports, x, y, w, h, cam, x + w - 2 * r - 4 / cam.zoom);
+
+      // v0.12.0: Lagerhaus mit Nachschub – Kreispfeil und Bild seiner Ware
+      const supply = building.prod.supply;
+      if (supply && cam.zoom >= 0.3) drawSupply(supply.type, ports, x, y, w, h, cam);
     }
 
     if (outline) {
@@ -462,6 +467,52 @@ export function createRenderer(canvas) {
       }
     }
     ctx.globalAlpha = 1;
+  }
+
+  // v0.12.0: Kleines Schild „holt aus dem Laden-Lager“ am Lagerhaus: blauer
+  // Kreispfeil und das Bild der Ware. Es sitzt neben dem Symbol – an der
+  // Seite, an der kein Pfeil im Weg ist.
+  function drawSupply(type, ports, x, y, w, h, cam) {
+    const s = Math.min(16 / cam.zoom, Math.min(w, h) * 0.3);
+    const pad = s * 0.22;
+    const pillW = 2 * s + 3 * pad;
+    const pillH = s + 2 * pad;
+    const spots =
+      w >= h
+        ? [{ cx: x + w * 0.2, cy: y + h / 2 }, { cx: x + w * 0.8, cy: y + h / 2 }]
+        : [{ cx: x + w / 2, cy: y + h * 0.2 }, { cx: x + w / 2, cy: y + h * 0.8 }];
+    const arrows = ports.map((port) => portBox(port));
+    const fits = ({ cx, cy }) =>
+      arrows.every(
+        (a) => cx + pillW / 2 < a.x0 || cx - pillW / 2 > a.x1 || cy + pillH / 2 < a.y0 || cy - pillH / 2 > a.y1,
+      );
+    const { cx, cy } = spots.find(fits) ?? spots[0];
+    ctx.fillStyle = 'rgba(36, 26, 16, 0.88)';
+    roundRect(cx - pillW / 2, cy - pillH / 2, pillW, pillH, pillH / 2);
+    ctx.fill();
+    ctx.strokeStyle = COLORS.portIn;
+    ctx.lineWidth = 1.5 / cam.zoom;
+    ctx.stroke();
+    // Kreispfeil
+    const ax = cx - pillW / 2 + pad + s / 2;
+    const r = s * 0.34;
+    ctx.strokeStyle = COLORS.portIn;
+    ctx.lineWidth = Math.max(1.2 / cam.zoom, s * 0.13);
+    ctx.beginPath();
+    ctx.arc(ax, cy, r, -Math.PI * 0.35, Math.PI * 1.25);
+    ctx.stroke();
+    const end = -Math.PI * 0.35;
+    const ex = ax + r * Math.cos(end);
+    const ey = cy + r * Math.sin(end);
+    const head = s * 0.22;
+    ctx.fillStyle = COLORS.portIn;
+    ctx.beginPath();
+    ctx.moveTo(ex + head, ey - head * 0.2);
+    ctx.lineTo(ex - head * 0.6, ey - head);
+    ctx.lineTo(ex - head * 0.2, ey + head * 0.9);
+    ctx.closePath();
+    ctx.fill();
+    drawItem(ctx, type, cx + pillW / 2 - pad - s / 2, cy, s * 0.85);
   }
 
   // Ungefähre Fläche eines Pfeils (für die Platzierung des Namens).
@@ -589,6 +640,13 @@ export function createRenderer(canvas) {
       roundRect(b.x * TILE, b.y * TILE, width * TILE, height * TILE, 14);
       ctx.stroke();
     } else if (selected.kind === 'belt') {
+      // v0.12.0: Die ganze Strecke leicht markieren – sie wird mit
+      // „Strecke leeren“ geleert.
+      ctx.fillStyle = COLORS.lineMark;
+      for (const key of beltLine(state, selected.x, selected.y)) {
+        const t = parseTileKey(key);
+        ctx.fillRect(t.x * TILE, t.y * TILE, TILE, TILE);
+      }
       roundRect(selected.x * TILE + 2, selected.y * TILE + 2, TILE - 4, TILE - 4, 8);
       ctx.stroke();
     } else if (selected.kind === 'land') {

@@ -645,10 +645,20 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const counterNow = await game(page, () => window.__game.state.counters[0].count);
   check((await page.textContent('#modal-content .amount-number')) === String(counterNow), `Menge öffnet mit der aktuellen Anzahl (${counterNow})`);
   await page.locator('#modal-content .amount-stepper button', { hasText: 'Alle' }).tap();
+  // Auch hier: Was ein Kunde genau jetzt kauft, zählt mit.
+  const saleIdAll = await game(page, () => window.__game.state.market.nextSaleId);
   await page.locator('#modal-content button', { hasText: 'Auf die Theke' }).tap();
   await sleep(80);
-  const counter = await game(page, () => window.__game.state.counters[0]);
-  check(counter.type === 'holzblock' && counter.count === 20, `„Alle“ füllt Theke 1 auf 20 Holzblöcke (${JSON.stringify(counter)})`);
+  const counter = await game(
+    page,
+    (since) => {
+      const s = window.__game.state;
+      const sold = s.market.sales.filter((sale) => sale.id >= since).reduce((n, sale) => n + (sale.items.holzblock ?? 0), 0);
+      return { ...s.counters[0], sold };
+    },
+    saleIdAll,
+  );
+  check(counter.type === 'holzblock' && counter.count + counter.sold === 20, `„Alle“ füllt Theke 1 auf 20 Holzblöcke (${JSON.stringify(counter)})`);
   await shot('9-theken');
   await game(page, () => window.__game.simulate(90));
   await sleep(500);
@@ -892,6 +902,215 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     cleared.sticks === sticksBefore + 10 && !cleared.stock.holzstab,
     `Knopf „Reste ins Laden-Lager“ legt die Teile ins Laden-Lager (${JSON.stringify(cleared)})`,
   );
+  await page.tap('#info-close');
+
+  // ---------- Bänder leeren (v0.12.0) ----------
+  // Zuleitung (23,13)–(25,13) in den oberen Eingang der Zimmerei (26,13), darauf
+  // Holzblöcke – die braucht die Zimmerei nicht, der Eingang staut sich.
+  await page.tap('#btn-build');
+  await page.tap('.build-item[data-tool="belt"]');
+  await touchDragTiles(page, cdp, [
+    [23, 13],
+    [26, 13],
+  ]);
+  await page.tap('#tool-confirm');
+  await page.tap('#build-close');
+  await sleep(80);
+  const feedLine = ['23,13', '24,13', '25,13'];
+  check(
+    (await game(page, (keys) => keys.map((k) => window.__game.state.belts[k]?.outs.join('') ?? '-').join(' '), feedLine)) === 'E E E',
+    'Zuleitung zur Zimmerei gelegt',
+  );
+  const jamFeed = () =>
+    game(page, (keys) => {
+      for (const k of keys) window.__game.state.belts[k].item = { type: 'holzblock', progress: 1, from: 'W' };
+    }, feedLine);
+  await jamFeed();
+  await tapTile(page, 24, 13);
+  check((await page.textContent('#info-title')) === 'Förderband', 'Band antippen zeigt Infofenster');
+  check(
+    (await page.textContent('#info-status')).includes('Auf der ganzen Strecke (3 Bänder): 3 Holzblöcke'),
+    `Infofenster nennt, was auf der ganzen Strecke liegt (${await page.textContent('#info-status')})`,
+  );
+  await shot('14c-strecke');
+  // Der Holzfäller schickt währenddessen weiter Holzblöcke ins Laden-Lager –
+  // deshalb „mindestens“ (und höchstens ein paar mehr).
+  const blocksBeforeLine = await game(page, () => window.__game.state.storage.holzblock ?? 0);
+  const blocksAbout = (n, want) => n >= blocksBeforeLine + want && n <= blocksBeforeLine + want + 3;
+  await page.locator('#info-actions button', { hasText: 'Strecke leeren' }).tap();
+  await sleep(450);
+  const lineCleared = await game(page, (keys) => ({
+    onBelts: keys.filter((k) => window.__game.state.belts[k].item).length,
+    blocks: window.__game.state.storage.holzblock ?? 0,
+  }), feedLine);
+  check(
+    lineCleared.onBelts === 0 && blocksAbout(lineCleared.blocks, 3),
+    `„Strecke leeren“: 3 Holzblöcke im Laden-Lager, Bänder bleiben (${JSON.stringify(lineCleared)})`,
+  );
+  check(
+    await page.locator('#info-actions button', { hasText: 'Strecke leeren' }).isDisabled(),
+    'Leere Strecke: Knopf gesperrt',
+  );
+  await page.tap('#info-close');
+  await jamFeed();
+  await tapTile(page, 26, 13);
+  check(
+    (await page.textContent('#info-status')).includes('Eingang blockiert: Holzblock wird hier nicht gebraucht'),
+    'Zimmerei zeigt den Stau',
+  );
+  const feedButton = page.locator('#info-actions button', { hasText: 'Zulauf leeren' });
+  check(await feedButton.isVisible(), 'Knopf „Zulauf leeren“ bei rotem Licht');
+  await shot('14d-zulauf');
+  await feedButton.tap();
+  await sleep(450);
+  const feedCleared = await game(page, (keys) => ({
+    onBelts: keys.filter((k) => window.__game.state.belts[k].item).length,
+    blocks: window.__game.state.storage.holzblock ?? 0,
+  }), feedLine);
+  check(
+    feedCleared.onBelts === 0 && blocksAbout(feedCleared.blocks, 6),
+    `„Zulauf leeren“ bringt die Holzblöcke ins Laden-Lager (${JSON.stringify(feedCleared)})`,
+  );
+  check(!(await feedButton.isVisible()), 'Ohne Stau kein Knopf „Zulauf leeren“');
+  await page.tap('#info-close');
+
+  // ---------- Lagerhaus: befüllen, Nachschub, ausräumen (v0.12.0) ----------
+  // Lagerhaus (10,14)-(11,14) gibt unten rechts aus → Band (11,15),(11,16)…(14,16)
+  // → Versandportal (15,16). Was hineinkommt, läuft zurück ins Laden-Lager.
+  await game(page, () => {
+    const s = window.__game.state.storage;
+    s.holzplatte = 40 + 8; // 8 kostet das Lagerhaus
+    s.holzblock = (s.holzblock ?? 0) + 20;
+    s.eisenbarren = 120;
+  });
+  await page.tap('#btn-build');
+  await buildAt('versandportal', 15, 16);
+  await buildAt('lagerhaus', 10, 14);
+  await page.tap('.build-item[data-tool="belt"]');
+  await touchDragTiles(page, cdp, [
+    [11, 15],
+    [11, 16],
+    [15, 16],
+  ]);
+  await page.tap('#tool-confirm');
+  await page.tap('#build-close');
+  await sleep(80);
+  const storeLine = await game(page, () => {
+    const st = window.__game.state;
+    return {
+      built: st.buildings.filter((b) => (b.type === 'lagerhaus' && b.x === 10 && b.y === 14) || (b.type === 'versandportal' && b.x === 15 && b.y === 16)).length,
+      belts: ['11,15', '11,16', '12,16', '13,16', '14,16'].map((k) => st.belts[k]?.outs.join('') ?? '-').join(' '),
+      free: 1000 - Object.values(st.storage).reduce((a, b) => a + b, 0),
+    };
+  });
+  check(storeLine.built === 2 && storeLine.belts === 'S E E E E', `Lagerhaus mit Band zum Versandportal gebaut (${JSON.stringify(storeLine)})`);
+  await tapTile(page, 10, 14);
+  check((await page.textContent('#info-title')) === 'Lagerhaus', 'Lagerhaus antippen zeigt Infofenster');
+  const storeButtons = await page.locator('#info-actions button').allTextContents();
+  check(
+    ['Befüllen', 'Nachschub', 'Ausräumen'].every((t) => storeButtons.some((b) => b.includes(t))),
+    `Knöpfe Befüllen, Nachschub, Ausräumen (${storeButtons.join(', ')})`,
+  );
+  check(await page.locator('#info-actions button', { hasText: 'Ausräumen' }).isDisabled(), 'Leeres Lagerhaus: Ausräumen gesperrt');
+  // Befüllen: Ware wählen, Menge einstellen
+  await page.locator('#info-actions button', { hasText: 'Befüllen' }).tap();
+  await sleep(120);
+  check((await page.textContent('#modal-content h2')) === '📥 Lagerhaus befüllen', 'Fenster „Lagerhaus befüllen“');
+  check(
+    !(await page.textContent('#modal-content')).includes('Holzstamm'),
+    'Rohstoffe stehen nicht zur Wahl',
+  );
+  await shot('14e-befuellen-ware');
+  await page.locator('#modal-content .pick-row', { hasText: 'Eisenbarren' }).tap();
+  await sleep(120);
+  check((await page.textContent('#modal-content h3')) === 'Wie viele Eisenbarren ins Lagerhaus?', 'Mengenwahl fürs Lagerhaus');
+  check((await page.textContent('#modal-content .amount-number')) === '120', 'Vorgeschlagen: alle 120 Eisenbarren');
+  await page.locator('#modal-content button', { hasText: '−5' }).tap();
+  await sleep(60);
+  check((await page.textContent('#modal-content .amount-number')) === '115', '−5 → 115');
+  await page.locator('#modal-content button', { hasText: 'Alle (120)' }).tap();
+  await sleep(60);
+  await shot('14f-befuellen-menge');
+  await page.locator('#modal-content button', { hasText: 'Ins Lagerhaus' }).tap();
+  await sleep(450);
+  const ironCount = () =>
+    game(page, () => {
+      const st = window.__game.state;
+      const store = st.buildings.find((b) => b.type === 'lagerhaus' && b.x === 10);
+      const inStore = store.prod.slots.reduce((a, s) => a + (s.type === 'eisenbarren' ? s.count : 0), 0);
+      const onBelts = Object.values(st.belts).filter((b) => b.item?.type === 'eisenbarren').length;
+      return { inStore, onBelts, inShop: st.storage.eisenbarren ?? 0 };
+    });
+  const filled = await ironCount();
+  check(
+    filled.inStore >= 100 && filled.inStore + filled.onBelts + filled.inShop === 120,
+    `120 Eisenbarren im Lagerhaus, sie laufen aufs Band (${JSON.stringify(filled)})`,
+  );
+  check(!(await page.isVisible('#modal')), 'Fenster schließt sich nach dem Befüllen');
+  check((await page.textContent('#info-status')).includes('Fach 1: Eisenbarren'), 'Infofenster zeigt die Fächer');
+  await shot('14g-lagerhaus-befuellt');
+  await game(page, () => window.__game.simulate(90));
+  const shipped = await ironCount();
+  check(shipped.inShop === 120 && shipped.inStore === 0, `Über Band und Versandportal zurück im Laden-Lager (${JSON.stringify(shipped)})`);
+  // Nachschub mit Rest: 20 Holzplatten bleiben immer im Laden-Lager
+  await page.locator('#info-actions button', { hasText: 'Nachschub' }).tap();
+  await sleep(120);
+  check((await page.textContent('#modal-content h2')) === '🔁 Nachschub einrichten', 'Fenster „Nachschub einrichten“');
+  await page.locator('#modal-content .pick-row', { hasText: 'Holzplatte' }).tap();
+  await sleep(120);
+  check(
+    (await page.textContent('#modal-content h3')) === 'Wie viele Holzplatten sollen im Laden-Lager bleiben?',
+    'Rest fürs Laden-Lager einstellen',
+  );
+  await page.locator('#modal-content button', { hasText: '+20' }).tap();
+  await sleep(60);
+  check((await page.textContent('#modal-content .amount-number')) === '20', '+20 → 20 bleiben im Laden-Lager');
+  await shot('14h-nachschub-rest');
+  await page.locator('#modal-content button', { hasText: 'Nachschub starten' }).tap();
+  await sleep(450);
+  const supply = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'lagerhaus' && b.x === 10).prod.supply);
+  check(JSON.stringify(supply) === '{"type":"holzplatte","keep":20}', `Nachschub eingestellt (${JSON.stringify(supply)})`);
+  const supplyStatus = await page.textContent('#info-status');
+  check(
+    supplyStatus.includes('Nachschub: holt Holzplatten aus dem Laden-Lager') && supplyStatus.includes('20 bleiben immer dort'),
+    `Infofenster nennt den Nachschub und den Rest (${supplyStatus})`,
+  );
+  check((await page.locator('#info-actions button.primary').allTextContents()).includes('✕ Nachschub aus'), 'Knopf „Nachschub aus“');
+  await shot('14i-nachschub');
+  const plates = () =>
+    game(page, () => {
+      const st = window.__game.state;
+      const store = st.buildings.find((b) => b.type === 'lagerhaus' && b.x === 10);
+      return {
+        inStore: store.prod.slots.reduce((a, s) => a + (s.type === 'holzplatte' ? s.count : 0), 0),
+        onBelts: Object.values(st.belts).filter((b) => b.item?.type === 'holzplatte').length,
+        inShop: st.storage.holzplatte ?? 0,
+      };
+    });
+  await game(page, () => window.__game.simulate(3));
+  const looping = await plates();
+  check(
+    looping.inShop >= 20 && looping.inStore + looping.onBelts > 0 && looping.inStore + looping.onBelts + looping.inShop === 40,
+    `Nachschub holt Holzplatten, 20 bleiben im Laden-Lager (${JSON.stringify(looping)})`,
+  );
+  await page.locator('#info-actions button', { hasText: 'Nachschub aus' }).tap();
+  await sleep(450);
+  check(
+    (await game(page, () => window.__game.state.buildings.find((b) => b.type === 'lagerhaus' && b.x === 10).prod.supply)) === null,
+    '„Nachschub aus“ schaltet ab',
+  );
+  // Ausräumen: alles zurück ins Laden-Lager
+  await game(page, () => {
+    const st = window.__game.state;
+    st.buildings.find((b) => b.type === 'lagerhaus' && b.x === 10).prod.slots = [{ type: 'holzplatte', count: 7 }];
+    st.storage.holzplatte = 33;
+    for (const b of Object.values(st.belts)) if (b.item?.type === 'holzplatte') b.item = null;
+  });
+  await sleep(450);
+  await page.locator('#info-actions button', { hasText: 'Ausräumen' }).tap();
+  await sleep(450);
+  const emptied = await plates();
+  check(emptied.inStore === 0 && emptied.inShop + emptied.onBelts === 40, `„Ausräumen“ legt alles ins Laden-Lager (${JSON.stringify(emptied)})`);
   await page.tap('#info-close');
 
   // ---------- Level 5 und 6: je eine Theke mehr, 5 Theken auf Level 6 ----------

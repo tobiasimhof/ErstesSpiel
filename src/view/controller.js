@@ -22,8 +22,12 @@ import {
   rotateBuilding,
 } from '../core/buildings.js';
 import {
+  beltItems,
+  beltLine,
   buildBeltPath,
   buyBeltPath,
+  clearBeltLine,
+  clearFeed,
   extendTrace,
   interpolateTiles,
   limitBeltPath,
@@ -45,6 +49,7 @@ import { buildingLevel, isBuildingUnlocked, isItemUnlocked, itemLevel } from '..
 import { buyRaw } from '../core/market.js';
 import {
   buildingStatus,
+  inputJam,
   loadInput,
   losesWorkOnRemove,
   productionOf,
@@ -55,6 +60,7 @@ import {
 } from '../core/production.js';
 import { affordableCount, canAfford, missingFor, storageCapacity, storageCount, storageTotal } from '../core/shop.js';
 import { beltAt, buildingAt, findBuilding, isInWorld, isOwned } from '../core/state.js';
+import { emptyWarehouse, stopSupply, warehouseTotal } from '../core/warehouse.js';
 import { TILE, panBy, screenToWorld } from './camera.js';
 import { costText, itemCount, numberFormat } from './format.js';
 
@@ -85,7 +91,18 @@ function stripText(offer) {
   return `${offer.depth} ${unit} ${SIDE_TEXT[offer.side]}`;
 }
 
-export function createController({ state, camera, ui, panels, buildBar, shopView, onChange, requestDraw, worldBounds }) {
+export function createController({
+  state,
+  camera,
+  ui,
+  panels,
+  buildBar,
+  shopView,
+  warehouseView,
+  onChange,
+  requestDraw,
+  worldBounds,
+}) {
   let mode = 'normal';
   let drag = null;
   let info = null; // { buttons, setStatus } des offenen Infofensters
@@ -179,12 +196,25 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
       if (hasRest) lines.push(`Liegt noch in der Maschine: ${costText(rest)} – für eine andere Einstellung.`);
       const restButton = info.buttons.get('leftovers');
       if (restButton) restButton.hidden = !hasRest;
+      // v0.12.0: Stau am Eingang – Zulauf leeren
+      const feedButton = info.buttons.get('clearFeed');
+      if (feedButton) feedButton.hidden = !inputJam(state, b);
       for (const key of p.recipes) info.buttons.get(`recipe:${key}`)?.classList.toggle('primary', key === prod.recipe);
     } else if (p?.kind === 'storage') {
       for (let i = 0; i < p.slots; i++) {
         const slot = prod.slots[i];
         lines.push(slot ? `Fach ${i + 1}: ${ITEMS[slot.type].name} ${slot.count} / ${p.slotSize}` : `Fach ${i + 1}: leer`);
       }
+      // v0.12.0: Nachschub aus dem Laden-Lager
+      const supply = prod.supply;
+      if (supply) {
+        const keep = supply.keep > 0 ? ` – ${supply.keep} bleiben immer dort` : '';
+        lines.push(`🔁 Im Laden-Lager: ${itemCount(supply.type, storageCount(state, supply.type))}${keep}`);
+      }
+      const supplyButton = info.buttons.get('supply');
+      supplyButton.textContent = supply ? '✕ Nachschub aus' : '🔁 Nachschub';
+      supplyButton.classList.toggle('primary', Boolean(supply));
+      info.buttons.get('empty').disabled = warehouseTotal(b) === 0 && !supply;
     } else if (p?.kind === 'shipping') {
       lines.push(`Bisher versendet: ${numberFormat.format(prod.shipped)} Waren`);
       lines.push(`Laden-Lager: ${storageTotal(state)} / ${storageCapacity(state)}`);
@@ -195,7 +225,17 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
   function updateBeltInfo(x, y) {
     const belt = beltAt(state, x, y);
     if (!belt) return select(null);
-    info.setStatus([belt.item ? `Transportiert: ${ITEMS[belt.item.type].name}` : 'Gerade leer']);
+    // v0.12.0: Was liegt auf der ganzen Strecke?
+    const line = beltLine(state, x, y);
+    const items = beltItems(state, line);
+    const empty = Object.keys(items).length === 0;
+    info.buttons.get('clear').disabled = empty;
+    info.setStatus([
+      belt.item ? `Transportiert: ${ITEMS[belt.item.type].name}` : 'Gerade leer',
+      empty
+        ? `Die ganze Strecke (${line.length} ${line.length === 1 ? 'Band' : 'Bänder'}) ist leer.`
+        : `Auf der ganzen Strecke (${line.length} Bänder): ${costText(items)}`,
+    ]);
   }
 
   function showSelectionInfo() {
@@ -262,6 +302,60 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
             infoRefresh?.();
           },
         });
+        // v0.12.0: Falsche Ware staut den Eingang – die Zuleitung leeren
+        actions.push({
+          key: 'clearFeed',
+          label: '🧺 Zulauf leeren',
+          onClick: () => {
+            const machine = findBuilding(state, b.id);
+            if (!machine) return;
+            const back = clearFeed(state, machine);
+            if (Object.keys(back).length > 0) {
+              panels.toast(`Zulauf geleert: ${costText(back)} liegen im Laden-Lager. Kommt weiter Falsches nach, die Zuleitung umlegen.`, 4500);
+            }
+            changed();
+            infoRefresh?.();
+          },
+        });
+      }
+      if (p?.kind === 'storage') {
+        // v0.12.0 (Tobias): Das Lagerhaus als Gegenstück zum Versandportal
+        actions.push(
+          { key: 'fill', label: '📥 Befüllen', onClick: () => warehouseView.open(b.id, 'fill') },
+          {
+            key: 'supply',
+            label: '🔁 Nachschub',
+            onClick: () => {
+              const store = findBuilding(state, b.id);
+              if (!store) return;
+              if (store.prod.supply) {
+                stopSupply(store);
+                changed();
+                panels.toast('Nachschub aus. Was noch im Lagerhaus liegt, läuft weiter aufs Band.', 3500);
+                infoRefresh?.();
+              } else {
+                warehouseView.open(b.id, 'supply');
+              }
+            },
+          },
+          {
+            key: 'empty',
+            label: '↩ Ausräumen',
+            onClick: () => {
+              const store = findBuilding(state, b.id);
+              if (!store) return;
+              const hadSupply = Boolean(store.prod.supply);
+              const back = emptyWarehouse(state, store);
+              const off = hadSupply ? ' Der Nachschub ist aus.' : '';
+              panels.toast(
+                Object.keys(back).length > 0 ? `Lagerhaus ausgeräumt: ${costText(back)} liegen im Laden-Lager.${off}` : `Das Lagerhaus ist leer.${off}`,
+                3500,
+              );
+              changed();
+              infoRefresh?.();
+            },
+          },
+        );
       }
       actions.push(
         { label: '↔ Verschieben', group: actions.length > 0, onClick: () => startPlace(b.type, b) },
@@ -288,7 +382,7 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
         icon: '➡️',
         title: 'Förderband',
         meta,
-        text: 'Transportiert Waren Feld für Feld in Pfeilrichtung. Zeigt ein Band in mehrere Richtungen, verteilt es die Waren abwechselnd. Ist ein Band voll, staut sich alles davor.',
+        text: 'Transportiert Waren Feld für Feld in Pfeilrichtung. Zeigt ein Band in mehrere Richtungen, verteilt es die Waren abwechselnd. Ist ein Band voll, staut sich alles davor. „Strecke leeren“ bringt alle Waren der hell markierten Strecke ins Laden-Lager.',
         actions: [
           {
             label: '↻ Drehen',
@@ -296,6 +390,19 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
               rotateBelt(state, sel.x, sel.y);
               changed();
               showSelectionInfo();
+            },
+          },
+          {
+            key: 'clear',
+            label: '🧺 Strecke leeren',
+            onClick: () => {
+              const back = clearBeltLine(state, sel.x, sel.y);
+              panels.toast(
+                Object.keys(back).length > 0 ? `Strecke geleert: ${costText(back)} liegen im Laden-Lager.` : 'Auf dieser Strecke liegt nichts.',
+                3500,
+              );
+              changed();
+              infoRefresh?.();
             },
           },
           {
@@ -731,6 +838,7 @@ export function createController({ state, camera, ui, panels, buildBar, shopView
     refresh() {
       infoRefresh?.();
       shopView.refresh();
+      warehouseView.refresh();
       if (mode === 'menu') buildBar.updateCosts(state);
     },
 

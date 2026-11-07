@@ -13,6 +13,8 @@
 import { DIRS, dirBetween, opposite, rotateCW, sortDirs, step } from './dirs.js';
 import { buildingPorts } from './geometry.js';
 import { BELT_COST } from './data/buildings.js';
+import { RECIPES } from './data/recipes.js';
+import { canAccept, productionOf } from './production.js';
 import { addToStorage, affordableCount, payCost, refundCost } from './shop.js';
 import { beltAt, buildingAt, isInWorld, isOwned, tileKey } from './state.js';
 
@@ -219,4 +221,100 @@ export function inputSides(state, x, y) {
     }
   }
   return sides;
+}
+
+// ---------- Bänder leeren (v0.12.0) ----------
+// Landen falsche Waren auf einer Strecke (z. B. Holzplatten auf der Strecke,
+// die nur Holzstäbe zur Zimmerei bringen soll), staut sich alles. Statt die
+// Bänder abzureißen, kommen alle Waren der Strecke ins Laden-Lager; die
+// Bänder bleiben liegen und die Produktion läuft sofort weiter.
+
+// Die zusammenhängende Strecke: alle Bänder, die mit diesem direkt verbunden
+// sind – auch über Abzweige und Zusammenführungen. An Gebäuden endet sie.
+// Ergebnis: Schlüssel "x,y" aller Bänder der Strecke.
+export function beltLine(state, x, y) {
+  if (!beltAt(state, x, y)) return [];
+  const seen = new Set([tileKey(x, y)]);
+  const queue = [{ x, y }];
+  while (queue.length > 0) {
+    const tile = queue.pop();
+    const belt = beltAt(state, tile.x, tile.y);
+    for (const dir of DIRS) {
+      const n = step(tile, dir);
+      const key = tileKey(n.x, n.y);
+      if (seen.has(key)) continue;
+      const other = beltAt(state, n.x, n.y);
+      if (!other) continue;
+      if (belt.outs.includes(dir) || other.outs.includes(opposite(dir))) {
+        seen.add(key);
+        queue.push(n);
+      }
+    }
+  }
+  return [...seen];
+}
+
+// Was liegt auf diesen Bändern? { Ware: Anzahl }
+export function beltItems(state, keys) {
+  const counts = {};
+  for (const key of keys) {
+    const item = state.belts[key]?.item;
+    if (item) counts[item.type] = (counts[item.type] ?? 0) + 1;
+  }
+  return counts;
+}
+
+// Nimmt alle Waren von diesen Bändern und legt sie ins Laden-Lager (wie beim
+// Abreißen darf es dabei übervoll werden). Gibt zurück: { Ware: Anzahl }.
+function clearBelts(state, keys) {
+  const back = beltItems(state, keys);
+  for (const key of keys) {
+    const belt = state.belts[key];
+    if (belt?.item) {
+      addToStorage(state, belt.item.type, 1);
+      belt.item = null;
+    }
+  }
+  return back;
+}
+
+// Knopf „Strecke leeren“ am Band.
+export function clearBeltLine(state, x, y) {
+  return clearBelts(state, beltLine(state, x, y));
+}
+
+// Gestaute Zuleitungen einer Werkstatt: Bänder, die direkt in einen Eingang
+// liefern und vorn eine Ware haben, die die Werkstatt gerade nicht annimmt.
+// Ergebnis: [{ x, y, type }]
+export function jammedFeeds(state, building) {
+  if (productionOf(building.type)?.kind !== 'workshop') return [];
+  const feeds = [];
+  for (const port of buildingPorts(building)) {
+    if (port.kind !== 'in') continue;
+    const belt = beltAt(state, port.outside.x, port.outside.y);
+    if (!belt?.item) continue;
+    const feedsIn = belt.outs.some((dir) => {
+      const t = step(port.outside, dir);
+      return t.x === port.tile.x && t.y === port.tile.y;
+    });
+    if (!feedsIn || canAccept(state, building, belt.item.type)) continue;
+    feeds.push({ x: port.outside.x, y: port.outside.y, type: belt.item.type });
+  }
+  return feeds;
+}
+
+// Knopf „Zulauf leeren“ an einer Werkstatt mit rotem Licht: leert die
+// gestauten Strecken, die in sie führen. Bringt eine Strecke eine Ware, die
+// die Werkstatt gar nicht braucht, wird nur diese geleert (die anderen warten
+// nur auf ihre Zutat); sonst alle gestauten. Gibt zurück: { Ware: Anzahl }.
+export function clearFeed(state, building) {
+  const jammed = jammedFeeds(state, building);
+  if (jammed.length === 0) return {};
+  const needed = RECIPES[building.prod.recipe].inputs;
+  const wrong = jammed.filter((f) => !needed[f.type]);
+  const keys = new Set();
+  for (const f of wrong.length > 0 ? wrong : jammed) {
+    for (const key of beltLine(state, f.x, f.y)) keys.add(key);
+  }
+  return clearBelts(state, [...keys]);
 }

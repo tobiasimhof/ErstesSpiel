@@ -8,6 +8,7 @@ import { step } from './dirs.js';
 import { buildingPorts } from './geometry.js';
 import { countProduced } from './levels.js';
 import { addToStorage, storageCount, storageFree, takeFromStorage } from './shop.js';
+import { supplyAvailable, updateSupply, warehouseCount } from './warehouse.js';
 
 export function productionOf(type) {
   return BUILDINGS[type]?.production ?? null;
@@ -21,7 +22,8 @@ export function createProductionState(type) {
     case 'workshop':
       return { recipe: p.recipes[0], stock: {}, busy: false, timer: 0, out: null, blocked: false };
     case 'storage':
-      return { slots: [], blocked: false };
+      // supply (v0.12.0): Nachschub aus dem Laden-Lager { type, keep } oder null
+      return { slots: [], supply: null, blocked: false };
     case 'shipping':
       return { shipped: 0, blocked: false };
     default:
@@ -131,6 +133,8 @@ export function updateProduction(state, building, dt) {
         countProduced(state, recipe.output, recipe.amount);
       }
     }
+  } else if (p?.kind === 'storage') {
+    updateSupply(state, building);
   }
 }
 
@@ -304,6 +308,21 @@ export function buildingStatus(state, building) {
     const total = prod.slots.reduce((sum, s) => sum + s.count, 0);
     const full = prod.slots.length >= p.slots && prod.slots.every((s) => s.count >= p.slotSize);
     if (full) return { level: 'blocked', text: 'Lager voll.' };
+    const supply = prod.supply;
+    if (supply) {
+      // v0.12.0: Nachschub aus dem Laden-Lager
+      const plural = ITEMS[supply.type].plural;
+      if (warehouseCount(building, supply.type) > 0 || supplyAvailable(state, building) > 0) {
+        return { level: 'work', text: `Nachschub: holt ${plural} aus dem Laden-Lager.` };
+      }
+      return {
+        level: 'idle',
+        text:
+          supply.keep > 0
+            ? `Wartet auf Nachschub: Im Laden-Lager liegen nicht mehr als ${supply.keep} ${plural} – die bleiben dort.`
+            : `Wartet auf Nachschub: keine ${plural} im Laden-Lager.`,
+      };
+    }
     return total > 0 ? { level: 'work', text: `${total} Waren gelagert.` } : { level: 'idle', text: 'Leer.' };
   }
   if (p?.kind === 'shipping') {
