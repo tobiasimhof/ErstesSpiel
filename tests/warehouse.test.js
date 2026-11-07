@@ -296,12 +296,12 @@ test('Strecke leeren: an einem Gebäude endet die Strecke', () => {
 
 // ---------- Zulauf leeren ----------
 
-// Zimmerei auf Handkurbeln: oben Holzstäbe, unten erst 3 Holzplatten (falsch),
+// Zimmerei auf Zahnradwellen: oben Holzstäbe, unten erst 3 Holzplatten (falsch),
 // dahinter Stein-Zahnräder.
 function jammedZimmerei() {
   const state = emptyGame();
   const machine = placeBuilding(state, 'zimmerei', 20, 10, 0);
-  setRecipe(machine, 'handkurbel');
+  setRecipe(machine, 'zahnradwelle');
   const a = placeBuilding(state, 'lagerhaus', 16, 9, 0);
   a.prod.slots = [{ type: 'holzstab', count: 30 }];
   drag(state, [
@@ -341,12 +341,12 @@ test('Zulauf leeren: nur die Strecke mit der falschen Ware wird geleert, danach 
   assert.equal(storageCount(state, 'holzplatte'), 3);
   assert.equal(state.belts['19,10'].item?.type, 'holzstab');
   simulate(state, 60);
-  assert.ok(storageCount(state, 'handkurbel') >= 1, 'jetzt kommen die Zahnräder an');
+  assert.ok(storageCount(state, 'zahnradwelle') >= 1, 'jetzt kommen die Zahnräder an');
   assert.notEqual(buildingStatus(state, machine).level, 'blocked');
 });
 
 test('Zulauf leeren bei gemischtem Band: die gestaute Strecke wird geleert', () => {
-  const { state, store, machine } = line('zimmerei', 'handkurbel');
+  const { state, store, machine } = line('zimmerei', 'zahnradwelle');
   store.prod.slots = [
     { type: 'holzstab', count: 23 }, // 20 passen in die Zimmerei, 3 stauen sich auf dem Band
     { type: 'steinzahnrad', count: 5 },
@@ -355,7 +355,7 @@ test('Zulauf leeren bei gemischtem Band: die gestaute Strecke wird geleert', () 
   assert.equal(inputJam(state, machine), 'holzstab');
   assert.deepEqual(clearFeed(state, machine), { holzstab: 3 });
   simulate(state, 60);
-  assert.equal(storageCount(state, 'handkurbel'), 1, 'die Zahnräder kommen durch');
+  assert.equal(storageCount(state, 'zahnradwelle'), 1, 'die Zahnräder kommen durch');
 });
 
 test('Zulauf leeren ohne Stau tut nichts', () => {

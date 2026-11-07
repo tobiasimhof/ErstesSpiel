@@ -200,15 +200,15 @@ function ironLine(state) {
   return { smelter, smithy };
 }
 
-test('Eisen-Kette: Schmelzhütte macht 200 Eisenbarren, Schmiede 40 Mini-Eisenplatten', () => {
+test('Eisen-Kette: Schmelzhütte macht 200 Eisenbarren, Schmiede 40 Eisenbleche', () => {
   const state = emptyGame();
   const { smelter, smithy } = ironLine(state);
-  assert.equal(smithy.prod.recipe, 'minieisenplatte', 'Schmiede startet mit Platten');
+  assert.equal(smithy.prod.recipe, 'eisenblech', 'Schmiede startet mit Platten');
   assert.ok(loadInput(state, smelter));
   assert.equal(loadInput(state, smelter), false, 'nur ein Eisenerz auf einmal');
   assert.equal(storageCount(state, 'eisenerz'), 1);
   simulate(state, 1000);
-  assert.equal(storageCount(state, 'minieisenplatte'), 40, '200 Barren → 40 Mini-Eisenplatten');
+  assert.equal(storageCount(state, 'eisenblech'), 40, '200 Barren → 40 Eisenbleche');
   assert.equal(storageCount(state, 'eisenbarren'), 0);
 });
 
@@ -332,7 +332,7 @@ test('Wirtschaft: Jede Stufe bringt mehr als ihre Zutaten (Preistabelle)', () =>
   assert.equal(200 * ITEMS.holzblock.price, 600);
   assert.equal(40 * ITEMS.holzplatte.price, 720);
   assert.equal(200 * ITEMS.eisenbarren.price, 2400);
-  assert.equal(40 * ITEMS.minieisenplatte.price, 2880);
+  assert.equal(40 * ITEMS.eisenblech.price, 2880);
   assert.equal(40 * ITEMS.eisenstange.price, 2880);
 });
 

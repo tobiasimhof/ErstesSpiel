@@ -17,6 +17,7 @@ import { applyTestPack } from './core/market.js';
 import { START_GOLD } from './core/data/shop.js';
 import { LAND } from './core/data/land.js';
 import { canLevelUp } from './core/levels.js';
+import { canDeliver, currentQuest, xpNeeded } from './core/quests.js';
 import { createLevelView, unlockText } from './view/levels.js';
 import { costText, numberFormat } from './view/format.js';
 import { redrawItemIcons } from './view/itemArt.js';
@@ -103,7 +104,12 @@ function onLevelUp({ level, gift }) {
   buildBar.updateCosts(state);
   panels.toast(`Laden-Level ${level}! Neu: ${unlockText(level)}. Gratis im Laden-Lager: ${costText(gift)}.`, 6000);
 }
-const levelView = createLevelView({ state, panels, onLevelUp });
+// v0.13.0: Auftrag abgegeben
+function onQuestDone({ gold, xp }) {
+  onChange();
+  panels.toast(`Auftrag erledigt: +${numberFormat.format(xp)} Erfahrung, +${numberFormat.format(gold)} Gold.`, 3000);
+}
+const levelView = createLevelView({ state, panels, onLevelUp, onQuestDone });
 function openLevel() {
   controller.closeInfo();
   levelView.open();
@@ -207,6 +213,7 @@ if (loaded.status === 'ok' && loaded.migratedFrom) {
     from < 8 ? `Neu: ${START_GOLD} Gold Startkapital – du bekommst es einmalig nachgezahlt.` : '',
     from < 9 ? `Neu: Fläche kostet jetzt immer ${numberFormat.format(LAND.price)} Gold für ${LAND.depth} Reihen; jede Seite lässt sich ${LAND.perSide}× erweitern.` : '',
     from < 10 ? 'Neu: Lagerhäuser lassen sich aus dem Laden-Lager befüllen und holen mit Nachschub Waren von dort aufs Band. Bänder lassen sich leeren.' : '',
+    from < 11 ? 'Neu: Aufträge der Bewohner – tippe oben auf „Laden-Level“. Einige Waren heißen jetzt anders, z. B. Mechanischer Schalter → Räderwerk, Mini-Schloss → Vorhängeschloss.' : '',
     ...(loaded.notes ?? []),
     loaded.counterNote ?? '',
   ].filter(Boolean);
@@ -224,6 +231,9 @@ let lastTime = performance.now();
 let accumulator = 0;
 let lastRefresh = 0;
 let lastGifts = state.market.gifts;
+// v0.13.0: einmal Bescheid sagen, wenn der aktuelle Auftrag abgegeben werden kann
+const questKey = () => `${state.shopLevel}|${state.quest.index}`;
+let questReadyKey = canDeliver(state) ? questKey() : null;
 
 function frame(now) {
   const realDt = Math.min(0.25, Math.max(0, (now - lastTime) / 1000));
@@ -246,12 +256,18 @@ function frame(now) {
     controller.refresh();
     levelView.refresh();
     hud.update(state); // Gold ändert sich, wenn Kunden kaufen
-    // Ziel fürs nächste Level gerade erreicht: einmal Bescheid sagen
+    // Genug Erfahrung und Gold fürs nächste Level: einmal Bescheid sagen
     const ready = canLevelUp(state);
     if (ready && !levelReady) {
-      panels.toast(`Ziel erreicht! Tippe oben auf „Laden-Level“, um auf Level ${state.shopLevel + 1} aufzusteigen.`, 5000);
+      panels.toast(`Genug Erfahrung und Gold! Tippe oben auf „Laden-Level“, um auf Level ${state.shopLevel + 1} aufzusteigen.`, 5000);
     }
     levelReady = ready;
+    if (canDeliver(state)) {
+      if (questReadyKey !== questKey() && !levelView.isOpen()) {
+        panels.toast(`Auftrag bereit: ${currentQuest(state).from} wartet. Tippe oben auf „Laden-Level“, um abzugeben.`, 5000);
+      }
+      questReadyKey = questKey();
+    }
     if (state.market.gifts !== lastGifts) {
       if (state.market.gifts > lastGifts) {
         panels.toast('Der Händler hat Mitleid: Du bekommst einen Holzstamm geschenkt. Er liegt im Laden-Lager.', 5000);
@@ -278,4 +294,7 @@ window.__game = {
     controller.refresh();
     requestDraw();
   },
+  // v0.13.0: für den Browser-Test – Erfahrung, die das aktuelle Level zum Aufstieg braucht
+  xpNeeded: () => xpNeeded(state.shopLevel),
+  currentQuest: () => currentQuest(state),
 };

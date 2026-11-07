@@ -30,6 +30,24 @@ function thickLine(ctx, points, s, width, color) {
   ctx.strokeStyle = OUTLINE;
 }
 
+// Zahnrad mit teeth Zähnen (v0.13.0: für Zahnradwelle, Räderwerk und Uhrwerk).
+function gear(ctx, x, y, outer, inner, teeth, color, s) {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  for (let i = 0; i < teeth * 2; i++) {
+    const r = i % 2 === 0 ? outer : inner;
+    const a0 = (i / (teeth * 2)) * Math.PI * 2;
+    const a1 = ((i + 1) / (teeth * 2)) * Math.PI * 2;
+    ctx.lineTo(x + Math.cos(a0) * r, y + Math.sin(a0) * r);
+    ctx.lineTo(x + Math.cos(a1) * r, y + Math.sin(a1) * r);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.lineWidth = Math.max(1, s * 0.08);
+  ctx.strokeStyle = OUTLINE;
+  ctx.stroke();
+}
+
 // Zeichnet eine Ware mittig auf (cx, cy) in etwa der Größe size.
 export function drawItem(ctx, type, cx, cy, size) {
   const def = ITEMS[type];
@@ -147,42 +165,34 @@ export function drawItem(ctx, type, cx, cy, size) {
       ctx.stroke();
       break;
     }
-    // ---------- v0.10.0: Kombi-Teile ----------
-    case 'crank': {
-      // Handkurbel: Arm aus Holz, Nabe aus Stein (Zahnrad), Griff
+    // ---------- v0.10.0: Kombi-Teile (v0.13.0: neue Namen und Bilder) ----------
+    case 'shaft': {
+      // Zahnradwelle: Holzachse mit einem Stein-Zahnrad in der Mitte
       ctx.translate(cx, cy);
-      thickLine(ctx, [[-0.3, 0.28], [0.28, -0.2]], s, 0.2, def.color);
-      ctx.fillStyle = '#9aa1aa';
-      ctx.beginPath();
-      ctx.arc(-0.3 * s, 0.28 * s, 0.2 * s, 0, Math.PI * 2);
+      ctx.rotate(-Math.PI / 4);
+      ctx.fillStyle = '#c48d55';
+      roundRect(ctx, -s * 0.62, -s * 0.1, s * 1.24, s * 0.2, s * 0.08);
       ctx.fill();
       ctx.stroke();
-      ctx.fillStyle = OUTLINE;
+      gear(ctx, 0, 0, s * 0.36, s * 0.26, 8, '#9aa1aa', s);
+      ctx.fillStyle = '#c48d55';
       ctx.beginPath();
-      ctx.arc(-0.3 * s, 0.28 * s, 0.07 * s, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#e0b277';
-      roundRect(ctx, 0.18 * s, -0.5 * s, 0.22 * s, 0.42 * s, 0.1 * s);
+      ctx.arc(0, 0, s * 0.1, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
       break;
     }
-    case 'switch': {
-      // Mechanischer Schalter: Steinsockel mit Hebel aus Holz
-      ctx.translate(cx, cy);
-      thickLine(ctx, [[-0.02, 0.12], [0.3, -0.42]], s, 0.12, '#c48d55');
-      ctx.fillStyle = '#e0b277';
-      ctx.beginPath();
-      ctx.arc(0.3 * s, -0.42 * s, 0.11 * s, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-      ctx.fillStyle = def.color;
-      roundRect(ctx, -0.5 * s, 0.02 * s, s, 0.38 * s, 0.08 * s);
-      ctx.fill();
-      ctx.stroke();
-      ctx.fillStyle = 'rgba(40, 26, 12, 0.5)';
-      roundRect(ctx, -0.16 * s, 0.1 * s, 0.32 * s, 0.1 * s, 0.05 * s);
-      ctx.fill();
+    case 'gears': {
+      // Räderwerk: zwei ineinandergreifende Zahnräder auf Holzachsen
+      gear(ctx, cx - s * 0.16, cy + s * 0.12, s * 0.38, s * 0.28, 9, def.color, s);
+      gear(ctx, cx + s * 0.3, cy - s * 0.26, s * 0.26, s * 0.18, 7, '#b5bcc5', s);
+      ctx.fillStyle = '#c48d55';
+      for (const [dx, dy, r] of [[-0.16, 0.12, 0.1], [0.3, -0.26, 0.07]]) {
+        ctx.beginPath();
+        ctx.arc(cx + dx * s, cy + dy * s, r * s, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      }
       break;
     }
     case 'reinforced': {
@@ -230,94 +240,96 @@ export function drawItem(ctx, type, cx, cy, size) {
       ctx.stroke();
       break;
     }
-    case 'spring': {
-      // Eisenfeder: Zickzack-Windungen
-      ctx.translate(cx, cy);
-      const pts = [[-0.05, -0.48]];
-      for (let i = 0; i < 6; i++) pts.push([i % 2 === 0 ? 0.3 : -0.3, -0.36 + i * 0.144]);
-      pts.push([0.05, 0.48]);
-      thickLine(ctx, pts, s, 0.12, def.color);
-      break;
-    }
-    case 'bearing': {
-      // Kugellager: äußerer Ring, Kugeln, innerer Ring
-      ctx.beginPath();
-      ctx.arc(cx, cy, s * 0.52, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-      ctx.fillStyle = '#5b5f6b';
-      ctx.beginPath();
-      ctx.arc(cx, cy, s * 0.4, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#eef1f5';
-      for (let i = 0; i < 8; i++) {
-        const a = (i / 8) * Math.PI * 2;
-        ctx.beginPath();
-        ctx.arc(cx + Math.cos(a) * s * 0.3, cy + Math.sin(a) * s * 0.3, s * 0.085, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.fillStyle = def.color;
-      ctx.beginPath();
-      ctx.arc(cx, cy, s * 0.19, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-      ctx.fillStyle = OUTLINE;
-      ctx.beginPath();
-      ctx.arc(cx, cy, s * 0.09, 0, Math.PI * 2);
-      ctx.fill();
-      break;
-    }
-    case 'chain': {
-      // Steinkette: drei Glieder schräg hintereinander
+    case 'key': {
+      // Schlüssel: Ring (Reide), Schaft aus der Eisenstange, Bart aus dem Blech
       ctx.translate(cx, cy);
       ctx.rotate(-Math.PI / 4);
-      for (const [dx, flat] of [[-0.36, true], [0, false], [0.36, true]]) {
-        const rx = flat ? 0.24 : 0.24;
-        const ry = flat ? 0.15 : 0.06;
-        ctx.beginPath();
-        ctx.ellipse(dx * s, 0, rx * s, ry * s, 0, 0, Math.PI * 2);
-        ctx.lineWidth = Math.max(1, s * 0.2);
-        ctx.strokeStyle = OUTLINE;
-        ctx.stroke();
-        ctx.lineWidth = Math.max(1, s * 0.11);
-        ctx.strokeStyle = def.color;
-        ctx.stroke();
-      }
+      ctx.fillRect(-s * 0.2, -s * 0.07, s * 0.76, s * 0.14);
+      ctx.strokeRect(-s * 0.2, -s * 0.07, s * 0.76, s * 0.14);
+      ctx.beginPath();
+      ctx.moveTo(s * 0.32, s * 0.06);
+      ctx.lineTo(s * 0.56, s * 0.06);
+      ctx.lineTo(s * 0.56, s * 0.3);
+      ctx.lineTo(s * 0.46, s * 0.3);
+      ctx.lineTo(s * 0.46, s * 0.2);
+      ctx.lineTo(s * 0.32, s * 0.2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(-s * 0.36, 0, s * 0.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(40, 26, 12, 0.85)';
+      ctx.beginPath();
+      ctx.arc(-s * 0.36, 0, s * 0.08, 0, Math.PI * 2);
+      ctx.fill();
       break;
     }
-    case 'regulator': {
-      // Regler: Gehäuse mit Skala und Zeiger
+    case 'compass': {
+      // Zirkel: zwei Schenkel aus Eisenstangen an einem Scharnier-Gelenk
+      ctx.translate(cx, cy);
+      thickLine(ctx, [[0, -0.36], [-0.32, 0.5]], s, 0.11, def.color);
+      thickLine(ctx, [[0, -0.36], [0.32, 0.5]], s, 0.11, def.color);
+      ctx.fillStyle = '#7d8794';
       ctx.beginPath();
-      ctx.arc(cx, cy, s * 0.5, 0, Math.PI * 2);
+      ctx.arc(0, -0.36 * s, 0.14 * s, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
+      ctx.fillStyle = '#e0b277';
+      roundRect(ctx, -0.05 * s, -0.62 * s, 0.1 * s, 0.16 * s, 0.04 * s);
+      ctx.fill();
+      ctx.stroke();
+      break;
+    }
+    case 'weight': {
+      // Gewichtstein: Steinkörper mit eisernem Haken (für Waage, Uhr oder Zugbrücke)
+      ctx.strokeStyle = OUTLINE;
+      ctx.lineWidth = Math.max(1, s * 0.2);
+      ctx.beginPath();
+      ctx.arc(cx, cy - s * 0.32, s * 0.15, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.strokeStyle = '#8e98a6';
+      ctx.lineWidth = Math.max(1, s * 0.1);
+      ctx.stroke();
+      ctx.strokeStyle = OUTLINE;
+      ctx.lineWidth = Math.max(1, s * 0.09);
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.26, cy - s * 0.18);
+      ctx.lineTo(cx + s * 0.26, cy - s * 0.18);
+      ctx.lineTo(cx + s * 0.46, cy + s * 0.48);
+      ctx.lineTo(cx - s * 0.46, cy + s * 0.48);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+      ctx.fillRect(cx - s * 0.18, cy - s * 0.08, s * 0.1, s * 0.4);
+      break;
+    }
+    case 'clockwork': {
+      // Uhrwerk: Zahnrad aus Messing mit Zifferblatt und Zeigern
+      gear(ctx, cx, cy, s * 0.54, s * 0.44, 12, def.color, s);
       ctx.fillStyle = '#efe2c2';
       ctx.beginPath();
-      ctx.arc(cx, cy, s * 0.36, 0, Math.PI * 2);
+      ctx.arc(cx, cy, s * 0.34, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = OUTLINE;
-      ctx.lineWidth = Math.max(1, s * 0.05);
-      ctx.beginPath();
-      for (let i = 0; i <= 4; i++) {
-        const a = Math.PI * (0.8 + i * 0.35);
-        ctx.moveTo(cx + Math.cos(a) * s * 0.26, cy + Math.sin(a) * s * 0.26);
-        ctx.lineTo(cx + Math.cos(a) * s * 0.34, cy + Math.sin(a) * s * 0.34);
-      }
       ctx.stroke();
-      ctx.strokeStyle = '#b8402f';
+      ctx.strokeStyle = OUTLINE;
       ctx.lineWidth = Math.max(1, s * 0.08);
       ctx.beginPath();
       ctx.moveTo(cx, cy);
-      ctx.lineTo(cx + s * 0.2, cy - s * 0.2);
+      ctx.lineTo(cx, cy - s * 0.24);
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + s * 0.17, cy + s * 0.06);
       ctx.stroke();
       ctx.fillStyle = OUTLINE;
       ctx.beginPath();
-      ctx.arc(cx, cy, s * 0.06, 0, Math.PI * 2);
+      ctx.arc(cx, cy, s * 0.05, 0, Math.PI * 2);
       ctx.fill();
       break;
     }
     case 'lock': {
-      // Mini-Schloss: Bügel und Körper mit Schlüsselloch
+      // Vorhängeschloss (v0.13.0, vorher Mini-Schloss): Bügel und Körper mit Schlüsselloch
       ctx.lineWidth = Math.max(1, s * 0.22);
       ctx.strokeStyle = OUTLINE;
       ctx.beginPath();

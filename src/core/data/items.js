@@ -24,20 +24,24 @@ export const ITEMS = {
   holzstab: { name: 'Holzstab', plural: 'Holzstäbe', price: 18, color: '#c48d55', shape: 'rod' },
   steinplatte: { name: 'Steinplatte', plural: 'Steinplatten', price: 18, color: '#c3c8ce', shape: 'plate' },
   steinzahnrad: { name: 'Stein-Zahnrad', plural: 'Stein-Zahnräder', price: 18, color: '#9aa1aa', shape: 'gear' },
-  minieisenplatte: { name: 'Mini-Eisenplatte', plural: 'Mini-Eisenplatten', price: 72, color: '#a9b4c2', shape: 'smallplate' },
+  // v0.13.0: Mini-Eisenplatte heißt Eisenblech (Tobias: Namen sollen zu den Zutaten passen)
+  eisenblech: { name: 'Eisenblech', plural: 'Eisenbleche', price: 72, color: '#a9b4c2', shape: 'smallplate' },
   // v0.8.0: Eisenstange statt Eisennägel (vorher 5 Barren → 5 Nägel, das gab zu viele Nägel)
   eisenstange: { name: 'Eisenstange', plural: 'Eisenstangen', price: 72, color: '#9fa9b7', shape: 'bar' },
   // v0.10.0: Kombi-Teile aus zwei Zutaten (Techbaum, Teil 2). Wert = Zutaten + 20 %.
+  // v0.13.0 (Tobias): Jedes Produkt heißt so, wie es logisch aus seinen
+  // Zutaten entsteht, und bleibt klein. Rezepte und Werte sind unverändert;
+  // die alten Namen stehen dahinter.
   // Zimmerei
-  handkurbel: { name: 'Handkurbel', plural: 'Handkurbeln', price: 324, color: '#b98a52', shape: 'crank' },
-  schalter: { name: 'Mechanischer Schalter', plural: 'Mechanische Schalter', price: 324, color: '#9aa1aa', shape: 'switch' },
+  zahnradwelle: { name: 'Zahnradwelle', plural: 'Zahnradwellen', price: 324, color: '#b98a52', shape: 'shaft' }, // Handkurbel
+  raederwerk: { name: 'Räderwerk', plural: 'Räderwerke', price: 324, color: '#9aa1aa', shape: 'gears' }, // Mechanischer Schalter
   verstaerkteholzplatte: { name: 'Verstärkte Holzplatte', plural: 'Verstärkte Holzplatten', price: 648, color: '#c79459', shape: 'reinforced', grain: true },
   // Feinschmiede
   scharnier: { name: 'Scharnier', plural: 'Scharniere', price: 1296, color: '#a9b4c2', shape: 'hinge' },
-  eisenfeder: { name: 'Eisenfeder', plural: 'Eisenfedern', price: 1296, color: '#8e98a6', shape: 'spring' },
-  kugellager: { name: 'Kugellager', plural: 'Kugellager', price: 1987, color: '#b5bfcc', shape: 'bearing' },
+  schluessel: { name: 'Schlüssel', plural: 'Schlüssel', price: 1296, color: '#c9a24a', shape: 'key' }, // Eisenfeder
+  zirkel: { name: 'Zirkel', plural: 'Zirkel', price: 1987, color: '#b5bfcc', shape: 'compass' }, // Kugellager
   // Schlosserei
-  steinkette: { name: 'Steinkette', plural: 'Steinketten', price: 648, color: '#a7adb5', shape: 'chain' },
-  regler: { name: 'Regler', plural: 'Regler', price: 778, color: '#b0844f', shape: 'regulator' },
-  minischloss: { name: 'Mini-Schloss', plural: 'Mini-Schlösser', price: 1944, color: '#c9a24a', shape: 'lock' },
+  gewichtstein: { name: 'Gewichtstein', plural: 'Gewichtsteine', price: 648, color: '#a7adb5', shape: 'weight' }, // Steinkette
+  uhrwerk: { name: 'Uhrwerk', plural: 'Uhrwerke', price: 778, color: '#b0844f', shape: 'clockwork' }, // Regler
+  vorhaengeschloss: { name: 'Vorhängeschloss', plural: 'Vorhängeschlösser', price: 1944, color: '#8e98a6', shape: 'lock' }, // Mini-Schloss
 };

@@ -23,6 +23,10 @@
 //  10 (v0.12.0): Lagerhäuser merken sich ihren Nachschub aus dem Laden-Lager
 //               (prod.supply: { type, keep } oder null). Bestehende Lagerhäuser
 //               bekommen null – sie laufen weiter wie bisher.
+//  11 (v0.13.0): Neue Namen für 8 Waren (z. B. Mechanischer Schalter →
+//               Räderwerk), überall im Spielstand. Aufträge mit Erfahrung
+//               (quest, xpTotal); das Level bleibt, die Aufträge des aktuellen
+//               Levels beginnen von vorn.
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
@@ -34,11 +38,23 @@ import { isDir, sortDirs } from './dirs.js';
 import { footprintSize, rotateLocal } from './geometry.js';
 import { buildingContents, createProductionState, productionOf } from './production.js';
 import { createCounters, createMarket } from './market.js';
+import { createQuestState } from './quests.js';
 import { addAllToStorage, counterSizeFor, fitCounters } from './shop.js';
 import { START_PLOT, WORLD, parseTileKey } from './state.js';
 
-export const SAVE_VERSION = 10;
+export const SAVE_VERSION = 11;
 
+// v0.13.0 (Tobias): Namen, die zu den Zutaten passen. Rezepte und Werte bleiben.
+const RENAMED_V11 = {
+  minieisenplatte: 'eisenblech',
+  handkurbel: 'zahnradwelle',
+  schalter: 'raederwerk',
+  eisenfeder: 'schluessel',
+  kugellager: 'zirkel',
+  steinkette: 'gewichtstein',
+  regler: 'uhrwerk',
+  minischloss: 'vorhaengeschloss',
+};
 // v0.6.0: Waren und Rezepte, die es nicht mehr gibt, und was aus ihnen wird.
 const RENAMED_ITEMS = { holzwinkel: 'holzplatte', splitt: 'steinzahnrad' };
 const RENAMED_RECIPES = { holzwinkel: 'holzplatte', splitt: 'steinzahnrad' };
@@ -141,7 +157,50 @@ function migrate(state, from, notes = []) {
       if (isObj(b?.prod) && productionOf(b.type)?.kind === 'storage' && b.prod.supply === undefined) b.prod.supply = null;
     }
   }
+  if (from < 11) {
+    // v0.12 → v0.13: neue Warennamen, Aufträge beginnen auf dem aktuellen Level
+    renameEverywhere(state, RENAMED_V11);
+    state.quest = createQuestState();
+    state.xpTotal = 0;
+  }
   return state;
+}
+
+// v0.12 → v0.13: Benennt Waren (und gleichnamige Rezepte) überall im
+// Spielstand um. Daten werden hier noch nicht geprüft, deshalb vorsichtig.
+function renameEverywhere(state, map) {
+  const rename = (t) => map[t] ?? t;
+  const renameCounts = (counts) => {
+    if (!isObj(counts)) return counts;
+    const out = {};
+    for (const [t, n] of Object.entries(counts)) {
+      const key = rename(t);
+      out[key] = isCount(out[key]) && isCount(n) ? out[key] + n : n;
+    }
+    return out;
+  };
+  const renameStack = (stack) => {
+    if (isObj(stack) && typeof stack.type === 'string') stack.type = rename(stack.type);
+  };
+  state.storage = renameCounts(state.storage);
+  state.produced = renameCounts(state.produced);
+  if (Array.isArray(state.counters)) state.counters.forEach(renameStack);
+  if (isObj(state.belts)) for (const belt of Object.values(state.belts)) if (isObj(belt)) renameStack(belt.item);
+  if (isObj(state.market) && Array.isArray(state.market.sales)) {
+    for (const sale of state.market.sales) if (isObj(sale)) sale.items = renameCounts(sale.items);
+  }
+  if (!Array.isArray(state.buildings)) return;
+  for (const b of state.buildings) {
+    if (!isObj(b)) continue;
+    if (b.paid !== undefined) b.paid = renameCounts(b.paid);
+    const prod = b.prod;
+    if (!isObj(prod)) continue;
+    renameStack(prod.out);
+    renameStack(prod.supply);
+    if (isObj(prod.stock)) prod.stock = renameCounts(prod.stock);
+    if (Array.isArray(prod.slots)) prod.slots.forEach(renameStack);
+    if (typeof prod.recipe === 'string') prod.recipe = rename(prod.recipe);
+  }
 }
 
 // v0.10.1 → v0.10.2: Die Welt bekommt eine eigene Ecke und ist so groß, dass
@@ -357,6 +416,8 @@ export function isValidState(s) {
   if (!isInt(s.shopLevel) || s.shopLevel < 1 || s.shopLevel > MAX_LEVEL) return false;
   if (!isObj(s.produced) || !Object.entries(s.produced).every(([t, n]) => isItem(t) && isCount(n))) return false;
   if (!isCount(s.landBought)) return false;
+  // v0.13.0: Aufträge
+  if (!isObj(s.quest) || !isCount(s.quest.index) || !isCount(s.quest.xp) || !isCount(s.xpTotal)) return false;
 
   const w = s.world;
   if (!w || ![w.x, w.y, w.width, w.height].every(isInt) || w.width <= 0 || w.height <= 0) return false;

@@ -9,6 +9,7 @@ import { START_GOLD, START_STORAGE } from './data/shop.js';
 import { occupies } from './geometry.js';
 import { createCounters, createMarket } from './market.js';
 import { createProductionState } from './production.js';
+import { createQuestState } from './quests.js';
 
 // v0.6.1: Grundstück 22 × 14 (vorher 16 × 10).
 export const START_PLOT = { x: 8, y: 5, width: 22, height: 14 };
@@ -55,6 +56,10 @@ export function createNewGame(seed) {
     // So oft wurde Fläche gekauft (v0.9.0; seit v0.10.2 nur noch gezählt,
     // der Preis bleibt gleich)
     landBought: 0,
+    // Aufträge der Bewohner (v0.13.0): nächster Auftrag und Erfahrung auf
+    // diesem Level; xpTotal zählt alle Erfahrung
+    quest: createQuestState(),
+    xpTotal: 0,
   };
   for (const start of START_BUILDINGS) {
     state.buildings.push({
