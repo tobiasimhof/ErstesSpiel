@@ -46,7 +46,7 @@ import {
 } from '../core/area.js';
 import { buyLand, landBuysLeft, landOffer, landSideAt } from '../core/land.js';
 import { buildingLevel, isBuildingUnlocked, isItemUnlocked, itemLevel } from '../core/levels.js';
-import { buyRaw } from '../core/market.js';
+import { buyRaw, refillPlan, refillSource } from '../core/market.js';
 import {
   buildingStatus,
   inputJam,
@@ -55,12 +55,15 @@ import {
   productionOf,
   returnUnusedStock,
   setRecipe,
+  sourceCapacity,
+  sourceCount,
+  sourceRoom,
   unusedStock,
   workshopInputs,
 } from '../core/production.js';
 import { affordableCount, canAfford, missingFor, storageCapacity, storageCount, storageTotal } from '../core/shop.js';
 import { beltAt, buildingAt, findBuilding, isInWorld, isOwned } from '../core/state.js';
-import { emptyWarehouse, stopSupply, warehouseTotal } from '../core/warehouse.js';
+import { emptyWarehouse, warehouseTotal } from '../core/warehouse.js';
 import { TILE, panBy, screenToWorld } from './camera.js';
 import { costText, itemCount, numberFormat } from './format.js';
 
@@ -143,6 +146,16 @@ export function createController({
     return `${m}:${String(s % 60).padStart(2, '0')} min`;
   }
 
+  // v0.14.0: Beschriftung von „Auffüllen“ – was der Knopf gerade tun würde
+  function refillLabel(plan, input) {
+    if (plan.room === 0) return '⏫ Vorrat voll';
+    const n = plan.fromStorage + plan.buy;
+    if (n === 0) return `⏫ Auffüllen – kein ${input.name} im Lager, Gold reicht nicht`;
+    const what = `${n} ${n === 1 ? input.name : input.plural}`;
+    if (plan.buy === 0) return `⏫ Auffüllen: ${what}`;
+    return `⏫ Auffüllen: ${what} · kauft ${plan.buy} für ${numberFormat.format(plan.cost)} 🪙`;
+  }
+
   // Aktualisiert Statuszeilen und Knöpfe eines Gebäude-Infofensters.
   function updateBuildingInfo(id) {
     const b = findBuilding(state, id);
@@ -155,11 +168,22 @@ export function createController({
       const input = ITEMS[p.input];
       const output = ITEMS[p.output];
       lines.push(`1 ${input.name} → ${p.amount} ${output.plural} in ${formatDuration(p.duration)}`);
-      if (prod.loaded) lines.push(`Fertig in etwa ${formatDuration(prod.remaining * (p.duration / p.amount))}`);
+      // v0.14.0: Vorrat von bis zu 3 Rohstoffen
+      const inside = sourceCount(b);
+      lines.push(`Vorrat: ${inside} / ${sourceCapacity(b)} ${inside === 1 ? input.name : input.plural}`);
+      if (prod.loaded) {
+        const left = prod.remaining + (prod.queued ?? 0) * p.amount;
+        lines.push(`Leer in etwa ${formatDuration(left * (p.duration / p.amount))}`);
+      }
       lines.push(`${input.plural} im Laden-Lager: ${storageCount(state, p.input)}`);
-      const button = info.buttons.get('load');
-      button.textContent = prod.loaded ? `${input.name} wird verarbeitet` : `➕ ${input.name} einlegen`;
-      button.disabled = prod.loaded || storageCount(state, p.input) < 1;
+      const plan = refillPlan(state, b);
+      const refill = info.buttons.get('refill');
+      refill.textContent = refillLabel(plan, input);
+      refill.disabled = plan.fromStorage + plan.buy === 0;
+      const room = sourceRoom(b);
+      const load = info.buttons.get('load');
+      load.textContent = `➕ 1 ${input.name} einlegen`;
+      load.disabled = room < 1 || storageCount(state, p.input) < 1;
       info.buttons.get('buy').disabled = state.gold < input.buyPrice || !isItemUnlocked(state, p.input);
     } else if (p?.kind === 'workshop') {
       const recipe = RECIPES[prod.recipe];
@@ -205,16 +229,7 @@ export function createController({
         const slot = prod.slots[i];
         lines.push(slot ? `Fach ${i + 1}: ${ITEMS[slot.type].name} ${slot.count} / ${p.slotSize}` : `Fach ${i + 1}: leer`);
       }
-      // v0.12.0: Nachschub aus dem Laden-Lager
-      const supply = prod.supply;
-      if (supply) {
-        const keep = supply.keep > 0 ? ` – ${supply.keep} bleiben immer dort` : '';
-        lines.push(`🔁 Im Laden-Lager: ${itemCount(supply.type, storageCount(state, supply.type))}${keep}`);
-      }
-      const supplyButton = info.buttons.get('supply');
-      supplyButton.textContent = supply ? '✕ Nachschub aus' : '🔁 Nachschub';
-      supplyButton.classList.toggle('primary', Boolean(supply));
-      info.buttons.get('empty').disabled = warehouseTotal(b) === 0 && !supply;
+      info.buttons.get('empty').disabled = warehouseTotal(b) === 0;
     } else if (p?.kind === 'shipping') {
       lines.push(`Bisher versendet: ${numberFormat.format(prod.shipped)} Waren`);
       lines.push(`Laden-Lager: ${storageTotal(state)} / ${storageCapacity(state)}`);
@@ -249,14 +264,36 @@ export function createController({
       const size = footprintSize(b.type, b.rot);
       const actions = [];
       if (p?.kind === 'source') {
+        // v0.14.0 (Tobias): bis zum Rand füllen – erst aus dem Laden-Lager,
+        // was fehlt, direkt beim Händler kaufen
+        actions.push({
+          key: 'refill',
+          label: '',
+          primary: true,
+          onClick: () => {
+            const machine = findBuilding(state, b.id);
+            if (!machine) return;
+            const done = refillSource(state, machine);
+            const n = done.fromStorage + done.buy;
+            if (n > 0) {
+              changed();
+              const input = ITEMS[p.input];
+              const bought = done.buy > 0 ? ` (${done.buy} gekauft für ${numberFormat.format(done.cost)} Gold)` : '';
+              panels.toast(`${n} ${n === 1 ? input.name : input.plural} eingelegt${bought}.`);
+            } else if (done.room === 0) panels.toast('Der Vorrat ist schon voll.');
+            else panels.toast(`Kein ${ITEMS[p.input].name} im Laden-Lager, und das Gold reicht nicht zum Kaufen.`);
+            infoRefresh?.();
+          },
+        });
         actions.push({
           key: 'load',
           label: '',
-          primary: true,
           onClick: () => {
             if (loadInput(state, b)) {
               changed();
               panels.toast(`${ITEMS[p.input].name} eingelegt.`);
+            } else if (sourceRoom(b) < 1) {
+              panels.toast('Der Vorrat ist voll.');
             } else {
               panels.toast(`Kein ${ITEMS[p.input].name} im Laden-Lager.`);
             }
@@ -319,36 +356,19 @@ export function createController({
         });
       }
       if (p?.kind === 'storage') {
-        // v0.12.0 (Tobias): Das Lagerhaus als Gegenstück zum Versandportal
+        // v0.12.0 (Tobias): Das Lagerhaus als Gegenstück zum Versandportal.
+        // v0.14.0 (Tobias): nur noch von Hand befüllen, kein Nachschub.
         actions.push(
-          { key: 'fill', label: '📥 Befüllen', onClick: () => warehouseView.open(b.id, 'fill') },
-          {
-            key: 'supply',
-            label: '🔁 Nachschub',
-            onClick: () => {
-              const store = findBuilding(state, b.id);
-              if (!store) return;
-              if (store.prod.supply) {
-                stopSupply(store);
-                changed();
-                panels.toast('Nachschub aus. Was noch im Lagerhaus liegt, läuft weiter aufs Band.', 3500);
-                infoRefresh?.();
-              } else {
-                warehouseView.open(b.id, 'supply');
-              }
-            },
-          },
+          { key: 'fill', label: '📥 Befüllen', primary: true, onClick: () => warehouseView.open(b.id) },
           {
             key: 'empty',
             label: '↩ Ausräumen',
             onClick: () => {
               const store = findBuilding(state, b.id);
               if (!store) return;
-              const hadSupply = Boolean(store.prod.supply);
               const back = emptyWarehouse(state, store);
-              const off = hadSupply ? ' Der Nachschub ist aus.' : '';
               panels.toast(
-                Object.keys(back).length > 0 ? `Lagerhaus ausgeräumt: ${costText(back)} liegen im Laden-Lager.${off}` : `Das Lagerhaus ist leer.${off}`,
+                Object.keys(back).length > 0 ? `Lagerhaus ausgeräumt: ${costText(back)} liegen im Laden-Lager.` : 'Das Lagerhaus ist leer.',
                 3500,
               );
               changed();

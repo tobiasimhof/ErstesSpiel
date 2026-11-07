@@ -3,10 +3,13 @@
 // ins Laden-Lager; das Lagerhaus holt sie zurück aufs Band.
 //
 // - Befüllen: einmal eine bestimmte Menge aus dem Laden-Lager hineinlegen.
-// - Nachschub: dauerhaft nachholen. Das Lagerhaus hält nur ein paar Stück
-//   bereit (supplyBuffer), der Rest bleibt sichtbar im Laden-Lager. Ein
-//   einstellbarer Rest (keep) bleibt immer dort, z. B. zum Bauen.
-// - Ausräumen: alles zurück ins Laden-Lager, Nachschub aus.
+//   Ist das Lagerhaus leer, füllt man es von Hand neu.
+// - Ausräumen: alles zurück ins Laden-Lager.
+//
+// v0.14.0 (Tobias): Den Nachschub (dauerhaft aus dem Laden-Lager nachholen)
+// gibt es nicht mehr. Sonst könnte man kurze Strecken bauen, alles ins
+// Laden-Lager schicken und es per Lagerhaus wieder herausholen – die Bänder
+// verlören ihren Sinn, und im Hintergrund liefe die Fabrik ewig weiter.
 //
 // Was im Lagerhaus liegt, läuft wie bisher am Ausgang aufs Band.
 // Kennt keine Grafik.
@@ -84,48 +87,10 @@ export function fillWarehouse(state, building, type, n) {
   return count;
 }
 
-// ---------- Nachschub ----------
-
-export function setSupply(building, type, keep = 0) {
-  if (!isWarehouse(building) || !canStoreItem(type)) return false;
-  building.prod.supply = { type, keep: Math.max(0, Math.floor(keep)) };
-  return true;
-}
-
-export function stopSupply(building) {
-  if (isWarehouse(building)) building.prod.supply = null;
-}
-
-// So viele Stück darf der Nachschub gerade aus dem Laden-Lager holen
-// (alles über dem Rest, der dort bleiben soll).
-export function supplyAvailable(state, building) {
-  const supply = building.prod.supply;
-  if (!supply) return 0;
-  return Math.max(0, storageCount(state, supply.type) - supply.keep);
-}
-
-// Jeden Takt: Das Lagerhaus füllt seine Ware auf supplyBuffer Stück auf.
-// Gibt zurück, wie viele es geholt hat.
-export function updateSupply(state, building) {
-  const p = storageDef(building);
-  const supply = building.prod.supply;
-  if (!p || !supply) return 0;
-  const want = Math.min(
-    (p.supplyBuffer ?? p.slotSize) - warehouseCount(building, supply.type),
-    warehouseRoom(building, supply.type),
-    supplyAvailable(state, building),
-  );
-  if (want <= 0) return 0;
-  takeFromStorage(state, supply.type, want);
-  putIn(building, supply.type, want);
-  return want;
-}
-
 // ---------- Ausräumen ----------
 
 // Legt alles ins Laden-Lager (wie beim Abreißen darf es dabei übervoll
-// werden, damit nichts verloren geht) und schaltet den Nachschub aus –
-// sonst wäre es sofort wieder voll. Gibt zurück: { Ware: Anzahl }.
+// werden, damit nichts verloren geht). Gibt zurück: { Ware: Anzahl }.
 export function emptyWarehouse(state, building) {
   if (!isWarehouse(building)) return {};
   const back = {};
@@ -134,6 +99,5 @@ export function emptyWarehouse(state, building) {
     addToStorage(state, slot.type, slot.count);
   }
   building.prod.slots = [];
-  building.prod.supply = null;
   return back;
 }

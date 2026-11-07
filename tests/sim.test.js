@@ -37,14 +37,17 @@ function woodLine(state, end = 16) {
   return wood;
 }
 
-test('Holzfällerlager braucht einen Holzstamm und nimmt nur einen auf einmal', () => {
+test('Holzfällerlager braucht Holzstämme und nimmt bis zu 3 auf (v0.14.0, vorher nur einen)', () => {
   const state = emptyGame();
   const wood = woodLine(state);
   assert.equal(buildingStatus(state, wood).level, 'idle');
   assert.ok(loadInput(state, wood));
   assert.equal(storageCount(state, 'holzstamm'), 4);
-  assert.equal(loadInput(state, wood), false, 'zweiter Stamm passt nicht');
-  assert.equal(storageCount(state, 'holzstamm'), 4);
+  assert.ok(loadInput(state, wood), 'zweiter Stamm wartet im Vorrat');
+  assert.ok(loadInput(state, wood), 'dritter Stamm wartet im Vorrat');
+  assert.deepEqual([wood.prod.loaded, wood.prod.queued], [true, 2]);
+  assert.equal(loadInput(state, wood), false, 'vierter Stamm passt nicht');
+  assert.equal(storageCount(state, 'holzstamm'), 2);
   state.storage = {};
   const other = placeBuilding(state, 'holzfaeller', 10, 9, 0);
   assert.equal(loadInput(state, other), false, 'ohne Vorrat geht nichts');
@@ -205,7 +208,6 @@ test('Eisen-Kette: Schmelzhütte macht 200 Eisenbarren, Schmiede 40 Eisenbleche'
   const { smelter, smithy } = ironLine(state);
   assert.equal(smithy.prod.recipe, 'eisenblech', 'Schmiede startet mit Platten');
   assert.ok(loadInput(state, smelter));
-  assert.equal(loadInput(state, smelter), false, 'nur ein Eisenerz auf einmal');
   assert.equal(storageCount(state, 'eisenerz'), 1);
   simulate(state, 1000);
   assert.equal(storageCount(state, 'eisenblech'), 40, '200 Barren → 40 Eisenbleche');

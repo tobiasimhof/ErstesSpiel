@@ -7,12 +7,15 @@
 // cost:  Baukosten in Waren aus dem Laden-Lager (v0.7.0). Abreißen gibt sie zurück.
 // level: ab diesem Laden-Level baubar (v0.9.0, siehe data/levels.js).
 // production: was das Gebäude tut
-//   source   – verarbeitet einen eingelegten Rohstoff nach und nach
-//              (amount Stück in duration Sekunden)
+//   source   – verarbeitet eingelegte Rohstoffe nach und nach
+//              (je Rohstoff amount Stück in duration Sekunden). v0.14.0
+//              (Tobias): Bis zu capacity Rohstoffe passen hinein; sie werden
+//              nacheinander verarbeitet – so läuft die Fabrik länger, auch
+//              wenn das Spiel geschlossen ist.
 //   workshop – verarbeitet Waren vom Band nach einem einstellbaren Rezept
 //   storage  – Zwischenlager mit Fächern (slots × slotSize). v0.12.0: lässt
-//              sich aus dem Laden-Lager befüllen; mit Nachschub hält es bis
-//              zu supplyBuffer Stück seiner Ware bereit (src/core/warehouse.js)
+//              sich aus dem Laden-Lager befüllen (src/core/warehouse.js);
+//              den Nachschub von dort gibt es seit v0.14.0 nicht mehr.
 //   shipping – schickt alles ins Laden-Lager
 // Alle Zahlen sind Platzhalter. Maschinen sind 2 × 2 (README, Abschnitt 4.2).
 
@@ -25,9 +28,9 @@ export const BUILDINGS = {
     size: [2, 2],
     color: '#4f7f35',
     description:
-      'Verarbeitet einen eingelegten Holzstamm nach und nach zu 200 Holzblöcken. Sie kommen am orangen Pfeil heraus.',
+      'Verarbeitet Holzstämme nach und nach zu je 200 Holzblöcken. Bis zu 3 Holzstämme passen hinein. Die Blöcke kommen am orangen Pfeil heraus.',
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
-    production: { kind: 'source', input: 'holzstamm', output: 'holzblock', amount: 200, duration: 900 },
+    production: { kind: 'source', input: 'holzstamm', output: 'holzblock', amount: 200, duration: 900, capacity: 3 },
   },
   steinbruch: {
     level: 2,
@@ -37,9 +40,9 @@ export const BUILDINGS = {
     size: [2, 2],
     color: '#7d8590',
     description:
-      'Verarbeitet einen eingelegten Felsbrocken nach und nach zu 200 Steinblöcken. Sie kommen am orangen Pfeil heraus.',
+      'Verarbeitet Felsbrocken nach und nach zu je 200 Steinblöcken. Bis zu 3 Felsbrocken passen hinein. Die Blöcke kommen am orangen Pfeil heraus.',
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
-    production: { kind: 'source', input: 'felsbrocken', output: 'steinblock', amount: 200, duration: 900 },
+    production: { kind: 'source', input: 'felsbrocken', output: 'steinblock', amount: 200, duration: 900, capacity: 3 },
   },
   schmelzhuette: {
     level: 3,
@@ -49,9 +52,9 @@ export const BUILDINGS = {
     size: [2, 2],
     color: '#8a4b32',
     description:
-      'Schmilzt ein eingelegtes Eisenerz nach und nach zu 200 Eisenbarren. Sie kommen am orangen Pfeil heraus.',
+      'Schmilzt Eisenerz nach und nach zu je 200 Eisenbarren. Bis zu 3 Eisenerz passen hinein. Die Barren kommen am orangen Pfeil heraus.',
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
-    production: { kind: 'source', input: 'eisenerz', output: 'eisenbarren', amount: 200, duration: 900 },
+    production: { kind: 'source', input: 'eisenerz', output: 'eisenbarren', amount: 200, duration: 900, capacity: 3 },
   },
   saegewerk: {
     level: 1,
@@ -156,12 +159,12 @@ export const BUILDINGS = {
     size: [2, 1],
     color: '#8b6b4a',
     description:
-      'Zwischenlager mit 3 Fächern zu je 50 Waren. Eingang oben links (blauer Pfeil), Ausgang unten rechts (oranger Pfeil). Was hineinläuft, wird gelagert und weitergegeben, sobald am Ausgang Platz ist. Lässt sich auch aus dem Laden-Lager befüllen – oder holt mit Nachschub dauerhaft Waren von dort aufs Band.',
+      'Zwischenlager mit 3 Fächern zu je 50 Waren. Eingang oben links (blauer Pfeil), Ausgang unten rechts (oranger Pfeil). Was hineinläuft, wird gelagert und weitergegeben, sobald am Ausgang Platz ist. Lässt sich von Hand aus dem Laden-Lager befüllen; ist es leer, füllst du es neu.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'N' },
       { kind: 'out', x: 1, y: 0, side: 'S' },
     ],
-    production: { kind: 'storage', slots: 3, slotSize: 50, supplyBuffer: 10 },
+    production: { kind: 'storage', slots: 3, slotSize: 50 },
   },
   versandportal: {
     level: 1,

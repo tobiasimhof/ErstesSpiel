@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.13.0 – Aufträge aus dem Ort & neue Warennamen |
+| **Aktuelle Version** | v0.14.0 – Fabrik läuft im Hintergrund weiter & Rohstoff-Vorrat |
 | **Phase** | M2 – Produktionsketten |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias testet v0.13.0 (Aufträge im Level-Fenster, neue Warennamen; Punkte unter „Was Tobias testet“ in Abschnitt 6) und schreibt sein Feedback in einen **neuen Chat**. Danach planen wir gemeinsam den **weiteren Techbaum** (Tobias' Kräuter-Idee, Level 7–10, Abschnitt 4.4) |
+| **Nächster Schritt** | Tobias testet v0.14.0 (Spiel schließen und später wiederkommen, „⏫ Auffüllen“, Lagerhaus nur noch befüllen; Punkte unter „Was Tobias testet“ in Abschnitt 6) und schreibt sein Feedback in einen **neuen Chat**. Danach besprechen wir gemeinsam die **Vorgehensweise mit Level und Techbaum** – das Kräuter-Kapitel ab Level 7 (Tobias' Plan in Abschnitt 4.4) –, damit später alles Sinn ergibt |
 
 ---
 
@@ -94,16 +94,16 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Förderbänder** verbinden die Gebäude und transportieren Waren Stück für Stück.
 - **Aufteilen und Zusammenführen durch Ziehen**, ohne Verteiler-Gebäude: Zieht man von einem bestehenden Band aus, teilt es sich auf (bis zu 3 Richtungen pro Feld; mehrfach aufteilen ergibt 4 und mehr Strecken). Zieht man auf ein bestehendes Band, laufen beide zusammen. Abzweigungen verteilen die Waren abwechselnd.
 - **Ein- und Ausgänge** sind als Pfeile am Gebäude zu sehen: blau = Eingang, orange = Ausgang.
-- **Rohstoffe kauft man beim Händler**, z. B. einen Holzstamm. Den legt man in das Holzfällerlager, das daraus nach und nach Holzblöcke herstellt (Beispiel: 1 Holzstamm → 200 Holzblöcke in 15 Minuten). **Es passt immer nur ein Holzstamm hinein.** Stein läuft genauso: Felsbrocken kaufen → Steinbruch → 200 Steinblöcke.
+- **Rohstoffe kauft man beim Händler**, z. B. einen Holzstamm. Den legt man in das Holzfällerlager, das daraus nach und nach Holzblöcke herstellt (Beispiel: 1 Holzstamm → 200 Holzblöcke in 15 Minuten). ~~Es passt immer nur ein Holzstamm hinein.~~ **Seit v0.14.0 (Tobias): Bis zu 3 Holzstämme passen hinein** (der Vorrat, 45 Minuten); sie werden nacheinander verarbeitet. **„⏫ Auffüllen“** im Infofenster füllt bis zum Rand: erst aus dem Laden-Lager, was fehlt, wird direkt beim Händler gekauft. Nachlegen bleibt Handarbeit. Am Gebäude zeigen drei Punkte, wie voll der Vorrat ist. Stein und Eisen laufen genauso: Felsbrocken kaufen → Steinbruch → 200 Steinblöcke.
 - **Maschinen** verarbeiten nach Rezept. Man stellt ein, was sie herstellen (Modus A oder B), z. B. Sägewerk → Holzplatte oder Holzstab (5 Blöcke → 1 Teil). Der festgelegte Techbaum steht in Abschnitt 4.2. Später kann es auch Maschinen geben, die mehrere Rohstoffe verarbeiten.
 - **Typischer Aufbau:** Ein Holzfällerlager wird auf 4 Strecken verteilt. Zwei davon gehen in Sägewerke (eins auf Winkel, eins auf Stäbe eingestellt), zwei laufen weiter für spätere Rezepte, die Holzblöcke direkt brauchen (z. B. zusammen mit Splitt).
 - **Stau:** Ist ein Band voll (z. B. weil es im Nichts endet), bleibt alles stehen und davor wird nicht weiter produziert.
 - **Lagerhäuser** sind die einzige Möglichkeit, Waren auf dem Grundstück zu lagern. Sie sind Zwischenstationen und eine Art Verteiler: 2 × 1 Felder, 3 Fächer zu je 50 Waren, **Eingang oben links, Ausgang unten rechts** – deshalb lagert man sinnvollerweise nur eine Sorte, z. B. 3 × 50 Holzblöcke. Was hineinläuft, läuft weiter, sobald am Ausgang Platz ist. Bleibt der Ausgang frei, sammelt das Lagerhaus bis zu 150 Stück; ein Abzweig davor schickt dann alles Weitere in die anderen Richtungen (z. B. ins Versandportal).
 - **Versandportal:** 1 × 1 Feld mit **einem** Eingang (dreht mit). Waren, die hineinlaufen, landen direkt im Laden.
-- **Lagerhaus als Gegenstück zum Versandportal (seit v0.12.0, Wunsch von Tobias):** Das Versandportal bringt Waren vom Band ins Laden-Lager, das Lagerhaus holt sie zurück aufs Band. Im Infofenster des Lagerhauses:
+- **Lagerhaus als Gegenstück zum Versandportal (seit v0.12.0, Wunsch von Tobias):** Das Versandportal bringt Waren vom Band ins Laden-Lager, das Lagerhaus holt sie zurück aufs Band – **seit v0.14.0 nur noch von Hand** (Tobias: Sonst könnte man kurze Strecken bauen, alles ins Laden-Lager schicken und per Lagerhaus wieder herausholen). Ist es leer, befüllt man es neu. Im Infofenster des Lagerhauses:
   - **📥 Befüllen:** Ware aus dem Laden-Lager wählen und die Menge einstellen wie bei der Theke (0, −5, −1, +1, +5, Alle), bis zu 150 Stück. Beispiel: 120 Eisenbarren, die an der Theke nur 1.440 Gold bringen würden, laufen in eine Schmiede und werden zu 24 Eisenstangen (1.728 Gold oder Zutat für Kombi-Teile).
-  - **🔁 Nachschub:** Das Lagerhaus holt dauerhaft eine Ware aus dem Laden-Lager. Es hält nur bis zu 10 Stück bereit, der Rest bleibt sichtbar im Laden-Lager. Ein einstellbarer **Rest** bleibt immer dort (z. B. 20 Holzplatten zum Bauen – der „eiserne Bestand“). Am Spielfeld zeigt das Lagerhaus einen blauen Kreispfeil und das Bild seiner Ware. „✕ Nachschub aus“ beendet es.
-  - **↩ Ausräumen:** Alles aus dem Lagerhaus zurück ins Laden-Lager; der Nachschub geht dabei aus.
+  - ~~**🔁 Nachschub:** Das Lagerhaus holt dauerhaft eine Ware aus dem Laden-Lager (mit einstellbarem Rest).~~ *v0.12.0 bis v0.13.0; seit v0.14.0 entfernt (Tobias).*
+  - **↩ Ausräumen:** Alles aus dem Lagerhaus zurück ins Laden-Lager.
   - Rohstoffe (Holzstamm, Felsbrocken, Eisenerz) kommen nicht ins Lagerhaus; die legt man direkt in ihr Gebäude ein.
 - **Bänder leeren (seit v0.12.0):** Band antippen → **„🧺 Strecke leeren“**: Alle Waren der zusammenhängenden Strecke (hell markiert; alle direkt verbundenen Bänder, auch über Abzweige und Zusammenführungen; an Gebäuden endet sie) kommen ins Laden-Lager, die Bänder bleiben liegen. Staut sich der Eingang einer Maschine (rotes Licht), steht im Infofenster **„🧺 Zulauf leeren“**: Bringt eine Zuleitung eine Ware, die die Maschine gar nicht braucht, wird nur diese geleert, sonst alle gestauten.
 - **Kombi-Maschinen** (seit v0.10.0) haben zwei Eingänge und brauchen zwei verschiedene Zutaten, z. B. Zimmerei: 10 Holzstäbe + 5 Stein-Zahnräder → 1 Zahnradwelle. Jeder Eingang nimmt jede passende Zutat; am sichersten kommt jede Zutat über ihren eigenen Eingang. Fehlt eine Zutat, zeigt die Maschine ein kleines Bild davon; das Infofenster sagt, wie viel fehlt. Laufen beide Zutaten gemischt über ein Band und eine nimmt überhand, staut sich der Eingang (rotes Licht, „Eingang blockiert“).
@@ -141,10 +141,11 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 
 ### 3.6 Zeit
 
-- Das Spiel läuft in Echtzeit. Die Fabrik produziert weiter, auch wenn das Spiel geschlossen ist.
-- Die Produktion läuft, bis ein Lager voll ist oder einer Werkstatt die Zutaten ausgehen. Ein zusätzliches Zeitlimit gibt es nicht.
-- Volle Lager sind der Anreiz, regelmäßig reinzuschauen.
-- Holzfällerlager und Steinbruch brauchen gekaufte Rohstoffe (Holzstamm, vermutlich Felsbrocken); die frühere Annahme „liefern unbegrenzt“ ist damit hinfällig.
+- Das Spiel läuft in Echtzeit. **Seit v0.14.0 produziert die Fabrik weiter, auch wenn das Spiel geschlossen oder die App im Hintergrund ist.**
+- **Wie Clash of Clans, nur umgekehrt (Tobias):** Dort laufen die Sammler voll und man leert sie; bei uns läuft alles, bis es leer ist, und man füllt nach. Holz, Stein und Eisen legt man immer von Hand nach (bis zu 3 je Gebäude, „⏫ Auffüllen“), Lagerhäuser befüllt man von Hand; die Produktion selbst läuft automatisch weiter – vom Holzfäller über Bänder und Maschinen bis zur letzten Maschine, die nichts mehr zu tun hat.
+- **Was weiterläuft:** Rohstoff-Gebäude, bis ihr Vorrat verarbeitet ist; Maschinen, bis ihnen Zutaten fehlen; Lagerhäuser, bis sie leer sind; das Versandportal, bis das Laden-Lager voll ist; Kunden kaufen an den Theken, bis sie leer sind. Ein zusätzliches Zeitlimit gibt es nicht.
+- **Beim Zurückkommen** rechnet das Spiel die verpasste Zeit nach (genau wie im laufenden Spiel). Nach mehr als 1 Minute erscheint eine kurze Meldung, nach mehr als 10 Minuten das Fenster **„👋 Willkommen zurück!“**: wie lange man weg war, was Kunden gekauft haben, was ins Laden-Lager kam, welche Gebäude leer gelaufen sind, ob das Laden-Lager voll oder alle Theken leer sind.
+- Leere Rohstoff-Gebäude, leere Theken und ein volles Laden-Lager sind der Anreiz, regelmäßig reinzuschauen.
 
 ### 3.7 Online-Teil (später)
 
@@ -221,16 +222,16 @@ Von Tobias bestätigt (Chat 3, Teil 2). Mengen, Zeiten und Preise hat Claude vor
 
 | Gebäude | Größe | Aufgabe | Freigeschaltet ab |
 |---|---|---|---|
-| Holzfällerlager | 2 × 2 | 1 Holzstamm → 200 Holzblöcke | Level 1 |
-| Steinbruch | 2 × 2 | 1 Felsbrocken → 200 Steinblöcke | Level 2 |
-| Schmelzhütte (neu) | 2 × 2 | 1 Eisenerz → 200 Eisenbarren | Level 3 |
+| Holzfällerlager | 2 × 2 | 1 Holzstamm → 200 Holzblöcke; seit v0.14.0 bis zu 3 Holzstämme als Vorrat | Level 1 |
+| Steinbruch | 2 × 2 | 1 Felsbrocken → 200 Steinblöcke; seit v0.14.0 bis zu 3 als Vorrat | Level 2 |
+| Schmelzhütte (neu) | 2 × 2 | 1 Eisenerz → 200 Eisenbarren; seit v0.14.0 bis zu 3 als Vorrat | Level 3 |
 | Sägewerk | 2 × 2 (bisher 2 × 1) | A: Holzplatte · B: Holzstab | Level 1 |
 | Steinmetz | 2 × 2 (bisher 2 × 1) | A: Steinplatte · B: Stein-Zahnrad | Level 2 |
 | Schmiede (neu) | 2 × 2 | A: Eisenblech (bis v0.12: Mini-Eisenplatte) · B: Eisenstange (bis v0.7.1: Eisennägel) | Level 3 |
 | Zimmerei (Kombi, seit v0.10.0) | 2 × 2 | Zahnradwelle · Räderwerk · Verstärkte Holzplatte | Level 4 |
 | Feinschmiede (Kombi, seit v0.10.0) | 2 × 2 | Scharnier · Schlüssel · Zirkel | Level 5 |
 | Schlosserei (Kombi, seit v0.10.0) | 2 × 2 | Gewichtstein · Uhrwerk · Vorhängeschloss | Level 6 |
-| Lagerhaus | 2 × 1 | Zwischenlager, 3 × 50; seit v0.12.0 aus dem Laden-Lager befüllen oder mit Nachschub | Level 1 |
+| Lagerhaus | 2 × 1 | Zwischenlager, 3 × 50; seit v0.12.0 von Hand aus dem Laden-Lager befüllen (Nachschub nur bis v0.13.0) | Level 1 |
 | Versandportal | 1 × 1 | schickt Waren ins Laden-Lager | Level 1 |
 | Förderband | 1 × 1 | transportiert | Level 1 |
 
@@ -303,12 +304,12 @@ Das Sägewerk kostet nur Holzblöcke, damit die erste Maschine ohne Platten baub
 
 **Holzwinkel und Splitt** fliegen raus (vielleicht kommen sie später wieder). Vorhandene im Spielstand werden umgewandelt: Holzwinkel → Holzplatte, Splitt → Stein-Zahnrad.
 
-### 4.3 Im Spiel (Stand v0.13.0)
+### 4.3 Im Spiel (Stand v0.14.0)
 
 | Stufe | Ware | Woher | Rezept |
 |---|---|---|---|
 | 0 | Holzstamm (ab Level 1), Felsbrocken (ab Level 2), Eisenerz (ab Level 3) | Händler (550 / 550 / 2.200 Gold); 1 Holzstamm gratis zum Start, je 1 Felsbrocken bzw. Eisenerz gratis beim Aufstieg | – |
-| 1 | Holzblock / Steinblock / Eisenbarren | Holzfällerlager / Steinbruch / Schmelzhütte | 1 Rohstoff → 200 Stück in 15 Minuten |
+| 1 | Holzblock / Steinblock / Eisenbarren | Holzfällerlager / Steinbruch / Schmelzhütte (je bis zu 3 Rohstoffe als Vorrat) | 1 Rohstoff → 200 Stück in 15 Minuten |
 | 2 | Holzplatte / Holzstab | Sägewerk, Einstellung „Platten“ / „Stäbe“ | 5 Holzblöcke → 1 Teil (5 Sekunden) |
 | 2 | Steinplatte / Stein-Zahnrad | Steinmetz, Einstellung „Platten“ / „Zahnräder“ | 5 Steinblöcke → 1 Teil (5 Sekunden) |
 | 2 | Eisenblech / Eisenstange | Schmiede, Einstellung „Bleche“ / „Stangen“ | 5 Eisenbarren → 1 Teil (5 Sekunden) |
@@ -322,15 +323,33 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 
 **Ideen für später:** weitere Rohstoffe wie Lehm (Ziegel), Hanf (Seile), Sand (Glas). *Größere Waren wie Fässer, Karren, Fenster passen nicht mehr (Tobias, v0.13.0: nur kleine Waren, die auf dem Band darstellbar sind).*
 
-### 4.4 Ideen für den weiteren Techbaum (Tobias, Chat 9 – noch nicht geplant)
+### 4.4 Der weitere Techbaum: das Kräuter-Kapitel (Tobias, Chat 9 und Chat 10 – Richtung steht, Details noch offen)
 
-Erst nach dem Test der Aufträge (v0.13.0) gemeinsam planen.
+**Tobias' Plan (Chat 10):** Die Level 1–6 waren ein Kapitel voller Werkzeuge. Ab Level 7 beginnt ein **zweites Kapitel mit neuer Thematik – Kräuter und Heilkunde** – und fängt wieder einfach an: Man stellt wieder ganz einfach etwas her (Flachs → Verbände) und steigert sich in der Schwierigkeit, bis man auf Level 10 (dem „Level 4“ der Kräuter) wieder mehr in die Produktion investieren muss. Auf Level 11 oder 12 schließt das Kräuter-Kapitel ab. Dann gibt es **zwei große Techbäume: Werkzeuge und Kräuter**. Ab Level 13 kommen neue Produkte, z. B. **Sand**: daraus Glas, aber über die Kräuter-Maschinen auch Sandstaub für die Zauberei – die Kapitel greifen ineinander.
+
+| Level | Inhalt (Tobias) | Stand |
+|---|---|---|
+| 7 | **Flachs** (Tobias' Wahl nach Claudes Vorschlag, statt Farn oder Hanf) → **Fasern** → **Verbände** – wieder ganz einfach | Plan folgt |
+| 8 | erster **Heilverband** (Verband + Kraut, z. B. **Ringelblume**) | Plan folgt |
+| 9 | zweite Verbands-Version (weiteres Kraut) | Plan folgt |
+| 10 | wie Level 4 bei den Werkzeugen: mehr investieren, auf Masse gehen | Plan folgt |
+| 11–12 | Abschluss des Kräuter-Kapitels | Plan folgt |
+| 13+ | neues Kapitel, z. B. Sand → Glas, mit den Kräuter-Maschinen Sandstaub für die Zauberei | später |
+| ~15 | **Alchemist** und Zaubertränke (Mörser → Pulver → Tränke) – Tobias möchte damit noch warten | später |
+
+- **Ein allgemeines Beet (Tobias):** Es gibt nicht für jede Pflanze ein eigenes Gebäude, sondern ein Beet, in dem man alles anpflanzen kann (Samen einlegen = nachlegen, wie bei Holz, Stein und Eisen).
+- **Warum Flachs (Claude):** Farn hat keine brauchbaren Fasern; Hanf eher grobe für Seile und Säcke. Aus Flachs wird Leinen – Leinenbinden waren im Mittelalter die Verbände. Tobias: „Flachs“.
+- **Ringelblume** als altes Wundkraut für die Heilung (Claudes Vorschlag, Tobias: „gute Ergänzung“).
+- **Farn als Zauberkraut für später** (Claudes Idee: Nach altem Volksglauben macht Farnsamen in der Johannisnacht unsichtbar) – noch offen.
+- **Wie wir vorgehen (Tobias):** erst das Spiel im Hintergrund (v0.14.0), dann besprechen wir gemeinsam die Vorgehensweise mit Level und Techbaum, damit später alles Sinn ergibt.
+
+**Ältere Ideen (Chat 9):**
 
 - **Kräuter anbauen:** Kräuter anpflanzen; nach einer bestimmten Zeit wächst die fertige Pflanze, die man ernten kann.
 - **Mörser:** Pflanzen durch einen Mörser schicken (Kräutermixtur).
 - **Verbände:** Aus Farn oder Hanf werden Verbände; Verband + Kräutermixtur = Heilender Verband.
 - **Tränke:** Kräuter mit Kohle und anderen Dingen mischen – erste Produkte in Richtung Lebenstrank, Manatrank, Alterstrank und Ähnliches.
-- **Leitlinien (Tobias):** nur kleine Waren; aus zwei Produkten entsteht immer das nächstmögliche, sinnvolle Produkt; die neuen Level (7 bis etwa 10) erzählen die Geschichte des Ortes weiter (z. B. eine Heilerin oder Kräuterkundige als neue Bewohnerin – Claudes Idee).
+- **Leitlinien (Tobias):** nur kleine Waren; aus zwei Produkten entsteht immer das nächstmögliche, sinnvolle Produkt; die neuen Level erzählen die Geschichte des Ortes weiter (z. B. eine Heilerin oder Kräuterkundige als neue Bewohnerin – Claudes Idee).
 
 ---
 
@@ -343,7 +362,7 @@ Erst nach dem Test der Aufträge (v0.13.0) gemeinsam planen.
   - Der gleiche Code kann später auf einem Server laufen (Online-Teil).
   - Die Grafik lässt sich austauschen, z. B. später eine Schrägansicht wie in Clash of Clans.
 - **Inhalte als Datentabellen:** Waren, Rezepte, Gebäude und Preise stehen in Tabellen. Neue Inhalte sind neue Zeilen.
-- **Simulation in festen Takten.** Verpasste Zeit wird beim Öffnen im Schnelldurchlauf nachgerechnet (Offline-Produktion).
+- **Simulation in festen Takten.** Verpasste Zeit wird beim Öffnen (und beim Zurückkommen aus dem Hintergrund) nachgerechnet (seit v0.14.0): Die Fabrik rechnet Takt für Takt wie im laufenden Spiel, bis sie stillsteht; danach kaufen nur noch die Kunden ein, das geht im Schnelldurchlauf. Gerechnet wird in Portionen, damit der Bildschirm nicht einfriert; dauert es länger, erscheint „⏩ Die Fabrik holt die Zeit nach …“ mit Fortschritt. Während des Nachrechnens wird nicht gespeichert. Gemessen: eine Fabrik mit 9 Holz-Linien braucht für 8 Stunden Abwesenheit gut 1 Sekunde (auf dem Tablet etwas mehr).
 - **Spielstand** wird im Browser gespeichert, später auf dem Server.
 - **Später als App:** Das Web-Spiel wird in eine App verpackt (z. B. mit Capacitor), oder wir steigen auf eine Engine um. Entscheidung in M7.
 - **Kein Build-Schritt:** Der Browser lädt die Dateien direkt. GitHub Pages veröffentlicht `main` aus dem Hauptordner (`/ (root)`), die Datei `.nojekyll` schaltet die Umwandlung durch GitHub ab.
@@ -366,6 +385,7 @@ Erst nach dem Test der Aufträge (v0.13.0) gemeinsam planen.
 | `src/core/data/shop.js` | Laden: Lagergröße und Theken je Level, Kunden-Takt, Startvorrat, Testpaket |
 | `src/core/data/levels.js` | Laden-Level: Bauabschnitt des Ortes, Geschichte, Aufträge der Bewohner, Preis des Aufstiegs, Gratis-Rohstoff; Belohnungs-Regel der Aufträge (was ein Level freischaltet, steht als `level` bei Gebäuden und Rohstoffen) |
 | `src/core/data/land.js` | Fläche kaufen: Streifentiefe, Käufe je Seite, Preis je Streifen |
+| `src/core/data/offline.js` | Spiel im Hintergrund (v0.14.0): ab wann nachgerechnet wird, Grenzen, ab wann Meldung bzw. Fenster „Willkommen zurück“ |
 | `src/core/state.js` | Spielzustand anlegen, Größe von Grundstück und Welt, Abfragen auf dem Raster |
 | `src/core/dirs.js` | Himmelsrichtungen (oben, rechts, unten, links) |
 | `src/core/geometry.js` | Größe, Drehung, Felder sowie Ein- und Ausgänge von Gebäuden |
@@ -373,10 +393,11 @@ Erst nach dem Test der Aufträge (v0.13.0) gemeinsam planen.
 | `src/core/belts.js` | Förderbänder legen, aufteilen, zusammenführen, drehen, abreißen; Strecke finden und leeren, Zulauf leeren (v0.12.0) |
 | `src/core/area.js` | Bereich markieren und alles darin verschieben, drehen oder abreißen (v0.11.0) |
 | `src/core/production.js` | Was Gebäude tun: einlegen, herstellen, zwischenlagern, versenden, Status |
-| `src/core/warehouse.js` | Lagerhaus und Laden-Lager (v0.12.0): befüllen, Nachschub mit Rest, ausräumen |
+| `src/core/warehouse.js` | Lagerhaus und Laden-Lager (v0.12.0): befüllen, ausräumen (Nachschub seit v0.14.0 entfernt) |
+| `src/core/offline.js` | Spiel im Hintergrund (v0.14.0): verpasste Zeit nachrechnen (in Portionen, Stillstand erkennen, dann nur Kunden), Bericht „Willkommen zurück“ |
 | `src/core/sim.js` | Simulation in festen Takten: Waren auf Bändern, Stau, Aufteilen, Zusammenführen |
 | `src/core/shop.js` | Laden-Lager, Baukosten bezahlen und zurückgeben |
-| `src/core/market.js` | Handel: Händler, Theken, Kunden (mit eigenem Zufall im Spielstand), Pleiteschutz, Testpaket |
+| `src/core/market.js` | Handel: Händler, Theken, Kunden (mit eigenem Zufall im Spielstand), Pleiteschutz, Testpaket, „Auffüllen“ der Rohstoff-Gebäude (v0.14.0) |
 | `src/core/levels.js` | Laden-Level: was freigeschaltet ist, hergestellte Waren zählen, aufsteigen (Erfahrung und Gold) |
 | `src/core/quests.js` | Aufträge der Bewohner (v0.13.0): aktueller Auftrag, Belohnung, abgeben, Erfahrung je Level |
 | `src/core/land.js` | Fläche kaufen: Streifen und Preis je Seite, wie oft noch, Kauf, welche Seite ein Feld der gesperrten Fläche ist |
@@ -389,7 +410,8 @@ Erst nach dem Test der Aufträge (v0.13.0) gemeinsam planen.
 | `src/view/hud.js` | Obere Leiste (Gold, Knopf „Laden-Level“ mit kleiner Erfahrungsleiste, ⬆ und ❗) und Menü ☰ |
 | `src/view/panels.js` | Infofenster, großes Fenster, Rückfragen, Meldungen |
 | `src/view/shop.js` | Laden-Fenster mit den Reitern Lager, Theken, Händler |
-| `src/view/warehouse.js` | Lagerhaus-Fenster (v0.12.0): Ware wählen, dann Menge (Befüllen) oder Rest im Laden-Lager (Nachschub) |
+| `src/view/warehouse.js` | Lagerhaus-Fenster (v0.12.0): Ware wählen, dann Menge (Befüllen) |
+| `src/view/offline.js` | Spiel im Hintergrund (v0.14.0): Hinweis „Die Fabrik holt die Zeit nach …“ und Fenster „Willkommen zurück“ |
 | `src/view/levels.js` | Level-Fenster mit den Reitern „📜 Aufträge“ (Geschichte, Erfahrungsleiste, Auftrag mit „Abgeben“, Aufstieg) und „🏘️ Ort & Level“ (alle Bauabschnitte) |
 | `src/view/format.js` | Texte für Zahlen, Waren und Kosten |
 | `src/view/buildbar.js` | Untere Leisten: Laden/Bauen, Bauleiste, Werkzeugleiste |
@@ -398,8 +420,8 @@ Erst nach dem Test der Aufträge (v0.13.0) gemeinsam planen.
 | `src/style.css` | Aussehen der Oberfläche |
 | `assets/icons/` | App-Symbole (erzeugt mit `tools/make-icons.py`) |
 | `tools/set-version.mjs` | Setzt die Versionsnummer in `src/version.js` und `index.html` (inkl. Import-Map) |
-| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`), Bereiche verschieben (`area.test.js`), Lagerhaus-Nachschub und Bänder leeren (`warehouse.test.js`), Aufträge und neue Warennamen (`quests.test.js`) |
-| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Bereich markieren/verschieben/drehen (auch mit Taste R)/abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufträge abgeben und Aufsteigen bis Level 6 (mit Reiter „Ort & Level“), die Eisen-Kette, die Zimmerei, Strecke und Zulauf leeren sowie Lagerhaus befüllen, Nachschub und Ausräumen per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
+| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`), Bereiche verschieben (`area.test.js`), Lagerhaus befüllen und Bänder leeren (`warehouse.test.js`), Aufträge und neue Warennamen (`quests.test.js`), Spiel im Hintergrund, Rohstoff-Vorrat und Auffüllen (`offline.test.js`) |
+| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Bereich markieren/verschieben/drehen (auch mit Taste R)/abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufträge abgeben und Aufsteigen bis Level 6 (mit Reiter „Ort & Level“), die Eisen-Kette, die Zimmerei, Strecke und Zulauf leeren, Lagerhaus befüllen und ausräumen (kein Nachschub), Auffüllen des Holzfällerlagers sowie das Spiel im Hintergrund (20 Minuten weg in der App, 2 Stunden mit geschlossenem Spiel → Fenster „Willkommen zurück“) per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
 
 **Prüfen vor jedem Merge:** `npm test` (Spielregeln) und `npm run test:browser` (Browser-Test).
 
@@ -444,8 +466,8 @@ Erst nach dem Test der Aufträge (v0.13.0) gemeinsam planen.
 | v0.11.1 | **Test-Feedback (nur README):** Tobias' Test von v0.11.0 festgehalten, „Strecke leeren“ vorgemerkt | ✅ fertig |
 | v0.12.0 | **Nachschub & Bänder leeren:** Lagerhaus als Gegenstück zum Versandportal (befüllen, Nachschub mit Rest, ausräumen), „Strecke leeren“ und „Zulauf leeren“ | ✅ fertig |
 | v0.13.0 | **Aufträge & neue Namen:** Aufträge der Bewohner im Level-Fenster mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen, Bauabschnitte des Ortes, 8 Waren mit neuen Namen und Bildern | ✅ fertig |
-| v0.14.0 | **Techbaum, Teil 3:** z. B. Kräuter anbauen, Mörser, Verbände, Tränke; Level 7 bis etwa 10 (Tobias' Ideen, Abschnitt 4.4) | nach Tobias' Test von v0.13.0 gemeinsam planen |
-| später | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | Reihenfolge mit Tobias klären |
+| v0.14.0 | **Spiel im Hintergrund:** Fabrik läuft weiter, bis etwas leer ist; „Willkommen zurück“; Rohstoff-Vorrat (3) mit „Auffüllen“; Lagerhaus nur noch von Hand befüllen | ✅ fertig |
+| v0.15.0 ff. | **Kräuter-Kapitel:** Level 7 Flachs → Fasern → Verbände, danach Level 8–12 (Tobias' Plan, Abschnitt 4.4) | nach Tobias' Test von v0.14.0 gemeinsam planen |
 
 ### Bänder leeren (vorgemerkt in v0.11.1, umgesetzt in v0.12.0)
 
@@ -458,6 +480,28 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 - Spielstand-Format bleibt gleich.
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
+
+### v0.14.0 – Fabrik läuft im Hintergrund weiter & Rohstoff-Vorrat (fertig)
+
+Tobias' Feedback zu v0.13.0 und die Planung stehen in Abschnitt 10 (Chat 10).
+
+**Neu im Spiel:**
+- **Die Fabrik läuft weiter, wenn das Spiel zu ist** (oder die App im Hintergrund, z. B. während Tobias mit Claude schreibt) – bis etwas leer ist: Rohstoffe verarbeitet, Zutaten aufgebraucht, Lagerhäuser leer, Theken leer verkauft oder das Laden-Lager voll. Beim Zurückkommen wird die Zeit nachgerechnet, genau wie im laufenden Spiel.
+- **„👋 Willkommen zurück!“** nach mehr als 10 Minuten: wie lange man weg war, was Kunden gekauft haben (mit Gold), was ins Laden-Lager kam, welche Gebäude leer gelaufen sind („Leer gelaufen: 3× Holzfällerlager“), ob das Laden-Lager voll ist, ob alle Theken leer sind und ob die Fabrik noch arbeitet. Zwischen 1 und 10 Minuten nur eine kurze Meldung. Dauert das Nachrechnen länger, erscheint „⏩ Die Fabrik holt die Zeit nach …“ mit Fortschrittsleiste.
+- **Rohstoff-Vorrat:** In Holzfällerlager, Steinbruch und Schmelzhütte passen jetzt **bis zu 3 Rohstoffe** (je 15 Minuten, zusammen 45 Minuten). Sie werden nacheinander verarbeitet. Am Gebäude zeigen **drei Punkte** unter der Fortschrittsleiste, wie voll der Vorrat ist. Das Infofenster zeigt „Vorrat: 2 / 3 Holzstämme“ und „Leer in etwa 37:39 min“.
+- **„⏫ Auffüllen“** (Infofenster eines Rohstoff-Gebäudes) füllt den Vorrat bis zum Rand: erst aus dem Laden-Lager, was fehlt, kauft es direkt beim Händler (braucht keinen Platz im Laden-Lager). Der Knopf sagt vorher, was er tut, z. B. „⏫ Auffüllen: 2 Holzstämme · kauft 1 für 550 🪙“. Reicht das Gold nicht für alle, kauft er so viele wie möglich. Dazu weiter „➕ 1 Holzstamm einlegen“ und „🧺 Holzstamm kaufen“.
+- **Lagerhaus nur noch von Hand befüllen:** Den Knopf „🔁 Nachschub“ gibt es nicht mehr. „📥 Befüllen“ und „↩ Ausräumen“ bleiben; ist das Lagerhaus leer, befüllt man es neu. Auf dem Band arbeitet es weiter als Zwischenstation.
+- **Spielstand** (Version 11 → 12): Rohstoff-Gebäude bekommen einen leeren Vorrat; Lagerhäuser verlieren ihren Nachschub, ihr Inhalt bleibt (hatte eins Nachschub, sagt eine Meldung Bescheid). Beim Öffnen erscheint eine kurze Meldung zu den Neuerungen.
+
+**Für Tobias' Fabrik:** Beim ersten Öffnen nach dem Update wird die Zeit seit dem letzten Spielen nachgerechnet – vermutlich lief nur der letzte Rohstoff noch zu Ende. Ab dann gilt: vor dem Schließen alle Rohstoff-Gebäude mit „⏫ Auffüllen“ füllen und die Theken bestücken; dann läuft der Laden 45 Minuten und länger weiter (die Maschinen danach noch, bis ihre Zutaten aufgebraucht sind).
+
+**Was Tobias testet:**
+- Alle Rohstoff-Gebäude mit „⏫ Auffüllen“ füllen, Theken bestücken, das Spiel schließen und nach einer Weile (z. B. 1–2 Stunden) wieder öffnen: Stimmt das Fenster „Willkommen zurück“? Fühlt sich der Rhythmus richtig an (rein, nachlegen, wieder raus)?
+- Kurz zu Claude wechseln und zurück: Läuft die Fabrik weiter, erscheint eine kurze Meldung?
+- Sind 3 Rohstoffe als Vorrat ein gutes Maß?
+- Lagerhaus: Befüllen und Ausräumen wie gewohnt; kein Nachschub mehr.
+- Erkennt man die neuen Warenbilder auf dem Band? (aus v0.13.0 noch offen)
+- Feedback bitte in einen neuen Chat; danach besprechen wir die Vorgehensweise mit Level und Techbaum (Abschnitt 4.4).
 
 ### v0.13.0 – Aufträge aus dem Ort & neue Warennamen (fertig)
 
@@ -485,6 +529,8 @@ Tobias' Feedback nach v0.12.0 und die Planung stehen in Abschnitt 10 (Chat 9, Te
 - Feedback bitte in einen neuen Chat; danach planen wir den weiteren Techbaum (Abschnitt 4.4).
 
 ### v0.12.0 – Nachschub aus dem Laden-Lager & Bänder leeren (fertig)
+
+*Seit v0.14.0 gibt es den Nachschub nicht mehr (Tobias); Befüllen, Ausräumen und Bänder leeren bleiben.*
 
 Tobias' Feedback nach Level 6 steht in Abschnitt 10 (Chat 9). Die Aufgaben rücken auf v0.13.0, das Weiterlaufen bei geschlossenem Spiel auf v0.14.0.
 
@@ -854,7 +900,7 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 | 07.11.2026 | Umbauen, Abreißen und Neubauen sind ein wesentlicher Bestandteil des Spiels | Tobias (Chat 8, Teil 3): Er spielt in Echtzeit und baut ständig um – mal fehlen Blöcke, mal Platten für neue Gebäude; man konzentriert sich erst auf eine Produktion, um dann andere anzugehen. |
 | 07.11.2026 | „Strecke leeren“ (am Band) und „Zulauf leeren“ (an blockierten Maschinen) vorgemerkt, noch nicht umgesetzt | Claudes Vorschlag; Tobias findet die Idee gut, möchte sie aber zusammen mit weiterem Feedback umsetzen. |
 | 07.11.2026 | Pause: Erst bis Level 6 spielen und Feedback sammeln, dann den nächsten Schritt programmieren | Tobias (Chat 8, Teil 3): „damit wir nicht nur für eine Kleinigkeit codieren“. |
-| 07.11.2026 | Das Lagerhaus wird das Gegenstück zum Versandportal: aus dem Laden-Lager befüllen (Menge wie bei der Theke), dauerhaft Nachschub holen, ausräumen | Tobias (Chat 9): 120 Eisenbarren im Laden-Lager für 12 Gold das Stück zu verkaufen ist schade, wenn man sie in die Produktion einschleusen könnte; er schlug selbst vor, dafür das Zwischenlager zu nutzen. Kein neues Gebäude. |
+| 07.11.2026 | *(Nachschub seit v0.14.0 entfernt, siehe unten)* Das Lagerhaus wird das Gegenstück zum Versandportal: aus dem Laden-Lager befüllen (Menge wie bei der Theke), dauerhaft Nachschub holen, ausräumen | Tobias (Chat 9): 120 Eisenbarren im Laden-Lager für 12 Gold das Stück zu verkaufen ist schade, wenn man sie in die Produktion einschleusen könnte; er schlug selbst vor, dafür das Zwischenlager zu nutzen. Kein neues Gebäude. |
 | 07.11.2026 | Nachschub mit einstellbarem Rest, der immer im Laden-Lager bleibt | Claudes Vorschlag, von Tobias angenommen: Sonst zieht der Nachschub das Baumaterial ab – genau das Problem mit dem „eisernen Bestand“ (offene Frage 13). |
 | 07.11.2026 | Nachschub hält nur bis zu 10 Stück im Lagerhaus bereit (Datentabelle `supplyBuffer`); Befüllen geht bis 150 | Claudes Wahl: Der Vorrat bleibt sichtbar im Laden-Lager, man kann weiter damit bauen und verkaufen, und mehrere Lagerhäuser teilen sich eine Ware. |
 | 07.11.2026 | Nachschub erst einmal ungebremst (so schnell, wie das Band abnimmt) | Claudes Vorschlag; Tobias: „Wir müssen das mal probieren und spielen, damit ich sehe, wie das läuft.“ Wird es zu leicht, lässt er sich verlangsamen. |
@@ -873,17 +919,26 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 | 07.11.2026 | Bestehende Spielstände behalten ihr Level; die Aufträge des aktuellen Levels beginnen von vorn | Claudes Wahl: Tobias' Fabrik (Level 6) bekommt die Aufträge vom Stadttor; nichts wird zurückgestuft. |
 | 07.11.2026 | Bewohner-Namen wählt Claude | Tobias: „Namen kannst du gerne aussuchen, das ist erstmal nicht so wichtig.“ |
 | 07.11.2026 | Nach den Aufträgen kommt der weitere Techbaum (Kräuter, Mörser, Verbände, Tränke) | Tobias: „Lass uns zuerst die Aufgaben machen, damit diese sinnig sind, und dann planen wir den weiteren Techbaum.“ |
+| 07.11.2026 | Stückzahlen der Aufträge bleiben so | Tobias (Test von v0.13.0): Der erste Auftrag ist eine machbare Menge, das Spiel soll auch fordern. |
+| 07.11.2026 | Die Fabrik läuft im Hintergrund weiter, bis etwas leer ist; Rohstoffe (und später Samen) legt man immer von Hand nach | Tobias: wie Clash of Clans, nur umgekehrt – „Alles läuft, bis es leer ist, und manuell wieder nachfüllen.“ Man soll sich immer wieder einloggen müssen, die Produktion läuft automatisch. Das Weiterlaufen stand seit dem 05.11.2026 im Konzept. |
+| 07.11.2026 | Bis zu 3 Rohstoffe je Rohstoff-Gebäude (statt einem); Knopf „Auffüllen“ (erst Laden-Lager, dann kaufen) | Claude: Ein Rohstoff reicht nur 15 Minuten – mehr Holzfäller machen die Fabrik schneller, aber nicht länger. Claudes Vorschlag waren 4, Tobias: „3 statt 4“. Auffüllen: Claudes Vorschlag, Tobias: „ein guter Knopf“. |
+| 07.11.2026 | Kunden kaufen im Hintergrund weiter, bis die Theken leer sind | Tobias: „ja, dürfen sie, bis alles leer ist“. |
+| 07.11.2026 | Lagerhaus nur noch von Hand befüllen; Nachschub entfällt, Ausräumen bleibt | Tobias: Sonst könnte man kurze Produktionsstraßen bauen, alles ins Laden-Lager schicken und über das Lagerhaus wieder heraus. Er hatte den Nachschub nie benutzt. Ausräumen bleibt (Claudes Vorschlag, Tobias einverstanden). |
+| 07.11.2026 | Beim Zurückkommen: nach über 1 Minute eine kurze Meldung, nach über 10 Minuten das Fenster „Willkommen zurück“; nachgerechnet wird in normaler Geschwindigkeit (auch im Testmodus) | Claudes Wahl: Tobias wechselt oft kurz zu Claude – ein Fenster jedes Mal wäre lästig. Grenzen stehen in `data/offline.js`. |
+| 07.11.2026 | Kräuter-Kapitel ab Level 7: wieder einfach beginnen (Flachs → Fasern → Verbände), bis Level 10 steigern, Level 11/12 abschließen; ein allgemeines Beet für alle Pflanzen; Alchemist erst um Level 15; ab Level 13 neue Rohstoffe wie Sand | Tobias' Plan (Abschnitt 4.4): zwei große Techbäume (Werkzeuge und Kräuter), die später ineinandergreifen. |
+| 07.11.2026 | Flachs statt Farn oder Hanf | Claudes Begründung (Leinenbinden waren die Verbände des Mittelalters, Farn hat keine Fasern), Tobias: „Flachs“. |
+| 07.11.2026 | Reihenfolge: erst das Spiel im Hintergrund (v0.14.0), dann gemeinsam die Vorgehensweise mit Level und Techbaum besprechen | Tobias, damit später alles Sinn ergibt. |
 
 ---
 
 ## 8. Offene Fragen
 
-Stand 07.11.2026 (nach v0.13.0).
+Stand 07.11.2026 (nach v0.14.0).
 
-1. **Nächstes Feedback:** Tobias testet v0.13.0 (Aufträge, neue Namen) und schreibt sein Feedback in einen neuen Chat. Stand: Level 6, Schlosserei gebaut, Lagerhaus-Nachschub getestet. Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Vorhängeschlössern sehr viel Gold. Danach Plan für den weiteren Techbaum.
+1. **Nächstes Feedback:** Tobias testet v0.14.0 (Spiel im Hintergrund, Vorrat, Auffüllen, Lagerhaus ohne Nachschub) und schreibt sein Feedback in einen neuen Chat. Danach besprechen wir die Vorgehensweise mit Level und Techbaum (Kräuter-Kapitel, Abschnitt 4.4). Noch offen aus v0.13.0: Erkennt man die neuen Warenbilder auf dem Band? (Tobias hat es noch nicht ausprobiert, bisher gab es mit den Bildern keine Probleme.) Stand: Level 6, erster Auftrag vom Stadttor gesehen. Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Vorhängeschlössern sehr viel Gold. Danach Plan für den weiteren Techbaum.
 2. **Handel im echten Tempo:** geklärt – Tobias' Zeiten (bis Eisen etwa 45 Minuten, zweite Runde Eisen nach etwa 60 Minuten) sind in echter Zeit gemessen; nur die Eisen-Runden hat er im Testmodus beschleunigt. Früher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10).
 3. **Laden-Lager:** seit v0.10.1 500 Plätze bis Level 3, 1.000 ab Level 4 (Tobias). Claudes Lesart: erst ab Level 4, weil es dort eng wird. Soll es schon ab Level 1 1.000 sein, ist das eine Zahl in der Datentabelle.
-4. **Aufträge (seit v0.13.0 im Spiel):** geklärt – Waren werden abgegeben, ein Auftrag nach dem anderen, Gold = Thekenwert, Erfahrung reicht genau fürs Level, Aufstieg kostet Gold. Noch offen: Passen Stückzahlen und Aufstiegspreise (Platzhalter)? Was bringen Level 7 bis 10 (Ende der Einführung) – kommt mit dem Techbaum Teil 3. Kostet der Laden-Ausbau später zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Tobias' Erkenntnis bleibt wichtig: Man muss die Mitte finden zwischen Verkaufen (Gold für Rohstoffe) und Weiterverarbeiten.
+4. **Aufträge (seit v0.13.0 im Spiel):** geklärt – Waren werden abgegeben, ein Auftrag nach dem anderen, Gold = Thekenwert, Erfahrung reicht genau fürs Level, Aufstieg kostet Gold. Stückzahlen passen (Tobias, v0.13.0: „machbare Menge, das Spiel soll auch fordern“). Noch offen: Passen die Aufstiegspreise (Platzhalter)? Level 7 bis 12 kommen mit dem Kräuter-Kapitel (Abschnitt 4.4). Kostet der Laden-Ausbau später zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Tobias' Erkenntnis bleibt wichtig: Man muss die Mitte finden zwischen Verkaufen (Gold für Rohstoffe) und Weiterverarbeiten.
 5. **Einstieg:** Tobias' Idee, am Anfang vor allem die Massenproduktion auszubauen, damit man schnell genug Ware von allem hat – später austesten. Die 500 Gold Startkapital reichen für den Weg zu Stein und Eisen (Test von v0.9.1).
 6. **Pleiteschutz:** Ein Rohstoff ohne passendes Gebäude (z. B. Felsbrocken ohne Steinbruch) verhindert das Geschenk. Vorerst bewusst so gelassen; beobachten.
 7. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
@@ -892,14 +947,36 @@ Stand 07.11.2026 (nach v0.13.0).
 10. **Tempo ab Level 4 (Feinschliff):** Bei Tobias dauerte es etwa 5 Minuten, bis ein Stein-Zahnrad in der Zimmerei ankam. Das ist gewollt: Am Anfang geht es schnell, danach muss man auf Masse gehen (mehr Holzfäller und Steinbrüche), um die Kombi-Maschinen zu versorgen. Beobachten, ob die Balance stimmt – Stellschrauben sind die Mengen in den Rezepten (10 + 5), die Dauer eines Rohstoffs (15 Minuten) und die Fläche (seit v0.10.2 fester Preis, 500 Gold je Streifen). Stand v0.11.0 (Tobias, Echtzeit): nach über einer Stunde noch nicht Level 6, nach 2–3 Stunden das erste Scharnier; der Flow fühlt sich gut an (schnell drin, ständig Rohstoffe nachlegen und produzieren).
 11. **Größe der Welt:** Seit v0.10.2 kann das Grundstück bis 38 × 30 Felder wachsen (jede Seite 2×). Reicht das für die Massenproduktion der höheren Level, oder gibt es später mehr Fläche, z. B. weitere Käufe je Seite mit dem Level oder über Aufgaben? Das ist dann nur eine Zahl in der Datentabelle (`perSide`).
 12. **Weiche mit Filter (Idee von Claude):** Ein Band-Feld, das eine bestimmte Ware abzweigt und den Rest geradeaus schickt, um gemischte Bänder zu sortieren. Will Tobias das, und wenn ja, wann? Seit v0.12.0 helfen „Strecke leeren“ und „Zulauf leeren“ bei falschen Waren.
-13. **„Eiserner Bestand“:** Tobias' Erkenntnis: Am Anfang verkauft man alles, weil man Gold braucht, und später fehlen Baumaterialien (Blöcke, Platten), weil sie in die Produktion gehen. Wer strukturiert spielt und immer einen Grundvorrat im Laden-Lager behält, kommt nicht in Not. Nach Level 6 (Chat 9): Wer am Anfang nicht auf das „Makro“ achtet, muss am Ende z. B. eine eigene Holz-Linie nur für Baumaterial nachbauen. Erste Hilfe seit v0.12.0: der **Rest beim Nachschub** (bleibt immer im Laden-Lager). Denkbar wäre später noch ein Mindestbestand, den die Theken nicht anrühren – nur, wenn Tobias das möchte.
-14. **Nachschub bremsen? (seit v0.12.0)** Tobias hat v0.12.0 getestet und die Schlosserei gebaut; bisher kein Wunsch nach einer Bremse. Mit Versandportal und Lagerhaus mit Nachschub wandern Waren quer übers Grundstück, ohne Band. Erst einmal ungebremst; macht es das Spiel zu leicht (die Bänder verlieren an Bedeutung), lässt sich der Nachschub verlangsamen, z. B. auf 1 Ware pro Sekunde. Tobias: Wer am Anfang ordentlich plant, braucht es kaum – es hilft aber, wenn zu viel im Lager liegt und man ein Band füllen möchte.
+13. **„Eiserner Bestand“:** Tobias' Erkenntnis: Am Anfang verkauft man alles, weil man Gold braucht, und später fehlen Baumaterialien (Blöcke, Platten), weil sie in die Produktion gehen. Wer strukturiert spielt und immer einen Grundvorrat im Laden-Lager behält, kommt nicht in Not. Nach Level 6 (Chat 9): Wer am Anfang nicht auf das „Makro“ achtet, muss am Ende z. B. eine eigene Holz-Linie nur für Baumaterial nachbauen. Erste Hilfe in v0.12.0 war der Rest beim Nachschub; den Nachschub gibt es seit v0.14.0 nicht mehr. Denkbar wäre später noch ein Mindestbestand, den die Theken nicht anrühren – nur, wenn Tobias das möchte.
+14. **Nachschub bremsen?** geklärt – den Nachschub gibt es seit v0.14.0 nicht mehr (Tobias: Er hebelt die Bänder aus). Lagerhäuser befüllt man von Hand.
 15. **Verbesserungen mit Erfahrung (Idee von Tobias):** Mit XP z. B. schneller Holz verarbeiten oder schnellere Förderbänder freischalten. Tobias ist sich noch nicht sicher, in welche Richtung; vorerst dient die Erfahrung nur dem Aufstieg. Das Spiel zählt schon alle Erfahrung mit (`xpTotal`), damit das später möglich ist.
-16. **Reihenfolge nach v0.13.0:** Techbaum Teil 3 (Kräuter) oder zuerst Offline (Fabrik läuft weiter, wenn das Spiel geschlossen ist)? Tobias wollte nach den Aufgaben den Techbaum planen; Offline steht seit v0.5.0 im Fahrplan.
+16. **Reihenfolge nach v0.13.0:** geklärt – erst das Spiel im Hintergrund (v0.14.0), dann besprechen wir gemeinsam die Vorgehensweise mit Level und Techbaum.
+17. **Rohstoff-Vorrat (seit v0.14.0):** 3 Rohstoffe je Gebäude (45 Minuten). Soll der Vorrat später wachsen, z. B. mit dem Level oder als Verbesserung mit Erfahrung (Frage 15)? Das ist eine Zahl in der Datentabelle (`capacity`).
+18. **Kräuter-Kapitel (Abschnitt 4.4):** Wie funktioniert das Beet genau (Wachsen sichtbar, wie lange, wie viele Pflanzen je Samen)? Welche Maschinen machen Fasern und Verbände, welches zweite Kraut kommt auf Level 9, wer sind die neuen Bewohner, und was kosten Samen? Planen wir nach Tobias' Test von v0.14.0.
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.14.0 – Fabrik läuft im Hintergrund weiter & Rohstoff-Vorrat (07.11.2026)
+
+**Vorgenommen:**
+- Tobias' Wunsch (Chat 10): Das Spiel läuft im Hintergrund weiter, aber man muss selbst nachlegen – wie Clash of Clans, nur umgekehrt. Dazu mehrere Rohstoffe je Gebäude, ein Knopf „Auffüllen“ und das Lagerhaus nur noch zum Befüllen.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie lange läuft eine Fabrik ohne Spieler? → Mit einem Rohstoff nur 15 Minuten, egal wie viele Holzfäller (sie arbeiten gleichzeitig). Deshalb ein Vorrat: 3 Rohstoffe (Tobias), also 45 Minuten, und die Maschinen danach, bis ihre Zutaten aufgebraucht sind.
+- Dürfen Kunden im Hintergrund kaufen? → Ja, bis die Theken leer sind (Tobias).
+- Was bleibt vom Lagerhaus? → Befüllen und Ausräumen; der Nachschub fällt weg, weil er die Bänder aushebelt (Tobias).
+- Wie rechnet man Stunden nach, ohne dass das Tablet hängt? → Die Fabrik Takt für Takt, bis sie stillsteht (geprüft alle 10 Sekunden Spielzeit); danach nur noch die Kunden im Schnelldurchlauf. In Portionen, mit Hinweis und Fortschrittsleiste. Laufen Waren endlos im Kreis, rechnet die Fabrik höchstens 4 Stunden nach.
+- Was passiert mit der Uhr? → Gerechnet wird ab dem letzten Speichern (alle 10 Sekunden und beim Verlassen). Während des Nachrechnens wird nicht gespeichert; eine zurückgestellte Uhr ändert nichts.
+
+**Gemacht:**
+- Datentabellen: Vorrat `capacity: 3` bei Holzfällerlager, Steinbruch und Schmelzhütte; neue Tabelle `data/offline.js`; Lagerhaus ohne `supplyBuffer`; neue Gebäudetexte.
+- Spielregeln: Vorrat (`queued`) in `production.js` (nacheinander verarbeiten, beim Abreißen kommen wartende Rohstoffe zurück), „Auffüllen“ in `market.js`, Nachschub aus `warehouse.js` entfernt, neues `src/core/offline.js` (Nachrechnen in Portionen, Stillstand erkennen, Bericht).
+- Oberfläche: Knöpfe „⏫ Auffüllen“ und „➕ 1 Holzstamm einlegen“, Vorrat und „Leer in etwa …“ im Infofenster, drei Punkte am Gebäude; Lagerhaus-Fenster nur noch zum Befüllen; Hinweis „Die Fabrik holt die Zeit nach …“ und Fenster „Willkommen zurück“ (`src/view/offline.js`); `main.js` erkennt Pausen (App im Hintergrund, Standby) und rechnet nach.
+- Spielstand-Version 12 mit Umwandlung von Version 11 (leerer Vorrat, Nachschub weg, Meldung).
+- 206 automatische Tests (neu in `offline.test.js`: Vorrat aus der Datentabelle, 3 Holzstämme → 600 Blöcke, Abreißen mit Vorrat, Speichern und ungültiger Vorrat, Umwandlung von Version 11, Auffüllen aus dem Laden-Lager und per Kauf, Gold- und Level-Grenzen, Nachrechnen ergibt genau dasselbe wie das laufende Spiel, Stillstand und Schnelldurchlauf, Kunden bis die Theken leer sind, volles Laden-Lager, endloser Kreis, in Stücken nachrechnen, keine oder negative Zeit; in `warehouse.test.js`: leeres Lagerhaus bleibt leer, Umwandlung des Nachschubs) und der Browser-Test (neu: Auffüllen mit Kauf, Vorrat 3 / 3, Lagerhaus ohne Nachschub, 20 Minuten weg in der App, 2 Stunden mit geschlossenem Spiel) in Tablet- und Handygröße – alle bestanden.
+- Beim Testen gefunden und behoben: Der Browser-Test zählte beim Lagerhaus auch Eisenbarren einer anderen Linie mit und schlug deshalb manchmal fehl.
 
 ### v0.13.0 – Aufträge aus dem Ort & neue Warennamen (07.11.2026)
 
@@ -1316,6 +1393,16 @@ Stand 07.11.2026 (nach v0.13.0).
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 07.11.2026 – Chat 10: Test von v0.13.0, Spiel im Hintergrund, Kräuter-Kapitel, Plan und Umsetzung v0.14.0
+
+**Tobias:** Die Stückzahlen passen; er hat den ersten Auftrag gesehen, eine machbare Menge – das Spiel soll auch fordern. Die Produkte mit den neuen Namen ergeben mehr Sinn und passen zur Geschichte. Die Bilder auf dem Band hat er noch nicht ausprobiert, geht aber davon aus, dass sie passen. Zum Weiterlaufen: Das Spiel soll im Hintergrund weiterlaufen, aber man muss selbst nachlegen – Holz, Stein und Eisen immer von Hand. Hat man z. B. 10 Holzfäller, die so viel produzieren, dass die Maschinen mehrere Stunden laufen, soll das auch im Hintergrund passieren. Man soll sich immer wieder einloggen müssen, um nachzulegen; die Produktion läuft automatisch. Das Zwischenlager soll nur noch die Funktion „Befüllen“ haben, sonst könnte man kurze Produktionsstraßen bauen, alles ins Lager schicken und über das Lagerhaus wieder heraus. Wie bei Clash of Clans, nur andersherum: Alles läuft, bis es leer ist, dann manuell nachfüllen. Techbaum: eine neue „Art“ – Kräuter. Auf Level 7 Farn oder Hanf (was mehr Sinn ergibt), daraus Fasern und in einem zweiten Schritt Verbände; auf Level 8 und 9 weitere Kräuter für heilende Verbände; später mit dem Mörser Pulver und Zaubertränke – wir sind ja im Mittelalter-Fantasy-Magier-Genre.
+
+**Claude** hat geantwortet: Ein Holzstamm reicht 15 Minuten; 10 Holzfäller arbeiten gleichzeitig und sind nach 15 Minuten alle leer – mehr Holzfäller machen die Fabrik schneller, nicht länger. Vorschlag: Vorrat von 4 Rohstoffen je Gebäude (1 Stunde), Knopf „Auffüllen“ (erst Laden-Lager, dann kaufen), alles läuft weiter bis es leer ist (auch Kunden bis die Theken leer sind), Fenster „Willkommen zurück“; Lagerhaus: Nachschub weg, Befüllen und Ausräumen bleiben. Techbaum: Flachs statt Farn oder Hanf (Leinenbinden waren die Verbände des Mittelalters), Farn später als Zauberkraut; grober Bogen bis Level 10 mit Kräuterbeet, Heilstube, Mörser und Alchemistenküche. Reihenfolge: erst der Hintergrund (v0.14.0), dann Level 7.
+
+**Tobias:** Mehrere Holzstämme gut, aber 3 statt 4. Seine Rechnung war: Zwischenlager können volllaufen; wird später z. B. ein Schloss aus bestimmten Stoffen hergestellt, ist der Holzfäller nach 15 Minuten leer, aber die restliche Produktion läuft weiter, bis die letzte Maschine nicht mehr arbeitet (15 Minuten bis leer, dazu Zeit für den Transport und jede Weiterverarbeitung) – im Prinzip richtig verstanden. „Auffüllen“ ist ein guter Knopf. Nachschub hat er nie benutzt. Kunden dürfen kaufen, bis alles leer ist. Flachs. Statt einzelner Gebäude ein allgemeines Beet, in dem man alles anpflanzen kann. Ringelblume ist eine gute Ergänzung für die Heilung. Level 7 Verbände, Level 8 erster Heilverband, Level 9 zweite Verbandsversion; mit dem Alchemisten möchte er bis etwa Level 15 warten. Die Level 1–6 waren voller Werkzeuge; die nächsten Level fangen mit neuer Thematik wieder von vorn an – einfach Flachs und Verbände herstellen, dann steigt die Schwierigkeit, sodass man auf Level 10 (dem „Level 4“ der Werkzeuge) wieder mehr in die Produktion investieren muss, und auf Level 11 oder 12 schließt das Kräuter-Kapitel ab. Dann gibt es zwei große Techbäume, Werkzeuge und Kräuter, und ab Level 13 kommen neue Produkte wie Sand: daraus Glas, aber über die Kräuter-Maschinen auch Sandstaub für die Zauberei. Erst den Hintergrund umsetzen, dann die Vorgehensweise mit Level und Techbaum besprechen, damit später alles Sinn ergibt.
+
+**Umgesetzt:** v0.14.0 (siehe Versionshistorie). Der nächste Chat beginnt mit Tobias' Test von v0.14.0; danach besprechen wir das Kräuter-Kapitel (Abschnitt 4.4).
 
 ### 07.11.2026 – Chat 9, Teil 2: Test von v0.12.0, Gesamtbild, Plan und Umsetzung v0.13.0
 

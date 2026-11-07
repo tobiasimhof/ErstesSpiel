@@ -8,7 +8,6 @@ import { step } from './dirs.js';
 import { buildingPorts } from './geometry.js';
 import { countProduced } from './levels.js';
 import { addToStorage, storageCount, storageFree, takeFromStorage } from './shop.js';
-import { supplyAvailable, updateSupply, warehouseCount } from './warehouse.js';
 
 export function productionOf(type) {
   return BUILDINGS[type]?.production ?? null;
@@ -18,12 +17,12 @@ export function createProductionState(type) {
   const p = productionOf(type);
   switch (p?.kind) {
     case 'source':
-      return { loaded: false, remaining: 0, timer: 0, out: null, blocked: false };
+      // queued (v0.14.0): Rohstoffe, die nach dem laufenden noch warten
+      return { loaded: false, remaining: 0, queued: 0, timer: 0, out: null, blocked: false };
     case 'workshop':
       return { recipe: p.recipes[0], stock: {}, busy: false, timer: 0, out: null, blocked: false };
     case 'storage':
-      // supply (v0.12.0): Nachschub aus dem Laden-Lager { type, keep } oder null
-      return { slots: [], supply: null, blocked: false };
+      return { slots: [], blocked: false };
     case 'shipping':
       return { shipped: 0, blocked: false };
     default:
@@ -111,7 +110,11 @@ export function updateProduction(state, building, dt) {
       prod.out = { type: p.output, count: 1 };
       countProduced(state, p.output, 1);
       prod.remaining--;
-      if (prod.remaining <= 0) {
+      if (prod.remaining <= 0 && prod.queued > 0) {
+        // v0.14.0: der nächste Rohstoff aus dem Vorrat kommt dran
+        prod.queued--;
+        prod.remaining = p.amount;
+      } else if (prod.remaining <= 0) {
         prod.loaded = false;
         prod.remaining = 0;
         prod.timer = 0;
@@ -133,8 +136,6 @@ export function updateProduction(state, building, dt) {
         countProduced(state, recipe.output, recipe.amount);
       }
     }
-  } else if (p?.kind === 'storage') {
-    updateSupply(state, building);
   }
 }
 
@@ -220,13 +221,44 @@ export function returnUnusedStock(state, building) {
 
 // ---------- Aktionen ----------
 
-// Legt einen Rohstoff aus dem Laden-Lager ein (nur einer auf einmal).
+// ---------- Rohstoff-Vorrat (v0.14.0, Tobias: bis zu 3 Rohstoffe) ----------
+
+// So viele Rohstoffe passen in das Gebäude (der laufende mitgezählt).
+export function sourceCapacity(building) {
+  const p = productionOf(building.type);
+  return p?.kind === 'source' ? (p.capacity ?? 1) : 0;
+}
+
+// So viele Rohstoffe stecken gerade darin (der laufende mitgezählt).
+export function sourceCount(building) {
+  const p = productionOf(building.type);
+  if (p?.kind !== 'source') return 0;
+  return (building.prod.loaded ? 1 : 0) + (building.prod.queued ?? 0);
+}
+
+// So viele Rohstoffe passen noch hinein.
+export function sourceRoom(building) {
+  return Math.max(0, sourceCapacity(building) - sourceCount(building));
+}
+
+// Legt einen Rohstoff ins Gebäude, ohne ihn aus dem Laden-Lager zu nehmen
+// (z. B. direkt beim Händler gekauft). Ist es leer, beginnt die Arbeit sofort,
+// sonst wartet er im Vorrat.
+export function addRawToSource(building) {
+  const p = productionOf(building.type);
+  if (p?.kind !== 'source' || sourceRoom(building) < 1) return false;
+  const prod = building.prod;
+  if (prod.loaded) prod.queued = (prod.queued ?? 0) + 1;
+  else Object.assign(prod, { loaded: true, remaining: p.amount, queued: 0, timer: 0 });
+  return true;
+}
+
+// Legt einen Rohstoff aus dem Laden-Lager ein (seit v0.14.0 bis zu capacity).
 export function loadInput(state, building) {
   const p = productionOf(building.type);
-  if (p?.kind !== 'source' || building.prod.loaded) return false;
+  if (p?.kind !== 'source' || sourceRoom(building) < 1) return false;
   if (!takeFromStorage(state, p.input, 1)) return false;
-  Object.assign(building.prod, { loaded: true, remaining: p.amount, timer: 0 });
-  return true;
+  return addRawToSource(building);
 }
 
 export function setRecipe(building, recipeKey) {
@@ -256,6 +288,7 @@ export function buildingContents(building) {
   if (p?.kind === 'source') {
     if (prod.out) add(prod.out.type, prod.out.count);
     if (prod.loaded && prod.remaining === p.amount) add(p.input, 1);
+    add(p.input, prod.queued ?? 0); // v0.14.0: wartende Rohstoffe sind unberührt
   } else if (p?.kind === 'workshop') {
     for (const [type, n] of Object.entries(prod.stock)) add(type, n);
     if (prod.out) add(prod.out.type, prod.out.count);
@@ -279,8 +312,11 @@ export function buildingStatus(state, building) {
   const prod = building.prod;
   if (p?.kind === 'source') {
     if (prod.out && prod.blocked) return { level: 'blocked', text: 'Ausgang voll – das Band nimmt nichts mehr an.' };
-    if (prod.loaded) return { level: 'work', text: `Arbeitet: noch ${prod.remaining} von ${p.amount}.` };
-    return { level: 'idle', text: 'Leer – Rohstoff einlegen.' };
+    if (prod.loaded) {
+      const waiting = prod.queued > 0 ? ` Danach noch ${itemCountText(p.input, prod.queued)}.` : '';
+      return { level: 'work', text: `Arbeitet: noch ${prod.remaining} von ${p.amount}.${waiting}` };
+    }
+    return { level: 'idle', text: 'Leer – Rohstoff nachlegen.' };
   }
   if (p?.kind === 'workshop') {
     if (prod.out && prod.blocked) return { level: 'blocked', text: 'Ausgang voll – das Band nimmt nichts mehr an.' };
@@ -299,7 +335,7 @@ export function buildingStatus(state, building) {
     }
     if (inputs.length === 1) {
       const [{ have, need }] = inputs;
-      return { level: 'idle', text: `Wartet auf Nachschub (${have} / ${need}).` };
+      return { level: 'idle', text: `Wartet auf ${ITEMS[inputs[0].type].plural} (${have} / ${need}).` };
     }
     const missing = inputs.filter((i) => !i.done).map((i) => `${ITEMS[i.type].name} (${i.have} / ${i.need})`);
     return { level: 'idle', text: `Wartet auf ${missing.join(' und ')}.` };
@@ -308,21 +344,6 @@ export function buildingStatus(state, building) {
     const total = prod.slots.reduce((sum, s) => sum + s.count, 0);
     const full = prod.slots.length >= p.slots && prod.slots.every((s) => s.count >= p.slotSize);
     if (full) return { level: 'blocked', text: 'Lager voll.' };
-    const supply = prod.supply;
-    if (supply) {
-      // v0.12.0: Nachschub aus dem Laden-Lager
-      const plural = ITEMS[supply.type].plural;
-      if (warehouseCount(building, supply.type) > 0 || supplyAvailable(state, building) > 0) {
-        return { level: 'work', text: `Nachschub: holt ${plural} aus dem Laden-Lager.` };
-      }
-      return {
-        level: 'idle',
-        text:
-          supply.keep > 0
-            ? `Wartet auf Nachschub: Im Laden-Lager liegen nicht mehr als ${supply.keep} ${plural} – die bleiben dort.`
-            : `Wartet auf Nachschub: keine ${plural} im Laden-Lager.`,
-      };
-    }
     return total > 0 ? { level: 'work', text: `${total} Waren gelagert.` } : { level: 'idle', text: 'Leer.' };
   }
   if (p?.kind === 'shipping') {
@@ -330,6 +351,11 @@ export function buildingStatus(state, building) {
     return { level: 'work', text: 'Bereit zum Versenden.' };
   }
   return { level: 'idle', text: '' };
+}
+
+// „2 Holzstämme“, „1 Eisenerz“
+function itemCountText(type, n) {
+  return `${n} ${n === 1 ? ITEMS[type].name : ITEMS[type].plural}`;
 }
 
 // Fortschritt 0..1 für die kleine Leiste am Gebäude (oder null).

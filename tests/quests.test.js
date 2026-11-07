@@ -177,7 +177,9 @@ test('Spielstand aus v0.12 (Version 10): neue Namen überall, Aufträge beginnen
   const [z, f, l] = s.buildings.slice(-3);
   assert.deepEqual([z.prod.recipe, z.prod.stock, z.prod.out], ['raederwerk', { steinzahnrad: 4, holzstab: 2 }, { type: 'raederwerk', count: 1 }]);
   assert.deepEqual([f.prod.recipe, f.paid], ['zirkel', { eisenblech: 10, raederwerk: 2 }]);
-  assert.deepEqual([l.prod.slots, l.prod.supply], [[{ type: 'zirkel', count: 2 }], { type: 'schluessel', keep: 3 }]);
+  // v0.14.0: Den Nachschub gibt es nicht mehr – der Inhalt bleibt, mit Hinweis
+  assert.deepEqual([l.prod.slots, 'supply' in l.prod], [[{ type: 'zirkel', count: 2 }], false]);
+  assert.ok(loaded.notes.some((n) => n.includes('1 Lagerhaus hatte Nachschub')), loaded.notes.join(' | '));
   assert.equal(s.belts['17,10'].item.type, 'zahnradwelle');
   assert.deepEqual(s.quest, { index: 0, xp: 0 });
   assert.equal(s.xpTotal, 0);

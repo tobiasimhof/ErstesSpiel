@@ -27,6 +27,10 @@
 //               Räderwerk), überall im Spielstand. Aufträge mit Erfahrung
 //               (quest, xpTotal); das Level bleibt, die Aufträge des aktuellen
 //               Levels beginnen von vorn.
+//  12 (v0.14.0): Rohstoff-Vorrat – Holzfällerlager, Steinbruch und
+//               Schmelzhütte merken sich wartende Rohstoffe (prod.queued).
+//               Den Nachschub der Lagerhäuser gibt es nicht mehr (prod.supply
+//               fällt weg; was im Lagerhaus liegt, bleibt).
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
@@ -42,7 +46,7 @@ import { createQuestState } from './quests.js';
 import { addAllToStorage, counterSizeFor, fitCounters } from './shop.js';
 import { START_PLOT, WORLD, parseTileKey } from './state.js';
 
-export const SAVE_VERSION = 11;
+export const SAVE_VERSION = 12;
 
 // v0.13.0 (Tobias): Namen, die zu den Zutaten passen. Rezepte und Werte bleiben.
 const RENAMED_V11 = {
@@ -162,6 +166,24 @@ function migrate(state, from, notes = []) {
     renameEverywhere(state, RENAMED_V11);
     state.quest = createQuestState();
     state.xpTotal = 0;
+  }
+  if (from < 12 && Array.isArray(state.buildings)) {
+    // v0.13 → v0.14: Rohstoff-Vorrat (leer), Lagerhäuser ohne Nachschub
+    let supplied = 0;
+    for (const b of state.buildings) {
+      if (!isObj(b?.prod)) continue;
+      const kind = productionOf(b.type)?.kind;
+      if (kind === 'source' && b.prod.queued === undefined) b.prod.queued = 0;
+      if (kind === 'storage' && 'supply' in b.prod) {
+        if (b.prod.supply) supplied++;
+        delete b.prod.supply;
+      }
+    }
+    if (supplied > 0) {
+      notes.push(
+        `${supplied === 1 ? '1 Lagerhaus hatte' : `${supplied} Lagerhäuser hatten`} Nachschub – den gibt es nicht mehr. Was darin liegt, läuft noch aufs Band; danach von Hand befüllen.`,
+      );
+    }
   }
   return state;
 }
@@ -364,7 +386,16 @@ function isValidProduction(b) {
   if (!isObj(prod)) return false;
   switch (p?.kind) {
     case 'source':
-      return typeof prod.loaded === 'boolean' && isCount(prod.remaining) && isNum(prod.timer) && isValidStack(prod.out);
+      return (
+        typeof prod.loaded === 'boolean' &&
+        isCount(prod.remaining) &&
+        isNum(prod.timer) &&
+        isValidStack(prod.out) &&
+        // v0.14.0: wartende Rohstoffe – nur, wenn einer läuft, und höchstens bis zum Rand
+        isCount(prod.queued) &&
+        (prod.loaded || prod.queued === 0) &&
+        (prod.loaded ? 1 : 0) + prod.queued <= (p.capacity ?? 1)
+      );
     case 'workshop':
       return (
         p.recipes.includes(prod.recipe) &&
@@ -379,9 +410,7 @@ function isValidProduction(b) {
       return (
         Array.isArray(prod.slots) &&
         prod.slots.length <= p.slots &&
-        prod.slots.every((s) => isObj(s) && isItem(s.type) && isInt(s.count) && s.count > 0 && s.count <= p.slotSize) &&
-        // v0.12.0: Nachschub (fehlt er, läuft das Lagerhaus wie bisher)
-        (prod.supply == null || (isObj(prod.supply) && isItem(prod.supply.type) && !ITEMS[prod.supply.type].raw && isCount(prod.supply.keep)))
+        prod.slots.every((s) => isObj(s) && isItem(s.type) && isInt(s.count) && s.count > 0 && s.count <= p.slotSize)
       );
     case 'shipping':
       return isCount(prod.shipped);

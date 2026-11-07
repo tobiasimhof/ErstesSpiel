@@ -1,23 +1,21 @@
 // Lagerhaus-Fenster (v0.12.0): Ware aus dem Laden-Lager wählen, dann
-// - Befüllen: wie viele Stück ins Lagerhaus kommen (wie die Menge der Theke),
-// - Nachschub: wie viele Stück immer im Laden-Lager bleiben sollen.
+// einstellen, wie viele Stück ins Lagerhaus kommen (wie die Menge der Theke).
+// v0.14.0 (Tobias): Nur noch Befüllen von Hand – den Nachschub gibt es nicht mehr.
 //
 // Das Fenster wird regelmäßig aktualisiert (die Fabrik läuft weiter). Knöpfe
 // werden dabei nicht neu erzeugt, nur ihre Beschriftung geändert – sonst ginge
 // ein Tippen verloren. Neu aufgebaut wird nur, wenn sich die Knöpfe ändern.
 
 import { ITEMS } from '../core/data/items.js';
-import { storageCapacity, storageCount } from '../core/shop.js';
+import { storageCount } from '../core/shop.js';
 import { findBuilding } from '../core/state.js';
-import { canStoreItem, fillMax, fillWarehouse, setSupply, warehouseCount, warehouseRoom } from '../core/warehouse.js';
+import { canStoreItem, fillMax, fillWarehouse, warehouseCount, warehouseRoom } from '../core/warehouse.js';
 import { createItemIcon } from './itemArt.js';
 import { itemCount, numberFormat } from './format.js';
 
-const TITLES = { fill: '📥 Lagerhaus befüllen', supply: '🔁 Nachschub einrichten' };
-
 export function createWarehouseView({ state, panels, onChange }) {
   let open = false;
-  // { id, kind: 'fill' | 'supply', type (gewählte Ware oder null), draft }
+  // { id, type (gewählte Ware oder null), draft }
   let view = null;
   let refs = null; // { body, helpers }
   let section = null; // { sig, update }
@@ -37,7 +35,7 @@ export function createWarehouseView({ state, panels, onChange }) {
   }
 
   function sig() {
-    return view.type ? `amount|${view.kind}|${view.type}` : `pick|${view.kind}|${storedTypes().join(',')}`;
+    return view.type ? `amount|${view.type}` : `pick|${storedTypes().join(',')}`;
   }
 
   function close() {
@@ -60,9 +58,7 @@ export function createWarehouseView({ state, panels, onChange }) {
       el(
         'p',
         null,
-        view.kind === 'fill'
-          ? 'Welche Ware aus dem Laden-Lager soll ins Lagerhaus? Sie läuft am orangen Pfeil aufs Band.'
-          : 'Welche Ware soll das Lagerhaus immer wieder aus dem Laden-Lager holen? Danach stellst du ein, wie viele im Laden-Lager bleiben – zum Beispiel zum Bauen.',
+        'Welche Ware aus dem Laden-Lager soll ins Lagerhaus? Sie läuft am orangen Pfeil aufs Band. Ist das Lagerhaus leer, füllst du es neu.',
       ),
     );
     const types = storedTypes();
@@ -77,7 +73,7 @@ export function createWarehouseView({ state, panels, onChange }) {
           label: '',
           onClick: () => {
             view.type = type;
-            view.draft = view.kind === 'fill' ? fillMax(state, store(), type) : 0;
+            view.draft = fillMax(state, store(), type);
             render();
           },
         });
@@ -103,16 +99,13 @@ export function createWarehouseView({ state, panels, onChange }) {
     };
   }
 
-  // ---------- Menge (Befüllen) bzw. Rest (Nachschub) ----------
+  // ---------- Menge ----------
 
   function buildAmount(body, { makeButton }) {
-    const { kind, type } = view;
+    const { type } = view;
     const def = ITEMS[type];
-    const fill = kind === 'fill';
-    const max = () => (fill ? fillMax(state, store(), type) : storageCapacity(state));
-    body.append(
-      el('h3', null, fill ? `Wie viele ${def.plural} ins Lagerhaus?` : `Wie viele ${def.plural} sollen im Laden-Lager bleiben?`),
-    );
+    const max = () => fillMax(state, store(), type);
+    body.append(el('h3', null, `Wie viele ${def.plural} ins Lagerhaus?`));
     const ware = el('div', 'counter-ware');
     const text = el('div', 'counter-text');
     const wareNote = el('span', 'item-note');
@@ -137,33 +130,25 @@ export function createWarehouseView({ state, panels, onChange }) {
     const minus1 = makeButton({ label: '−1', onClick: step(-1) });
     const plus1 = makeButton({ label: '+1', onClick: step(1) });
     const plus5 = makeButton({ label: '+5', onClick: step(5) });
-    // Befüllen: „Alle“ wie bei der Theke; Nachschub: größere Schritte für den Rest
-    const last = fill
-      ? makeButton({
-          label: '',
-          onClick: () => {
-            view.draft = max();
-            update();
-          },
-        })
-      : makeButton({ label: '+20', onClick: step(20) });
+    // „Alle“ wie bei der Theke
+    const last = makeButton({
+      label: '',
+      onClick: () => {
+        view.draft = max();
+        update();
+      },
+    });
     const stepper = el('div', 'amount-stepper');
     stepper.append(none, minus5, minus1, display, plus1, plus5, last);
     const meta = el('p', 'modal-meta');
     const ok = makeButton({
-      label: fill ? '✓ Ins Lagerhaus' : '✓ Nachschub starten',
+      label: '✓ Ins Lagerhaus',
       primary: true,
       onClick: () => {
         const b = store();
         if (!b) return close();
-        if (fill) {
-          const n = fillWarehouse(state, b, type, view.draft);
-          done(n > 0 ? `Lagerhaus: ${itemCount(type, n)} eingelagert. Sie laufen am orangen Pfeil aufs Band.` : 'Nichts eingelagert.');
-        } else {
-          setSupply(b, type, view.draft);
-          const keep = view.draft > 0 ? ` ${itemCount(type, view.draft)} bleiben dort.` : '';
-          done(`Nachschub: Das Lagerhaus holt ${def.plural} aus dem Laden-Lager.${keep}`);
-        }
+        const n = fillWarehouse(state, b, type, view.draft);
+        done(n > 0 ? `Lagerhaus: ${itemCount(type, n)} eingelagert. Sie laufen am orangen Pfeil aufs Band.` : 'Nichts eingelagert.');
       },
     });
     ok.classList.add('amount-ok');
@@ -187,17 +172,10 @@ export function createWarehouseView({ state, panels, onChange }) {
       number.textContent = String(n);
       minus5.disabled = minus1.disabled = none.disabled = n <= 0;
       plus5.disabled = plus1.disabled = last.disabled = n >= max();
-      if (fill) {
-        last.textContent = `Alle (${max()})`;
-        sub.textContent = `${numberFormat.format(n * def.price)} 🪙`;
-        wareNote.textContent = `Platz im Lagerhaus: ${warehouseRoom(b, type)}`;
-        meta.textContent = `Im Laden-Lager: ${numberFormat.format(inShop)} · im Lagerhaus: ${warehouseCount(b, type)}.`;
-      } else {
-        sub.textContent = 'bleiben';
-        wareNote.textContent = `je ${numberFormat.format(def.price)} 🪙`;
-        const now = Math.max(0, inShop - n);
-        meta.textContent = `Im Laden-Lager: ${numberFormat.format(inShop)}. Das Lagerhaus holt ${def.plural}, solange dort mehr als ${n} liegen – gerade also ${numberFormat.format(now)}.`;
-      }
+      last.textContent = `Alle (${max()})`;
+      sub.textContent = `${numberFormat.format(n * def.price)} 🪙`;
+      wareNote.textContent = `Platz im Lagerhaus: ${warehouseRoom(b, type)}`;
+      meta.textContent = `Im Laden-Lager: ${numberFormat.format(inShop)} · im Lagerhaus: ${warehouseCount(b, type)}.`;
     }
     return update;
   }
@@ -215,13 +193,12 @@ export function createWarehouseView({ state, panels, onChange }) {
   }
 
   return {
-    // kind: 'fill' (Befüllen) oder 'supply' (Nachschub)
-    open(buildingId, kind) {
-      view = { id: buildingId, kind, type: null, draft: 0 };
+    open(buildingId) {
+      view = { id: buildingId, type: null, draft: 0 };
       section = null;
       panels.showModal((box, helpers) => {
         const body = el('div', 'tab-body');
-        box.append(el('h2', null, TITLES[kind]), body);
+        box.append(el('h2', null, '📥 Lagerhaus befüllen'), body);
         refs = { body, helpers };
       });
       open = true;

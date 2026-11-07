@@ -7,11 +7,13 @@
 //   den Theken zum festen Wert der Ware. Der Zufall steckt im Spielstand
 //   (market.rng), damit sich Abläufe in Tests wiederholen lassen.
 // - Pleiteschutz: Wer gar nicht mehr weiterkommt, bekommt einen Holzstamm.
+// - Auffüllen (v0.14.0): Holzfällerlager & Co. bis zum Rand füllen – erst aus
+//   dem Laden-Lager, was fehlt, direkt beim Händler gekauft.
 
 import { ITEMS } from './data/items.js';
 import { BAILOUT_ITEM, CUSTOMERS, SALES_LOG_SIZE, SHOP_LEVELS, TEST_PACK } from './data/shop.js';
 import { isItemUnlocked, itemLevel } from './levels.js';
-import { productionOf, buildingContents } from './production.js';
+import { addRawToSource, buildingContents, loadInput, productionOf, sourceRoom } from './production.js';
 import {
   addToStorage,
   counterCountFor,
@@ -73,6 +75,36 @@ export function buyRaw(state, type) {
   state.gold -= def.buyPrice;
   addToStorage(state, type, 1);
   return 'ok';
+}
+
+// ---------- Auffüllen (v0.14.0) ----------
+
+// Was „Auffüllen“ gerade tun würde: { input, room, fromStorage, buy, cost,
+// short } – short: so viele passen noch hinein, aber dafür reicht weder das
+// Laden-Lager noch das Gold. Gibt null zurück, wenn es kein Rohstoff-Gebäude ist.
+export function refillPlan(state, building) {
+  const p = productionOf(building.type);
+  if (p?.kind !== 'source') return null;
+  const def = ITEMS[p.input];
+  const room = sourceRoom(building);
+  const fromStorage = Math.min(room, storageCount(state, p.input));
+  const canBuy = isItemUnlocked(state, p.input) && def.buyPrice > 0 ? Math.floor(state.gold / def.buyPrice) : 0;
+  const buy = Math.min(room - fromStorage, canBuy);
+  return { input: p.input, room, fromStorage, buy, cost: buy * def.buyPrice, short: room - fromStorage - buy };
+}
+
+// Füllt das Gebäude so weit wie möglich auf. Gekaufte Rohstoffe gehen direkt
+// hinein (sie brauchen keinen Platz im Laden-Lager). Gibt den Plan zurück,
+// so wie er ausgeführt wurde.
+export function refillSource(state, building) {
+  const plan = refillPlan(state, building);
+  if (!plan) return null;
+  for (let i = 0; i < plan.fromStorage; i++) loadInput(state, building);
+  for (let i = 0; i < plan.buy; i++) {
+    state.gold -= ITEMS[plan.input].buyPrice;
+    addRawToSource(building);
+  }
+  return plan;
 }
 
 // ---------- Theken ----------
