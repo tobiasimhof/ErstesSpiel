@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.11.0 – Umbauen: Bereiche markieren, verschieben, drehen, abreißen; Taste R dreht |
+| **Aktuelle Version** | v0.11.1 – Test-Feedback zu v0.11.0 (nur README); im Spiel wie v0.11.0 |
 | **Phase** | M2 – Produktionsketten |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias testet v0.11.0 (Abschnitt 6, „v0.11.0 – Was Tobias testet“) und schreibt sein Feedback in einen **neuen Chat**. Claude hält es fest, nimmt bei Bedarf noch Feinschliff vor; danach Plan für **v0.12.0 – Aufgaben** |
+| **Nächster Schritt** | **Pause.** Tobias spielt in Echtzeit weiter bis Level 6 und schreibt dann sein gesammeltes Feedback in einen **neuen Chat**. Claude hält es fest und schlägt einen Schritt vor, der das Feedback und den vorgemerkten Knopf „🧺 Strecke leeren“ (Abschnitt 6, „Vorgemerkt“) zusammenfasst; danach Plan für **v0.12.0 – Aufgaben** |
 
 ---
 
@@ -389,8 +389,27 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | v0.10.1 | **Feinschliff nach Tobias' Test:** alle Theken wachsen mit (20 → 25 → 30), Laden-Lager 1.000 ab Level 4, Flächen-Streifen 4 tief ab Level 4, Teile bleiben beim Umstellen in der Maschine, Rezepte aller Einstellungen im Infofenster | ✅ fertig |
 | v0.10.2 | **Fläche & Warenbilder:** jeder Flächenkauf 500 Gold für 4 Reihen (schon ab Level 1), jede Seite 2×; Warenbilder in der Bauleiste bleiben nach dem Minimieren sichtbar | ✅ fertig |
 | v0.11.0 | **Umbauen:** Bereich markieren und alles darin auf einmal verschieben, drehen oder abreißen; Taste R dreht | ✅ fertig |
-| v0.12.0 | **Aufgaben:** Aufgaben mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen (Modell von Tobias, Abschnitt 3.5) | nach Tobias' Test von v0.11.0 planen |
+| v0.11.1 | **Test-Feedback (nur README):** Tobias' Test von v0.11.0 festgehalten, „Strecke leeren“ vorgemerkt | ✅ fertig |
+| – | **Vorgemerkt:** „🧺 Strecke leeren“ am Band und „🧺 Zulauf leeren“ an blockierten Maschinen (Abschnitt 6, „Vorgemerkt“) | mit dem nächsten Feedback umsetzen |
+| v0.12.0 | **Aufgaben:** Aufgaben mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen (Modell von Tobias, Abschnitt 3.5) | nach Tobias' Feedback (Level 6) planen |
 | v0.13.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
+
+### Vorgemerkt: Bänder leeren (noch nicht umgesetzt)
+
+Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich eigentlich eine gute Idee. Die können wir erstmal so festhalten.“ Wird zusammen mit dem nächsten Feedback umgesetzt, damit nicht für eine Kleinigkeit programmiert wird.
+
+- **Problem:** Landen falsche Waren auf einer Strecke (z. B. Holzplatten auf der Strecke, die nur Holzstäbe zur Zimmerei bringen soll), nimmt die Maschine sie nicht an und alles staut sich. Bisher hilft nur Abreißen und neu Bauen.
+- **Am Band:** Band antippen → im Infofenster **„🧺 Strecke leeren“**. Alle Waren auf der zusammenhängenden Strecke (alle direkt verbundenen Bänder, auch über Abzweige und Zusammenführungen; an einer Maschine endet die Strecke) kommen ins Laden-Lager.
+- **An der Maschine:** Zeigt sie rotes Licht („Eingang blockiert“), steht im Infofenster **„🧺 Zulauf leeren“** – leert die Strecke, die in diese Maschine führt.
+- Nichts geht verloren (auch die richtigen Waren kommen ins Laden-Lager), die Bänder bleiben liegen, die Produktion läuft sofort weiter. Kommen weiter falsche Waren nach, muss man die Zuleitung umlegen.
+- Spielstand-Format bleibt gleich.
+
+**Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
+
+### v0.11.1 – Test-Feedback (fertig, nur README)
+
+- Tobias' Test von v0.11.0 festgehalten (Abschnitt 10, Chat 8, Teil 3): Verschieben, Markieren und Drehen mit R klappen hervorragend; Umbauen ist ein wesentlicher Teil des Spiels; nach 2–3 Stunden Echtzeit das erste Scharnier (Level 5).
+- „Strecke leeren“ vorgemerkt (siehe oben). Spiel unverändert; nur die Versionsnummer im Spiel steigt auf v0.11.1.
 
 ### v0.11.0 – Umbauen: Bereiche verschieben (fertig)
 
@@ -730,6 +749,9 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 | 07.11.2026 | Bänder außerhalb der Gruppe bleiben beim Verschieben, wo sie sind; ein Abzweig ins nun leere Feld verliert diesen Ausgang (wie beim Abreißen) | Claudes Wahl: Man schließt an der neuen Stelle selbst wieder an. |
 | 07.11.2026 | Taste R dreht (Vorschau beim Bauen und Verschieben, sonst das angetippte Gebäude oder Band) | Tobias (Chat 8, Teil 2): Er spielt mit angeschlossener Tastatur am Tablet. |
 | 07.11.2026 | Bereich verschieben wird v0.11.0; Aufgaben rücken auf v0.12.0, Offline auf v0.13.0 | Tobias: „Wir können das auch gerne v11 nennen.“ |
+| 07.11.2026 | Umbauen, Abreißen und Neubauen sind ein wesentlicher Bestandteil des Spiels | Tobias (Chat 8, Teil 3): Er spielt in Echtzeit und baut ständig um – mal fehlen Blöcke, mal Platten für neue Gebäude; man konzentriert sich erst auf eine Produktion, um dann andere anzugehen. |
+| 07.11.2026 | „Strecke leeren“ (am Band) und „Zulauf leeren“ (an blockierten Maschinen) vorgemerkt, noch nicht umgesetzt | Claudes Vorschlag; Tobias findet die Idee gut, möchte sie aber zusammen mit weiterem Feedback umsetzen. |
+| 07.11.2026 | Pause: Erst bis Level 6 spielen und Feedback sammeln, dann den nächsten Schritt programmieren | Tobias (Chat 8, Teil 3): „damit wir nicht nur für eine Kleinigkeit codieren“. |
 
 ---
 
@@ -737,7 +759,7 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 
 Stand 07.11.2026.
 
-1. **Test von v0.11.0:** Tobias testet und schreibt sein Feedback in einen neuen Chat (Abschnitt 6, „v0.11.0 – Was Tobias testet“). Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Mini-Schlössern sehr viel Gold. Danach Plan für v0.12.0 (Aufgaben).
+1. **Nächstes Feedback:** Tobias spielt in Echtzeit bis Level 6 und schreibt sein gesammeltes Feedback in einen neuen Chat. Stand nach 2–3 Stunden: erstes Scharnier (Level 5). Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Mini-Schlössern sehr viel Gold. Danach Plan für v0.12.0 (Aufgaben).
 2. **Handel im echten Tempo:** geklärt – Tobias' Zeiten (bis Eisen etwa 45 Minuten, zweite Runde Eisen nach etwa 60 Minuten) sind in echter Zeit gemessen; nur die Eisen-Runden hat er im Testmodus beschleunigt. Früher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10).
 3. **Laden-Lager:** seit v0.10.1 500 Plätze bis Level 3, 1.000 ab Level 4 (Tobias). Claudes Lesart: erst ab Level 4, weil es dort eng wird. Soll es schon ab Level 1 1.000 sein, ist das eine Zahl in der Datentabelle.
 4. **Aufgaben (v0.12.0):** Werden die Waren für eine Aufgabe abgegeben (verbraucht), oder zählt nur, dass man sie hergestellt hat? Wie viel Erfahrung braucht ein Level, was kostet ein Aufstieg? Kostet der Laden-Ausbau zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Was bringen Level 7 bis 10 (Ende der Einführung)? Vorschlag kommt mit dem Plan für v0.12.0.
@@ -746,12 +768,27 @@ Stand 07.11.2026.
 7. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
 8. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
 9. **Theken-Größen:** geklärt (v0.10.1) – alle Theken wachsen mit: klein 20 (bis Level 3), mittel 25 (Level 4), groß 30 (ab Level 5). Claudes Lesart der Level-Zuordnung; falls mittel erst ab Level 5 und groß ab Level 6 gemeint war, ist das eine Zeile in der Datentabelle.
-10. **Tempo ab Level 4 (Feinschliff):** Bei Tobias dauerte es etwa 5 Minuten, bis ein Stein-Zahnrad in der Zimmerei ankam. Das ist gewollt: Am Anfang geht es schnell, danach muss man auf Masse gehen (mehr Holzfäller und Steinbrüche), um die Kombi-Maschinen zu versorgen. Beobachten, ob die Balance stimmt – Stellschrauben sind die Mengen in den Rezepten (10 + 5), die Dauer eines Rohstoffs (15 Minuten) und die Fläche (seit v0.10.2 fester Preis, 500 Gold je Streifen).
+10. **Tempo ab Level 4 (Feinschliff):** Bei Tobias dauerte es etwa 5 Minuten, bis ein Stein-Zahnrad in der Zimmerei ankam. Das ist gewollt: Am Anfang geht es schnell, danach muss man auf Masse gehen (mehr Holzfäller und Steinbrüche), um die Kombi-Maschinen zu versorgen. Beobachten, ob die Balance stimmt – Stellschrauben sind die Mengen in den Rezepten (10 + 5), die Dauer eines Rohstoffs (15 Minuten) und die Fläche (seit v0.10.2 fester Preis, 500 Gold je Streifen). Stand v0.11.0 (Tobias, Echtzeit): nach über einer Stunde noch nicht Level 6, nach 2–3 Stunden das erste Scharnier; der Flow fühlt sich gut an (schnell drin, ständig Rohstoffe nachlegen und produzieren).
 11. **Größe der Welt:** Seit v0.10.2 kann das Grundstück bis 38 × 30 Felder wachsen (jede Seite 2×). Reicht das für die Massenproduktion der höheren Level, oder gibt es später mehr Fläche, z. B. weitere Käufe je Seite mit dem Level oder über Aufgaben? Das ist dann nur eine Zahl in der Datentabelle (`perSide`).
+12. **Weiche mit Filter (Idee von Claude):** Ein Band-Feld, das eine bestimmte Ware abzweigt und den Rest geradeaus schickt, um gemischte Bänder zu sortieren. Will Tobias das, und wenn ja, wann?
+13. **„Eiserner Bestand“:** Tobias' Erkenntnis: Am Anfang verkauft man alles, weil man Gold braucht, und später fehlen Baumaterialien (Blöcke, Platten), weil sie in die Produktion gehen. Wer strukturiert spielt und immer einen Grundvorrat im Laden-Lager behält, kommt nicht in Not. Erst einmal beobachten; denkbar wäre später eine Hilfe im Spiel (z. B. ein Mindestbestand, den die Theken nicht anrühren) – nur, wenn Tobias das möchte.
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.11.1 – Test-Feedback (07.11.2026, nur README)
+
+**Vorgenommen:**
+- Tobias' Feedback zu v0.11.0 festhalten und die Idee „Bänder leeren“ vormerken, damit der nächste Chat direkt daran anknüpfen kann.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie werden falsche Waren auf einer Strecke los, ohne die Bänder abzureißen? → Knopf „🧺 Strecke leeren“ am Band und „🧺 Zulauf leeren“ an blockierten Maschinen; die Waren kommen ins Laden-Lager (vorgemerkt).
+- Liegt das Problem am Spiel oder an der Spielweise? → Beides ein wenig: Tobias merkt selbst, dass ein „eiserner Bestand“ an Baumaterialien hilft; der Knopf bleibt trotzdem eine gute Erleichterung.
+- Jetzt programmieren? → Nein (Tobias): erst bis Level 6 spielen und Feedback sammeln.
+
+**Gemacht:**
+- README: Status, Fahrplan, Abschnitt „Vorgemerkt: Bänder leeren“, Entscheidungen, offene Fragen, Gesprächsprotokoll. Spiel unverändert; nur die Versionsnummer im Spiel steigt auf v0.11.1.
 
 ### v0.11.0 – Umbauen: Bereiche verschieben (07.11.2026)
 
@@ -1112,6 +1149,16 @@ Stand 07.11.2026.
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 07.11.2026 – Chat 8, Teil 3: Test von v0.11.0 & Pause
+
+**Tobias:** Es läuft sehr gut. Er spielt eigentlich nur in Echtzeit und muss ständig umbauen, weil ihm entweder Blöcke fehlen oder er Platten braucht, um neue Dinge zu errichten. Man muss sich zuerst auf eine Produktion konzentrieren, um dann andere angehen zu können – Umbauen, Abreißen und Neubauen sind dadurch ein wesentlicher Bestandteil des Spiels. Ein „Problem“: Schickt er beim Umbauen plötzlich Holzplatten direkt ins Lager, um Maschinen kaufen zu können, blockieren die Platten unter Umständen die Strecke für die Schalter, auf die eigentlich nur Stäbe gehören. Bisher hat er die Bänder abgerissen und neu gebaut, damit die Waren verschwinden. Verschieben und Markieren klappen hervorragend; man muss sich etwas an die Handhabung gewöhnen, aber das Grundprinzip passt. Drehen mit R klappt hervorragend. Nach über einer Stunde hatte er Level 6 noch nicht erreicht; nach 2–3 Stunden hat er gerade das erste Scharnier hergestellt. Der Flow ist sehr gut: Man kommt schnell rein, kann immer wieder produzieren und muss Holz, Stein und Eisen nachlegen, damit die Produktion weiterläuft – man spielt gut auf Fortschritt hin.
+
+**Claude** hat vorgeschlagen: v0.11.1 mit „🧺 Strecke leeren“ am Band und „🧺 Zulauf leeren“ an blockierten Maschinen (Waren ins Laden-Lager, Bänder bleiben liegen); als Idee für später eine Weiche mit Filter.
+
+**Tobias:** Eine gute erste Idee, aber eigentlich muss er mehr Bänder bauen, weil er vergisst, Baumaterialien extra zu sichern: Am Anfang verkauft man alles, weil man Geld braucht, später lagert man nichts mehr ein, weil man es für die Produktion braucht. Wer am Anfang strukturierter arbeitet und immer einen „eisernen Bestand“ im Lager hat, kommt nicht in Not. „Band leeren“ findet er trotzdem gut – erst einmal festhalten. Jetzt Pause: Er versucht, Level 6 zu erreichen, und gibt dann weiteres Feedback, „damit wir nicht nur für eine Kleinigkeit codieren“.
+
+**Umgesetzt:** v0.11.1 (nur README). Der nächste Chat beginnt mit Tobias' Feedback nach Level 6.
 
 ### 07.11.2026 – Chat 8, Teil 2: Test von v0.10.2, Plan und Umsetzung v0.11.0
 
