@@ -1,5 +1,6 @@
-// v0.12.0: Lagerhaus als Gegenstück zum Versandportal (befüllen, Nachschub,
-// ausräumen) und Bänder leeren („Strecke leeren“, „Zulauf leeren“).
+// v0.12.0: Lagerhaus als Gegenstück zum Versandportal (befüllen, ausräumen;
+// den Nachschub gibt es seit v0.14.0 nicht mehr) und Bänder leeren
+// („Strecke leeren“, „Zulauf leeren“).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
@@ -11,15 +12,7 @@ import { deserializeGame, serializeGame } from '../src/core/save.js';
 import { storageCount } from '../src/core/shop.js';
 import { simulate } from '../src/core/sim.js';
 import { createNewGame } from '../src/core/state.js';
-import {
-  emptyWarehouse,
-  fillMax,
-  fillWarehouse,
-  setSupply,
-  stopSupply,
-  warehouseCount,
-  warehouseRoom,
-} from '../src/core/warehouse.js';
+import { emptyWarehouse, fillMax, fillWarehouse, warehouseRoom } from '../src/core/warehouse.js';
 
 function emptyGame() {
   const state = createNewGame(12);
@@ -57,8 +50,8 @@ function line(machineType, recipe) {
 
 // ---------- Befüllen ----------
 
-test('Lagerhaus: Nachschub hält 10 Stück bereit (Datentabelle)', () => {
-  assert.deepEqual(BUILDINGS.lagerhaus.production, { kind: 'storage', slots: 3, slotSize: 50, supplyBuffer: 10 });
+test('Lagerhaus: 3 Fächer zu je 50, kein Nachschub mehr (Datentabelle, v0.14.0)', () => {
+  assert.deepEqual(BUILDINGS.lagerhaus.production, { kind: 'storage', slots: 3, slotSize: 50 });
 });
 
 test('Befüllen: 120 Eisenbarren aus dem Laden-Lager verteilen sich auf die Fächer', () => {
@@ -94,8 +87,7 @@ test('Rohstoffe kommen nicht ins Lagerhaus (die legt man ein)', () => {
   const store = placeBuilding(state, 'lagerhaus', 16, 9, 0);
   state.storage.holzstamm = 3;
   assert.equal(fillWarehouse(state, store, 'holzstamm', 1), 0);
-  assert.equal(setSupply(store, 'eisenerz', 0), false);
-  assert.equal(store.prod.supply, null);
+  assert.deepEqual(store.prod.slots, []);
 });
 
 test('Tobias’ Beispiel: 120 Eisenbarren aus dem Laden-Lager werden zu 24 Eisenstangen', () => {
@@ -108,128 +100,84 @@ test('Tobias’ Beispiel: 120 Eisenbarren aus dem Laden-Lager werden zu 24 Eisen
   assert.deepEqual(store.prod.slots, []);
 });
 
-// ---------- Nachschub ----------
-
-test('Nachschub: holt nur ein paar Stück, der Rest bleibt sichtbar im Laden-Lager', () => {
-  const state = emptyGame();
-  const store = placeBuilding(state, 'lagerhaus', 16, 9, 0);
-  state.storage.holzblock = 100;
-  setSupply(store, 'holzblock', 0);
-  simulate(state, 1); // Ausgang ist nicht angeschlossen
-  assert.deepEqual(slots(store), [['holzblock', 10]]);
-  assert.equal(storageCount(state, 'holzblock'), 90);
-});
-
-test('Nachschub schickt Waren aus dem Laden-Lager durch die Fabrik – das Gegenstück zum Versandportal', () => {
+test('Befüllen ist Handarbeit (v0.14.0): Ist das Lagerhaus leer, bleibt es leer – auch wenn im Laden-Lager genug liegt', () => {
   const { state, store } = line('saegewerk', 'holzplatte');
-  state.storage.holzblock = 100;
-  setSupply(store, 'holzblock', 0);
+  state.storage.holzblock = 300;
+  assert.equal(fillWarehouse(state, store, 'holzblock', 100), 100);
   simulate(state, 150);
-  assert.equal(storageCount(state, 'holzblock'), 0);
   assert.equal(storageCount(state, 'holzplatte'), 20, '100 Holzblöcke → 20 Holzplatten');
-  const status = buildingStatus(state, store);
-  assert.deepEqual(status, { level: 'idle', text: 'Wartet auf Nachschub: keine Holzblöcke im Laden-Lager.' });
-  // Kommt Nachschub ins Laden-Lager, läuft es von selbst weiter
-  state.storage.holzblock = 10;
+  assert.deepEqual(store.prod.slots, []);
+  assert.deepEqual(buildingStatus(state, store), { level: 'idle', text: 'Leer.' });
+  simulate(state, 60);
+  assert.equal(storageCount(state, 'holzblock'), 200, 'nichts wird von selbst nachgeholt');
+  assert.equal(storageCount(state, 'holzplatte'), 20);
+  // Neu befüllen – dann läuft es weiter
+  fillWarehouse(state, store, 'holzblock', 10);
   simulate(state, 30);
   assert.equal(storageCount(state, 'holzplatte'), 22);
 });
 
-test('Nachschub mit Rest: so viele bleiben immer im Laden-Lager (z. B. zum Bauen)', () => {
-  const { state, store } = line('saegewerk', 'holzplatte');
-  state.storage.holzblock = 60;
-  setSupply(store, 'holzblock', 40);
-  simulate(state, 120);
-  assert.equal(storageCount(state, 'holzblock'), 40, 'der Rest bleibt liegen');
-  assert.equal(storageCount(state, 'holzplatte'), 4, '20 Holzblöcke → 4 Holzplatten');
-  assert.deepEqual(buildingStatus(state, store), {
-    level: 'idle',
-    text: 'Wartet auf Nachschub: Im Laden-Lager liegen nicht mehr als 40 Holzblöcke – die bleiben dort.',
-  });
-});
-
-test('Nachschub: Status „holt … aus dem Laden-Lager“, solange etwas da ist', () => {
-  const state = emptyGame();
-  const store = placeBuilding(state, 'lagerhaus', 16, 9, 0);
-  state.storage.holzplatte = 5;
-  setSupply(store, 'holzplatte', 0);
-  assert.deepEqual(buildingStatus(state, store), { level: 'work', text: 'Nachschub: holt Holzplatten aus dem Laden-Lager.' });
-  stopSupply(store);
-  assert.equal(store.prod.supply, null);
-  assert.deepEqual(buildingStatus(state, store), { level: 'idle', text: 'Leer.' });
-});
-
-test('Zwei Lagerhäuser mit Nachschub teilen sich die Ware', () => {
-  const state = emptyGame();
-  const a = placeBuilding(state, 'lagerhaus', 10, 8, 0);
-  const b = placeBuilding(state, 'lagerhaus', 14, 8, 0);
-  state.storage.eisenstange = 15;
-  setSupply(a, 'eisenstange', 0);
-  setSupply(b, 'eisenstange', 0);
-  simulate(state, 1);
-  assert.equal(warehouseCount(a, 'eisenstange'), 10);
-  assert.equal(warehouseCount(b, 'eisenstange'), 5);
-  assert.equal(storageCount(state, 'eisenstange'), 0);
-});
-
 // ---------- Ausräumen, Abreißen ----------
 
-test('Ausräumen: alles zurück ins Laden-Lager, der Nachschub geht aus', () => {
+test('Ausräumen: alles zurück ins Laden-Lager', () => {
   const state = emptyGame();
   const store = placeBuilding(state, 'lagerhaus', 16, 9, 0);
   state.storage = { eisenbarren: 30, holzplatte: 20 };
   fillWarehouse(state, store, 'eisenbarren', 30);
-  setSupply(store, 'holzplatte', 5);
-  simulate(state, 1);
+  fillWarehouse(state, store, 'holzplatte', 10);
   assert.deepEqual(emptyWarehouse(state, store), { eisenbarren: 30, holzplatte: 10 });
   assert.deepEqual(state.storage, { eisenbarren: 30, holzplatte: 20 });
-  assert.equal(store.prod.supply, null);
   simulate(state, 1);
   assert.deepEqual(store.prod.slots, [], 'bleibt leer');
 });
 
-test('Abreißen eines Lagerhauses mit Nachschub gibt seinen Inhalt zurück', () => {
+test('Abreißen eines befüllten Lagerhauses gibt seinen Inhalt zurück', () => {
   const state = emptyGame();
   const store = placeBuilding(state, 'lagerhaus', 16, 9, 0);
   state.storage.holzstab = 25;
-  setSupply(store, 'holzstab', 0);
-  simulate(state, 1);
+  fillWarehouse(state, store, 'holzstab', 25);
   removeBuilding(state, store.id);
   assert.equal(storageCount(state, 'holzstab'), 25);
 });
 
 // ---------- Spielstand ----------
 
-test('Spielstand: Nachschub wird mitgespeichert', () => {
+test('Spielstand: Inhalt des Lagerhauses wird mitgespeichert', () => {
   const state = emptyGame();
   const store = placeBuilding(state, 'lagerhaus', 16, 9, 0);
   state.storage.holzplatte = 50;
-  setSupply(store, 'holzplatte', 20);
+  fillWarehouse(state, store, 'holzplatte', 20);
   const loaded = deserializeGame(serializeGame(state));
   assert.ok(loaded);
-  assert.deepEqual(loaded.state.buildings[0].prod.supply, { type: 'holzplatte', keep: 20 });
+  assert.deepEqual(loaded.state.buildings[0].prod, { slots: [{ type: 'holzplatte', count: 20 }], blocked: false });
 });
 
-test('Spielstand aus v0.11 (Version 9): Lagerhäuser laufen ohne Nachschub weiter wie bisher', () => {
+test('Spielstand aus v0.13 (Version 11): Nachschub fällt weg, der Inhalt bleibt, mit Hinweis', () => {
+  const v11 = emptyGame();
+  const a = placeBuilding(v11, 'lagerhaus', 16, 9, 0);
+  a.prod.slots = [{ type: 'holzplatte', count: 7 }];
+  a.prod.supply = { type: 'holzplatte', keep: 20 };
+  const b = placeBuilding(v11, 'lagerhaus', 16, 12, 0);
+  b.prod.supply = null;
+  const loaded = deserializeGame(JSON.stringify({ saveVersion: 11, savedAt: 1, state: v11 }));
+  assert.ok(loaded);
+  assert.equal(loaded.migratedFrom, 11);
+  const [pa, pb] = loaded.state.buildings.map((x) => x.prod);
+  assert.deepEqual([pa.slots, 'supply' in pa, 'supply' in pb], [[{ type: 'holzplatte', count: 7 }], false, false]);
+  assert.deepEqual(loaded.notes, ['1 Lagerhaus hatte Nachschub – den gibt es nicht mehr. Was darin liegt, läuft noch aufs Band; danach von Hand befüllen.']);
+});
+
+test('Spielstand aus v0.11 (Version 9): Lagerhäuser laufen weiter wie bisher', () => {
   const v9 = emptyGame();
   const store = placeBuilding(v9, 'lagerhaus', 16, 9, 0);
   store.prod.slots = [{ type: 'holzblock', count: 42 }];
-  delete store.prod.supply;
   const loaded = deserializeGame(JSON.stringify({ saveVersion: 9, savedAt: 1, state: v9 }));
   assert.ok(loaded);
   assert.equal(loaded.migratedFrom, 9);
   assert.deepEqual(loaded.notes, []);
   const prod = loaded.state.buildings[0].prod;
-  assert.equal(prod.supply, null);
+  assert.equal('supply' in prod, false);
   assert.deepEqual(prod.slots, [{ type: 'holzblock', count: 42 }]);
-});
-
-test('Ungültiger Nachschub im Spielstand wird erkannt', () => {
-  for (const supply of [{ type: 'holzstamm', keep: 0 }, { type: 'holzplatte', keep: -1 }, { type: 'gibtsnicht', keep: 0 }, 'holzplatte']) {
-    const state = emptyGame();
-    placeBuilding(state, 'lagerhaus', 16, 9, 0).prod.supply = supply;
-    assert.equal(deserializeGame(serializeGame(state)), null, JSON.stringify(supply));
-  }
 });
 
 // ---------- Strecke leeren ----------

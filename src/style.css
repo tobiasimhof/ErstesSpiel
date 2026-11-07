@@ -871,6 +871,93 @@ button.level-up {
 
 /* ---------- Spiel startet nicht ---------- */
 
+/* ---------- Spiel im Hintergrund (v0.14.0) ---------- */
+
+.catchup {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.catchup-box {
+  width: min(420px, 100%);
+  padding: 16px 20px;
+  background: var(--parchment);
+  color: var(--ink);
+  border: 3px solid var(--border);
+  border-radius: 14px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.catchup-icon {
+  font-size: 30px;
+}
+
+.catchup-box p {
+  margin: 6px 0 10px;
+}
+
+.catchup-bar {
+  height: 10px;
+  overflow: hidden;
+  background: rgba(138, 106, 63, 0.25);
+  border-radius: 5px;
+}
+
+#catchup-fill {
+  width: 0;
+  height: 100%;
+  background: var(--ok);
+  transition: width 0.15s;
+}
+
+.away-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+
+.away-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 8px 10px;
+  background: rgba(138, 106, 63, 0.12);
+  border-radius: 10px;
+}
+
+.away-icon {
+  flex: 0 0 auto;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.away-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.away-goods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-top: 4px;
+}
+
+.away-good {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+}
+
 #boot-error {
   position: fixed;
   inset: 0;

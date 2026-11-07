@@ -188,10 +188,15 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await page.textContent('#info-title')) === 'Holzfällerlager', 'Antippen zeigt Infofenster „Holzfällerlager“');
   const actionTexts = await page.locator('#info-actions button').allTextContents();
   check(
-    ['Holzstamm einlegen', 'Verschieben', 'Drehen', 'Abreißen'].every((t) => actionTexts.some((a) => a.includes(t))),
-    'Infofenster hat Einlegen, Verschieben, Drehen, Abreißen',
+    ['Auffüllen', 'Holzstamm einlegen', 'Verschieben', 'Drehen', 'Abreißen'].every((t) => actionTexts.some((a) => a.includes(t))),
+    `Infofenster hat Auffüllen, Einlegen, Verschieben, Drehen, Abreißen (${actionTexts.join(', ')})`,
   );
   check((await page.textContent('#info-status')).includes('Holzstämme im Laden-Lager: 1'), 'Infofenster zeigt Vorrat im Laden-Lager');
+  check((await page.textContent('#info-status')).includes('Vorrat: 0 / 3 Holzstämme'), 'Infofenster zeigt den Vorrat im Gebäude (0 / 3)');
+  check(
+    (await page.locator('#info-actions button', { hasText: 'Auffüllen' }).textContent()) === '⏫ Auffüllen: 1 Holzstamm',
+    'Auffüllen nimmt den Holzstamm aus dem Laden-Lager (Gold reicht nicht für mehr)',
+  );
   check(await page.locator('#info-actions button', { hasText: 'Holzstamm kaufen' }).isDisabled(), 'Mit 500 Gold reicht es noch nicht für einen Holzstamm (550)');
   await page.locator('#info-actions button', { hasText: 'Drehen' }).tap();
   await sleep(80);
@@ -586,9 +591,10 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     loaded: window.__game.state.buildings.find((b) => b.type === 'holzfaeller').prod.loaded,
   }));
   check(afterLoad.loaded && afterLoad.logs === 0, 'Gratis-Holzstamm eingelegt');
+  check((await page.textContent('#info-status')).includes('Vorrat: 1 / 3 Holzstamm'), 'Vorrat 1 / 3');
   check(
-    await page.locator('#info-actions button', { hasText: 'wird verarbeitet' }).isDisabled(),
-    'Zweiter Holzstamm lässt sich nicht einlegen',
+    await page.locator('#info-actions button', { hasText: 'Holzstamm einlegen' }).isDisabled(),
+    'Ohne Holzstamm im Laden-Lager lässt sich keiner mehr einlegen',
   );
   await page.tap('#info-close');
 
@@ -1017,7 +1023,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(!(await feedButton.isVisible()), 'Ohne Stau kein Knopf „Zulauf leeren“');
   await page.tap('#info-close');
 
-  // ---------- Lagerhaus: befüllen, Nachschub, ausräumen (v0.12.0) ----------
+  // ---------- Lagerhaus: befüllen, ausräumen (v0.12.0; ohne Nachschub seit v0.14.0) ----------
   // Lagerhaus (10,14)-(11,14) gibt unten rechts aus → Band (11,15),(11,16)…(14,16)
   // → Versandportal (15,16). Was hineinkommt, läuft zurück ins Laden-Lager.
   await game(page, () => {
@@ -1051,8 +1057,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await page.textContent('#info-title')) === 'Lagerhaus', 'Lagerhaus antippen zeigt Infofenster');
   const storeButtons = await page.locator('#info-actions button').allTextContents();
   check(
-    ['Befüllen', 'Nachschub', 'Ausräumen'].every((t) => storeButtons.some((b) => b.includes(t))),
-    `Knöpfe Befüllen, Nachschub, Ausräumen (${storeButtons.join(', ')})`,
+    ['Befüllen', 'Ausräumen'].every((t) => storeButtons.some((b) => b.includes(t))) && !storeButtons.some((b) => b.includes('Nachschub')),
+    `Knöpfe Befüllen und Ausräumen, kein Nachschub (${storeButtons.join(', ')})`,
   );
   check(await page.locator('#info-actions button', { hasText: 'Ausräumen' }).isDisabled(), 'Leeres Lagerhaus: Ausräumen gesperrt');
   // Befüllen: Ware wählen, Menge einstellen
@@ -1081,7 +1087,9 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
       const st = window.__game.state;
       const store = st.buildings.find((b) => b.type === 'lagerhaus' && b.x === 10);
       const inStore = store.prod.slots.reduce((a, s) => a + (s.type === 'eisenbarren' ? s.count : 0), 0);
-      const onBelts = Object.values(st.belts).filter((b) => b.item?.type === 'eisenbarren').length;
+      // Nur die Bänder dieser Strecke – die Eisen-Linie von vorhin läuft noch
+      const line = ['11,15', '11,16', '12,16', '13,16', '14,16'];
+      const onBelts = line.filter((k) => st.belts[k]?.item?.type === 'eisenbarren').length;
       return { inStore, onBelts, inShop: st.storage.eisenbarren ?? 0 };
     });
   const filled = await ironCount();
@@ -1095,31 +1103,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await game(page, () => window.__game.simulate(90));
   const shipped = await ironCount();
   check(shipped.inShop === 120 && shipped.inStore === 0, `Über Band und Versandportal zurück im Laden-Lager (${JSON.stringify(shipped)})`);
-  // Nachschub mit Rest: 20 Holzplatten bleiben immer im Laden-Lager
-  await page.locator('#info-actions button', { hasText: 'Nachschub' }).tap();
-  await sleep(120);
-  check((await page.textContent('#modal-content h2')) === '🔁 Nachschub einrichten', 'Fenster „Nachschub einrichten“');
-  await page.locator('#modal-content .pick-row', { hasText: 'Holzplatte' }).tap();
-  await sleep(120);
-  check(
-    (await page.textContent('#modal-content h3')) === 'Wie viele Holzplatten sollen im Laden-Lager bleiben?',
-    'Rest fürs Laden-Lager einstellen',
-  );
-  await page.locator('#modal-content button', { hasText: '+20' }).tap();
-  await sleep(60);
-  check((await page.textContent('#modal-content .amount-number')) === '20', '+20 → 20 bleiben im Laden-Lager');
-  await shot('14h-nachschub-rest');
-  await page.locator('#modal-content button', { hasText: 'Nachschub starten' }).tap();
-  await sleep(450);
-  const supply = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'lagerhaus' && b.x === 10).prod.supply);
-  check(JSON.stringify(supply) === '{"type":"holzplatte","keep":20}', `Nachschub eingestellt (${JSON.stringify(supply)})`);
-  const supplyStatus = await page.textContent('#info-status');
-  check(
-    supplyStatus.includes('Nachschub: holt Holzplatten aus dem Laden-Lager') && supplyStatus.includes('20 bleiben immer dort'),
-    `Infofenster nennt den Nachschub und den Rest (${supplyStatus})`,
-  );
-  check((await page.locator('#info-actions button.primary').allTextContents()).includes('✕ Nachschub aus'), 'Knopf „Nachschub aus“');
-  await shot('14i-nachschub');
+  // v0.14.0: Leer bleibt leer – das Lagerhaus holt nichts von selbst aus dem Laden-Lager
   const plates = () =>
     game(page, () => {
       const st = window.__game.state;
@@ -1130,18 +1114,11 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
         inShop: st.storage.holzplatte ?? 0,
       };
     });
-  await game(page, () => window.__game.simulate(3));
-  const looping = await plates();
-  check(
-    looping.inShop >= 20 && looping.inStore + looping.onBelts > 0 && looping.inStore + looping.onBelts + looping.inShop === 40,
-    `Nachschub holt Holzplatten, 20 bleiben im Laden-Lager (${JSON.stringify(looping)})`,
-  );
-  await page.locator('#info-actions button', { hasText: 'Nachschub aus' }).tap();
+  await game(page, () => window.__game.simulate(30));
+  const stillEmpty = await plates();
+  check(stillEmpty.inStore === 0 && stillEmpty.inShop === 40, `Leeres Lagerhaus bleibt leer, die Holzplatten bleiben im Laden-Lager (${JSON.stringify(stillEmpty)})`);
   await sleep(450);
-  check(
-    (await game(page, () => window.__game.state.buildings.find((b) => b.type === 'lagerhaus' && b.x === 10).prod.supply)) === null,
-    '„Nachschub aus“ schaltet ab',
-  );
+  check((await page.textContent('#info-status')).includes('Leer.'), 'Infofenster: Lagerhaus leer');
   // Ausräumen: alles zurück ins Laden-Lager
   await game(page, () => {
     const st = window.__game.state;
@@ -1248,7 +1225,68 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(80);
   const logBought = await game(page, () => ({ gold: window.__game.state.gold, logs: window.__game.state.storage.holzstamm ?? 0 }));
   check(logBought.logs === 1 && logBought.gold <= goldBeforeLog - 550 + 200, `Holzstamm im Infofenster gekauft (${goldBeforeLog} → ${logBought.gold})`);
+  // v0.14.0: Auffüllen – erst der Holzstamm aus dem Laden-Lager, der Rest wird gekauft
+  await game(page, () => (window.__game.state.gold += 2000));
+  await sleep(450);
+  const refillText = await page.locator('#info-actions button', { hasText: 'Auffüllen' }).textContent();
+  const beforeRefill = await game(page, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'holzfaeller');
+    return { inside: (b.prod.loaded ? 1 : 0) + b.prod.queued, gold: window.__game.state.gold };
+  });
+  const toBuy = 3 - beforeRefill.inside - 1;
+  check(
+    refillText === `⏫ Auffüllen: ${3 - beforeRefill.inside} Holzstämme${toBuy > 0 ? ` · kauft ${toBuy} für ${(toBuy * 550).toLocaleString('de-DE')} 🪙` : ''}`,
+    `Knopf sagt, was Auffüllen tut („${refillText}“)`,
+  );
+  await page.locator('#info-actions button', { hasText: 'Auffüllen' }).tap();
+  await sleep(450);
+  const refilled = await game(page, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'holzfaeller');
+    return { inside: (b.prod.loaded ? 1 : 0) + b.prod.queued, logs: window.__game.state.storage.holzstamm ?? 0, gold: window.__game.state.gold };
+  });
+  check(
+    refilled.inside === 3 && refilled.logs === 0 && refilled.gold <= beforeRefill.gold - toBuy * 550 + 200,
+    `Auffüllen: 3 / 3 Holzstämme im Holzfällerlager (${JSON.stringify(beforeRefill)} → ${JSON.stringify(refilled)})`,
+  );
+  check((await page.textContent('#info-status')).includes('Vorrat: 3 / 3 Holzstämme'), 'Infofenster: Vorrat 3 / 3');
+  check(
+    (await page.locator('#info-actions button', { hasText: 'Vorrat voll' }).isDisabled()) &&
+      (await page.locator('#info-actions button', { hasText: 'Holzstamm einlegen' }).isDisabled()),
+    'Bei vollem Vorrat: „Vorrat voll“, Einlegen gesperrt',
+  );
+  await shot('17b-vorrat-voll');
   await page.tap('#info-close');
+
+  // ---------- Spiel im Hintergrund (v0.14.0) ----------
+  // a) 20 Minuten weg (App im Hintergrund): Die Fabrik und die Kunden laufen weiter
+  await game(page, () => {
+    const st = window.__game.state;
+    st.counters.forEach((c, i) => Object.assign(c, i === 0 ? { type: 'holzplatte', count: 10 } : { type: null, count: 0 }));
+  });
+  const awayBefore = await game(page, () => ({
+    gold: window.__game.state.gold,
+    remaining: window.__game.state.buildings.find((b) => b.type === 'holzfaeller').prod.remaining,
+  }));
+  await game(page, () => window.__game.away(20 * 60));
+  await page.waitForFunction(() => !window.__game.isCatchingUp(), null, { timeout: 15000 });
+  await sleep(150);
+  check((await page.textContent('#modal-content h2')) === '👋 Willkommen zurück!', 'Nach 20 Minuten: Fenster „Willkommen zurück“');
+  const awayText = await page.textContent('#modal-content');
+  check(awayText.includes('Du warst 20 Min. weg') && awayText.includes('Kunden haben'), `Bericht nennt Zeit und Verkäufe (${awayText.slice(0, 160)})`);
+  const awayAfter = await game(page, () => ({
+    gold: window.__game.state.gold,
+    counter: window.__game.state.counters[0].count,
+    inside: (() => {
+      const b = window.__game.state.buildings.find((x) => x.type === 'holzfaeller');
+      return (b.prod.loaded ? 1 : 0) + b.prod.queued;
+    })(),
+  }));
+  check(awayAfter.counter === 0 && awayAfter.gold >= awayBefore.gold + 180, `Kunden haben die Theke leer gekauft (${JSON.stringify(awayAfter)})`);
+  check(awayAfter.inside >= 1 && awayAfter.inside <= 2, `Nach 20 Minuten ist mindestens ein Holzstamm verarbeitet (${awayAfter.inside} im Vorrat)`);
+  await shot('17c-willkommen-zurueck');
+  await page.locator('#modal-content button', { hasText: 'Weiter' }).tap();
+  await sleep(120);
+  check(!(await page.isVisible('#modal')), '„Weiter“ schließt das Fenster');
 
   // Die Fabrik läuft beim Neuladen weiter; beim Verlassen wird der neueste Stand
   // gespeichert. Deshalb: nichts darf verloren gehen (eher kommt etwas dazu).
@@ -1265,6 +1303,38 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     afterReload.logs === beforeReload.logs && afterReload.blocks >= beforeReload.blocks,
     `Laden-Lager bleibt nach dem Neuladen erhalten (Holzstämme ${beforeReload.logs} → ${afterReload.logs}, Holzblöcke ${beforeReload.blocks} → ${afterReload.blocks})`,
   );
+
+  // b) Spiel 2 Stunden zu: Beim Öffnen wird nachgerechnet. Den Spielstand
+  // dafür auf einer anderen Seite derselben Adresse zurückdatieren – das Spiel
+  // selbst speichert beim Schließen den neuesten Stand.
+  await page.close();
+  const page2 = await context.newPage();
+  page2.on('pageerror', (e) => errors.push(e.message));
+  page2.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await page2.goto(`${baseUrl}manifest.webmanifest`);
+  const backdated = await page2.evaluate(() => {
+    const key = 'erstesspiel-spielstand';
+    const data = JSON.parse(localStorage.getItem(key));
+    data.savedAt -= 2 * 3600 * 1000;
+    localStorage.setItem(key, JSON.stringify(data));
+    return data.saveVersion;
+  });
+  check(backdated === 12, `Spielstand-Version 12 (${backdated})`);
+  await page2.goto(baseUrl);
+  await waitForGame(page2);
+  await page2.waitForFunction(() => !window.__game.isCatchingUp(), null, { timeout: 20000 });
+  await sleep(200);
+  const loadText = await page2.textContent('#modal-content');
+  check(
+    (await page2.textContent('#modal-content h2')) === '👋 Willkommen zurück!' && loadText.includes('Du warst 2 Std. weg') && loadText.includes('Leer gelaufen: 1× Holzfällerlager'),
+    `Nach 2 Stunden: Bericht beim Öffnen, Holzfällerlager leer gelaufen (${loadText.slice(0, 200)})`,
+  );
+  const woodAfter = await game(page2, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'holzfaeller');
+    return (b.prod.loaded ? 1 : 0) + b.prod.queued;
+  });
+  check(woodAfter === 0, 'Nach über 45 Minuten sind alle 3 Holzstämme verarbeitet');
+  await page2.screenshot({ path: path.join(OUT, `${device.name}-17d-willkommen-nach-2-std.png`) });
 
   check(errors.length === 0, `Keine Fehler in der Konsole${errors.length ? ': ' + errors.join(' | ') : ''}`);
   await context.close();

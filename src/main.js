@@ -22,6 +22,9 @@ import { createLevelView, unlockText } from './view/levels.js';
 import { costText, numberFormat } from './view/format.js';
 import { redrawItemIcons } from './view/itemArt.js';
 import { clearGame, loadGame, loadSettings, saveGame, saveSettings } from './view/storage.js';
+import { OFFLINE } from './core/data/offline.js';
+import { catchUpProgress, extendCatchUp, offlineReport, runCatchUp, startCatchUp } from './core/offline.js';
+import { createOfflineView } from './view/offline.js';
 
 const loaded = loadGame();
 const state = loaded.status === 'ok' ? loaded.state : createNewGame();
@@ -43,10 +46,14 @@ const requestDraw = () => {
 
 let saveTimer = null;
 let resetting = false;
+// v0.14.0: Läuft das Nachrechnen der verpassten Zeit, wird nicht gespeichert –
+// sonst stünde im Spielstand eine neue Uhrzeit zu einer alten Fabrik. Der
+// alte Spielstand bleibt; beim nächsten Öffnen wird von dort nachgerechnet.
+let catchUpJob = null;
 function saveNow() {
   clearTimeout(saveTimer);
   saveTimer = null;
-  if (!resetting) saveGame(state);
+  if (!resetting && !catchUpJob) saveGame(state);
 }
 function scheduleSave() {
   clearTimeout(saveTimer);
@@ -149,6 +156,7 @@ const buildBar = createBuildBar({
   onAreaErase: () => controller.areaEraseTool(),
 });
 const shopView = createShopView({ state, panels, onChange });
+const offlineView = createOfflineView({ panels });
 const warehouseView = createWarehouseView({ state, panels, onChange });
 controller = createController({ state, camera, ui, panels, buildBar, shopView, warehouseView, onChange, requestDraw, worldBounds });
 buildBar.setMode('normal');
@@ -212,8 +220,11 @@ if (loaded.status === 'ok' && loaded.migratedFrom) {
     from < 7 ? 'Neu: Fläche kaufen – tippe auf die ＋-Schilder am Rand. Deine Fabrik hat Laden-Level 3, alles bleibt freigeschaltet.' : '',
     from < 8 ? `Neu: ${START_GOLD} Gold Startkapital – du bekommst es einmalig nachgezahlt.` : '',
     from < 9 ? `Neu: Fläche kostet jetzt immer ${numberFormat.format(LAND.price)} Gold für ${LAND.depth} Reihen; jede Seite lässt sich ${LAND.perSide}× erweitern.` : '',
-    from < 10 ? 'Neu: Lagerhäuser lassen sich aus dem Laden-Lager befüllen und holen mit Nachschub Waren von dort aufs Band. Bänder lassen sich leeren.' : '',
+    from < 10 ? 'Neu: Lagerhäuser lassen sich aus dem Laden-Lager befüllen, Bänder lassen sich leeren.' : '',
     from < 11 ? 'Neu: Aufträge der Bewohner – tippe oben auf „Laden-Level“. Einige Waren heißen jetzt anders, z. B. Mechanischer Schalter → Räderwerk, Mini-Schloss → Vorhängeschloss.' : '',
+    from < 12
+      ? 'Neu: Deine Fabrik läuft weiter, wenn das Spiel zu ist – bis Rohstoffe, Zutaten oder Theken leer sind. In Holzfällerlager, Steinbruch und Schmelzhütte passen jetzt 3 Rohstoffe („⏫ Auffüllen“). Lagerhäuser befüllst du von Hand.'
+      : '',
     ...(loaded.notes ?? []),
     loaded.counterNote ?? '',
   ].filter(Boolean);
@@ -222,12 +233,51 @@ if (loaded.status === 'ok' && loaded.migratedFrom) {
 else if (loaded.status === 'ok') panels.toast('Spielstand geladen.', 1600);
 else if (loaded.status === 'invalid') panels.toast('Spielstand war beschädigt – neues Spiel gestartet.', 3500);
 
+// ---------- Spiel im Hintergrund (v0.14.0) ----------
+// War das Spiel zu oder die App im Hintergrund, wird die verpasste Zeit
+// nachgerechnet – in Portionen, damit der Bildschirm nicht einfriert. Dauert
+// es länger als ein Bild, erscheint ein Hinweis mit Fortschritt.
+
+const CATCH_UP_MS = 30; // so lange je Bild nachrechnen
+
+function beginCatchUp(seconds) {
+  if (!(seconds > 0)) return;
+  if (catchUpJob) extendCatchUp(catchUpJob, seconds);
+  else catchUpJob = startCatchUp(state, seconds);
+}
+
+// Rechnet eine Portion; gibt true zurück, wenn alles nachgeholt ist.
+function continueCatchUp() {
+  const start = performance.now();
+  let finished = false;
+  do finished = runCatchUp(catchUpJob, 200);
+  while (!finished && performance.now() - start < CATCH_UP_MS);
+  if (!finished) {
+    offlineView.showProgress(catchUpJob.seconds, catchUpProgress(catchUpJob));
+    return false;
+  }
+  const report = offlineReport(catchUpJob);
+  catchUpJob = null;
+  offlineView.hideProgress();
+  if (report.seconds >= OFFLINE.toastSeconds) {
+    controller.closeInfo();
+    offlineView.report(report);
+  }
+  onChange();
+  saveNow();
+  return true;
+}
+
+// Beim Öffnen: Zeit seit dem letzten Speichern nachrechnen
+if (loaded.status === 'ok' && loaded.savedAt > 0) beginCatchUp((Date.now() - loaded.savedAt) / 1000);
+
 // ---------- Takt ----------
 // Die Simulation läuft in festen Takten (TICK). Pro Bild werden so viele Takte
-// gerechnet, wie Zeit vergangen ist. Ist das Spiel im Hintergrund, ruht es
-// (Offline-Produktion folgt in v0.14.0).
+// gerechnet, wie Zeit vergangen ist. Ist das Spiel im Hintergrund, ruht es;
+// beim Zurückkommen wird die verpasste Zeit nachgerechnet (siehe oben).
 
 let lastTime = performance.now();
+let lastWall = Date.now(); // Uhrzeit des letzten Bildes – erkennt Pausen im Hintergrund
 let accumulator = 0;
 let lastRefresh = 0;
 let lastGifts = state.market.gifts;
@@ -238,14 +288,25 @@ let questReadyKey = canDeliver(state) ? questKey() : null;
 function frame(now) {
   const realDt = Math.min(0.25, Math.max(0, (now - lastTime) / 1000));
   lastTime = now;
-  accumulator += realDt * (settings.testMode ? TEST_SPEED : 1);
-  let steps = 0;
-  while (accumulator >= TICK && steps < 200) {
-    tick(state);
-    accumulator -= TICK;
-    steps++;
+  // v0.14.0: Lange kein Bild (App im Hintergrund, Gerät im Standby) – die
+  // Zeit dazwischen wird nachgerechnet, in normaler Geschwindigkeit.
+  const wall = Date.now();
+  const gap = (wall - lastWall) / 1000;
+  lastWall = wall;
+  if (gap > OFFLINE.gapSeconds || (catchUpJob && gap > 0)) beginCatchUp(gap);
+  if (catchUpJob) {
+    accumulator = 0;
+    continueCatchUp();
+  } else {
+    accumulator += realDt * (settings.testMode ? TEST_SPEED : 1);
+    let steps = 0;
+    while (accumulator >= TICK && steps < 200) {
+      tick(state);
+      accumulator -= TICK;
+      steps++;
+    }
+    if (steps === 200) accumulator = 0;
   }
-  if (steps === 200) accumulator = 0;
   ui.simAlpha = accumulator / TICK;
 
   renderer.draw(state, camera, ui);
@@ -294,6 +355,11 @@ window.__game = {
     controller.refresh();
     requestDraw();
   },
+  // v0.14.0: so tun, als wäre das Spiel so lange zu gewesen
+  away(seconds) {
+    beginCatchUp(seconds);
+  },
+  isCatchingUp: () => Boolean(catchUpJob),
   // v0.13.0: für den Browser-Test – Erfahrung, die das aktuelle Level zum Aufstieg braucht
   xpNeeded: () => xpNeeded(state.shopLevel),
   currentQuest: () => currentQuest(state),
