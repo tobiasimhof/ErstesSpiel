@@ -5,7 +5,7 @@ import { BELT_COST, BUILDINGS, BUILD_MENU } from '../core/data/buildings.js';
 import { buildingLevel, isBuildingUnlocked } from '../core/levels.js';
 import { canAfford } from '../core/shop.js';
 import { costText } from './format.js';
-import { createItemIcon } from './itemArt.js';
+import { createItemIcon, redrawItemIcons } from './itemArt.js';
 import { onPress } from './press.js';
 
 const EXTRA_TOOLS = [
@@ -107,6 +107,9 @@ export function createBuildBar({ onShop, onOpenMenu, onCloseMenu, onSelectTool, 
     // mode: normal | menu | place | belt | erase
     setMode(mode, { text = '', confirmLabel = '✓ Fertig' } = {}) {
       bottomBar.hidden = mode !== 'normal';
+      // v0.10.2: Warenbilder bei jedem Öffnen neu zeichnen – der Browser darf
+      // sie wegwerfen, wenn die App im Hintergrund war.
+      if (mode === 'menu' && buildBar.hidden) redrawItemIcons(buildBar);
       buildBar.hidden = mode !== 'menu';
       const toolMode = mode === 'place' || mode === 'belt' || mode === 'erase';
       toolBar.hidden = !toolMode;

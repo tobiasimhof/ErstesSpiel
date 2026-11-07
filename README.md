@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.10.1 – Feinschliff nach Tobias' Test (Theken, Laden-Lager, Fläche, Umstellen) |
+| **Aktuelle Version** | v0.10.2 – Fläche für 500 Gold & Warenbilder in der Bauleiste |
 | **Phase** | M2 – Produktionsketten |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias testet v0.10.1 (Abschnitt 6, „v0.10.1 – Was Tobias testet“) und schreibt sein Feedback in einen **neuen Chat**. Claude hält es fest, nimmt bei Bedarf noch Feinschliff vor; danach Plan für **v0.11.0 – Aufgaben** |
+| **Nächster Schritt** | Tobias testet v0.10.2 (Abschnitt 6, „v0.10.2 – Was Tobias testet“) und schreibt sein Feedback in einen **neuen Chat**. Claude hält es fest, nimmt bei Bedarf noch Feinschliff vor; danach Plan für **v0.11.0 – Aufgaben** |
 
 ---
 
@@ -86,7 +86,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 
 ### 3.3 Fabrik
 
-- Das Grundstück besteht aus quadratischen Feldern (Raster). Man startet mit **22 × 14 Feldern** (seit v0.6.1, vorher 16 × 10). Ringsum liegt gesperrte Fläche (Welt 40 × 26). **Seit v0.9.0 kauft man Fläche dazu:** An jeder Seite des Grundstücks steht ein Schild mit dem Preis; ein Streifen ist 2 Felder tief (ab Level 4: 4 Felder, seit v0.10.1) und reicht über die ganze Seite. Jeder Kauf wird teurer (Abschnitt 6, v0.9.0).
+- Das Grundstück besteht aus quadratischen Feldern (Raster). Man startet mit **22 × 14 Feldern** (seit v0.6.1, vorher 16 × 10). Ringsum liegt gesperrte Fläche (seit v0.10.2 Welt 38 × 30, vorher 40 × 26). **Seit v0.9.0 kauft man Fläche dazu:** An jeder Seite des Grundstücks steht ein Schild mit dem Preis; ein Streifen reicht über die ganze Seite. **Seit v0.10.2 (Tobias):** Jeder Streifen ist 4 Felder tief und kostet immer 500 Gold, schon ab Level 1; jede Seite lässt sich 2× erweitern. Ganz ausgebaut sind es 38 × 30 Felder für zusammen 4.000 Gold (Abschnitt 6, v0.10.2).
 - **Der Laden ist das ganze Grundstück**, kein einzelnes Gebäude. Darauf stehen zu Beginn ein Holzfällerlager und (seit v0.7.0) ein Versandportal. Bis v0.8.0 stand dort auch ein Steinbruch; seit v0.9.0 baut man ihn ab Level 2 selbst.
 - Gebäude belegen mehrere Felder und haben Ein- und Ausgänge. **Größen (Tobias, 06.11.2026):** Maschinen 2 × 2 (damit sie später zwei Eingänge für zwei verschiedene Rohstoffe haben können), alles andere kleiner: Förderbänder 1 × 1, Lagerhaus 2 × 1, Versandportal 1 × 1.
 - **Förderbänder** verbinden die Gebäude und transportieren Waren Stück für Stück.
@@ -121,11 +121,11 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 
 - **Laden-Level**, ähnlich dem Rathaus in Clash of Clans: Jede Stufe schaltet neue Werkstätten, Rezepte, Lagerplatz und Fläche frei. Jede Stufe wird teurer. **Rohstoffe nach Level:** Holz ab Level 1, Stein ab Level 2, Eisen ab Level 3.
 - **Erste einfache Level (seit v0.9.0):** Level 1 startet nur mit Holz. Wer 1 Holzplatte und 1 Holzstab hergestellt hat, kann auf Level 2 (Stein) aufsteigen; nach 1 Steinplatte und 1 Stein-Zahnrad auf Level 3 (Eisen). Aufsteigen geht per Knopf im Level-Fenster (oben auf „Laden-Level“ tippen) und kostet vorerst nichts. **Zu Beginn jedes Levels gibt es einen Rohstoff gratis** (Tobias).
-- **Level 4–6 (seit v0.10.0):** Jedes Level schaltet eine Kombi-Maschine und eine weitere Verkaufstheke frei: Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei. Dazu wächst der Laden (seit v0.10.1): Level 4 bringt mittlere Theken (25), 1.000 Plätze im Laden-Lager und doppelt so tiefe Flächen-Streifen, Level 5 große Theken (30). Ziel ist jeweils, die Produkte der zuletzt freigeschalteten Maschine einmal herzustellen; Geschenk ist 1 Eisenerz.
+- **Level 4–6 (seit v0.10.0):** Jedes Level schaltet eine Kombi-Maschine und eine weitere Verkaufstheke frei: Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei. Dazu wächst der Laden (seit v0.10.1): Level 4 bringt mittlere Theken (25) und 1.000 Plätze im Laden-Lager, Level 5 große Theken (30). (Die doppelt so tiefen Flächen-Streifen ab Level 4 aus v0.10.1 gelten seit v0.10.2 schon ab Level 1.) Ziel ist jeweils, die Produkte der zuletzt freigeschalteten Maschine einmal herzustellen; Geschenk ist 1 Eisenerz.
 - **Einführung bis etwa Level 10 (Tobias):** Die ersten Level konzentrieren sich darauf, eine coole Produktionsstätte aufzubauen. Man kommt mit jedem Level ein Stück weiter und lernt nach und nach alles kennen; bis etwa Level 10 ist sozusagen das „Intro“ abgeschlossen.
 - **Später: Aufgaben, Erfahrung und Gold (Modell von Tobias):** Für jedes Level gibt es Aufgaben, z. B. „50 Blöcke und 20 Holzplatten herstellen“. Dafür bekommt man z. B. 100 Erfahrungspunkte (XP) und 250 Gold. Mit genug Erfahrung schaltet man das nächste Level frei und kauft den Aufstieg dann mit Gold, z. B. 100 Gold für Level 2. So gibt es mehrere Handlungsstränge – Ware produzieren, Ware verkaufen, Ware für Aufgaben herstellen – und man setzt den Schwerpunkt seiner Produktion je nachdem anders.
 - **Laden-Ausbau** geht sofort, kostet aber Gold **und** Waren, z. B. 200 Holzzahnräder + 200 Splitt + 500 Gold. So muss man ständig Neues produzieren, und das Produzieren ersetzt das Warten.
-- **Fläche kaufen:** Das Grundstück wird stückweise erweitert, immer teurer (seit v0.9.0 im Spiel, mit Gold). Ob das Laden-Level die Fläche begrenzt, entscheiden wir mit den Aufgaben.
+- **Fläche kaufen:** Das Grundstück wird stückweise mit Gold erweitert (seit v0.9.0 im Spiel). Seit v0.10.2 zum festen Preis (500 Gold für 4 Reihen, jede Seite 2×), damit man am Anfang gut skalieren kann und nicht am Platz scheitert (Tobias). Ob es später mehr Fläche gibt, z. B. mit Level oder Aufgaben, entscheiden wir mit den Aufgaben.
 - **Freischaltpunkte (Idee, später entscheiden):** Jeder Laden-Aufstieg gibt Punkte, z. B. 10 Punkte für Level 2. Mit den Punkten schaltet man neue Werkstätten frei, etwa das Sägewerk, und kann sie danach sofort bauen.
 
 ### 3.6 Zeit
@@ -314,8 +314,8 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/core/data/recipes.js` | Datentabelle der Rezepte (Zutaten, Ergebnis, Zeit) |
 | `src/core/data/shop.js` | Laden: Lagergröße und Theken je Level, Kunden-Takt, Startvorrat, Testpaket |
 | `src/core/data/levels.js` | Laden-Level: Name, Ziel für den Aufstieg, Gratis-Rohstoff (was ein Level freischaltet, steht als `level` bei Gebäuden und Rohstoffen) |
-| `src/core/data/land.js` | Fläche kaufen: Streifentiefe, Preis je Feld, Preissteigerung |
-| `src/core/state.js` | Spielzustand anlegen, Abfragen auf dem Raster |
+| `src/core/data/land.js` | Fläche kaufen: Streifentiefe, Käufe je Seite, Preis je Streifen |
+| `src/core/state.js` | Spielzustand anlegen, Größe von Grundstück und Welt, Abfragen auf dem Raster |
 | `src/core/dirs.js` | Himmelsrichtungen (oben, rechts, unten, links) |
 | `src/core/geometry.js` | Größe, Drehung, Felder sowie Ein- und Ausgänge von Gebäuden |
 | `src/core/buildings.js` | Gebäude bauen, verschieben, drehen, abreißen, freie Stelle suchen |
@@ -325,13 +325,13 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/core/shop.js` | Laden-Lager, Baukosten bezahlen und zurückgeben |
 | `src/core/market.js` | Handel: Händler, Theken, Kunden (mit eigenem Zufall im Spielstand), Pleiteschutz, Testpaket |
 | `src/core/levels.js` | Laden-Level: was freigeschaltet ist, hergestellte Waren zählen, Ziel prüfen, aufsteigen |
-| `src/core/land.js` | Fläche kaufen: Streifen und Preis je Seite, Kauf, welche Seite ein Feld der gesperrten Fläche ist |
+| `src/core/land.js` | Fläche kaufen: Streifen und Preis je Seite, wie oft noch, Kauf, welche Seite ein Feld der gesperrten Fläche ist |
 | `src/core/save.js` | Spielstand in Text umwandeln, prüfen und alte Spielstände umwandeln |
 | `src/view/camera.js` | Kamera: verschieben, zoomen, Bildschirm ↔ Welt umrechnen |
 | `src/view/input.js` | Touch, Maus und Mausrad (Antippen, Ziehen, zwei Finger) |
 | `src/view/controller.js` | Modi (Ansehen, Bauleiste, Platzieren, Förderband, Abreißen) und was Gesten darin tun |
 | `src/view/renderer.js` | Zeichnet Spielfeld, Bänder, Waren, Gebäude mit Statuslicht, Vorschau |
-| `src/view/itemArt.js` | Aussehen der Waren (auf dem Band und in Listen) |
+| `src/view/itemArt.js` | Aussehen der Waren (auf dem Band und in Listen); kleine Warenbilder lassen sich neu zeichnen |
 | `src/view/hud.js` | Obere Leiste und Menü ☰ |
 | `src/view/panels.js` | Infofenster, großes Fenster, Rückfragen, Meldungen |
 | `src/view/shop.js` | Laden-Fenster mit den Reitern Lager, Theken, Händler |
@@ -344,7 +344,7 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `assets/icons/` | App-Symbole (erzeugt mit `tools/make-icons.py`) |
 | `tools/set-version.mjs` | Setzt die Versionsnummer in `src/version.js` und `index.html` (inkl. Import-Map) |
 | `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`) |
-| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen, Abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufsteigen bis Level 6, die Eisen-Kette und die Zimmerei per Touch durch |
+| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufsteigen bis Level 6, die Eisen-Kette und die Zimmerei per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
 
 **Prüfen vor jedem Merge:** `npm test` (Spielregeln) und `npm run test:browser` (Browser-Test).
 
@@ -384,8 +384,32 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | v0.9.2 | **Test-Feedback (nur README):** Tobias' Test von v0.9.1 festgehalten, Plan für v0.10.0 vorbereitet | ✅ fertig |
 | v0.10.0 | **Techbaum, Teil 2:** 3 Kombi-Maschinen mit je 2 Eingängen und 3 Einstellungen (9 neue Waren), Level 4–6, je Level eine Verkaufstheke mehr, Menge auf der Theke einstellbar | ✅ fertig |
 | v0.10.1 | **Feinschliff nach Tobias' Test:** alle Theken wachsen mit (20 → 25 → 30), Laden-Lager 1.000 ab Level 4, Flächen-Streifen 4 tief ab Level 4, Teile bleiben beim Umstellen in der Maschine, Rezepte aller Einstellungen im Infofenster | ✅ fertig |
-| v0.11.0 | **Aufgaben:** Aufgaben mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen (Modell von Tobias, Abschnitt 3.5) | nach Tobias' Test von v0.10.1 planen |
+| v0.10.2 | **Fläche & Warenbilder:** jeder Flächenkauf 500 Gold für 4 Reihen (schon ab Level 1), jede Seite 2×; Warenbilder in der Bauleiste bleiben nach dem Minimieren sichtbar | ✅ fertig |
+| v0.11.0 | **Aufgaben:** Aufgaben mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen (Modell von Tobias, Abschnitt 3.5) | nach Tobias' Test von v0.10.2 planen |
 | v0.12.0 | **Offline:** Fabrik läuft weiter, wenn das Spiel geschlossen ist | |
+
+### v0.10.2 – Fläche für 500 Gold & Warenbilder in der Bauleiste (fertig)
+
+Tobias' Feedback zu v0.10.1 steht in Abschnitt 10 (Chat 8).
+
+**Fläche kaufen:**
+- **Jeder Kauf kostet 500 Gold** und wird nicht teurer, egal wie oft man schon gekauft hat.
+- **Jeder Kauf bringt 4 Reihen**, schon ab Level 1 (bisher 2 Reihen bis Level 3). Links oder rechts sind das am Anfang 4 × 14 = 56 Felder, oben oder unten 4 × 22 = 88 Felder.
+- **Jede Seite lässt sich 2× erweitern.** Die Welt ist jetzt genau so groß, dass auf jeder Seite 2 Streifen Platz haben: 38 × 30 Felder statt 40 × 26 (oben kamen 3 Reihen dazu, unten 1; rechts fallen 2 Spalten weg, die man nie kaufen konnte). Ist eine Seite fertig, verschwindet ihr Schild.
+- **Ganz ausgebaut:** 38 × 30 = 1.140 Felder statt 22 × 14 = 308 zum Start (fast viermal so viel) für zusammen 8 × 500 = 4.000 Gold. Bisher hätte allein der 8. Kauf gut 1.000 Gold gekostet.
+- Das Infofenster sagt, wie oft es an dieser Seite noch geht („An dieser Seite geht das noch 2×“ bzw. „Das ist der letzte Kauf an dieser Seite“).
+- **Bestehende Spielstände** (Spielstand-Version 8 → 9): Gebäude, Bänder und gekaufte Fläche bleiben, wo sie sind; Gekauftes zählt mit. Jede Seite kann bis zu 8 Reihen über das Startgrundstück hinauswachsen. Ein übrig gebliebener Rest-Streifen kostet anteilig weniger: z. B. wer rechts schon 2 Spalten hat, bekommt noch einmal 4 Spalten für 500 Gold und dann 2 Spalten für 250 Gold. Reicht eine Seite schon weiter (früher ging es rechts bis 10 Spalten), bleibt das so. Beim Öffnen erscheint eine kurze Meldung.
+
+**Warenbilder in der Bauleiste:**
+- **Fehler:** Nach dem Minimieren der App standen unter den Gebäuden nur noch die Zahlen (z. B. „20“ und „5“) ohne die kleinen Warenbilder.
+- **Ursache:** Die Bilder wurden nur einmal beim Start gezeichnet. Ist die App im Hintergrund, darf der Browser solche Zeichnungen wegwerfen, um Speicher zu sparen. Laden- und Level-Fenster zeichnen ihre Bilder bei jedem Öffnen neu, deshalb fiel es nur in der Bauleiste auf.
+- **Behoben:** Die Bilder werden bei jedem Öffnen der Bauleiste neu gezeichnet, ebenso alle Warenbilder, sobald man ins Spiel zurückkommt.
+
+**Was Tobias testet:**
+- Beim Öffnen: Erscheint die Meldung, und ist die Fabrik mit der gekauften Fläche unverändert da? Welche Preise stehen auf den Schildern (500 oder ein günstigerer Rest-Streifen)?
+- Fläche kaufen: Fühlen sich 500 Gold für 4 Reihen gut an? Hilft es, früh auf Masse zu gehen?
+- App minimieren (z. B. um Claude zu öffnen), zurückkommen und die Bauleiste öffnen: Sind die Warenbilder noch da?
+- Feedback bitte in einen neuen Chat; danach Plan für v0.11.0 (Aufgaben).
 
 ### v0.10.1 – Feinschliff nach Tobias' Test (fertig)
 
@@ -393,7 +417,7 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 
 - **Theken wachsen alle mit** (statt nur der neuen): kleine Theken mit 20 Plätzen bis Level 3, mittlere mit 25 auf Level 4, große mit 30 ab Level 5; danach bleibt es erst einmal so. Anzahl wie bisher: 2 Theken bis Level 3, dann je Level eine mehr (Level 6: 5 Theken). Lag auf einer Theke mehr, als jetzt passt (in v0.10.0 fasste Theke 5 noch 35), kommt der Rest beim Öffnen ins Laden-Lager, mit Meldung.
 - **Laden-Lager ab Level 4: 1.000 Plätze** (bis Level 3 weiter 500), weil man ab Level 4 auf Masse produziert und schon 50 von jeder Ware das alte Lager füllen würden.
-- **Fläche kaufen ab Level 4: Streifen 4 Felder tief** statt 2 (am Rand der Welt notfalls weniger). Der Preis je Feld bleibt (10 Gold, jeder Kauf +20 %); ein Streifen kostet also etwa doppelt so viel, bringt aber doppelt so viel Platz. Beispiel: erster Kauf rechts 4 × 14 = 56 Felder für 560 Gold.
+- **Fläche kaufen ab Level 4: Streifen 4 Felder tief** statt 2 (am Rand der Welt notfalls weniger). *Seit v0.10.2 schon ab Level 1, für immer 500 Gold.* Der Preis je Feld bleibt (10 Gold, jeder Kauf +20 %); ein Streifen kostet also etwa doppelt so viel, bringt aber doppelt so viel Platz. Beispiel: erster Kauf rechts 4 × 14 = 56 Felder für 560 Gold.
 - **Umstellen ohne Verlust:** Bisher kamen beim Umstellen die Teile, die die neue Einstellung nicht braucht, ins Laden-Lager (mit kurzer Meldung) – in der Maschine sah es aus, als wären sie verschwunden. Jetzt bleiben alle Teile in der Maschine und werden wieder gebraucht, sobald man zurückstellt. Das Infofenster zeigt „Liegt noch in der Maschine: …“ und einen Knopf „↩ Reste ins Laden-Lager“.
 - **Rezepte ansehen ohne Umstellen:** Das Infofenster zeigt unter „Andere Einstellungen“ die Zutaten und den Wert der übrigen Einstellungen.
 - Das Level-Fenster nennt den Laden-Ausbau mit, z. B. „🛒 Theke 3 · mittlere Theken (25 Plätze) · 📦 Laden-Lager 1.000 Plätze“.
@@ -672,6 +696,10 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 | 07.11.2026 | Laden-Lager 1.000 Plätze ab Level 4 (bis Level 3 weiter 500) | Tobias (Chat 7, Teil 2): Bei Massenproduktion würden schon 50 von jeder Ware das Lager füllen. „Ab Level 4“ ist Claudes Lesart. |
 | 07.11.2026 | Flächen-Streifen ab Level 4 doppelt so tief (4 statt 2 Felder), Preis je Feld unverändert | Tobias (Chat 7, Teil 2): Ab Level 4 muss man die Produktion deutlich steigern; 2 Reihen pro Kauf sind zu wenig. Die genaue Tiefe ist Claudes Vorschlag. |
 | 07.11.2026 | Beim Umstellen bleiben alle Teile in der Maschine; Knopf „↩ Reste ins Laden-Lager“; Infofenster zeigt die Rezepte aller Einstellungen | Tobias (Chat 7, Teil 2): Beim Umstellen „verschwanden“ die Teile (sie lagen im Laden-Lager). Ersetzt „nicht gebrauchte Zutaten ins Laden-Lager“ vom 06.11.2026. |
+| 07.11.2026 | Fläche kaufen zum festen Preis: jeder Streifen 500 Gold und 4 Reihen tief, schon ab Level 1; jede Seite lässt sich 2× erweitern (ganz ausgebaut 38 × 30 Felder für 4.000 Gold) | Tobias (Chat 8): Wer Spaß am Spiel hat und seine Fabrik skalieren möchte, soll nicht am Platz scheitern; die Einstiegshürden sollen so gering wie möglich sein. Besonders ab Level 4 und 5 muss man auf Masse gehen. 4 Reihen hat Tobias bestätigt. Ersetzt „10 Gold je Feld, jeder Kauf +20 %“ vom 06.11.2026 und „ab Level 4 doppelt so tief“ vom 07.11.2026. |
+| 07.11.2026 | Die Welt ist genau so groß, wie man Fläche kaufen kann (38 × 30), und hat eine eigene Ecke: Sie beginnt oben bei Reihe −3 | Claudes Wahl: So hat jede Seite Platz für 2 Streifen, und Gebäude und Bänder bestehender Fabriken behalten ihre Felder (nichts muss verschoben werden). |
+| 07.11.2026 | Bestehende Spielstände: Gekaufte Fläche zählt mit (jede Seite bis 8 Reihen über das Startgrundstück hinaus); ein Rest-Streifen kostet anteilig weniger (z. B. 2 Reihen 250 Gold); was schon weiter reicht, bleibt | Claudes Plan, von Tobias freigegeben. |
+| 07.11.2026 | Warenbilder werden beim Öffnen der Bauleiste und beim Zurückkehren ins Spiel neu gezeichnet | Tobias (Chat 8): Die Bilder waren erst weg, nachdem er die App minimiert hatte, um Claude zu öffnen. Der Browser darf solche Zeichnungen im Hintergrund wegwerfen. |
 
 ---
 
@@ -679,7 +707,7 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 
 Stand 07.11.2026.
 
-1. **Test von v0.10.1:** Tobias testet und schreibt sein Feedback in einen neuen Chat (Abschnitt 6, „v0.10.1 – Was Tobias testet“). Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Mini-Schlössern sehr viel Gold. Danach Plan für v0.11.0 (Aufgaben).
+1. **Test von v0.10.2:** Tobias testet und schreibt sein Feedback in einen neuen Chat (Abschnitt 6, „v0.10.2 – Was Tobias testet“). Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Mini-Schlössern sehr viel Gold. Danach Plan für v0.11.0 (Aufgaben).
 2. **Handel im echten Tempo:** geklärt – Tobias' Zeiten (bis Eisen etwa 45 Minuten, zweite Runde Eisen nach etwa 60 Minuten) sind in echter Zeit gemessen; nur die Eisen-Runden hat er im Testmodus beschleunigt. Früher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10).
 3. **Laden-Lager:** seit v0.10.1 500 Plätze bis Level 3, 1.000 ab Level 4 (Tobias). Claudes Lesart: erst ab Level 4, weil es dort eng wird. Soll es schon ab Level 1 1.000 sein, ist das eine Zahl in der Datentabelle.
 4. **Aufgaben (v0.11.0):** Werden die Waren für eine Aufgabe abgegeben (verbraucht), oder zählt nur, dass man sie hergestellt hat? Wie viel Erfahrung braucht ein Level, was kostet ein Aufstieg? Kostet der Laden-Ausbau zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Was bringen Level 7 bis 10 (Ende der Einführung)? Vorschlag kommt mit dem Plan für v0.11.0.
@@ -688,12 +716,30 @@ Stand 07.11.2026.
 7. **Schwarzmarkt & verbundene Läden:** in M5 entscheiden.
 8. **Arbeitstitel:** ergibt sich im Laufe der Entwicklung.
 9. **Theken-Größen:** geklärt (v0.10.1) – alle Theken wachsen mit: klein 20 (bis Level 3), mittel 25 (Level 4), groß 30 (ab Level 5). Claudes Lesart der Level-Zuordnung; falls mittel erst ab Level 5 und groß ab Level 6 gemeint war, ist das eine Zeile in der Datentabelle.
-10. **Tempo ab Level 4 (Feinschliff):** Bei Tobias dauerte es etwa 5 Minuten, bis ein Stein-Zahnrad in der Zimmerei ankam. Das ist gewollt: Am Anfang geht es schnell, danach muss man auf Masse gehen (mehr Holzfäller und Steinbrüche), um die Kombi-Maschinen zu versorgen. Beobachten, ob die Balance stimmt – Stellschrauben sind die Mengen in den Rezepten (10 + 5), die Dauer eines Rohstoffs (15 Minuten) und die Flächenpreise.
-11. **Größe der Welt:** Das Grundstück kann bis zum Rand der Welt (40 × 26 Felder) wachsen. Reicht das für die Massenproduktion der höheren Level, oder muss die Welt später größer werden?
+10. **Tempo ab Level 4 (Feinschliff):** Bei Tobias dauerte es etwa 5 Minuten, bis ein Stein-Zahnrad in der Zimmerei ankam. Das ist gewollt: Am Anfang geht es schnell, danach muss man auf Masse gehen (mehr Holzfäller und Steinbrüche), um die Kombi-Maschinen zu versorgen. Beobachten, ob die Balance stimmt – Stellschrauben sind die Mengen in den Rezepten (10 + 5), die Dauer eines Rohstoffs (15 Minuten) und die Fläche (seit v0.10.2 fester Preis, 500 Gold je Streifen).
+11. **Größe der Welt:** Seit v0.10.2 kann das Grundstück bis 38 × 30 Felder wachsen (jede Seite 2×). Reicht das für die Massenproduktion der höheren Level, oder gibt es später mehr Fläche, z. B. weitere Käufe je Seite mit dem Level oder über Aufgaben? Das ist dann nur eine Zahl in der Datentabelle (`perSide`).
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.10.2 – Fläche für 500 Gold & Warenbilder in der Bauleiste (07.11.2026)
+
+**Vorgenommen:**
+- Tobias' Rückmeldungen zu v0.10.1: Die Fläche ist noch immer ein entscheidender Faktor – jeder Kauf soll 500 Gold kosten, ohne teurer zu werden, und jede Seite soll sich 2× erweitern lassen. Außerdem fehlten in der Bauleiste die Warenbilder.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie tief ist ein Streifen? → 4 Reihen, schon ab Level 1 (Tobias: „4 Reihen reichen“).
+- Wie hat jede Seite Platz für 2 Käufe? Oben waren bisher nur 5 Reihen frei, rechts 10. → Die Welt ist jetzt genau 8 Felder um das Startgrundstück herum groß (38 × 30). Damit Gebäude ihre Felder behalten, beginnt sie oben bei Reihe −3 statt 0.
+- Was passiert mit schon gekaufter Fläche? → Sie bleibt und zählt mit; übrig gebliebene Rest-Streifen kosten anteilig weniger.
+- Warum fehlten die Bilder? → Sie wurden nur beim Start gezeichnet; nach dem Minimieren darf der Browser sie wegwerfen. Tobias bestätigte: Die Bilder waren erst nach dem Minimieren weg.
+
+**Gemacht:**
+- Datentabelle `land.js`: Streifentiefe 4, 2 Käufe je Seite, 500 Gold je Streifen. Welt mit eigener Ecke (`state.js`), Spielregeln für Preis und „wie oft noch“ (`land.js`), Zeichnen und Kamera mit der neuen Welt.
+- Spielstand-Version 9 mit Umwandlung von Version 8 (Welt passend zur gekauften Fläche), Meldung beim Öffnen.
+- Warenbilder: merken sich, was sie zeigen, und werden beim Öffnen der Bauleiste sowie beim Zurückkehren ins Spiel neu gezeichnet.
+- Nachgestellt: ein Spielstand aus v0.10.1 auf Level 4 mit gekaufter Fläche (oben bis an den alten Rand, rechts 6 Spalten) öffnet sich mit Meldung, Fabrik und Fläche unverändert; die Schilder zeigen oben 380 Gold (3 Reihen) und rechts 250 Gold (2 Spalten).
+- 155 automatische Tests (neu u. a.: 500 Gold bei jedem Kauf, 4 Reihen auf jedem Level, jede Seite genau 2×, alles gekauft = 38 × 30 für 4.000 Gold, Bauen oberhalb von Reihe 0, Rest-Streifen anteilig, Umwandlung von Version 8 auch mit Fläche über die neue Welt hinaus) und der Browser-Test (neu: Angebot 4 Spalten für 500 Gold schon auf Level 1, rechts 2× kaufen bis zum Rand, Warenbilder der Bauleiste erscheinen nach dem Wegwerfen beim Öffnen und beim Zurückkehren wieder) in Tablet- und Handygröße – alle bestanden.
 
 ### v0.10.1 – Feinschliff nach Tobias' Test (07.11.2026)
 
@@ -1019,6 +1065,16 @@ Stand 07.11.2026.
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 07.11.2026 – Chat 8: Feedback zu v0.10.1, Plan und Umsetzung v0.10.2
+
+**Tobias:** Die Änderungen sind sehr gut und machen jetzt viel mehr Sinn. Die Fläche ist aber immer noch ein entscheidender Faktor. Wunsch: Die Erweiterung kostet immer 500 Gold und steigt nicht, wenn man neue Fläche dazukauft, damit man am Anfang besser skalieren kann; jede Seite soll sich 2× für je 500 Gold vergrößern lassen. Besonders ab Level 4 und 5 muss man in die Massenproduktion gehen, um z. B. Schalter in guter Stückzahl herzustellen. Außerdem werden unten im Menü die Bilder der benötigten Waren nicht mehr angezeigt, dort steht z. B. nur noch „20“ und „5“. Die Aufgaben (v0.11.0) können warten; erst v0.10.2, damit das Spielgefühl noch besser wird.
+
+**Claude** hat den Plan vorgestellt: jeder Kauf 500 Gold und 4 Reihen ab Level 1, Welt so groß, dass jede Seite genau 2 Käufe hat (38 × 30, fast viermal so viel wie zum Start, zusammen 4.000 Gold), gekaufte Fläche zählt mit, Rest-Streifen anteilig. Zu den Bildern: Vermutlich wirft der Browser die einmal beim Start gezeichneten Bilder weg, wenn die App im Hintergrund ist; Lösung: bei jedem Öffnen der Bauleiste und beim Zurückkehren neu zeichnen.
+
+**Tobias:** 4 Reihen reichen. Wer Spaß am Spiel hat und seine Fabrik skalieren möchte, soll nicht am geringen Platz scheitern; die Einstiegshürden sollen so gering wie möglich sein. Die Bilder waren erst weg, nachdem er die App minimiert hatte, um Claude zu öffnen; davor waren sie immer da. „Passt!“
+
+**Umgesetzt:** v0.10.2 (siehe Versionshistorie).
 
 ### 07.11.2026 – Chat 7, Teil 2: Test von v0.10.0
 

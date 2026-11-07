@@ -402,16 +402,40 @@ export function drawItem(ctx, type, cx, cy, size) {
 }
 
 // Kleines Bild einer Ware für Listen (CSS-Größe cssSize Pixel).
+//
+// v0.10.2: Der Browser darf die Zeichnung solcher Bilder wegwerfen, z. B. wenn
+// man die App minimiert (Tobias: danach standen in der Bauleiste nur noch die
+// Zahlen). Jedes Bild merkt sich deshalb, was es zeigt, und lässt sich mit
+// redrawItemIcons() jederzeit neu zeichnen; nach einem Verlust zeichnet es
+// sich selbst neu, sobald der Browser es wieder freigibt.
 export function createItemIcon(type, cssSize = 28) {
   const canvas = document.createElement('canvas');
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = Math.round(cssSize * dpr);
-  canvas.height = Math.round(cssSize * dpr);
+  canvas.className = 'item-icon';
+  canvas.dataset.item = type;
+  canvas.dataset.size = String(cssSize);
   canvas.style.width = `${cssSize}px`;
   canvas.style.height = `${cssSize}px`;
-  canvas.className = 'item-icon';
+  canvas.addEventListener('contextrestored', () => paintItemIcon(canvas));
+  paintItemIcon(canvas);
+  return canvas;
+}
+
+function paintItemIcon(canvas) {
+  const type = canvas.dataset.item;
+  const cssSize = Number(canvas.dataset.size);
+  if (!type || !cssSize) return;
+  const dpr = window.devicePixelRatio || 1;
+  // Breite neu setzen leert die Fläche und setzt Skalierung & Co. zurück.
+  canvas.width = Math.round(cssSize * dpr);
+  canvas.height = Math.round(cssSize * dpr);
   const ctx = canvas.getContext('2d');
+  if (!ctx) return;
   ctx.scale(dpr, dpr);
   drawItem(ctx, type, cssSize / 2, cssSize / 2, cssSize * 0.62);
-  return canvas;
+}
+
+// Zeichnet alle Warenbilder in root neu (z. B. beim Öffnen der Bauleiste oder
+// wenn man ins Spiel zurückkommt).
+export function redrawItemIcons(root = document) {
+  for (const canvas of root.querySelectorAll('canvas.item-icon')) paintItemIcon(canvas);
 }

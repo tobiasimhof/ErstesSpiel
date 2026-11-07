@@ -1,22 +1,23 @@
 // Fläche kaufen (v0.9.0): Das Grundstück wächst in Streifen an einer Seite.
 // Alle Zahlen sind Platzhalter.
 //
-// strips:        So viele Felder tief ist ein Streifen, je nach Laden-Level
-//                (am Rand der Welt notfalls weniger). v0.10.1 (Tobias): ab
-//                Level 4 doppelt so tief, weil man dort die Produktion
-//                deutlich steigern muss.
-// pricePerField: Gold je Feld beim ersten Kauf.
-// growth:        Jeder weitere Kauf macht jedes Feld um diesen Faktor teurer.
-// roundTo:       Preise werden auf so viel Gold gerundet.
+// v0.10.2 (Tobias): Jeder Kauf kostet gleich viel und bringt 4 Reihen, schon
+// ab Level 1 – wer seine Fabrik ausbauen möchte, soll nicht am Platz
+// scheitern. Jede Seite lässt sich 2× erweitern; die Welt ist genau so groß,
+// dass auf jeder Seite 2 Streifen Platz haben (siehe WORLD in state.js).
 //
-// Beispiel: Der erste Streifen rechts (2 × 14 = 28 Felder) kostet 280 Gold.
+// depth:   So viele Felder tief ist ein Streifen.
+// perSide: So oft lässt sich jede Seite erweitern.
+// price:   Gold für einen vollen Streifen. Ein Rest-Streifen (nur in
+//          Spielständen von vor v0.10.2 möglich) kostet anteilig weniger.
+// roundTo: Preise werden auf so viel Gold gerundet.
+//
+// Beispiel: Der erste Streifen rechts (4 × 14 = 56 Felder) kostet 500 Gold,
+// jeder weitere Streifen auch.
 
 export const LAND = {
-  strips: [
-    { level: 1, depth: 2 },
-    { level: 4, depth: 4 },
-  ],
-  pricePerField: 10,
-  growth: 1.2,
+  depth: 4,
+  perSide: 2,
+  price: 500,
   roundTo: 10,
 };

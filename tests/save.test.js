@@ -7,7 +7,8 @@ import { loadInput } from '../src/core/production.js';
 import { simulate } from '../src/core/sim.js';
 import { footprintSize, buildingPorts } from '../src/core/geometry.js';
 import { SAVE_VERSION, deserializeGame, isValidState, serializeGame } from '../src/core/save.js';
-import { createNewGame } from '../src/core/state.js';
+import { landOffer } from '../src/core/land.js';
+import { WORLD, createNewGame } from '../src/core/state.js';
 
 function sampleGame() {
   const state = createNewGame();
@@ -163,7 +164,7 @@ test('Spielstand aus v0.6.0 (Version 3): Grundstück wächst nach rechts und unt
   assert.ok(loaded);
   assert.equal(loaded.migratedFrom, 3);
   assert.deepEqual(loaded.state.plot, { x: 8, y: 5, width: 22, height: 14 });
-  assert.deepEqual(loaded.state.world, { width: 40, height: 26 });
+  assert.deepEqual(loaded.state.world, WORLD, 'seit v0.10.2 mit eigener Ecke');
   assert.equal(JSON.stringify(loaded.state.buildings), before, 'Gebäude unverändert');
   assert.deepEqual(loaded.state.storage, v3.storage, 'kein Geschenk doppelt');
   assert.deepEqual(loaded.notes, []);
@@ -294,6 +295,50 @@ test('Spielstand aus v0.9.0 (Version 7): 500 Gold Startkapital werden einmalig n
   assert.equal(again.migratedFrom, undefined);
 });
 
+// Spielstand aus v0.10.1 mit gekaufter Fläche: rechts 2 + 4 Spalten, oben 5 Reihen
+// (bis an den damaligen Rand bei y = 0), Welt 40 × 26 ohne eigene Ecke.
+function v8Game() {
+  const v8 = createNewGame(8);
+  v8.shopLevel = 4;
+  v8.gold = 1234;
+  v8.world = { width: 40, height: 26 };
+  v8.plot = { x: 8, y: 0, width: 28, height: 19 };
+  v8.landBought = 5;
+  return v8;
+}
+
+test('Spielstand aus v0.10.1 (Version 8): Welt bekommt eine Ecke, gekaufte Fläche und Fabrik bleiben', () => {
+  const v8 = v8Game();
+  const before = JSON.stringify({ buildings: v8.buildings, belts: v8.belts });
+  const loaded = deserializeGame(JSON.stringify({ saveVersion: 8, savedAt: 5, state: v8 }));
+  assert.ok(loaded);
+  assert.equal(loaded.migratedFrom, 8);
+  const s = loaded.state;
+  assert.deepEqual(s.world, { x: 0, y: -3, width: 38, height: 30 });
+  assert.deepEqual(s.plot, v8.plot, 'Grundstück unverändert');
+  assert.equal(JSON.stringify({ buildings: s.buildings, belts: s.belts }), before, 'Gebäude und Bänder unverändert');
+  assert.deepEqual([s.gold, s.shopLevel, s.landBought], [1234, 4, 5], 'kein Startkapital doppelt, Level bleibt');
+  assert.deepEqual(loaded.notes, []);
+  // Was schon gekauft ist, zählt mit: rechts noch 2 Spalten (Rest, 250 Gold),
+  // oben noch 3 Reihen (380 Gold), links und unten je 2 volle Streifen.
+  assert.deepEqual([landOffer(s, 'E').depth, landOffer(s, 'E').price], [2, 250]);
+  assert.deepEqual([landOffer(s, 'N').depth, landOffer(s, 'N').price], [3, 380]);
+  assert.deepEqual([landOffer(s, 'W').depth, landOffer(s, 'W').price], [4, 500]);
+  assert.deepEqual([landOffer(s, 'S').depth, landOffer(s, 'S').price], [4, 500]);
+});
+
+test('Spielstand aus v0.10.1, der schon weiter reicht: die Welt wächst mit, nichts geht verloren', () => {
+  const v8 = v8Game();
+  v8.plot = { x: 8, y: 5, width: 32, height: 21 }; // rechts bis x = 40, unten bis y = 26
+  const loaded = deserializeGame(JSON.stringify({ saveVersion: 8, savedAt: 5, state: v8 }));
+  assert.ok(loaded);
+  assert.deepEqual(loaded.state.world, { x: 0, y: -3, width: 40, height: 30 });
+  assert.deepEqual(loaded.state.plot, v8.plot);
+  assert.equal(landOffer(loaded.state, 'E'), null, 'rechts ist nichts mehr zu kaufen');
+  // unten reicht die Welt jetzt bis y = 27 (Start 19 + 8): noch 1 Reihe für 130 Gold
+  assert.deepEqual([landOffer(loaded.state, 'S').depth, landOffer(loaded.state, 'S').price], [1, 130]);
+});
+
 test('Ungültiges Level, Zähler oder Flächenkäufe werden erkannt', () => {
   const bad = (change) => {
     const s = createNewGame();
@@ -309,12 +354,18 @@ test('Ungültiges Level, Zähler oder Flächenkäufe werden erkannt', () => {
   assert.equal(bad((s) => delete s.produced), false);
   assert.equal(bad((s) => (s.landBought = 1.5)), false);
   assert.equal(bad((s) => delete s.landBought), false);
+  assert.equal(bad((s) => delete s.world.y), false, 'Welt ohne Ecke');
+  assert.equal(bad((s) => (s.plot.y = -4)), false, 'Grundstück ragt oben aus der Welt');
+  assert.equal(bad((s) => (s.plot.width = 31)), false, 'Grundstück ragt rechts aus der Welt');
+  assert.equal(bad((s) => (s.plot = { ...s.world })), true, 'ganze Welt gekauft');
 });
 
 test('Neues Spiel startet mit 22 × 14 Feldern', () => {
   const s = createNewGame();
   assert.deepEqual([s.plot.width, s.plot.height], [22, 14]);
-  assert.ok(s.plot.x + s.plot.width < s.world.width && s.plot.y + s.plot.height < s.world.height, 'gesperrte Fläche rundherum');
+  const w = s.world;
+  assert.ok(s.plot.x > w.x && s.plot.y > w.y, 'gesperrte Fläche links und oben');
+  assert.ok(s.plot.x + s.plot.width < w.x + w.width && s.plot.y + s.plot.height < w.y + w.height, 'gesperrte Fläche rechts und unten');
 });
 
 test('Kaputte oder fremde Daten werden abgelehnt', () => {

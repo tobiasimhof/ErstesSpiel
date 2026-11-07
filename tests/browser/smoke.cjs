@@ -235,6 +235,37 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(80);
   check(await page.isVisible('#build-bar'), 'Bauleiste öffnet sich');
   check(!(await page.isVisible('#bottom-bar')), 'Grundleiste ist währenddessen ausgeblendet');
+
+  // v0.10.2: Die Warenbilder der Baukosten sind gezeichnet – auch nachdem der
+  // Browser sie weggeworfen hat (Tobias: nach dem Minimieren nur noch Zahlen).
+  const costIcons = () =>
+    page.evaluate(() => {
+      const icons = [...document.querySelectorAll('#build-items .cost-part canvas.item-icon')];
+      const painted = icons.filter((c) => {
+        const data = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+        for (let i = 3; i < data.length; i += 4) if (data[i] > 0) return true;
+        return false;
+      });
+      return { total: icons.length, painted: painted.length };
+    });
+  const wipeIcons = () =>
+    page.evaluate(() => {
+      for (const c of document.querySelectorAll('canvas.item-icon')) c.width = c.width; // leert die Zeichnung
+    });
+  let icons = await costIcons();
+  check(icons.total >= 8 && icons.painted === icons.total, `Bauleiste zeigt die Warenbilder der Baukosten (${icons.painted}/${icons.total})`);
+  await wipeIcons();
+  check((await costIcons()).painted === 0, 'Warenbilder absichtlich gelöscht (wie beim Minimieren)');
+  await page.tap('#build-close');
+  await sleep(80);
+  await page.tap('#btn-build');
+  await sleep(80);
+  icons = await costIcons();
+  check(icons.painted === icons.total, `Bauleiste neu geöffnet: Warenbilder wieder da (${icons.painted}/${icons.total})`);
+  await wipeIcons();
+  await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
+  icons = await costIcons();
+  check(icons.painted === icons.total, `Zurück ins Spiel: Warenbilder wieder da (${icons.painted}/${icons.total})`);
   const barOrder = await page.locator('#build-items .build-item').evaluateAll((items) => items.map((b) => b.dataset.tool));
   check(
     JSON.stringify(barOrder.slice(0, 6)) === '["holzfaeller","saegewerk","lagerhaus","versandportal","belt","erase"]',
@@ -344,15 +375,16 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await page.textContent('#info-title')) === 'Gesperrte Fläche', 'Ecke der gesperrten Fläche zeigt Hinweis');
   await tapTile(page, plot.px - 1, plot.py + 4);
   check((await page.textContent('#info-title')) === 'Fläche kaufen', 'Gesperrte Fläche links antippen bietet Fläche an');
-  check((await page.textContent('#info-meta')).includes('2 Spalten links · 28 Felder'), 'Angebot: 2 Spalten links, 28 Felder');
+  check((await page.textContent('#info-meta')).includes('4 Spalten links · 56 Felder'), 'Angebot: 4 Spalten links, 56 Felder (schon auf Level 1)');
+  check((await page.textContent('#info-text')).includes('noch 2×'), 'Infofenster: an dieser Seite noch 2 Käufe');
   const landButton = page.locator('#info-actions button', { hasText: 'Kaufen' });
-  check((await landButton.textContent()).includes('280'), 'Erster Streifen kostet 280 Gold');
+  check((await landButton.textContent()).includes('500'), 'Streifen kostet 500 Gold');
   await shot('6b-flaeche-angebot');
   const goldBeforeLand = await game(page, () => window.__game.state.gold);
   await landButton.tap();
   await sleep(120);
   const land = await game(page, () => ({ plot: { ...window.__game.state.plot }, gold: window.__game.state.gold }));
-  check(land.plot.x === plot.px - 2 && land.plot.width === 24 && land.gold === goldBeforeLand - 280, `Fläche gekauft (Grundstück ${land.plot.width} × ${land.plot.height}, Gold ${goldBeforeLand} → ${land.gold})`);
+  check(land.plot.x === plot.px - 4 && land.plot.width === 26 && land.gold === goldBeforeLand - 500, `Fläche gekauft (Grundstück ${land.plot.width} × ${land.plot.height}, Gold ${goldBeforeLand} → ${land.gold})`);
   check(!(await page.isVisible('#info-panel')), 'Nach dem Kauf schließt das Fenster');
   await shot('6c-flaeche-gekauft');
 
@@ -405,7 +437,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     rot: window.__game.state.buildings.find((b) => b.type === 'holzfaeller').rot,
     plotWidth: window.__game.state.plot.width,
   }));
-  check(after.buildings === 3 && after.belts === beltCountBefore && after.rot === 1 && after.plotWidth === 24, 'Nach dem Neuladen ist alles noch da (auch die gekaufte Fläche)');
+  check(after.buildings === 3 && after.belts === beltCountBefore && after.rot === 1 && after.plotWidth === 26, 'Nach dem Neuladen ist alles noch da (auch die gekaufte Fläche)');
   check((await page.textContent('#toast')).includes('Spielstand geladen'), 'Meldung „Spielstand geladen“');
 
   // ---------- Gebäude abreißen ----------
@@ -786,16 +818,42 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await page.textContent('#modal-content .modal-meta')).includes('/ 1.000'), 'Laden-Lager fasst 1.000 Waren');
   await shot('16-fuenf-theken');
   await page.tap('#modal-close');
-  // Ab Level 4 sind die Flächen-Streifen 4 Felder tief
+  // v0.10.2: Jeder Streifen kostet 500 Gold, jede Seite geht 2×
   const plotNow = await game(page, () => ({ ...window.__game.state.plot }));
   await tapTile(page, plotNow.x + plotNow.width, plotNow.y + 3);
   check((await page.textContent('#info-title')) === 'Fläche kaufen', 'Fläche rechts antippen bietet Fläche an');
   check(
     (await page.textContent('#info-meta')).includes(`4 Spalten rechts · ${4 * plotNow.height} Felder`),
-    `Angebot ab Level 4: 4 Spalten (${await page.textContent('#info-meta')})`,
+    `Angebot: 4 Spalten (${await page.textContent('#info-meta')})`,
   );
   await shot('16b-flaeche-level6');
-  await page.tap('#info-close');
+  // 1.000 Gold dazu, damit die beiden Käufe den weiteren Ablauf nicht arm machen
+  const goldRight = await game(page, () => (window.__game.state.gold += 1000));
+  await page.locator('#info-actions button', { hasText: 'Kaufen · 500' }).tap();
+  await sleep(120);
+  // Karte so schieben, dass der nächste Streifen rechts zu sehen ist (danach zurück)
+  const camLand = await game(page, () => ({ x: window.__game.camera.x, y: window.__game.camera.y }));
+  await game(page, (tx) => {
+    const { camera, TILE } = window.__game;
+    camera.x = (tx + 0.5) * TILE - camera.viewWidth / camera.zoom / 2;
+  }, plotNow.x + plotNow.width + 4);
+  await tapTile(page, plotNow.x + plotNow.width + 4, plotNow.y + 3);
+  check((await page.textContent('#info-text')).includes('letzte Kauf'), `Zweiter Streifen rechts ist der letzte an dieser Seite (Gold ${goldRight})`);
+  await page.locator('#info-actions button', { hasText: 'Kaufen · 500' }).tap();
+  await sleep(120);
+  const right = await game(page, () => ({
+    plot: { ...window.__game.state.plot },
+    world: { ...window.__game.state.world },
+    gold: window.__game.state.gold,
+  }));
+  check(
+    right.plot.x + right.plot.width === right.world.x + right.world.width && right.plot.width === plotNow.width + 8,
+    `Rechts 2× gekauft: Grundstück reicht bis an den Rand der Welt (${right.plot.width} × ${right.plot.height})`,
+  );
+  // Kunden können währenddessen kaufen, deshalb höchstens etwas mehr Gold
+  check(right.gold <= goldRight - 1000 + 200 && right.gold >= goldRight - 1000, `Beide Streifen kosten je 500 Gold (${goldRight} → ${right.gold})`);
+  await shot('16c-flaeche-rechts-fertig');
+  await game(page, (c) => Object.assign(window.__game.camera, c), camLand);
   await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)
   await page.tap('#info-close').catch(() => {});
   await shot('17-fabrik');

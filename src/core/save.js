@@ -16,6 +16,10 @@
 //               bekommen Level 3, damit nichts gesperrt wird.
 //   8 (v0.9.1): Startkapital – bestehende Spielstände bekommen START_GOLD
 //               einmalig nachgezahlt (Format sonst unverändert).
+//   9 (v0.10.2): Die Welt hat eine eigene Ecke (world.x, world.y) und reicht
+//               auf jeder Seite 8 Felder über das Startgrundstück hinaus
+//               (2 Flächenkäufe à 4). Gebäude, Bänder und Grundstück behalten
+//               ihre Felder; schon gekaufte Fläche bleibt.
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
@@ -28,9 +32,9 @@ import { footprintSize, rotateLocal } from './geometry.js';
 import { buildingContents, createProductionState, productionOf } from './production.js';
 import { createCounters, createMarket } from './market.js';
 import { addAllToStorage, counterSizeFor, fitCounters } from './shop.js';
-import { START_PLOT, WORLD_HEIGHT, WORLD_WIDTH, parseTileKey } from './state.js';
+import { START_PLOT, WORLD, parseTileKey } from './state.js';
 
-export const SAVE_VERSION = 8;
+export const SAVE_VERSION = 9;
 
 // v0.6.0: Waren und Rezepte, die es nicht mehr gibt, und was aus ihnen wird.
 const RENAMED_ITEMS = { holzwinkel: 'holzplatte', splitt: 'steinzahnrad' };
@@ -44,6 +48,8 @@ const NAILS_PER_BAR = 5;
 // v0.9.0: Bestehende Fabriken haben schon Holz, Stein und Eisen – sie bekommen
 // dieses Level, damit nichts gesperrt wird.
 const EXISTING_FACTORY_LEVEL = 3;
+// v0.6.1: So groß wurde die Welt damals (ab Feld 0, 0).
+const V4_WORLD = { width: 40, height: 26 };
 
 export function serializeGame(state, now = Date.now()) {
   return JSON.stringify({ saveVersion: SAVE_VERSION, savedAt: now, state });
@@ -102,8 +108,8 @@ function migrate(state, from, notes = []) {
     const grow = (obj, key, min) => {
       if (isInt(obj[key])) obj[key] = Math.max(obj[key], min);
     };
-    grow(state.world, 'width', WORLD_WIDTH);
-    grow(state.world, 'height', WORLD_HEIGHT);
+    grow(state.world, 'width', V4_WORLD.width);
+    grow(state.world, 'height', V4_WORLD.height);
     grow(state.plot, 'width', START_PLOT.width);
     grow(state.plot, 'height', START_PLOT.height);
   }
@@ -125,7 +131,21 @@ function migrate(state, from, notes = []) {
     // v0.9.0 → v0.9.1: Das Startkapital gibt es für bestehende Spielstände einmalig dazu.
     state.gold += START_GOLD;
   }
+  if (from < 9) fitWorld(state);
   return state;
+}
+
+// v0.10.1 → v0.10.2: Die Welt bekommt eine eigene Ecke und ist so groß, dass
+// man an jeder Seite 2 Streifen kaufen kann. Was schon gekauft ist, bleibt
+// (auch wenn es weiter reicht); die Welt umfasst dann beides.
+function fitWorld(state) {
+  const p = state.plot;
+  if (!isObj(p) || ![p.x, p.y, p.width, p.height].every(isInt)) return;
+  const x = Math.min(WORLD.x, p.x);
+  const y = Math.min(WORLD.y, p.y);
+  const right = Math.max(WORLD.x + WORLD.width, p.x + p.width);
+  const bottom = Math.max(WORLD.y + WORLD.height, p.y + p.height);
+  state.world = { x, y, width: right - x, height: bottom - y };
 }
 
 // v0.7 → v0.8: Eisennägel gibt es nicht mehr. Je 5 Nägel werden zu 1 Eisenstange
@@ -328,11 +348,11 @@ export function isValidState(s) {
   if (!isCount(s.landBought)) return false;
 
   const w = s.world;
-  if (!w || !isInt(w.width) || !isInt(w.height) || w.width <= 0 || w.height <= 0) return false;
+  if (!w || ![w.x, w.y, w.width, w.height].every(isInt) || w.width <= 0 || w.height <= 0) return false;
   const p = s.plot;
   if (!p || ![p.x, p.y, p.width, p.height].every(isInt)) return false;
-  if (p.x < 0 || p.y < 0 || p.width <= 0 || p.height <= 0) return false;
-  if (p.x + p.width > w.width || p.y + p.height > w.height) return false;
+  if (p.x < w.x || p.y < w.y || p.width <= 0 || p.height <= 0) return false;
+  if (p.x + p.width > w.x + w.width || p.y + p.height > w.y + w.height) return false;
 
   if (!Array.isArray(s.buildings) || !isInt(s.nextBuildingId)) return false;
   const ids = new Set();

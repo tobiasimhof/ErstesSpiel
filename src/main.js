@@ -14,9 +14,11 @@ import { createController } from './view/controller.js';
 import { createShopView } from './view/shop.js';
 import { applyTestPack } from './core/market.js';
 import { START_GOLD } from './core/data/shop.js';
+import { LAND } from './core/data/land.js';
 import { canLevelUp } from './core/levels.js';
 import { createLevelView, unlockText } from './view/levels.js';
-import { costText } from './view/format.js';
+import { costText, numberFormat } from './view/format.js';
+import { redrawItemIcons } from './view/itemArt.js';
 import { clearGame, loadGame, loadSettings, saveGame, saveSettings } from './view/storage.js';
 
 const loaded = loadGame();
@@ -116,7 +118,8 @@ const hud = createHud({
 hud.setTestMode(Boolean(settings.testMode), TEST_SPEED);
 
 function worldBounds() {
-  return { x: 0, y: 0, width: state.world.width * TILE, height: state.world.height * TILE };
+  const w = state.world;
+  return { x: w.x * TILE, y: w.y * TILE, width: w.width * TILE, height: w.height * TILE };
 }
 
 function plotRect() {
@@ -162,6 +165,13 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') controller.back();
 });
 
+// v0.10.2: Zurück aus dem Hintergrund (z. B. App minimiert) – der Browser kann
+// die kleinen Warenbilder weggeworfen haben, also alle neu zeichnen.
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') redrawItemIcons();
+});
+window.addEventListener('pageshow', () => redrawItemIcons());
+
 function handleResize() {
   const size = renderer.resize();
   const firstLayout = camera.viewWidth === 0;
@@ -184,6 +194,7 @@ if (loaded.status === 'ok' && loaded.migratedFrom) {
     from === 5 ? 'Neu: Die Schmiede macht Eisenstangen statt Nägel.' : '',
     from < 7 ? 'Neu: Fläche kaufen – tippe auf die ＋-Schilder am Rand. Deine Fabrik hat Laden-Level 3, alles bleibt freigeschaltet.' : '',
     from < 8 ? `Neu: ${START_GOLD} Gold Startkapital – du bekommst es einmalig nachgezahlt.` : '',
+    from < 9 ? `Neu: Fläche kostet jetzt immer ${numberFormat.format(LAND.price)} Gold für ${LAND.depth} Reihen; jede Seite lässt sich ${LAND.perSide}× erweitern.` : '',
     ...(loaded.notes ?? []),
     loaded.counterNote ?? '',
   ].filter(Boolean);

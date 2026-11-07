@@ -4,18 +4,28 @@
 //
 // Der Laden ist kein Gebäude, sondern das ganze eigene Grundstück (plot).
 
+import { LAND } from './data/land.js';
 import { START_GOLD, START_STORAGE } from './data/shop.js';
 import { occupies } from './geometry.js';
 import { createCounters, createMarket } from './market.js';
 import { createProductionState } from './production.js';
 
-// Gesamte Welt in Feldern. Alles außerhalb des Grundstücks ist gesperrt
-// und kann später gekauft werden.
-// v0.6.1: Grundstück 22 × 14 (vorher 16 × 10), Welt 40 × 26 (vorher 32 × 20).
-export const WORLD_WIDTH = 40;
-export const WORLD_HEIGHT = 26;
-
+// v0.6.1: Grundstück 22 × 14 (vorher 16 × 10).
 export const START_PLOT = { x: 8, y: 5, width: 22, height: 14 };
+
+// Gesamte Welt in Feldern. Alles außerhalb des Grundstücks ist gesperrt und
+// kann gekauft werden. v0.10.2: Die Welt reicht auf jeder Seite genau so weit,
+// wie man Fläche kaufen kann (2 Streifen à 4 Felder): links bei x = 0, oben bei
+// y = −3 (deshalb hat die Welt eine eigene Ecke x/y). Gebäude und Bänder
+// behalten so ihre Felder. Bis v0.10.1: 40 × 26 ab (0, 0).
+const LAND_REACH = LAND.depth * LAND.perSide;
+export const WORLD = {
+  x: START_PLOT.x - LAND_REACH,
+  y: START_PLOT.y - LAND_REACH,
+  width: START_PLOT.width + 2 * LAND_REACH,
+  height: START_PLOT.height + 2 * LAND_REACH,
+};
+
 // v0.7.0: dazu ein Versandportal – ohne Portal und ohne Gold käme sonst nie
 // eine Ware in den Laden. v0.9.0: Man startet nur mit Holz (Level 1); den
 // Steinbruch baut man ab Level 2 selbst.
@@ -28,7 +38,7 @@ export function createNewGame(seed) {
   const state = {
     gold: START_GOLD,
     shopLevel: 1,
-    world: { width: WORLD_WIDTH, height: WORLD_HEIGHT },
+    world: { ...WORLD },
     plot: { ...START_PLOT },
     buildings: [],
     nextBuildingId: 1,
@@ -42,7 +52,8 @@ export function createNewGame(seed) {
     market: createMarket(seed),
     // Bisher hergestellte Waren: Ware → Anzahl (v0.9.0, für die Level)
     produced: {},
-    // So oft wurde Fläche gekauft (v0.9.0, macht jeden Kauf teurer)
+    // So oft wurde Fläche gekauft (v0.9.0; seit v0.10.2 nur noch gezählt,
+    // der Preis bleibt gleich)
     landBought: 0,
   };
   for (const start of START_BUILDINGS) {
@@ -80,7 +91,8 @@ export function beltAt(state, tx, ty) {
 }
 
 export function isInWorld(state, tx, ty) {
-  return tx >= 0 && ty >= 0 && tx < state.world.width && ty < state.world.height;
+  const w = state.world;
+  return tx >= w.x && ty >= w.y && tx < w.x + w.width && ty < w.y + w.height;
 }
 
 export function isOwned(state, tx, ty) {
