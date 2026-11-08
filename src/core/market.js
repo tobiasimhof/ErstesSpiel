@@ -9,11 +9,23 @@
 // - Pleiteschutz: Wer gar nicht mehr weiterkommt, bekommt einen Holzstamm.
 // - Auffüllen (v0.14.0): Holzfällerlager & Co. bis zum Rand füllen – erst aus
 //   dem Laden-Lager, was fehlt, direkt beim Händler gekauft.
+// - Säen (v0.16.0): einen Samen ins Beet – aus dem Laden-Lager, sonst direkt
+//   beim Händler gekauft.
 
 import { ITEMS } from './data/items.js';
 import { BAILOUT_ITEM, CUSTOMERS, SALES_LOG_SIZE, SHOP_LEVELS, TEST_PACK } from './data/shop.js';
 import { isItemUnlocked, itemLevel } from './levels.js';
-import { addRawToSource, buildingContents, loadInput, productionOf, sourceRoom } from './production.js';
+import {
+  addRawToSource,
+  buildingContents,
+  gardenCrop,
+  gardenSeeds,
+  loadInput,
+  plantSeed,
+  productionOf,
+  sourceRoom,
+  sowFromStorage,
+} from './production.js';
 import {
   addToStorage,
   counterCountFor,
@@ -90,7 +102,7 @@ export function refillPlan(state, building) {
   const fromStorage = Math.min(room, storageCount(state, p.input));
   const canBuy = isItemUnlocked(state, p.input) && def.buyPrice > 0 ? Math.floor(state.gold / def.buyPrice) : 0;
   const buy = Math.min(room - fromStorage, canBuy);
-  return { input: p.input, room, fromStorage, buy, cost: buy * def.buyPrice, short: room - fromStorage - buy };
+  return { input: p.input, room, fromStorage, buy, cost: buy * (def.buyPrice ?? 0), short: room - fromStorage - buy };
 }
 
 // Füllt das Gebäude so weit wie möglich auf. Gekaufte Rohstoffe gehen direkt
@@ -103,6 +115,46 @@ export function refillSource(state, building) {
   for (let i = 0; i < plan.buy; i++) {
     state.gold -= ITEMS[plan.input].buyPrice;
     addRawToSource(building);
+  }
+  return plan;
+}
+
+// ---------- Säen (v0.16.0) ----------
+
+// Gibt es den Rohstoff beim Händler? (Die Flachspflanze z. B. wächst nur im Beet.)
+export function isBuyable(type) {
+  return Boolean(ITEMS[type]?.raw) && ITEMS[type].buyPrice > 0;
+}
+
+// Welchen Samen „Säen“ nimmt, wenn man keinen auswählt: den ersten, der
+// freigeschaltet ist (auf Level 7 gibt es nur Leinsamen).
+export function defaultSeed(state, building) {
+  return gardenSeeds(building.type).find((seed) => isItemUnlocked(state, seed)) ?? null;
+}
+
+// Was „Säen“ gerade tun würde: { seed, fromStorage, buy, cost, result }.
+// result: 'ok' | 'busy' (es wächst schon etwas) | 'gold' | 'locked' | 'invalid'
+export function sowPlan(state, building, seed = defaultSeed(state, building)) {
+  const plan = { seed, fromStorage: false, buy: false, cost: 0, result: 'invalid' };
+  if (!seed || !gardenSeeds(building.type).includes(seed)) return plan;
+  if (gardenCrop(building)) return { ...plan, result: 'busy' };
+  if (!isItemUnlocked(state, seed)) return { ...plan, result: 'locked' };
+  if (storageCount(state, seed) > 0) return { ...plan, fromStorage: true, result: 'ok' };
+  const price = ITEMS[seed].buyPrice;
+  if (!(price > 0)) return plan;
+  if (state.gold < price) return { ...plan, cost: price, result: 'gold' };
+  return { ...plan, buy: true, cost: price, result: 'ok' };
+}
+
+// Knopf „🌱 Säen“: aus dem Laden-Lager, sonst direkt gekauft (braucht keinen
+// Platz im Laden-Lager). Gibt den Plan zurück, so wie er ausgeführt wurde.
+export function sowSeed(state, building, seed) {
+  const plan = sowPlan(state, building, seed);
+  if (plan.result !== 'ok') return plan;
+  if (plan.fromStorage) sowFromStorage(state, building, plan.seed);
+  else {
+    state.gold -= plan.cost;
+    plantSeed(building, plan.seed);
   }
   return plan;
 }
@@ -221,8 +273,9 @@ export function goodsValue(state) {
   return total;
 }
 
+// v0.16.0: Nur was es beim Händler gibt (die Flachspflanze nicht).
 function cheapestRaw() {
-  return Math.min(...Object.values(ITEMS).filter((d) => d.raw).map((d) => d.buyPrice));
+  return Math.min(...Object.values(ITEMS).filter((d) => d.raw && d.buyPrice > 0).map((d) => d.buyPrice));
 }
 
 // Pleite: zu wenig Gold für den billigsten Rohstoff, kein Rohstoff im Lager
@@ -232,6 +285,7 @@ export function isBroke(state) {
   if (state.gold >= price) return false;
   if (Object.keys(state.storage).some((type) => ITEMS[type]?.raw && state.storage[type] > 0)) return false;
   if (state.buildings.some((b) => productionOf(b.type)?.kind === 'source' && b.prod.loaded)) return false;
+  if (state.buildings.some((b) => gardenCrop(b))) return false; // v0.16.0: im Beet wächst etwas
   return state.gold + goodsValue(state) < price;
 }
 

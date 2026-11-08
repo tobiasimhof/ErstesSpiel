@@ -7,7 +7,16 @@ import { DELTA, opposite, step } from '../core/dirs.js';
 import { buildingPorts, footprintSize } from '../core/geometry.js';
 import { beltLine, inputSides, pathDirections } from '../core/belts.js';
 import { landOffer, landOffers } from '../core/land.js';
-import { buildingProgress, buildingStatus, missingInputs, sourceCapacity, sourceCount } from '../core/production.js';
+import {
+  buildingProgress,
+  buildingStatus,
+  gardenCrop,
+  growth,
+  isRipe,
+  missingInputs,
+  sourceCapacity,
+  sourceCount,
+} from '../core/production.js';
 import { BELT_SPEED, TICK } from '../core/sim.js';
 import { drawItem } from './itemArt.js';
 import { beltAt, isOwned, parseTileKey } from '../core/state.js';
@@ -49,6 +58,12 @@ const COLORS = {
   areaBad: 'rgba(255, 107, 107, 0.6)',
   lineMark: 'rgba(255, 212, 59, 0.3)',
 };
+
+// v0.16.0: Aussehen der Pflanzen im Beet (Stängel, Blätter, Blüten)
+const PLANT_LOOK = {
+  flachspflanze: { stem: '#5f8f3a', leaf: '#7fb24e', flower: '#5b8ff9', center: '#f6e7a1' },
+};
+const DEFAULT_PLANT = { stem: '#5f8f3a', leaf: '#7fb24e', flower: '#f2c94c', center: '#fff3bf' };
 
 const EMOJI_FONT = '"Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", sans-serif';
 const LABEL_FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
@@ -372,13 +387,21 @@ export function createRenderer(canvas) {
     roundRect(x + 3, y + 3, w - 6, h * 0.35, radius - 3);
     ctx.fill();
 
-    // Symbol (deckende Füllfarbe, sonst werden farbige Emojis durchsichtig)
-    const iconSize = Math.min(w, h) * 0.55;
-    ctx.fillStyle = '#000';
-    ctx.font = `${iconSize}px ${EMOJI_FONT}`;
+    // v0.16.0: Beet – Erde mit Furchen, darauf die Pflanze (groß, Tobias)
+    const garden = def.production?.kind === 'garden';
+    const crop = garden && building.prod ? gardenCrop(building) : null;
+    if (garden) drawGarden(building, crop, x, y, w, h);
+
+    // Symbol (deckende Füllfarbe, sonst werden farbige Emojis durchsichtig).
+    // Im Beet nur, solange nichts wächst – dann ist die Pflanze das Bild.
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(def.icon, x + w / 2, y + h * 0.46);
+    if (!crop) {
+      const iconSize = Math.min(w, h) * (garden ? 0.4 : 0.55);
+      ctx.fillStyle = '#000';
+      ctx.font = `${iconSize}px ${EMOJI_FONT}`;
+      ctx.fillText(def.icon, x + w / 2, y + h * 0.46);
+    }
 
     // Name: bleibt auf dem Bildschirm etwa 12 px groß. Er sucht sich die erste
     // Stelle, an der er keinen Ein-/Ausgangspfeil verdeckt: Unterkante,
@@ -481,6 +504,100 @@ export function createRenderer(canvas) {
       }
     }
     ctx.globalAlpha = 1;
+  }
+
+  // v0.16.0: Beet. Die Pflanze wächst sichtbar in Stufen: Keimling, kleine
+  // Pflanze, große Pflanze mit Knospen, reif mit Blüten – dann ein 🌾.
+  function drawGarden(building, crop, x, y, w, h) {
+    const m = Math.min(w, h) * 0.1;
+    ctx.fillStyle = '#4a3220';
+    roundRect(x + m, y + m, w - 2 * m, h - 2 * m, 8);
+    ctx.fill();
+    // Furchen
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.28)';
+    ctx.lineWidth = Math.max(2, h * 0.025);
+    for (let i = 1; i <= 4; i++) {
+      const fy = y + m + ((h - 2 * m) * i) / 5;
+      ctx.beginPath();
+      ctx.moveTo(x + m * 1.6, fy);
+      ctx.lineTo(x + w - m * 1.6, fy);
+      ctx.stroke();
+    }
+    if (!crop) return;
+    const g = growth(building);
+    const ripe = isRipe(building);
+    const look = PLANT_LOOK[crop.plant] ?? DEFAULT_PLANT;
+    const baseY = y + h - m * 1.4;
+    const cx = x + w / 2;
+    const size = Math.min(w, h);
+    // Höhe: Keimling 15 %, ausgewachsen 62 % des Beets (die Blüten bleiben auf der Erde)
+    const height = size * (0.15 + 0.47 * Math.min(1, g / 0.85));
+    const stems = g < 0.2 ? 3 : g < 0.5 ? 5 : 7;
+    ctx.lineCap = 'round';
+    for (let i = 0; i < stems; i++) {
+      const t = stems === 1 ? 0 : i / (stems - 1) - 0.5; // -0.5 … 0.5
+      const sx = cx + t * size * 0.32;
+      const lean = t * size * 0.22;
+      const top = { x: sx + lean, y: baseY - height * (1 - Math.abs(t) * 0.35) };
+      ctx.strokeStyle = look.stem;
+      ctx.lineWidth = Math.max(2, size * 0.028);
+      ctx.beginPath();
+      ctx.moveTo(sx, baseY);
+      ctx.quadraticCurveTo(sx, (baseY + top.y) / 2, top.x, top.y);
+      ctx.stroke();
+      // Blätter ab der kleinen Pflanze
+      if (g >= 0.2) {
+        ctx.fillStyle = look.leaf;
+        for (const f of [0.35, 0.6]) {
+          const lx = sx + (top.x - sx) * f;
+          const ly = baseY + (top.y - baseY) * f;
+          const side = i % 2 === 0 ? 1 : -1;
+          ctx.beginPath();
+          ctx.ellipse(lx + side * size * 0.035, ly, size * 0.045, size * 0.016, side * 0.6, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      // Knospen ab 60 %, Blüten wenn reif
+      if (ripe) {
+        const r = size * 0.05;
+        ctx.fillStyle = look.flower;
+        for (let k = 0; k < 5; k++) {
+          const a = (k / 5) * Math.PI * 2;
+          ctx.beginPath();
+          ctx.arc(top.x + Math.cos(a) * r * 0.75, top.y + Math.sin(a) * r * 0.75, r * 0.6, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.fillStyle = look.center;
+        ctx.beginPath();
+        ctx.arc(top.x, top.y, r * 0.4, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (g >= 0.6) {
+        ctx.fillStyle = look.flower;
+        ctx.globalAlpha *= 0.85;
+        ctx.beginPath();
+        ctx.ellipse(top.x, top.y, size * 0.022, size * 0.034, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha /= 0.85;
+      }
+    }
+    // Reif: 🌾 in einem hellen Kreis – auch von Weitem gut zu sehen
+    if (ripe) {
+      const r = size * 0.16;
+      const bx = x + w * 0.22;
+      const by = y + h * 0.6;
+      ctx.fillStyle = 'rgba(255, 236, 153, 0.95)';
+      ctx.beginPath();
+      ctx.arc(bx, by, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.55)';
+      ctx.lineWidth = Math.max(2, size * 0.02);
+      ctx.stroke();
+      ctx.fillStyle = '#000';
+      ctx.font = `${r * 1.25}px ${EMOJI_FONT}`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🌾', bx, by + r * 0.05);
+    }
   }
 
   // Ungefähre Fläche eines Pfeils (für die Platzierung des Namens).

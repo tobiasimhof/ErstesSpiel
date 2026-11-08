@@ -46,9 +46,14 @@ import {
 } from '../core/area.js';
 import { buyLand, landBuysLeft, landOffer, landSideAt } from '../core/land.js';
 import { buildingLevel, isBuildingUnlocked, isItemUnlocked, itemLevel } from '../core/levels.js';
-import { buyRaw, refillPlan, refillSource } from '../core/market.js';
+import { buyRaw, isBuyable, refillPlan, refillSource, sowPlan, sowSeed } from '../core/market.js';
 import {
   buildingStatus,
+  gardenCrop,
+  gardenSeeds,
+  growthLeft,
+  harvest,
+  isRipe,
   inputJam,
   loadInput,
   losesWorkOnRemove,
@@ -150,10 +155,22 @@ export function createController({
   function refillLabel(plan, input) {
     if (plan.room === 0) return '⏫ Vorrat voll';
     const n = plan.fromStorage + plan.buy;
+    // v0.16.0: Flachspflanzen gibt es nicht beim Händler – dann zählt nur das Laden-Lager
+    if (n === 0 && input.grown) return `⏫ Auffüllen – keine ${input.plural} im Laden-Lager`;
     if (n === 0) return `⏫ Auffüllen – kein ${input.name} im Lager, Gold reicht nicht`;
     const what = `${n} ${n === 1 ? input.name : input.plural}`;
     if (plan.buy === 0) return `⏫ Auffüllen: ${what}`;
     return `⏫ Auffüllen: ${what} · kauft ${plan.buy} für ${numberFormat.format(plan.cost)} 🪙`;
+  }
+
+  // v0.16.0: Beschriftung von „Säen“ – was der Knopf gerade tun würde
+  function sowLabel(plan) {
+    if (!plan.seed) return '🌱 Säen';
+    const name = ITEMS[plan.seed].name;
+    if (plan.result === 'locked') return `🌱 ${name} gibt es erst ab Level ${itemLevel(plan.seed)}`;
+    if (plan.result === 'gold') return `🌱 Säen – kein ${name} im Lager, Gold reicht nicht`;
+    if (plan.buy) return `🌱 Säen: ${name} · kauft 1 für ${numberFormat.format(plan.cost)} 🪙`;
+    return `🌱 Säen: ${name}`;
   }
 
   // Aktualisiert Statuszeilen und Knöpfe eines Gebäude-Infofensters.
@@ -184,7 +201,29 @@ export function createController({
       const load = info.buttons.get('load');
       load.textContent = `➕ 1 ${input.name} einlegen`;
       load.disabled = room < 1 || storageCount(state, p.input) < 1;
-      info.buttons.get('buy').disabled = state.gold < input.buyPrice || !isItemUnlocked(state, p.input);
+      // v0.16.0: Flachspflanzen gibt es nicht beim Händler – dann fehlt der Knopf
+      const buy = info.buttons.get('buy');
+      if (buy) buy.disabled = state.gold < input.buyPrice || !isItemUnlocked(state, p.input);
+    } else if (p?.kind === 'garden') {
+      // v0.16.0 (Tobias): Beet – säen, wachsen lassen, ernten (zwei Schritte)
+      for (const seed of gardenSeeds(b.type)) {
+        const c = p.crops[seed];
+        lines.push(`1 ${ITEMS[seed].name} → 1 ${ITEMS[c.plant].name} in ${formatDuration(c.time)}`);
+      }
+      const crop = gardenCrop(b);
+      if (crop && !isRipe(b)) lines.push(`Reif in etwa ${formatDuration(growthLeft(b))}`);
+      if (crop && isRipe(b)) lines.push(`🌾 Die ${ITEMS[crop.plant].name} ist reif. Nach dem Ernten liegt sie im Laden-Lager.`);
+      const plan = sowPlan(state, b);
+      if (plan.seed) lines.push(`${ITEMS[plan.seed].name} im Laden-Lager: ${storageCount(state, plan.seed)}`);
+      const sow = info.buttons.get('sow');
+      sow.hidden = Boolean(crop);
+      sow.textContent = sowLabel(plan);
+      sow.disabled = plan.result !== 'ok';
+      const reap = info.buttons.get('harvest');
+      reap.hidden = !crop;
+      reap.disabled = !isRipe(b);
+      reap.classList.toggle('primary', isRipe(b));
+      reap.textContent = isRipe(b) ? `🌾 Ernten: 1 ${ITEMS[crop.plant].name}` : '🌾 Ernten – noch nicht reif';
     } else if (p?.kind === 'workshop') {
       const recipe = RECIPES[prod.recipe];
       const inputs = workshopInputs(b);
@@ -281,6 +320,7 @@ export function createController({
               const bought = done.buy > 0 ? ` (${done.buy} gekauft für ${numberFormat.format(done.cost)} Gold)` : '';
               panels.toast(`${n} ${n === 1 ? input.name : input.plural} eingelegt${bought}.`);
             } else if (done.room === 0) panels.toast('Der Vorrat ist schon voll.');
+            else if (ITEMS[p.input].grown) panels.toast(`Keine ${ITEMS[p.input].plural} im Laden-Lager – erst im Beet ernten.`);
             else panels.toast(`Kein ${ITEMS[p.input].name} im Laden-Lager, und das Gold reicht nicht zum Kaufen.`);
             infoRefresh?.();
           },
@@ -295,12 +335,13 @@ export function createController({
             } else if (sourceRoom(b) < 1) {
               panels.toast('Der Vorrat ist voll.');
             } else {
-              panels.toast(`Kein ${ITEMS[p.input].name} im Laden-Lager.`);
+              const input = ITEMS[p.input];
+              panels.toast(input.grown ? `Keine ${input.plural} im Laden-Lager – erst im Beet ernten.` : `Kein ${input.name} im Laden-Lager.`);
             }
             infoRefresh?.();
           },
         });
-        actions.push({
+        if (isBuyable(p.input)) actions.push({
           key: 'buy',
           label: `🧺 ${ITEMS[p.input].name} kaufen · ${numberFormat.format(ITEMS[p.input].buyPrice)} 🪙`,
           onClick: () => {
@@ -315,8 +356,47 @@ export function createController({
           },
         });
       }
+      if (p?.kind === 'garden') {
+        // v0.16.0 (Tobias): Säen und Ernten sind zwei getrennte Schritte
+        actions.push({
+          key: 'sow',
+          label: '',
+          primary: true,
+          onClick: () => {
+            const beet = findBuilding(state, b.id);
+            if (!beet) return;
+            const done = sowSeed(state, beet);
+            if (done.result === 'ok') {
+              changed();
+              const crop = gardenCrop(beet);
+              const bought = done.buy ? ` (gekauft für ${numberFormat.format(done.cost)} Gold)` : '';
+              panels.toast(`${ITEMS[done.seed].name} gesät${bought}. In ${formatDuration(crop.time)} ist die ${ITEMS[crop.plant].name} reif.`, 4000);
+            } else if (done.result === 'gold') panels.toast(`Kein ${ITEMS[done.seed].name} im Laden-Lager, und das Gold reicht nicht zum Kaufen.`);
+            else if (done.result === 'locked') panels.toast(`${ITEMS[done.seed].name} gibt es erst ab Level ${itemLevel(done.seed)}.`);
+            else if (done.result === 'busy') panels.toast('Im Beet wächst schon etwas.');
+            infoRefresh?.();
+          },
+        });
+        actions.push({
+          key: 'harvest',
+          label: '🌾 Ernten',
+          onClick: () => {
+            const beet = findBuilding(state, b.id);
+            if (!beet) return;
+            const crop = gardenCrop(beet);
+            const result = harvest(state, beet);
+            if (result === 'ok') {
+              changed();
+              panels.toast(`${ITEMS[crop.plant].name} geerntet – sie liegt im Laden-Lager. Jetzt das Beet neu säen.`, 4000);
+            } else if (result === 'full') panels.toast('Dein Laden-Lager ist voll – erst Platz schaffen, dann ernten.');
+            else if (result === 'unripe') panels.toast(`Noch nicht reif – in etwa ${formatDuration(growthLeft(beet))}.`);
+            infoRefresh?.();
+          },
+        });
+      }
       if (p?.kind === 'workshop') {
-        for (const key of p.recipes) {
+        // v0.16.0: Mit nur einer Einstellung (Webstube) gibt es nichts umzustellen.
+        if (p.recipes.length > 1) for (const key of p.recipes) {
           actions.push({
             key: `recipe:${key}`,
             label: RECIPES[key].label,
@@ -506,7 +586,7 @@ export function createController({
     const ok = await panels.confirm({
       title: `${def.name} abreißen?`,
       text: losesWorkOnRemove(b)
-        ? `Der angefangene Rohstoff geht dabei verloren. Waren im Gebäude kommen ins Laden-Lager. ${refund}`
+        ? `${productionOf(b.type)?.kind === 'garden' ? 'Die halb gewachsene Pflanze' : 'Der angefangene Rohstoff'} geht dabei verloren. Waren im Gebäude kommen ins Laden-Lager. ${refund}`
         : `Waren im Gebäude kommen ins Laden-Lager. ${refund}`,
       okLabel: 'Abreißen',
       danger: true,
@@ -770,7 +850,7 @@ export function createController({
     const sel = cleanSelection(state, ui.area.sel);
     if (isEmptySelection(sel)) return;
     const summary = areaSummary(sel);
-    const lost = areaLosesWork(state, sel) ? ' Ein angefangener Rohstoff geht dabei verloren.' : '';
+    const lost = areaLosesWork(state, sel) ? ' Ein angefangener Rohstoff oder eine halb gewachsene Pflanze geht dabei verloren.' : '';
     const ok = await panels.confirm({
       title: 'Bereich abreißen?',
       text: `Alles Markierte wird abgerissen: ${summary}.${lost} Waren darin und bezahlte Baukosten kommen ins Laden-Lager.`,

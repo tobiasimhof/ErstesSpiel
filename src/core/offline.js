@@ -13,7 +13,7 @@
 
 import { OFFLINE } from './data/offline.js';
 import { updateMarket } from './market.js';
-import { productionOf, sourceCount } from './production.js';
+import { isRipe, productionOf, sourceCount } from './production.js';
 import { storageFree } from './shop.js';
 import { TICK, tick } from './sim.js';
 
@@ -25,6 +25,7 @@ function factoryKey(state) {
 }
 
 const isSource = (b) => productionOf(b.type)?.kind === 'source';
+const isGarden = (b) => productionOf(b.type)?.kind === 'garden';
 
 // ---------- Nachrechnen ----------
 
@@ -94,12 +95,14 @@ export function offlineSnapshot(state) {
     storage: { ...state.storage },
     counters: state.counters.map((c) => ({ type: c.type, count: c.count })),
     sources: Object.fromEntries(state.buildings.filter(isSource).map((b) => [b.id, sourceCount(b)])),
+    ripe: state.buildings.filter((b) => isGarden(b) && isRipe(b)).length,
   };
 }
 
 // Was in der Zeit passiert ist:
 // { seconds, gold, sold: { Ware: n }, stored: { Ware: n }, emptied: { Gebäudeart: n },
-//   empty: Anzahl leerer Rohstoff-Gebäude, storageFull, countersEmpty, running }
+//   empty: Anzahl leerer Rohstoff-Gebäude, ripe: Beete, die reif geworden sind
+//   (v0.16.0), storageFull, countersEmpty, running }
 export function offlineReport(job) {
   const { state, before } = job;
   const sold = {};
@@ -120,6 +123,8 @@ export function offlineReport(job) {
     empty++;
     if ((before.sources[b.id] ?? 0) > 0) emptied[b.type] = (emptied[b.type] ?? 0) + 1;
   }
+  // v0.16.0: Beete, die während der Pause reif geworden sind
+  const ripe = Math.max(0, state.buildings.filter((b) => isGarden(b) && isRipe(b)).length - (before.ripe ?? 0));
   const hadGoods = before.counters.some((c) => c.type && c.count > 0);
   return {
     seconds: job.seconds,
@@ -128,6 +133,7 @@ export function offlineReport(job) {
     stored,
     emptied,
     empty,
+    ripe,
     storageFull: storageFree(state) <= 0,
     countersEmpty: hadGoods && state.counters.every((c) => !c.type || c.count === 0),
     running: !job.still && job.done < job.busyLimit,

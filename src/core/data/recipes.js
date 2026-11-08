@@ -33,4 +33,8 @@ export const RECIPES = {
   gewichtstein: { building: 'schlosserei', label: 'Gewichte', inputs: { steinplatte: 10, eisenstange: 5 }, output: 'gewichtstein', amount: 1, time: 20 },
   uhrwerk: { building: 'schlosserei', label: 'Uhrwerke', inputs: { zahnradwelle: 1, raederwerk: 1 }, output: 'uhrwerk', amount: 1, time: 30 },
   vorhaengeschloss: { building: 'schlosserei', label: 'Schlösser', inputs: { scharnier: 1, raederwerk: 1 }, output: 'vorhaengeschloss', amount: 1, time: 30 },
+
+  // v0.16.0: Webstube (Level 7) – aus Flachsfasern werden Verbände (Leinenbinden).
+  // Vorerst nur diese eine Einstellung (Tobias); mehr kommt mit Level 8.
+  verband: { building: 'webstube', label: 'Verbände', inputs: { flachsfaser: 5 }, output: 'verband', amount: 1, time: 10 },
 };

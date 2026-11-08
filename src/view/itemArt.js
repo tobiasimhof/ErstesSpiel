@@ -368,6 +368,114 @@ export function drawItem(ctx, type, cx, cy, size) {
       ctx.stroke();
       break;
     }
+    // v0.16.0: Kräuter-Kapitel
+    case 'seeds': {
+      // Säckchen Leinsamen, oben zugebunden, ein paar Samen davor
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.18, cy - s * 0.3);
+      ctx.quadraticCurveTo(cx - s * 0.48, cy + s * 0.05, cx - s * 0.36, cy + s * 0.44);
+      ctx.lineTo(cx + s * 0.36, cy + s * 0.44);
+      ctx.quadraticCurveTo(cx + s * 0.48, cy + s * 0.05, cx + s * 0.18, cy - s * 0.3);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      // Zipfel über dem Band
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.16, cy - s * 0.3);
+      ctx.lineTo(cx - s * 0.24, cy - s * 0.5);
+      ctx.lineTo(cx + s * 0.24, cy - s * 0.5);
+      ctx.lineTo(cx + s * 0.16, cy - s * 0.3);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.strokeStyle = '#7a4f2a';
+      ctx.lineWidth = Math.max(1.5, s * 0.08);
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.2, cy - s * 0.3);
+      ctx.lineTo(cx + s * 0.2, cy - s * 0.3);
+      ctx.stroke();
+      ctx.fillStyle = '#8a5a2b';
+      for (const [dx, dy] of [[-0.12, 0.12], [0.1, 0.2], [0.02, 0.0], [-0.04, 0.3]]) {
+        ctx.beginPath();
+        ctx.ellipse(cx + dx * s, cy + dy * s, s * 0.05, s * 0.03, 0.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      break;
+    }
+    case 'flax': {
+      // Flachspflanze: Bündel grüner Stängel mit blauen Blüten
+      const stems = [[-0.22, -0.42], [0, -0.52], [0.22, -0.42]];
+      for (const [dx, dy] of stems) thickLine(ctx, [[0, 0.48], [dx, dy]], s, 0.07, def.color);
+      ctx.fillStyle = '#5b8ff9';
+      for (const [dx, dy] of stems) {
+        for (let k = 0; k < 5; k++) {
+          const a = (k / 5) * Math.PI * 2;
+          ctx.beginPath();
+          ctx.arc(cx + (dx + Math.cos(a) * 0.07) * s, cy + (dy + Math.sin(a) * 0.07) * s, s * 0.06, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.fillStyle = '#f6e7a1';
+      for (const [dx, dy] of stems) {
+        ctx.beginPath();
+        ctx.arc(cx + dx * s, cy + dy * s, s * 0.035, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      break;
+    }
+    case 'fiber': {
+      // Flachsfasern: helles Bündel, in der Mitte zusammengebunden
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.55, cy - s * 0.28);
+      ctx.quadraticCurveTo(cx, cy - s * 0.02, cx + s * 0.55, cy - s * 0.28);
+      ctx.lineTo(cx + s * 0.55, cy + s * 0.28);
+      ctx.quadraticCurveTo(cx, cy + s * 0.02, cx - s * 0.55, cy + s * 0.28);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(120, 95, 50, 0.55)';
+      ctx.lineWidth = Math.max(1, s * 0.04);
+      for (const f of [-0.14, 0, 0.14]) {
+        ctx.beginPath();
+        ctx.moveTo(cx - s * 0.48, cy + f * s * 1.4);
+        ctx.quadraticCurveTo(cx, cy + f * s * 0.3, cx + s * 0.48, cy + f * s * 1.4);
+        ctx.stroke();
+      }
+      ctx.fillStyle = '#a0703c';
+      roundRect(ctx, cx - s * 0.07, cy - s * 0.16, s * 0.14, s * 0.32, s * 0.04);
+      ctx.fill();
+      ctx.strokeStyle = OUTLINE;
+      ctx.lineWidth = Math.max(1, s * 0.07);
+      ctx.stroke();
+      break;
+    }
+    case 'bandage': {
+      // Verband: weiße Leinenrolle mit herabhängendem Ende
+      ctx.beginPath();
+      ctx.moveTo(cx + s * 0.05, cy + s * 0.2);
+      ctx.lineTo(cx + s * 0.55, cy + s * 0.32);
+      ctx.lineTo(cx + s * 0.5, cy + s * 0.5);
+      ctx.lineTo(cx, cy + s * 0.4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(cx - s * 0.08, cy - s * 0.04, s * 0.42, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(150, 140, 120, 0.8)';
+      ctx.lineWidth = Math.max(1, s * 0.05);
+      ctx.beginPath();
+      for (let a = 0; a < Math.PI * 4; a += 0.2) {
+        const r = s * (0.06 + (a / (Math.PI * 4)) * 0.28);
+        const px = cx - s * 0.08 + Math.cos(a) * r;
+        const py = cy - s * 0.04 + Math.sin(a) * r;
+        if (a === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+      break;
+    }
     case 'log': {
       roundRect(ctx, cx - s * 0.6, cy - s * 0.3, s * 1.1, s * 0.6, s * 0.3);
       ctx.fill();
