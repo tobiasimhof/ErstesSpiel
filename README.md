@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.14.0 – Fabrik läuft im Hintergrund weiter & Rohstoff-Vorrat |
+| **Aktuelle Version** | v0.15.0 – Test-Knopf „Auftrag erledigen“ |
 | **Phase** | M2 – Produktionsketten |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias testet v0.14.0 (Spiel schließen und später wiederkommen, „⏫ Auffüllen“, Lagerhaus nur noch befüllen; Punkte unter „Was Tobias testet“ in Abschnitt 6) und schreibt sein Feedback in einen **neuen Chat**. Danach besprechen wir gemeinsam die **Vorgehensweise mit Level und Techbaum** – das Kräuter-Kapitel ab Level 7 (Tobias' Plan in Abschnitt 4.4) –, damit später alles Sinn ergibt |
+| **Nächster Schritt** | **Kräuter-Kapitel auf dem Papier planen (v0.15.1, nur README):** Claude entwirft mit Tobias' Antworten aus Chat 11 (Abschnitt 4.4) das Gesamtbild, zuerst Level 7 im Detail (Beet, Flachs, Fasern, Verbände, Preise, Zeiten, Bewohnerin, Aufträge); Tobias gibt es frei. Danach **v0.16.0: Beet und Level 7**, häppchenweise weiter bis Level 12 |
 
 ---
 
@@ -134,6 +134,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Level 4–6 (seit v0.10.0):** Jedes Level schaltet eine Kombi-Maschine und eine weitere Verkaufstheke frei: Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei. Dazu wächst der Laden (seit v0.10.1): Level 4 bringt mittlere Theken (25) und 1.000 Plätze im Laden-Lager, Level 5 große Theken (30). (Die doppelt so tiefen Flächen-Streifen ab Level 4 aus v0.10.1 gelten seit v0.10.2 schon ab Level 1.) Geschenk ist jeweils 1 Eisenerz.
 - **Einführung bis etwa Level 10 (Tobias):** Die ersten Level konzentrieren sich darauf, eine coole Produktionsstätte aufzubauen. Man kommt mit jedem Level ein Stück weiter und lernt nach und nach alles kennen; bis etwa Level 10 ist sozusagen das „Intro“ abgeschlossen.
 - **Aufträge, Erfahrung und Gold (seit v0.13.0, Modell von Tobias):** Im Level-Fenster (oben auf „Laden-Level“ tippen) steht im Reiter „📜 Aufträge“ immer **genau ein Auftrag** eines Bewohners, z. B. „Müllerin Grete: Für das Mahlwerk brauche ich Räderwerke – 4 Räderwerke“. **„✓ Abgeben“** nimmt die Waren aus dem Laden-Lager und gibt **Erfahrung (XP)** und **Gold** – Gold genau so viel, wie die Waren an der Theke bringen (nicht mehr: Man macht die Aufträge wegen der Erfahrung, der Ladenverkauf bleibt im Vordergrund). Dann kommt der nächste Auftrag; **2–5 Aufträge je Level**, überspringen geht nicht. Die Erfahrung aller Aufträge eines Levels reicht genau für den Aufstieg; **aufsteigen kostet dann Gold** (Level 2: 100, Level 3: 250, Level 4: 500, Level 5: 1.000, Level 6: 2.000). Danach braucht man Bauteile für die neuen Maschinen. So bleibt alles schlüssig: Erfahrung schaltet frei, Gold kauft das Level, Waren bauen die Maschinen. Die Stückzahlen sind so gewählt, dass man ab Level 4 auf Masse gehen muss (z. B. 8 Räderwerke + 4 Zahnradwellen). Eine Erfahrungsleiste steht im Level-Fenster und klein im Knopf „Laden-Level“; ein ❗ dort heißt: Der Auftrag lässt sich abgeben. Tabelle aller Aufträge in Abschnitt 3.8.
+- **Test-Knopf (seit v0.15.0, Wunsch von Tobias):** Unter dem Auftrag steht im Prototyp immer **„🧪 Test: Auftrag erledigen“**. Er wertet den Auftrag als erledigt und gibt die Erfahrung, nimmt aber keine Waren und gibt kein Gold – so lässt sich die Spielmechanik testen, ohne die Wirtschaft zu verfälschen. Aufsteigen kostet weiter Gold. Vor v1.0 fliegt der Knopf wieder raus (eine Zeile in `data/levels.js`: `QUEST_TEST_SKIP`).
 - **Idee für später (Tobias, noch offen):** Mit Erfahrung Verbesserungen freischalten, z. B. schneller Holz verarbeiten oder schnellere Förderbänder (offene Frage 15).
 - **Laden-Ausbau** geht sofort, kostet aber Gold **und** Waren, z. B. 200 Holzzahnräder + 200 Splitt + 500 Gold. So muss man ständig Neues produzieren, und das Produzieren ersetzt das Warten.
 - **Fläche kaufen:** Das Grundstück wird stückweise mit Gold erweitert (seit v0.9.0 im Spiel). Seit v0.10.2 zum festen Preis (500 Gold für 4 Reihen, jede Seite 2×), damit man am Anfang gut skalieren kann und nicht am Platz scheitert (Tobias). Ob es später mehr Fläche gibt, z. B. mit Level oder Aufgaben, entscheiden wir mit den Aufgaben.
@@ -323,7 +324,7 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 
 **Ideen für später:** weitere Rohstoffe wie Lehm (Ziegel), Hanf (Seile), Sand (Glas). *Größere Waren wie Fässer, Karren, Fenster passen nicht mehr (Tobias, v0.13.0: nur kleine Waren, die auf dem Band darstellbar sind).*
 
-### 4.4 Der weitere Techbaum: das Kräuter-Kapitel (Tobias, Chat 9 und Chat 10 – Richtung steht, Details noch offen)
+### 4.4 Der weitere Techbaum: das Kräuter-Kapitel (Tobias, Chat 9 bis Chat 11 – Richtung steht, Details noch offen)
 
 **Tobias' Plan (Chat 10):** Die Level 1–6 waren ein Kapitel voller Werkzeuge. Ab Level 7 beginnt ein **zweites Kapitel mit neuer Thematik – Kräuter und Heilkunde** – und fängt wieder einfach an: Man stellt wieder ganz einfach etwas her (Flachs → Verbände) und steigert sich in der Schwierigkeit, bis man auf Level 10 (dem „Level 4“ der Kräuter) wieder mehr in die Produktion investieren muss. Auf Level 11 oder 12 schließt das Kräuter-Kapitel ab. Dann gibt es **zwei große Techbäume: Werkzeuge und Kräuter**. Ab Level 13 kommen neue Produkte, z. B. **Sand**: daraus Glas, aber über die Kräuter-Maschinen auch Sandstaub für die Zauberei – die Kapitel greifen ineinander.
 
@@ -342,6 +343,16 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 - **Ringelblume** als altes Wundkraut für die Heilung (Claudes Vorschlag, Tobias: „gute Ergänzung“).
 - **Farn als Zauberkraut für später** (Claudes Idee: Nach altem Volksglauben macht Farnsamen in der Johannisnacht unsichtbar) – noch offen.
 - **Wie wir vorgehen (Tobias):** erst das Spiel im Hintergrund (v0.14.0), dann besprechen wir gemeinsam die Vorgehensweise mit Level und Techbaum, damit später alles Sinn ergibt.
+
+**Vorgehen und Antworten von Tobias (Chat 11, 08.11.2026):**
+
+- **Häppchenweise:** Erst das Gesamtbild auf dem Papier (v0.15.1, nur README), dann umsetzen: v0.16.0 Beet und Level 7, danach Level 8–9 (Heilverbände) und Level 10–12 (Claudes Vorschlag, Tobias: „Können wir gerne so umsetzen. Immer häppchenweise.“).
+- **Das Beet:** Man kauft (baut) es wie eine Maschine, platziert es und pflanzt einen Samen. **1 Samen = 1 Pflanze**; die Pflanze wird etwas „größer“ dargestellt. Nach einer Wachszeit ist sie ausgewachsen und wird **geerntet**.
+- **Wachszeit etwa 30 Minuten**, damit sich der Geldfluss steuern lässt (ein Samen bringt rund 50 % Gewinn).
+- **Das Beet hat (noch) keinen Anschluss ans Band.**
+- **Im Beet wächst alles**, egal welche Pflanze.
+- **Kette (Level 7 wie Level 1, klein anfangen):** Eine Maschine macht aus der Pflanze Fasern, z. B. **1 Pflanze → 50 Fasern**, daraus **10 Verbände**. Später kommt eine Maschine mit 2 Eingängen für Faser + Kräuter.
+- **Preise in der mittleren Kategorie** (die Werkstattwaren bringen bisher 72 bis gut 300 Gold): z. B. **1 Verband 150 Gold, 1 Samen 1.000 Gold** – aus einem Samen werden so 1.500 Gold. Feintuning später. **Die Basis (Flachs) bleibt günstig**; mit den Ringelblumen zieht es an: teurer, bringt aber auch mehr.
 
 **Ältere Ideen (Chat 9):**
 
@@ -383,7 +394,7 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/core/data/items.js` | Datentabelle der Waren (Name, Preise, Aussehen) |
 | `src/core/data/recipes.js` | Datentabelle der Rezepte (Zutaten, Ergebnis, Zeit) |
 | `src/core/data/shop.js` | Laden: Lagergröße und Theken je Level, Kunden-Takt, Startvorrat, Testpaket |
-| `src/core/data/levels.js` | Laden-Level: Bauabschnitt des Ortes, Geschichte, Aufträge der Bewohner, Preis des Aufstiegs, Gratis-Rohstoff; Belohnungs-Regel der Aufträge (was ein Level freischaltet, steht als `level` bei Gebäuden und Rohstoffen) |
+| `src/core/data/levels.js` | Laden-Level: Bauabschnitt des Ortes, Geschichte, Aufträge der Bewohner, Preis des Aufstiegs, Gratis-Rohstoff; Belohnungs-Regel der Aufträge; Test-Knopf an/aus (`QUEST_TEST_SKIP`, v0.15.0) (was ein Level freischaltet, steht als `level` bei Gebäuden und Rohstoffen) |
 | `src/core/data/land.js` | Fläche kaufen: Streifentiefe, Käufe je Seite, Preis je Streifen |
 | `src/core/data/offline.js` | Spiel im Hintergrund (v0.14.0): ab wann nachgerechnet wird, Grenzen, ab wann Meldung bzw. Fenster „Willkommen zurück“ |
 | `src/core/state.js` | Spielzustand anlegen, Größe von Grundstück und Welt, Abfragen auf dem Raster |
@@ -399,7 +410,7 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/core/shop.js` | Laden-Lager, Baukosten bezahlen und zurückgeben |
 | `src/core/market.js` | Handel: Händler, Theken, Kunden (mit eigenem Zufall im Spielstand), Pleiteschutz, Testpaket, „Auffüllen“ der Rohstoff-Gebäude (v0.14.0) |
 | `src/core/levels.js` | Laden-Level: was freigeschaltet ist, hergestellte Waren zählen, aufsteigen (Erfahrung und Gold) |
-| `src/core/quests.js` | Aufträge der Bewohner (v0.13.0): aktueller Auftrag, Belohnung, abgeben, Erfahrung je Level |
+| `src/core/quests.js` | Aufträge der Bewohner (v0.13.0): aktueller Auftrag, Belohnung, abgeben, Erfahrung je Level; Test-Knopf „Auftrag erledigen“ (v0.15.0) |
 | `src/core/land.js` | Fläche kaufen: Streifen und Preis je Seite, wie oft noch, Kauf, welche Seite ein Feld der gesperrten Fläche ist |
 | `src/core/save.js` | Spielstand in Text umwandeln, prüfen und alte Spielstände umwandeln |
 | `src/view/camera.js` | Kamera: verschieben, zoomen, Bildschirm ↔ Welt umrechnen |
@@ -412,7 +423,7 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/view/shop.js` | Laden-Fenster mit den Reitern Lager, Theken, Händler |
 | `src/view/warehouse.js` | Lagerhaus-Fenster (v0.12.0): Ware wählen, dann Menge (Befüllen) |
 | `src/view/offline.js` | Spiel im Hintergrund (v0.14.0): Hinweis „Die Fabrik holt die Zeit nach …“ und Fenster „Willkommen zurück“ |
-| `src/view/levels.js` | Level-Fenster mit den Reitern „📜 Aufträge“ (Geschichte, Erfahrungsleiste, Auftrag mit „Abgeben“, Aufstieg) und „🏘️ Ort & Level“ (alle Bauabschnitte) |
+| `src/view/levels.js` | Level-Fenster mit den Reitern „📜 Aufträge“ (Geschichte, Erfahrungsleiste, Auftrag mit „Abgeben“ und Test-Knopf, Aufstieg) und „🏘️ Ort & Level“ (alle Bauabschnitte) |
 | `src/view/format.js` | Texte für Zahlen, Waren und Kosten |
 | `src/view/buildbar.js` | Untere Leisten: Laden/Bauen, Bauleiste, Werkzeugleiste |
 | `src/view/press.js` | Knöpfe reagieren aufs Loslassen des Fingers (siehe Entscheidungen) |
@@ -420,8 +431,8 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/style.css` | Aussehen der Oberfläche |
 | `assets/icons/` | App-Symbole (erzeugt mit `tools/make-icons.py`) |
 | `tools/set-version.mjs` | Setzt die Versionsnummer in `src/version.js` und `index.html` (inkl. Import-Map) |
-| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`), Bereiche verschieben (`area.test.js`), Lagerhaus befüllen und Bänder leeren (`warehouse.test.js`), Aufträge und neue Warennamen (`quests.test.js`), Spiel im Hintergrund, Rohstoff-Vorrat und Auffüllen (`offline.test.js`) |
-| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Bereich markieren/verschieben/drehen (auch mit Taste R)/abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufträge abgeben und Aufsteigen bis Level 6 (mit Reiter „Ort & Level“), die Eisen-Kette, die Zimmerei, Strecke und Zulauf leeren, Lagerhaus befüllen und ausräumen (kein Nachschub), Auffüllen des Holzfällerlagers sowie das Spiel im Hintergrund (20 Minuten weg in der App, 2 Stunden mit geschlossenem Spiel → Fenster „Willkommen zurück“) per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
+| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`), Bereiche verschieben (`area.test.js`), Lagerhaus befüllen und Bänder leeren (`warehouse.test.js`), Aufträge, neue Warennamen und Test-Knopf (`quests.test.js`), Spiel im Hintergrund, Rohstoff-Vorrat und Auffüllen (`offline.test.js`) |
+| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Bereich markieren/verschieben/drehen (auch mit Taste R)/abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufträge abgeben und Aufsteigen bis Level 6 (mit Reiter „Ort & Level“), Test-Knopf „Auftrag erledigen“ (Stadttor-Aufträge ohne Waren und Gold), die Eisen-Kette, die Zimmerei, Strecke und Zulauf leeren, Lagerhaus befüllen und ausräumen (kein Nachschub), Auffüllen des Holzfällerlagers sowie das Spiel im Hintergrund (20 Minuten weg in der App, 2 Stunden mit geschlossenem Spiel → Fenster „Willkommen zurück“) per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
 
 **Prüfen vor jedem Merge:** `npm test` (Spielregeln) und `npm run test:browser` (Browser-Test).
 
@@ -467,7 +478,10 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | v0.12.0 | **Nachschub & Bänder leeren:** Lagerhaus als Gegenstück zum Versandportal (befüllen, Nachschub mit Rest, ausräumen), „Strecke leeren“ und „Zulauf leeren“ | ✅ fertig |
 | v0.13.0 | **Aufträge & neue Namen:** Aufträge der Bewohner im Level-Fenster mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen, Bauabschnitte des Ortes, 8 Waren mit neuen Namen und Bildern | ✅ fertig |
 | v0.14.0 | **Spiel im Hintergrund:** Fabrik läuft weiter, bis etwas leer ist; „Willkommen zurück“; Rohstoff-Vorrat (3) mit „Auffüllen“; Lagerhaus nur noch von Hand befüllen | ✅ fertig |
-| v0.15.0 ff. | **Kräuter-Kapitel:** Level 7 Flachs → Fasern → Verbände, danach Level 8–12 (Tobias' Plan, Abschnitt 4.4) | nach Tobias' Test von v0.14.0 gemeinsam planen |
+| v0.15.0 | **Test-Knopf:** „🧪 Test: Auftrag erledigen“ im Level-Fenster – Erfahrung ohne Waren und ohne Gold, solange das Spiel ein Prototyp ist | ✅ fertig |
+| v0.15.1 | **Kräuter-Kapitel auf dem Papier (nur README):** Gesamtbild Level 7–12, zuerst Level 7 im Detail (Beet, Maschinen, Waren, Preise, Zeiten, Bewohnerin, Aufträge) | als Nächstes, gemeinsam |
+| v0.16.0 | **Beet und Level 7:** Samen pflanzen, Pflanze wächst (etwa 30 Minuten), ernten; Flachs → Fasern → Verbände | nach der Freigabe von v0.15.1 |
+| v0.17.0 ff. | **Level 8–12:** Ringelblume und Heilverbände (Maschine mit 2 Eingängen), zweites Kraut, Masse, Abschluss des Kapitels (Abschnitt 4.4) | häppchenweise |
 
 ### Bänder leeren (vorgemerkt in v0.11.1, umgesetzt in v0.12.0)
 
@@ -480,6 +494,23 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 - Spielstand-Format bleibt gleich.
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
+
+### v0.15.0 – Test-Knopf „Auftrag erledigen“ (fertig)
+
+Tobias' Test von v0.14.0 und der Wunsch nach dem Knopf stehen in Abschnitt 10 (Chat 11).
+
+**Neu im Spiel:**
+- Im Level-Fenster (oben auf „Laden-Level“ tippen), Reiter „📜 Aufträge“, steht unter dem Auftrag in einem gestrichelten, lila Kasten **„🧪 Test: Auftrag erledigen“** – immer, auch ohne Testmodus (Tobias spielt in Echtzeit).
+- Ein Tipp wertet den aktuellen Auftrag als erledigt: Es gibt **die Erfahrung** des Auftrags, aber **keine Waren** werden genommen und es gibt **kein Gold** (Gold ohne Waren würde die Wirtschaft verfälschen, die Tobias testet). Der nächste Auftrag rückt nach; oben steht „🧪 Auftrag als erledigt gewertet (Test): +259 Erfahrung, kein Gold.“
+- **Aufsteigen bleibt, wie es ist:** Es kostet weiter Gold.
+- Ist kein Auftrag mehr offen, verschwindet der Knopf.
+- **Spielstand:** Format unverändert, keine Umwandlung nötig.
+
+**Für Tobias' Fabrik (Level 6):** Der Knopf erledigt die 4 Aufträge vom Stadttor (zusammen 1.841 Erfahrung); die Erfahrung sammelt sich, bis es Level 7 gibt. Richtig nützlich wird er mit dem Kräuter-Kapitel und bei einem neuen Spiel.
+
+**Was Tobias testet:**
+- Level-Fenster öffnen, „🧪 Test: Auftrag erledigen“ tippen: Steigt die Erfahrung, bleiben Gold und Laden-Lager gleich?
+- Ist der Knopf deutlich genug vom echten „✓ Abgeben“ zu unterscheiden?
 
 ### v0.14.0 – Fabrik läuft im Hintergrund weiter & Rohstoff-Vorrat (fertig)
 
@@ -928,14 +959,21 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 | 07.11.2026 | Kräuter-Kapitel ab Level 7: wieder einfach beginnen (Flachs → Fasern → Verbände), bis Level 10 steigern, Level 11/12 abschließen; ein allgemeines Beet für alle Pflanzen; Alchemist erst um Level 15; ab Level 13 neue Rohstoffe wie Sand | Tobias' Plan (Abschnitt 4.4): zwei große Techbäume (Werkzeuge und Kräuter), die später ineinandergreifen. |
 | 07.11.2026 | Flachs statt Farn oder Hanf | Claudes Begründung (Leinenbinden waren die Verbände des Mittelalters, Farn hat keine Fasern), Tobias: „Flachs“. |
 | 07.11.2026 | Reihenfolge: erst das Spiel im Hintergrund (v0.14.0), dann gemeinsam die Vorgehensweise mit Level und Techbaum besprechen | Tobias, damit später alles Sinn ergibt. |
+| 08.11.2026 | Spiel im Hintergrund und Vorrat von 3 Rohstoffen bleiben so | Tobias (Test von v0.14.0): Spiel über Nacht geschlossen, am Morgen hat alles funktioniert, die Fabrik läuft weiter; 3 Rohstoffe reichen. |
+| 08.11.2026 | Test-Knopf „🧪 Test: Auftrag erledigen“: gibt die Erfahrung, nimmt keine Waren, gibt kein Gold; Aufsteigen kostet weiter Gold | Tobias (Chat 11): Die Aufträge macht Tobias gerade nicht aktiv; im Vordergrund steht die Spielmechanik. Ohne Gold und Waren, damit die Wirtschaft unverfälscht bleibt: Claudes Vorschlag, Tobias einverstanden. |
+| 08.11.2026 | Der Test-Knopf ist im Prototyp immer zu sehen (nicht nur im Testmodus); vor v1.0 wird er entfernt (`QUEST_TEST_SKIP`) | Tobias: „Immer zu sehen, genau wie du vorschlägst.“ Der Testmodus würde die Zeit ×10 beschleunigen, Tobias spielt aber in Echtzeit. |
+| 08.11.2026 | Kräuter-Kapitel häppchenweise: erst das Gesamtbild auf dem Papier (v0.15.1), dann v0.16.0 Beet und Level 7, danach Level 8–9 und 10–12 | Claudes Vorschlag, Tobias: „Immer häppchenweise.“ |
+| 08.11.2026 | Beet: baut man wie eine Maschine; 1 Samen = 1 Pflanze (größer dargestellt), wächst etwa 30 Minuten, dann ernten; kein Anschluss ans Band (vorerst); im Beet wächst jede Pflanze | Tobias (Chat 11). Die 30 Minuten bremsen den Geldfluss, weil ein Samen rund 50 % Gewinn bringt. Ersetzt Claudes Vorschlag „wie der Holzfäller, 200 Stück in 15 Minuten“. |
+| 08.11.2026 | Flachs-Kette: 1 Pflanze → 50 Fasern → 10 Verbände; später eine Maschine mit 2 Eingängen für Faser + Kräuter | Tobias (Chat 11): Level 7 wie Level 1 aufbauen, klein anfangen. |
+| 08.11.2026 | Kräuter-Preise in der mittleren Kategorie: etwa Samen 1.000 Gold, Verband 150 Gold (1.500 Gold je Samen); Basis günstig, Ringelblume teurer und lohnender | Tobias (Chat 11); Feintuning später. Ersetzt Claudes Vorschläge „wie Holz“ bzw. „wie Eisen“. |
 
 ---
 
 ## 8. Offene Fragen
 
-Stand 07.11.2026 (nach v0.14.0).
+Stand 08.11.2026 (nach v0.15.0).
 
-1. **Nächstes Feedback:** Tobias testet v0.14.0 (Spiel im Hintergrund, Vorrat, Auffüllen, Lagerhaus ohne Nachschub) und schreibt sein Feedback in einen neuen Chat. Danach besprechen wir die Vorgehensweise mit Level und Techbaum (Kräuter-Kapitel, Abschnitt 4.4). Noch offen aus v0.13.0: Erkennt man die neuen Warenbilder auf dem Band? (Tobias hat es noch nicht ausprobiert, bisher gab es mit den Bildern keine Probleme.) Stand: Level 6, erster Auftrag vom Stadttor gesehen. Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Vorhängeschlössern sehr viel Gold. Danach Plan für den weiteren Techbaum.
+1. **Nächster Schritt:** das Kräuter-Kapitel auf dem Papier (v0.15.1, Abschnitt 4.4 und Frage 18). v0.14.0 ist getestet (Spiel im Hintergrund klappt, 3 Rohstoffe reichen, die neuen Warenbilder erkennt Tobias und sie gefallen); das Lagerhaus ohne Nachschub hat Tobias nicht erwähnt. Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Vorhängeschlössern sehr viel Gold.
 2. **Handel im echten Tempo:** geklärt – Tobias' Zeiten (bis Eisen etwa 45 Minuten, zweite Runde Eisen nach etwa 60 Minuten) sind in echter Zeit gemessen; nur die Eisen-Runden hat er im Testmodus beschleunigt. Früher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10).
 3. **Laden-Lager:** seit v0.10.1 500 Plätze bis Level 3, 1.000 ab Level 4 (Tobias). Claudes Lesart: erst ab Level 4, weil es dort eng wird. Soll es schon ab Level 1 1.000 sein, ist das eine Zahl in der Datentabelle.
 4. **Aufträge (seit v0.13.0 im Spiel):** geklärt – Waren werden abgegeben, ein Auftrag nach dem anderen, Gold = Thekenwert, Erfahrung reicht genau fürs Level, Aufstieg kostet Gold. Stückzahlen passen (Tobias, v0.13.0: „machbare Menge, das Spiel soll auch fordern“). Noch offen: Passen die Aufstiegspreise (Platzhalter)? Level 7 bis 12 kommen mit dem Kräuter-Kapitel (Abschnitt 4.4). Kostet der Laden-Ausbau später zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Tobias' Erkenntnis bleibt wichtig: Man muss die Mitte finden zwischen Verkaufen (Gold für Rohstoffe) und Weiterverarbeiten.
@@ -951,12 +989,29 @@ Stand 07.11.2026 (nach v0.14.0).
 14. **Nachschub bremsen?** geklärt – den Nachschub gibt es seit v0.14.0 nicht mehr (Tobias: Er hebelt die Bänder aus). Lagerhäuser befüllt man von Hand.
 15. **Verbesserungen mit Erfahrung (Idee von Tobias):** Mit XP z. B. schneller Holz verarbeiten oder schnellere Förderbänder freischalten. Tobias ist sich noch nicht sicher, in welche Richtung; vorerst dient die Erfahrung nur dem Aufstieg. Das Spiel zählt schon alle Erfahrung mit (`xpTotal`), damit das später möglich ist.
 16. **Reihenfolge nach v0.13.0:** geklärt – erst das Spiel im Hintergrund (v0.14.0), dann besprechen wir gemeinsam die Vorgehensweise mit Level und Techbaum.
-17. **Rohstoff-Vorrat (seit v0.14.0):** 3 Rohstoffe je Gebäude (45 Minuten). Soll der Vorrat später wachsen, z. B. mit dem Level oder als Verbesserung mit Erfahrung (Frage 15)? Das ist eine Zahl in der Datentabelle (`capacity`).
-18. **Kräuter-Kapitel (Abschnitt 4.4):** Wie funktioniert das Beet genau (Wachsen sichtbar, wie lange, wie viele Pflanzen je Samen)? Welche Maschinen machen Fasern und Verbände, welches zweite Kraut kommt auf Level 9, wer sind die neuen Bewohner, und was kosten Samen? Planen wir nach Tobias' Test von v0.14.0.
+17. **Rohstoff-Vorrat (seit v0.14.0):** 3 Rohstoffe je Gebäude (45 Minuten) – Tobias: „3 als Rohstoff reichen“. Soll der Vorrat später wachsen, z. B. mit dem Level oder als Verbesserung mit Erfahrung (Frage 15)? Das ist eine Zahl in der Datentabelle (`capacity`).
+18. **Kräuter-Kapitel (Abschnitt 4.4):** Geklärt (Chat 11): 1 Samen = 1 Pflanze, etwa 30 Minuten Wachszeit, ernten, kein Band am Beet, jede Pflanze im selben Beet, 1 Pflanze → 50 Fasern → 10 Verbände, Preise etwa 1.000 (Samen) und 150 (Verband). Noch offen für v0.15.1: Wie kommt die geerntete Pflanze in die Faser-Maschine (Claudes Idee: einlegen wie einen Holzstamm)? Wie groß ist das Beet? Ernten und neu säen mit einem Tipp? Zeiten der Maschinen, Baukosten, Namen der Maschinen, neue Bewohnerin, Aufträge und Aufstiegspreis für Level 7. Später: welches zweite Kraut auf Level 9 (Claudes Idee: Schafgarbe), wie die Ringelblume verarbeitet wird.
+19. **Test-Knopf (seit v0.15.0):** Vor v1.0 entfernen (`QUEST_TEST_SKIP = false` in `data/levels.js`). Zählt die übersprungene Erfahrung auch für spätere Verbesserungen mit Erfahrung (Frage 15)? Im Moment ja (`xpTotal`).
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.15.0 – Test-Knopf „Auftrag erledigen“ (08.11.2026)
+
+**Vorgenommen:**
+- Tobias' Wunsch nach dem Test von v0.14.0: ein Knopf für den Prototyp, der einen Auftrag automatisch abschließt – die Aufträge macht Tobias gerade nicht aktiv, weil die Spielmechanik im Vordergrund steht.
+
+**Fragen, die wir uns gestellt haben:**
+- Was gibt der Knopf? → Nur die Erfahrung. Keine Waren weg, kein Gold – sonst wäre es Gratis-Gold, das die Wirtschaft verfälscht. Aufsteigen kostet weiter Gold.
+- Wann ist er zu sehen? → Immer, solange das Spiel ein Prototyp ist (Tobias); im Testmodus liefe die Zeit ×10, Tobias spielt aber in Echtzeit.
+- Was bringt er auf Level 6? → Die Erfahrung der Stadttor-Aufträge sammelt sich bis Level 7; richtig nützlich wird er mit dem Kräuter-Kapitel und bei einem neuen Spiel.
+- Muss der Spielstand umgewandelt werden? → Nein.
+
+**Gemacht:**
+- Datentabelle `data/levels.js`: `QUEST_TEST_SKIP = true`. Spielregeln in `quests.js`: `canSkipQuest`, `skipQuest` (Erfahrung und `xpTotal`, nächster Auftrag, keine Waren, kein Gold).
+- Level-Fenster: lila, gestrichelter Kasten mit „🧪 Test: Auftrag erledigen“ und der Erfahrung, die er bringt; Bestätigung „Auftrag als erledigt gewertet (Test)“ und kurze Meldung.
+- 211 automatische Tests (neu in `quests.test.js`: Knopf eingeschaltet, Erfahrung ohne Waren und Gold, geht auch ohne die Waren und danach normal weiter, alle Aufträge jedes Levels ergeben genau die Erfahrung und Aufsteigen braucht weiter Gold, höchstes Level sammelt Erfahrung, Spielstand-Format unverändert) und der Browser-Test (neu: Knopf ohne Testmodus sichtbar, auf Level 6 per Touch: +259 Erfahrung, kein Gold, keine Waren, alle 4 Stadttor-Aufträge, danach kein Knopf mehr) in Tablet- und Handygröße – alle bestanden.
 
 ### v0.14.0 – Fabrik läuft im Hintergrund weiter & Rohstoff-Vorrat (07.11.2026)
 
@@ -1393,6 +1448,16 @@ Stand 07.11.2026 (nach v0.14.0).
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 08.11.2026 – Chat 11: Test von v0.14.0, Test-Knopf, Vorgehen beim Kräuter-Kapitel
+
+**Tobias:** Das Spiel über Nacht geschlossen und am Morgen wieder reingeschaut – alles hat funktioniert, die Fabrik läuft weiter. 3 Rohstoffe reichen. Die neuen Warenbilder erkennt Tobias und findet sie gut. Die Aufträge macht Tobias gerade nicht aktiv, weil die Spielmechanik wichtiger ist. Wunsch: für die Testversion des Prototyps ein Knopf, der den Auftrag automatisch abschließt. Dann gemeinsam das weitere Vorgehen planen.
+
+**Claude** hat vorgeschlagen: Knopf „🧪 Test: Auftrag erledigen“ im Level-Fenster – Erfahrung ja, keine Waren, kein Gold, Aufsteigen kostet weiter Gold; Frage, ob immer oder nur im Testmodus sichtbar. Für das Kräuter-Kapitel: erst das Gesamtbild auf dem Papier, dann häppchenweise umsetzen (v0.16.0 Beet und Level 7 …). Fragen zum Beet (wie der Holzfäller oder echtes Warten?), ein Beet für alle Pflanzen, Preise (wie Holz oder wie Eisen) und eine Skizze für Level 7 (Leinsamen → Beet → Flachsfasern → Webstube mit Verbänden).
+
+**Tobias:** Der Knopf soll immer zu sehen sein. Häppchenweise, wie vorgeschlagen. Das Beet kauft man wie eine Maschine, platziert es und pflanzt den Samen; ein Samen ergibt eine Pflanze, die man etwas größer darstellen kann. Nach einer Zeit ist aus dem Samen eine Pflanze geworden, die man erntet. Dann macht eine Maschine aus der Pflanze Fasern, und im nächsten Schritt gibt es wieder eine Maschine mit 2 Eingängen für Faser + Kräuter. Aus einer Pflanze z. B. 50 Fasern, daraus 10 Verbände. Das Beet soll (noch) keinen Anschluss ans Band haben; darin wächst alles, unabhängig vom Typ. Preise in der mittleren Kategorie – die mittleren Werkstattwaren bringen 72 bis 300 Gold –, z. B. 1 Verband 150 Gold, 1 Samen 1.000 Gold, also 1.500 Gold je Samen; Feintuning später. Die Basis soll günstig bleiben, mit Ringelblumen kann es anziehen (teurer, bringt mehr). Sonst wie Level 1 aufbauen, um klein anzufangen. Weil ein Samen etwa 50 % Rendite bringt, soll es etwa 30 Minuten dauern, bis die Pflanze ausgewachsen ist – so lässt sich der Geldfluss steuern.
+
+**Umgesetzt:** v0.15.0 (siehe Versionshistorie). Tobias' Antworten zum Kräuter-Kapitel stehen in Abschnitt 4.4; als Nächstes entwirft Claude damit Level 7 im Detail (v0.15.1, nur README).
 
 ### 07.11.2026 – Chat 10: Test von v0.13.0, Spiel im Hintergrund, Kräuter-Kapitel, Plan und Umsetzung v0.14.0
 

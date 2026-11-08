@@ -710,6 +710,10 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     'Erfahrungsleiste 0 / 81 und Belohnung',
   );
   check((await page.locator('#modal-content .goal-row.done').count()) === 1, 'Ware liegt im Laden-Lager (abgehakt)');
+  check(
+    await page.locator('#modal-content button.quest-skip', { hasText: '🧪 Test: Auftrag erledigen' }).isVisible(),
+    'Test-Knopf „Auftrag erledigen“ ist zu sehen (v0.15.0, ohne Testmodus)',
+  );
   check(await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 2' }).isDisabled(), 'Aufsteigen noch gesperrt (zu wenig Erfahrung)');
   await shot('10b-auftrag');
   const before1 = await game(page, () => ({ plates: window.__game.state.storage.holzplatte, gold: window.__game.state.gold }));
@@ -1152,6 +1156,37 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const lvl6Text = await page.textContent('#modal-content');
   check(lvl6Text.includes('höchste Level') && lvl6Text.includes('Torwächter Ulrich') && lvl6Text.includes('Gewichtsteine'), 'Level 6 ist vorerst das höchste; Aufträge fürs Stadttor');
   await shot('15-level-6');
+  // v0.15.0: Test-Knopf – Erfahrung ohne Waren und ohne Gold
+  const before6 = await game(page, () => {
+    const st = window.__game.state;
+    return { gold: st.gold, sale: st.market.sales[0]?.id ?? 0, storage: { ...st.storage }, quest: { ...st.quest } };
+  });
+  await page.locator('#modal-content button', { hasText: '🧪 Test: Auftrag erledigen' }).tap();
+  await sleep(200);
+  const after6 = await game(page, (since) => {
+    const st = window.__game.state;
+    const sold = st.market.sales.filter((x) => x.id > since).reduce((sum, x) => sum + x.gold, 0);
+    return { gold: st.gold, sold, storage: { ...st.storage }, quest: { ...st.quest } };
+  }, before6.sale);
+  check(
+    after6.quest.index === before6.quest.index + 1 && after6.quest.xp === before6.quest.xp + 259,
+    `Test-Knopf: Auftrag 1 als erledigt gewertet, +259 Erfahrung (${JSON.stringify(after6.quest)})`,
+  );
+  check(after6.gold === before6.gold + after6.sold, `Test-Knopf gibt kein Gold (${before6.gold} → ${after6.gold}, Kunden ${after6.sold})`);
+  check((after6.storage.gewichtstein ?? 0) === (before6.storage.gewichtstein ?? 0), 'Test-Knopf nimmt keine Waren');
+  const skipText = await page.textContent('#modal-content');
+  check(skipText.includes('Auftrag als erledigt gewertet (Test)') && skipText.includes('Auftrag 2 von 4'), 'Bestätigung und nächster Auftrag');
+  await shot('15b-test-knopf');
+  for (let i = 0; i < 3; i++) {
+    await page.locator('#modal-content button', { hasText: '🧪 Test: Auftrag erledigen' }).tap();
+    await sleep(200);
+  }
+  const allSkipped = await page.textContent('#modal-content');
+  check(
+    allSkipped.includes('Alle Aufträge dieses Bauabschnitts sind erledigt') && allSkipped.includes('1.841 / 1.841'),
+    'Alle 4 Aufträge vom Stadttor per Test-Knopf erledigt, Erfahrung voll',
+  );
+  check((await page.locator('#modal-content button.quest-skip').count()) === 0, 'Ohne Auftrag kein Test-Knopf mehr');
   await page.tap('#modal-close');
   await page.tap('#btn-shop');
   await sleep(80);

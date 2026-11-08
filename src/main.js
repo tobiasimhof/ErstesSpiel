@@ -112,9 +112,15 @@ function onLevelUp({ level, gift }) {
   panels.toast(`Laden-Level ${level}! Neu: ${unlockText(level)}. Gratis im Laden-Lager: ${costText(gift)}.`, 6000);
 }
 // v0.13.0: Auftrag abgegeben
-function onQuestDone({ gold, xp }) {
+// v0.15.0: oder mit dem Test-Knopf als erledigt gewertet (skipped)
+function onQuestDone({ gold, xp, skipped }) {
   onChange();
-  panels.toast(`Auftrag erledigt: +${numberFormat.format(xp)} Erfahrung, +${numberFormat.format(gold)} Gold.`, 3000);
+  panels.toast(
+    skipped
+      ? `Test: Auftrag als erledigt gewertet – +${numberFormat.format(xp)} Erfahrung, keine Waren, kein Gold.`
+      : `Auftrag erledigt: +${numberFormat.format(xp)} Erfahrung, +${numberFormat.format(gold)} Gold.`,
+    3000,
+  );
 }
 const levelView = createLevelView({ state, panels, onLevelUp, onQuestDone });
 function openLevel() {
