@@ -1154,7 +1154,10 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const lvl6 = await game(page, () => ({ level: window.__game.state.shopLevel, counters: window.__game.state.counters.length }));
   check(lvl6.level === 6 && lvl6.counters === 5, `Level 6 mit 5 Verkaufstheken (${JSON.stringify(lvl6)})`);
   const lvl6Text = await page.textContent('#modal-content');
-  check(lvl6Text.includes('höchste Level') && lvl6Text.includes('Torwächter Ulrich') && lvl6Text.includes('Gewichtsteine'), 'Level 6 ist vorerst das höchste; Aufträge fürs Stadttor');
+  check(
+    lvl6Text.includes('Torwächter Ulrich') && lvl6Text.includes('Gewichtsteine') && lvl6Text.includes('Nächstes Level: Level 7 · Die Heilstube'),
+    'Level 6: Aufträge fürs Stadttor, danach kommt Level 7 „Die Heilstube“',
+  );
   await shot('15-level-6');
   // v0.15.0: Test-Knopf – Erfahrung ohne Waren und ohne Gold
   const before6 = await game(page, () => {
@@ -1187,6 +1190,30 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     'Alle 4 Aufträge vom Stadttor per Test-Knopf erledigt, Erfahrung voll',
   );
   check((await page.locator('#modal-content button.quest-skip').count()) === 0, 'Ohne Auftrag kein Test-Knopf mehr');
+  // v0.16.0: Aufsteigen auf Level 7 „Die Heilstube“ (3.000 Gold; das Gold
+  // kommt hier dazu, damit der weitere Ablauf gleich bleibt)
+  check(
+    allSkipped.includes('Beet') && allSkipped.includes('Flachsbreche') && allSkipped.includes('Webstube') &&
+      allSkipped.includes('Leinsamen beim Händler') && !allSkipped.includes('Flachspflanze beim Händler'),
+    'Level 7 kündigt Beet, Flachsbreche, Webstube und Leinsamen beim Händler an',
+  );
+  await game(page, () => (window.__game.state.gold += 3000));
+  await sleep(450);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 7 · 3.000' }).tap();
+  await sleep(150);
+  const lvl7 = await game(page, () => ({
+    level: window.__game.state.shopLevel,
+    seeds: window.__game.state.storage.leinsamen ?? 0,
+    counters: window.__game.state.counters.length,
+  }));
+  check(lvl7.level === 7 && lvl7.seeds === 1 && lvl7.counters === 5, `Level 7: 1 Leinsamen gratis, Laden bleibt bei 5 Theken (${JSON.stringify(lvl7)})`);
+  const lvl7Text = await page.textContent('#modal-content');
+  check(
+    lvl7Text.includes('Level 7 erreicht') && lvl7Text.includes('Die Heilstube') && lvl7Text.includes('Heilerin Agnes') && lvl7Text.includes('5 Verbände'),
+    'Level-Fenster: Heilerin Agnes möchte 5 Verbände',
+  );
+  check(lvl7Text.includes('0 / 850'), 'Erfahrung für Level 8: 0 / 850');
+  await shot('15c-level-7');
   await page.tap('#modal-close');
   await page.tap('#btn-shop');
   await sleep(80);
@@ -1235,6 +1262,130 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   // Kunden können währenddessen kaufen, deshalb höchstens etwas mehr Gold
   check(right.gold <= goldRight - 1000 + 200 && right.gold >= goldRight - 1000, `Beide Streifen kosten je 500 Gold (${goldRight} → ${right.gold})`);
   await shot('16c-flaeche-rechts-fertig');
+
+  // ---------- Level 7: Beet, Flachsbreche, Webstube (v0.16.0) ----------
+  // Auf der neu gekauften Fläche rechts: säen, reif werden lassen, ernten
+  // (zwei Schritte), Pflanze in die Flachsbreche einlegen.
+  const bx = plotNow.x + plotNow.width + 1;
+  const by = plotNow.y + 1;
+  await game(page, ([x, y]) => {
+    const { camera, TILE } = window.__game;
+    camera.x = (x + 0.5) * TILE - camera.viewWidth / camera.zoom / 2;
+    camera.y = (y + 0.5) * TILE - camera.viewHeight / camera.zoom / 2;
+  }, [bx + 3, by + 2]);
+  await game(page, () => {
+    const s = window.__game.state.storage;
+    s.holzplatte = (s.holzplatte ?? 0) + 20;
+    s.steinplatte = (s.steinplatte ?? 0) + 10;
+    s.zahnradwelle = (s.zahnradwelle ?? 0) + 2;
+    s.holzstab = (s.holzstab ?? 0) + 20;
+    s.raederwerk = (s.raederwerk ?? 0) + 2;
+  });
+  await page.tap('#btn-build');
+  check(
+    !(await page.locator('.build-item[data-tool="beet"]').evaluate((b) => b.classList.contains('locked'))),
+    'Beet in der Bauleiste freigeschaltet (Level 7)',
+  );
+  await buildAt('beet', bx, by);
+  await buildAt('flachsbreche', bx + 4, by);
+  await buildAt('webstube', bx + 4, by + 3);
+  await page.tap('#build-close');
+  await sleep(80);
+  const herbs = await game(page, () =>
+    window.__game.state.buildings.filter((b) => ['beet', 'flachsbreche', 'webstube'].includes(b.type)).map((b) => `${b.type}@${b.x},${b.y}`),
+  );
+  check(
+    herbs.join(' ') === `beet@${bx},${by} flachsbreche@${bx + 4},${by} webstube@${bx + 4},${by + 3}`,
+    `Beet, Flachsbreche und Webstube per Touch gebaut (${herbs.join(', ')})`,
+  );
+  const beetState = () =>
+    game(page, () => {
+      const b = window.__game.state.buildings.find((x) => x.type === 'beet');
+      const st = window.__game.state;
+      return { crop: b.prod.crop, timer: b.prod.timer, seeds: st.storage.leinsamen ?? 0, plants: st.storage.flachspflanze ?? 0, gold: st.gold };
+    });
+  await tapTile(page, bx, by);
+  check((await page.textContent('#info-title')) === 'Beet', 'Beet antippen zeigt Infofenster');
+  await sleep(450);
+  const sowButton = page.locator('#info-actions button', { hasText: '🌱 Säen: Leinsamen' });
+  check((await sowButton.textContent()) === '🌱 Säen: Leinsamen' && (await sowButton.isEnabled()), 'Leeres Beet: „🌱 Säen: Leinsamen“ (aus dem Laden-Lager)');
+  check(!(await page.locator('#info-actions button', { hasText: 'Ernten' }).isVisible()), 'Leeres Beet: kein Ernten-Knopf');
+  await shot('18-beet-leer');
+  await sowButton.tap();
+  await sleep(450);
+  const sown = await beetState();
+  check(sown.crop === 'leinsamen' && sown.seeds === 0, `Gesät: der Leinsamen aus dem Laden-Lager (${JSON.stringify(sown)})`);
+  const growingText = await page.textContent('#info-status');
+  check(growingText.includes('Flachspflanze wächst') && growingText.includes('Reif in etwa'), `Infofenster: wächst, reif in etwa … (${growingText.slice(0, 120)})`);
+  const reapButton = page.locator('#info-actions button', { hasText: 'Ernten' });
+  check((await reapButton.isVisible()) && (await reapButton.isDisabled()), 'Während es wächst: „🌾 Ernten“ gesperrt');
+  check(!(await sowButton.isVisible()), 'Während es wächst: kein Säen-Knopf');
+  // 30 Minuten vorspulen (nur dieses Beet, damit der Rest der Fabrik gleich bleibt)
+  await game(page, () => {
+    window.__game.state.buildings.find((x) => x.type === 'beet').prod.timer = 1799.5;
+    window.__game.simulate(1);
+  });
+  await sleep(500);
+  const ripeText = await page.textContent('#info-status');
+  check(ripeText.includes('Reif – Flachspflanze ernten'), `Nach 30 Minuten reif (${ripeText.slice(0, 80)})`);
+  check(await page.locator('#toast', { hasText: 'Ein Beet ist reif' }).isVisible(), 'Meldung: „Ein Beet ist reif“');
+  check(await reapButton.isEnabled(), 'Reif: „🌾 Ernten: 1 Flachspflanze“');
+  await shot('18b-beet-reif');
+  await reapButton.tap();
+  await sleep(450);
+  const reaped = await beetState();
+  check(reaped.crop === null && reaped.plants === 1, `Geerntet: Flachspflanze im Laden-Lager, Beet leer (${JSON.stringify(reaped)})`);
+  check(
+    (await sowButton.isVisible()) && (await sowButton.textContent()).includes('kauft 1 für 1.000'),
+    'Danach neu säen – ohne Leinsamen im Lager kauft der Knopf einen für 1.000 Gold',
+  );
+  // Flachsbreche: Pflanze einlegen wie einen Holzstamm; kaufen kann man Pflanzen nicht
+  await tapTile(page, bx + 4, by);
+  check((await page.textContent('#info-title')) === 'Flachsbreche', 'Flachsbreche antippen zeigt Infofenster');
+  await sleep(450);
+  const refillButton = page.locator('#info-actions button', { hasText: 'Auffüllen' });
+  check((await refillButton.textContent()) === '⏫ Auffüllen: 1 Flachspflanze', `Auffüllen aus dem Laden-Lager (${await refillButton.textContent()})`);
+  check((await page.locator('#info-actions button', { hasText: 'kaufen' }).count()) === 0, 'Kein Kaufen-Knopf: Flachspflanzen gibt es nicht beim Händler');
+  check((await page.textContent('#info-status')).includes('1 Flachspflanze → 50 Flachsfasern in 10:00 min'), 'Rezept: 1 Flachspflanze → 50 Flachsfasern in 10 Minuten');
+  await refillButton.tap();
+  await sleep(450);
+  const breche = await game(page, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'flachsbreche');
+    return { loaded: b.prod.loaded, plants: window.__game.state.storage.flachspflanze ?? 0 };
+  });
+  check(breche.loaded && breche.plants === 0, `Flachspflanze eingelegt (${JSON.stringify(breche)})`);
+  check(
+    (await refillButton.textContent()) === '⏫ Auffüllen – keine Flachspflanzen im Laden-Lager',
+    `Ohne Pflanzen im Lager: „keine Flachspflanzen im Laden-Lager“ (${await refillButton.textContent()})`,
+  );
+  await shot('18c-flachsbreche');
+  // Webstube: nur eine Einstellung, nichts umzustellen
+  await tapTile(page, bx + 4, by + 3);
+  check((await page.textContent('#info-title')) === 'Webstube', 'Webstube antippen zeigt Infofenster');
+  await sleep(450);
+  const webText = await page.textContent('#info-status');
+  check(webText.includes('5 Flachsfasern → 1 Verband') && webText.includes('Wartet auf Flachsfasern'), `Webstube: 5 Flachsfasern → 1 Verband (${webText.slice(0, 100)})`);
+  check((await page.locator('#info-actions button', { hasText: 'Verbände' }).count()) === 0, 'Webstube: kein Umstellen (nur Verbände)');
+  // Neu säen (kauft einen Leinsamen) – das Beet wächst nachher im Hintergrund weiter
+  await tapTile(page, bx, by);
+  await sleep(450);
+  const goldSow = await game(page, () => (window.__game.state.gold += 1000));
+  await sowButton.tap();
+  await sleep(200);
+  const resown = await beetState();
+  check(
+    resown.crop === 'leinsamen' && resown.gold >= goldSow - 1000 && resown.gold <= goldSow - 1000 + 200,
+    `Neu gesät, Leinsamen für 1.000 Gold gekauft (${goldSow} → ${resown.gold})`,
+  );
+  await page.tap('#info-close');
+  // Händler: Leinsamen ja, Flachspflanze nein
+  await page.tap('#btn-shop');
+  await sleep(80);
+  await page.tap('#modal-content .tab[data-tab="haendler"]');
+  await sleep(120);
+  const traderText = await page.textContent('#modal-content');
+  check(traderText.includes('Leinsamen') && !traderText.includes('Flachspflanze'), 'Händler verkauft Leinsamen, aber keine Flachspflanzen');
+  await page.tap('#modal-close');
   await game(page, (c) => Object.assign(window.__game.camera, c), camLand);
   await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)
   await page.tap('#info-close').catch(() => {});
@@ -1354,7 +1505,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     localStorage.setItem(key, JSON.stringify(data));
     return data.saveVersion;
   });
-  check(backdated === 12, `Spielstand-Version 12 (${backdated})`);
+  check(backdated === 13, `Spielstand-Version 13 (${backdated})`);
   await page2.goto(baseUrl);
   await waitForGame(page2);
   await page2.waitForFunction(() => !window.__game.isCatchingUp(), null, { timeout: 20000 });
@@ -1369,6 +1520,13 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     return (b.prod.loaded ? 1 : 0) + b.prod.queued;
   });
   check(woodAfter === 0, 'Nach über 45 Minuten sind alle 3 Holzstämme verarbeitet');
+  // v0.16.0: Das Beet ist im Hintergrund reif geworden
+  check(loadText.includes('Reif zum Ernten: 1× Beet'), 'Bericht: Reif zum Ernten: 1× Beet');
+  const beetAfter = await game(page2, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'beet');
+    return { crop: b.prod.crop, timer: b.prod.timer };
+  });
+  check(beetAfter.crop === 'leinsamen' && beetAfter.timer === 1800, `Beet im Hintergrund gewachsen (${JSON.stringify(beetAfter)})`);
   await page2.screenshot({ path: path.join(OUT, `${device.name}-17d-willkommen-nach-2-std.png`) });
 
   check(errors.length === 0, `Keine Fehler in der Konsole${errors.length ? ': ' + errors.join(' | ') : ''}`);

@@ -91,6 +91,22 @@ export const LEVELS = {
       { from: 'Torwächter Ulrich', text: 'Die ganze Stadtmauer bekommt Pforten – jede mit Schloss und Gegengewicht.', items: { vorhaengeschloss: 4, gewichtstein: 4 } },
     ],
   },
+  // v0.16.0: Das Kräuter-Kapitel beginnt (Tobias, Chat 11) – wieder einfach,
+  // wie Level 1: Flachs → Fasern → Verbände. Weniger Erfahrung als Level 6,
+  // weil das Kapitel von vorn anfängt.
+  7: {
+    name: 'Die Heilstube',
+    story:
+      'Vor dem neuen Stadttor rasten Reisende, Händler und Wachen – und manche kommen verletzt an. Heilerin Agnes zieht in den Ort und richtet eine Heilstube ein. Was sie braucht, wächst auf dem Feld: Flachs.',
+    cost: 3000,
+    gift: { leinsamen: 1 },
+    quests: [
+      { from: 'Heilerin Agnes', text: 'Ich richte am Stadttor eine Heilstube ein. Für den Anfang brauche ich saubere Verbände.', items: { verband: 5 } },
+      { from: 'Heilerin Agnes', text: 'Aus Flachsfasern zupfe ich weiche Polster für die Wunden.', items: { flachsfaser: 50 } },
+      { from: 'Torwächter Ulrich', text: 'Meine Wachen holen sich beim Üben Schrammen. Die Wachstube soll einen eigenen Vorrat haben.', items: { verband: 15 } },
+      { from: 'Bürgermeisterin Hilde', text: 'Zum Markttag kommen viele Reisende. Agnes braucht einen großen Vorrat.', items: { verband: 20, flachsfaser: 50 } },
+    ],
+  },
 };
 
 export const MAX_LEVEL = Math.max(...Object.keys(LEVELS).map(Number));

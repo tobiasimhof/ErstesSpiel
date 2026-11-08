@@ -17,6 +17,11 @@
 //              sich aus dem Laden-Lager befüllen (src/core/warehouse.js);
 //              den Nachschub von dort gibt es seit v0.14.0 nicht mehr.
 //   shipping – schickt alles ins Laden-Lager
+//   garden   – v0.16.0 (Tobias): Beet. Man sät einen Samen; nach der
+//              Wachszeit ist daraus 1 Pflanze geworden, die man erntet (sie
+//              kommt ins Laden-Lager). Säen und Ernten sind zwei Schritte.
+//              Kein Anschluss ans Band. Im Beet wächst jede Pflanze: crops
+//              sagt, welcher Samen welche Pflanze in welcher Zeit ergibt.
 // Alle Zahlen sind Platzhalter. Maschinen sind 2 × 2 (README, Abschnitt 4.2).
 
 export const BUILDINGS = {
@@ -151,6 +156,48 @@ export const BUILDINGS = {
     ],
     production: { kind: 'workshop', recipes: ['gewichtstein', 'uhrwerk', 'vorhaengeschloss'] },
   },
+  // v0.16.0: Kräuter-Kapitel, Level 7 „Die Heilstube“ (Tobias, Chat 11) –
+  // aufgebaut wie Level 1: Beet (wie der Händler-Rohstoff), Flachsbreche (wie
+  // das Holzfällerlager), Webstube (wie das Sägewerk). Die Baukosten kommen aus
+  // Waren von Level 1–6, damit diese ihren Wert behalten.
+  beet: {
+    level: 7,
+    name: 'Beet',
+    cost: { holzplatte: 10, steinplatte: 10 },
+    icon: '🌱',
+    size: [2, 2],
+    color: '#6b4a2e',
+    description:
+      'Hier wächst aus einem Samen eine Pflanze. Säen, warten, bis sie reif ist (🌾), dann ernten – die Pflanze kommt ins Laden-Lager. Kein Anschluss ans Band.',
+    ports: [],
+    production: { kind: 'garden', crops: { leinsamen: { plant: 'flachspflanze', time: 1800 } } },
+  },
+  flachsbreche: {
+    level: 7,
+    name: 'Flachsbreche',
+    cost: { holzplatte: 10, zahnradwelle: 2 },
+    icon: '🪢',
+    size: [2, 2],
+    color: '#8a7a3e',
+    description:
+      'Bricht Flachspflanzen nach und nach zu je 50 Flachsfasern. Bis zu 3 Flachspflanzen passen hinein. Die Fasern kommen am orangen Pfeil heraus.',
+    ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
+    production: { kind: 'source', input: 'flachspflanze', output: 'flachsfaser', amount: 50, duration: 600, capacity: 3 },
+  },
+  webstube: {
+    level: 7,
+    name: 'Webstube',
+    cost: { holzstab: 20, raederwerk: 2 },
+    icon: '🧵',
+    size: [2, 2],
+    color: '#7f6a8f',
+    description: 'Webt aus je 5 Flachsfasern einen Verband. Flachsfasern kommen am blauen Pfeil hinein.',
+    ports: [
+      { kind: 'in', x: 0, y: 0, side: 'W' },
+      { kind: 'out', x: 1, y: 0, side: 'E' },
+    ],
+    production: { kind: 'workshop', recipes: ['verband'] },
+  },
   lagerhaus: {
     level: 1,
     name: 'Lagerhaus',
@@ -191,6 +238,9 @@ export const BUILD_MENU = [
   'zimmerei',
   'feinschmiede',
   'schlosserei',
+  'beet',
+  'flachsbreche',
+  'webstube',
   'lagerhaus',
   'versandportal',
 ];

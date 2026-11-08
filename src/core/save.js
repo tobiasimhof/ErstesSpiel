@@ -31,6 +31,9 @@
 //               Schmelzhütte merken sich wartende Rohstoffe (prod.queued).
 //               Den Nachschub der Lagerhäuser gibt es nicht mehr (prod.supply
 //               fällt weg; was im Lagerhaus liegt, bleibt).
+//  13 (v0.16.0): Kräuter-Kapitel, Level 7 – Beete (prod.crop, prod.timer),
+//               neue Waren und Gebäude. Bestehende Spielstände bleiben
+//               unverändert.
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
@@ -46,7 +49,7 @@ import { createQuestState } from './quests.js';
 import { addAllToStorage, counterSizeFor, fitCounters } from './shop.js';
 import { START_PLOT, WORLD, parseTileKey } from './state.js';
 
-export const SAVE_VERSION = 12;
+export const SAVE_VERSION = 13;
 
 // v0.13.0 (Tobias): Namen, die zu den Zutaten passen. Rezepte und Werte bleiben.
 const RENAMED_V11 = {
@@ -414,6 +417,10 @@ function isValidProduction(b) {
       );
     case 'shipping':
       return isCount(prod.shipped);
+    case 'garden':
+      // v0.16.0: leer (crop null, timer 0) oder ein Samen, der wächst
+      if (prod.crop === null) return prod.timer === 0;
+      return typeof prod.crop === 'string' && Boolean(p.crops[prod.crop]) && isNum(prod.timer) && prod.timer >= 0 && prod.timer <= p.crops[prod.crop].time;
     default:
       return true;
   }

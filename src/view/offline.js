@@ -40,7 +40,8 @@ export function createOfflineView({ panels }) {
   // Waren mit Bild: „[Bild] 120 Holzplatten“
   function goodsList(counts) {
     const list = el('div', 'away-goods');
-    const sorted = Object.entries(counts).sort((a, b) => b[1] * ITEMS[b[0]].price - a[1] * ITEMS[a[0]].price);
+    const worth = ([type, n]) => n * (ITEMS[type].price ?? 0);
+    const sorted = Object.entries(counts).sort((a, b) => worth(b) - worth(a));
     for (const [type, n] of sorted) {
       const chip = el('span', 'away-good');
       chip.append(createItemIcon(type, 22), el('span', null, itemCount(type, n)));
@@ -78,6 +79,8 @@ export function createOfflineView({ panels }) {
       if (Object.keys(report.emptied).length > 0) {
         row('🪵', `Leer gelaufen: ${buildingsText(report.emptied)}. Tippe sie an und lege mit „⏫ Auffüllen“ nach.`);
       }
+      // v0.16.0: reife Beete warten aufs Ernten
+      if (report.ripe > 0) row('🌾', `Reif zum Ernten: ${report.ripe}× Beet. ${report.ripe === 1 ? 'Tippe es' : 'Tippe sie'} an und ernte – dann neu säen.`);
       if (report.storageFull) row('⚠️', 'Das Laden-Lager ist voll – die Fabrik staut sich. Verkaufe oder verbaue Waren.');
       if (report.countersEmpty) row('🧺', 'Alle Theken sind leer verkauft – stelle neue Waren hin.');
       if (report.running) row('⚙️', 'Die Fabrik arbeitet noch.');
@@ -115,6 +118,7 @@ export function createOfflineView({ panels }) {
       if (stored > 0) parts.push(`${numberFormat.format(stored)} ${stored === 1 ? 'Ware' : 'Waren'} ins Laden-Lager`);
       const emptied = sum(report.emptied);
       if (emptied > 0) parts.push(`${emptied} ${emptied === 1 ? 'Rohstoff-Gebäude ist' : 'Rohstoff-Gebäude sind'} leer`);
+      if (report.ripe > 0) parts.push(`${report.ripe} ${report.ripe === 1 ? 'Beet ist' : 'Beete sind'} reif`);
       if (parts.length === 0) return null;
       panels.toast(`Du warst ${durationText(report.seconds)} weg – deine Fabrik lief weiter: ${parts.join(', ')}.`, 5000);
       return 'toast';

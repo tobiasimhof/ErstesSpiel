@@ -25,6 +25,9 @@ export function createProductionState(type) {
       return { slots: [], blocked: false };
     case 'shipping':
       return { shipped: 0, blocked: false };
+    case 'garden':
+      // v0.16.0: crop = gesäter Samen (oder null), timer = so lange wächst er schon
+      return { crop: null, timer: 0, blocked: false };
     default:
       return { blocked: false };
   }
@@ -136,7 +139,81 @@ export function updateProduction(state, building, dt) {
         countProduced(state, recipe.output, recipe.amount);
       }
     }
+  } else if (p?.kind === 'garden') {
+    // v0.16.0: Die Pflanze wächst, bis sie reif ist – dann wartet sie aufs Ernten.
+    const crop = gardenCrop(building);
+    if (crop && prod.timer < crop.time) {
+      prod.timer = Math.min(crop.time, prod.timer + dt);
+      // Viele kleine Takte addieren sich nicht ganz genau – reif ist reif.
+      if (crop.time - prod.timer < 1e-6) prod.timer = crop.time;
+    }
   }
+}
+
+// ---------- Beet (v0.16.0, Tobias: 1 Samen = 1 Pflanze, säen und ernten) ----------
+
+// Was im Beet wächst: { seed, plant, time } oder null, wenn es leer ist.
+export function gardenCrop(building) {
+  const p = productionOf(building.type);
+  const seed = building.prod?.crop;
+  if (p?.kind !== 'garden' || !seed || !p.crops[seed]) return null;
+  return { seed, ...p.crops[seed] };
+}
+
+// Samen, die in diesem Beet wachsen können (in der Reihenfolge der Tabelle).
+export function gardenSeeds(type) {
+  const p = productionOf(type);
+  return p?.kind === 'garden' ? Object.keys(p.crops) : [];
+}
+
+export function isRipe(building) {
+  const crop = gardenCrop(building);
+  return Boolean(crop) && building.prod.timer >= crop.time;
+}
+
+// Wachstum 0..1 (oder null, wenn nichts wächst).
+export function growth(building) {
+  const crop = gardenCrop(building);
+  return crop ? Math.min(1, building.prod.timer / crop.time) : null;
+}
+
+// So viele Sekunden noch, bis die Pflanze reif ist.
+export function growthLeft(building) {
+  const crop = gardenCrop(building);
+  return crop ? Math.max(0, crop.time - building.prod.timer) : 0;
+}
+
+// Sät einen Samen in ein leeres Beet, ohne ihn aus dem Laden-Lager zu nehmen
+// (z. B. direkt beim Händler gekauft).
+export function plantSeed(building, seed) {
+  const p = productionOf(building.type);
+  if (p?.kind !== 'garden' || !p.crops[seed] || building.prod.crop) return false;
+  building.prod.crop = seed;
+  building.prod.timer = 0;
+  return true;
+}
+
+// Sät einen Samen aus dem Laden-Lager.
+export function sowFromStorage(state, building, seed) {
+  const p = productionOf(building.type);
+  if (p?.kind !== 'garden' || !p.crops[seed] || building.prod.crop) return false;
+  if (!takeFromStorage(state, seed, 1)) return false;
+  return plantSeed(building, seed);
+}
+
+// Erntet die reife Pflanze ins Laden-Lager. Danach ist das Beet leer und man
+// sät neu (zwei getrennte Schritte, Tobias). Ergebnis: 'ok' | 'unripe' |
+// 'full' (Laden-Lager voll) | 'invalid'.
+export function harvest(state, building) {
+  const crop = gardenCrop(building);
+  if (!crop) return 'invalid';
+  if (!isRipe(building)) return 'unripe';
+  if (storageFree(state) < 1) return 'full';
+  addToStorage(state, crop.plant, 1);
+  countProduced(state, crop.plant, 1);
+  building.prod.crop = null;
+  building.prod.timer = 0;
+  return 'ok';
 }
 
 function hasInputs(prod, recipe) {
@@ -295,12 +372,19 @@ export function buildingContents(building) {
     if (prod.busy) for (const [type, n] of Object.entries(RECIPES[prod.recipe].inputs)) add(type, n);
   } else if (p?.kind === 'storage') {
     for (const slot of prod.slots) add(slot.type, slot.count);
+  } else if (p?.kind === 'garden') {
+    // v0.16.0: Eine reife Pflanze kommt mit, ein gerade gesäter Samen auch;
+    // eine halb gewachsene Pflanze geht verloren (wie ein angefangener Holzstamm).
+    const crop = gardenCrop(building);
+    if (crop && isRipe(building)) add(crop.plant, 1);
+    else if (crop && prod.timer === 0) add(crop.seed, 1);
   }
   return contents;
 }
 
 export function losesWorkOnRemove(building) {
   const p = productionOf(building.type);
+  if (p?.kind === 'garden') return Boolean(gardenCrop(building)) && building.prod.timer > 0 && !isRipe(building);
   return p?.kind === 'source' && building.prod.loaded && building.prod.remaining < p.amount;
 }
 
@@ -350,6 +434,12 @@ export function buildingStatus(state, building) {
     if (storageFree(state) <= 0) return { level: 'blocked', text: 'Laden-Lager voll.' };
     return { level: 'work', text: 'Bereit zum Versenden.' };
   }
+  if (p?.kind === 'garden') {
+    const crop = gardenCrop(building);
+    if (!crop) return { level: 'idle', text: 'Leer – Samen säen.' };
+    if (isRipe(building)) return { level: 'idle', text: `Reif – ${ITEMS[crop.plant].name} ernten.` };
+    return { level: 'work', text: `${ITEMS[crop.plant].name} wächst.` };
+  }
   return { level: 'idle', text: '' };
 }
 
@@ -364,6 +454,7 @@ export function buildingProgress(building) {
   const prod = building.prod;
   if (p?.kind === 'source' && prod.loaded) return prod.remaining / p.amount;
   if (p?.kind === 'workshop' && prod.busy) return Math.min(1, prod.timer / RECIPES[prod.recipe].time);
+  if (p?.kind === 'garden') return growth(building);
   return null;
 }
 

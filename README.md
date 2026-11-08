@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.15.1 – Plan für Level 7 „Die Heilstube“ (nur README) |
-| **Phase** | M2 – Produktionsketten |
+| **Aktuelle Version** | v0.16.0 – Beet und Level 7 „Die Heilstube“ |
+| **Phase** | M2 – Produktionsketten (Kräuter-Kapitel ab Level 7) |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias liest den **Plan für v0.16.0 – Beet und Level 7 „Die Heilstube“** (Abschnitt 6) und gibt ihn frei oder ändert Zahlen und Namen. Danach programmiert Claude v0.16.0; Level 8–12 folgen häppchenweise (Abschnitt 4.4) |
+| **Nächster Schritt** | Tobias testet v0.16.0 (mit dem Test-Knopf die Stadttor-Aufträge erledigen, auf Level 7 aufsteigen, Beete säen und ernten, Flachsbreche und Webstube; Punkte unter „Was Tobias testet“ in Abschnitt 6) und schreibt das Feedback in einen **neuen Chat**. Danach planen wir **Level 8** (Ringelblume und die erste Maschine mit 2 Eingängen, Abschnitt 4.4) |
 
 ---
 
@@ -111,6 +111,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Umbauen ist leicht und günstig** (verschieben, drehen, abreißen mit Rückerstattung), weil man sich ständig an den Markt anpasst. Das gilt für alle Gebäude, auch die Startgebäude, damit man den Schwerpunkt der Fabrik jederzeit neu setzen kann.
 - **Bereiche umbauen (seit v0.11.0, Wunsch von Tobias):** Mit dem Werkzeug „✥ Verschieben“ in der Bauleiste markiert man einen Bereich (Rechteck ziehen oder ein Teil antippen). Alles darin – Bänder, Maschinen, Lager, Portale; auch Gebäude, die nur zum Teil im Rechteck liegen – lässt sich auf einmal verschieben, um 90° drehen oder abreißen. Innerhalb der Gruppe bleibt alles verbunden, Waren ziehen mit um, die Fabrik läuft sofort weiter. So setzt man z. B. eine ganze Eisen-Linie in eine andere Ecke, ohne ein Band neu zu legen.
 - **Taste R (seit v0.11.0):** Mit angeschlossener Tastatur dreht R die Vorschau beim Bauen und Verschieben, sonst das angetippte Gebäude oder Band.
+- **Beet (seit v0.16.0, Tobias):** 2 × 2, ohne Anschluss ans Band. Man **sät** einen Samen (aus dem Laden-Lager; liegt keiner da, kauft „🌱 Säen“ ihn direkt beim Händler), die Pflanze wächst sichtbar in Stufen (**30 Minuten** für Flachs), dann erscheint 🌾 und man **erntet** sie – sie kommt ins Laden-Lager. Säen und Ernten sind zwei getrennte Schritte. 1 Samen = 1 Pflanze. Im Beet wächst jede Pflanze (ab Level 8 auch Ringelblumen). Die geerntete Flachspflanze legt man wie einen Holzstamm in die **Flachsbreche** (1 Pflanze → 50 Flachsfasern in 10 Minuten, Vorrat 3); die **Webstube** macht aus je 5 Fasern 1 Verband.
 - **Bauen geht sofort**, sofern man die Waren dafür hat. Es gibt keine Bauzeiten.
 - **Bauen kostet Waren statt Gold** (Tobias, v0.7.0): z. B. Förderband 1 Holzblock, Sägewerk 40 Holzblöcke. Die Waren kommen aus dem Laden-Lager. So muss man abwägen: verkaufen oder damit eine weitere Maschine bauen? Abreißen gibt die bezahlten Waren zurück; Verschieben und Drehen sind kostenlos. Tabelle in Abschnitt 4.2.
 
@@ -135,6 +136,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Einführung bis etwa Level 10 (Tobias):** Die ersten Level konzentrieren sich darauf, eine coole Produktionsstätte aufzubauen. Man kommt mit jedem Level ein Stück weiter und lernt nach und nach alles kennen; bis etwa Level 10 ist sozusagen das „Intro“ abgeschlossen.
 - **Aufträge, Erfahrung und Gold (seit v0.13.0, Modell von Tobias):** Im Level-Fenster (oben auf „Laden-Level“ tippen) steht im Reiter „📜 Aufträge“ immer **genau ein Auftrag** eines Bewohners, z. B. „Müllerin Grete: Für das Mahlwerk brauche ich Räderwerke – 4 Räderwerke“. **„✓ Abgeben“** nimmt die Waren aus dem Laden-Lager und gibt **Erfahrung (XP)** und **Gold** – Gold genau so viel, wie die Waren an der Theke bringen (nicht mehr: Man macht die Aufträge wegen der Erfahrung, der Ladenverkauf bleibt im Vordergrund). Dann kommt der nächste Auftrag; **2–5 Aufträge je Level**, überspringen geht nicht. Die Erfahrung aller Aufträge eines Levels reicht genau für den Aufstieg; **aufsteigen kostet dann Gold** (Level 2: 100, Level 3: 250, Level 4: 500, Level 5: 1.000, Level 6: 2.000). Danach braucht man Bauteile für die neuen Maschinen. So bleibt alles schlüssig: Erfahrung schaltet frei, Gold kauft das Level, Waren bauen die Maschinen. Die Stückzahlen sind so gewählt, dass man ab Level 4 auf Masse gehen muss (z. B. 8 Räderwerke + 4 Zahnradwellen). Eine Erfahrungsleiste steht im Level-Fenster und klein im Knopf „Laden-Level“; ein ❗ dort heißt: Der Auftrag lässt sich abgeben. Tabelle aller Aufträge in Abschnitt 3.8.
 - **Test-Knopf (seit v0.15.0, Wunsch von Tobias):** Unter dem Auftrag steht im Prototyp immer **„🧪 Test: Auftrag erledigen“**. Er wertet den Auftrag als erledigt und gibt die Erfahrung, nimmt aber keine Waren und gibt kein Gold – so lässt sich die Spielmechanik testen, ohne die Wirtschaft zu verfälschen. Aufsteigen kostet weiter Gold. Vor v1.0 fliegt der Knopf wieder raus (eine Zeile in `data/levels.js`: `QUEST_TEST_SKIP`).
+- **Level 7 „Die Heilstube“ (seit v0.16.0):** Das Kräuter-Kapitel beginnt wieder einfach – Beet, Flachsbreche, Webstube, Leinsamen beim Händler; Aufstieg 3.000 Gold, Geschenk 1 Leinsamen, der Laden bleibt wie auf Level 6. Plan für Level 8–12 in Abschnitt 4.4.
 - **Idee für später (Tobias, noch offen):** Mit Erfahrung Verbesserungen freischalten, z. B. schneller Holz verarbeiten oder schnellere Förderbänder (offene Frage 15).
 - **Laden-Ausbau** geht sofort, kostet aber Gold **und** Waren, z. B. 200 Holzzahnräder + 200 Splitt + 500 Gold. So muss man ständig Neues produzieren, und das Produzieren ersetzt das Warten.
 - **Fläche kaufen:** Das Grundstück wird stückweise mit Gold erweitert (seit v0.9.0 im Spiel). Seit v0.10.2 zum festen Preis (500 Gold für 4 Reihen, jede Seite 2×), damit man am Anfang gut skalieren kann und nicht am Platz scheitert (Tobias). Ob es später mehr Fläche gibt, z. B. mit Level oder Aufgaben, entscheiden wir mit den Aufgaben.
@@ -143,7 +145,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 ### 3.6 Zeit
 
 - Das Spiel läuft in Echtzeit. **Seit v0.14.0 produziert die Fabrik weiter, auch wenn das Spiel geschlossen oder die App im Hintergrund ist.**
-- **Wie Clash of Clans, nur umgekehrt (Tobias):** Dort laufen die Sammler voll und man leert sie; bei uns läuft alles, bis es leer ist, und man füllt nach. Holz, Stein und Eisen legt man immer von Hand nach (bis zu 3 je Gebäude, „⏫ Auffüllen“), Lagerhäuser befüllt man von Hand; die Produktion selbst läuft automatisch weiter – vom Holzfäller über Bänder und Maschinen bis zur letzten Maschine, die nichts mehr zu tun hat.
+- **Wie Clash of Clans, nur umgekehrt (Tobias):** Dort laufen die Sammler voll und man leert sie; bei uns läuft alles, bis es leer ist, und man füllt nach. Holz, Stein und Eisen legt man immer von Hand nach (bis zu 3 je Gebäude, „⏫ Auffüllen“), Lagerhäuser befüllt man von Hand, Beete sät und erntet man von Hand (seit v0.16.0: sie wachsen im Hintergrund weiter, die reife Pflanze wartet aufs Ernten, „Willkommen zurück“ nennt reife Beete); die Produktion selbst läuft automatisch weiter – vom Holzfäller über Bänder und Maschinen bis zur letzten Maschine, die nichts mehr zu tun hat.
 - **Was weiterläuft:** Rohstoff-Gebäude, bis ihr Vorrat verarbeitet ist; Maschinen, bis ihnen Zutaten fehlen; Lagerhäuser, bis sie leer sind; das Versandportal, bis das Laden-Lager voll ist; Kunden kaufen an den Theken, bis sie leer sind. Ein zusätzliches Zeitlimit gibt es nicht.
 - **Beim Zurückkommen** rechnet das Spiel die verpasste Zeit nach (genau wie im laufenden Spiel). Nach mehr als 1 Minute erscheint eine kurze Meldung, nach mehr als 10 Minuten das Fenster **„👋 Willkommen zurück!“**: wie lange man weg war, was Kunden gekauft haben, was ins Laden-Lager kam, welche Gebäude leer gelaufen sind, ob das Laden-Lager voll oder alle Theken leer sind.
 - Leere Rohstoff-Gebäude, leere Theken und ein volles Laden-Lager sind der Anreiz, regelmäßig reinzuschauen.
@@ -170,9 +172,9 @@ Rahmen von Claude, von Tobias angenommen („gefällt mir sehr gut“). Namen de
 | 4 | Die Mühle am Fluss | Müllerin Grete: 2 Zahnradwellen · Grete: 4 Räderwerke (Mahlwerk) · Grete: 2 Verstärkte Holzplatten (Mühlentür) · Hilde: 8 Räderwerke + 4 Zahnradwellen (zweite Mühle) | 714 | 500 Gold |
 | 5 | Der Markt | Händlerin Marta: 2 Scharniere (Klappen der Stände) · Marta: 2 Schlüssel (Kassen) · Baumeister Anton: 1 Zirkel (Marktplatz vermessen) · Marta: 3 Scharniere + 3 Schlüssel (Markttag) | 1.495 | 1.000 Gold |
 | 6 | Das Stadttor | Torwächter Ulrich: 4 Gewichtsteine (Gegengewichte der Zugbrücke) · Ulrich: 2 Vorhängeschlösser (Tor) · Hilde: 2 Uhrwerke (Torturm) · Ulrich: 4 Vorhängeschlösser + 4 Gewichtsteine (Pforten der Stadtmauer) | 1.841 | 2.000 Gold |
-| 7 *(geplant, v0.16.0)* | Die Heilstube | Heilerin Agnes: 5 Verbände · Agnes: 50 Flachsfasern (Wundpolster) · Torwächter Ulrich: 15 Verbände (Wachstube) · Hilde: 20 Verbände + 50 Flachsfasern (Markttag) | 850 (sammelt sich bis Level 8) | 3.000 Gold |
+| 7 | Die Heilstube | Heilerin Agnes: 5 Verbände · Agnes: 50 Flachsfasern (Wundpolster) · Torwächter Ulrich: 15 Verbände (Wachstube) · Hilde: 20 Verbände + 50 Flachsfasern (Markttag) | 850 (sammelt sich bis Level 8) | 3.000 Gold |
 
-Der Reiter „🏘️ Ort & Level“ im Level-Fenster zeigt alle Bauabschnitte mit dem, was sie freischalten. Level 7 ist geplant (v0.16.0, Abschnitt 6); Level 8–12 folgen häppchenweise (Abschnitt 4.4).
+Der Reiter „🏘️ Ort & Level“ im Level-Fenster zeigt alle Bauabschnitte mit dem, was sie freischalten. Level 7 ist seit v0.16.0 im Spiel; Level 8–12 folgen häppchenweise (Abschnitt 4.4).
 
 ---
 
@@ -233,6 +235,9 @@ Von Tobias bestätigt (Chat 3, Teil 2). Mengen, Zeiten und Preise hat Claude vor
 | Zimmerei (Kombi, seit v0.10.0) | 2 × 2 | Zahnradwelle · Räderwerk · Verstärkte Holzplatte | Level 4 |
 | Feinschmiede (Kombi, seit v0.10.0) | 2 × 2 | Scharnier · Schlüssel · Zirkel | Level 5 |
 | Schlosserei (Kombi, seit v0.10.0) | 2 × 2 | Gewichtstein · Uhrwerk · Vorhängeschloss | Level 6 |
+| Beet (seit v0.16.0) | 2 × 2, kein Band | 1 Leinsamen → 1 Flachspflanze in 30 Minuten; säen und ernten von Hand | Level 7 |
+| Flachsbreche (seit v0.16.0) | 2 × 2 | 1 Flachspflanze → 50 Flachsfasern in 10 Minuten; Vorrat 3 | Level 7 |
+| Webstube (seit v0.16.0) | 2 × 2 | Verband (5 Flachsfasern → 1) | Level 7 |
 | Lagerhaus | 2 × 1 | Zwischenlager, 3 × 50; seit v0.12.0 von Hand aus dem Laden-Lager befüllen (Nachschub nur bis v0.13.0) | Level 1 |
 | Versandportal | 1 × 1 | schickt Waren ins Laden-Lager | Level 1 |
 | Förderband | 1 × 1 | transportiert | Level 1 |
@@ -278,12 +283,16 @@ Verstärkte Holzplatte und Scharnier heißen weiter so.
 | Gewichtstein | Schlosserei: 10 Steinplatten + 5 Eisenstangen | 20 s | 648 (Zutaten 540) |
 | Uhrwerk | Schlosserei: 1 Zahnradwelle + 1 Räderwerk | 30 s | 778 (Zutaten 648) |
 | Vorhängeschloss | Schlosserei: 1 Scharnier + 1 Räderwerk | 30 s | 1.944 (Zutaten 1.620) |
+| Leinsamen (seit v0.16.0) | beim Händler kaufen | – | 1.000 (Kauf) |
+| Flachspflanze | Beet: 1 Leinsamen | 30 min | – (nicht verkäuflich, wird eingelegt) |
+| Flachsfaser | Flachsbreche: 1 Flachspflanze → 50 | 12 s je Faser | 25 (50 Stück = 1.250) |
+| Verband | Webstube: 5 Flachsfasern → 1 | 10 s | 150 (10 Stück = 1.500) |
 
 **Eisenstange statt Eisennägel (v0.8.0):** Bis v0.7.1 machte die Schmiede aus 5 Barren 5 Nägel zu je 14 Gold. Tobias fiel beim Spielen auf, dass dadurch extrem viele Nägel entstehen (100–140 im Lager, von allem anderen etwa 20), und an der Theke brachten 20 Nägel nur 280 Gold. Jetzt läuft die Schmiede wie Sägewerk und Steinmetz: 5 : 1. Nägel können später als eigene Stufe zurückkommen (z. B. 1 Eisenstange → mehrere Nägel).
 
 **Steinkette (seit v0.13.0 Gewichtstein) aus Steinplatten (v0.10.0):** Sonst bräuchte kein Kombi-Rezept die Steinplatte. So wird jedes der 6 Grundteile gebraucht; Eisen etwas mehr als Holz und Stein, weil es auch mehr bringt.
 
-**Freischalten nach Laden-Level** (von Tobias bestätigt): Level 1 Holz, Level 2 Stein, Level 3 Eisen, Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei (seit v0.10.0 je Level eine Kombi-Maschine). Seit v0.13.0 braucht der Aufstieg Erfahrung aus Aufträgen und kostet Gold (Abschnitt 3.5 und 3.8). Den ersten Rohstoff jeder Sorte gibt es gratis: den ersten Holzstamm zum Spielstart, den ersten Felsbrocken beim Erreichen von Level 2, das erste Eisenerz bei Level 3; ab Level 4 gibt es bei jedem Aufstieg 1 Eisenerz (einen vierten Rohstoff gibt es nicht).
+**Freischalten nach Laden-Level** (von Tobias bestätigt): Level 1 Holz, Level 2 Stein, Level 3 Eisen, Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei (seit v0.10.0 je Level eine Kombi-Maschine). Seit v0.13.0 braucht der Aufstieg Erfahrung aus Aufträgen und kostet Gold (Abschnitt 3.5 und 3.8). Den ersten Rohstoff jeder Sorte gibt es gratis: den ersten Holzstamm zum Spielstart, den ersten Felsbrocken beim Erreichen von Level 2, das erste Eisenerz bei Level 3; ab Level 4 gibt es bei jedem Aufstieg 1 Eisenerz (einen vierten Rohstoff gibt es nicht). Seit v0.16.0: Level 7 Beet, Flachsbreche, Webstube und Leinsamen beim Händler; Geschenk 1 Leinsamen.
 
 **Baukosten** (seit v0.7.0, Platzhalter; Tobias: „erstmal spielen und schauen, ob es nicht zu lange dauert“):
 
@@ -301,12 +310,15 @@ Verstärkte Holzplatte und Scharnier heißen weiter so.
 | Zimmerei (v0.10.0) | 20 Holzplatten + 10 Eisenstangen | 1.080 Gold |
 | Feinschmiede (v0.10.0) | 10 Eisenbleche + 2 Räderwerke | 1.368 Gold |
 | Schlosserei (v0.10.0) | 1 Scharnier + 2 Verstärkte Holzplatten | 2.592 Gold |
+| Beet (v0.16.0) | 10 Holzplatten + 10 Steinplatten | 360 Gold |
+| Flachsbreche (v0.16.0) | 10 Holzplatten + 2 Zahnradwellen | 828 Gold |
+| Webstube (v0.16.0) | 20 Holzstäbe + 2 Räderwerke | 1.008 Gold |
 
-Das Sägewerk kostet nur Holzblöcke, damit die erste Maschine ohne Platten baubar ist. Für Stein braucht man Holzteile, für Eisen Steinteile, für die Kombi-Maschinen Teile aus den vorigen – so behalten frühere Waren ihren Wert. Kein Gebäude kostet mehr, als ein Rohstoff seines Levels als Teile einbringt (Holz und Stein 720 Gold, Eisen und ab Level 4: 2.880 Gold; ein Test prüft das). Eine Level-4-bis-6-Maschine kostet also höchstens etwa eine Runde Eisen.
+Das Sägewerk kostet nur Holzblöcke, damit die erste Maschine ohne Platten baubar ist. Für Stein braucht man Holzteile, für Eisen Steinteile, für die Kombi-Maschinen Teile aus den vorigen – so behalten frühere Waren ihren Wert. Kein Gebäude kostet mehr, als ein Rohstoff seines Levels als Teile einbringt (Holz und Stein 720 Gold, Eisen und ab Level 4: 2.880 Gold; ein Test prüft das). Eine Level-4-bis-6-Maschine kostet also höchstens etwa eine Runde Eisen. Die Gebäude von Level 7 kosten höchstens, was ein Leinsamen einbringt (1.500 Gold).
 
 **Holzwinkel und Splitt** fliegen raus (vielleicht kommen sie später wieder). Vorhandene im Spielstand werden umgewandelt: Holzwinkel → Holzplatte, Splitt → Stein-Zahnrad.
 
-### 4.3 Im Spiel (Stand v0.14.0)
+### 4.3 Im Spiel (Stand v0.16.0)
 
 | Stufe | Ware | Woher | Rezept |
 |---|---|---|---|
@@ -320,6 +332,10 @@ Das Sägewerk kostet nur Holzblöcke, damit die erste Maschine ohne Platten baub
 | 3 | Gewichtstein | Schlosserei (ab Level 6), Einstellung „Gewichte“ | 10 Steinplatten + 5 Eisenstangen (20 Sekunden) |
 | 4 | Zirkel | Feinschmiede | 1 Scharnier + 5 Eisenstangen (30 Sekunden) |
 | 4 | Uhrwerk / Vorhängeschloss | Schlosserei | 1 Zahnradwelle bzw. 1 Scharnier + 1 Räderwerk (30 Sekunden) |
+| *Kräuter* 0 | Leinsamen (ab Level 7) | Händler (1.000 Gold); 1 gratis beim Aufstieg auf Level 7 | – |
+| *Kräuter* 1 | Flachspflanze | Beet (säen, ernten) | 1 Leinsamen → 1 Pflanze in 30 Minuten |
+| *Kräuter* 2 | Flachsfaser | Flachsbreche (bis zu 3 Pflanzen als Vorrat) | 1 Flachspflanze → 50 Fasern in 10 Minuten |
+| *Kräuter* 3 | Verband | Webstube | 5 Flachsfasern → 1 Verband (10 Sekunden) |
 
 Genaue Rezepte und Werte: Abschnitt 4.2.
 
@@ -331,8 +347,8 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 
 | Level | Inhalt (Tobias) | Stand |
 |---|---|---|
-| 7 | **Flachs** (Tobias' Wahl nach Claudes Vorschlag, statt Farn oder Hanf) → **Fasern** → **Verbände** – wieder ganz einfach, als Grundlage (wie Level 1 mit Holz): Beet, Flachsbreche, Webstube | Plan steht (v0.16.0, Abschnitt 6), wartet auf Freigabe |
-| 8 | **Ringelblume** als zweite Pflanze im selben Beet; die erste Maschine mit 2 Eingängen (Faser bzw. Verband + Kraut) → erster **Heilverband** (wie Level 2) | planen nach v0.16.0 |
+| 7 | **Flachs** (Tobias' Wahl nach Claudes Vorschlag, statt Farn oder Hanf) → **Fasern** → **Verbände** – wieder ganz einfach, als Grundlage (wie Level 1 mit Holz): Beet, Flachsbreche, Webstube | ✅ im Spiel (v0.16.0) |
+| 8 | **Ringelblume** als zweite Pflanze im selben Beet; die erste Maschine mit 2 Eingängen (Faser bzw. Verband + Kraut) → erster **Heilverband** (wie Level 2) | als Nächstes planen (nach Tobias' Test von v0.16.0) |
 | 9 | eine **dritte Pflanze** (Claudes Idee: Schafgarbe, das Wundkraut des Mittelalters) und der nächste Schritt, z. B. eine zweite Verbands-Version (wie Level 3) | später |
 | 10 | Jetzt hat man **Fasern + 3 Pflanzen** – wie Holz, Stein und Eisen im Werkzeug-Kapitel. Wie Level 4: mehr investieren, auf Masse gehen | später |
 | 11–12 | die Pflanzen **weiter kombinieren** (wie Level 5–6), Abschluss des Kräuter-Kapitels | später |
@@ -412,12 +428,12 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/core/buildings.js` | Gebäude bauen, verschieben, drehen, abreißen, freie Stelle suchen |
 | `src/core/belts.js` | Förderbänder legen, aufteilen, zusammenführen, drehen, abreißen; Strecke finden und leeren, Zulauf leeren (v0.12.0) |
 | `src/core/area.js` | Bereich markieren und alles darin verschieben, drehen oder abreißen (v0.11.0) |
-| `src/core/production.js` | Was Gebäude tun: einlegen, herstellen, zwischenlagern, versenden, Status |
+| `src/core/production.js` | Was Gebäude tun: einlegen, herstellen, zwischenlagern, versenden, wachsen lassen (Beet: säen, ernten, v0.16.0), Status |
 | `src/core/warehouse.js` | Lagerhaus und Laden-Lager (v0.12.0): befüllen, ausräumen (Nachschub seit v0.14.0 entfernt) |
 | `src/core/offline.js` | Spiel im Hintergrund (v0.14.0): verpasste Zeit nachrechnen (in Portionen, Stillstand erkennen, dann nur Kunden), Bericht „Willkommen zurück“ |
 | `src/core/sim.js` | Simulation in festen Takten: Waren auf Bändern, Stau, Aufteilen, Zusammenführen |
 | `src/core/shop.js` | Laden-Lager, Baukosten bezahlen und zurückgeben |
-| `src/core/market.js` | Handel: Händler, Theken, Kunden (mit eigenem Zufall im Spielstand), Pleiteschutz, Testpaket, „Auffüllen“ der Rohstoff-Gebäude (v0.14.0) |
+| `src/core/market.js` | Handel: Händler, Theken, Kunden (mit eigenem Zufall im Spielstand), Pleiteschutz, Testpaket, „Auffüllen“ der Rohstoff-Gebäude (v0.14.0), „Säen“ mit Kauf des Samens (v0.16.0) |
 | `src/core/levels.js` | Laden-Level: was freigeschaltet ist, hergestellte Waren zählen, aufsteigen (Erfahrung und Gold) |
 | `src/core/quests.js` | Aufträge der Bewohner (v0.13.0): aktueller Auftrag, Belohnung, abgeben, Erfahrung je Level; Test-Knopf „Auftrag erledigen“ (v0.15.0) |
 | `src/core/land.js` | Fläche kaufen: Streifen und Preis je Seite, wie oft noch, Kauf, welche Seite ein Feld der gesperrten Fläche ist |
@@ -440,8 +456,8 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/style.css` | Aussehen der Oberfläche |
 | `assets/icons/` | App-Symbole (erzeugt mit `tools/make-icons.py`) |
 | `tools/set-version.mjs` | Setzt die Versionsnummer in `src/version.js` und `index.html` (inkl. Import-Map) |
-| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`), Bereiche verschieben (`area.test.js`), Lagerhaus befüllen und Bänder leeren (`warehouse.test.js`), Aufträge, neue Warennamen und Test-Knopf (`quests.test.js`), Spiel im Hintergrund, Rohstoff-Vorrat und Auffüllen (`offline.test.js`) |
-| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Bereich markieren/verschieben/drehen (auch mit Taste R)/abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufträge abgeben und Aufsteigen bis Level 6 (mit Reiter „Ort & Level“), Test-Knopf „Auftrag erledigen“ (Stadttor-Aufträge ohne Waren und Gold), die Eisen-Kette, die Zimmerei, Strecke und Zulauf leeren, Lagerhaus befüllen und ausräumen (kein Nachschub), Auffüllen des Holzfällerlagers sowie das Spiel im Hintergrund (20 Minuten weg in der App, 2 Stunden mit geschlossenem Spiel → Fenster „Willkommen zurück“) per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
+| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`), Bereiche verschieben (`area.test.js`), Lagerhaus befüllen und Bänder leeren (`warehouse.test.js`), Aufträge, neue Warennamen und Test-Knopf (`quests.test.js`), Spiel im Hintergrund, Rohstoff-Vorrat und Auffüllen (`offline.test.js`), Beet, Flachs-Kette und Level 7 (`garden.test.js`) |
+| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Bereich markieren/verschieben/drehen (auch mit Taste R)/abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufträge abgeben und Aufsteigen bis Level 6 (mit Reiter „Ort & Level“), Test-Knopf „Auftrag erledigen“ (Stadttor-Aufträge ohne Waren und Gold), Aufstieg auf Level 7 mit Beet (säen, reif, ernten), Flachsbreche und Webstube, die Eisen-Kette, die Zimmerei, Strecke und Zulauf leeren, Lagerhaus befüllen und ausräumen (kein Nachschub), Auffüllen des Holzfällerlagers sowie das Spiel im Hintergrund (20 Minuten weg in der App, 2 Stunden mit geschlossenem Spiel → Fenster „Willkommen zurück“ mit reifem Beet) per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
 
 **Prüfen vor jedem Merge:** `npm test` (Spielregeln) und `npm run test:browser` (Browser-Test).
 
@@ -489,8 +505,8 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | v0.14.0 | **Spiel im Hintergrund:** Fabrik läuft weiter, bis etwas leer ist; „Willkommen zurück“; Rohstoff-Vorrat (3) mit „Auffüllen“; Lagerhaus nur noch von Hand befüllen | ✅ fertig |
 | v0.15.0 | **Test-Knopf:** „🧪 Test: Auftrag erledigen“ im Level-Fenster – Erfahrung ohne Waren und ohne Gold, solange das Spiel ein Prototyp ist | ✅ fertig |
 | v0.15.1 | **Kräuter-Kapitel auf dem Papier (nur README):** Gesamtbild Level 7–12, Level 7 im Detail (Beet, Maschinen, Waren, Preise, Zeiten, Bewohnerin, Aufträge) | ✅ fertig |
-| v0.16.0 | **Beet und Level 7 „Die Heilstube“:** säen, 30 Minuten wachsen, ernten; Flachsbreche (1 Pflanze → 50 Fasern), Webstube (5 Fasern → 1 Verband); Heilerin Agnes mit 4 Aufträgen | Plan steht (unten), wartet auf Tobias' Freigabe |
-| v0.17.0 ff. | **Level 8–12:** Ringelblume und Heilverbände (Maschine mit 2 Eingängen), zweites Kraut, Masse, Abschluss des Kapitels (Abschnitt 4.4) | häppchenweise |
+| v0.16.0 | **Beet und Level 7 „Die Heilstube“:** säen, 30 Minuten wachsen, ernten; Flachsbreche (1 Pflanze → 50 Fasern), Webstube (5 Fasern → 1 Verband); Heilerin Agnes mit 4 Aufträgen | ✅ fertig |
+| v0.17.0 ff. | **Level 8–12:** Ringelblume und Heilverbände (Maschine mit 2 Eingängen), dritte Pflanze, Masse, Abschluss des Kapitels (Abschnitt 4.4) | nach Tobias' Test von v0.16.0 gemeinsam planen, häppchenweise |
 
 ### Bänder leeren (vorgemerkt in v0.11.1, umgesetzt in v0.12.0)
 
@@ -504,9 +520,29 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### v0.16.0 – Beet und Level 7 „Die Heilstube“ (Plan, wartet auf Tobias' Freigabe)
+### v0.16.0 – Beet und Level 7 „Die Heilstube“ (fertig)
 
-Aufgebaut wie Level 1 – erst klein anfangen (Tobias, Chat 11). Tobias' Vorgaben stehen in Abschnitt 4.4; Namen, Zeiten, Baukosten und Aufträge sind Claudes Vorschlag. Alle Zahlen sind Platzhalter in den Datentabellen.
+Aufgebaut wie Level 1 – erst klein anfangen (Tobias, Chat 11). Tobias' Vorgaben stehen in Abschnitt 4.4; Namen, Zeiten, Baukosten und Aufträge sind Claudes Vorschlag, von Tobias freigegeben („Passt so, leg los mit v0.16.0“). Alle Zahlen sind Platzhalter in den Datentabellen. Umgesetzt genau wie unten beschrieben; dazu:
+
+- **Bauleiste:** Beet 🌱, Flachsbreche 🪢 und Webstube 🧵 stehen nach der Schlosserei (bis Level 7 mit 🔒).
+- **Infofenster des Beets:** „🌱 Säen: Leinsamen“ (ohne Samen im Lager: „· kauft 1 für 1.000 🪙“), während es wächst „Reif in etwa …“ und „🌾 Ernten – noch nicht reif“ (gesperrt), reif „🌾 Ernten: 1 Flachspflanze“. Bei vollem Laden-Lager geht Ernten nicht – die Pflanze bleibt reif im Beet.
+- **Wird ein Beet reif**, während man spielt, erscheint einmal „🌾 Ein Beet ist reif – tippe es an und ernte, dann neu säen.“
+- **Flachsbreche:** wie das Holzfällerlager, aber ohne „kaufen“ – „⏫ Auffüllen“ nimmt nur Flachspflanzen aus dem Laden-Lager. Die Webstube hat keine Knöpfe zum Umstellen (nur Verbände).
+- **Abreißen eines Beets:** ein gerade gesäter Samen und eine reife Pflanze kommen zurück; eine halb gewachsene Pflanze geht verloren (das Spiel fragt vorher, wie beim angefangenen Holzstamm).
+- **Händler:** Leinsamen ab Level 7; Flachspflanzen gibt es nicht zu kaufen und nicht zu verkaufen.
+- **Spielstand** (Version 12 → 13): bestehende Fabriken bleiben unverändert; beim Öffnen erscheint eine kurze Meldung zu Level 7.
+
+**Für Tobias' Fabrik (Level 6):** Im Level-Fenster mit „🧪 Test: Auftrag erledigen“ die 4 Stadttor-Aufträge erledigen, dann „⬆ Aufsteigen auf Level 7 · 3.000 🪙“. Der Gratis-Leinsamen liegt danach im Laden-Lager. Zum Bauen braucht man 10 Holzplatten + 10 Steinplatten (Beet), 10 Holzplatten + 2 Zahnradwellen (Flachsbreche) und 20 Holzstäbe + 2 Räderwerke (Webstube).
+
+**Was Tobias testet:**
+- Aufsteigen auf Level 7, ein Beet bauen und säen. Sieht man gut, wie die Pflanze wächst und wann sie reif ist (🌾)?
+- Ernten und neu säen als zwei Schritte: Fühlt sich das gut an, auch mit mehreren Beeten?
+- Die Kette Flachsbreche → Band → Webstube → Versandportal: Kommen 10 Verbände je Pflanze an?
+- Geld und Zeit: Fühlen sich 30 Minuten Wachszeit, 1.000 Gold je Samen und 1.500 Gold je Pflanze richtig an? Sind die Aufträge von Heilerin Agnes machbar?
+- Spiel schließen, während Beete wachsen: Nennt „Willkommen zurück“ die reifen Beete?
+- Feedback bitte in einen neuen Chat; danach planen wir Level 8 (Ringelblume und die erste Maschine mit 2 Eingängen).
+
+**Der Plan (Chat 11):**
 
 **Die Kette:**
 
@@ -1040,15 +1076,19 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 | 08.11.2026 | Ernten und Säen sind zwei getrennte Schritte | Tobias (Chat 11, Teil 2): „damit man 2× alles durchgehen muss“. Ersetzt Claudes Vorschlag „Ernten & neu säen“ in einem Tipp. |
 | 08.11.2026 | Beet 2 × 2 | Claudes Empfehlung, Tobias: „Ja, 2x2“. So ist die Pflanze gut zu sehen. |
 | 08.11.2026 | Level 7: nur Verbände als Grundlage; Level 8 Ringelblume und die erste Maschine mit 2 Eingängen; Level 9 eine dritte Pflanze; bis Level 10 Fasern + 3 Pflanzen (wie Holz, Stein, Eisen); Level 11–12 weiter kombinieren | Tobias (Chat 11, Teil 2): schrittweise immer mehr dazu, wie im Werkzeug-Kapitel. |
-| 08.11.2026 | Plan für Level 7 (v0.16.0): Flachsbreche 1 Pflanze → 50 Fasern in 10 Minuten (Vorrat 3), Webstube 5 Fasern → 1 Verband in 10 s, Flachsfaser 25 Gold, Baukosten aus Waren von Level 1–6, Heilerin Agnes mit 4 Aufträgen (850 Erfahrung), Aufstieg 3.000 Gold, Laden bleibt wie auf Level 6 | Claudes Entwurf nach Tobias' Vorgaben; wartet auf Tobias' Freigabe. |
+| 08.11.2026 | Plan für Level 7 (v0.16.0): Flachsbreche 1 Pflanze → 50 Fasern in 10 Minuten (Vorrat 3), Webstube 5 Fasern → 1 Verband in 10 s, Flachsfaser 25 Gold, Baukosten aus Waren von Level 1–6, Heilerin Agnes mit 4 Aufträgen (850 Erfahrung), Aufstieg 3.000 Gold, Laden bleibt wie auf Level 6 | Claudes Entwurf nach Tobias' Vorgaben; Tobias: „Passt so, leg los mit v0.16.0“. |
+| 08.11.2026 | „🌱 Säen“ nimmt den Samen aus dem Laden-Lager; liegt keiner da, kauft der Knopf ihn direkt beim Händler (wie „⏫ Auffüllen“) | Claudes Wahl (im Plan beschrieben): spart den Weg zum Händler. |
+| 08.11.2026 | Die Flachspflanze ist ein Rohstoff zum Einlegen: nicht kaufen, nicht verkaufen, nicht ins Lagerhaus | Claudes Wahl: Sie entsteht nur im Beet; so bleibt das Säen der Weg zu Fasern und Verbänden. |
+| 08.11.2026 | Ernten geht nicht bei vollem Laden-Lager; eine halb gewachsene Pflanze geht beim Abreißen verloren (mit Rückfrage), ein frisch gesäter Samen und eine reife Pflanze kommen zurück | Claudes Wahl, wie beim Holzstamm. |
+| 08.11.2026 | Meldung „Ein Beet ist reif“ im laufenden Spiel; „Willkommen zurück“ nennt reife Beete | Claudes Wahl: Beete haben kein Band – man soll merken, wann man ernten kann. |
 
 ---
 
 ## 8. Offene Fragen
 
-Stand 08.11.2026 (nach v0.15.0).
+Stand 08.11.2026 (nach v0.16.0).
 
-1. **Nächster Schritt:** Tobias gibt den Plan für v0.16.0 frei (Beet und Level 7, Abschnitt 6) oder ändert Zahlen und Namen. v0.14.0 ist getestet (Spiel im Hintergrund klappt, 3 Rohstoffe reichen, die neuen Warenbilder erkennt Tobias und sie gefallen); das Lagerhaus ohne Nachschub hat Tobias nicht erwähnt. Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Vorhängeschlössern sehr viel Gold.
+1. **Nächstes Feedback:** Tobias testet v0.16.0 (Level 7 mit Beet, Flachsbreche und Webstube) und schreibt das Feedback in einen neuen Chat. Danach planen wir Level 8. v0.14.0 ist getestet (Spiel im Hintergrund klappt, 3 Rohstoffe reichen, die neuen Warenbilder erkennt Tobias und sie gefallen); das Lagerhaus ohne Nachschub hat Tobias nicht erwähnt. Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Vorhängeschlössern sehr viel Gold.
 2. **Handel im echten Tempo:** geklärt – Tobias' Zeiten (bis Eisen etwa 45 Minuten, zweite Runde Eisen nach etwa 60 Minuten) sind in echter Zeit gemessen; nur die Eisen-Runden hat er im Testmodus beschleunigt. Früher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10).
 3. **Laden-Lager:** seit v0.10.1 500 Plätze bis Level 3, 1.000 ab Level 4 (Tobias). Claudes Lesart: erst ab Level 4, weil es dort eng wird. Soll es schon ab Level 1 1.000 sein, ist das eine Zahl in der Datentabelle.
 4. **Aufträge (seit v0.13.0 im Spiel):** geklärt – Waren werden abgegeben, ein Auftrag nach dem anderen, Gold = Thekenwert, Erfahrung reicht genau fürs Level, Aufstieg kostet Gold. Stückzahlen passen (Tobias, v0.13.0: „machbare Menge, das Spiel soll auch fordern“). Noch offen: Passen die Aufstiegspreise (Platzhalter)? Level 7 bis 12 kommen mit dem Kräuter-Kapitel (Abschnitt 4.4). Kostet der Laden-Ausbau später zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Tobias' Erkenntnis bleibt wichtig: Man muss die Mitte finden zwischen Verkaufen (Gold für Rohstoffe) und Weiterverarbeiten.
@@ -1065,12 +1105,30 @@ Stand 08.11.2026 (nach v0.15.0).
 15. **Verbesserungen mit Erfahrung (Idee von Tobias):** Mit XP z. B. schneller Holz verarbeiten oder schnellere Förderbänder freischalten. Tobias ist sich noch nicht sicher, in welche Richtung; vorerst dient die Erfahrung nur dem Aufstieg. Das Spiel zählt schon alle Erfahrung mit (`xpTotal`), damit das später möglich ist.
 16. **Reihenfolge nach v0.13.0:** geklärt – erst das Spiel im Hintergrund (v0.14.0), dann besprechen wir gemeinsam die Vorgehensweise mit Level und Techbaum.
 17. **Rohstoff-Vorrat (seit v0.14.0):** 3 Rohstoffe je Gebäude (45 Minuten) – Tobias: „3 als Rohstoff reichen“. Soll der Vorrat später wachsen, z. B. mit dem Level oder als Verbesserung mit Erfahrung (Frage 15)? Das ist eine Zahl in der Datentabelle (`capacity`).
-18. **Kräuter-Kapitel (Abschnitt 4.4):** Geklärt (Chat 11): 1 Samen = 1 Pflanze, etwa 30 Minuten Wachszeit, ernten, kein Band am Beet, jede Pflanze im selben Beet, 1 Pflanze → 50 Fasern → 10 Verbände, Preise etwa 1.000 (Samen) und 150 (Verband). Geklärt (Chat 11, Teil 2): Pflanze einlegen wie einen Holzstamm, Ernten und Säen getrennt, Beet 2 × 2, die Maschine mit 2 Eingängen erst auf Level 8. Der Plan für Level 7 steht als Entwurf (Abschnitt 6, v0.16.0) und wartet auf Freigabe. Später: Level 8 (wie die Ringelblume verarbeitet wird, welche Maschine mit 2 Eingängen, Rezept des Heilverbands, wählt man beim Säen den Samen per Liste?), Level 9 (dritte Pflanze, Claudes Idee: Schafgarbe), Level 10–12.
+18. **Kräuter-Kapitel (Abschnitt 4.4):** Geklärt (Chat 11): 1 Samen = 1 Pflanze, etwa 30 Minuten Wachszeit, ernten, kein Band am Beet, jede Pflanze im selben Beet, 1 Pflanze → 50 Fasern → 10 Verbände, Preise etwa 1.000 (Samen) und 150 (Verband). Geklärt (Chat 11, Teil 2): Pflanze einlegen wie einen Holzstamm, Ernten und Säen getrennt, Beet 2 × 2, die Maschine mit 2 Eingängen erst auf Level 8. Level 7 ist seit v0.16.0 im Spiel. Offen: Passen 30 Minuten, 1.000 Gold je Samen, 50 Fasern und 10 Verbände je Pflanze, und sind die Aufträge machbar? Später: Level 8 (wie die Ringelblume verarbeitet wird, welche Maschine mit 2 Eingängen, Rezept des Heilverbands, wählt man beim Säen den Samen per Liste?), Level 9 (dritte Pflanze, Claudes Idee: Schafgarbe), Level 10–12.
 19. **Test-Knopf (seit v0.15.0):** Vor v1.0 entfernen (`QUEST_TEST_SKIP = false` in `data/levels.js`). Zählt die übersprungene Erfahrung auch für spätere Verbesserungen mit Erfahrung (Frage 15)? Im Moment ja (`xpTotal`).
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.16.0 – Beet und Level 7 „Die Heilstube“ (08.11.2026)
+
+**Vorgenommen:**
+- Das Kräuter-Kapitel beginnen, wie in v0.15.1 geplant und von Tobias freigegeben: Beet (säen, wachsen, ernten), Flachsbreche, Webstube, Level 7 mit Heilerin Agnes.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie passt ein Beet ohne Band in die Fabrik? → Es ist eine neue Art Gebäude: Säen und Ernten von Hand, die Pflanze kommt ins Laden-Lager und wird wie ein Holzstamm in die Flachsbreche eingelegt. Ab dort läuft alles über Bänder wie bisher.
+- Wie sieht man, wann man ernten kann? → Die Pflanze wächst sichtbar in Stufen; reif blüht sie blau und zeigt 🌾, dazu einmal eine Meldung und im „Willkommen zurück“ die Zahl der reifen Beete.
+- Was passiert mit dem Pleiteschutz? → Wer etwas im Beet wachsen hat, ist nicht pleite; Flachspflanzen zählen nicht als Händler-Rohstoff.
+- Muss Tobias' Spielstand umgewandelt werden? → Nein; die Version steigt auf 13, damit eine ältere Version des Spiels einen neuen Spielstand nicht falsch liest.
+
+**Gemacht:**
+- Datentabellen: 4 Waren (Leinsamen, Flachspflanze, Flachsfaser, Verband), 3 Gebäude (Beet, Flachsbreche, Webstube), Rezept Verband, Level 7 mit 4 Aufträgen, Laden-Daten für Level 7.
+- Spielregeln: neue Gebäudeart „Beet“ in `production.js` (säen, wachsen, ernten, Abreißen, Status, Fortschritt), „Säen“ mit Kauf in `market.js`, Pleiteschutz und Händler-Liste nur mit kaufbaren Rohstoffen, Spielstand-Version 13, reife Beete im Bericht „Willkommen zurück“.
+- Oberfläche: Beet mit Erde, Furchen und wachsender Pflanze (Keimling → Blüten → 🌾), Infofenster mit „🌱 Säen“ und „🌾 Ernten“, 4 neue Warenbilder (Säckchen, Flachspflanze, Faserbündel, Verbandsrolle), Meldungen.
+- 230 automatische Tests (neu in `garden.test.js`: Datentabellen, Preise je Stufe, Baukosten-Grenze, Flachspflanze nicht kaufbar/verkäuflich, Level 7 mit Aufstieg und Geschenk, säen und nach genau 30 Minuten reif, Ernten und Säen getrennt, Säen mit Kauf, gesperrt unter Level 7, Ernten bei vollem Lager, Abreißen, Flachsbreche mit Auffüllen nur aus dem Lager, ganze Kette 1 Pflanze → 10 Verbände, Rhythmus 3 Beete je Flachsbreche, Hintergrund mit reifen Beeten, Pleiteschutz, Testpaket, Spielstand Version 13 und Umwandlung von Version 12; angepasst: Level-Tabelle, Aufstieg bis Level 7, Erfahrung je Level, höchstes Level, Preistabelle) und der Browser-Test (neu: Aufstieg auf Level 7, Beet, Flachsbreche und Webstube per Touch bauen, säen, reif, Meldung, ernten, neu säen mit Kauf, Auffüllen der Flachsbreche ohne Kaufen-Knopf, Webstube ohne Umstellen, Händler, reifes Beet nach 2 Stunden im „Willkommen zurück“) in Tablet- und Handygröße – alle bestanden.
+- Beim Testen gefunden und behoben: Nach genau 30 Minuten fehlte durch Rundung ein winziger Rest bis „reif“; „Auffüllen“ rechnete bei der Flachsbreche einen ungültigen Preis aus und schrieb „kein Flachspflanze …, Gold reicht nicht“ (jetzt: „keine Flachspflanzen im Laden-Lager“); die Blüten ragten oben aus dem Beet.
 
 ### v0.15.1 – Plan für Level 7 „Die Heilstube“ (08.11.2026, nur README)
 
@@ -1553,7 +1611,11 @@ Stand 08.11.2026 (nach v0.15.0).
 
 **Tobias:** Einlegen: ja. Ernten und Säen sollen zwei getrennte Schritte sein, damit man zweimal alles durchgehen muss. Beet 2 × 2: ja. Level 8: genau richtig verstanden. Schrittweise immer mehr dazu: auf Level 7 erst die Verbände als Grundlage, auf Level 8 kommt etwas dazu, auf Level 9 der nächste Schritt mit einer neuen Pflanze – bis Level 10 hat man Fasern + 3 verschiedene Pflanzen (wie Holz, Eisen und Stein), auf Level 11–12 kann man diese weiter kombinieren. So ähnlich war es schon festgelegt.
 
-**Umgesetzt:** v0.15.1 (nur README): Plan für v0.16.0 – Beet und Level 7 „Die Heilstube“ (Abschnitt 6), wartet auf Tobias' Freigabe.
+**Umgesetzt:** v0.15.1 (nur README): Plan für v0.16.0 – Beet und Level 7 „Die Heilstube“ (Abschnitt 6).
+
+**Tobias:** „Passt so, leg los mit v0.16.0.“
+
+**Umgesetzt:** v0.16.0 (siehe Versionshistorie). Der nächste Chat beginnt mit Tobias' Test von v0.16.0; danach planen wir Level 8.
 
 ### 07.11.2026 – Chat 10: Test von v0.13.0, Spiel im Hintergrund, Kräuter-Kapitel, Plan und Umsetzung v0.14.0
 

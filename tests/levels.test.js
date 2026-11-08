@@ -27,7 +27,7 @@ import { createNewGame } from '../src/core/state.js';
 // ---------- Datentabellen ----------
 
 test('Level-Tabelle: jedes Level ein Bauabschnitt mit 2–5 Aufträgen; ab Level 2 Preis und Gratis-Rohstoff (v0.13.0)', () => {
-  assert.equal(MAX_LEVEL, 6);
+  assert.equal(MAX_LEVEL, 7);
   let lastCost = 0;
   for (let level = 1; level <= MAX_LEVEL; level++) {
     const def = LEVELS[level];
@@ -47,10 +47,12 @@ test('Level-Tabelle: jedes Level ein Bauabschnitt mit 2–5 Aufträgen; ab Level
     assert.ok(def.cost > lastCost, `Level ${level} kostet mehr als das vorige (${def.cost})`);
     lastCost = def.cost;
     // Zu Beginn jedes Levels genau ein Rohstoff gratis (Tobias): bis Level 3
-    // der neue Rohstoff, danach Eisenerz (einen vierten Rohstoff gibt es nicht).
+    // der neue Rohstoff, Level 4–6 Eisenerz (einen vierten Rohstoff gibt es
+    // nicht), v0.16.0: Level 7 der erste Samen des Kräuter-Kapitels.
     assert.deepEqual(Object.values(def.gift), [1]);
     const [raw] = Object.keys(def.gift);
-    assert.ok(ITEMS[raw].raw && itemLevel(raw) === Math.min(level, 3), `Geschenk ${raw} passt zu Level ${level}`);
+    const giftLevel = level <= 3 ? level : level <= 6 ? 3 : level;
+    assert.ok(ITEMS[raw].raw && ITEMS[raw].buyPrice > 0 && itemLevel(raw) === giftLevel, `Geschenk ${raw} passt zu Level ${level}`);
   }
 });
 
@@ -186,12 +188,12 @@ test('Aufstieg auf Level 2: erst genug Erfahrung, dann kostet er Gold; dafür gi
   assert.equal(levelUpBlocker(state), 'xp');
 });
 
-test('Level 4 bis 6: Eisenerz als Geschenk und je eine neue Theke; danach ist Schluss', () => {
+test('Level 4 bis 6: Eisenerz als Geschenk und je eine neue Theke; Level 7 mit Leinsamen; danach ist Schluss', () => {
   const state = createNewGame(3);
   state.shopLevel = 3;
   state.gold = 100000;
   const results = [];
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 4; i++) {
     state.quest.xp = xpNeeded(state.shopLevel);
     results.push(levelUp(state));
   }
@@ -199,15 +201,18 @@ test('Level 4 bis 6: Eisenerz als Geschenk und je eine neue Theke; danach ist Sc
     { level: 4, gift: { eisenerz: 1 }, counters: 1, cost: 500 },
     { level: 5, gift: { eisenerz: 1 }, counters: 1, cost: 1000 },
     { level: 6, gift: { eisenerz: 1 }, counters: 1, cost: 2000 },
+    // v0.16.0: Kräuter-Kapitel – der Laden bleibt wie auf Level 6
+    { level: 7, gift: { leinsamen: 1 }, counters: 0, cost: 3000 },
   ]);
-  assert.equal(state.gold, 100000 - 3500);
+  assert.equal(state.gold, 100000 - 6500);
   assert.equal(state.counters.length, 5);
   assert.equal(storageCount(state, 'eisenerz'), 3);
+  assert.equal(storageCount(state, 'leinsamen'), 1);
   state.quest.xp = 99999;
   assert.equal(levelUpBlocker(state), 'max', 'höchstes Level');
   assert.equal(nextLevelCost(state), null);
   assert.equal(levelUp(state), null);
-  assert.equal(state.shopLevel, 6);
+  assert.equal(state.shopLevel, 7);
 });
 
 test('Ein neues Spiel lässt sich von Holz bis Eisen durchspielen', () => {

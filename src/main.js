@@ -18,6 +18,7 @@ import { START_GOLD } from './core/data/shop.js';
 import { LAND } from './core/data/land.js';
 import { canLevelUp } from './core/levels.js';
 import { canDeliver, currentQuest, xpNeeded } from './core/quests.js';
+import { isRipe, productionOf } from './core/production.js';
 import { createLevelView, unlockText } from './view/levels.js';
 import { costText, numberFormat } from './view/format.js';
 import { redrawItemIcons } from './view/itemArt.js';
@@ -50,6 +51,9 @@ let resetting = false;
 // sonst stünde im Spielstand eine neue Uhrzeit zu einer alten Fabrik. Der
 // alte Spielstand bleibt; beim nächsten Öffnen wird von dort nachgerechnet.
 let catchUpJob = null;
+// v0.16.0: einmal Bescheid sagen, wenn ein Beet reif wird
+const ripeCount = () => state.buildings.filter((b) => productionOf(b.type)?.kind === 'garden' && isRipe(b)).length;
+let lastRipe = ripeCount();
 function saveNow() {
   clearTimeout(saveTimer);
   saveTimer = null;
@@ -231,6 +235,7 @@ if (loaded.status === 'ok' && loaded.migratedFrom) {
     from < 12
       ? 'Neu: Deine Fabrik läuft weiter, wenn das Spiel zu ist – bis Rohstoffe, Zutaten oder Theken leer sind. In Holzfällerlager, Steinbruch und Schmelzhütte passen jetzt 3 Rohstoffe („⏫ Auffüllen“). Lagerhäuser befüllst du von Hand.'
       : '',
+    from < 13 ? 'Neu: Level 7 „Die Heilstube“ – Beet, Flachsbreche und Webstube. Aus Leinsamen wachsen Flachspflanzen, daraus werden Fasern und Verbände.' : '',
     ...(loaded.notes ?? []),
     loaded.counterNote ?? '',
   ].filter(Boolean);
@@ -264,6 +269,7 @@ function continueCatchUp() {
   }
   const report = offlineReport(catchUpJob);
   catchUpJob = null;
+  lastRipe = ripeCount(); // reife Beete nennt schon der Bericht
   offlineView.hideProgress();
   if (report.seconds >= OFFLINE.toastSeconds) {
     controller.closeInfo();
@@ -335,6 +341,11 @@ function frame(now) {
       }
       questReadyKey = questKey();
     }
+    const ripe = ripeCount();
+    if (ripe > lastRipe) {
+      panels.toast(`🌾 ${ripe === 1 ? 'Ein Beet ist reif – tippe es' : `${ripe} Beete sind reif – tippe sie`} an und ernte, dann neu säen.`, 5000);
+    }
+    lastRipe = ripe;
     if (state.market.gifts !== lastGifts) {
       if (state.market.gifts > lastGifts) {
         panels.toast('Der Händler hat Mitleid: Du bekommst einen Holzstamm geschenkt. Er liegt im Laden-Lager.', 5000);

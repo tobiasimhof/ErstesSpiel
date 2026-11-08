@@ -1,7 +1,10 @@
 // Waren-Tabelle: Neue Waren sind neue Einträge.
 //
 // raw:      Rohstoff, wird gekauft und in ein Gebäude eingelegt (nicht aufs Band)
-// buyPrice: Kaufpreis beim Händler (ab v0.7.0)
+// buyPrice: Kaufpreis beim Händler (ab v0.7.0). Ohne buyPrice gibt es den
+//           Rohstoff nicht beim Händler.
+// grown:    v0.16.0: wächst im Beet (Flachspflanze) – ein Rohstoff, den man
+//           erntet und dann einlegt; kaufen kann man ihn nicht
 // level:    Rohstoff: ab diesem Laden-Level beim Händler (v0.9.0)
 // price:    fester Wert/Verkaufspreis im Laden
 // shape/color: Aussehen auf dem Band und in Listen
@@ -44,4 +47,14 @@ export const ITEMS = {
   gewichtstein: { name: 'Gewichtstein', plural: 'Gewichtsteine', price: 648, color: '#a7adb5', shape: 'weight' }, // Steinkette
   uhrwerk: { name: 'Uhrwerk', plural: 'Uhrwerke', price: 778, color: '#b0844f', shape: 'clockwork' }, // Regler
   vorhaengeschloss: { name: 'Vorhängeschloss', plural: 'Vorhängeschlösser', price: 1944, color: '#8e98a6', shape: 'lock' }, // Mini-Schloss
+
+  // v0.16.0: Kräuter-Kapitel, Level 7 „Die Heilstube“ (Tobias, Chat 11).
+  // Leinsamen kaufen → im Beet wächst 1 Flachspflanze (30 Minuten) → in der
+  // Flachsbreche 50 Flachsfasern → in der Webstube je 5 Fasern 1 Verband.
+  // Mittlere Preise (Tobias): Samen 1.000, aus einem Samen 1.500 Gold.
+  // Jede Stufe bringt mehr: 1.000 → 50 × 25 = 1.250 → 10 × 150 = 1.500.
+  leinsamen: { name: 'Leinsamen', plural: 'Leinsamen', raw: true, level: 7, buyPrice: 1000, color: '#c9a66b', shape: 'seeds' },
+  flachspflanze: { name: 'Flachspflanze', plural: 'Flachspflanzen', raw: true, grown: true, level: 7, color: '#6f9a45', shape: 'flax' },
+  flachsfaser: { name: 'Flachsfaser', plural: 'Flachsfasern', price: 25, color: '#e3d3a4', shape: 'fiber' },
+  verband: { name: 'Verband', plural: 'Verbände', price: 150, color: '#f4f1e8', shape: 'bandage' },
 };

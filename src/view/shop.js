@@ -29,7 +29,8 @@ const TABS = [
   { key: 'haendler', label: '🧺 Händler' },
 ];
 
-const RAWS = Object.keys(ITEMS).filter((type) => ITEMS[type].raw);
+// v0.16.0: nur was es beim Händler gibt (die Flachspflanze wächst im Beet)
+const RAWS = Object.keys(ITEMS).filter((type) => ITEMS[type].raw && ITEMS[type].buyPrice > 0);
 
 export function createShopView({ state, panels, onChange }) {
   let open = false;
@@ -72,9 +73,11 @@ export function createShopView({ state, panels, onChange }) {
     for (const type of entries) {
       const def = ITEMS[type];
       const count = storageCount(state, type);
-      const note = def.raw
-        ? `Rohstoff · beim Händler ${numberFormat.format(def.buyPrice)} 🪙`
-        : `Wert ${numberFormat.format(def.price)} 🪙 je Stück`;
+      const note = def.grown
+        ? 'Wächst im Beet · in die Flachsbreche einlegen'
+        : def.raw
+          ? `Rohstoff · beim Händler ${numberFormat.format(def.buyPrice)} 🪙`
+          : `Wert ${numberFormat.format(def.price)} 🪙 je Stück`;
       if (!def.raw) total += count * def.price;
       const row = el('div', 'item-row');
       row.append(createItemIcon(type, 30), el('span', 'item-name', def.name), el('span', 'item-note', note), el('span', 'item-count', `${numberFormat.format(count)}×`));

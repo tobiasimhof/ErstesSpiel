@@ -69,9 +69,9 @@ test('Die Erfahrung aller Aufträge eines Levels reicht genau für den Aufstieg'
   }
 });
 
-test('Erfahrung je Level steigt mit dem Level', () => {
+test('Erfahrung je Level: steigt im Werkzeug-Kapitel, das Kräuter-Kapitel fängt wieder klein an', () => {
   const needs = Object.keys(LEVELS).map((level) => xpNeeded(Number(level)));
-  assert.deepEqual(needs, [81, 90, 162, 714, 1495, 1841]);
+  assert.deepEqual(needs, [81, 90, 162, 714, 1495, 1841, 850]);
 });
 
 // ---------- Abgeben ----------
@@ -119,14 +119,14 @@ test('Nach dem letzten Auftrag eines Levels steht keiner mehr an', () => {
 
 test('Höchstes Level: Aufträge gehen, die Erfahrung sammelt sich, aufsteigen geht (noch) nicht', () => {
   const state = createNewGame(6);
-  state.shopLevel = 6;
-  assert.equal(currentQuest(state).from, 'Torwächter Ulrich');
-  for (const quest of levelQuests(6)) {
+  state.shopLevel = MAX_LEVEL;
+  assert.equal(currentQuest(state).from, 'Heilerin Agnes');
+  for (const quest of levelQuests(MAX_LEVEL)) {
     fillFor(state, quest);
     assert.ok(deliverQuest(state));
   }
-  assert.equal(state.quest.xp, xpNeeded(6));
-  assert.equal(state.xpTotal, xpNeeded(6));
+  assert.equal(state.quest.xp, xpNeeded(MAX_LEVEL));
+  assert.equal(state.xpTotal, xpNeeded(MAX_LEVEL));
   assert.equal(levelUpBlocker(state), 'max');
 });
 

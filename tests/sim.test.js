@@ -313,14 +313,20 @@ test('Abreißen gibt Waren ins Laden-Lager zurück, ein angefangener Stamm geht 
 });
 
 test('Wirtschaft: Jede Stufe bringt mehr als ihre Zutaten (Preistabelle)', () => {
-  // Rohstoff → Blöcke: knapp mehr als der Kaufpreis
+  // Rohstoff → Blöcke: knapp mehr als der Kaufpreis. v0.16.0: Die
+  // Flachspflanze wächst aus einem Leinsamen – dessen Preis zählt
+  // (1.000 → 50 Fasern = 1.250, Tobias: aus einem Samen 1.500 Gold).
+  const seedFor = (plant) =>
+    Object.values(BUILDINGS)
+      .flatMap((b) => (b.production?.kind === 'garden' ? Object.entries(b.production.crops) : []))
+      .find(([, crop]) => crop.plant === plant)?.[0];
   for (const [type, def] of Object.entries(BUILDINGS)) {
     const p = def.production;
     if (p?.kind !== 'source') continue;
-    const cost = ITEMS[p.input].buyPrice;
+    const cost = ITEMS[p.input].grown ? ITEMS[seedFor(p.input)].buyPrice : ITEMS[p.input].buyPrice;
     const value = p.amount * ITEMS[p.output].price;
     assert.ok(value > cost, `${type}: ${value} > ${cost}`);
-    assert.ok(value < cost * 1.25, `${type}: aber nur knapp`);
+    assert.ok(value <= cost * 1.25, `${type}: aber nur knapp`);
   }
   // Jedes Rezept: mehr als die Zutaten, aber nicht übertrieben
   for (const [key, r] of Object.entries(RECIPES)) {
@@ -336,6 +342,10 @@ test('Wirtschaft: Jede Stufe bringt mehr als ihre Zutaten (Preistabelle)', () =>
   assert.equal(200 * ITEMS.eisenbarren.price, 2400);
   assert.equal(40 * ITEMS.eisenblech.price, 2880);
   assert.equal(40 * ITEMS.eisenstange.price, 2880);
+  // v0.16.0: Kräuter-Kapitel, Level 7
+  assert.equal(ITEMS.leinsamen.buyPrice, 1000);
+  assert.equal(50 * ITEMS.flachsfaser.price, 1250);
+  assert.equal(10 * ITEMS.verband.price, 1500);
 });
 
 test('Datentabellen passen zusammen: Rezepte, Werkstätten, Waren', () => {

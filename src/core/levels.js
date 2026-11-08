@@ -47,10 +47,12 @@ export function isItemUnlocked(state, type) {
 }
 
 // Was ein Level neu freischaltet: { buildings: [...], raws: [...] }
+// raws: was es neu beim Händler gibt (v0.16.0: nicht die Flachspflanze – die
+// wächst im Beet).
 export function unlocksOf(level) {
   return {
     buildings: BUILD_MENU.filter((type) => buildingLevel(type) === level),
-    raws: Object.keys(ITEMS).filter((type) => ITEMS[type].raw && itemLevel(type) === level),
+    raws: Object.keys(ITEMS).filter((type) => ITEMS[type].raw && ITEMS[type].buyPrice > 0 && itemLevel(type) === level),
   };
 }
 
