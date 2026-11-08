@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 
 import { placeBuilding } from '../src/core/buildings.js';
 import { ITEMS } from '../src/core/data/items.js';
-import { LEVELS, MAX_LEVEL } from '../src/core/data/levels.js';
+import { LEVELS, MAX_LEVEL, QUEST_TEST_SKIP } from '../src/core/data/levels.js';
 import { RECIPES } from '../src/core/data/recipes.js';
 import { hasEnoughXp, levelUpBlocker } from '../src/core/levels.js';
 import {
@@ -16,6 +16,8 @@ import {
   questNumber,
   questReward,
   questValue,
+  canSkipQuest,
+  skipQuest,
   xpNeeded,
 } from '../src/core/quests.js';
 import { deserializeGame, serializeGame } from '../src/core/save.js';
@@ -126,6 +128,60 @@ test('Höchstes Level: Aufträge gehen, die Erfahrung sammelt sich, aufsteigen g
   assert.equal(state.quest.xp, xpNeeded(6));
   assert.equal(state.xpTotal, xpNeeded(6));
   assert.equal(levelUpBlocker(state), 'max');
+});
+
+// ---------- Test-Knopf (v0.15.0) ----------
+
+test('Test-Knopf ist im Prototyp eingeschaltet', () => {
+  assert.equal(QUEST_TEST_SKIP, true);
+  assert.equal(canSkipQuest(createNewGame(1)), true);
+});
+
+test('Test-Knopf: Erfahrung wie beim Abgeben, aber keine Waren und kein Gold', () => {
+  const state = createNewGame(1);
+  state.storage.holzplatte = 7;
+  const gold = state.gold;
+  const storage = { ...state.storage };
+  const result = skipQuest(state);
+  assert.deepEqual([result.quest.from, result.xp, result.gold, result.skipped], ['Zimmermann Jakob', 9, 0, true]);
+  assert.deepEqual(state.storage, storage, 'Laden-Lager unverändert');
+  assert.equal(state.gold, gold, 'kein Gold');
+  assert.deepEqual(state.quest, { index: 1, xp: 9 });
+  assert.equal(state.xpTotal, 9);
+  assert.deepEqual(currentQuest(state).items, { holzstab: 10 }, 'der nächste Auftrag rückt nach');
+});
+
+test('Test-Knopf geht auch ohne die Waren; danach ist Abgeben wieder normal', () => {
+  const state = createNewGame(1);
+  assert.equal(canDeliver(state), false);
+  assert.ok(skipQuest(state));
+  fillFor(state, currentQuest(state));
+  const result = deliverQuest(state);
+  assert.deepEqual([result.xp, result.gold], [18, 180]);
+  assert.deepEqual(state.quest, { index: 2, xp: 27 });
+});
+
+test('Test-Knopf: alle Aufträge eines Levels ergeben genau die Erfahrung; Aufsteigen kostet weiter Gold', () => {
+  for (let level = 1; level < MAX_LEVEL; level++) {
+    const state = createNewGame(1);
+    state.shopLevel = level;
+    state.gold = 0;
+    for (let i = 0; i < levelQuests(level).length; i++) assert.ok(skipQuest(state), `Level ${level}, Auftrag ${i + 1}`);
+    assert.equal(state.quest.xp, xpNeeded(level));
+    assert.equal(canSkipQuest(state), false, 'kein Auftrag mehr');
+    assert.equal(skipQuest(state), null);
+    assert.equal(levelUpBlocker(state), 'gold', `Level ${level}: genug Erfahrung, aber das Gold fehlt`);
+  }
+});
+
+test('Test-Knopf auf dem höchsten Level: Erfahrung sammelt sich bis zum nächsten Level', () => {
+  const state = createNewGame(1);
+  state.shopLevel = MAX_LEVEL;
+  while (skipQuest(state));
+  assert.equal(state.quest.xp, xpNeeded(MAX_LEVEL));
+  assert.equal(levelUpBlocker(state), 'max');
+  const loaded = deserializeGame(serializeGame(state));
+  assert.deepEqual(loaded.state.quest, state.quest, 'Spielstand-Format unverändert');
 });
 
 // ---------- Spielstand ----------

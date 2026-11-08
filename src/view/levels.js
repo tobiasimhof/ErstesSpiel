@@ -12,7 +12,18 @@ import { BUILDINGS } from '../core/data/buildings.js';
 import { ITEMS } from '../core/data/items.js';
 import { LEVELS, MAX_LEVEL, levelUp, levelUpBlocker, nextLevelCost, unlocksOf } from '../core/levels.js';
 import { COUNTER_SIZE_NAMES, SHOP_LEVELS } from '../core/data/shop.js';
-import { canDeliver, currentQuest, deliverQuest, levelXp, questNeeds, questNumber, questReward, xpNeeded } from '../core/quests.js';
+import {
+  canDeliver,
+  canSkipQuest,
+  currentQuest,
+  deliverQuest,
+  levelXp,
+  questNeeds,
+  questNumber,
+  questReward,
+  skipQuest,
+  xpNeeded,
+} from '../core/quests.js';
 import { costText, itemCount, numberFormat } from './format.js';
 import { createItemIcon } from './itemArt.js';
 
@@ -83,7 +94,13 @@ export function createLevelView({ state, panels, onLevelUp, onQuestDone }) {
 
     if (lastDelivery) {
       body.append(
-        el('div', 'level-banner', `✅ Auftrag erledigt: +${numberFormat.format(lastDelivery.xp)} Erfahrung, +${numberFormat.format(lastDelivery.gold)} Gold.`),
+        el(
+          'div',
+          'level-banner',
+          lastDelivery.skipped
+            ? `🧪 Auftrag als erledigt gewertet (Test): +${numberFormat.format(lastDelivery.xp)} Erfahrung, kein Gold.`
+            : `✅ Auftrag erledigt: +${numberFormat.format(lastDelivery.xp)} Erfahrung, +${numberFormat.format(lastDelivery.gold)} Gold.`,
+        ),
       );
     }
 
@@ -127,6 +144,28 @@ export function createLevelView({ state, panels, onLevelUp, onQuestDone }) {
       foot.append(deliver);
       card.append(list, foot, el('p', 'modal-meta quest-note', 'Die Waren kommen aus dem Laden-Lager. Stehen sie auf einer Theke, räum sie vorher ab.'));
       body.append(card);
+      // v0.15.0: Test-Knopf für den Prototyp (Tobias) – Erfahrung ohne Waren
+      // und ohne Gold, damit man die Spielmechanik testen kann.
+      if (canSkipQuest(state)) {
+        const testBox = el('div', 'quest-test');
+        const skip = makeButton({
+          label: '🧪 Test: Auftrag erledigen',
+          onClick: () => {
+            const result = skipQuest(state);
+            if (result) {
+              lastDelivery = result;
+              onQuestDone(result);
+            }
+            refresh();
+          },
+        });
+        skip.classList.add('quest-skip');
+        testBox.append(
+          skip,
+          el('span', 'quest-test-note', `Nur zum Testen: +${numberFormat.format(reward.xp)} Erfahrung, ohne Waren und ohne Gold.`),
+        );
+        body.append(testBox);
+      }
     } else {
       body.append(
         el(

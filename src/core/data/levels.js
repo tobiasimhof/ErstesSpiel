@@ -99,3 +99,10 @@ export const MAX_LEVEL = Math.max(...Object.keys(LEVELS).map(Number));
 // Gold genau so viel wie an der Theke (Tobias: nicht mehr – man macht die
 // Aufträge wegen der Erfahrung), Erfahrung 1 je 10 Gold Warenwert.
 export const QUEST_REWARD = { goldFactor: 1, xpPerGold: 0.1 };
+
+// v0.15.0 (Tobias): Test-Knopf „🧪 Test: Auftrag erledigen“ im Level-Fenster,
+// solange das Spiel ein Prototyp ist (bis v1.0 immer sichtbar). Er gibt die
+// Erfahrung des Auftrags, nimmt keine Waren und gibt kein Gold – so lässt sich
+// die Spielmechanik testen, ohne die Wirtschaft zu verfälschen.
+// false blendet den Knopf aus.
+export const QUEST_TEST_SKIP = true;

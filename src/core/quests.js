@@ -12,7 +12,7 @@
 // Erfahrung (für später, z. B. Verbesserungen mit XP).
 
 import { ITEMS } from './data/items.js';
-import { LEVELS, QUEST_REWARD } from './data/levels.js';
+import { LEVELS, QUEST_REWARD, QUEST_TEST_SKIP } from './data/levels.js';
 import { storageCount, takeFromStorage } from './shop.js';
 
 export function createQuestState() {
@@ -84,4 +84,25 @@ export function deliverQuest(state) {
   state.xpTotal = (state.xpTotal ?? 0) + xp;
   state.quest.index++;
   return { quest, gold, xp };
+}
+
+// ---------- Test-Knopf (v0.15.0, nur im Prototyp) ----------
+
+// Ist der Knopf „🧪 Test: Auftrag erledigen“ zu sehen? Nur, wenn er in der
+// Datentabelle eingeschaltet ist und gerade ein Auftrag ansteht.
+export function canSkipQuest(state) {
+  return QUEST_TEST_SKIP && Boolean(currentQuest(state));
+}
+
+// Wertet den aktuellen Auftrag als erledigt: Erfahrung wie beim Abgeben, aber
+// keine Waren aus dem Laden-Lager und kein Gold. Aufsteigen kostet weiter Gold.
+// Ergebnis: { quest, gold: 0, xp, skipped: true } oder null.
+export function skipQuest(state) {
+  if (!canSkipQuest(state)) return null;
+  const quest = currentQuest(state);
+  const { xp } = questReward(quest);
+  state.quest.xp += xp;
+  state.xpTotal = (state.xpTotal ?? 0) + xp;
+  state.quest.index++;
+  return { quest, gold: 0, xp, skipped: true };
 }

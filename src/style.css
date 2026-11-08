@@ -1264,6 +1264,36 @@ button.quest-deliver {
   font-size: 13px;
 }
 
+/* v0.15.0: Test-Knopf für den Prototyp – deutlich anders als „✓ Abgeben“ */
+.quest-test {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border: 2px dashed rgba(106, 76, 147, 0.6);
+  border-radius: 10px;
+  background: rgba(106, 76, 147, 0.08);
+}
+
+button.quest-skip {
+  min-height: 40px;
+  background: #ece3f6;
+  border-color: #6a4c93;
+  color: #4a2f72;
+  font-weight: 700;
+}
+
+button.quest-skip:active {
+  background: #d9c8ee;
+}
+
+.quest-test-note {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
 .level-reward {
   margin-top: 12px;
 }
