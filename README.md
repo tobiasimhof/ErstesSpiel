@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.15.0 – Test-Knopf „Auftrag erledigen“ |
+| **Aktuelle Version** | v0.15.1 – Plan für Level 7 „Die Heilstube“ (nur README) |
 | **Phase** | M2 – Produktionsketten |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | **Kräuter-Kapitel auf dem Papier planen (v0.15.1, nur README):** Claude entwirft mit Tobias' Antworten aus Chat 11 (Abschnitt 4.4) das Gesamtbild, zuerst Level 7 im Detail (Beet, Flachs, Fasern, Verbände, Preise, Zeiten, Bewohnerin, Aufträge); Tobias gibt es frei. Danach **v0.16.0: Beet und Level 7**, häppchenweise weiter bis Level 12 |
+| **Nächster Schritt** | Tobias liest den **Plan für v0.16.0 – Beet und Level 7 „Die Heilstube“** (Abschnitt 6) und gibt ihn frei oder ändert Zahlen und Namen. Danach programmiert Claude v0.16.0; Level 8–12 folgen häppchenweise (Abschnitt 4.4) |
 
 ---
 
@@ -169,9 +169,10 @@ Rahmen von Claude, von Tobias angenommen („gefällt mir sehr gut“). Namen de
 | 3 | Die Dorfschmiede | Schmied Konrad: 5 Eisenstangen (Werkzeug) · Konrad: 5 Eisenbleche (Beschläge) · Hilde: 10 Eisenstangen + 10 Holzplatten (Pflüge) | 162 | 250 Gold |
 | 4 | Die Mühle am Fluss | Müllerin Grete: 2 Zahnradwellen · Grete: 4 Räderwerke (Mahlwerk) · Grete: 2 Verstärkte Holzplatten (Mühlentür) · Hilde: 8 Räderwerke + 4 Zahnradwellen (zweite Mühle) | 714 | 500 Gold |
 | 5 | Der Markt | Händlerin Marta: 2 Scharniere (Klappen der Stände) · Marta: 2 Schlüssel (Kassen) · Baumeister Anton: 1 Zirkel (Marktplatz vermessen) · Marta: 3 Scharniere + 3 Schlüssel (Markttag) | 1.495 | 1.000 Gold |
-| 6 | Das Stadttor | Torwächter Ulrich: 4 Gewichtsteine (Gegengewichte der Zugbrücke) · Ulrich: 2 Vorhängeschlösser (Tor) · Hilde: 2 Uhrwerke (Torturm) · Ulrich: 4 Vorhängeschlösser + 4 Gewichtsteine (Pforten der Stadtmauer) | 1.841 (sammelt sich bis Level 7) | 2.000 Gold |
+| 6 | Das Stadttor | Torwächter Ulrich: 4 Gewichtsteine (Gegengewichte der Zugbrücke) · Ulrich: 2 Vorhängeschlösser (Tor) · Hilde: 2 Uhrwerke (Torturm) · Ulrich: 4 Vorhängeschlösser + 4 Gewichtsteine (Pforten der Stadtmauer) | 1.841 | 2.000 Gold |
+| 7 *(geplant, v0.16.0)* | Die Heilstube | Heilerin Agnes: 5 Verbände · Agnes: 50 Flachsfasern (Wundpolster) · Torwächter Ulrich: 15 Verbände (Wachstube) · Hilde: 20 Verbände + 50 Flachsfasern (Markttag) | 850 (sammelt sich bis Level 8) | 3.000 Gold |
 
-Der Reiter „🏘️ Ort & Level“ im Level-Fenster zeigt alle Bauabschnitte mit dem, was sie freischalten. Level 7 und weiter kommen mit dem nächsten Techbaum (Abschnitt 4.4).
+Der Reiter „🏘️ Ort & Level“ im Level-Fenster zeigt alle Bauabschnitte mit dem, was sie freischalten. Level 7 ist geplant (v0.16.0, Abschnitt 6); Level 8–12 folgen häppchenweise (Abschnitt 4.4).
 
 ---
 
@@ -330,11 +331,11 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 
 | Level | Inhalt (Tobias) | Stand |
 |---|---|---|
-| 7 | **Flachs** (Tobias' Wahl nach Claudes Vorschlag, statt Farn oder Hanf) → **Fasern** → **Verbände** – wieder ganz einfach | Plan folgt |
-| 8 | erster **Heilverband** (Verband + Kraut, z. B. **Ringelblume**) | Plan folgt |
-| 9 | zweite Verbands-Version (weiteres Kraut) | Plan folgt |
-| 10 | wie Level 4 bei den Werkzeugen: mehr investieren, auf Masse gehen | Plan folgt |
-| 11–12 | Abschluss des Kräuter-Kapitels | Plan folgt |
+| 7 | **Flachs** (Tobias' Wahl nach Claudes Vorschlag, statt Farn oder Hanf) → **Fasern** → **Verbände** – wieder ganz einfach, als Grundlage (wie Level 1 mit Holz): Beet, Flachsbreche, Webstube | Plan steht (v0.16.0, Abschnitt 6), wartet auf Freigabe |
+| 8 | **Ringelblume** als zweite Pflanze im selben Beet; die erste Maschine mit 2 Eingängen (Faser bzw. Verband + Kraut) → erster **Heilverband** (wie Level 2) | planen nach v0.16.0 |
+| 9 | eine **dritte Pflanze** (Claudes Idee: Schafgarbe, das Wundkraut des Mittelalters) und der nächste Schritt, z. B. eine zweite Verbands-Version (wie Level 3) | später |
+| 10 | Jetzt hat man **Fasern + 3 Pflanzen** – wie Holz, Stein und Eisen im Werkzeug-Kapitel. Wie Level 4: mehr investieren, auf Masse gehen | später |
+| 11–12 | die Pflanzen **weiter kombinieren** (wie Level 5–6), Abschluss des Kräuter-Kapitels | später |
 | 13+ | neues Kapitel, z. B. Sand → Glas, mit den Kräuter-Maschinen Sandstaub für die Zauberei | später |
 | ~15 | **Alchemist** und Zaubertränke (Mörser → Pulver → Tränke) – Tobias möchte damit noch warten | später |
 
@@ -353,6 +354,14 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 - **Im Beet wächst alles**, egal welche Pflanze.
 - **Kette (Level 7 wie Level 1, klein anfangen):** Eine Maschine macht aus der Pflanze Fasern, z. B. **1 Pflanze → 50 Fasern**, daraus **10 Verbände**. Später kommt eine Maschine mit 2 Eingängen für Faser + Kräuter.
 - **Preise in der mittleren Kategorie** (die Werkstattwaren bringen bisher 72 bis gut 300 Gold): z. B. **1 Verband 150 Gold, 1 Samen 1.000 Gold** – aus einem Samen werden so 1.500 Gold. Feintuning später. **Die Basis (Flachs) bleibt günstig**; mit den Ringelblumen zieht es an: teurer, bringt aber auch mehr.
+
+**Chat 11, Teil 2 (Antworten auf Claudes Fragen zu Level 7):**
+
+- **Die geerntete Pflanze legt man ein wie einen Holzstamm** (das Beet hat kein Band): Beet → Laden-Lager → Flachsbreche.
+- **Ernten und Säen sind zwei getrennte Schritte** – Tobias: „damit man 2× alles durchgehen muss“.
+- **Das Beet ist 2 × 2** groß, damit die Pflanze gut zu sehen ist.
+- **Die Maschine mit 2 Eingängen (Faser + Kraut) kommt erst auf Level 8** mit der Ringelblume. Auf Level 7 macht die Webstube nur Verbände.
+- **Gesamtbild (Tobias):** Schritt für Schritt immer mehr dazu, wie im Werkzeug-Kapitel: Level 7 die Verbände als Grundlage, auf Level 8 kommt etwas dazu, auf Level 9 der nächste Schritt mit einer neuen Pflanze – so hat man bis Level 10 Fasern + 3 verschiedene Pflanzen (wie Holz, Stein und Eisen), und auf Level 11–12 kombiniert man sie weiter (Tabelle oben).
 
 **Ältere Ideen (Chat 9):**
 
@@ -479,8 +488,8 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | v0.13.0 | **Aufträge & neue Namen:** Aufträge der Bewohner im Level-Fenster mit Erfahrung (XP) und Gold, Aufstieg mit Gold bezahlen, Bauabschnitte des Ortes, 8 Waren mit neuen Namen und Bildern | ✅ fertig |
 | v0.14.0 | **Spiel im Hintergrund:** Fabrik läuft weiter, bis etwas leer ist; „Willkommen zurück“; Rohstoff-Vorrat (3) mit „Auffüllen“; Lagerhaus nur noch von Hand befüllen | ✅ fertig |
 | v0.15.0 | **Test-Knopf:** „🧪 Test: Auftrag erledigen“ im Level-Fenster – Erfahrung ohne Waren und ohne Gold, solange das Spiel ein Prototyp ist | ✅ fertig |
-| v0.15.1 | **Kräuter-Kapitel auf dem Papier (nur README):** Gesamtbild Level 7–12, zuerst Level 7 im Detail (Beet, Maschinen, Waren, Preise, Zeiten, Bewohnerin, Aufträge) | als Nächstes, gemeinsam |
-| v0.16.0 | **Beet und Level 7:** Samen pflanzen, Pflanze wächst (etwa 30 Minuten), ernten; Flachs → Fasern → Verbände | nach der Freigabe von v0.15.1 |
+| v0.15.1 | **Kräuter-Kapitel auf dem Papier (nur README):** Gesamtbild Level 7–12, Level 7 im Detail (Beet, Maschinen, Waren, Preise, Zeiten, Bewohnerin, Aufträge) | ✅ fertig |
+| v0.16.0 | **Beet und Level 7 „Die Heilstube“:** säen, 30 Minuten wachsen, ernten; Flachsbreche (1 Pflanze → 50 Fasern), Webstube (5 Fasern → 1 Verband); Heilerin Agnes mit 4 Aufträgen | Plan steht (unten), wartet auf Tobias' Freigabe |
 | v0.17.0 ff. | **Level 8–12:** Ringelblume und Heilverbände (Maschine mit 2 Eingängen), zweites Kraut, Masse, Abschluss des Kapitels (Abschnitt 4.4) | häppchenweise |
 
 ### Bänder leeren (vorgemerkt in v0.11.1, umgesetzt in v0.12.0)
@@ -494,6 +503,67 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 - Spielstand-Format bleibt gleich.
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
+
+### v0.16.0 – Beet und Level 7 „Die Heilstube“ (Plan, wartet auf Tobias' Freigabe)
+
+Aufgebaut wie Level 1 – erst klein anfangen (Tobias, Chat 11). Tobias' Vorgaben stehen in Abschnitt 4.4; Namen, Zeiten, Baukosten und Aufträge sind Claudes Vorschlag. Alle Zahlen sind Platzhalter in den Datentabellen.
+
+**Die Kette:**
+
+| Schritt | Gebäude | Was passiert | Wert |
+|---|---|---|---|
+| 1 | Händler | **Leinsamen** kaufen (1 Säckchen = 1 Samen) | 1.000 Gold (Kauf) |
+| 2 | 🌱 **Beet** (2 × 2, kein Band) | **Säen** → die Pflanze wächst **30 Minuten** → **Ernten**: 1 Flachspflanze kommt ins Laden-Lager. Säen und Ernten sind zwei getrennte Tipps. | – |
+| 3 | 🪢 **Flachsbreche** (2 × 2, wie der Holzfäller) | Flachspflanze **einlegen** (Vorrat 3, „⏫ Auffüllen“ aus dem Laden-Lager) → **50 Flachsfasern** in 10 Minuten (alle 12 Sekunden eine) am orangen Pfeil aufs Band | 25 Gold je Faser (50 = 1.250) |
+| 4 | 🧵 **Webstube** (2 × 2, wie das Sägewerk) | **5 Flachsfasern → 1 Verband** in 10 Sekunden; vorerst nur diese eine Einstellung | 150 Gold je Verband (10 = 1.500) |
+
+- **Jede Stufe bringt mehr:** Samen 1.000 → 50 Fasern 1.250 (+25 %) → 10 Verbände 1.500 (+20 %).
+- **Die Flachspflanze ist wie ein Rohstoff:** Man legt sie ein; aufs Band, ins Lagerhaus oder auf die Theke kommt sie nicht. Kaufen kann man sie nicht – nur anbauen.
+- **Rhythmus:** 3 Beete versorgen genau eine Flachsbreche (3 Pflanzen × 10 Minuten = eine Wachszeit). Eine Webstube schafft die Fasern von bis zu 6 Flachsbrechen.
+- **Geldfluss:** Eine Linie (3 Beete, 1 Flachsbreche, 1 Webstube) macht alle 30 Minuten 30 Verbände = 4.500 Gold aus 3.000 Gold Samen, also rund 1.500 Gold Gewinn – etwa so viel wie eine Eisen-Linie in derselben Zeit.
+
+**Das Beet im Spiel:**
+- **Leer:** Infofenster mit „🌱 Säen: Leinsamen“. Der Samen kommt aus dem Laden-Lager; liegt keiner da, kauft der Knopf einen für 1.000 Gold (er sagt vorher, was er tut).
+- **Wächst:** Die Pflanze wächst sichtbar in Stufen (Keimling → kleine Pflanze → große Pflanze → blühender, reifer Flachs), dazu eine Fortschrittsleiste; das Infofenster sagt z. B. „Reif in etwa 12:30 min“. Licht grün.
+- **Reif:** Am Beet erscheint 🌾, Licht gelb (wartet). „🌾 Ernten“ legt die Flachspflanze ins Laden-Lager; danach ist das Beet leer und man sät neu.
+- **Im Hintergrund** wächst das Beet weiter; die reife Pflanze wartet, bis man sie erntet. „Willkommen zurück“ nennt reife Beete („Reif zum Ernten: 3× Beet“). Im Testmodus wächst es 10-mal schneller.
+- **Später** wächst im selben Beet jede Pflanze (ab Level 8 Ringelblumen); dann wählt man beim Säen den Samen.
+
+**Bauabschnitt Level 7 „Die Heilstube“:** *„Vor dem neuen Stadttor rasten Reisende, Händler und Wachen – und manche kommen verletzt an. Heilerin Agnes zieht in den Ort und richtet eine Heilstube ein. Was sie braucht, wächst auf dem Feld: Flachs.“*
+
+| | |
+|---|---|
+| Aufstieg auf Level 7 | 3.000 Gold; die Erfahrung kommt aus den 4 Aufträgen vom Stadttor (1.841) |
+| Neu | 🌱 Beet, 🪢 Flachsbreche, 🧵 Webstube · Leinsamen beim Händler |
+| Gratis | 1 Leinsamen |
+| Laden | bleibt wie auf Level 6 (5 große Theken, 1.000 Plätze) |
+
+**Aufträge** (Erfahrung für Level 8 zusammen 850):
+
+| # | Bewohner | Wofür | Waren | Erfahrung |
+|---|---|---|---|---|
+| 1 | Heilerin Agnes | „Ich richte am Stadttor eine Heilstube ein. Für den Anfang brauche ich saubere Verbände.“ | 5 Verbände | 75 |
+| 2 | Heilerin Agnes | „Aus Flachsfasern zupfe ich weiche Polster für die Wunden.“ | 50 Flachsfasern | 125 |
+| 3 | Torwächter Ulrich | „Meine Wachen holen sich beim Üben Schrammen. Die Wachstube soll einen eigenen Vorrat haben.“ | 15 Verbände | 225 |
+| 4 | Bürgermeisterin Hilde | „Zum Markttag kommen viele Reisende. Agnes braucht einen großen Vorrat.“ | 20 Verbände + 50 Flachsfasern | 425 |
+
+Zusammen 40 Verbände und 100 Flachsfasern, also 6 Pflanzen. Weniger Erfahrung als auf Level 6 (1.841), weil das Kapitel wieder einfach anfängt. Level 8 gibt es dann noch nicht; die Erfahrung sammelt sich bis dahin.
+
+**Baukosten** (aus Waren von Level 1–6, damit sie ihren Wert behalten; keins kostet mehr, als ein Samen einbringt – 1.500 Gold):
+
+| Gebäude | Kosten | entspricht etwa |
+|---|---|---|
+| 🌱 Beet | 10 Holzplatten + 10 Steinplatten | 360 Gold |
+| 🪢 Flachsbreche | 10 Holzplatten + 2 Zahnradwellen | 828 Gold |
+| 🧵 Webstube | 20 Holzstäbe + 2 Räderwerke | 1.008 Gold |
+
+Die erste Linie (3 Beete, Flachsbreche, Webstube) kostet rund 2.900 Gold an Waren, dazu 3 Leinsamen.
+
+**Bilder:** Säckchen Leinsamen, Flachspflanze mit blauen Blüten, Flachsfaser (helles Faserbündel), Verband (weiße Leinenrolle).
+
+**Spielstand:** Version 12 → 13; bestehende Fabriken bleiben unverändert, die neuen Gebäude kommen einfach dazu.
+
+**Prüfen:** Spielregeln (säen, 30 Minuten wachsen – auch im Hintergrund –, ernten, einlegen, 1 Pflanze → 50 Fasern → 10 Verbände, Werte je Stufe, Baukosten-Grenze, Aufträge, Aufstieg auf Level 7, Spielstand) und Browser-Test in Tablet- und Handygröße (Beet per Touch bauen, säen, Zeit vorspulen, ernten, einlegen, Verbände kommen im Laden-Lager an).
 
 ### v0.15.0 – Test-Knopf „Auftrag erledigen“ (fertig)
 
@@ -966,6 +1036,11 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 | 08.11.2026 | Beet: baut man wie eine Maschine; 1 Samen = 1 Pflanze (größer dargestellt), wächst etwa 30 Minuten, dann ernten; kein Anschluss ans Band (vorerst); im Beet wächst jede Pflanze | Tobias (Chat 11). Die 30 Minuten bremsen den Geldfluss, weil ein Samen rund 50 % Gewinn bringt. Ersetzt Claudes Vorschlag „wie der Holzfäller, 200 Stück in 15 Minuten“. |
 | 08.11.2026 | Flachs-Kette: 1 Pflanze → 50 Fasern → 10 Verbände; später eine Maschine mit 2 Eingängen für Faser + Kräuter | Tobias (Chat 11): Level 7 wie Level 1 aufbauen, klein anfangen. |
 | 08.11.2026 | Kräuter-Preise in der mittleren Kategorie: etwa Samen 1.000 Gold, Verband 150 Gold (1.500 Gold je Samen); Basis günstig, Ringelblume teurer und lohnender | Tobias (Chat 11); Feintuning später. Ersetzt Claudes Vorschläge „wie Holz“ bzw. „wie Eisen“. |
+| 08.11.2026 | Die geerntete Pflanze kommt ins Laden-Lager und wird wie ein Holzstamm in die Flachsbreche eingelegt | Claudes Vorschlag, Tobias: „Ja“. Das Beet hat kein Band. |
+| 08.11.2026 | Ernten und Säen sind zwei getrennte Schritte | Tobias (Chat 11, Teil 2): „damit man 2× alles durchgehen muss“. Ersetzt Claudes Vorschlag „Ernten & neu säen“ in einem Tipp. |
+| 08.11.2026 | Beet 2 × 2 | Claudes Empfehlung, Tobias: „Ja, 2x2“. So ist die Pflanze gut zu sehen. |
+| 08.11.2026 | Level 7: nur Verbände als Grundlage; Level 8 Ringelblume und die erste Maschine mit 2 Eingängen; Level 9 eine dritte Pflanze; bis Level 10 Fasern + 3 Pflanzen (wie Holz, Stein, Eisen); Level 11–12 weiter kombinieren | Tobias (Chat 11, Teil 2): schrittweise immer mehr dazu, wie im Werkzeug-Kapitel. |
+| 08.11.2026 | Plan für Level 7 (v0.16.0): Flachsbreche 1 Pflanze → 50 Fasern in 10 Minuten (Vorrat 3), Webstube 5 Fasern → 1 Verband in 10 s, Flachsfaser 25 Gold, Baukosten aus Waren von Level 1–6, Heilerin Agnes mit 4 Aufträgen (850 Erfahrung), Aufstieg 3.000 Gold, Laden bleibt wie auf Level 6 | Claudes Entwurf nach Tobias' Vorgaben; wartet auf Tobias' Freigabe. |
 
 ---
 
@@ -973,7 +1048,7 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 
 Stand 08.11.2026 (nach v0.15.0).
 
-1. **Nächster Schritt:** das Kräuter-Kapitel auf dem Papier (v0.15.1, Abschnitt 4.4 und Frage 18). v0.14.0 ist getestet (Spiel im Hintergrund klappt, 3 Rohstoffe reichen, die neuen Warenbilder erkennt Tobias und sie gefallen); das Lagerhaus ohne Nachschub hat Tobias nicht erwähnt. Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Vorhängeschlössern sehr viel Gold.
+1. **Nächster Schritt:** Tobias gibt den Plan für v0.16.0 frei (Beet und Level 7, Abschnitt 6) oder ändert Zahlen und Namen. v0.14.0 ist getestet (Spiel im Hintergrund klappt, 3 Rohstoffe reichen, die neuen Warenbilder erkennt Tobias und sie gefallen); das Lagerhaus ohne Nachschub hat Tobias nicht erwähnt. Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Vorhängeschlössern sehr viel Gold.
 2. **Handel im echten Tempo:** geklärt – Tobias' Zeiten (bis Eisen etwa 45 Minuten, zweite Runde Eisen nach etwa 60 Minuten) sind in echter Zeit gemessen; nur die Eisen-Runden hat er im Testmodus beschleunigt. Früher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10).
 3. **Laden-Lager:** seit v0.10.1 500 Plätze bis Level 3, 1.000 ab Level 4 (Tobias). Claudes Lesart: erst ab Level 4, weil es dort eng wird. Soll es schon ab Level 1 1.000 sein, ist das eine Zahl in der Datentabelle.
 4. **Aufträge (seit v0.13.0 im Spiel):** geklärt – Waren werden abgegeben, ein Auftrag nach dem anderen, Gold = Thekenwert, Erfahrung reicht genau fürs Level, Aufstieg kostet Gold. Stückzahlen passen (Tobias, v0.13.0: „machbare Menge, das Spiel soll auch fordern“). Noch offen: Passen die Aufstiegspreise (Platzhalter)? Level 7 bis 12 kommen mit dem Kräuter-Kapitel (Abschnitt 4.4). Kostet der Laden-Ausbau später zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Tobias' Erkenntnis bleibt wichtig: Man muss die Mitte finden zwischen Verkaufen (Gold für Rohstoffe) und Weiterverarbeiten.
@@ -990,12 +1065,27 @@ Stand 08.11.2026 (nach v0.15.0).
 15. **Verbesserungen mit Erfahrung (Idee von Tobias):** Mit XP z. B. schneller Holz verarbeiten oder schnellere Förderbänder freischalten. Tobias ist sich noch nicht sicher, in welche Richtung; vorerst dient die Erfahrung nur dem Aufstieg. Das Spiel zählt schon alle Erfahrung mit (`xpTotal`), damit das später möglich ist.
 16. **Reihenfolge nach v0.13.0:** geklärt – erst das Spiel im Hintergrund (v0.14.0), dann besprechen wir gemeinsam die Vorgehensweise mit Level und Techbaum.
 17. **Rohstoff-Vorrat (seit v0.14.0):** 3 Rohstoffe je Gebäude (45 Minuten) – Tobias: „3 als Rohstoff reichen“. Soll der Vorrat später wachsen, z. B. mit dem Level oder als Verbesserung mit Erfahrung (Frage 15)? Das ist eine Zahl in der Datentabelle (`capacity`).
-18. **Kräuter-Kapitel (Abschnitt 4.4):** Geklärt (Chat 11): 1 Samen = 1 Pflanze, etwa 30 Minuten Wachszeit, ernten, kein Band am Beet, jede Pflanze im selben Beet, 1 Pflanze → 50 Fasern → 10 Verbände, Preise etwa 1.000 (Samen) und 150 (Verband). Noch offen für v0.15.1: Wie kommt die geerntete Pflanze in die Faser-Maschine (Claudes Idee: einlegen wie einen Holzstamm)? Wie groß ist das Beet? Ernten und neu säen mit einem Tipp? Zeiten der Maschinen, Baukosten, Namen der Maschinen, neue Bewohnerin, Aufträge und Aufstiegspreis für Level 7. Später: welches zweite Kraut auf Level 9 (Claudes Idee: Schafgarbe), wie die Ringelblume verarbeitet wird.
+18. **Kräuter-Kapitel (Abschnitt 4.4):** Geklärt (Chat 11): 1 Samen = 1 Pflanze, etwa 30 Minuten Wachszeit, ernten, kein Band am Beet, jede Pflanze im selben Beet, 1 Pflanze → 50 Fasern → 10 Verbände, Preise etwa 1.000 (Samen) und 150 (Verband). Geklärt (Chat 11, Teil 2): Pflanze einlegen wie einen Holzstamm, Ernten und Säen getrennt, Beet 2 × 2, die Maschine mit 2 Eingängen erst auf Level 8. Der Plan für Level 7 steht als Entwurf (Abschnitt 6, v0.16.0) und wartet auf Freigabe. Später: Level 8 (wie die Ringelblume verarbeitet wird, welche Maschine mit 2 Eingängen, Rezept des Heilverbands, wählt man beim Säen den Samen per Liste?), Level 9 (dritte Pflanze, Claudes Idee: Schafgarbe), Level 10–12.
 19. **Test-Knopf (seit v0.15.0):** Vor v1.0 entfernen (`QUEST_TEST_SKIP = false` in `data/levels.js`). Zählt die übersprungene Erfahrung auch für spätere Verbesserungen mit Erfahrung (Frage 15)? Im Moment ja (`xpTotal`).
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.15.1 – Plan für Level 7 „Die Heilstube“ (08.11.2026, nur README)
+
+**Vorgenommen:**
+- Das Kräuter-Kapitel auf dem Papier planen, bevor Code entsteht: Gesamtbild Level 7–12 und Level 7 im Detail.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie kommt die Pflanze ohne Band in die Faser-Maschine? → Ernten legt sie ins Laden-Lager, von dort legt man sie ein wie einen Holzstamm (Tobias: „Ja“).
+- Ernten und Säen in einem Tipp? → Nein, zwei Schritte (Tobias).
+- Wie viele Beete braucht eine Flachsbreche? → 3: Mit 10 Minuten je Pflanze und Vorrat 3 läuft die Flachsbreche genau eine Wachszeit (30 Minuten).
+- Passen die Preise zu den Regeln? → Ja: jede Stufe bringt mehr (1.000 → 1.250 → 1.500), und kein neues Gebäude kostet mehr, als ein Samen einbringt.
+- Wie geht es nach Level 7 weiter? → Schritt für Schritt wie im Werkzeug-Kapitel: Level 8 Ringelblume und die erste Maschine mit 2 Eingängen, Level 9 eine dritte Pflanze, bis Level 10 Fasern + 3 Pflanzen, Level 11–12 weiter kombinieren (Tobias).
+
+**Gemacht:**
+- README: Plan für v0.16.0 (Abschnitt 6), Gesamtbild und Antworten in Abschnitt 4.4, Level 7 in Abschnitt 3.8, Status, Fahrplan, Entscheidungen, offene Fragen, Gesprächsprotokoll. Spiel unverändert; nur die Versionsnummer im Spiel steigt auf v0.15.1.
 
 ### v0.15.0 – Test-Knopf „Auftrag erledigen“ (08.11.2026)
 
@@ -1457,7 +1547,13 @@ Stand 08.11.2026 (nach v0.15.0).
 
 **Tobias:** Der Knopf soll immer zu sehen sein. Häppchenweise, wie vorgeschlagen. Das Beet kauft man wie eine Maschine, platziert es und pflanzt den Samen; ein Samen ergibt eine Pflanze, die man etwas größer darstellen kann. Nach einer Zeit ist aus dem Samen eine Pflanze geworden, die man erntet. Dann macht eine Maschine aus der Pflanze Fasern, und im nächsten Schritt gibt es wieder eine Maschine mit 2 Eingängen für Faser + Kräuter. Aus einer Pflanze z. B. 50 Fasern, daraus 10 Verbände. Das Beet soll (noch) keinen Anschluss ans Band haben; darin wächst alles, unabhängig vom Typ. Preise in der mittleren Kategorie – die mittleren Werkstattwaren bringen 72 bis 300 Gold –, z. B. 1 Verband 150 Gold, 1 Samen 1.000 Gold, also 1.500 Gold je Samen; Feintuning später. Die Basis soll günstig bleiben, mit Ringelblumen kann es anziehen (teurer, bringt mehr). Sonst wie Level 1 aufbauen, um klein anzufangen. Weil ein Samen etwa 50 % Rendite bringt, soll es etwa 30 Minuten dauern, bis die Pflanze ausgewachsen ist – so lässt sich der Geldfluss steuern.
 
-**Umgesetzt:** v0.15.0 (siehe Versionshistorie). Tobias' Antworten zum Kräuter-Kapitel stehen in Abschnitt 4.4; als Nächstes entwirft Claude damit Level 7 im Detail (v0.15.1, nur README).
+**Umgesetzt:** v0.15.0 (siehe Versionshistorie). Tobias' Antworten zum Kräuter-Kapitel stehen in Abschnitt 4.4.
+
+**Claude** hat danach einen Entwurf für Level 7 vorgestellt (Leinsamen → Beet → Flachspflanze → Flachsbreche → 50 Fasern → Webstube → 10 Verbände; Werte 1.000 → 1.250 → 1.500; 3 Beete je Flachsbreche) und gefragt: Pflanze einlegen wie einen Holzstamm? Ernten und neu säen in einem Tipp? Beet 2 × 2? Kommt die Maschine mit 2 Eingängen erst auf Level 8?
+
+**Tobias:** Einlegen: ja. Ernten und Säen sollen zwei getrennte Schritte sein, damit man zweimal alles durchgehen muss. Beet 2 × 2: ja. Level 8: genau richtig verstanden. Schrittweise immer mehr dazu: auf Level 7 erst die Verbände als Grundlage, auf Level 8 kommt etwas dazu, auf Level 9 der nächste Schritt mit einer neuen Pflanze – bis Level 10 hat man Fasern + 3 verschiedene Pflanzen (wie Holz, Eisen und Stein), auf Level 11–12 kann man diese weiter kombinieren. So ähnlich war es schon festgelegt.
+
+**Umgesetzt:** v0.15.1 (nur README): Plan für v0.16.0 – Beet und Level 7 „Die Heilstube“ (Abschnitt 6), wartet auf Tobias' Freigabe.
 
 ### 07.11.2026 – Chat 10: Test von v0.13.0, Spiel im Hintergrund, Kräuter-Kapitel, Plan und Umsetzung v0.14.0
 
