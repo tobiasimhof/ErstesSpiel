@@ -338,7 +338,7 @@ test('Wirtschaft: Jede Stufe bringt mehr als ihre Zutaten (Preistabelle)', () =>
     assert.ok(outValue > inValue, `${key} lohnt sich (${outValue} > ${inValue})`);
     assert.ok(outValue <= inValue * 1.3, `${key} nicht übertrieben (${outValue})`);
   }
-  // Werte aus der Tabelle (README 4.2)
+  // Werte aus der Tabelle (docs/SPIEL.md, Abschnitt 7)
   assert.equal(ITEMS.eisenerz.buyPrice, 4 * ITEMS.holzstamm.buyPrice, 'Eisen kostet viermal so viel');
   assert.equal(200 * ITEMS.holzblock.price, 600);
   assert.equal(40 * ITEMS.holzplatte.price, 720);

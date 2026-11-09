@@ -9,7 +9,7 @@
 // price:    fester Wert/Verkaufspreis im Laden
 // shape/color: Aussehen auf dem Band und in Listen
 //
-// Preise nach dem festgelegten Techbaum (README, Abschnitt 4.2), alle Beträge ×10:
+// Preise nach dem festgelegten Techbaum (docs/SPIEL.md, Abschnitt 7), alle Beträge ×10:
 // Blöcke bringen knapp mehr als der Rohstoff kostet (+9 %), jedes weitere Teil
 // rund 20 % mehr als seine Zutaten. Eisen kostet viermal so viel wie Holz und Stein.
 

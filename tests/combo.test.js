@@ -125,7 +125,7 @@ test('Rezepte aus Grundteilen: 10 + 5 Stück, zwei verschiedene Zutaten, jedes R
   }
 });
 
-test('Werte der neuen Waren: Zutaten + 20 % (Tabelle in der README)', () => {
+test('Werte der neuen Waren: Zutaten + 20 % (Tabelle in docs/SPIEL.md)', () => {
   const expected = {
     zahnradwelle: 324,
     raederwerk: 324,

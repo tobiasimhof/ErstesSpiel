@@ -1,0 +1,161 @@
+# Das Spiel
+
+> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.18.1). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+
+## 1. Idee
+
+- **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeitstitel offen). Man baut auf einem Grundstück eine Fabrik: Rohstoffe kaufen, über Förderbänder durch Werkstätten zu immer komplexeren Waren verarbeiten, im eigenen Laden verkaufen und mit dem Gold ausbauen.
+- **Schwerpunkt: die optimale Fabrik bauen.** Die Wirtschaft gibt vor, was sich gerade lohnt. Leitidee (Tobias): Was gebraucht wird, ändert sich mit dem Level – man baut eine Produktion zurück und eine andere aus. Umbauen, Abreißen und Neubauen sind ein wesentlicher Teil des Spiels.
+- **Makro-Spiel:** Man muss früh planen – genug Grundrohstoffe, ein Grundvorrat an Baumaterial, eigene Straßen je Zwischenprodukt, Lagerhäuser als Zwischenlager. Werden zwei Bänder mit verschiedenen Waren zusammengeführt, ist nicht mehr steuerbar, was an der Maschine ankommt.
+- **Roter Faden:** Der Laden liegt in einem kleinen Ort am Fluss, der wächst. Jedes Level ist ein Bauabschnitt, die Bewohner geben Aufträge.
+- **Kapitel:** Werkzeuge (Level 1–6: Holz, Stein, Eisen) und Kräuter (ab Level 7: Flachs, Ringelblume). Jedes Kapitel fängt einfach an und steigert sich; später greifen die Kapitel ineinander.
+- **Kleine Waren:** Alles auf dem Band ist auch im echten Leben klein (keine Türen, Truhen, Tore). Jedes Produkt entsteht logisch aus seinen Zutaten – aus zwei Produkten das nächstmögliche, sinnvolle.
+- **Plattform:** Browser-Spiel für Tablet und Handy, **nur Querformat**, alles per Touch. Hauptgerät ist Tobias' Galaxy Tab S9, oft mit angeschlossener Tastatur. Später als App. Vorerst nur Deutsch. Draufsicht mit Platzhalter-Grafik (farbige Blöcke, Emojis, gezeichnete Warenbilder).
+- **Vorbilder nur für Mechaniken** – eigene Namen, Rezepte und Grafik: Alchemy Factory (kleine Fabrik mit Bändern), Clash of Clans (Hauptgebäude-Level, regelmäßig reinschauen, Clans), Hay Day (Handel zwischen Spielern).
+- **Geschäftsmodell (später):** kostenlos; Season Pass und Skins, kein Pay2Win.
+
+## 2. Kernschleife und Zeit
+
+Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeiten → Versandportal → Laden-Lager → Theken → Kunden zahlen Gold → neue Rohstoffe, Fläche, Aufstieg. Waren sind zugleich Baumaterial: verkaufen oder damit bauen?
+
+- **Echtzeit.** Die Fabrik läuft auch bei geschlossenem Spiel weiter, **bis etwas leer ist**: Rohstoff-Gebäude, bis ihr Vorrat verarbeitet ist; Maschinen, bis Zutaten fehlen; Lagerhäuser, bis sie leer sind; das Versandportal, bis das Laden-Lager voll ist; Kunden, bis die Theken leer sind; Beete wachsen, bis sie reif sind. Nachlegen ist immer Handarbeit („wie Clash of Clans, nur umgekehrt“, Tobias).
+- **Zurückkommen:** Die verpasste Zeit wird nachgerechnet. Nach mehr als 1 Minute kurze Meldung, nach mehr als 10 Minuten das Fenster „👋 Willkommen zurück!“ (wie lange weg, Verkäufe, was ins Laden-Lager kam, was leer gelaufen ist, reife Beete, Laden-Lager voll, Theken leer).
+- **Menü ☰:** Neues Spiel, Testmodus (Zeit ×10 und ein Testpaket mit Waren). Oben: Gold, Knopf „Laden-Level“, Vollbild, Versionsnummer.
+
+## 3. Die Fabrik
+
+**Grundstück:** Raster aus Feldern, Start 22 × 14. An jeder Seite steht ein Schild: Ein Streifen Fläche (4 Reihen über die ganze Seite) kostet 500 Gold, jede Seite lässt sich 2× erweitern → höchstens 38 × 30 Felder (zusammen 4.000 Gold). Zum Start stehen ein Holzfällerlager und ein Versandportal darauf.
+
+**Förderbänder** (1 × 1, 1 Holzblock je Feld) transportieren Waren Stück für Stück.
+- **Aufteilen:** von einem bestehenden Band aus ziehen (bis zu 3 Richtungen je Feld; Abzweige verteilen abwechselnd). **Zusammenführen:** auf ein bestehendes Band ziehen.
+- **Stau:** Ist ein Band voll, steht alles davor still – nichts geht verloren.
+- **Leeren:** Band antippen → „🧺 Strecke leeren“ (alle Waren der zusammenhängenden Strecke ins Laden-Lager, die Bänder bleiben). Maschine mit gestautem Eingang (rotes Licht) → „🧺 Zulauf leeren“ (leert die Zuleitung mit der falschen Ware, sonst alle gestauten).
+
+**Anschlüsse und Licht:** Pfeile am Gebäude – blau = Eingang, orange = Ausgang. Maschinen (2 × 2): Eingang links oben, Ausgang rechts oben. Kombi-Maschinen: zwei Eingänge links oben und links unten, jeder nimmt jede passende Zutat (am sichersten jede Zutat über ihren eigenen Eingang). Statuslicht: grün = arbeitet, gelb = wartet, rot = blockiert.
+
+**Rohstoff-Gebäude** (Holzfällerlager, Steinbruch, Schmelzhütte, Erntebank): Rohstoff einlegen → 200 Blöcke bzw. Barren in 15 Minuten (Erntebank: 1 Pflanze → 50 Fasern bzw. Blüten in 10 Minuten). **Vorrat bis 3**, der Reihe nach verarbeitet; drei Punkte am Gebäude zeigen ihn. „⏫ Auffüllen“ füllt bis zum Rand: erst aus dem Laden-Lager, was fehlt, kauft es beim Händler (Erntebank nur aus dem Laden-Lager). Die **Erntebank** nimmt jede Pflanze, auch gemischt; je Pflanze ein Knopf „➕ … einlegen“, Auffüllen nimmt die Pflanze, die gerade läuft. Tobias baut lieber zwei Erntebänke und legt getrennt ein, damit die Straßen steuerbar bleiben.
+
+**Maschinen** verarbeiten nach Rezept. Im Infofenster stellt man ein, was sie herstellen (Grundmaschinen 2 Einstellungen, Kombi-Maschinen 2–3). Beim Umstellen bleiben alle Teile in der Maschine; „↩ Reste ins Laden-Lager“ holt ungebrauchte heraus. Das Infofenster zeigt alle Rezepte und was fehlt; fehlt eine Zutat, zeigt die Maschine ein kleines Bild davon.
+
+**Beet** (2 × 2, kein Band): „🌱 Säen“ (je Samensorte ein Knopf; der Samen kommt aus dem Laden-Lager, sonst kauft der Knopf einen beim Händler) → die Pflanze wächst sichtbar **30 Minuten** → 🌾 reif → „🌾 Ernten“ legt sie ins Laden-Lager. Säen und Ernten sind getrennte Schritte, 1 Samen = 1 Pflanze. Ernten geht nicht bei vollem Laden-Lager. Wird ein Beet reif, erscheint eine Meldung. Abreißen: Samen und reife Pflanze kommen zurück, eine halb gewachsene geht verloren (mit Rückfrage).
+
+**Lagerhaus** (2 × 1): Eingang oben links, Ausgang unten rechts, 3 Fächer × 50. Zwischenlager und Puffer – was hineinläuft, läuft weiter, sobald am Ausgang Platz ist. Infofenster: „📥 Befüllen“ aus dem Laden-Lager (Ware wählen, Menge wie an der Theke, bis 150) und „↩ Ausräumen“. Nur von Hand, kein automatischer Nachschub. Rohstoffe kommen nicht hinein.
+
+**Versandportal** (1 × 1, ein Eingang, dreht mit): schickt alles ins Laden-Lager; nimmt nichts an, solange das Laden-Lager voll ist.
+
+**Bauen und Umbauen**
+- **Bauen geht sofort** und kostet **Waren** aus dem Laden-Lager (Tabelle in Abschnitt 6), kein Gold. Abreißen gibt die bezahlten Waren zurück – auch über die Grenze des Laden-Lagers (die Startgebäude geben nichts zurück). Verschieben und Drehen kosten nichts.
+- **Bauleiste** („🔨 Bauen“ unten rechts): links immer Förderband, Lagerhaus, Portal (Versandportal), Verschieben, Abreißen; rechts die Gebäude des gewählten **Reiters Holz, Stein, Eisen oder Kräuter** (die Reiter ragen oben aus der Leiste). Gesperrte Gebäude stehen hinten mit „🔒 Level …“, ein ganz gesperrter Reiter trägt ein 🔒. Was die Waren nicht hergeben, ist ausgegraut und sagt beim Antippen, was fehlt. Der zuletzt geöffnete Reiter bleibt gemerkt. Die Karte lässt sich unten so weit schieben, dass die unterste Reihe über der Leiste liegt.
+- **Platzieren:** Vorschau (grün/rot) mit dem Finger schieben, „↻ Drehen“, „✓ Bauen“. **Taste R** dreht die Vorschau, sonst das angetippte Gebäude oder Band.
+- **„✥ Verschieben“:** Bereich markieren (Rechteck ziehen oder ein Teil antippen; halb erfasste Gebäude gehören dazu) → alles auf einmal verschieben, um 90° drehen oder abreißen. In der Gruppe bleibt alles verbunden, Waren ziehen mit. Ein Finger markiert, zwei Finger bewegen die Karte.
+- **„🧹 Abreißen“:** antippen oder mit dem Finger über viele Bänder wischen.
+
+## 4. Wirtschaft
+
+- **Feste Preise** (alles ×10, damit jede Ware ganze Gold kostet). Regel: Blöcke bringen etwa 9 % mehr, als der Rohstoff kostet; jede weitere Stufe rund 20 % mehr als ihre Zutaten – so macht man beim Verkaufen nie Minus. Holz und Stein kosten und bringen gleich viel, Eisen viermal so viel. Ein Test prüft die Stufen.
+- **Laden** (Knopf „⚖️ Laden“ unten links) mit den Reitern **Lager, Theken, Händler**:
+  - **Laden-Lager:** 500 Plätze bis Level 3, 1.000 ab Level 4. Gefüllt über Versandportale, Ernten und Abreißen.
+  - **Theken** bestückt man von Hand mit genau eingestellter Menge (0, −5, −1, +1, +5, Alle). Level 1–3: 2 Theken à 20; Level 4: 3 à 25; Level 5: 4 à 30; ab Level 6: 5 à 30.
+  - **Kunden** kommen alle 10–30 Sekunden und kaufen 1–3 Stück zum festen Wert (teure Teile genauso oft wie einfache). „Letzte Verkäufe“ zeigt die letzten 5.
+  - **Händler:** nur Rohstoffe und Samen kaufen. Verkauft wird nur über die Theken.
+- **Start:** 500 Gold, 1 Holzstamm, 20 Holzblöcke.
+- **Pleiteschutz:** Wer weniger Gold hat, als ein Holzstamm kostet, keinen Rohstoff im Lager oder in Arbeit hat und dessen Waren zusammen weniger wert sind als ein Holzstamm, bekommt einen Holzstamm geschenkt.
+
+## 5. Fortschritt: Laden-Level und Aufträge
+
+- **Level-Fenster** (oben auf „Laden-Level“ tippen) mit den Reitern „📜 Aufträge“ und „🏘️ Ort & Level“. Es gibt immer **genau einen Auftrag** eines Bewohners; „✓ Abgeben“ nimmt die Waren aus dem Laden-Lager und gibt **Erfahrung** (1 je 10 Gold Warenwert) und **Gold** (so viel, wie die Waren an der Theke bringen). 2–5 Aufträge je Level, nicht überspringbar. Die Erfahrung aller Aufträge eines Levels reicht genau für den Aufstieg; **der Aufstieg kostet Gold**. Erfahrung schaltet frei, Gold kauft das Level, Waren bauen die Maschinen. Am Knopf zeigt ❗ einen abgebbaren Auftrag, ⬆ einen möglichen Aufstieg.
+- **„🧪 Test: Auftrag erledigen“** (im Prototyp immer sichtbar, lila gestrichelt): gibt die Erfahrung, nimmt keine Waren, gibt kein Gold. Vor v1.0 entfernen (`QUEST_TEST_SKIP` in `data/levels.js`).
+- Beim Aufstieg gibt es einen Rohstoff gratis.
+
+| Level | Bauabschnitt | Neu | Aufträge (der Reihe nach) | Erfahrung | Aufstieg kostet | Geschenk |
+|---|---|---|---|---|---|---|
+| 1 | Die ersten Hütten | Holzfällerlager, Sägewerk, Lagerhaus, Versandportal, Förderband; Holzstamm | Zimmermann Jakob: 5 Holzplatten · Jakob: 10 Holzstäbe · Bürgermeisterin Hilde: 20 Holzstäbe + 10 Holzplatten | 81 | – (Start) | 1 Holzstamm (Start) |
+| 2 | Wege und Brunnen | Steinbruch, Steinmetz; Felsbrocken | Steinmetzin Berta: 10 Steinplatten · Berta: 10 Stein-Zahnräder · Hilde: 20 Steinplatten + 10 Holzstäbe | 90 | 100 | 1 Felsbrocken |
+| 3 | Die Dorfschmiede | Schmelzhütte, Schmiede; Eisenerz | Schmied Konrad: 5 Eisenstangen · Konrad: 5 Eisenbleche · Hilde: 10 Eisenstangen + 10 Holzplatten | 162 | 250 | 1 Eisenerz |
+| 4 | Die Mühle am Fluss | Zimmerei, 3. Theke | Müllerin Grete: 2 Zahnradwellen · Grete: 4 Räderwerke · Grete: 2 Verstärkte Holzplatten · Hilde: 8 Räderwerke + 4 Zahnradwellen | 714 | 500 | 1 Eisenerz |
+| 5 | Der Markt | Feinschmiede, 4. Theke | Händlerin Marta: 2 Scharniere · Marta: 2 Schlüssel · Baumeister Anton: 1 Zirkel · Marta: 3 Scharniere + 3 Schlüssel | 1.495 | 1.000 | 1 Eisenerz |
+| 6 | Das Stadttor | Schlosserei, 5. Theke | Torwächter Ulrich: 4 Gewichtsteine · Ulrich: 2 Vorhängeschlösser · Hilde: 2 Uhrwerke · Ulrich: 4 Vorhängeschlösser + 4 Gewichtsteine | 1.841 | 2.000 | 1 Eisenerz |
+| 7 | Die Heilstube | Beet, Erntebank, Webstube; Leinsamen | Heilerin Agnes: 5 Verbände · Agnes: 50 Flachsfasern · Ulrich: 15 Verbände · Hilde: 20 Verbände + 50 Flachsfasern | 850 | 3.000 | 1 Leinsamen |
+| 8 | Der Kräutergarten | Kräuterstube; Ringelblumensamen | Agnes: 50 Ringelblüten · Agnes: 5 Heilverbände · Ulrich: 5 Kräuterkompressen · Hilde: 10 Heilverbände + 20 Verbände | 1.332 (sammelt sich, bis es Level 9 gibt) | 4.000 | 1 Ringelblumensamen |
+
+„Erfahrung“ = was die Aufträge des Levels zusammen geben (genau so viel braucht der nächste Aufstieg). Ab Level 4 sind die Stückzahlen so gewählt, dass man auf Masse gehen muss; das Kräuter-Kapitel (Level 7) fängt wieder einfach an.
+
+## 6. Gebäude
+
+| Gebäude | Reiter | Größe | Was es tut | ab Level | Baukosten |
+|---|---|---|---|---|---|
+| 🪓 Holzfällerlager | Holz | 2 × 2 | 1 Holzstamm → 200 Holzblöcke (15 min), Vorrat 3 | 1 | 10 Holzplatten + 10 Holzstäbe |
+| 🪚 Sägewerk | Holz | 2 × 2 | „Platten“ oder „Stäbe“: 5 Holzblöcke → 1 Holzplatte bzw. Holzstab | 1 | 40 Holzblöcke |
+| 🛠️ Zimmerei | Holz | 2 × 2, 2 Eingänge | Zahnradwelle · Räderwerk · Verstärkte Holzplatte | 4 | 20 Holzplatten + 10 Eisenstangen |
+| ⛏️ Steinbruch | Stein | 2 × 2 | 1 Felsbrocken → 200 Steinblöcke (15 min), Vorrat 3 | 2 | 10 Holzplatten + 5 Holzstäbe |
+| ⚒️ Steinmetz | Stein | 2 × 2 | „Platten“ oder „Zahnräder“: 5 Steinblöcke → 1 | 2 | 30 Steinblöcke + 5 Holzstäbe |
+| 🔥 Schmelzhütte | Eisen | 2 × 2 | 1 Eisenerz → 200 Eisenbarren (15 min), Vorrat 3 | 3 | 20 Steinplatten + 10 Holzplatten |
+| 🔨 Schmiede | Eisen | 2 × 2 | „Bleche“ oder „Stangen“: 5 Eisenbarren → 1 | 3 | 10 Steinplatten + 30 Eisenbarren |
+| ⚙️ Feinschmiede | Eisen | 2 × 2, 2 Eingänge | Scharnier · Schlüssel · Zirkel | 5 | 10 Eisenbleche + 2 Räderwerke |
+| 🔐 Schlosserei | Eisen | 2 × 2, 2 Eingänge | Gewichtstein · Uhrwerk · Vorhängeschloss | 6 | 1 Scharnier + 2 Verstärkte Holzplatten |
+| 🌱 Beet | Kräuter | 2 × 2, kein Band | 1 Samen → 1 Pflanze (30 min), säen und ernten von Hand | 7 | 10 Holzplatten + 10 Steinplatten |
+| 🪢 Erntebank | Kräuter | 2 × 2 | 1 Pflanze → 50 Flachsfasern bzw. Ringelblüten (10 min), Vorrat 3, auch gemischt | 7 | 10 Holzplatten + 2 Zahnradwellen |
+| 🧵 Webstube | Kräuter | 2 × 2 | 5 Flachsfasern → 1 Verband | 7 | 20 Holzstäbe + 2 Räderwerke |
+| 🌿 Kräuterstube | Kräuter | 2 × 2, 2 Eingänge | „Heilverbände“ · „Kompressen“ | 8 | 10 Holzplatten + 5 Eisenbleche + 2 Zahnradwellen |
+| 📦 Lagerhaus | immer sichtbar | 2 × 1 | Zwischenlager 3 × 50, von Hand befüllen | 1 | 8 Holzplatten |
+| 🌀 Versandportal | immer sichtbar | 1 × 1 | schickt Waren ins Laden-Lager | 1 | 10 Holzblöcke |
+| ➡️ Förderband | immer sichtbar | 1 × 1 | transportiert | 1 | 1 Holzblock je Feld |
+
+**Regeln für Baukosten:** Das Sägewerk kostet nur Holzblöcke (erste Maschine ohne Platten). Jedes Gebäude kostet Waren früherer Stufen, damit sie ihren Wert behalten. Kein Gebäude kostet mehr, als ein Rohstoff seines Levels als Teile einbringt (Holz und Stein 720 Gold, ab Eisen 2.880; Kräuter-Gebäude höchstens 1.500). Kräuter-Gebäude kosten nur Werkzeug-Waren (Tobias: aus Verbänden wird keine Maschine). Ein Test prüft die Grenze.
+
+Intern heißt die Erntebank `flachsbreche` (alter Name, damit Spielstände passen).
+
+## 7. Waren und Rezepte
+
+| Ware | Herstellung | Zeit | Wert (Gold) |
+|---|---|---|---|
+| Holzstamm | Händler (ab Level 1) | – | 550 (Kauf) |
+| Felsbrocken | Händler (ab Level 2) | – | 550 (Kauf) |
+| Eisenerz | Händler (ab Level 3) | – | 2.200 (Kauf) |
+| Holzblock / Steinblock | Holzfällerlager / Steinbruch | 4,5 s je Stück | 3 |
+| Eisenbarren | Schmelzhütte | 4,5 s je Stück | 12 |
+| Holzplatte / Holzstab | Sägewerk: 5 Holzblöcke → 1 | 5 s | 18 |
+| Steinplatte / Stein-Zahnrad | Steinmetz: 5 Steinblöcke → 1 | 5 s | 18 |
+| Eisenblech / Eisenstange | Schmiede: 5 Eisenbarren → 1 | 5 s | 72 |
+| Zahnradwelle | Zimmerei: 10 Holzstäbe + 5 Stein-Zahnräder | 20 s | 324 |
+| Räderwerk | Zimmerei: 10 Stein-Zahnräder + 5 Holzstäbe | 20 s | 324 |
+| Verstärkte Holzplatte | Zimmerei: 10 Holzplatten + 5 Eisenstangen | 20 s | 648 |
+| Scharnier | Feinschmiede: 10 Eisenbleche + 5 Eisenstangen | 20 s | 1.296 |
+| Schlüssel | Feinschmiede: 10 Eisenstangen + 5 Eisenbleche | 20 s | 1.296 |
+| Zirkel | Feinschmiede: 1 Scharnier + 5 Eisenstangen | 30 s | 1.987 |
+| Gewichtstein | Schlosserei: 10 Steinplatten + 5 Eisenstangen | 20 s | 648 |
+| Uhrwerk | Schlosserei: 1 Zahnradwelle + 1 Räderwerk | 30 s | 778 |
+| Vorhängeschloss | Schlosserei: 1 Scharnier + 1 Räderwerk | 30 s | 1.944 |
+| Leinsamen | Händler (ab Level 7) | – | 1.000 (Kauf) |
+| Flachspflanze | Beet: 1 Leinsamen | 30 min | – (nicht verkäuflich, wird eingelegt) |
+| Flachsfaser | Erntebank: 1 Flachspflanze → 50 | 12 s je Stück | 25 |
+| Verband | Webstube: 5 Flachsfasern → 1 | 10 s | 150 |
+| Ringelblumensamen | Händler (ab Level 8) | – | 1.500 (Kauf) |
+| Ringelblume | Beet: 1 Ringelblumensamen | 30 min | – (nicht verkäuflich, wird eingelegt) |
+| Ringelblüte (getrocknet) | Erntebank: 1 Ringelblume → 50 | 12 s je Stück | 36 |
+| Heilverband | Kräuterstube: 1 Verband + 5 Ringelblüten | 20 s | 396 |
+| Kräuterkompresse | Kräuterstube: 10 Flachsfasern + 5 Ringelblüten | 20 s | 516 |
+
+- Rohstoffe und Pflanzen kommen nicht aufs Band und nicht ins Lagerhaus; man legt sie direkt ins Gebäude. Pflanzen kann man nicht kaufen und nicht verkaufen.
+- **Rechenbeispiele:** 1 Holzstamm (550) → 200 Holzblöcke (600) → 40 Teile (720). 1 Leinsamen (1.000) → 50 Fasern (1.250) → 10 Verbände (1.500). 1 Holzstamm + 1 Felsbrocken ergeben etwa 5 Zahnradwellen oder Räderwerke. 1 Beet Flachs + 1 Beet Ringelblumen = genau 10 Heilverbände; 10 Kräuterkompressen brauchen 2 Flachspflanzen und 1 Ringelblume. 3 Beete versorgen eine Erntebank (3 × 10 Minuten = eine Wachszeit).
+- Verwendung: Jedes Grundteil wird von mindestens einem Kombi-Rezept gebraucht (die Steinplatte vom Gewichtstein); Eisen etwas mehr als Holz und Stein, weil es mehr bringt. Der Verband ist für Wunden, die Kräuterkompresse für Prellungen und Schwellungen.
+
+## 8. Ausblick
+
+**Kräuter-Kapitel (Tobias' Plan):**
+
+| Level | Inhalt | Stand |
+|---|---|---|
+| 7 | Flachs → Fasern → Verbände (wie Level 1) | im Spiel |
+| 8 | Ringelblume, Kräuterstube mit 2 Eingängen (wie Level 2) | im Spiel |
+| 9 | dritte Pflanze (Claudes Idee: Schafgarbe, das Wundkraut des Mittelalters) und der nächste Schritt, z. B. eine zweite Verbands-Version (wie Level 3) | von Tobias erst einmal hinten angestellt |
+| 10 | Fasern + 3 Pflanzen (wie Holz, Stein, Eisen); wieder mehr investieren, auf Masse gehen (wie Level 4) | später |
+| 11–12 | die Pflanzen weiter kombinieren (z. B. Kompresse + Heilverband zu Größerem), Abschluss des Kapitels | später |
+| ab 13 | neues Kapitel, z. B. Sand → Glas, über die Kräuter-Maschinen auch Sandstaub für die Zauberei | später |
+| ~15 | Alchemist, Mörser (getrocknete Blüten → Staub, z. B. Ringelblumenstaub), Zaubertränke (Lebens-, Mana-, Alterstrank …); Farn als Zauberkraut (Idee) | später |
+
+**Leitlinien für neue Inhalte:** Jedes Kapitel fängt einfach an; neue Pflanzen wachsen im selben Beet und laufen durch dieselbe Erntebank; Gebäude kosten Werkzeug-Waren; jede Stufe bringt rund 20 % mehr; jedes neue Level erzählt die Geschichte des Ortes weiter (neue Bewohner, neuer Bauabschnitt); nur kleine Waren; häppchenweise planen und umsetzen.
+
+**Ideen für später (noch nicht entschieden):** Nachfrage drückt Preise, Trends („Die Stadt baut eine Mauer: Steinblöcke +50 %“); Kaufen statt Herstellen (teurer); Laden-Ausbau mit Gold **und** Waren; Weiche mit Filter für gemischte Bänder; Verbesserungen mit Erfahrung (schneller verarbeiten, schnellere Bänder); Mindestbestand im Laden-Lager; weitere Rohstoffe (Lehm → Ziegel, Hanf → Seile, Sand → Glas); Nägel als eigene Stufe.
+
+**Online (ab Meilenstein M5):** Spielerkonto, Spielstand auf dem Server, globaler Schwarzmarkt (alle Läden verbunden, Angebot drückt Preise, Computer-Händler halten ihn lebendig), Clans mit Handel, App für Android und iOS. Braucht einen Server mit laufenden Kosten, Datenschutz (DSGVO), Schutz vor Schummeln (der Server kontrolliert die Wirtschaft), Moderation und Store-Gebühren – deshalb erst das Einzelspieler-Spiel.
