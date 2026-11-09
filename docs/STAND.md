@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.18.5 – Plan: übersichtliches Infofenster (nur Doku) |
+| **Aktuelle Version** | v0.19.0 – Übersichtliches Infofenster und Reiter „Erde“ |
 | **Phase** | M2 – Produktionsketten (Kräuter-Kapitel ab Level 7) |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | v0.19.0 „Übersichtliches Infofenster und Reiter ‚Erde‘“ (Plan in `docs/archiv/PLAENE.md`, Vorschaubilder im Chat gezeigt). Claude programmiert, sobald Tobias den Entwurf freigibt. |
+| **Nächster Schritt** | Tobias spielt mit dem neuen Infofenster weiter (Eisen ausbauen, Kräuterstube ausprobieren) und gibt Feedback. Danach wählen wir gemeinsam den nächsten Schritt; Claude stellt ihn vor und programmiert erst nach Tobias' OK. |
 
 **Tobias' Fabrik** (Screenshot vom 09.11.2026, ca. 1 Stunde in Echtzeit gespielt, 6.036 Gold): Level 8. Links zwei gleiche Holz-Stein-Straßen (je 3 Holzfällerlager → Sägewerk, 3 Steinbrüche → Steinmetz, Zimmerei, Lagerhäuser als Zwischenlager). Oben 2 Holzfällerlager → Sägewerk, 5 Schmelzhütten → 5 Schmieden, 3 Steinbrüche → Steinmetz; darunter Zimmerei, 2 Feinschmieden und 1 Schlosserei (nur Vorhängeschlösser), jede Ausgabe endet in einem Lagerhaus. Unten 3 Beete, 2 Erntebänke, Webstube und Kräuterstube. Zimmerei und eine Feinschmiede warten auf Eisenstangen. Er spielt auf dem Tablet und nutzt für Aufträge den Test-Knopf.
 
@@ -24,11 +24,11 @@
 | M6 | Clans & Handel | Clans, Handel zwischen Spielern |
 | M7 | App | Android und iOS |
 
-**Mögliche nächste Schritte** (Tobias wählt): Übersichtliches Infofenster (offene Frage 1, gewählt), Level 9 mit der dritten Pflanze (hinten angestellt), Weiche mit Filter (Frage 5), Verbesserungen mit Erfahrung (Frage 7).
+**Mögliche nächste Schritte** (Tobias wählt): Maschinen zeigen auf der Karte, was sie herstellen (Frage 1), Level 9 mit der dritten Pflanze (hinten angestellt), Weiche mit Filter (Frage 5), Verbesserungen mit Erfahrung (Frage 7).
 
 ## Offene Fragen
 
-1. **Infofenster (v0.19.0, geplant):** Passt der Entwurf (oben „Stellt gerade her“ mit Bildern, darunter „Umstellen auf“, Knöpfe kleiner)? Die Bauleiste bleibt ohne Warenbilder, der Reiter „Kräuter“ heißt „Erde“. Später vielleicht: Maschinen zeigen auf der Karte, was sie herstellen.
+1. **Infofenster (seit v0.19.0):** Wie spielt es sich? Idee für danach: Maschinen zeigen auf der Karte klein, was sie gerade herstellen (z. B. welche Schmiede Bleche, welche Stangen macht). Beet, Lagerhaus und Versandportal zeigen noch Textzeilen – auch mit Bildern?
 2. **Kräuterstube mit 2 Eingängen** ist gebaut und angeschlossen (v0.18.2), Tobias' Urteil steht noch aus.
 3. **Platzhalter-Zahlen:** Aufstiegspreise, Auftragsmengen, Baukosten. Kostet der Laden-Ausbau später zusätzlich Waren? Begrenzt das Level die kaufbare Fläche?
 4. **Weltgröße:** Reichen 38 × 30 Felder für die Masse der höheren Level, oder gibt es später mehr Fläche (`perSide` in `data/land.js`)?
@@ -43,6 +43,12 @@
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.19.0 – Übersichtliches Infofenster und Reiter „Erde“ (09.11.2026)
+
+- **Warum (Tobias, Chat 14):** Beim Antippen eines Gebäudes sah er „nur eine Menge an Informationen“. Oben soll stehen, was gerade hergestellt wird und was dafür fehlt, darunter, was die anderen Einstellungen kosten – „dann prägt man sich das auch besser ein“. Keine Warenbilder in der Bauleiste; „Pflanzenkunde“ zu lang, „Pflanzen“ klingt komisch → „Erde“.
+- **Umgesetzt:** Status unter dem Namen; grüner Kasten „Stellt gerade her“ mit den Warenbildern vom Band (hat / braucht, fehlend rot) → Ergebnis; „Umstellen auf“ mit jedem anderen Rezept als Knopf (ersetzt Rezept-Knöpfe und Textliste); Rohstoff-Gebäude mit Vorrat als Bildern, „Auffüllen“ groß, „Einlegen“ und „Kaufen“ klein; Verschieben, Drehen, Abreißen klein in einer Zeile; kurzer Tipp statt langer Beschreibung; Reiter „Erde“. Lange Namen brechen um.
+- **Tobias** (zum Entwurf): „Sieht sehr übersichtlich aus und ansprechend.“ Sein Urteil im Spiel steht aus.
+
 ### v0.18.5 – Plan: übersichtliches Infofenster (09.11.2026, nur Doku)
 
 - **Tobias:** Variante B, aber in der Bauleiste nur Symbol, Name und Kosten – keine Waren. „Pflanzenkunde“ zu lang, „Pflanzen“ klingt komisch → Reiter „Erde“. Stattdessen das Infofenster beim Antippen übersichtlicher: oben, was gerade hergestellt wird und was man dafür braucht, darunter, was die anderen Einstellungen kosten – „dann prägt man sich das auch besser ein“. „Ansonsten hast du mein Go.“
@@ -54,9 +60,3 @@
 - **Tobias:** „Gerne Punkt 1“; der Reiter „Kräuter“ darf „Pflanzen“ oder „Pflanzenkunde“ heißen. Frage: Wie kann man die Gebäude darstellen – einfach das Warenbild vom Band, nur etwas größer?
 - **Claude:** Ja, genau so machen es Fabrikspiele – eine Ware sieht überall gleich aus. Vorschaubilder für Tablet und Handy: Variante B (Waren in eigener Zeile, empfohlen), C (Waren als Hauptbild); A passt nicht. Gebäude-Emojis bleiben vorerst, eigene Gebäudebilder in M4. Plan in `docs/archiv/PLAENE.md`. Tobias' Wahl steht aus.
 - Spiel unverändert, nur die Versionsnummer steigt.
-
-### v0.18.3 – Balance bleibt, oberste Regel (09.11.2026, nur Doku)
-
-- **Tobias wählt Option A:** „Alles ist gut so, wie es aktuell ist.“ Mehr Eisen bauen ist klar, aber nicht alles auf einmal, weil das Gold fehlt – „das Balancing zwischen Gold verdienen und Rohstoffe nachkaufen [finde ich] sehr gut“. Der Theken-Verkauf gefällt ihm: „Wer mehr verdienen will, muss teurere Sachen anbieten.“ Massenproduktion steht im Vordergrund; so entstehen mehrere Spielstile.
-- **Neue oberste Regel in `CLAUDE.md`:** Claude programmiert nie ohne Tobias' Erlaubnis, sondern stellt immer erst vor, was programmiert werden soll; dann setzen sie es gemeinsam um.
-- Offene Frage 3 (Balance) erledigt und als Entscheidung ins Archiv; die übrigen Fragen sind neu nummeriert. Spiel unverändert, nur die Versionsnummer steigt.

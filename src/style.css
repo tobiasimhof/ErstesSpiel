@@ -219,7 +219,8 @@ button.danger {
   position: absolute;
   top: 12px;
   right: max(12px, var(--safe-right));
-  width: min(310px, 42vw);
+  /* v0.19.0: etwas breiter, damit Verschieben, Drehen, Abreißen in eine Zeile passen */
+  width: min(320px, 42vw);
   max-height: calc(100% - 92px);
   overflow-y: auto;
   padding: 14px 16px;
@@ -300,6 +301,196 @@ button.danger {
 
 .panel-actions button {
   min-height: 40px;
+}
+
+/* ---------- Infofenster mit Warenbildern (v0.19.0) ---------- */
+
+/* Knöpfe: wide = eigene Zeile, half = zwei nebeneinander */
+.panel-actions button.wide {
+  flex: 1 1 100%;
+}
+
+.panel-actions button.half {
+  flex: 1 1 calc(50% - 4px);
+  min-width: 0;
+  padding: 0 4px;
+  font-size: 13.5px;
+  white-space: nowrap;
+}
+
+.panel-actions button .item-icon,
+.recipe-option .item-icon {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.info-body {
+  margin-top: 10px;
+}
+
+/* Grüner Kasten „Stellt gerade her“ */
+.info-card {
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 2px solid var(--ok);
+  border-radius: 10px;
+}
+
+.info-cap {
+  margin: 10px 0 4px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  opacity: 0.65;
+}
+
+.info-card .info-cap {
+  margin-top: 0;
+  color: #1f6f30;
+  opacity: 1;
+}
+
+.recipe-flow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.recipe-flow + .recipe-flow {
+  margin-top: 4px;
+}
+
+.flow-item {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 40px;
+}
+
+.flow-item .item-icon,
+.flow-out .item-icon {
+  display: block;
+  flex: 0 0 auto;
+}
+
+.flow-count {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.flow-item.lack .flow-count {
+  color: #c2410c;
+}
+
+.flow-item.done .flow-count {
+  color: #1f6f30;
+}
+
+.flow-op {
+  font-size: 16px;
+  font-weight: 700;
+  opacity: 0.6;
+}
+
+.flow-out {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.flow-name {
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.15;
+  /* lange Namen (Kräuterkompresse) brechen um, statt aus dem Kasten zu ragen */
+  hyphens: auto;
+  overflow-wrap: anywhere;
+}
+
+.info-sub {
+  margin-top: 4px;
+  font-size: 12.5px;
+  line-height: 1.35;
+  opacity: 0.8;
+}
+
+/* „Umstellen auf“: jedes andere Rezept ist ein Knopf */
+.recipe-option {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  min-height: 42px;
+  margin-top: 6px;
+  padding: 3px 8px;
+  text-align: left;
+}
+
+.flow-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.option-name {
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 700;
+  hyphens: auto;
+  overflow-wrap: anywhere;
+}
+
+.option-price {
+  margin-left: auto;
+  font-size: 12.5px;
+  white-space: nowrap;
+  opacity: 0.85;
+}
+
+.info-note {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+/* Vorrat der Rohstoff-Gebäude: ein Bild je Platz, leere Plätze blass */
+.source-slots {
+  display: flex;
+  gap: 6px;
+}
+
+.source-slots .item-icon.empty {
+  opacity: 0.25;
+}
+
+/* Verschieben, Drehen, Abreißen: klein in einer Zeile unten */
+.info-tools {
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.info-tools button {
+  flex: 1 1 auto;
+  min-height: 36px;
+  padding: 0 5px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* Kurzer Tipp ganz unten */
+.info-hint {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.3;
+  opacity: 0.65;
 }
 
 /* ---------- Hinweis & Meldungen ---------- */
@@ -1150,6 +1341,64 @@ button.level-up {
 
   .panel-actions {
     margin-top: 8px;
+  }
+
+  /* v0.19.0: Infofenster mit Warenbildern etwas enger */
+  .info-body {
+    margin-top: 8px;
+  }
+
+  .info-card {
+    padding: 6px 8px;
+  }
+
+  .info-cap {
+    margin: 8px 0 3px;
+    font-size: 11px;
+  }
+
+  .flow-name {
+    font-size: 14px;
+  }
+
+  .flow-count,
+  .flow-chip {
+    font-size: 12px;
+  }
+
+  .info-sub {
+    font-size: 12px;
+  }
+
+  .recipe-option {
+    min-height: 38px;
+    margin-top: 5px;
+  }
+
+  .option-name {
+    font-size: 13px;
+  }
+
+  .option-price {
+    font-size: 12px;
+  }
+
+  .panel-actions button.half {
+    font-size: 13px;
+  }
+
+  .info-tools {
+    margin-top: 8px;
+  }
+
+  .info-tools button {
+    min-height: 34px;
+    font-size: 12.5px;
+  }
+
+  .info-hint {
+    margin-top: 6px;
+    font-size: 11.5px;
   }
 
   .big-button {

@@ -369,6 +369,14 @@ export function sourceStock(building) {
   return stock;
 }
 
+// v0.19.0: Der Vorrat der Reihe nach (der laufende Rohstoff zuerst), z. B.
+// ['holzstamm', 'holzstamm'] – für die Bilder im Infofenster.
+export function sourceSlots(building) {
+  const prod = building.prod;
+  if (productionOf(building.type)?.kind !== 'source' || !prod?.loaded || !prod.input) return [];
+  return [prod.input, ...(prod.queue ?? [])];
+}
+
 export function setRecipe(building, recipeKey) {
   const p = productionOf(building.type);
   if (p?.kind !== 'workshop' || !p.recipes.includes(recipeKey)) return false;

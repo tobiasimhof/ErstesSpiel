@@ -8,10 +8,11 @@ import { ITEMS } from '../src/core/data/items.js';
 import { unlocksOf } from '../src/core/levels.js';
 import { clampCamera, createCamera, panBy, setViewSize } from '../src/view/camera.js';
 
-test('Reiter: Holz, Stein, Eisen, Kräuter – in dieser Reihenfolge', () => {
+// v0.19.0 (Tobias): Der Reiter „Kräuter“ heißt „Erde“.
+test('Reiter: Holz, Stein, Eisen, Erde – in dieser Reihenfolge', () => {
   assert.deepEqual(
     BUILD_TABS.map((t) => t.name),
-    ['Holz', 'Stein', 'Eisen', 'Kräuter'],
+    ['Holz', 'Stein', 'Eisen', 'Erde'],
   );
   assert.equal(new Set(BUILD_TABS.map((t) => t.id)).size, BUILD_TABS.length, 'Reiter-Kennungen sind eindeutig');
   for (const tab of BUILD_TABS) assert.ok(ITEMS[tab.item], `Warenbild ${tab.item} des Reiters ${tab.name} gibt es`);

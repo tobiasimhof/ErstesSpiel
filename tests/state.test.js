@@ -83,7 +83,8 @@ test('tileKey und parseTileKey passen zusammen', () => {
 
 test('Gebäude-Tabelle ist vollständig ausgefüllt', () => {
   for (const [key, def] of Object.entries(BUILDINGS)) {
-    for (const field of ['name', 'icon', 'color', 'description']) {
+    // v0.19.0: statt der langen Beschreibung ein kurzer Tipp (tip)
+    for (const field of ['name', 'icon', 'color', 'tip']) {
       assert.ok(typeof def[field] === 'string' && def[field].length > 0, `${key}.${field} fehlt`);
     }
     assert.ok(Array.isArray(def.size) && def.size.length === 2, `${key}.size fehlt`);
