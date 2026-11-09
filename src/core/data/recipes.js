@@ -5,7 +5,7 @@
 // inputs:   benötigte Waren je Durchgang
 // output/amount: was herauskommt
 // time:     Sekunden je Durchgang
-// Festgelegter Techbaum (README, Abschnitt 4.2). Mengen und Zeiten sind Platzhalter.
+// Festgelegter Techbaum (docs/SPIEL.md, Abschnitt 7). Mengen und Zeiten sind Platzhalter.
 
 export const RECIPES = {
   holzplatte: { building: 'saegewerk', label: 'Platten', inputs: { holzblock: 5 }, output: 'holzplatte', amount: 1, time: 5 },

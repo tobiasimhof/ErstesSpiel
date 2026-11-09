@@ -24,7 +24,7 @@
 //              kommt ins Laden-Lager). Säen und Ernten sind zwei Schritte.
 //              Kein Anschluss ans Band. Im Beet wächst jede Pflanze: crops
 //              sagt, welcher Samen welche Pflanze in welcher Zeit ergibt.
-// Alle Zahlen sind Platzhalter. Maschinen sind 2 × 2 (README, Abschnitt 4.2).
+// Alle Zahlen sind Platzhalter. Maschinen sind 2 × 2 (docs/SPIEL.md, Abschnitt 6).
 
 export const BUILDINGS = {
   holzfaeller: {

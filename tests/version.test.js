@@ -17,9 +17,24 @@ test('index.html lädt Dateien mit der aktuellen Versionsnummer', () => {
   for (const v of found) assert.equal(v, VERSION, `index.html nutzt ?v=${v}, erwartet ${VERSION}`);
 });
 
-test('README nennt die aktuelle Version in der Status-Tabelle', () => {
-  const readme = read('README.md');
-  assert.ok(readme.includes(`| **Aktuelle Version** | v${VERSION}`), `README-Status zeigt nicht v${VERSION}`);
+test('docs/STAND.md nennt die aktuelle Version in der Status-Tabelle', () => {
+  const stand = read('docs/STAND.md');
+  assert.ok(stand.includes(`| **Aktuelle Version** | v${VERSION}`), `STAND.md zeigt nicht v${VERSION}`);
+});
+
+// v0.18.1: Diese Dateien liest Claude zu Beginn jedes Chats – sie sollen kurz
+// bleiben. Ausführliches gehört ins Archiv (docs/archiv/).
+test('Doku: STAND.md und SPIEL.md bleiben kurz, das Archiv ist vollständig da', () => {
+  const size = (path) => Buffer.byteLength(read(path), 'utf8');
+  assert.ok(size('docs/STAND.md') < 20000, `docs/STAND.md ist ${size('docs/STAND.md')} Byte groß (Grenze 20.000)`);
+  assert.ok(size('docs/SPIEL.md') < 40000, `docs/SPIEL.md ist ${size('docs/SPIEL.md')} Byte groß (Grenze 40.000)`);
+  assert.ok(size('CLAUDE.md') < 12000, `CLAUDE.md ist ${size('CLAUDE.md')} Byte groß (Grenze 12.000)`);
+  for (const file of ['ENTSCHEIDUNGEN', 'VERSIONEN', 'GESPRAECHE', 'PLAENE', 'KONZEPT-VERLAUF']) {
+    assert.ok(size(`docs/archiv/${file}.md`) > 1000, `docs/archiv/${file}.md fehlt oder ist leer`);
+  }
+  const stand = read('docs/STAND.md');
+  const steps = stand.split('## Die letzten 3 Arbeitsschritte')[1] ?? '';
+  assert.ok((steps.match(/^### v/gm) ?? []).length <= 3, 'STAND.md: höchstens 3 Arbeitsschritte');
 });
 
 test('Import-Map in index.html versieht jede Programmdatei mit der aktuellen Version', async () => {
