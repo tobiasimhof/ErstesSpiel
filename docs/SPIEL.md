@@ -1,12 +1,13 @@
 # Das Spiel
 
-> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.18.1). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.18.3). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
 - **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeitstitel offen). Man baut auf einem Grundstück eine Fabrik: Rohstoffe kaufen, über Förderbänder durch Werkstätten zu immer komplexeren Waren verarbeiten, im eigenen Laden verkaufen und mit dem Gold ausbauen.
 - **Schwerpunkt: die optimale Fabrik bauen.** Die Wirtschaft gibt vor, was sich gerade lohnt. Leitidee (Tobias): Was gebraucht wird, ändert sich mit dem Level – man baut eine Produktion zurück und eine andere aus. Umbauen, Abreißen und Neubauen sind ein wesentlicher Teil des Spiels.
 - **Makro-Spiel:** Man muss früh planen – genug Grundrohstoffe, ein Grundvorrat an Baumaterial, eigene Straßen je Zwischenprodukt, Lagerhäuser als Zwischenlager. Werden zwei Bänder mit verschiedenen Waren zusammengeführt, ist nicht mehr steuerbar, was an der Maschine ankommt.
+- **Gold ist bewusst knapp** (Tobias): Man kann nicht alles auf einmal bauen und auffüllen; das Gleichgewicht zwischen Gold verdienen und Rohstoffe nachkaufen gehört zum Spiel. Wer mehr verdienen will, muss teurere Waren anbieten. So gibt es mehrere Spielstile – z. B. auf Masse gehen oder sich auf teure Waren konzentrieren.
 - **Roter Faden:** Der Laden liegt in einem kleinen Ort am Fluss, der wächst. Jedes Level ist ein Bauabschnitt, die Bewohner geben Aufträge.
 - **Kapitel:** Werkzeuge (Level 1–6: Holz, Stein, Eisen) und Kräuter (ab Level 7: Flachs, Ringelblume). Jedes Kapitel fängt einfach an und steigert sich; später greifen die Kapitel ineinander.
 - **Kleine Waren:** Alles auf dem Band ist auch im echten Leben klein (keine Türen, Truhen, Tore). Jedes Produkt entsteht logisch aus seinen Zutaten – aus zwei Produkten das nächstmögliche, sinnvolle.
@@ -56,7 +57,7 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 - **Laden** (Knopf „⚖️ Laden“ unten links) mit den Reitern **Lager, Theken, Händler**:
   - **Laden-Lager:** 500 Plätze bis Level 3, 1.000 ab Level 4. Gefüllt über Versandportale, Ernten und Abreißen.
   - **Theken** bestückt man von Hand mit genau eingestellter Menge (0, −5, −1, +1, +5, Alle). Level 1–3: 2 Theken à 20; Level 4: 3 à 25; Level 5: 4 à 30; ab Level 6: 5 à 30.
-  - **Kunden** kommen alle 10–30 Sekunden und kaufen 1–3 Stück zum festen Wert (teure Teile genauso oft wie einfache). „Letzte Verkäufe“ zeigt die letzten 5.
+  - **Kunden** kommen alle 10–30 Sekunden und kaufen 1–3 Stück zum festen Wert, jedes Stück von einer zufälligen gefüllten Theke (teure Teile genauso oft wie einfache). Das sind etwa 6 Stück pro Minute, egal wie viele Theken – mehr Gold bringen nur teurere Waren. „Letzte Verkäufe“ zeigt die letzten 5.
   - **Händler:** nur Rohstoffe und Samen kaufen. Verkauft wird nur über die Theken.
 - **Start:** 500 Gold, 1 Holzstamm, 20 Holzblöcke.
 - **Pleiteschutz:** Wer weniger Gold hat, als ein Holzstamm kostet, keinen Rohstoff im Lager oder in Arbeit hat und dessen Waren zusammen weniger wert sind als ein Holzstamm, bekommt einen Holzstamm geschenkt.

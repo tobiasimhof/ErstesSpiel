@@ -17,7 +17,13 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 - Tipp: Das Uhrwerk (Zahnradwelle + Räderwerk) braucht gar kein Eisen und bringt im Verhältnis zu den Rohstoffen genauso viel wie das Vorhängeschloss (etwa das 1,9-Fache) – eine zweite Schlosserei für Uhrwerke ließe sich aus den Holz-Stein-Straßen versorgen, mit Rohstoffen für 550 statt 2.200 Gold.
 - Vorschlag für den nächsten Schritt: erst einmal nichts an der Balance ändern (es macht Spaß, man kommt voran, und der Wunsch, alles voll zu machen, hält am Ball) und die Kräuter ausprobieren. Alternativ: Eisen-Balance anpassen (z. B. mehr Kunden mit jedem Level, Eisenpreis, Vorrat) oder eine Planungshilfe im Infofenster („braucht bei voller Arbeit so viel wie 17 Schmelzhütten“).
 
-**Umgesetzt:** v0.18.2 (nur Doku). Tobias' Antwort steht aus.
+**Umgesetzt:** v0.18.2 (nur Doku).
+
+**Tobias:** „Notier bitte noch in den obersten Regeln in der Datei, die du immer als Erstes liest, dass du nicht ohne meine Erlaubnis anfängst zu codieren, sondern mir immer vorstellst, was du codieren möchtest, und dann setzen wir das gemeinsam um. Ich entscheide mich für Option A. Alles ist gut so, wie es aktuell ist, und dass man mehr Eisen braucht und dafür mehr Eisen bauen muss, ist mir klar – nur man kann das nicht alles auf einmal bauen, weil man das Gold nicht dazu hat. Deswegen finde ich das Balancing zwischen Gold verdienen und Rohstoffe nachkaufen sehr gut. Der Verkauf der Theke gefällt mir ebenfalls. Wer mehr verdienen will, muss teurere Sachen anbieten, was genau mein Ziel ist. Die Massenproduktion steht wie gesagt im Vordergrund, aber die kann ich noch nicht umsetzen, weil Gold fehlt, aber prinzipiell könnte man sich darauf konzentrieren. So entstehen eben mehr Spielstile, das Spiel zu spielen, was ich gut finde. Was hatten wir als nächsten Schritt geplant?“
+
+**Umgesetzt:** v0.18.3 (nur Doku): oberste Regel ganz oben in `CLAUDE.md` (mit der Ausnahme für reine Doku-Versionen), Entscheidungen festgehalten, offene Frage 3 erledigt.
+
+**Claude** hat die möglichen nächsten Schritte aus `docs/STAND.md` aufgezählt (Warenbilder in der Bauleiste, Level 9, Weiche mit Filter, Verbesserungen mit Erfahrung) und Tobias wählen lassen.
 
 ### 09.11.2026 – Chat 12 und 13: Test von v0.17.0, Plan und Umsetzung v0.18.0 (Bauleiste mit Reitern)
 
