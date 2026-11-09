@@ -4,6 +4,18 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.18.5 – Plan: übersichtliches Infofenster (09.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Antwort auf den Plan v0.18.4 festhalten: keine Warenbilder in der Bauleiste, Reiter „Erde“, Infofenster übersichtlicher.
+
+**Fragen, die wir uns gestellt haben:**
+- Gilt Tobias' „Go“ schon fürs Programmieren? → Für die Bauleiste und den Reiter ja; das Infofenster ist ein neuer Entwurf, den Tobias erst sehen soll (oberste Regel). Claude hat Vorschaubilder gezeigt und wartet auf sein OK.
+
+**Gemacht:**
+- `docs/archiv/PLAENE.md`: Plan für v0.19.0 „Übersichtliches Infofenster und Reiter ‚Erde‘“ (der Entwurf „Warenbilder in der Bauleiste“ ist als überholt markiert). `docs/STAND.md`: Status, nächster Schritt, offene Frage 1, neuer Arbeitsschritt oben (v0.18.2 fällt aus der Liste). Gespräch und Entscheidungen ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.18.4 – Plan: Warenbilder in der Bauleiste (09.11.2026, nur Doku)
 
 **Vorgenommen:**

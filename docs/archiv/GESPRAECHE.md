@@ -29,7 +29,13 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Claude** hat Vorschaubilder (Tablet und Handy) mit drei Varianten gebaut und erklärt: Das Warenbild vom Band zu nehmen, ist genau richtig – eine Ware sieht überall gleich aus (Band, Laden, Aufträge, Bauleiste). Variante A (Waren neben dem Gebäudebild) passt bei drei Waren nicht in den Knopf; B (eigene Zeile unter dem Namen, Leiste etwas höher) empfohlen; C (Waren groß, Gebäude klein in der Ecke, Leiste gleich hoch). Gebäudebilder: Emojis (heute, sehen auf jedem Gerät anders aus, manche ähneln sich), selbst gezeichnet wie die Waren, oder gemalte Grafik-Dateien – Empfehlung: Emojis vorerst behalten, eigene Gebäudebilder in M4. Reiter: „Pflanzen“ empfohlen. Idee für danach: Maschinen zeigen auf der Karte, was sie gerade herstellen.
 
-**Umgesetzt:** v0.18.4 (nur Doku): Plan für v0.19.0 in `PLAENE.md`. Tobias' Wahl steht aus.
+**Umgesetzt:** v0.18.4 (nur Doku): Plan für v0.19.0 in `PLAENE.md`.
+
+**Tobias:** „Ich bin tatsächlich für Variante B, wenn ich das richtig gesehen habe. Symbol, wie es heißt und was es kostet. Was es herstellt, würde ich da nicht drauf machen. Ich finde Pflanzenkunde zu lang, und Pflanzen hört sich auch komisch an. Wir sind bei Rohstoffen, deswegen könnte man diesen Bereich evtl. einfach ‚Erde‘ nennen. Ich würde evtl., wenn man das Gebäude anklickt, das nochmal übersichtlicher darstellen wollen, dann prägt man sich das auch besser ein. Aktuell klick ich auf das Gebäude und sehe nur eine Menge an Informationen. Ich würde gerne ganz oben stehen haben, was man aktuell produziert und was man dafür braucht, und unten drunter dann nochmal, was die anderen Dinge kosten würden. So haben wir das aktuell auch schon, aber ich finde es sehr unübersichtlich. Evtl. können wir das klarer und übersichtlicher darstellen. Ansonsten hast du mein Go.“
+
+**Claude** hat nachgefragt, ob die Bauleiste damit wie heute bleibt (Variante B hatte die Warenzeile), und Vorschaubilder fürs neue Infofenster gezeigt (Feinschmiede und Holzfällerlager, heute und neu, Tablet und Handy): oben ein grüner Kasten „Stellt gerade her“ mit Zutaten als Bildern (hat / braucht) → Ergebnis, darunter „Umstellen auf“ mit jedem anderen Rezept als Knopf, Verschieben/Drehen/Abreißen klein in einer Zeile, ein kurzer Tipp statt des langen Textes. Weil der Entwurf neu ist, wartet Claude nach der obersten Regel auf Tobias' OK.
+
+**Umgesetzt:** v0.18.5 (nur Doku): Plan für v0.19.0 „Übersichtliches Infofenster und Reiter ‚Erde‘“ in `PLAENE.md`.
 
 ### 09.11.2026 – Chat 12 und 13: Test von v0.17.0, Plan und Umsetzung v0.18.0 (Bauleiste mit Reitern)
 

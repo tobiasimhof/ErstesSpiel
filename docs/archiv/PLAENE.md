@@ -61,7 +61,21 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### v0.19.0 – Warenbilder in der Bauleiste (Entwurf, wartet auf Tobias' Wahl)
+### v0.19.0 – Übersichtliches Infofenster und Reiter „Erde“ (Entwurf, wartet auf Tobias' OK)
+
+Ersetzt den Entwurf „Warenbilder in der Bauleiste“ (darunter). Tobias (Chat 14): Variante B, aber in der Bauleiste nur Symbol, Name und Kosten – was ein Gebäude herstellt, soll dort nicht stehen. Reiter „Pflanzenkunde“ zu lang, „Pflanzen“ klingt komisch → „Erde“. Stattdessen soll das Infofenster beim Antippen eines Gebäudes übersichtlicher werden, „dann prägt man sich das auch besser ein“: ganz oben, was gerade hergestellt wird und was man dafür braucht, darunter, was die anderen Einstellungen kosten.
+
+- **Bauleiste:** bleibt wie heute (Symbol, Name, Kosten). Reiter „Kräuter“ heißt „Erde“ (Bild bleibt die Ringelblume). Das Kräuter-Kapitel heißt in der Doku weiter so.
+- **Infofenster, Kopf:** Gebäudebild, Name, darunter das Statuslicht mit kurzem Text (statt „2 × 2 Felder“).
+- **Maschinen:** grüner Kasten **„Stellt gerade her“** – Zutaten als Warenbilder mit „hat / braucht“ (fehlend rot, vollständig grün mit Haken) → Ergebnis als Bild mit Namen; darunter eine Zeile: was noch fehlt, Zeit je Stück, Wert. Darunter **„Umstellen auf“**: jede andere Einstellung als Knopf mit dem Rezept in Bildern (z. B. 10 Stangen + 5 Bleche → Schlüssel) und dem Wert; Antippen stellt um. Das ersetzt die Rezept-Knöpfe und die Textliste. Die Webstube (nur ein Rezept) hat nur den grünen Kasten.
+- **Rohstoff-Gebäude und Erntebank:** grüner Kasten „Stellt gerade her“ (z. B. 1 Holzstamm → 200 Holzblöcke, in 15 min, leer in etwa …), darunter der Vorrat als 3 Bilder und was im Laden-Lager liegt; „⏫ Auffüllen“ groß, „➕ 1 einlegen“ und „🧺 Kaufen“ kleiner nebeneinander (Erntebank: je Pflanze).
+- **Alle Gebäude:** „↔ Verschieben“, „↻ Drehen“, „🗑 Abreißen“ kleiner in einer Zeile unten; Knöpfe für Sonderfälle („↩ Reste ins Laden-Lager“, „🧺 Zulauf leeren“) erscheinen wie heute nur, wenn nötig. Statt des langen Beschreibungstextes ganz unten ein kurzer, kleiner Tipp. Beet, Lagerhaus und Versandportal bekommen denselben Kopf und dieselbe untere Knopfzeile, ihr Inhalt bleibt sonst wie heute.
+- **Handy:** Das Wichtigste steht oben, der Rest lässt sich wie heute scrollen.
+- **Vorschaubilder** (Feinschmiede und Holzfällerlager, heute und neu, Tablet und Handy) im Chat gezeigt, nicht im Projekt gespeichert.
+- **Prüfen:** Tests für die Inhalte des Infofensters (Zutaten mit hat / braucht, andere Einstellungen, Umstellen per Knopf); Browser-Test in Tablet- und Handygröße (Fenster passt, Umstellen per Tippen, Auffüllen, Reiter „Erde“).
+- **Idee für später:** Maschinen zeigen auf der Karte klein, was sie gerade herstellen.
+
+### Entwurf „Warenbilder in der Bauleiste“ (überholt, siehe oben)
 
 Tobias wählt Punkt 1 der möglichen nächsten Schritte (Chat 14) und fragt, wie man die Gebäude darstellen kann – ob man einfach das Warenbild vom Band nimmt, nur etwas größer.
 
