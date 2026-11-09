@@ -1,19 +1,34 @@
-// Untere Leisten: Grundleiste (Laden, Bauen), Bauleiste (Gebäude, Förderband,
-// Abreißen) und Werkzeugleiste (während man baut).
+// Untere Leisten: Grundleiste (Laden, Bauen), Bauleiste und Werkzeugleiste
+// (während man baut).
+//
+// Bauleiste (seit v0.18.0, Tobias): links immer sichtbar, was man oft braucht
+// (Förderband, Lagerhaus, Versandportal, Verschieben, Abreißen), rechts die
+// Gebäude des gewählten Reiters (Holz, Stein, Eisen, Kräuter). Die Reiter
+// ragen oben aus der Leiste heraus.
 
-import { BELT_COST, BUILDINGS, BUILD_MENU } from '../core/data/buildings.js';
+import { BELT_COST, BUILDINGS, BUILD_ALWAYS, BUILD_TABS } from '../core/data/buildings.js';
 import { buildingLevel, isBuildingUnlocked } from '../core/levels.js';
 import { canAfford } from '../core/shop.js';
 import { costText } from './format.js';
 import { createItemIcon, redrawItemIcons } from './itemArt.js';
 import { onPress } from './press.js';
 
-const EXTRA_TOOLS = [
-  { tool: 'belt', icon: '➡️', name: 'Förderband', cost: BELT_COST, suffix: 'je Feld' },
+// Kurze Namen für die schmalen Knöpfe links.
+const SHORT_NAMES = { versandportal: 'Portal' };
+
+const TOOLS_BEFORE = [{ tool: 'belt', icon: '➡️', name: 'Förderband', cost: BELT_COST, suffix: 'je Feld' }];
+const TOOLS_AFTER = [
   // v0.11.0: Bereich markieren und verschieben, drehen oder abreißen
   { tool: 'area', icon: '✥', name: 'Verschieben', meta: 'Bereich markieren' },
   { tool: 'erase', icon: '🧹', name: 'Abreißen', meta: 'Bänder & Gebäude' },
 ];
+
+const TOOL_MODES = ['place', 'belt', 'erase', 'area', 'areaMove'];
+
+function buildingEntry(type, extra = {}) {
+  const def = BUILDINGS[type];
+  return { tool: type, building: true, icon: def.icon, name: def.name, cost: def.cost ?? {}, ...extra };
+}
 
 // Baukosten als kleine Warenbilder mit Anzahl, z. B. „40 ▣“.
 function costNode(cost, suffix) {
@@ -30,6 +45,42 @@ function costNode(cost, suffix) {
   return node;
 }
 
+function entryButton(entry) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'build-item';
+  button.dataset.tool = entry.tool;
+  if (entry.tab) button.dataset.tab = entry.tab;
+  const icon = document.createElement('span');
+  icon.className = 'build-icon';
+  icon.textContent = entry.icon;
+  const name = document.createElement('span');
+  name.className = 'build-name';
+  name.textContent = entry.shortName ?? entry.name;
+  if (entry.shortName) button.title = entry.name;
+  let meta;
+  if (entry.cost) {
+    meta = costNode(entry.cost, entry.suffix);
+  } else {
+    meta = document.createElement('span');
+    meta.className = 'build-meta build-note'; // auf dem Handy ausgeblendet (zu schmal)
+    meta.textContent = entry.meta;
+  }
+  button.append(icon, name, meta);
+  entry.metaNode = meta;
+  if (entry.building) {
+    // Gesperrt (v0.9.0): statt der Kosten steht dort, ab welchem Level es das Gebäude gibt.
+    const lock = document.createElement('span');
+    lock.className = 'build-meta build-lock';
+    lock.textContent = `🔒 Level ${buildingLevel(entry.tool)}`;
+    lock.hidden = true;
+    button.append(lock);
+    entry.lock = lock;
+  }
+  entry.button = button;
+  return button;
+}
+
 export function createBuildBar({
   onShop,
   onOpenMenu,
@@ -40,10 +91,15 @@ export function createBuildBar({
   onCancel,
   onAreaMove,
   onAreaErase,
+  initialTab,
+  onTabChange,
 }) {
+  const stage = document.getElementById('stage');
   const bottomBar = document.getElementById('bottom-bar');
   const buildBar = document.getElementById('build-bar');
   const toolBar = document.getElementById('tool-bar');
+  const toolsBox = document.getElementById('build-tools');
+  const tabsBox = document.getElementById('build-tabs');
   const items = document.getElementById('build-items');
   const toolText = document.getElementById('tool-text');
   const toolRotate = document.getElementById('tool-rotate');
@@ -61,57 +117,65 @@ export function createBuildBar({
   onPress(toolAreaMove, onAreaMove);
   onPress(toolAreaErase, onAreaErase);
 
-  const entries = [
-    ...BUILD_MENU.map((type) => {
-      const def = BUILDINGS[type];
-      return { tool: type, building: true, icon: def.icon, name: def.name, cost: def.cost ?? {} };
-    }),
-    ...EXTRA_TOOLS,
+  // Links: immer sichtbar
+  const toolEntries = [
+    ...TOOLS_BEFORE,
+    ...BUILD_ALWAYS.map((type) => buildingEntry(type, { shortName: SHORT_NAMES[type] })),
+    ...TOOLS_AFTER,
   ];
-  for (const entry of entries) {
+  for (const entry of toolEntries) toolsBox.append(entryButton(entry));
+
+  // Rechts: die Gebäude der Reiter
+  const tabEntries = BUILD_TABS.flatMap((tab) => tab.buildings.map((type) => buildingEntry(type, { tab: tab.id })));
+  for (const entry of tabEntries) items.append(entryButton(entry));
+
+  const entries = [...toolEntries, ...tabEntries];
+  for (const entry of entries) onPress(entry.button, () => onSelectTool(entry.tool));
+
+  // Reiter
+  const tabs = BUILD_TABS.map((tab) => {
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = 'build-item';
-    button.dataset.tool = entry.tool;
-    const icon = document.createElement('span');
-    icon.className = 'build-icon';
-    icon.textContent = entry.icon;
+    button.className = 'build-tab';
+    button.dataset.tab = tab.id;
+    button.setAttribute('role', 'tab');
     const name = document.createElement('span');
-    name.className = 'build-name';
-    name.textContent = entry.name;
-    let meta;
-    if (entry.cost) {
-      meta = costNode(entry.cost, entry.suffix);
-    } else {
-      meta = document.createElement('span');
-      meta.className = 'build-meta';
-      meta.textContent = entry.meta;
-    }
-    button.append(icon, name, meta);
-    if (entry.building) {
-      // Gesperrt (v0.9.0): statt der Kosten steht dort, ab welchem Level es das Gebäude gibt.
-      const lock = document.createElement('span');
-      lock.className = 'build-meta build-lock';
-      lock.textContent = `🔒 Level ${buildingLevel(entry.tool)}`;
-      lock.hidden = true;
-      button.append(lock);
-      entry.lock = lock;
-    }
-    entry.button = button;
-    entry.meta = meta;
-    onPress(button, () => onSelectTool(entry.tool));
-    items.append(button);
-  }
+    name.className = 'build-tab-name';
+    name.textContent = tab.name;
+    const lock = document.createElement('span');
+    lock.className = 'build-tab-lock';
+    lock.textContent = '🔒';
+    lock.hidden = true;
+    button.append(createItemIcon(tab.item, 26), name, lock);
+    onPress(button, () => showTab(tab.id));
+    tabsBox.append(button);
+    return { ...tab, button, lock };
+  });
 
-  // Reihenfolge: freigeschaltete Gebäude, Förderband und Abreißen, dann die
-  // gesperrten Gebäude nach Level. Umgestellt wird nur, wenn sich etwas ändert.
+  let activeTab = BUILD_TABS.some((t) => t.id === initialTab) ? initialTab : BUILD_TABS[0].id;
+  function showTab(id) {
+    if (!BUILD_TABS.some((t) => t.id === id)) return;
+    const changedTab = id !== activeTab;
+    activeTab = id;
+    for (const tab of tabs) {
+      const on = tab.id === id;
+      tab.button.classList.toggle('active', on);
+      tab.button.setAttribute('aria-selected', String(on));
+    }
+    for (const entry of tabEntries) entry.button.hidden = entry.tab !== id;
+    items.scrollLeft = 0;
+    if (changedTab) onTabChange?.(id);
+  }
+  showTab(activeTab);
+
+  // Reihenfolge im Reiter: freigeschaltete Gebäude, dann die gesperrten nach
+  // Level. Umgestellt wird nur, wenn sich etwas ändert.
   let order = '';
   function arrange(state) {
-    const locked = (e) => e.building && !isBuildingUnlocked(state, e.tool);
+    const locked = (e) => !isBuildingUnlocked(state, e.tool);
     const sorted = [
-      ...entries.filter((e) => e.building && !locked(e)),
-      ...entries.filter((e) => !e.building),
-      ...entries.filter(locked).sort((a, b) => buildingLevel(a.tool) - buildingLevel(b.tool)),
+      ...tabEntries.filter((e) => !locked(e)),
+      ...tabEntries.filter(locked).sort((a, b) => buildingLevel(a.tool) - buildingLevel(b.tool)),
     ];
     const next = sorted.map((e) => e.tool).join(',');
     if (next === order) return;
@@ -119,16 +183,51 @@ export function createBuildBar({
     items.append(...sorted.map((e) => e.button));
   }
 
+  // Wie hoch die Leisten von unten über die Karte ragen (Bildschirmpixel).
+  // Die Bauleiste samt Reitern ist die höchste; um so viel lässt sich die
+  // Karte nach oben schieben (v0.18.0), damit nichts dauerhaft verdeckt ist.
+  function coverOf(el) {
+    const bottom = stage.getBoundingClientRect().bottom;
+    let top = el.getBoundingClientRect().top;
+    if (el === buildBar) top = Math.min(top, tabsBox.getBoundingClientRect().top);
+    return Math.max(0, Math.round(bottom - top));
+  }
+  let buildCover = 0;
+  function measure() {
+    const wasHidden = buildBar.hidden;
+    if (wasHidden) {
+      buildBar.style.visibility = 'hidden';
+      buildBar.hidden = false;
+    }
+    buildCover = coverOf(buildBar);
+    if (wasHidden) {
+      buildBar.hidden = true;
+      buildBar.style.visibility = '';
+    }
+  }
+  measure();
+
+  let currentMode = 'normal';
+  // Meldungen erscheinen über der gerade sichtbaren Leiste (CSS-Variable).
+  function placeOverlays() {
+    let cover = coverOf(bottomBar);
+    if (currentMode === 'menu') cover = buildCover;
+    else if (TOOL_MODES.includes(currentMode)) cover = coverOf(toolBar);
+    stage.style.setProperty('--bottom-ui', `${cover}px`);
+  }
+
   return {
     // mode: normal | menu | place | belt | erase | area | areaMove
     setMode(mode, { text = '', confirmLabel = '✓ Fertig' } = {}) {
+      currentMode = mode;
+      stage.dataset.mode = mode;
       bottomBar.hidden = mode !== 'normal';
       // v0.10.2: Warenbilder bei jedem Öffnen neu zeichnen – der Browser darf
       // sie wegwerfen, wenn die App im Hintergrund war.
       if (mode === 'menu' && buildBar.hidden) redrawItemIcons(buildBar);
       buildBar.hidden = mode !== 'menu';
-      const toolMode = ['place', 'belt', 'erase', 'area', 'areaMove'].includes(mode);
-      toolBar.hidden = !toolMode;
+      if (mode === 'menu') buildCover = coverOf(buildBar);
+      toolBar.hidden = !TOOL_MODES.includes(mode);
       toolText.textContent = text;
       const moving = mode === 'place' || mode === 'areaMove';
       toolRotate.hidden = !moving;
@@ -137,6 +236,7 @@ export function createBuildBar({
       toolAreaErase.hidden = mode !== 'area';
       toolConfirm.textContent = confirmLabel;
       toolConfirm.disabled = false;
+      placeOverlays();
     },
     setConfirmEnabled(enabled) {
       toolConfirm.disabled = !enabled;
@@ -149,17 +249,37 @@ export function createBuildBar({
       toolAreaMove.disabled = !enabled;
       toolAreaErase.disabled = !enabled;
     },
+    // Neu messen, wenn sich die Bildschirmgröße ändert.
+    resize() {
+      measure();
+      placeOverlays();
+    },
+    // Platz, den die Karte unten zusätzlich bekommt (Bildschirmpixel), mit
+    // etwas Luft, damit der Rand des Grundstücks nicht an den Reitern klebt.
+    bottomCover() {
+      return buildCover + 8;
+    },
+    activeTab() {
+      return activeTab;
+    },
+    showTab,
     // Graut Gebäude aus, für die die Waren im Laden-Lager nicht reichen, und
     // zeigt gesperrte Gebäude mit Schloss. Beide bleiben antippbar und sagen
-    // dann, was fehlt.
+    // dann, was fehlt. Ein Reiter, in dem noch alles gesperrt ist, bekommt
+    // ebenfalls ein Schloss.
     updateCosts(state) {
       arrange(state);
       for (const entry of entries) {
         const locked = Boolean(entry.building) && !isBuildingUnlocked(state, entry.tool);
         entry.button.classList.toggle('locked', locked);
         if (entry.lock) entry.lock.hidden = !locked;
-        entry.meta.hidden = locked;
+        entry.metaNode.hidden = locked;
         if (entry.cost) entry.button.classList.toggle('short', !locked && !canAfford(state, entry.cost));
+      }
+      for (const tab of tabs) {
+        const allLocked = tab.buildings.every((type) => !isBuildingUnlocked(state, type));
+        tab.button.classList.toggle('locked', allLocked);
+        tab.lock.hidden = !allLocked;
       }
     },
   };

@@ -141,9 +141,11 @@ const hud = createHud({
 });
 hud.setTestMode(Boolean(settings.testMode), TEST_SPEED);
 
+// v0.18.0: Unten bekommt die Karte so viel Platz, wie die Bauleiste samt
+// Reitern hoch ist – so lässt sich auch die unterste Reihe darüber schieben.
 function worldBounds() {
   const w = state.world;
-  return { x: w.x * TILE, y: w.y * TILE, width: w.width * TILE, height: w.height * TILE };
+  return { x: w.x * TILE, y: w.y * TILE, width: w.width * TILE, height: w.height * TILE, padBottom: buildBar.bottomCover() };
 }
 
 function plotRect() {
@@ -164,6 +166,12 @@ const buildBar = createBuildBar({
   onCancel: () => controller.cancelTool(),
   onAreaMove: () => controller.areaMoveTool(),
   onAreaErase: () => controller.areaEraseTool(),
+  // v0.18.0: Der zuletzt geöffnete Reiter bleibt gemerkt.
+  initialTab: settings.buildTab,
+  onTabChange(tab) {
+    settings.buildTab = tab;
+    saveSettings(settings);
+  },
 });
 const shopView = createShopView({ state, panels, onChange });
 const offlineView = createOfflineView({ panels });
@@ -209,6 +217,7 @@ window.addEventListener('pageshow', () => redrawItemIcons());
 
 function handleResize() {
   const size = renderer.resize();
+  buildBar.resize();
   const firstLayout = camera.viewWidth === 0;
   setViewSize(camera, size.width, size.height);
   // Rand von 36 px: Die Schilder zum Flächenkauf über und unter dem Grundstück bleiben sichtbar.

@@ -37,10 +37,13 @@ function clampAxis(pos, start, size, visible) {
   return clamp(pos, start, start + size - visible);
 }
 
+// bounds.padBottom (Bildschirmpixel, v0.18.0): so viel Platz bekommt die Karte
+// unten zusätzlich, damit die unterste Reihe über die Bauleiste passt.
 export function clampCamera(cam, bounds) {
   cam.zoom = clamp(cam.zoom, MIN_ZOOM, MAX_ZOOM);
+  const padBottom = (bounds.padBottom ?? 0) / cam.zoom;
   cam.x = clampAxis(cam.x, bounds.x, bounds.width, cam.viewWidth / cam.zoom);
-  cam.y = clampAxis(cam.y, bounds.y, bounds.height, cam.viewHeight / cam.zoom);
+  cam.y = clampAxis(cam.y, bounds.y, bounds.height + padBottom, cam.viewHeight / cam.zoom);
 }
 
 // Verschiebt die Karte um eine Strecke in Bildschirmpixeln (Finger-Bewegung).
