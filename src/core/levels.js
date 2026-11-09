@@ -35,7 +35,7 @@ export function itemLevel(type) {
   for (const b of Object.values(BUILDINGS)) {
     const p = b.production;
     const makes =
-      (p?.kind === 'source' && p.output === type) ||
+      (p?.kind === 'source' && Object.values(p.inputs ?? { [p.input]: p.output }).includes(type)) ||
       (p?.kind === 'workshop' && p.recipes.some((key) => RECIPES[key]?.output === type));
     if (makes) level = Math.min(level, b.level ?? 1);
   }

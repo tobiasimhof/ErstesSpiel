@@ -74,7 +74,7 @@ export function createShopView({ state, panels, onChange }) {
       const def = ITEMS[type];
       const count = storageCount(state, type);
       const note = def.grown
-        ? 'Wächst im Beet · in die Flachsbreche einlegen'
+        ? 'Wächst im Beet · in die Erntebank einlegen'
         : def.raw
           ? `Rohstoff · beim Händler ${numberFormat.format(def.buyPrice)} 🪙`
           : `Wert ${numberFormat.format(def.price)} 🪙 je Stück`;

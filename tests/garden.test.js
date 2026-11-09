@@ -67,15 +67,13 @@ const clone = (state) => deserializeGame(serializeGame(state)).state;
 test('Datentabellen: Beet 2 × 2 ohne Band, 1 Leinsamen → 1 Flachspflanze in 30 Minuten', () => {
   const beet = BUILDINGS.beet;
   assert.deepEqual([beet.level, beet.size, beet.ports], [7, [2, 2], []]);
-  assert.deepEqual(beet.production, { kind: 'garden', crops: { leinsamen: { plant: 'flachspflanze', time: GROW } } });
-  assert.deepEqual(BUILDINGS.flachsbreche.production, {
-    kind: 'source',
-    input: 'flachspflanze',
-    output: 'flachsfaser',
-    amount: 50,
-    duration: 600,
-    capacity: 3,
-  });
+  assert.deepEqual(beet.production.crops.leinsamen, { plant: 'flachspflanze', time: GROW });
+  // v0.17.0: Die Flachsbreche heißt Erntebank und verarbeitet alle Pflanzen
+  assert.deepEqual(BUILDINGS.flachsbreche.production.inputs.flachspflanze, 'flachsfaser');
+  assert.deepEqual(
+    [BUILDINGS.flachsbreche.production.amount, BUILDINGS.flachsbreche.production.duration, BUILDINGS.flachsbreche.production.capacity],
+    [50, 600, 3],
+  );
   assert.deepEqual(BUILDINGS.webstube.production.recipes, ['verband']);
   assert.deepEqual(RECIPES.verband.inputs, { flachsfaser: 5 });
   assert.equal(RECIPES.verband.time, 10);
@@ -314,8 +312,8 @@ test('Testpaket auf Level 7: Fasern und Verbände je 5, keine Samen oder Pflanze
 
 // ---------- Spielstand ----------
 
-test('Spielstand (Version 13): Beete mit wachsender Pflanze bleiben erhalten', () => {
-  assert.equal(SAVE_VERSION, 13);
+test('Spielstand: Beete mit wachsender Pflanze bleiben erhalten', () => {
+  assert.ok(SAVE_VERSION >= 13);
   const state = level7();
   state.storage.leinsamen = 1;
   const beet = placeBuilding(state, 'beet', 10, 6, 0);

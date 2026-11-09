@@ -13,12 +13,28 @@ export function productionOf(type) {
   return BUILDINGS[type]?.production ?? null;
 }
 
+// v0.17.0: Was ein Rohstoff-Gebäude verarbeitet: { Rohstoff: Ware }.
+// Holzfällerlager & Co. haben einen Rohstoff (input/output), die Erntebank
+// mehrere (inputs). Die Reihenfolge ist die der Tabelle.
+export function sourceInputs(p) {
+  if (p?.kind !== 'source') return {};
+  return p.inputs ?? { [p.input]: p.output };
+}
+
+// Rohstoffe eines Gebäudes, z. B. ['flachspflanze', 'ringelblume']
+export function sourceInputTypes(type) {
+  return Object.keys(sourceInputs(productionOf(type)));
+}
+
 export function createProductionState(type) {
   const p = productionOf(type);
   switch (p?.kind) {
     case 'source':
-      // queued (v0.14.0): Rohstoffe, die nach dem laufenden noch warten
-      return { loaded: false, remaining: 0, queued: 0, timer: 0, out: null, blocked: false };
+      // queued (v0.14.0): Rohstoffe, die nach dem laufenden noch warten.
+      // v0.17.0: input = welcher Rohstoff gerade läuft (oder null), queue =
+      // welche warten (queue.length === queued) – die Erntebank nimmt mehrere
+      // Pflanzen, auch gemischt.
+      return { loaded: false, input: null, remaining: 0, queued: 0, queue: [], timer: 0, out: null, blocked: false };
     case 'workshop':
       return { recipe: p.recipes[0], stock: {}, busy: false, timer: 0, out: null, blocked: false };
     case 'storage':
@@ -110,15 +126,18 @@ export function updateProduction(state, building, dt) {
     const interval = p.duration / p.amount;
     if (prod.timer >= interval) {
       prod.timer -= interval;
-      prod.out = { type: p.output, count: 1 };
-      countProduced(state, p.output, 1);
+      const output = sourceInputs(p)[prod.input];
+      prod.out = { type: output, count: 1 };
+      countProduced(state, output, 1);
       prod.remaining--;
       if (prod.remaining <= 0 && prod.queued > 0) {
         // v0.14.0: der nächste Rohstoff aus dem Vorrat kommt dran
         prod.queued--;
+        prod.input = prod.queue.shift();
         prod.remaining = p.amount;
       } else if (prod.remaining <= 0) {
         prod.loaded = false;
+        prod.input = null;
         prod.remaining = 0;
         prod.timer = 0;
       }
@@ -320,22 +339,34 @@ export function sourceRoom(building) {
 
 // Legt einen Rohstoff ins Gebäude, ohne ihn aus dem Laden-Lager zu nehmen
 // (z. B. direkt beim Händler gekauft). Ist es leer, beginnt die Arbeit sofort,
-// sonst wartet er im Vorrat.
-export function addRawToSource(building) {
+// sonst wartet er im Vorrat. v0.17.0: type = welcher Rohstoff (ohne Angabe
+// der erste des Gebäudes).
+export function addRawToSource(building, type = sourceInputTypes(building.type)[0]) {
   const p = productionOf(building.type);
-  if (p?.kind !== 'source' || sourceRoom(building) < 1) return false;
+  if (p?.kind !== 'source' || sourceRoom(building) < 1 || !sourceInputs(p)[type]) return false;
   const prod = building.prod;
-  if (prod.loaded) prod.queued = (prod.queued ?? 0) + 1;
-  else Object.assign(prod, { loaded: true, remaining: p.amount, queued: 0, timer: 0 });
+  if (prod.loaded) {
+    prod.queue.push(type);
+    prod.queued = prod.queue.length;
+  } else Object.assign(prod, { loaded: true, input: type, remaining: p.amount, queued: 0, queue: [], timer: 0 });
   return true;
 }
 
 // Legt einen Rohstoff aus dem Laden-Lager ein (seit v0.14.0 bis zu capacity).
-export function loadInput(state, building) {
+export function loadInput(state, building, type = sourceInputTypes(building.type)[0]) {
   const p = productionOf(building.type);
-  if (p?.kind !== 'source' || sourceRoom(building) < 1) return false;
-  if (!takeFromStorage(state, p.input, 1)) return false;
-  return addRawToSource(building);
+  if (p?.kind !== 'source' || sourceRoom(building) < 1 || !sourceInputs(p)[type]) return false;
+  if (!takeFromStorage(state, type, 1)) return false;
+  return addRawToSource(building, type);
+}
+
+// v0.17.0: Was im Vorrat steckt (der laufende mitgezählt): { Rohstoff: Anzahl }
+export function sourceStock(building) {
+  const prod = building.prod;
+  const stock = {};
+  if (prod?.loaded && prod.input) stock[prod.input] = 1;
+  for (const type of prod?.queue ?? []) stock[type] = (stock[type] ?? 0) + 1;
+  return stock;
 }
 
 export function setRecipe(building, recipeKey) {
@@ -364,8 +395,8 @@ export function buildingContents(building) {
   };
   if (p?.kind === 'source') {
     if (prod.out) add(prod.out.type, prod.out.count);
-    if (prod.loaded && prod.remaining === p.amount) add(p.input, 1);
-    add(p.input, prod.queued ?? 0); // v0.14.0: wartende Rohstoffe sind unberührt
+    if (prod.loaded && prod.remaining === p.amount) add(prod.input, 1);
+    for (const type of prod.queue ?? []) add(type, 1); // v0.14.0: wartende Rohstoffe sind unberührt
   } else if (p?.kind === 'workshop') {
     for (const [type, n] of Object.entries(prod.stock)) add(type, n);
     if (prod.out) add(prod.out.type, prod.out.count);
@@ -397,8 +428,13 @@ export function buildingStatus(state, building) {
   if (p?.kind === 'source') {
     if (prod.out && prod.blocked) return { level: 'blocked', text: 'Ausgang voll – das Band nimmt nichts mehr an.' };
     if (prod.loaded) {
-      const waiting = prod.queued > 0 ? ` Danach noch ${itemCountText(p.input, prod.queued)}.` : '';
-      return { level: 'work', text: `Arbeitet: noch ${prod.remaining} von ${p.amount}.${waiting}` };
+      const queue = {};
+      for (const type of prod.queue ?? []) queue[type] = (queue[type] ?? 0) + 1;
+      const parts = Object.entries(queue).map(([type, n]) => itemCountText(type, n));
+      const waiting = parts.length > 0 ? ` Danach noch ${parts.join(' und ')}.` : '';
+      // v0.17.0: Bei mehreren Rohstoffen steht dabei, welcher gerade läuft
+      const what = Object.keys(sourceInputs(p)).length > 1 ? ` ${ITEMS[prod.input].name}` : '';
+      return { level: 'work', text: `Arbeitet${what}: noch ${prod.remaining} von ${p.amount}.${waiting}` };
     }
     return { level: 'idle', text: 'Leer – Rohstoff nachlegen.' };
   }

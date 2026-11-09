@@ -54,7 +54,17 @@ export const ITEMS = {
   // Mittlere Preise (Tobias): Samen 1.000, aus einem Samen 1.500 Gold.
   // Jede Stufe bringt mehr: 1.000 → 50 × 25 = 1.250 → 10 × 150 = 1.500.
   leinsamen: { name: 'Leinsamen', plural: 'Leinsamen', raw: true, level: 7, buyPrice: 1000, color: '#c9a66b', shape: 'seeds' },
-  flachspflanze: { name: 'Flachspflanze', plural: 'Flachspflanzen', raw: true, grown: true, level: 7, color: '#6f9a45', shape: 'flax' },
+  flachspflanze: { name: 'Flachspflanze', plural: 'Flachspflanzen', raw: true, grown: true, level: 7, color: '#6f9a45', flower: '#5b8ff9', shape: 'plant' },
   flachsfaser: { name: 'Flachsfaser', plural: 'Flachsfasern', price: 25, color: '#e3d3a4', shape: 'fiber' },
   verband: { name: 'Verband', plural: 'Verbände', price: 150, color: '#f4f1e8', shape: 'bandage' },
+
+  // v0.17.0: Level 8 „Der Kräutergarten“ (Tobias, Chat 11): Die Ringelblume
+  // wächst im selben Beet und kommt in dieselbe Maschine wie Flachs (Erntebank).
+  // Teurer, bringt aber mehr: 1.500 → 50 × 36 = 1.800 → Heilverbände.
+  ringelblumensamen: { name: 'Ringelblumensamen', plural: 'Ringelblumensamen', raw: true, level: 8, buyPrice: 1500, color: '#e8a33c', shape: 'seeds' },
+  ringelblume: { name: 'Ringelblume', plural: 'Ringelblumen', raw: true, grown: true, level: 8, color: '#5f8f3a', flower: '#f59f00', shape: 'plant' },
+  ringelbluete: { name: 'Ringelblüte', plural: 'Ringelblüten', price: 36, color: '#f08c00', shape: 'petals' },
+  // Kräuterstube: Verband (bzw. Fasern) + Kraut. Wert = Zutaten + 20 %.
+  heilverband: { name: 'Heilverband', plural: 'Heilverbände', price: 396, color: '#f4f1e8', herb: '#f59f00', shape: 'bandage' },
+  kraeuterkompresse: { name: 'Kräuterkompresse', plural: 'Kräuterkompressen', price: 516, color: '#efe3c2', herb: '#f08c00', shape: 'compress' },
 };

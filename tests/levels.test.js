@@ -27,7 +27,7 @@ import { createNewGame } from '../src/core/state.js';
 // ---------- Datentabellen ----------
 
 test('Level-Tabelle: jedes Level ein Bauabschnitt mit 2–5 Aufträgen; ab Level 2 Preis und Gratis-Rohstoff (v0.13.0)', () => {
-  assert.equal(MAX_LEVEL, 7);
+  assert.equal(MAX_LEVEL, 8);
   let lastCost = 0;
   for (let level = 1; level <= MAX_LEVEL; level++) {
     const def = LEVELS[level];
@@ -188,12 +188,12 @@ test('Aufstieg auf Level 2: erst genug Erfahrung, dann kostet er Gold; dafür gi
   assert.equal(levelUpBlocker(state), 'xp');
 });
 
-test('Level 4 bis 6: Eisenerz als Geschenk und je eine neue Theke; Level 7 mit Leinsamen; danach ist Schluss', () => {
+test('Level 4 bis 6: Eisenerz als Geschenk und je eine neue Theke; Level 7 und 8 mit Samen; danach ist Schluss', () => {
   const state = createNewGame(3);
   state.shopLevel = 3;
   state.gold = 100000;
   const results = [];
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 5; i++) {
     state.quest.xp = xpNeeded(state.shopLevel);
     results.push(levelUp(state));
   }
@@ -203,16 +203,19 @@ test('Level 4 bis 6: Eisenerz als Geschenk und je eine neue Theke; Level 7 mit L
     { level: 6, gift: { eisenerz: 1 }, counters: 1, cost: 2000 },
     // v0.16.0: Kräuter-Kapitel – der Laden bleibt wie auf Level 6
     { level: 7, gift: { leinsamen: 1 }, counters: 0, cost: 3000 },
+    // v0.17.0: Level 8 „Der Kräutergarten“
+    { level: 8, gift: { ringelblumensamen: 1 }, counters: 0, cost: 4000 },
   ]);
-  assert.equal(state.gold, 100000 - 6500);
+  assert.equal(state.gold, 100000 - 10500);
   assert.equal(state.counters.length, 5);
   assert.equal(storageCount(state, 'eisenerz'), 3);
   assert.equal(storageCount(state, 'leinsamen'), 1);
+  assert.equal(storageCount(state, 'ringelblumensamen'), 1);
   state.quest.xp = 99999;
   assert.equal(levelUpBlocker(state), 'max', 'höchstes Level');
   assert.equal(nextLevelCost(state), null);
   assert.equal(levelUp(state), null);
-  assert.equal(state.shopLevel, 7);
+  assert.equal(state.shopLevel, 8);
 });
 
 test('Ein neues Spiel lässt sich von Holz bis Eisen durchspielen', () => {

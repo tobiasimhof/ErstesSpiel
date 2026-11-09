@@ -7,7 +7,7 @@ import { ITEMS } from '../src/core/data/items.js';
 import { RECIPES } from '../src/core/data/recipes.js';
 import { BUILDINGS } from '../src/core/data/buildings.js';
 import { buildingPorts } from '../src/core/geometry.js';
-import { buildingContents, buildingStatus, loadInput, setRecipe } from '../src/core/production.js';
+import { buildingContents, buildingStatus, loadInput, setRecipe, sourceInputs } from '../src/core/production.js';
 import { storageCount } from '../src/core/shop.js';
 import { simulate } from '../src/core/sim.js';
 import { beltAt, createNewGame } from '../src/core/state.js';
@@ -320,13 +320,16 @@ test('Wirtschaft: Jede Stufe bringt mehr als ihre Zutaten (Preistabelle)', () =>
     Object.values(BUILDINGS)
       .flatMap((b) => (b.production?.kind === 'garden' ? Object.entries(b.production.crops) : []))
       .find(([, crop]) => crop.plant === plant)?.[0];
+  // v0.17.0: Die Erntebank verarbeitet mehrere Pflanzen – jede zählt.
   for (const [type, def] of Object.entries(BUILDINGS)) {
     const p = def.production;
     if (p?.kind !== 'source') continue;
-    const cost = ITEMS[p.input].grown ? ITEMS[seedFor(p.input)].buyPrice : ITEMS[p.input].buyPrice;
-    const value = p.amount * ITEMS[p.output].price;
-    assert.ok(value > cost, `${type}: ${value} > ${cost}`);
-    assert.ok(value <= cost * 1.25, `${type}: aber nur knapp`);
+    for (const [input, output] of Object.entries(sourceInputs(p))) {
+      const cost = ITEMS[input].grown ? ITEMS[seedFor(input)].buyPrice : ITEMS[input].buyPrice;
+      const value = p.amount * ITEMS[output].price;
+      assert.ok(value > cost, `${type} (${input}): ${value} > ${cost}`);
+      assert.ok(value <= cost * 1.25, `${type} (${input}): aber nur knapp`);
+    }
   }
   // Jedes Rezept: mehr als die Zutaten, aber nicht übertrieben
   for (const [key, r] of Object.entries(RECIPES)) {
@@ -346,6 +349,10 @@ test('Wirtschaft: Jede Stufe bringt mehr als ihre Zutaten (Preistabelle)', () =>
   assert.equal(ITEMS.leinsamen.buyPrice, 1000);
   assert.equal(50 * ITEMS.flachsfaser.price, 1250);
   assert.equal(10 * ITEMS.verband.price, 1500);
+  // v0.17.0: Level 8 – teurer, bringt aber mehr
+  assert.equal(ITEMS.ringelblumensamen.buyPrice, 1500);
+  assert.equal(50 * ITEMS.ringelbluete.price, 1800);
+  assert.equal(10 * ITEMS.heilverband.price, 3960);
 });
 
 test('Datentabellen passen zusammen: Rezepte, Werkstätten, Waren', () => {
@@ -357,7 +364,11 @@ test('Datentabellen passen zusammen: Rezepte, Werkstätten, Waren', () => {
   for (const [type, def] of Object.entries(BUILDINGS)) {
     const p = def.production;
     if (p?.kind === 'workshop') for (const k of p.recipes) assert.equal(RECIPES[k]?.building, type, `${type}: ${k}`);
-    if (p?.kind === 'source') assert.ok(ITEMS[p.input].raw && ITEMS[p.output] && !ITEMS[p.output].raw, type);
+    if (p?.kind === 'source') {
+      for (const [input, output] of Object.entries(sourceInputs(p))) {
+        assert.ok(ITEMS[input].raw && ITEMS[output] && !ITEMS[output].raw, `${type}: ${input} → ${output}`);
+      }
+    }
   }
   assert.equal(ITEMS.holzwinkel, undefined, 'Holzwinkel entfällt');
   assert.equal(ITEMS.splitt, undefined, 'Splitt entfällt');

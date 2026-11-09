@@ -8,7 +8,9 @@
 // level: ab diesem Laden-Level baubar (v0.9.0, siehe data/levels.js).
 // production: was das Gebäude tut
 //   source   – verarbeitet eingelegte Rohstoffe nach und nach
-//              (je Rohstoff amount Stück in duration Sekunden). v0.14.0
+//              (je Rohstoff amount Stück in duration Sekunden). v0.17.0: Statt
+//              input/output kann inputs mehrere Rohstoffe nennen ({ Rohstoff:
+//              Ware }) – die Erntebank verarbeitet so alle Pflanzen. v0.14.0
 //              (Tobias): Bis zu capacity Rohstoffe passen hinein; sie werden
 //              nacheinander verarbeitet – so läuft die Fabrik länger, auch
 //              wenn das Spiel geschlossen ist.
@@ -170,19 +172,34 @@ export const BUILDINGS = {
     description:
       'Hier wächst aus einem Samen eine Pflanze. Säen, warten, bis sie reif ist (🌾), dann ernten – die Pflanze kommt ins Laden-Lager. Kein Anschluss ans Band.',
     ports: [],
-    production: { kind: 'garden', crops: { leinsamen: { plant: 'flachspflanze', time: 1800 } } },
+    // v0.17.0: Ringelblumen wachsen im selben Beet, im gleichen Takt (Tobias)
+    production: {
+      kind: 'garden',
+      crops: {
+        leinsamen: { plant: 'flachspflanze', time: 1800 },
+        ringelblumensamen: { plant: 'ringelblume', time: 1800 },
+      },
+    },
   },
+  // v0.17.0 (Tobias): ein Gerät für alle Pflanzen – deshalb heißt die
+  // Flachsbreche jetzt Erntebank (der Schlüssel bleibt, damit Spielstände passen).
   flachsbreche: {
     level: 7,
-    name: 'Flachsbreche',
+    name: 'Erntebank',
     cost: { holzplatte: 10, zahnradwelle: 2 },
     icon: '🪢',
     size: [2, 2],
     color: '#8a7a3e',
     description:
-      'Bricht Flachspflanzen nach und nach zu je 50 Flachsfasern. Bis zu 3 Flachspflanzen passen hinein. Die Fasern kommen am orangen Pfeil heraus.',
+      'Verarbeitet geerntete Pflanzen nach und nach: 1 Flachspflanze → 50 Flachsfasern, 1 Ringelblume → 50 getrocknete Ringelblüten. Bis zu 3 Pflanzen passen hinein, auch gemischt. Die Waren kommen am orangen Pfeil heraus.',
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
-    production: { kind: 'source', input: 'flachspflanze', output: 'flachsfaser', amount: 50, duration: 600, capacity: 3 },
+    production: {
+      kind: 'source',
+      inputs: { flachspflanze: 'flachsfaser', ringelblume: 'ringelbluete' },
+      amount: 50,
+      duration: 600,
+      capacity: 3,
+    },
   },
   webstube: {
     level: 7,
@@ -197,6 +214,24 @@ export const BUILDINGS = {
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
     production: { kind: 'workshop', recipes: ['verband'] },
+  },
+  // v0.17.0: Level 8 – Kombi-Maschine des Kräuter-Kapitels (zwei Eingänge wie
+  // die Zimmerei). Baukosten nur aus Werkzeug-Waren (Tobias).
+  kraeuterstube: {
+    level: 8,
+    name: 'Kräuterstube',
+    cost: { holzplatte: 10, eisenblech: 5, zahnradwelle: 2 },
+    icon: '🌿',
+    size: [2, 2],
+    color: '#4f7a4a',
+    description:
+      'Macht Heilverbände (Verband + Ringelblüten) oder Kräuterkompressen (Flachsfasern + Ringelblüten). Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
+    ports: [
+      { kind: 'in', x: 0, y: 0, side: 'W' },
+      { kind: 'in', x: 0, y: 1, side: 'W' },
+      { kind: 'out', x: 1, y: 0, side: 'E' },
+    ],
+    production: { kind: 'workshop', recipes: ['heilverband', 'kraeuterkompresse'] },
   },
   lagerhaus: {
     level: 1,
@@ -241,6 +276,7 @@ export const BUILD_MENU = [
   'beet',
   'flachsbreche',
   'webstube',
+  'kraeuterstube',
   'lagerhaus',
   'versandportal',
 ];

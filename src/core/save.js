@@ -34,6 +34,10 @@
 //  13 (v0.16.0): Kräuter-Kapitel, Level 7 – Beete (prod.crop, prod.timer),
 //               neue Waren und Gebäude. Bestehende Spielstände bleiben
 //               unverändert.
+//  14 (v0.17.0): Level 8 – die Erntebank (bisher Flachsbreche) verarbeitet
+//               mehrere Pflanzen. Rohstoff-Gebäude merken sich, welcher
+//               Rohstoff läuft (prod.input) und welche warten (prod.queue);
+//               bestehende bekommen ihren bisherigen Rohstoff eingetragen.
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
@@ -43,13 +47,13 @@ import { SALES_LOG_SIZE, START_GOLD, START_STORAGE } from './data/shop.js';
 import { canPlaceBuilding, findFreeSpot } from './buildings.js';
 import { isDir, sortDirs } from './dirs.js';
 import { footprintSize, rotateLocal } from './geometry.js';
-import { buildingContents, createProductionState, productionOf } from './production.js';
+import { buildingContents, createProductionState, productionOf, sourceInputTypes, sourceInputs } from './production.js';
 import { createCounters, createMarket } from './market.js';
 import { createQuestState } from './quests.js';
 import { addAllToStorage, counterSizeFor, fitCounters } from './shop.js';
 import { START_PLOT, WORLD, parseTileKey } from './state.js';
 
-export const SAVE_VERSION = 13;
+export const SAVE_VERSION = 14;
 
 // v0.13.0 (Tobias): Namen, die zu den Zutaten passen. Rezepte und Werte bleiben.
 const RENAMED_V11 = {
@@ -186,6 +190,16 @@ function migrate(state, from, notes = []) {
       notes.push(
         `${supplied === 1 ? '1 Lagerhaus hatte' : `${supplied} Lagerhäuser hatten`} Nachschub – den gibt es nicht mehr. Was darin liegt, läuft noch aufs Band; danach von Hand befüllen.`,
       );
+    }
+  }
+  if (from < 14 && Array.isArray(state.buildings)) {
+    // v0.16 → v0.17: Rohstoff-Gebäude merken sich, welcher Rohstoff läuft und
+    // welche warten. Bisher hatte jedes nur einen Rohstoff – den ersten.
+    for (const b of state.buildings) {
+      if (!isObj(b?.prod) || productionOf(b.type)?.kind !== 'source') continue;
+      const first = sourceInputTypes(b.type)[0];
+      if (b.prod.input === undefined) b.prod.input = b.prod.loaded ? first : null;
+      if (b.prod.queue === undefined) b.prod.queue = isCount(b.prod.queued) ? Array(b.prod.queued).fill(first) : [];
     }
   }
   return state;
@@ -397,7 +411,12 @@ function isValidProduction(b) {
         // v0.14.0: wartende Rohstoffe – nur, wenn einer läuft, und höchstens bis zum Rand
         isCount(prod.queued) &&
         (prod.loaded || prod.queued === 0) &&
-        (prod.loaded ? 1 : 0) + prod.queued <= (p.capacity ?? 1)
+        (prod.loaded ? 1 : 0) + prod.queued <= (p.capacity ?? 1) &&
+        // v0.17.0: welcher Rohstoff läuft und welche warten
+        (prod.loaded ? Boolean(sourceInputs(p)[prod.input]) : prod.input === null) &&
+        Array.isArray(prod.queue) &&
+        prod.queue.length === prod.queued &&
+        prod.queue.every((t) => Boolean(sourceInputs(p)[t]))
       );
     case 'workshop':
       return (

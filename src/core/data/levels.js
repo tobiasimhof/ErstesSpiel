@@ -107,6 +107,20 @@ export const LEVELS = {
       { from: 'Bürgermeisterin Hilde', text: 'Zum Markttag kommen viele Reisende. Agnes braucht einen großen Vorrat.', items: { verband: 20, flachsfaser: 50 } },
     ],
   },
+  // v0.17.0: Die Ringelblume kommt dazu und die erste Maschine mit zwei
+  // Eingängen (Tobias, Chat 11). Teurer, bringt aber mehr.
+  8: {
+    name: 'Der Kräutergarten',
+    story: 'Die Heilstube ist voll. Agnes legt hinter dem Haus einen Kräutergarten an – die Ringelblume heilt Wunden schneller als jeder Verband allein.',
+    cost: 4000,
+    gift: { ringelblumensamen: 1 },
+    quests: [
+      { from: 'Heilerin Agnes', text: 'Hinter der Heilstube lege ich einen Kräutergarten an. Bring mir getrocknete Ringelblüten.', items: { ringelbluete: 50 } },
+      { from: 'Heilerin Agnes', text: 'Verband und Ringelblüten zusammen ergeben einen Heilverband – damit heilen Wunden schneller.', items: { heilverband: 5 } },
+      { from: 'Torwächter Ulrich', text: 'Nach dem Turnier haben meine Wachen Beulen und Prellungen. Kräuterkompressen lindern das.', items: { kraeuterkompresse: 5 } },
+      { from: 'Bürgermeisterin Hilde', text: 'Der Ort baut ein kleines Spital. Agnes braucht einen Vorrat für die Kranken.', items: { heilverband: 10, verband: 20 } },
+    ],
+  },
 };
 
 export const MAX_LEVEL = Math.max(...Object.keys(LEVELS).map(Number));

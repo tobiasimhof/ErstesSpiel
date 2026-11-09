@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.16.1 – Plan für Level 8 „Der Kräutergarten“ (nur README) |
+| **Aktuelle Version** | v0.17.0 – Ringelblume und Level 8 „Der Kräutergarten“ |
 | **Phase** | M2 – Produktionsketten (Kräuter-Kapitel ab Level 7) |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias liest den **Plan für v0.17.0 – Ringelblume und Level 8 „Der Kräutergarten“** (Abschnitt 6), sagt, ob die Flachsbreche „Erntebank“ heißen soll, und gibt den Plan frei. Danach programmiert Claude v0.17.0 |
+| **Nächster Schritt** | Tobias testet v0.17.0 (mit dem Test-Knopf die Aufträge von Level 7 erledigen, auf Level 8 aufsteigen, Ringelblumen säen, in der Erntebank trocknen, Heilverbände und Kräuterkompressen in der Kräuterstube; Punkte unter „Was Tobias testet“ in Abschnitt 6) und gibt Feedback. Danach planen wir **Level 9** (dritte Pflanze, Abschnitt 4.4) |
 
 ---
 
@@ -111,7 +111,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Umbauen ist leicht und günstig** (verschieben, drehen, abreißen mit Rückerstattung), weil man sich ständig an den Markt anpasst. Das gilt für alle Gebäude, auch die Startgebäude, damit man den Schwerpunkt der Fabrik jederzeit neu setzen kann.
 - **Bereiche umbauen (seit v0.11.0, Wunsch von Tobias):** Mit dem Werkzeug „✥ Verschieben“ in der Bauleiste markiert man einen Bereich (Rechteck ziehen oder ein Teil antippen). Alles darin – Bänder, Maschinen, Lager, Portale; auch Gebäude, die nur zum Teil im Rechteck liegen – lässt sich auf einmal verschieben, um 90° drehen oder abreißen. Innerhalb der Gruppe bleibt alles verbunden, Waren ziehen mit um, die Fabrik läuft sofort weiter. So setzt man z. B. eine ganze Eisen-Linie in eine andere Ecke, ohne ein Band neu zu legen.
 - **Taste R (seit v0.11.0):** Mit angeschlossener Tastatur dreht R die Vorschau beim Bauen und Verschieben, sonst das angetippte Gebäude oder Band.
-- **Beet (seit v0.16.0, Tobias):** 2 × 2, ohne Anschluss ans Band. Man **sät** einen Samen (aus dem Laden-Lager; liegt keiner da, kauft „🌱 Säen“ ihn direkt beim Händler), die Pflanze wächst sichtbar in Stufen (**30 Minuten** für Flachs), dann erscheint 🌾 und man **erntet** sie – sie kommt ins Laden-Lager. Säen und Ernten sind zwei getrennte Schritte. 1 Samen = 1 Pflanze. Im Beet wächst jede Pflanze (ab Level 8 auch Ringelblumen). Die geerntete Flachspflanze legt man wie einen Holzstamm in die **Flachsbreche** (1 Pflanze → 50 Flachsfasern in 10 Minuten, Vorrat 3); die **Webstube** macht aus je 5 Fasern 1 Verband.
+- **Beet (seit v0.16.0, Tobias):** 2 × 2, ohne Anschluss ans Band. Man **sät** einen Samen (aus dem Laden-Lager; liegt keiner da, kauft „🌱 Säen“ ihn direkt beim Händler), die Pflanze wächst sichtbar in Stufen (**30 Minuten** für Flachs), dann erscheint 🌾 und man **erntet** sie – sie kommt ins Laden-Lager. Säen und Ernten sind zwei getrennte Schritte. 1 Samen = 1 Pflanze. Im Beet wächst jede Pflanze (seit v0.17.0 auch Ringelblumen; je Samen ein Knopf „🌱 Säen“). Die geerntete Pflanze legt man wie einen Holzstamm in die **Erntebank** (bis v0.16 „Flachsbreche“; seit v0.17.0 ein Gerät für alle Pflanzen, Tobias): 1 Flachspflanze → 50 Flachsfasern, 1 Ringelblume → 50 getrocknete Ringelblüten, je 10 Minuten; Vorrat 3, auch gemischt – die Pflanzen werden der Reihe nach verarbeitet, je Pflanze gibt es einen Knopf „➕ einlegen“, „⏫ Auffüllen“ füllt mit der Pflanze, die gerade läuft. Die **Webstube** macht aus je 5 Fasern 1 Verband, die **Kräuterstube** (2 Eingänge) Heilverbände und Kräuterkompressen.
 - **Bauen geht sofort**, sofern man die Waren dafür hat. Es gibt keine Bauzeiten.
 - **Bauen kostet Waren statt Gold** (Tobias, v0.7.0): z. B. Förderband 1 Holzblock, Sägewerk 40 Holzblöcke. Die Waren kommen aus dem Laden-Lager. So muss man abwägen: verkaufen oder damit eine weitere Maschine bauen? Abreißen gibt die bezahlten Waren zurück; Verschieben und Drehen sind kostenlos. Tabelle in Abschnitt 4.2.
 
@@ -136,7 +136,8 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Einführung bis etwa Level 10 (Tobias):** Die ersten Level konzentrieren sich darauf, eine coole Produktionsstätte aufzubauen. Man kommt mit jedem Level ein Stück weiter und lernt nach und nach alles kennen; bis etwa Level 10 ist sozusagen das „Intro“ abgeschlossen.
 - **Aufträge, Erfahrung und Gold (seit v0.13.0, Modell von Tobias):** Im Level-Fenster (oben auf „Laden-Level“ tippen) steht im Reiter „📜 Aufträge“ immer **genau ein Auftrag** eines Bewohners, z. B. „Müllerin Grete: Für das Mahlwerk brauche ich Räderwerke – 4 Räderwerke“. **„✓ Abgeben“** nimmt die Waren aus dem Laden-Lager und gibt **Erfahrung (XP)** und **Gold** – Gold genau so viel, wie die Waren an der Theke bringen (nicht mehr: Man macht die Aufträge wegen der Erfahrung, der Ladenverkauf bleibt im Vordergrund). Dann kommt der nächste Auftrag; **2–5 Aufträge je Level**, überspringen geht nicht. Die Erfahrung aller Aufträge eines Levels reicht genau für den Aufstieg; **aufsteigen kostet dann Gold** (Level 2: 100, Level 3: 250, Level 4: 500, Level 5: 1.000, Level 6: 2.000). Danach braucht man Bauteile für die neuen Maschinen. So bleibt alles schlüssig: Erfahrung schaltet frei, Gold kauft das Level, Waren bauen die Maschinen. Die Stückzahlen sind so gewählt, dass man ab Level 4 auf Masse gehen muss (z. B. 8 Räderwerke + 4 Zahnradwellen). Eine Erfahrungsleiste steht im Level-Fenster und klein im Knopf „Laden-Level“; ein ❗ dort heißt: Der Auftrag lässt sich abgeben. Tabelle aller Aufträge in Abschnitt 3.8.
 - **Test-Knopf (seit v0.15.0, Wunsch von Tobias):** Unter dem Auftrag steht im Prototyp immer **„🧪 Test: Auftrag erledigen“**. Er wertet den Auftrag als erledigt und gibt die Erfahrung, nimmt aber keine Waren und gibt kein Gold – so lässt sich die Spielmechanik testen, ohne die Wirtschaft zu verfälschen. Aufsteigen kostet weiter Gold. Vor v1.0 fliegt der Knopf wieder raus (eine Zeile in `data/levels.js`: `QUEST_TEST_SKIP`).
-- **Level 7 „Die Heilstube“ (seit v0.16.0):** Das Kräuter-Kapitel beginnt wieder einfach – Beet, Flachsbreche, Webstube, Leinsamen beim Händler; Aufstieg 3.000 Gold, Geschenk 1 Leinsamen, der Laden bleibt wie auf Level 6. Plan für Level 8–12 in Abschnitt 4.4.
+- **Level 7 „Die Heilstube“ (seit v0.16.0):** Das Kräuter-Kapitel beginnt wieder einfach – Beet, Erntebank (damals Flachsbreche), Webstube, Leinsamen beim Händler; Aufstieg 3.000 Gold, Geschenk 1 Leinsamen, der Laden bleibt wie auf Level 6.
+- **Level 8 „Der Kräutergarten“ (seit v0.17.0):** Ringelblumen im selben Beet, die Erntebank für alle Pflanzen, die Kräuterstube mit 2 Eingängen; Ringelblumensamen beim Händler; Aufstieg 4.000 Gold, Geschenk 1 Ringelblumensamen, der Laden bleibt gleich. Plan für Level 9–12 in Abschnitt 4.4.
 - **Idee für später (Tobias, noch offen):** Mit Erfahrung Verbesserungen freischalten, z. B. schneller Holz verarbeiten oder schnellere Förderbänder (offene Frage 15).
 - **Laden-Ausbau** geht sofort, kostet aber Gold **und** Waren, z. B. 200 Holzzahnräder + 200 Splitt + 500 Gold. So muss man ständig Neues produzieren, und das Produzieren ersetzt das Warten.
 - **Fläche kaufen:** Das Grundstück wird stückweise mit Gold erweitert (seit v0.9.0 im Spiel). Seit v0.10.2 zum festen Preis (500 Gold für 4 Reihen, jede Seite 2×), damit man am Anfang gut skalieren kann und nicht am Platz scheitert (Tobias). Ob es später mehr Fläche gibt, z. B. mit Level oder Aufgaben, entscheiden wir mit den Aufgaben.
@@ -173,9 +174,9 @@ Rahmen von Claude, von Tobias angenommen („gefällt mir sehr gut“). Namen de
 | 5 | Der Markt | Händlerin Marta: 2 Scharniere (Klappen der Stände) · Marta: 2 Schlüssel (Kassen) · Baumeister Anton: 1 Zirkel (Marktplatz vermessen) · Marta: 3 Scharniere + 3 Schlüssel (Markttag) | 1.495 | 1.000 Gold |
 | 6 | Das Stadttor | Torwächter Ulrich: 4 Gewichtsteine (Gegengewichte der Zugbrücke) · Ulrich: 2 Vorhängeschlösser (Tor) · Hilde: 2 Uhrwerke (Torturm) · Ulrich: 4 Vorhängeschlösser + 4 Gewichtsteine (Pforten der Stadtmauer) | 1.841 | 2.000 Gold |
 | 7 | Die Heilstube | Heilerin Agnes: 5 Verbände · Agnes: 50 Flachsfasern (Wundpolster) · Torwächter Ulrich: 15 Verbände (Wachstube) · Hilde: 20 Verbände + 50 Flachsfasern (Markttag) | 850 (sammelt sich bis Level 8) | 3.000 Gold |
-| 8 *(geplant, v0.17.0)* | Der Kräutergarten | Agnes: 50 Ringelblüten · Agnes: 5 Heilverbände · Torwächter Ulrich: 5 Kräuterkompressen (Prellungen nach dem Turnier) · Hilde: 10 Heilverbände + 20 Verbände (Spital) | 1.332 (sammelt sich bis Level 9) | 4.000 Gold |
+| 8 | Der Kräutergarten | Agnes: 50 Ringelblüten · Agnes: 5 Heilverbände · Torwächter Ulrich: 5 Kräuterkompressen (Prellungen nach dem Turnier) · Hilde: 10 Heilverbände + 20 Verbände (Spital) | 1.332 (sammelt sich bis Level 9) | 4.000 Gold |
 
-Der Reiter „🏘️ Ort & Level“ im Level-Fenster zeigt alle Bauabschnitte mit dem, was sie freischalten. Level 7 ist seit v0.16.0 im Spiel; Level 8–12 folgen häppchenweise (Abschnitt 4.4).
+Der Reiter „🏘️ Ort & Level“ im Level-Fenster zeigt alle Bauabschnitte mit dem, was sie freischalten. Level 7 ist seit v0.16.0 im Spiel, Level 8 seit v0.17.0; Level 9–12 folgen häppchenweise (Abschnitt 4.4).
 
 ---
 
@@ -237,8 +238,9 @@ Von Tobias bestätigt (Chat 3, Teil 2). Mengen, Zeiten und Preise hat Claude vor
 | Feinschmiede (Kombi, seit v0.10.0) | 2 × 2 | Scharnier · Schlüssel · Zirkel | Level 5 |
 | Schlosserei (Kombi, seit v0.10.0) | 2 × 2 | Gewichtstein · Uhrwerk · Vorhängeschloss | Level 6 |
 | Beet (seit v0.16.0) | 2 × 2, kein Band | 1 Leinsamen → 1 Flachspflanze in 30 Minuten; säen und ernten von Hand | Level 7 |
-| Flachsbreche (seit v0.16.0) | 2 × 2 | 1 Flachspflanze → 50 Flachsfasern in 10 Minuten; Vorrat 3 | Level 7 |
+| Erntebank (seit v0.16.0, bis v0.16 „Flachsbreche“) | 2 × 2 | 1 Flachspflanze → 50 Flachsfasern, seit v0.17.0 auch 1 Ringelblume → 50 Ringelblüten, je 10 Minuten; Vorrat 3, auch gemischt | Level 7 |
 | Webstube (seit v0.16.0) | 2 × 2 | Verband (5 Flachsfasern → 1) | Level 7 |
+| Kräuterstube (Kombi, seit v0.17.0) | 2 × 2, 2 Eingänge | Heilverband · Kräuterkompresse | Level 8 |
 | Lagerhaus | 2 × 1 | Zwischenlager, 3 × 50; seit v0.12.0 von Hand aus dem Laden-Lager befüllen (Nachschub nur bis v0.13.0) | Level 1 |
 | Versandportal | 1 × 1 | schickt Waren ins Laden-Lager | Level 1 |
 | Förderband | 1 × 1 | transportiert | Level 1 |
@@ -286,14 +288,19 @@ Verstärkte Holzplatte und Scharnier heißen weiter so.
 | Vorhängeschloss | Schlosserei: 1 Scharnier + 1 Räderwerk | 30 s | 1.944 (Zutaten 1.620) |
 | Leinsamen (seit v0.16.0) | beim Händler kaufen | – | 1.000 (Kauf) |
 | Flachspflanze | Beet: 1 Leinsamen | 30 min | – (nicht verkäuflich, wird eingelegt) |
-| Flachsfaser | Flachsbreche: 1 Flachspflanze → 50 | 12 s je Faser | 25 (50 Stück = 1.250) |
+| Flachsfaser | Erntebank: 1 Flachspflanze → 50 | 12 s je Faser | 25 (50 Stück = 1.250) |
 | Verband | Webstube: 5 Flachsfasern → 1 | 10 s | 150 (10 Stück = 1.500) |
+| Ringelblumensamen (seit v0.17.0) | beim Händler kaufen | – | 1.500 (Kauf) |
+| Ringelblume | Beet: 1 Ringelblumensamen | 30 min | – (nicht verkäuflich, wird eingelegt) |
+| Ringelblüte (getrocknet) | Erntebank: 1 Ringelblume → 50 | 12 s je Blüte | 36 (50 Stück = 1.800) |
+| Heilverband | Kräuterstube: 1 Verband + 5 Ringelblüten | 20 s | 396 (Zutaten 330) |
+| Kräuterkompresse | Kräuterstube: 10 Flachsfasern + 5 Ringelblüten | 20 s | 516 (Zutaten 430) |
 
 **Eisenstange statt Eisennägel (v0.8.0):** Bis v0.7.1 machte die Schmiede aus 5 Barren 5 Nägel zu je 14 Gold. Tobias fiel beim Spielen auf, dass dadurch extrem viele Nägel entstehen (100–140 im Lager, von allem anderen etwa 20), und an der Theke brachten 20 Nägel nur 280 Gold. Jetzt läuft die Schmiede wie Sägewerk und Steinmetz: 5 : 1. Nägel können später als eigene Stufe zurückkommen (z. B. 1 Eisenstange → mehrere Nägel).
 
 **Steinkette (seit v0.13.0 Gewichtstein) aus Steinplatten (v0.10.0):** Sonst bräuchte kein Kombi-Rezept die Steinplatte. So wird jedes der 6 Grundteile gebraucht; Eisen etwas mehr als Holz und Stein, weil es auch mehr bringt.
 
-**Freischalten nach Laden-Level** (von Tobias bestätigt): Level 1 Holz, Level 2 Stein, Level 3 Eisen, Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei (seit v0.10.0 je Level eine Kombi-Maschine). Seit v0.13.0 braucht der Aufstieg Erfahrung aus Aufträgen und kostet Gold (Abschnitt 3.5 und 3.8). Den ersten Rohstoff jeder Sorte gibt es gratis: den ersten Holzstamm zum Spielstart, den ersten Felsbrocken beim Erreichen von Level 2, das erste Eisenerz bei Level 3; ab Level 4 gibt es bei jedem Aufstieg 1 Eisenerz (einen vierten Rohstoff gibt es nicht). Seit v0.16.0: Level 7 Beet, Flachsbreche, Webstube und Leinsamen beim Händler; Geschenk 1 Leinsamen.
+**Freischalten nach Laden-Level** (von Tobias bestätigt): Level 1 Holz, Level 2 Stein, Level 3 Eisen, Level 4 Zimmerei, Level 5 Feinschmiede, Level 6 Schlosserei (seit v0.10.0 je Level eine Kombi-Maschine). Seit v0.13.0 braucht der Aufstieg Erfahrung aus Aufträgen und kostet Gold (Abschnitt 3.5 und 3.8). Den ersten Rohstoff jeder Sorte gibt es gratis: den ersten Holzstamm zum Spielstart, den ersten Felsbrocken beim Erreichen von Level 2, das erste Eisenerz bei Level 3; ab Level 4 gibt es bei jedem Aufstieg 1 Eisenerz (einen vierten Rohstoff gibt es nicht). Seit v0.16.0: Level 7 Beet, Erntebank (damals Flachsbreche), Webstube und Leinsamen beim Händler; Geschenk 1 Leinsamen. Seit v0.17.0: Level 8 Kräuterstube und Ringelblumensamen; Geschenk 1 Ringelblumensamen.
 
 **Baukosten** (seit v0.7.0, Platzhalter; Tobias: „erstmal spielen und schauen, ob es nicht zu lange dauert“):
 
@@ -312,14 +319,15 @@ Verstärkte Holzplatte und Scharnier heißen weiter so.
 | Feinschmiede (v0.10.0) | 10 Eisenbleche + 2 Räderwerke | 1.368 Gold |
 | Schlosserei (v0.10.0) | 1 Scharnier + 2 Verstärkte Holzplatten | 2.592 Gold |
 | Beet (v0.16.0) | 10 Holzplatten + 10 Steinplatten | 360 Gold |
-| Flachsbreche (v0.16.0) | 10 Holzplatten + 2 Zahnradwellen | 828 Gold |
+| Erntebank (v0.16.0, damals Flachsbreche) | 10 Holzplatten + 2 Zahnradwellen | 828 Gold |
 | Webstube (v0.16.0) | 20 Holzstäbe + 2 Räderwerke | 1.008 Gold |
+| Kräuterstube (v0.17.0) | 10 Holzplatten + 5 Eisenbleche + 2 Zahnradwellen | 1.188 Gold |
 
 Das Sägewerk kostet nur Holzblöcke, damit die erste Maschine ohne Platten baubar ist. Für Stein braucht man Holzteile, für Eisen Steinteile, für die Kombi-Maschinen Teile aus den vorigen – so behalten frühere Waren ihren Wert. Kein Gebäude kostet mehr, als ein Rohstoff seines Levels als Teile einbringt (Holz und Stein 720 Gold, Eisen und ab Level 4: 2.880 Gold; ein Test prüft das). Eine Level-4-bis-6-Maschine kostet also höchstens etwa eine Runde Eisen. Die Gebäude von Level 7 kosten höchstens, was ein Leinsamen einbringt (1.500 Gold).
 
 **Holzwinkel und Splitt** fliegen raus (vielleicht kommen sie später wieder). Vorhandene im Spielstand werden umgewandelt: Holzwinkel → Holzplatte, Splitt → Stein-Zahnrad.
 
-### 4.3 Im Spiel (Stand v0.16.0)
+### 4.3 Im Spiel (Stand v0.17.0)
 
 | Stufe | Ware | Woher | Rezept |
 |---|---|---|---|
@@ -335,8 +343,12 @@ Das Sägewerk kostet nur Holzblöcke, damit die erste Maschine ohne Platten baub
 | 4 | Uhrwerk / Vorhängeschloss | Schlosserei | 1 Zahnradwelle bzw. 1 Scharnier + 1 Räderwerk (30 Sekunden) |
 | *Kräuter* 0 | Leinsamen (ab Level 7) | Händler (1.000 Gold); 1 gratis beim Aufstieg auf Level 7 | – |
 | *Kräuter* 1 | Flachspflanze | Beet (säen, ernten) | 1 Leinsamen → 1 Pflanze in 30 Minuten |
-| *Kräuter* 2 | Flachsfaser | Flachsbreche (bis zu 3 Pflanzen als Vorrat) | 1 Flachspflanze → 50 Fasern in 10 Minuten |
+| *Kräuter* 2 | Flachsfaser | Erntebank (bis zu 3 Pflanzen als Vorrat) | 1 Flachspflanze → 50 Fasern in 10 Minuten |
 | *Kräuter* 3 | Verband | Webstube | 5 Flachsfasern → 1 Verband (10 Sekunden) |
+| *Kräuter* 0 | Ringelblumensamen (ab Level 8) | Händler (1.500 Gold); 1 gratis beim Aufstieg auf Level 8 | – |
+| *Kräuter* 1 | Ringelblume | Beet (säen, ernten) | 1 Ringelblumensamen → 1 Pflanze in 30 Minuten |
+| *Kräuter* 2 | Ringelblüte (getrocknet) | Erntebank | 1 Ringelblume → 50 Blüten in 10 Minuten |
+| *Kräuter* 3 | Heilverband / Kräuterkompresse | Kräuterstube (ab Level 8), Einstellungen „Heilverbände“ / „Kompressen“ | 1 Verband bzw. 10 Flachsfasern + 5 Ringelblüten (20 Sekunden) |
 
 Genaue Rezepte und Werte: Abschnitt 4.2.
 
@@ -349,8 +361,8 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | Level | Inhalt (Tobias) | Stand |
 |---|---|---|
 | 7 | **Flachs** (Tobias' Wahl nach Claudes Vorschlag, statt Farn oder Hanf) → **Fasern** → **Verbände** – wieder ganz einfach, als Grundlage (wie Level 1 mit Holz): Beet, Flachsbreche, Webstube | ✅ im Spiel (v0.16.0) |
-| 8 | **Ringelblume** als zweite Pflanze im selben Beet; die erste Maschine mit 2 Eingängen (Kräuterstube: Verband bzw. Fasern + Ringelblüten) → **Heilverband** und **Kräuterkompresse** (wie Level 2) | Plan steht (v0.17.0, Abschnitt 6), wartet auf Freigabe |
-| 9 | eine **dritte Pflanze** (Claudes Idee: Schafgarbe, das Wundkraut des Mittelalters) und der nächste Schritt, z. B. eine zweite Verbands-Version (wie Level 3) | später |
+| 8 | **Ringelblume** als zweite Pflanze im selben Beet; die erste Maschine mit 2 Eingängen (Kräuterstube: Verband bzw. Fasern + Ringelblüten) → **Heilverband** und **Kräuterkompresse** (wie Level 2); die Erntebank verarbeitet alle Pflanzen | ✅ im Spiel (v0.17.0) |
+| 9 | eine **dritte Pflanze** (Claudes Idee: Schafgarbe, das Wundkraut des Mittelalters) und der nächste Schritt, z. B. eine zweite Verbands-Version (wie Level 3) | als Nächstes planen (nach Tobias' Test von v0.17.0) |
 | 10 | Jetzt hat man **Fasern + 3 Pflanzen** – wie Holz, Stein und Eisen im Werkzeug-Kapitel. Wie Level 4: mehr investieren, auf Masse gehen | später |
 | 11–12 | die Pflanzen **weiter kombinieren** (wie Level 5–6), Abschluss des Kräuter-Kapitels | später |
 | 13+ | neues Kapitel, z. B. Sand → Glas, mit den Kräuter-Maschinen Sandstaub für die Zauberei | später |
@@ -382,7 +394,7 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 
 **Chat 11, Teil 3 (Test von v0.16.0 und Antworten zu Level 8):**
 
-- **Ein Gerät für alle Pflanzen (Tobias):** Die Flachsbreche verarbeitet auch die Ringelblume – 1 Pflanze → 50 getrocknete Ringelblüten, genau wie Flachs → 50 Fasern. „Bei den Pflanzen können wir es etwas einfacher halten.“ Weil sie dann für alle Pflanzen ist, schlägt Claude den Namen **Erntebank** vor (offen).
+- **Ein Gerät für alle Pflanzen (Tobias):** Die Flachsbreche verarbeitet auch die Ringelblume – 1 Pflanze → 50 getrocknete Ringelblüten, genau wie Flachs → 50 Fasern. „Bei den Pflanzen können wir es etwas einfacher halten.“ Weil sie dann für alle Pflanzen ist, schlug Claude den Namen **Erntebank** vor – Tobias: „Meiner Meinung nach der bessere Name.“
 - **Die Rechnung passt (Tobias):** „Dauert lange, aber bringt auch gutes Geld.“ Alles im gleichen Takt (30 Minuten).
 - **Gebäude überwiegend aus Werkzeug-Waren (Tobias):** Es ergibt keinen Sinn, dass aus Verbänden und Zahnradwellen eine Maschine wird. Baukosten der Kräuter-Gebäude kommen deshalb aus Holz, Stein und Eisen.
 - **Kräuterkompresse:** Tobias findet sie gut. Wofür (Claudes Erklärung): Der Verband kommt auf Wunden, die Kompresse – ein Polster aus Fasern mit getrockneten Kräutern – auf Prellungen und Schwellungen. Später (Level 10–12) kann sie mit dem Heilverband zu etwas Größerem kombiniert werden.
@@ -438,7 +450,7 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/core/buildings.js` | Gebäude bauen, verschieben, drehen, abreißen, freie Stelle suchen |
 | `src/core/belts.js` | Förderbänder legen, aufteilen, zusammenführen, drehen, abreißen; Strecke finden und leeren, Zulauf leeren (v0.12.0) |
 | `src/core/area.js` | Bereich markieren und alles darin verschieben, drehen oder abreißen (v0.11.0) |
-| `src/core/production.js` | Was Gebäude tun: einlegen, herstellen, zwischenlagern, versenden, wachsen lassen (Beet: säen, ernten, v0.16.0), Status |
+| `src/core/production.js` | Was Gebäude tun: einlegen (seit v0.17.0 mehrere Rohstoffe je Gebäude, z. B. Erntebank), herstellen, zwischenlagern, versenden, wachsen lassen (Beet: säen, ernten, v0.16.0), Status |
 | `src/core/warehouse.js` | Lagerhaus und Laden-Lager (v0.12.0): befüllen, ausräumen (Nachschub seit v0.14.0 entfernt) |
 | `src/core/offline.js` | Spiel im Hintergrund (v0.14.0): verpasste Zeit nachrechnen (in Portionen, Stillstand erkennen, dann nur Kunden), Bericht „Willkommen zurück“ |
 | `src/core/sim.js` | Simulation in festen Takten: Waren auf Bändern, Stau, Aufteilen, Zusammenführen |
@@ -466,8 +478,8 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/style.css` | Aussehen der Oberfläche |
 | `assets/icons/` | App-Symbole (erzeugt mit `tools/make-icons.py`) |
 | `tools/set-version.mjs` | Setzt die Versionsnummer in `src/version.js` und `index.html` (inkl. Import-Map) |
-| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`), Bereiche verschieben (`area.test.js`), Lagerhaus befüllen und Bänder leeren (`warehouse.test.js`), Aufträge, neue Warennamen und Test-Knopf (`quests.test.js`), Spiel im Hintergrund, Rohstoff-Vorrat und Auffüllen (`offline.test.js`), Beet, Flachs-Kette und Level 7 (`garden.test.js`) |
-| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Bereich markieren/verschieben/drehen (auch mit Taste R)/abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufträge abgeben und Aufsteigen bis Level 6 (mit Reiter „Ort & Level“), Test-Knopf „Auftrag erledigen“ (Stadttor-Aufträge ohne Waren und Gold), Aufstieg auf Level 7 mit Beet (säen, reif, ernten), Flachsbreche und Webstube, die Eisen-Kette, die Zimmerei, Strecke und Zulauf leeren, Lagerhaus befüllen und ausräumen (kein Nachschub), Auffüllen des Holzfällerlagers sowie das Spiel im Hintergrund (20 Minuten weg in der App, 2 Stunden mit geschlossenem Spiel → Fenster „Willkommen zurück“ mit reifem Beet) per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
+| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`), Bereiche verschieben (`area.test.js`), Lagerhaus befüllen und Bänder leeren (`warehouse.test.js`), Aufträge, neue Warennamen und Test-Knopf (`quests.test.js`), Spiel im Hintergrund, Rohstoff-Vorrat und Auffüllen (`offline.test.js`), Beet, Flachs-Kette und Level 7 (`garden.test.js`), Ringelblume, Erntebank, Kräuterstube und Level 8 (`kraeutergarten.test.js`) |
+| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Bereich markieren/verschieben/drehen (auch mit Taste R)/abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufträge abgeben und Aufsteigen bis Level 6 (mit Reiter „Ort & Level“), Test-Knopf „Auftrag erledigen“ (Stadttor-Aufträge ohne Waren und Gold), Aufstieg auf Level 7 mit Beet (säen, reif, ernten), Erntebank und Webstube, Aufstieg auf Level 8 mit Ringelblume, gemischtem Vorrat in der Erntebank und Kräuterstube, die Eisen-Kette, die Zimmerei, Strecke und Zulauf leeren, Lagerhaus befüllen und ausräumen (kein Nachschub), Auffüllen des Holzfällerlagers sowie das Spiel im Hintergrund (20 Minuten weg in der App, 2 Stunden mit geschlossenem Spiel → Fenster „Willkommen zurück“ mit reifem Beet) per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
 
 **Prüfen vor jedem Merge:** `npm test` (Spielregeln) und `npm run test:browser` (Browser-Test).
 
@@ -517,8 +529,8 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | v0.15.1 | **Kräuter-Kapitel auf dem Papier (nur README):** Gesamtbild Level 7–12, Level 7 im Detail (Beet, Maschinen, Waren, Preise, Zeiten, Bewohnerin, Aufträge) | ✅ fertig |
 | v0.16.0 | **Beet und Level 7 „Die Heilstube“:** säen, 30 Minuten wachsen, ernten; Flachsbreche (1 Pflanze → 50 Fasern), Webstube (5 Fasern → 1 Verband); Heilerin Agnes mit 4 Aufträgen | ✅ fertig |
 | v0.16.1 | **Plan für Level 8 (nur README):** Tobias' Test von v0.16.0, Ringelblume, Erntebank für alle Pflanzen, Kräuterstube mit Heilverband und Kräuterkompresse | ✅ fertig |
-| v0.17.0 | **Ringelblume und Level 8 „Der Kräutergarten“:** zweite Pflanze im Beet, Erntebank (ehemals Flachsbreche) für alle Pflanzen, Kräuterstube mit 2 Eingängen | Plan steht (unten), wartet auf Tobias' Freigabe |
-| v0.18.0 ff. | **Level 9–12:** dritte Pflanze, Masse, weiter kombinieren, Abschluss des Kapitels (Abschnitt 4.4) | häppchenweise |
+| v0.17.0 | **Ringelblume und Level 8 „Der Kräutergarten“:** zweite Pflanze im Beet, Erntebank (ehemals Flachsbreche) für alle Pflanzen, Kräuterstube mit 2 Eingängen | ✅ fertig |
+| v0.18.0 ff. | **Level 9–12:** dritte Pflanze, Masse, weiter kombinieren, Abschluss des Kapitels (Abschnitt 4.4) | nach Tobias' Test von v0.17.0 gemeinsam planen, häppchenweise |
 
 ### Bänder leeren (vorgemerkt in v0.11.1, umgesetzt in v0.12.0)
 
@@ -532,7 +544,26 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### v0.17.0 – Ringelblume und Level 8 „Der Kräutergarten“ (Plan, wartet auf Tobias' Freigabe)
+### v0.17.0 – Ringelblume und Level 8 „Der Kräutergarten“ (fertig)
+
+Von Tobias freigegeben: „Ja, das passt so, und die Erntebank darf auch so bleiben.“ Umgesetzt genau wie unten beschrieben; dazu:
+
+- **Bauleiste:** Die Kräuterstube 🌿 steht nach der Webstube (bis Level 8 mit 🔒). Die Flachsbreche heißt jetzt überall „Erntebank“.
+- **Infofenster der Erntebank:** alle freigeschalteten Pflanzen mit Rezept („1 Ringelblume → 50 Ringelblüten in 10:00 min“), der Vorrat mit Sorten („Vorrat: 2 / 3 (1 Flachspflanze, 1 Ringelblume)“), je Pflanze „➕ 1 … einlegen“. Der Status sagt, welche Pflanze gerade läuft („Arbeitet Flachspflanze: … Danach noch 1 Ringelblume.“).
+- **Beet:** Ist es leer, stehen auf Level 8 zwei Knöpfe da: „🌱 Säen: Leinsamen“ und „🌱 Säen: Ringelblumensamen“.
+- **Bilder:** Säckchen Ringelblumensamen (orange), Ringelblume mit orangen Blüten (auch im Beet), getrocknete Ringelblüten, Heilverband (Verband mit orangem Streifen), Kräuterkompresse (abgestepptes Polster mit Blüten).
+- **Spielstand** (Version 13 → 14): Rohstoff-Gebäude merken sich, welcher Rohstoff läuft und welche warten; bestehende Fabriken bleiben unverändert. Beim Öffnen erscheint eine kurze Meldung zu Level 8 und zur Erntebank.
+
+**Für Tobias' Fabrik (Level 7):** Im Level-Fenster mit „🧪 Test: Auftrag erledigen“ die 4 Aufträge von Agnes erledigen, dann „⬆ Aufsteigen auf Level 8 · 4.000 🪙“. Der Gratis-Ringelblumensamen liegt danach im Laden-Lager. Die Kräuterstube kostet 10 Holzplatten + 5 Eisenbleche + 2 Zahnradwellen. Für einen Heilverband braucht die Kräuterstube Verbände (z. B. aus einem Lagerhaus, das man mit Verbänden befüllt) und Ringelblüten aus der Erntebank – am besten jede Zutat über ihren eigenen Eingang.
+
+**Was Tobias testet:**
+- Aufsteigen auf Level 8, Ringelblumen säen und ernten: Sieht man die orangen Blüten gut?
+- Erntebank mit Flachs und Ringelblume: Ist der gemischte Vorrat verständlich? Wird das Band mit Fasern und Blüten zu unübersichtlich, oder baut man lieber zwei Erntebänke?
+- Kräuterstube: Kommen Heilverbände und Kräuterkompressen an? Ist der Aufbau mit zwei Eingängen klar?
+- Geld und Zeit: Fühlt sich „dauert lange, bringt aber gutes Geld“ im Spiel auch so an? Sind die Aufträge machbar?
+- Danach planen wir Level 9 (dritte Pflanze).
+
+**Der Plan (Chat 11, Teil 3):**
 
 Tobias' Vorgaben stehen in Abschnitt 4.4 (Chat 11, Teil 3); Zahlen, Baukosten und Aufträge sind Claudes Vorschlag, Preise, Namen und Aufträge hat Tobias schon bestätigt. Alle Zahlen sind Platzhalter in den Datentabellen.
 
@@ -1158,14 +1189,17 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 | 08.11.2026 | Level 8: Ringelblumensamen 1.500 Gold, 30 Minuten (gleicher Takt wie Flachs), Ringelblüte 36 Gold, Kräuterstube mit Heilverband (1 Verband + 5 Ringelblüten, 396) und Kräuterkompresse (10 Flachsfasern + 5 Ringelblüten, 516), Aufstieg 4.000 Gold, 4 Aufträge | Claudes Entwurf; Tobias: Rechnung, Preise, Namen und Aufträge passen, „dauert lange, aber bringt auch gutes Geld“. |
 | 08.11.2026 | Gebäude kosten überwiegend Werkzeug-Waren (Holz, Stein, Eisen und ihre Teile), keine Kräuter-Waren | Tobias: Es ergibt keinen Sinn, dass aus Verbänden und Zahnradwellen eine Maschine wird. Ersetzt Claudes Vorschlag „Kräuterstube aus 10 Verbänden + 2 Zahnradwellen“. |
 | 08.11.2026 | Die getrockneten Blüten der Kräuter sind später die Grundlage für den Mörser (z. B. Ringelblumenstaub) | Tobias (Chat 11, Teil 3); Mörser und Alchemist kommen etwa ab Level 15. |
+| 09.11.2026 | Die Flachsbreche heißt „Erntebank“ (ein Gerät für alle Pflanzen) | Claudes Vorschlag; Tobias: „Meiner Meinung nach der bessere Name.“ Intern bleibt der Schlüssel `flachsbreche`, damit Spielstände passen. |
+| 09.11.2026 | Plan für Level 8 (v0.17.0) freigegeben | Tobias: „Ja, das passt so.“ |
+| 09.11.2026 | Erntebank: Vorrat auch gemischt, der Reihe nach; je Pflanze ein „Einlegen“-Knopf; „Auffüllen“ füllt mit der Pflanze, die gerade läuft (leer: mit der häufigsten im Laden-Lager) | Claudes Wahl (im Plan beschrieben): Ein Gerät für alle Pflanzen soll nicht mehr Knöpfe brauchen als nötig. |
 
 ---
 
 ## 8. Offene Fragen
 
-Stand 08.11.2026 (nach v0.16.1).
+Stand 09.11.2026 (nach v0.17.0).
 
-1. **Nächster Schritt:** Tobias gibt den Plan für v0.17.0 frei (Ringelblume und Level 8, Abschnitt 6) und sagt, ob die Flachsbreche „Erntebank“ heißen soll. v0.16.0 ist getestet (Beet gut sichtbar, Ernten und Säen fühlen sich gut an, Fasern → Verbände klappt, Aufträge gut). v0.14.0 ist getestet (Spiel im Hintergrund klappt, 3 Rohstoffe reichen, die neuen Warenbilder erkennt Tobias und sie gefallen); das Lagerhaus ohne Nachschub hat Tobias nicht erwähnt. Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Vorhängeschlössern sehr viel Gold.
+1. **Nächstes Feedback:** Tobias testet v0.17.0 (Level 8 mit Ringelblume, Erntebank und Kräuterstube). Danach planen wir Level 9. v0.16.0 ist getestet (Beet gut sichtbar, Ernten und Säen fühlen sich gut an, Fasern → Verbände klappt, Aufträge gut). v0.14.0 ist getestet (Spiel im Hintergrund klappt, 3 Rohstoffe reichen, die neuen Warenbilder erkennt Tobias und sie gefallen); das Lagerhaus ohne Nachschub hat Tobias nicht erwähnt. Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Vorhängeschlössern sehr viel Gold.
 2. **Handel im echten Tempo:** geklärt – Tobias' Zeiten (bis Eisen etwa 45 Minuten, zweite Runde Eisen nach etwa 60 Minuten) sind in echter Zeit gemessen; nur die Eisen-Runden hat er im Testmodus beschleunigt. Früher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10).
 3. **Laden-Lager:** seit v0.10.1 500 Plätze bis Level 3, 1.000 ab Level 4 (Tobias). Claudes Lesart: erst ab Level 4, weil es dort eng wird. Soll es schon ab Level 1 1.000 sein, ist das eine Zahl in der Datentabelle.
 4. **Aufträge (seit v0.13.0 im Spiel):** geklärt – Waren werden abgegeben, ein Auftrag nach dem anderen, Gold = Thekenwert, Erfahrung reicht genau fürs Level, Aufstieg kostet Gold. Stückzahlen passen (Tobias, v0.13.0: „machbare Menge, das Spiel soll auch fordern“). Noch offen: Passen die Aufstiegspreise (Platzhalter)? Level 7 bis 12 kommen mit dem Kräuter-Kapitel (Abschnitt 4.4). Kostet der Laden-Ausbau später zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Tobias' Erkenntnis bleibt wichtig: Man muss die Mitte finden zwischen Verkaufen (Gold für Rohstoffe) und Weiterverarbeiten.
@@ -1182,12 +1216,29 @@ Stand 08.11.2026 (nach v0.16.1).
 15. **Verbesserungen mit Erfahrung (Idee von Tobias):** Mit XP z. B. schneller Holz verarbeiten oder schnellere Förderbänder freischalten. Tobias ist sich noch nicht sicher, in welche Richtung; vorerst dient die Erfahrung nur dem Aufstieg. Das Spiel zählt schon alle Erfahrung mit (`xpTotal`), damit das später möglich ist.
 16. **Reihenfolge nach v0.13.0:** geklärt – erst das Spiel im Hintergrund (v0.14.0), dann besprechen wir gemeinsam die Vorgehensweise mit Level und Techbaum.
 17. **Rohstoff-Vorrat (seit v0.14.0):** 3 Rohstoffe je Gebäude (45 Minuten) – Tobias: „3 als Rohstoff reichen“. Soll der Vorrat später wachsen, z. B. mit dem Level oder als Verbesserung mit Erfahrung (Frage 15)? Das ist eine Zahl in der Datentabelle (`capacity`).
-18. **Kräuter-Kapitel (Abschnitt 4.4):** Geklärt (Chat 11): 1 Samen = 1 Pflanze, etwa 30 Minuten Wachszeit, ernten, kein Band am Beet, jede Pflanze im selben Beet, 1 Pflanze → 50 Fasern → 10 Verbände, Preise etwa 1.000 (Samen) und 150 (Verband). Geklärt (Chat 11, Teil 2): Pflanze einlegen wie einen Holzstamm, Ernten und Säen getrennt, Beet 2 × 2, die Maschine mit 2 Eingängen erst auf Level 8. Level 7 ist seit v0.16.0 im Spiel. Getestet (v0.16.0): passt. Level 8 geklärt (Chat 11, Teil 3; Plan in Abschnitt 6): Ringelblume in die gleiche Maschine wie Flachs, Kräuterstube mit Heilverband und Kräuterkompresse, gleicher Takt, Baukosten aus Werkzeug-Waren. Offen: Name „Erntebank“. Später: Level 9 (dritte Pflanze, Claudes Idee: Schafgarbe), Level 10–12 (wofür die Kräuterkompresse dort gebraucht wird), Mörser (~Level 15).
+18. **Kräuter-Kapitel (Abschnitt 4.4):** Geklärt (Chat 11): 1 Samen = 1 Pflanze, etwa 30 Minuten Wachszeit, ernten, kein Band am Beet, jede Pflanze im selben Beet, 1 Pflanze → 50 Fasern → 10 Verbände, Preise etwa 1.000 (Samen) und 150 (Verband). Geklärt (Chat 11, Teil 2): Pflanze einlegen wie einen Holzstamm, Ernten und Säen getrennt, Beet 2 × 2, die Maschine mit 2 Eingängen erst auf Level 8. Level 7 ist seit v0.16.0 im Spiel. Getestet (v0.16.0): passt. Level 8 geklärt (Chat 11, Teil 3; Plan in Abschnitt 6): Ringelblume in die gleiche Maschine wie Flachs, Kräuterstube mit Heilverband und Kräuterkompresse, gleicher Takt, Baukosten aus Werkzeug-Waren. Level 8 ist seit v0.17.0 im Spiel, die Flachsbreche heißt Erntebank (Tobias). Offen: Fühlt sich Level 8 im Spiel gut an (gemischte Bänder aus der Erntebank, zwei Eingänge der Kräuterstube)? Später: Level 9 (dritte Pflanze, Claudes Idee: Schafgarbe), Level 10–12 (wofür die Kräuterkompresse dort gebraucht wird), Mörser (~Level 15).
 19. **Test-Knopf (seit v0.15.0):** Vor v1.0 entfernen (`QUEST_TEST_SKIP = false` in `data/levels.js`). Zählt die übersprungene Erfahrung auch für spätere Verbesserungen mit Erfahrung (Frage 15)? Im Moment ja (`xpTotal`).
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.17.0 – Ringelblume und Level 8 „Der Kräutergarten“ (09.11.2026)
+
+**Vorgenommen:**
+- Level 8 umsetzen, wie in v0.16.1 geplant und von Tobias freigegeben: Ringelblume im selben Beet, ein Gerät für alle Pflanzen (Erntebank), die erste Maschine des Kräuter-Kapitels mit zwei Eingängen.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie verarbeitet ein Gerät zwei Pflanzen? → Es merkt sich, welche Pflanze gerade läuft und welche im Vorrat warten; der Vorrat darf gemischt sein und wird der Reihe nach verarbeitet. Holzfällerlager, Steinbruch und Schmelzhütte bleiben bei ihrem einen Rohstoff.
+- Womit füllt „Auffüllen“? → Mit der Pflanze, die gerade läuft; ist die Erntebank leer, mit der, von der am meisten im Laden-Lager liegt.
+- Was passiert mit bestehenden Flachsbrechen? → Sie heißen Erntebank und laufen weiter; der Spielstand trägt bei allen Rohstoff-Gebäuden den bisherigen Rohstoff ein (Version 14).
+
+**Gemacht:**
+- Datentabellen: 5 Waren (Ringelblumensamen, Ringelblume, Ringelblüte, Heilverband, Kräuterkompresse), Kräuterstube, 2 Rezepte, Ringelblume im Beet, Erntebank mit zwei Pflanzen, Level 8 mit 4 Aufträgen, Laden-Daten für Level 8.
+- Spielregeln: Rohstoff-Gebäude mit mehreren Rohstoffen (`sourceInputs`, Vorrat mit Sorten, `refillInput`), Spielstand-Version 14 mit Umwandlung von Version 13.
+- Oberfläche: Infofenster der Erntebank (je Pflanze einlegen, Vorrat mit Sorten), ein Säen-Knopf je Samen, Ringelblume im Beet mit orangen Blüten, 3 neue Warenbilder und 2 neue Varianten, Meldung zu Level 8 beim Öffnen.
+- 247 automatische Tests (neu in `kraeutergarten.test.js`: Datentabellen, Preise, Baukosten nur aus Werkzeug-Waren, Ringelblume nicht kaufbar/verkäuflich, Level 8 mit Aufstieg, Ringelblume säen (mit Kauf) und ernten, gesperrt unter Level 8, Erntebank mit Ringelblume und gemischtem Vorrat in der richtigen Reihenfolge, Auffüllen mit der richtigen Pflanze, Kette Ringelblume → Erntebank → Band → Kräuterstube → 10 Heilverbände, Kräuterkompresse, Testpaket, Spielstand Version 14 und Umwandlung von Version 13; angepasst: Level-Tabelle, Aufstieg bis Level 8, Erfahrung je Level, Preistabelle mit mehreren Pflanzen) und der Browser-Test (neu: Aufträge von Level 7 per Test-Knopf, Aufstieg auf Level 8, zweites Beet und Kräuterstube per Touch bauen, zwei Säen-Knöpfe, Ringelblume säen, reif, ernten, in die Erntebank zur Flachspflanze legen, Kräuterstube mit beiden Einstellungen) in Tablet- und Handygröße – alle bestanden.
+- Beim Testen gefunden und behoben: Das kleine Bild der Pflanzen (seit v0.16.0) zeigte die Stängel oben links in der Ecke statt unter den Blüten; die Blüten sind jetzt auch größer.
 
 ### v0.16.1 – Plan für Level 8 „Der Kräutergarten“ (08.11.2026, nur README)
 
@@ -1716,7 +1767,11 @@ Stand 08.11.2026 (nach v0.16.1).
 
 **Claude:** Die Kompresse ist für Prellungen und Schwellungen (der Verband für Wunden), später Zutat für Größeres. Vorschlag: die Flachsbreche in „Erntebank“ umbenennen, weil sie jetzt alle Pflanzen verarbeitet.
 
-**Umgesetzt:** v0.16.1 (nur README): Plan für v0.17.0 – Ringelblume und Level 8 „Der Kräutergarten“ (Abschnitt 6), wartet auf Tobias' Freigabe.
+**Umgesetzt:** v0.16.1 (nur README): Plan für v0.17.0 – Ringelblume und Level 8 „Der Kräutergarten“ (Abschnitt 6).
+
+**Tobias (09.11.2026):** „Ja, das passt so, und die Erntebank darf auch so bleiben. Meiner Meinung nach der bessere Name.“
+
+**Umgesetzt:** v0.17.0 (siehe Versionshistorie). Als Nächstes testet Tobias Level 8; danach planen wir Level 9.
 
 ### 07.11.2026 – Chat 10: Test von v0.13.0, Spiel im Hintergrund, Kräuter-Kapitel, Plan und Umsetzung v0.14.0
 

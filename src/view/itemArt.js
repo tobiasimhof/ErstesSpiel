@@ -402,23 +402,28 @@ export function drawItem(ctx, type, cx, cy, size) {
       }
       break;
     }
-    case 'flax': {
-      // Flachspflanze: Bündel grüner Stängel mit blauen Blüten
-      const stems = [[-0.22, -0.42], [0, -0.52], [0.22, -0.42]];
-      for (const [dx, dy] of stems) thickLine(ctx, [[0, 0.48], [dx, dy]], s, 0.07, def.color);
-      ctx.fillStyle = '#5b8ff9';
+    case 'plant': {
+      // Pflanze aus dem Beet: Bündel grüner Stängel mit Blüten (v0.17.0:
+      // Farbe der Blüten aus der Tabelle – Flachs blau, Ringelblume orange).
+      // thickLine rechnet ab der Mitte, deshalb erst dorthin verschieben.
+      ctx.translate(cx, cy);
+      const stems = [[-0.24, -0.3], [0, -0.4], [0.24, -0.3]];
+      for (const [dx, dy] of stems) thickLine(ctx, [[0, 0.5], [dx, dy]], s, 0.08, def.color);
+      ctx.fillStyle = def.flower ?? '#5b8ff9';
+      ctx.lineWidth = Math.max(1, s * 0.05);
       for (const [dx, dy] of stems) {
         for (let k = 0; k < 5; k++) {
           const a = (k / 5) * Math.PI * 2;
           ctx.beginPath();
-          ctx.arc(cx + (dx + Math.cos(a) * 0.07) * s, cy + (dy + Math.sin(a) * 0.07) * s, s * 0.06, 0, Math.PI * 2);
+          ctx.arc((dx + Math.cos(a) * 0.1) * s, (dy + Math.sin(a) * 0.1) * s, s * 0.085, 0, Math.PI * 2);
           ctx.fill();
+          ctx.stroke();
         }
       }
       ctx.fillStyle = '#f6e7a1';
       for (const [dx, dy] of stems) {
         ctx.beginPath();
-        ctx.arc(cx + dx * s, cy + dy * s, s * 0.035, 0, Math.PI * 2);
+        ctx.arc(dx * s, dy * s, s * 0.06, 0, Math.PI * 2);
         ctx.fill();
       }
       break;
@@ -449,6 +454,48 @@ export function drawItem(ctx, type, cx, cy, size) {
       ctx.stroke();
       break;
     }
+    case 'petals': {
+      // v0.17.0: getrocknete Ringelblüten – kleines Häufchen oranger Blütenblätter
+      const leaves = [
+        [-0.28, 0.2, 0.4],
+        [0.05, 0.25, -0.3],
+        [0.3, 0.15, 0.8],
+        [-0.12, -0.02, 1.2],
+        [0.18, -0.12, -0.9],
+        [-0.3, -0.2, 0.2],
+        [0.02, -0.32, 0.6],
+      ];
+      for (const [dx, dy, a] of leaves) {
+        ctx.beginPath();
+        ctx.ellipse(cx + dx * s, cy + dy * s, s * 0.2, s * 0.09, a, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      }
+      ctx.fillStyle = '#a85a00';
+      ctx.beginPath();
+      ctx.arc(cx, cy + s * 0.05, s * 0.08, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    }
+    case 'compress': {
+      // v0.17.0: Kräuterkompresse – helles, abgestepptes Polster mit Blüten darin
+      roundRect(ctx, cx - s * 0.5, cy - s * 0.36, s, s * 0.72, s * 0.14);
+      ctx.fill();
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(120, 95, 50, 0.5)';
+      ctx.lineWidth = Math.max(1, s * 0.04);
+      ctx.setLineDash([s * 0.07, s * 0.05]);
+      roundRect(ctx, cx - s * 0.38, cy - s * 0.24, s * 0.76, s * 0.48, s * 0.08);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = def.herb ?? '#f08c00';
+      for (const [dx, dy] of [[-0.18, -0.06], [0.14, 0.08], [0.02, -0.1], [-0.06, 0.12]]) {
+        ctx.beginPath();
+        ctx.arc(cx + dx * s, cy + dy * s, s * 0.06, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      break;
+    }
     case 'bandage': {
       // Verband: weiße Leinenrolle mit herabhängendem Ende
       ctx.beginPath();
@@ -474,6 +521,15 @@ export function drawItem(ctx, type, cx, cy, size) {
         else ctx.lineTo(px, py);
       }
       ctx.stroke();
+      // v0.17.0: Heilverband – mit einem Streifen Ringelblüten am Ende
+      if (def.herb) {
+        ctx.strokeStyle = def.herb;
+        ctx.lineWidth = Math.max(1.5, s * 0.1);
+        ctx.beginPath();
+        ctx.moveTo(cx + s * 0.08, cy + s * 0.3);
+        ctx.lineTo(cx + s * 0.5, cy + s * 0.41);
+        ctx.stroke();
+      }
       break;
     }
     case 'log': {

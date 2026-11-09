@@ -1193,9 +1193,9 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   // v0.16.0: Aufsteigen auf Level 7 „Die Heilstube“ (3.000 Gold; das Gold
   // kommt hier dazu, damit der weitere Ablauf gleich bleibt)
   check(
-    allSkipped.includes('Beet') && allSkipped.includes('Flachsbreche') && allSkipped.includes('Webstube') &&
+    allSkipped.includes('Beet') && allSkipped.includes('Erntebank') && allSkipped.includes('Webstube') &&
       allSkipped.includes('Leinsamen beim Händler') && !allSkipped.includes('Flachspflanze beim Händler'),
-    'Level 7 kündigt Beet, Flachsbreche, Webstube und Leinsamen beim Händler an',
+    'Level 7 kündigt Beet, Erntebank, Webstube und Leinsamen beim Händler an',
   );
   await game(page, () => (window.__game.state.gold += 3000));
   await sleep(450);
@@ -1341,7 +1341,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   );
   // Flachsbreche: Pflanze einlegen wie einen Holzstamm; kaufen kann man Pflanzen nicht
   await tapTile(page, bx + 4, by);
-  check((await page.textContent('#info-title')) === 'Flachsbreche', 'Flachsbreche antippen zeigt Infofenster');
+  check((await page.textContent('#info-title')) === 'Erntebank', 'Erntebank (bisher Flachsbreche) antippen zeigt Infofenster');
   await sleep(450);
   const refillButton = page.locator('#info-actions button', { hasText: 'Auffüllen' });
   check((await refillButton.textContent()) === '⏫ Auffüllen: 1 Flachspflanze', `Auffüllen aus dem Laden-Lager (${await refillButton.textContent()})`);
@@ -1386,6 +1386,119 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const traderText = await page.textContent('#modal-content');
   check(traderText.includes('Leinsamen') && !traderText.includes('Flachspflanze'), 'Händler verkauft Leinsamen, aber keine Flachspflanzen');
   await page.tap('#modal-close');
+
+  // ---------- Level 8: Ringelblume, Erntebank, Kräuterstube (v0.17.0) ----------
+  // Aufträge von Level 7 mit dem Test-Knopf, dann aufsteigen (4.000 Gold kommen dazu)
+  await page.tap('#btn-level');
+  await sleep(150);
+  for (let i = 0; i < 4; i++) {
+    await page.locator('#modal-content button', { hasText: '🧪 Test: Auftrag erledigen' }).tap();
+    await sleep(200);
+  }
+  const l7done = await page.textContent('#modal-content');
+  check(
+    l7done.includes('850 / 850') && l7done.includes('Nächstes Level: Level 8 · Der Kräutergarten') && l7done.includes('Kräuterstube') &&
+      l7done.includes('Ringelblumensamen beim Händler'),
+    'Level 7 erledigt; Level 8 kündigt Kräuterstube und Ringelblumensamen an',
+  );
+  await game(page, () => (window.__game.state.gold += 4000));
+  await sleep(450);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 8 · 4.000' }).tap();
+  await sleep(150);
+  const lvl8 = await game(page, () => ({ level: window.__game.state.shopLevel, seeds: window.__game.state.storage.ringelblumensamen ?? 0 }));
+  check(lvl8.level === 8 && lvl8.seeds === 1, `Level 8: 1 Ringelblumensamen gratis (${JSON.stringify(lvl8)})`);
+  const lvl8Text = await page.textContent('#modal-content');
+  check(lvl8Text.includes('Der Kräutergarten') && lvl8Text.includes('50 Ringelblüten') && lvl8Text.includes('0 / 1.332'), 'Level 8: Agnes möchte 50 Ringelblüten, Erfahrung 0 / 1.332');
+  await shot('19-level-8');
+  await page.tap('#modal-close');
+  await game(page, ([x, y]) => {
+    const { camera, TILE } = window.__game;
+    camera.x = (x + 0.5) * TILE - camera.viewWidth / camera.zoom / 2;
+    camera.y = (y + 0.5) * TILE - camera.viewHeight / camera.zoom / 2;
+  }, [bx + 3, by + 4]);
+  await game(page, () => {
+    const s = window.__game.state.storage;
+    s.holzplatte = (s.holzplatte ?? 0) + 20;
+    s.steinplatte = (s.steinplatte ?? 0) + 10;
+    s.eisenblech = (s.eisenblech ?? 0) + 5;
+    s.zahnradwelle = (s.zahnradwelle ?? 0) + 2;
+  });
+  await page.tap('#btn-build');
+  await buildAt('beet', bx, by + 3);
+  await buildAt('kraeuterstube', bx, by + 6);
+  await page.tap('#build-close');
+  await sleep(80);
+  const herbs8 = await game(page, () =>
+    window.__game.state.buildings.filter((b) => ['beet', 'kraeuterstube'].includes(b.type)).map((b) => `${b.type}@${b.x},${b.y}`),
+  );
+  check(
+    herbs8.includes(`beet@${bx},${by + 3}`) && herbs8.includes(`kraeuterstube@${bx},${by + 6}`),
+    `Zweites Beet und Kräuterstube per Touch gebaut (${herbs8.join(', ')})`,
+  );
+  // Ringelblume säen, reif werden lassen, ernten
+  await tapTile(page, bx, by + 3);
+  await sleep(450);
+  const sowRing = page.locator('#info-actions button', { hasText: '🌱 Säen: Ringelblumensamen' });
+  const sowLein = page.locator('#info-actions button', { hasText: '🌱 Säen: Leinsamen' });
+  check((await sowRing.isVisible()) && (await sowLein.isVisible()), 'Leeres Beet auf Level 8: zwei Knöpfe – Leinsamen und Ringelblumensamen');
+  await sowRing.tap();
+  await sleep(450);
+  const beet2 = () =>
+    game(page, ([x, y]) => {
+      const b = window.__game.state.buildings.find((g) => g.type === 'beet' && g.x === x && g.y === y);
+      return { crop: b.prod.crop, seeds: window.__game.state.storage.ringelblumensamen ?? 0, plants: window.__game.state.storage.ringelblume ?? 0 };
+    }, [bx, by + 3]);
+  const sownRing = await beet2();
+  check(sownRing.crop === 'ringelblumensamen' && sownRing.seeds === 0, `Ringelblumensamen gesät (${JSON.stringify(sownRing)})`);
+  check(!(await sowRing.isVisible()) && !(await sowLein.isVisible()), 'Während es wächst: keine Säen-Knöpfe');
+  check((await page.textContent('#info-status')).includes('Ringelblume wächst'), 'Infofenster: Ringelblume wächst');
+  await game(page, ([x, y]) => {
+    window.__game.state.buildings.find((g) => g.type === 'beet' && g.x === x && g.y === y).prod.timer = 1799.5;
+    window.__game.simulate(1);
+  }, [bx, by + 3]);
+  await sleep(500);
+  await shot('19b-ringelblume-reif');
+  await page.locator('#info-actions button', { hasText: 'Ernten: 1 Ringelblume' }).tap();
+  await sleep(450);
+  const reapedRing = await beet2();
+  check(reapedRing.crop === null && reapedRing.plants === 1, `Ringelblume geerntet (${JSON.stringify(reapedRing)})`);
+  // Erntebank: Ringelblume zur laufenden Flachspflanze dazulegen (gemischter Vorrat)
+  await tapTile(page, bx + 4, by);
+  check((await page.textContent('#info-title')) === 'Erntebank', 'Erntebank antippen zeigt Infofenster');
+  await sleep(450);
+  const loadRing = page.locator('#info-actions button', { hasText: '➕ 1 Ringelblume einlegen' });
+  check(await loadRing.isEnabled(), 'Erntebank: Knopf „➕ 1 Ringelblume einlegen“');
+  await loadRing.tap();
+  await sleep(450);
+  const bankText = await page.textContent('#info-status');
+  check(
+    bankText.includes('1 Ringelblume → 50 Ringelblüten in 10:00 min') && bankText.includes('Vorrat: 2 / 3 (1 Flachspflanze, 1 Ringelblume)'),
+    `Erntebank: gemischter Vorrat (${bankText.slice(0, 160)})`,
+  );
+  const bankState = await game(page, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'flachsbreche');
+    return { input: b.prod.input, queue: b.prod.queue };
+  });
+  check(bankState.input === 'flachspflanze' && bankState.queue.join() === 'ringelblume', `Erst die Flachspflanze, dann die Ringelblume (${JSON.stringify(bankState)})`);
+  await shot('19c-erntebank');
+  // Kräuterstube: zwei Einstellungen
+  await tapTile(page, bx, by + 6);
+  check((await page.textContent('#info-title')) === 'Kräuterstube', 'Kräuterstube antippen zeigt Infofenster');
+  await sleep(450);
+  check(
+    (await page.locator('#info-actions button', { hasText: 'Heilverbände' }).isVisible()) &&
+      (await page.locator('#info-actions button', { hasText: 'Kompressen' }).isVisible()),
+    'Kräuterstube: Einstellungen „Heilverbände“ und „Kompressen“',
+  );
+  check((await page.textContent('#info-status')).includes('1 Verband + 5 Ringelblüten → 1 Heilverband'), 'Rezept: 1 Verband + 5 Ringelblüten → 1 Heilverband');
+  await page.locator('#info-actions button', { hasText: 'Kompressen' }).tap();
+  await sleep(450);
+  check(
+    (await page.textContent('#info-status')).includes('10 Flachsfasern + 5 Ringelblüten → 1 Kräuterkompresse'),
+    'Umgestellt: 10 Flachsfasern + 5 Ringelblüten → 1 Kräuterkompresse',
+  );
+  await shot('19d-kraeuterstube');
+  await page.tap('#info-close');
   await game(page, (c) => Object.assign(window.__game.camera, c), camLand);
   await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)
   await page.tap('#info-close').catch(() => {});
@@ -1505,7 +1618,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     localStorage.setItem(key, JSON.stringify(data));
     return data.saveVersion;
   });
-  check(backdated === 13, `Spielstand-Version 13 (${backdated})`);
+  check(backdated === 14, `Spielstand-Version 14 (${backdated})`);
   await page2.goto(baseUrl);
   await waitForGame(page2);
   await page2.waitForFunction(() => !window.__game.isCatchingUp(), null, { timeout: 20000 });
