@@ -4,12 +4,12 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.18.1 – Doku neu geordnet (nur Doku) |
+| **Aktuelle Version** | v0.18.2 – Feedback nach einer Stunde Spielen (nur Doku) |
 | **Phase** | M2 – Produktionsketten (Kräuter-Kapitel ab Level 7) |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias spielt mit der neuen Bauleiste (v0.18.0) weiter, baut seine Fabrik aus und probiert dabei die Kräuterstube aus. Danach besprechen wir, was als Nächstes kommt. Level 9 (dritte Pflanze) hat Tobias erst einmal hinten angestellt. |
+| **Nächster Schritt** | Tobias antwortet auf Claudes Rechnung zum Eisen (offene Frage 3) und entscheidet: weiterspielen ohne Änderung und die Kräuter ausprobieren, an der Eisen-Balance drehen oder eine Planungshilfe im Infofenster. Level 9 (dritte Pflanze) ist weiter hinten angestellt. |
 
-**Tobias' Fabrik:** Level 8, nach v0.17.0 komplett neu gebaut – eine eigene Straße je Zwischenprodukt, Lagerhäuser als Zwischenlager, zwei Erntebänke (Flachs und Ringelblume getrennt). Er spielt in Echtzeit auf dem Tablet und nutzt für Aufträge den Test-Knopf.
+**Tobias' Fabrik** (Screenshot vom 09.11.2026, ca. 1 Stunde in Echtzeit gespielt, 6.036 Gold): Level 8. Links zwei gleiche Holz-Stein-Straßen (je 3 Holzfällerlager → Sägewerk, 3 Steinbrüche → Steinmetz, Zimmerei, Lagerhäuser als Zwischenlager). Oben 2 Holzfällerlager → Sägewerk, 5 Schmelzhütten → 5 Schmieden, 3 Steinbrüche → Steinmetz; darunter Zimmerei, 2 Feinschmieden und 1 Schlosserei (nur Vorhängeschlösser), jede Ausgabe endet in einem Lagerhaus. Unten 3 Beete, 2 Erntebänke, Webstube und Kräuterstube. Zimmerei und eine Feinschmiede warten auf Eisenstangen. Er spielt auf dem Tablet und nutzt für Aufträge den Test-Knopf.
 
 ## Fahrplan
 
@@ -29,8 +29,8 @@
 ## Offene Fragen
 
 1. **Bauleiste (seit v0.18.0 mit Reitern):** Tobias: „Die Übersicht gefällt mir viel besser.“ Sein ursprünglicher Punkt war auch, dass man nicht direkt sieht, was welche Maschine macht – sollen die Gebäude in der Bauleiste zusätzlich ihre Waren als kleine Bilder zeigen (z. B. Sägewerk → Holzplatte, Holzstab)? Reiter „Kräuter“ oder lieber „Pflanzen“?
-2. **Kräuterstube mit 2 Eingängen** ist im echten Spiel noch nicht getestet.
-3. **Balance und Rohstoffe:** Tobias hatte nach Level 8 zu wenig Grundrohstoffe für alle Maschinen und hat neu gebaut (Learning: eigene Straße je Zwischenprodukt). Stellschrauben: Rezeptmengen (10 + 5), Dauer eines Rohstoffs (15 min), Vorrat (3), Fläche, Preise. Kunden kaufen Kombi-Teile genauso oft wie einfache – eine Theke mit Vorhängeschlössern bringt sehr viel Gold.
+2. **Kräuterstube mit 2 Eingängen** ist gebaut und angeschlossen (v0.18.2), Tobias' Urteil steht noch aus.
+3. **Balance und Rohstoffe, vor allem Eisen:** Nach einer Stunde (v0.18.2): Es macht Spaß, man wächst stetig, aber jedes Auffüllen macht fast pleite; Eisen ist der Engpass. Claudes Rechnung: Eine volle Schmelzhütte kostet 6.600 Gold (Tobias' 5 zusammen 33.000, alle 45 Minuten neu). Eine Feinschmiede bei voller Arbeit verbraucht das Eisen von etwa 17 Schmelzhütten (eine Zimmerei ebenso das von 17 Holz- und Steingebäuden, eine Grundmaschine das von 4–5). Kunden kaufen immer etwa 6 Stück pro Minute, egal wie viele Theken – teure Waren auf den Theken bringen also viel mehr. Das Uhrwerk braucht gar kein Eisen. Stellschrauben: Rezeptmengen (10 + 5), Dauer eines Rohstoffs (15 min), Vorrat (3), Eisenpreis, Kundenzahl je Level, Fläche, Preise. Noch nichts entschieden.
 4. **Platzhalter-Zahlen:** Aufstiegspreise, Auftragsmengen, Baukosten. Kostet der Laden-Ausbau später zusätzlich Waren? Begrenzt das Level die kaufbare Fläche?
 5. **Weltgröße:** Reichen 38 × 30 Felder für die Masse der höheren Level, oder gibt es später mehr Fläche (`perSide` in `data/land.js`)?
 6. **Weiche mit Filter** (Claudes Idee): ein Band-Feld, das eine Ware abzweigt und den Rest geradeaus schickt. Tobias' Problem mit gemischten Bändern spricht dafür – will er das, und wann?
@@ -44,6 +44,12 @@
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.18.2 – Feedback nach einer Stunde Spielen (09.11.2026, nur Doku)
+
+- **Tobias:** Eine Stunde im normalen Tempo gespielt, „langsam immer stetiger wachsen“. Er blieb am Ball, weil er alle Fabriken mit Rohstoffen füllen wollte – das klappt jetzt gut, nur Eisen könnte besser sein. Beim Auffüllen ging er jedes Mal fast pleite und musste warten, bis genug verkauft war (jetzt 6.000 Gold, mit Eisen wieder fast 0). „Es macht Spaß“, die Kräuter kommen langsam dran. Er muss mehr Eisen bauen, weil die Schlosserei nur ein Produkt herstellt – „man wird nicht reich, aber man kommt langsam voran“.
+- **Claude:** Rechnung zum Eisen und Tipps (offene Frage 3); Vorschlag: erst einmal nichts ändern und die Kräuter ausprobieren, sonst Eisen-Balance oder eine Planungshilfe. Tobias' Antwort steht aus.
+- Spiel unverändert, nur die Versionsnummer steigt.
+
 ### v0.18.1 – Doku neu geordnet (09.11.2026, nur Doku)
 
 - **Tobias:** Die README ist sehr lang und verbraucht zu Beginn jedes Chats viel Kontext. Wunsch: eine Datei, in der jeder Arbeitsschritt dokumentiert wird, eine Historie, eine Datei für die letzten Arbeitsschritte und eine grobe Zusammenfassung des Spiels – erst das Repo klären, dann weiter am Spiel. „Das Spielprinzip ist ja klar und wir müssen die Basis eigentlich nur erweitern.“
@@ -56,8 +62,3 @@
 - **Umgesetzt:** Reiter Holz, Stein, Eisen, Kräuter (Zimmerei bei Holz, Feinschmiede und Schlosserei bei Eisen); Förderband, Lagerhaus, Portal, Verschieben, Abreißen immer links; gesperrte Reiter mit 🔒; Reiter bleibt gemerkt; die Karte lässt sich unten über die Leiste schieben; Meldungen über der Leiste. Die Leiste ist nicht höher geworden.
 - **Tobias:** „Ja, perfekt. So langsam nimmt das Spiel Form an. Die Übersicht gefällt mir viel besser.“
 - Offen: Warenbilder je Gebäude (Frage 1).
-
-### v0.17.0 – Ringelblume und Level 8 „Der Kräutergarten“ (09.11.2026)
-
-- **Umgesetzt:** Ringelblume im selben Beet, die Flachsbreche heißt Erntebank und verarbeitet alle Pflanzen (auch gemischt), Kräuterstube mit 2 Eingängen (Heilverband, Kräuterkompresse), Level 8 mit 4 Aufträgen, Spielstand Version 14.
-- **Tobias' Test (Chat 12, im Chat 13 wiederholt):** Das meiste funktioniert. Die Ringelblume ist gut zu sehen. Er hat die ganze Fabrik neu gebaut, weil er zu wenig Grundrohstoffe für alle Maschinen hatte – jetzt eine Straße je Zwischenprodukt und Lagerhäuser als Zwischenlager; zusammengeführte Bänder mit zwei Waren sind nicht steuerbar. Zwei Erntebänke statt gemischtem Vorrat. Kräuterstube noch nicht getestet. Die dritte Pflanze stellt er hinten an.

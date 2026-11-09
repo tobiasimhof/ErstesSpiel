@@ -4,6 +4,19 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.18.2 – Feedback nach einer Stunde Spielen (09.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Feedback nach etwa einer Stunde Spielen in Echtzeit (Chat 14) sofort festhalten, damit nichts verloren geht.
+
+**Fragen, die wir uns gestellt haben:**
+- Warum macht das Auffüllen mit Eisen fast pleite? → Claudes Rechnung (siehe Gesprächsprotokoll und offene Frage 3 in `docs/STAND.md`): Eine volle Schmelzhütte kostet 6.600 Gold, eine Feinschmiede verbraucht bei voller Arbeit das Eisen von etwa 17 Schmelzhütten, und die Kunden kaufen immer etwa 6 Stück pro Minute.
+- Muss etwas geändert werden? → Noch offen; Tobias entscheidet nach Claudes Vorschlag.
+
+**Gemacht:**
+- `docs/STAND.md`: Status, Tobias' Fabrik nach dem Screenshot, offene Fragen 2 und 3, neuer Arbeitsschritt oben (v0.17.0 fällt aus der Liste). Gesprächsprotokoll ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.18.1 – Doku neu geordnet (09.11.2026, nur Doku)
 
 **Vorgenommen:**

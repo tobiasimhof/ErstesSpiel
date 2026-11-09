@@ -4,6 +4,21 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 09.11.2026 – Chat 14: Feedback nach einer Stunde Spielen (v0.18.1)
+
+**Tobias** (mit Screenshot seiner Fabrik auf Level 8, 6.036 Gold): „Ich hab jetzt ca. eine Stunde lang im normalen Spieltempo gespielt, und konnte langsam immer stetiger wachsen. Ich bin immer am Ball geblieben, weil ich meine ganzen Fabriken voll machen wollte mit Rohstoffen, was jetzt auch ganz gut geklappt hat, nur die Eisenvorräte könnten noch besser sein. Immer wenn ich Rohstoffe voll machen wollte, bin ich quasi pleite gegangen und musste erst warten, bis ich genug Ware produziert hatte, um diese zu verkaufen. Aktuell hab ich zwar 6000 Gold, aber müsste noch Eisen dazu kaufen und wäre wieder bei fast 0. Ich finde, es macht Spaß, und man kann sich so langsam an die Kräutersachen machen. Außerdem muss ich noch mehr Eisenproduktionen bauen, weil ich bei der Schlosserei aktuell nur ein Produkt herstelle, weshalb man nicht reich wird, aber man kommt langsam voran.“
+
+**Auf dem Screenshot:** links zwei gleiche Holz-Stein-Straßen (je 3 Holzfällerlager, 3 Steinbrüche, Sägewerk, Steinmetz, Zimmerei, Lagerhäuser); oben 2 Holzfällerlager, 5 Schmelzhütten mit 5 Schmieden, 3 Steinbrüche, darunter Zimmerei, 2 Feinschmieden, 1 Schlosserei; unten 3 Beete, 2 Erntebänke, Webstube, Kräuterstube. Zimmerei und eine Feinschmiede warten auf Eisenstangen.
+
+**Claude** hat nachgerechnet (Zahlen aus den Datentabellen):
+- Eine Schmelzhütte voll aufzufüllen kostet 3 × 2.200 = 6.600 Gold, Tobias' 5 Hütten 33.000 Gold – und nach 45 Minuten wieder. Holz und Stein kosten je Gebäude nur 1.650.
+- Eine Schmelzhütte liefert etwa 13 Barren pro Minute (2–3 Bleche oder Stangen). Eine Feinschmiede braucht bei voller Arbeit für Scharniere 45 Bleche und Stangen pro Minute – das Eisen von etwa 17 Schmelzhütten. Ebenso verbraucht eine Zimmerei so viel wie etwa 17 Holz- und Steingebäude liefern, eine Grundmaschine so viel wie 4–5 Rohstoff-Gebäude. Deshalb warten Tobias' Kombi-Maschinen; „mehr Eisen bauen“ ist der richtige Schluss.
+- Kunden kommen etwa alle 20 Sekunden und kaufen im Schnitt 2 Stück, also etwa 6 Stück pro Minute (360 pro Stunde) – egal wie viele Theken. Jedes Stück nimmt der Kunde von einer zufälligen gefüllten Theke. Aus 1 Eisenerz werden 40 Bleche und Stangen (2.880 Gold), die allein 7 Minuten aller Kunden bräuchten; als Vorhängeschlösser werden daraus 2⅔ Stück (5.184 Gold). Tipp: die teuersten Waren auf die Theken; Bleche und Stangen weiterverarbeiten statt verkaufen.
+- Tipp: Das Uhrwerk (Zahnradwelle + Räderwerk) braucht gar kein Eisen und bringt im Verhältnis zu den Rohstoffen genauso viel wie das Vorhängeschloss (etwa das 1,9-Fache) – eine zweite Schlosserei für Uhrwerke ließe sich aus den Holz-Stein-Straßen versorgen, mit Rohstoffen für 550 statt 2.200 Gold.
+- Vorschlag für den nächsten Schritt: erst einmal nichts an der Balance ändern (es macht Spaß, man kommt voran, und der Wunsch, alles voll zu machen, hält am Ball) und die Kräuter ausprobieren. Alternativ: Eisen-Balance anpassen (z. B. mehr Kunden mit jedem Level, Eisenpreis, Vorrat) oder eine Planungshilfe im Infofenster („braucht bei voller Arbeit so viel wie 17 Schmelzhütten“).
+
+**Umgesetzt:** v0.18.2 (nur Doku). Tobias' Antwort steht aus.
+
 ### 09.11.2026 – Chat 12 und 13: Test von v0.17.0, Plan und Umsetzung v0.18.0 (Bauleiste mit Reitern)
 
 *Chat 12 wurde nicht in der README festgehalten; Tobias hat sein Feedback und Claudes Rückfragen in Chat 13 wiederholt.*
