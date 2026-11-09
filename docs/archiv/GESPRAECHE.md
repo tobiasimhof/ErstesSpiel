@@ -23,7 +23,13 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Umgesetzt:** v0.18.3 (nur Doku): oberste Regel ganz oben in `CLAUDE.md` (mit der Ausnahme für reine Doku-Versionen), Entscheidungen festgehalten, offene Frage 3 erledigt.
 
-**Claude** hat die möglichen nächsten Schritte aus `docs/STAND.md` aufgezählt (Warenbilder in der Bauleiste, Level 9, Weiche mit Filter, Verbesserungen mit Erfahrung) und Tobias wählen lassen.
+**Claude** hat die möglichen nächsten Schritte aus `docs/STAND.md` aufgezählt (Warenbilder in der Bauleiste, Level 9, Weiche mit Filter, Verbesserungen mit Erfahrung) und Tobias wählen lassen; Empfehlung: Warenbilder in der Bauleiste.
+
+**Tobias:** „Gerne Punkt 1, und du kannst Kräuter auch in Pflanzen oder Pflanzenkunde umbenennen. Welche Möglichkeiten hast du, die Gebäude (also die Icons) darzustellen? Was hergestellt wird – kann man einfach das Symbol nehmen, welches auf dem Band liegen würde, nur minimal größer, oder wie würdest du das aus Sicht eines Spieleentwicklers machen?“
+
+**Claude** hat Vorschaubilder (Tablet und Handy) mit drei Varianten gebaut und erklärt: Das Warenbild vom Band zu nehmen, ist genau richtig – eine Ware sieht überall gleich aus (Band, Laden, Aufträge, Bauleiste). Variante A (Waren neben dem Gebäudebild) passt bei drei Waren nicht in den Knopf; B (eigene Zeile unter dem Namen, Leiste etwas höher) empfohlen; C (Waren groß, Gebäude klein in der Ecke, Leiste gleich hoch). Gebäudebilder: Emojis (heute, sehen auf jedem Gerät anders aus, manche ähneln sich), selbst gezeichnet wie die Waren, oder gemalte Grafik-Dateien – Empfehlung: Emojis vorerst behalten, eigene Gebäudebilder in M4. Reiter: „Pflanzen“ empfohlen. Idee für danach: Maschinen zeigen auf der Karte, was sie gerade herstellen.
+
+**Umgesetzt:** v0.18.4 (nur Doku): Plan für v0.19.0 in `PLAENE.md`. Tobias' Wahl steht aus.
 
 ### 09.11.2026 – Chat 12 und 13: Test von v0.17.0, Plan und Umsetzung v0.18.0 (Bauleiste mit Reitern)
 

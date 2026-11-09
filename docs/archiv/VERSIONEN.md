@@ -4,6 +4,19 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.18.4 – Plan: Warenbilder in der Bauleiste (09.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Wahl (Punkt 1, Reiter umbenennen) und Claudes Plan-Entwurf für v0.19.0 festhalten.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie zeigt man, was ein Gebäude herstellt? → Mit den Warenbildern vom Band, etwas größer (Tobias' Idee, Claudes Empfehlung). Wo im Knopf? → Varianten B und C, Tobias wählt.
+- Wie stellt man die Gebäude selbst dar? → Emojis vorerst; selbst gezeichnete Gebäudebilder später in M4.
+
+**Gemacht:**
+- `docs/archiv/PLAENE.md`: Plan für v0.19.0 (Entwurf). `docs/STAND.md`: Status, nächster Schritt, offene Frage 1, neuer Arbeitsschritt oben (v0.18.1 fällt aus der Liste). Gesprächsprotokoll und Entscheidungen ergänzt.
+- Vorschaubilder nur im Chat (nicht im Projekt gespeichert). Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.18.3 – Balance bleibt, oberste Regel (09.11.2026, nur Doku)
 
 **Vorgenommen:**

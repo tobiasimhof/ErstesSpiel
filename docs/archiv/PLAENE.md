@@ -61,6 +61,19 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### v0.19.0 – Warenbilder in der Bauleiste (Entwurf, wartet auf Tobias' Wahl)
+
+Tobias wählt Punkt 1 der möglichen nächsten Schritte (Chat 14) und fragt, wie man die Gebäude darstellen kann – ob man einfach das Warenbild vom Band nimmt, nur etwas größer.
+
+- **Ziel:** In der Bauleiste sieht man auf einen Blick, was jedes Gebäude herstellt.
+- **Warenbilder:** dieselben Bilder wie auf dem Band, im Laden und in den Aufträgen, etwas größer (etwa 20 Pixel auf dem Tablet, 17 auf dem Handy). Eine Ware sieht überall gleich aus – das ist in Fabrikspielen der wichtigste Wiedererkennungs-Effekt. Sie stehen in einem dunklen Kästchen, damit man sie nicht mit den Baukosten verwechselt (die haben Zahlen).
+- **Varianten** (Vorschaubilder für Tablet und Handy im Chat gezeigt): **B** – Waren in eigener Zeile unter dem Namen, die Leiste wird etwas höher (Tablet etwa 11, Handy etwa 14 Pixel); Lesereihenfolge Gebäude → Name → stellt her → kostet (Claudes Empfehlung). **C** – Waren als Hauptbild, das Gebäude-Emoji klein in der Ecke, Leiste gleich hoch. Verworfen: **A** – Waren neben dem Gebäudebild, drei Waren passen nicht in den Knopf.
+- **Welche Waren:** Rohstoff-Gebäude ihr Ergebnis (Holzblock, Steinblock, Eisenbarren), Erntebank Flachsfaser und Ringelblüte, Beet die Pflanzen, Maschinen alle ihre Rezepte. Waren eines späteren Levels blass (Claudes Vorschlag). Lagerhaus, Versandportal und Werkzeuge bleiben, wie sie sind. Die Waren ergeben sich aus den vorhandenen Datentabellen, neue Zahlen gibt es nicht.
+- **Reiter „Kräuter“** wird umbenannt (Tobias: „Pflanzen“ oder „Pflanzenkunde“; Claude empfiehlt „Pflanzen“ – kurz wie Holz, Stein, Eisen; „Pflanzenkunde“ passt auch auf dem Handy, aber knapp). Das Kräuter-Kapitel heißt in der Doku weiter so.
+- **Gebäudebilder:** Möglichkeiten sind Emojis (heute: schnell, sehen aber auf jedem Gerät anders aus, manche ähneln sich, z. B. 🔨 Schmiede, ⚒️ Steinmetz, 🛠️ Zimmerei), selbst gezeichnete Bilder wie bei den Waren (überall gleich, eigener Stil) oder gemalte Grafik-Dateien (am schönsten, viel Aufwand). Claudes Empfehlung: Emojis bleiben vorerst, die Warenbilder erklären das Gebäude; eigene Gebäudebilder später in M4 (Optik), dann für Karte und Leiste zusammen.
+- **Idee für danach (eigener Schritt):** Auf der Karte zeigt jede Maschine klein, was sie gerade herstellt (z. B. welche der 5 Schmieden Bleche und welche Stangen macht).
+- **Prüfen:** Test, dass jedes Gebäude in den Reitern genau seine Waren zeigt; Browser-Test in Tablet- und Handygröße (Warenbilder sichtbar, alles passt auf den Bildschirm, Reitername).
+
 ### v0.18.1 – Doku neu geordnet (fertig, nur Doku)
 
 Tobias' Wunsch und Claudes Vorschlag stehen in `GESPRAECHE.md` (Chat 12 und 13). Tobias: „Ja, setze es bitte genauso um.“
