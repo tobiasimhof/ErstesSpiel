@@ -56,6 +56,9 @@ import {
   isRipe,
   inputJam,
   loadInput,
+  sourceInputTypes,
+  sourceInputs,
+  sourceStock,
   losesWorkOnRemove,
   productionOf,
   returnUnusedStock,
@@ -182,43 +185,62 @@ export function createController({
     const status = buildingStatus(state, b);
     const lines = [`${DOT[status.level]} ${status.text}`];
     if (p?.kind === 'source') {
-      const input = ITEMS[p.input];
-      const output = ITEMS[p.output];
-      lines.push(`1 ${input.name} → ${p.amount} ${output.plural} in ${formatDuration(p.duration)}`);
+      // v0.17.0: Die Erntebank verarbeitet mehrere Pflanzen – gezeigt wird,
+      // was auf diesem Level schon freigeschaltet ist.
+      const inputs = sourceInputs(p);
+      const all = Object.keys(inputs);
+      const types = all.filter((t) => isItemUnlocked(state, t));
+      for (const t of types) lines.push(`1 ${ITEMS[t].name} → ${p.amount} ${ITEMS[inputs[t]].plural} in ${formatDuration(p.duration)}`);
       // v0.14.0: Vorrat von bis zu 3 Rohstoffen
       const inside = sourceCount(b);
-      lines.push(`Vorrat: ${inside} / ${sourceCapacity(b)} ${inside === 1 ? input.name : input.plural}`);
+      if (all.length === 1) {
+        const input = ITEMS[all[0]];
+        lines.push(`Vorrat: ${inside} / ${sourceCapacity(b)} ${inside === 1 ? input.name : input.plural}`);
+      } else {
+        const list = Object.entries(sourceStock(b)).map(([t, n]) => itemCount(t, n)).join(', ');
+        lines.push(`Vorrat: ${inside} / ${sourceCapacity(b)}${list ? ` (${list})` : ''}`);
+      }
       if (prod.loaded) {
         const left = prod.remaining + (prod.queued ?? 0) * p.amount;
         lines.push(`Leer in etwa ${formatDuration(left * (p.duration / p.amount))}`);
       }
-      lines.push(`${input.plural} im Laden-Lager: ${storageCount(state, p.input)}`);
+      for (const t of types) lines.push(`${ITEMS[t].plural} im Laden-Lager: ${storageCount(state, t)}`);
       const plan = refillPlan(state, b);
       const refill = info.buttons.get('refill');
-      refill.textContent = refillLabel(plan, input);
+      refill.textContent = refillLabel(plan, ITEMS[plan.input]);
       refill.disabled = plan.fromStorage + plan.buy === 0;
       const room = sourceRoom(b);
-      const load = info.buttons.get('load');
-      load.textContent = `➕ 1 ${input.name} einlegen`;
-      load.disabled = room < 1 || storageCount(state, p.input) < 1;
-      // v0.16.0: Flachspflanzen gibt es nicht beim Händler – dann fehlt der Knopf
-      const buy = info.buttons.get('buy');
-      if (buy) buy.disabled = state.gold < input.buyPrice || !isItemUnlocked(state, p.input);
+      for (const t of all) {
+        const load = info.buttons.get(`load:${t}`);
+        if (load) {
+          load.hidden = !isItemUnlocked(state, t);
+          load.textContent = `➕ 1 ${ITEMS[t].name} einlegen`;
+          load.disabled = room < 1 || storageCount(state, t) < 1;
+        }
+        // v0.16.0: Flachspflanzen gibt es nicht beim Händler – dann fehlt der Knopf
+        const buy = info.buttons.get(`buy:${t}`);
+        if (buy) buy.disabled = state.gold < ITEMS[t].buyPrice || !isItemUnlocked(state, t);
+      }
     } else if (p?.kind === 'garden') {
       // v0.16.0 (Tobias): Beet – säen, wachsen lassen, ernten (zwei Schritte)
-      for (const seed of gardenSeeds(b.type)) {
+      // v0.17.0: alle freigeschalteten Samen (Leinsamen, Ringelblumensamen)
+      const seeds = gardenSeeds(b.type).filter((seed) => isItemUnlocked(state, seed));
+      for (const seed of seeds) {
         const c = p.crops[seed];
         lines.push(`1 ${ITEMS[seed].name} → 1 ${ITEMS[c.plant].name} in ${formatDuration(c.time)}`);
       }
       const crop = gardenCrop(b);
       if (crop && !isRipe(b)) lines.push(`Reif in etwa ${formatDuration(growthLeft(b))}`);
       if (crop && isRipe(b)) lines.push(`🌾 Die ${ITEMS[crop.plant].name} ist reif. Nach dem Ernten liegt sie im Laden-Lager.`);
-      const plan = sowPlan(state, b);
-      if (plan.seed) lines.push(`${ITEMS[plan.seed].name} im Laden-Lager: ${storageCount(state, plan.seed)}`);
-      const sow = info.buttons.get('sow');
-      sow.hidden = Boolean(crop);
-      sow.textContent = sowLabel(plan);
-      sow.disabled = plan.result !== 'ok';
+      for (const seed of seeds) lines.push(`${ITEMS[seed].name} im Laden-Lager: ${storageCount(state, seed)}`);
+      for (const seed of gardenSeeds(b.type)) {
+        const sow = info.buttons.get(`sow:${seed}`);
+        if (!sow) continue;
+        const plan = sowPlan(state, b, seed);
+        sow.hidden = Boolean(crop) || !seeds.includes(seed);
+        sow.textContent = sowLabel(plan);
+        sow.disabled = plan.result !== 'ok';
+      }
       const reap = info.buttons.get('harvest');
       reap.hidden = !crop;
       reap.disabled = !isRipe(b);
@@ -305,6 +327,8 @@ export function createController({
       if (p?.kind === 'source') {
         // v0.14.0 (Tobias): bis zum Rand füllen – erst aus dem Laden-Lager,
         // was fehlt, direkt beim Händler kaufen
+        const none = (input) =>
+          input.grown ? `Keine ${input.plural} im Laden-Lager – erst im Beet ernten.` : `Kein ${input.name} im Laden-Lager.`;
         actions.push({
           key: 'refill',
           label: '',
@@ -313,59 +337,65 @@ export function createController({
             const machine = findBuilding(state, b.id);
             if (!machine) return;
             const done = refillSource(state, machine);
+            const input = ITEMS[done.input];
             const n = done.fromStorage + done.buy;
             if (n > 0) {
               changed();
-              const input = ITEMS[p.input];
               const bought = done.buy > 0 ? ` (${done.buy} gekauft für ${numberFormat.format(done.cost)} Gold)` : '';
               panels.toast(`${n} ${n === 1 ? input.name : input.plural} eingelegt${bought}.`);
             } else if (done.room === 0) panels.toast('Der Vorrat ist schon voll.');
-            else if (ITEMS[p.input].grown) panels.toast(`Keine ${ITEMS[p.input].plural} im Laden-Lager – erst im Beet ernten.`);
-            else panels.toast(`Kein ${ITEMS[p.input].name} im Laden-Lager, und das Gold reicht nicht zum Kaufen.`);
+            else if (input.grown) panels.toast(none(input));
+            else panels.toast(`Kein ${input.name} im Laden-Lager, und das Gold reicht nicht zum Kaufen.`);
             infoRefresh?.();
           },
         });
-        actions.push({
-          key: 'load',
-          label: '',
-          onClick: () => {
-            if (loadInput(state, b)) {
-              changed();
-              panels.toast(`${ITEMS[p.input].name} eingelegt.`);
-            } else if (sourceRoom(b) < 1) {
-              panels.toast('Der Vorrat ist voll.');
-            } else {
-              const input = ITEMS[p.input];
-              panels.toast(input.grown ? `Keine ${input.plural} im Laden-Lager – erst im Beet ernten.` : `Kein ${input.name} im Laden-Lager.`);
-            }
-            infoRefresh?.();
-          },
-        });
-        if (isBuyable(p.input)) actions.push({
-          key: 'buy',
-          label: `🧺 ${ITEMS[p.input].name} kaufen · ${numberFormat.format(ITEMS[p.input].buyPrice)} 🪙`,
-          onClick: () => {
-            const result = buyRaw(state, p.input);
-            if (result === 'ok') {
-              changed();
-              panels.toast(`${ITEMS[p.input].name} gekauft. Jetzt einlegen.`);
-            } else if (result === 'gold') panels.toast('Dafür reicht dein Gold nicht.');
-            else if (result === 'full') panels.toast('Dein Laden-Lager ist voll.');
-            else if (result === 'locked') panels.toast(`${ITEMS[p.input].name} gibt es erst ab Level ${itemLevel(p.input)}.`);
-            infoRefresh?.();
-          },
-        });
+        // v0.17.0: je Rohstoff ein Knopf „einlegen“ (die Erntebank nimmt mehrere Pflanzen)
+        for (const type of sourceInputTypes(b.type)) {
+          const input = ITEMS[type];
+          actions.push({
+            key: `load:${type}`,
+            label: '',
+            onClick: () => {
+              const machine = findBuilding(state, b.id);
+              if (!machine) return;
+              if (loadInput(state, machine, type)) {
+                changed();
+                panels.toast(`${input.name} eingelegt.`);
+              } else if (sourceRoom(machine) < 1) panels.toast('Der Vorrat ist voll.');
+              else panels.toast(none(input));
+              infoRefresh?.();
+            },
+          });
+        }
+        for (const type of sourceInputTypes(b.type).filter(isBuyable)) {
+          const input = ITEMS[type];
+          actions.push({
+            key: `buy:${type}`,
+            label: `🧺 ${input.name} kaufen · ${numberFormat.format(input.buyPrice)} 🪙`,
+            onClick: () => {
+              const result = buyRaw(state, type);
+              if (result === 'ok') {
+                changed();
+                panels.toast(`${input.name} gekauft. Jetzt einlegen.`);
+              } else if (result === 'gold') panels.toast('Dafür reicht dein Gold nicht.');
+              else if (result === 'full') panels.toast('Dein Laden-Lager ist voll.');
+              else if (result === 'locked') panels.toast(`${input.name} gibt es erst ab Level ${itemLevel(type)}.`);
+              infoRefresh?.();
+            },
+          });
+        }
       }
       if (p?.kind === 'garden') {
         // v0.16.0 (Tobias): Säen und Ernten sind zwei getrennte Schritte
-        actions.push({
-          key: 'sow',
+        // v0.17.0: je Samen ein Knopf (Leinsamen, Ringelblumensamen)
+        for (const seed of gardenSeeds(b.type)) actions.push({
+          key: `sow:${seed}`,
           label: '',
           primary: true,
           onClick: () => {
             const beet = findBuilding(state, b.id);
             if (!beet) return;
-            const done = sowSeed(state, beet);
+            const done = sowSeed(state, beet, seed);
             if (done.result === 'ok') {
               changed();
               const crop = gardenCrop(beet);

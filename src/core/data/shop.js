@@ -18,6 +18,7 @@ export const SHOP_LEVELS = {
   6: { storage: 1000, counters: 5, counterSize: 30 },
   // v0.16.0: Level 7 (Kräuter-Kapitel) – der Laden bleibt wie auf Level 6.
   7: { storage: 1000, counters: 5, counterSize: 30 },
+  8: { storage: 1000, counters: 5, counterSize: 30 },
 };
 
 // Namen der Theken-Größen für Texte (v0.10.1)

@@ -62,6 +62,8 @@ const COLORS = {
 // v0.16.0: Aussehen der Pflanzen im Beet (Stängel, Blätter, Blüten)
 const PLANT_LOOK = {
   flachspflanze: { stem: '#5f8f3a', leaf: '#7fb24e', flower: '#5b8ff9', center: '#f6e7a1' },
+  // v0.17.0: Ringelblume mit orangen Blüten
+  ringelblume: { stem: '#557f33', leaf: '#6fa046', flower: '#f59f00', center: '#a85a00' },
 };
 const DEFAULT_PLANT = { stem: '#5f8f3a', leaf: '#7fb24e', flower: '#f2c94c', center: '#fff3bf' };
 

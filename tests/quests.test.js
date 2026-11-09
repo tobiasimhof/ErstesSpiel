@@ -71,7 +71,7 @@ test('Die Erfahrung aller Aufträge eines Levels reicht genau für den Aufstieg'
 
 test('Erfahrung je Level: steigt im Werkzeug-Kapitel, das Kräuter-Kapitel fängt wieder klein an', () => {
   const needs = Object.keys(LEVELS).map((level) => xpNeeded(Number(level)));
-  assert.deepEqual(needs, [81, 90, 162, 714, 1495, 1841, 850]);
+  assert.deepEqual(needs, [81, 90, 162, 714, 1495, 1841, 850, 1332]);
 });
 
 // ---------- Abgeben ----------

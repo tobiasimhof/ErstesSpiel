@@ -37,4 +37,10 @@ export const RECIPES = {
   // v0.16.0: Webstube (Level 7) – aus Flachsfasern werden Verbände (Leinenbinden).
   // Vorerst nur diese eine Einstellung (Tobias); mehr kommt mit Level 8.
   verband: { building: 'webstube', label: 'Verbände', inputs: { flachsfaser: 5 }, output: 'verband', amount: 1, time: 10 },
+
+  // v0.17.0: Kräuterstube (Level 8) – die erste Maschine des Kräuter-Kapitels
+  // mit zwei Eingängen (Tobias: Faser bzw. Verband + Kraut). Der Verband kommt
+  // auf Wunden, die Kompresse auf Prellungen und Schwellungen.
+  heilverband: { building: 'kraeuterstube', label: 'Heilverbände', inputs: { verband: 1, ringelbluete: 5 }, output: 'heilverband', amount: 1, time: 20 },
+  kraeuterkompresse: { building: 'kraeuterstube', label: 'Kompressen', inputs: { flachsfaser: 10, ringelbluete: 5 }, output: 'kraeuterkompresse', amount: 1, time: 20 },
 };

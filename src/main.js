@@ -235,7 +235,10 @@ if (loaded.status === 'ok' && loaded.migratedFrom) {
     from < 12
       ? 'Neu: Deine Fabrik läuft weiter, wenn das Spiel zu ist – bis Rohstoffe, Zutaten oder Theken leer sind. In Holzfällerlager, Steinbruch und Schmelzhütte passen jetzt 3 Rohstoffe („⏫ Auffüllen“). Lagerhäuser befüllst du von Hand.'
       : '',
-    from < 13 ? 'Neu: Level 7 „Die Heilstube“ – Beet, Flachsbreche und Webstube. Aus Leinsamen wachsen Flachspflanzen, daraus werden Fasern und Verbände.' : '',
+    from < 13 ? 'Neu: Level 7 „Die Heilstube“ – Beet, Erntebank und Webstube. Aus Leinsamen wachsen Flachspflanzen, daraus werden Fasern und Verbände.' : '',
+    from < 14
+      ? 'Neu: Level 8 „Der Kräutergarten“ – Ringelblumen im Beet und die Kräuterstube für Heilverbände und Kräuterkompressen. Die Flachsbreche heißt jetzt Erntebank und verarbeitet alle Pflanzen.'
+      : '',
     ...(loaded.notes ?? []),
     loaded.counterNote ?? '',
   ].filter(Boolean);
