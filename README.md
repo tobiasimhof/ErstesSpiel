@@ -6,10 +6,10 @@ Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeit
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.17.0 – Ringelblume und Level 8 „Der Kräutergarten“ |
+| **Aktuelle Version** | v0.18.0 – Bauleiste mit Reitern |
 | **Phase** | M2 – Produktionsketten (Kräuter-Kapitel ab Level 7) |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias testet v0.17.0 (mit dem Test-Knopf die Aufträge von Level 7 erledigen, auf Level 8 aufsteigen, Ringelblumen säen, in der Erntebank trocknen, Heilverbände und Kräuterkompressen in der Kräuterstube; Punkte unter „Was Tobias testet“ in Abschnitt 6) und gibt Feedback. Danach planen wir **Level 9** (dritte Pflanze, Abschnitt 4.4) |
+| **Nächster Schritt** | Tobias testet v0.18.0 (Bauleiste mit den Reitern Holz, Stein, Eisen, Kräuter; Werkzeuge immer links; ganz unten bauen – Punkte unter „Was Tobias testet“ in Abschnitt 6), baut seine neue Fabrik weiter und probiert dabei die Kräuterstube aus. **Level 9** (dritte Pflanze) stellt Tobias erst einmal hinten an; was als Nächstes kommt, besprechen wir nach seinem Feedback |
 
 ---
 
@@ -113,6 +113,7 @@ Rohstoffe gewinnen → über Förderbänder verarbeiten → im Laden oder auf de
 - **Taste R (seit v0.11.0):** Mit angeschlossener Tastatur dreht R die Vorschau beim Bauen und Verschieben, sonst das angetippte Gebäude oder Band.
 - **Beet (seit v0.16.0, Tobias):** 2 × 2, ohne Anschluss ans Band. Man **sät** einen Samen (aus dem Laden-Lager; liegt keiner da, kauft „🌱 Säen“ ihn direkt beim Händler), die Pflanze wächst sichtbar in Stufen (**30 Minuten** für Flachs), dann erscheint 🌾 und man **erntet** sie – sie kommt ins Laden-Lager. Säen und Ernten sind zwei getrennte Schritte. 1 Samen = 1 Pflanze. Im Beet wächst jede Pflanze (seit v0.17.0 auch Ringelblumen; je Samen ein Knopf „🌱 Säen“). Die geerntete Pflanze legt man wie einen Holzstamm in die **Erntebank** (bis v0.16 „Flachsbreche“; seit v0.17.0 ein Gerät für alle Pflanzen, Tobias): 1 Flachspflanze → 50 Flachsfasern, 1 Ringelblume → 50 getrocknete Ringelblüten, je 10 Minuten; Vorrat 3, auch gemischt – die Pflanzen werden der Reihe nach verarbeitet, je Pflanze gibt es einen Knopf „➕ einlegen“, „⏫ Auffüllen“ füllt mit der Pflanze, die gerade läuft. Die **Webstube** macht aus je 5 Fasern 1 Verband, die **Kräuterstube** (2 Eingänge) Heilverbände und Kräuterkompressen.
 - **Bauen geht sofort**, sofern man die Waren dafür hat. Es gibt keine Bauzeiten.
+- **Bauleiste mit Reitern (seit v0.18.0, Tobias):** „🔨 Bauen“ öffnet die Bauleiste. **Links stehen immer** Förderband, Lagerhaus, Versandportal (kurz „Portal“), Verschieben und Abreißen. **Rechts** stehen die Gebäude des gewählten **Reiters**; die Reiter ragen oben aus der Leiste: **Holz** (Holzfällerlager, Sägewerk, Zimmerei), **Stein** (Steinbruch, Steinmetz), **Eisen** (Schmelzhütte, Schmiede, Feinschmiede, Schlosserei), **Kräuter** (Beet, Erntebank, Webstube, Kräuterstube). Die Kombi-Maschinen stehen bei dem Stoff, zu dem sie vom Namen her passen. Gesperrte Gebäude stehen im Reiter hinten mit 🔒; ist in einem Reiter noch alles gesperrt, trägt auch der Reiter ein 🔒. Der zuletzt geöffnete Reiter bleibt gemerkt. **Ganz unten bauen:** Die Karte lässt sich so weit nach oben schieben, dass auch die unterste Reihe über der Bauleiste samt Reitern liegt – vorher hielt sie am Rand an, und die unterste Fläche lag hinter der Leiste. Meldungen erscheinen über der Leiste.
 - **Bauen kostet Waren statt Gold** (Tobias, v0.7.0): z. B. Förderband 1 Holzblock, Sägewerk 40 Holzblöcke. Die Waren kommen aus dem Laden-Lager. So muss man abwägen: verkaufen oder damit eine weitere Maschine bauen? Abreißen gibt die bezahlten Waren zurück; Verschieben und Drehen sind kostenlos. Tabelle in Abschnitt 4.2.
 
 ### 3.4 Wirtschaft
@@ -362,7 +363,7 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 |---|---|---|
 | 7 | **Flachs** (Tobias' Wahl nach Claudes Vorschlag, statt Farn oder Hanf) → **Fasern** → **Verbände** – wieder ganz einfach, als Grundlage (wie Level 1 mit Holz): Beet, Flachsbreche, Webstube | ✅ im Spiel (v0.16.0) |
 | 8 | **Ringelblume** als zweite Pflanze im selben Beet; die erste Maschine mit 2 Eingängen (Kräuterstube: Verband bzw. Fasern + Ringelblüten) → **Heilverband** und **Kräuterkompresse** (wie Level 2); die Erntebank verarbeitet alle Pflanzen | ✅ im Spiel (v0.17.0) |
-| 9 | eine **dritte Pflanze** (Claudes Idee: Schafgarbe, das Wundkraut des Mittelalters) und der nächste Schritt, z. B. eine zweite Verbands-Version (wie Level 3) | als Nächstes planen (nach Tobias' Test von v0.17.0) |
+| 9 | eine **dritte Pflanze** (Claudes Idee: Schafgarbe, das Wundkraut des Mittelalters) und der nächste Schritt, z. B. eine zweite Verbands-Version (wie Level 3) | von Tobias erst einmal hinten angestellt (Chat 12) |
 | 10 | Jetzt hat man **Fasern + 3 Pflanzen** – wie Holz, Stein und Eisen im Werkzeug-Kapitel. Wie Level 4: mehr investieren, auf Masse gehen | später |
 | 11–12 | die Pflanzen **weiter kombinieren** (wie Level 5–6), Abschluss des Kräuter-Kapitels | später |
 | 13+ | neues Kapitel, z. B. Sand → Glas, mit den Kräuter-Maschinen Sandstaub für die Zauberei | später |
@@ -401,6 +402,14 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 - **Mörser später (Tobias):** Die verschiedenen Blüten dienen später als Grundlage für einen Mörser, z. B. für Ringelblumenstaub.
 - Preise, Namen und Aufträge passen (Tobias).
 
+**Chat 12 und 13 (Test von v0.17.0, 09.11.2026):**
+
+- **Das meiste hat funktioniert.** Alles testen konnte Tobias nicht, weil er seine komplette Fabrik neu gebaut hat: Er hatte zu wenig Grundrohstoffe, um alle Maschinen zu versorgen – „ein wichtiges Learning“.
+- **Die Ringelblume** ist im Beet gut zu erkennen.
+- **Erntebank:** Weil sie wie das Holzfällerlager funktioniert, baut Tobias lieber **zwei Erntebänke** und legt Flachs und Ringelblumen getrennt ein, damit er die Straßen besser steuern kann (so war es im Plan auch gedacht).
+- **Kräuterstube mit zwei Eingängen** ergibt Sinn, ist aber noch nicht getestet.
+- **Die dritte Pflanze (Level 9) stellt Tobias erst einmal hinten an.**
+
 **Ältere Ideen (Chat 9):**
 
 - **Kräuter anbauen:** Kräuter anpflanzen; nach einer bestimmten Zeit wächst die fertige Pflanze, die man ernten kann.
@@ -437,7 +446,7 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/version.js` | Versionsnummer, wird im Spiel angezeigt |
 | `src/main.js` | Verbindet Spielregeln, Kamera, Eingabe und Anzeige |
 | `src/core/` | Spielregeln und Spielzustand, ohne Grafik |
-| `src/core/data/buildings.js` | Datentabelle der Gebäude (Größe, Ein- und Ausgänge, Texte, Produktion) und Reihenfolge im Baumenü |
+| `src/core/data/buildings.js` | Datentabelle der Gebäude (Größe, Ein- und Ausgänge, Texte, Produktion) und Einteilung der Bauleiste: Reiter mit ihren Gebäuden (`BUILD_TABS`) und was immer sichtbar ist (`BUILD_ALWAYS`, v0.18.0) |
 | `src/core/data/items.js` | Datentabelle der Waren (Name, Preise, Aussehen) |
 | `src/core/data/recipes.js` | Datentabelle der Rezepte (Zutaten, Ergebnis, Zeit) |
 | `src/core/data/shop.js` | Laden: Lagergröße und Theken je Level, Kunden-Takt, Startvorrat, Testpaket |
@@ -460,7 +469,7 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/core/quests.js` | Aufträge der Bewohner (v0.13.0): aktueller Auftrag, Belohnung, abgeben, Erfahrung je Level; Test-Knopf „Auftrag erledigen“ (v0.15.0) |
 | `src/core/land.js` | Fläche kaufen: Streifen und Preis je Seite, wie oft noch, Kauf, welche Seite ein Feld der gesperrten Fläche ist |
 | `src/core/save.js` | Spielstand in Text umwandeln, prüfen und alte Spielstände umwandeln |
-| `src/view/camera.js` | Kamera: verschieben, zoomen, Bildschirm ↔ Welt umrechnen |
+| `src/view/camera.js` | Kamera: verschieben, zoomen, Bildschirm ↔ Welt umrechnen; unten Platz, damit die unterste Reihe über die Bauleiste passt (v0.18.0) |
 | `src/view/input.js` | Touch, Maus und Mausrad (Antippen, Ziehen, zwei Finger) |
 | `src/view/controller.js` | Modi (Ansehen, Bauleiste, Platzieren, Förderband, Abreißen, Bereich markieren und verschieben) und was Gesten und die Taste R darin tun |
 | `src/view/renderer.js` | Zeichnet Spielfeld, Bänder, Waren, Gebäude mit Statuslicht, Vorschau |
@@ -472,14 +481,14 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | `src/view/offline.js` | Spiel im Hintergrund (v0.14.0): Hinweis „Die Fabrik holt die Zeit nach …“ und Fenster „Willkommen zurück“ |
 | `src/view/levels.js` | Level-Fenster mit den Reitern „📜 Aufträge“ (Geschichte, Erfahrungsleiste, Auftrag mit „Abgeben“ und Test-Knopf, Aufstieg) und „🏘️ Ort & Level“ (alle Bauabschnitte) |
 | `src/view/format.js` | Texte für Zahlen, Waren und Kosten |
-| `src/view/buildbar.js` | Untere Leisten: Laden/Bauen, Bauleiste, Werkzeugleiste |
+| `src/view/buildbar.js` | Untere Leisten: Laden/Bauen, Bauleiste (seit v0.18.0 mit Reitern und den Werkzeugen links; misst, wie hoch sie ist, und setzt die Meldungen darüber), Werkzeugleiste |
 | `src/view/press.js` | Knöpfe reagieren aufs Loslassen des Fingers (siehe Entscheidungen) |
 | `src/view/storage.js` | Speichern und Laden im Browser |
 | `src/style.css` | Aussehen der Oberfläche |
 | `assets/icons/` | App-Symbole (erzeugt mit `tools/make-icons.py`) |
 | `tools/set-version.mjs` | Setzt die Versionsnummer in `src/version.js` und `index.html` (inkl. Import-Map) |
-| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`), Bereiche verschieben (`area.test.js`), Lagerhaus befüllen und Bänder leeren (`warehouse.test.js`), Aufträge, neue Warennamen und Test-Knopf (`quests.test.js`), Spiel im Hintergrund, Rohstoff-Vorrat und Auffüllen (`offline.test.js`), Beet, Flachs-Kette und Level 7 (`garden.test.js`), Ringelblume, Erntebank, Kräuterstube und Level 8 (`kraeutergarten.test.js`) |
-| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Bereich markieren/verschieben/drehen (auch mit Taste R)/abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufträge abgeben und Aufsteigen bis Level 6 (mit Reiter „Ort & Level“), Test-Knopf „Auftrag erledigen“ (Stadttor-Aufträge ohne Waren und Gold), Aufstieg auf Level 7 mit Beet (säen, reif, ernten), Erntebank und Webstube, Aufstieg auf Level 8 mit Ringelblume, gemischtem Vorrat in der Erntebank und Kräuterstube, die Eisen-Kette, die Zimmerei, Strecke und Zulauf leeren, Lagerhaus befüllen und ausräumen (kein Nachschub), Auffüllen des Holzfällerlagers sowie das Spiel im Hintergrund (20 Minuten weg in der App, 2 Stunden mit geschlossenem Spiel → Fenster „Willkommen zurück“ mit reifem Beet) per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
+| `tests/*.test.js` | Automatische Tests: Spielregeln, Gebäude, Förderbänder, Handel, Level, Fläche, Speichern, Kamera, Versionsnummer, Kombi-Maschinen und Theken (`combo.test.js`), Bereiche verschieben (`area.test.js`), Lagerhaus befüllen und Bänder leeren (`warehouse.test.js`), Aufträge, neue Warennamen und Test-Knopf (`quests.test.js`), Spiel im Hintergrund, Rohstoff-Vorrat und Auffüllen (`offline.test.js`), Beet, Flachs-Kette und Level 7 (`garden.test.js`), Ringelblume, Erntebank, Kräuterstube und Level 8 (`kraeutergarten.test.js`), Reiter der Bauleiste und Platz unter der Karte (`bauleiste.test.js`) |
+| `tests/browser/smoke.cjs` | Browser-Test in Tablet- und Handygröße: spielt die Bauleiste mit Reitern (Reiter wechseln, Werkzeuge immer da, alles passt auf den Bildschirm, Reiter bleibt gemerkt, unterste Reihe über die Leiste schieben, Meldung über der Leiste), Bauen, Bänder, Fläche kaufen (bis eine Seite fertig ist), Abreißen, Bereich markieren/verschieben/drehen (auch mit Taste R)/abreißen, Speichern, Neues Spiel, Theken mit Mengenwahl, Aufträge abgeben und Aufsteigen bis Level 6 (mit Reiter „Ort & Level“), Test-Knopf „Auftrag erledigen“ (Stadttor-Aufträge ohne Waren und Gold), Aufstieg auf Level 7 mit Beet (säen, reif, ernten), Erntebank und Webstube, Aufstieg auf Level 8 mit Ringelblume, gemischtem Vorrat in der Erntebank und Kräuterstube, die Eisen-Kette, die Zimmerei, Strecke und Zulauf leeren, Lagerhaus befüllen und ausräumen (kein Nachschub), Auffüllen des Holzfällerlagers sowie das Spiel im Hintergrund (20 Minuten weg in der App, 2 Stunden mit geschlossenem Spiel → Fenster „Willkommen zurück“ mit reifem Beet) per Touch durch; prüft, dass die Warenbilder der Bauleiste nach dem Wegwerfen wieder erscheinen |
 
 **Prüfen vor jedem Merge:** `npm test` (Spielregeln) und `npm run test:browser` (Browser-Test).
 
@@ -530,7 +539,8 @@ Genaue Rezepte und Werte: Abschnitt 4.2.
 | v0.16.0 | **Beet und Level 7 „Die Heilstube“:** säen, 30 Minuten wachsen, ernten; Flachsbreche (1 Pflanze → 50 Fasern), Webstube (5 Fasern → 1 Verband); Heilerin Agnes mit 4 Aufträgen | ✅ fertig |
 | v0.16.1 | **Plan für Level 8 (nur README):** Tobias' Test von v0.16.0, Ringelblume, Erntebank für alle Pflanzen, Kräuterstube mit Heilverband und Kräuterkompresse | ✅ fertig |
 | v0.17.0 | **Ringelblume und Level 8 „Der Kräutergarten“:** zweite Pflanze im Beet, Erntebank (ehemals Flachsbreche) für alle Pflanzen, Kräuterstube mit 2 Eingängen | ✅ fertig |
-| v0.18.0 ff. | **Level 9–12:** dritte Pflanze, Masse, weiter kombinieren, Abschluss des Kapitels (Abschnitt 4.4) | nach Tobias' Test von v0.17.0 gemeinsam planen, häppchenweise |
+| v0.18.0 | **Bauleiste mit Reitern:** Reiter Holz, Stein, Eisen, Kräuter; Förderband, Lagerhaus, Versandportal, Verschieben und Abreißen immer links; die Karte lässt sich über die Leiste schieben | ✅ fertig |
+| später | **Level 9–12:** dritte Pflanze, Masse, weiter kombinieren, Abschluss des Kapitels (Abschnitt 4.4) | von Tobias erst einmal hinten angestellt (Chat 12); gemeinsam planen, häppchenweise |
 
 ### Bänder leeren (vorgemerkt in v0.11.1, umgesetzt in v0.12.0)
 
@@ -543,6 +553,36 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 - Spielstand-Format bleibt gleich.
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
+
+### v0.18.0 – Bauleiste mit Reitern (fertig)
+
+Tobias' Feedback zu v0.17.0 und seine Antworten stehen in Abschnitt 10 (Chat 12 und 13). Plan mit Vorschaubildern von Claude, Tobias: „Ja, die Einteilung passt so und du kannst gerne loslegen.“
+
+**Warum:** Beim Neubauen seiner Fabrik wurde die Bauleiste mit inzwischen 15 Gebäuden und Werkzeugen unübersichtlich – man sieht nicht direkt, was welche Maschine macht. Außerdem lag die unterste Fläche hinter der offenen Bauleiste, wenn Tobias ganz unten bauen wollte.
+
+**Neu im Spiel:**
+- **Reiter:** „🔨 Bauen“ öffnet die Bauleiste; oben ragen vier Reiter mit den Warenbildern Holzstamm, Felsbrocken, Eisenerz und Ringelblume heraus:
+
+| Reiter | Gebäude |
+|---|---|
+| Holz | Holzfällerlager, Sägewerk, Zimmerei |
+| Stein | Steinbruch, Steinmetz |
+| Eisen | Schmelzhütte, Schmiede, Feinschmiede, Schlosserei |
+| Kräuter | Beet, Erntebank, Webstube, Kräuterstube |
+
+- **Immer links:** ➡️ Förderband, 📦 Lagerhaus, 🌀 Portal (Versandportal), ✥ Verschieben, 🧹 Abreißen – mit ihren Kosten. Auf dem Handy fallen dort die kleinen Zusatztexte („Bereich markieren“, „Bänder & Gebäude“) weg, damit alles nebeneinander passt.
+- **Gesperrtes:** Gebäude stehen im Reiter hinten mit 🔒 Level; ist im ganzen Reiter noch alles gesperrt (z. B. „Kräuter“ bis Level 7), trägt auch der Reiter ein 🔒. Antippen sagt weiter, ab welchem Level.
+- **Der zuletzt geöffnete Reiter bleibt gemerkt** – nach dem Bauen und auch nach dem Neuladen.
+- **Ganz unten bauen:** Die Karte lässt sich so weit nach oben schieben, dass die unterste Reihe über der Bauleiste samt Reitern liegt (auch beim Platzieren). Vorher hielt die Karte am Rand an.
+- **Die Leiste wird nicht höher:** auf dem Tablet gleich hoch wie vorher, auf dem Handy sogar etwas niedriger; die 4 Gebäude eines Reiters passen auch auf dem Handy nebeneinander.
+- **Kleinigkeiten:** Meldungen wie „Dir fehlen …“ erscheinen über der Leiste statt darauf; der Hinweis „Ziehen: verschieben …“ verschwindet, sobald eine Leiste offen ist.
+- **Spielstand:** unverändert, keine Umwandlung nötig.
+
+**Was Tobias testet:**
+- Findet man die Gebäude in den Reitern schneller? Passt die Einteilung (Zimmerei bei Holz, Feinschmiede und Schlosserei bei Eisen)?
+- Sind die Werkzeuge links gut erreichbar?
+- Ganz unten bauen: Lässt sich die unterste Reihe jetzt über die Leiste schieben?
+- Sieht man jetzt besser, was welche Maschine macht – oder sollen die Gebäude zusätzlich ihre Waren als kleine Bilder zeigen (offene Frage 20)?
 
 ### v0.17.0 – Ringelblume und Level 8 „Der Kräutergarten“ (fertig)
 
@@ -1192,14 +1232,23 @@ Tobias' Test von v0.10.0 steht in Abschnitt 10 (Chat 7, Teil 2).
 | 09.11.2026 | Die Flachsbreche heißt „Erntebank“ (ein Gerät für alle Pflanzen) | Claudes Vorschlag; Tobias: „Meiner Meinung nach der bessere Name.“ Intern bleibt der Schlüssel `flachsbreche`, damit Spielstände passen. |
 | 09.11.2026 | Plan für Level 8 (v0.17.0) freigegeben | Tobias: „Ja, das passt so.“ |
 | 09.11.2026 | Erntebank: Vorrat auch gemischt, der Reihe nach; je Pflanze ein „Einlegen“-Knopf; „Auffüllen“ füllt mit der Pflanze, die gerade läuft (leer: mit der häufigsten im Laden-Lager) | Claudes Wahl (im Plan beschrieben): Ein Gerät für alle Pflanzen soll nicht mehr Knöpfe brauchen als nötig. |
+| 09.11.2026 | Die Erntebank bleibt ein Gerät für alle Pflanzen; Tobias baut lieber zwei Erntebänke und legt getrennt ein | Tobias (Test von v0.17.0): So lassen sich die Straßen besser steuern. Im Spiel ändert sich nichts. |
+| 09.11.2026 | Level 9 (dritte Pflanze) wird erst einmal hinten angestellt | Tobias (Chat 12): Er baut gerade seine Fabrik neu auf. |
+| 09.11.2026 | Bauleiste mit Reitern nach Rohstoff: Holz, Stein, Eisen, Kräuter, je mit allen Gebäuden ihrer „Straße“ | Tobias (Chat 12 und 13): Mit vielen Maschinen wurde die Bauleiste unübersichtlich. Claudes Vorschlag „nach Straße“ statt „nach Stufe“, Tobias: Reiter wie Holz, Stein und Eisen mit allen spezifischen Gebäuden. |
+| 09.11.2026 | Förderband, Lagerhaus, Versandportal, Verschieben und Abreißen stehen immer sichtbar links neben den Reitern | Tobias: die Sachen, die man öfter braucht. Versandportal als „Portal“ abgekürzt (Claudes Wahl, damit es auf den schmalen Knopf passt). |
+| 09.11.2026 | Kombi-Maschinen stehen im Reiter des Stoffs, zu dem sie vom Namen her passen: Zimmerei bei Holz, Feinschmiede und Schlosserei bei Eisen | Claudes Vorschlag, Tobias: „Ja, die Einteilung passt so.“ Eine Zeile in `data/buildings.js`. |
+| 09.11.2026 | Der vierte Reiter heißt „Kräuter“ | Claudes Wahl (wie das Kapitel); Tobias hatte „Pflanzen“ gesagt – jederzeit änderbar. |
+| 09.11.2026 | Ganz unten bauen: Die Karte lässt sich unten so weit schieben, wie die Bauleiste samt Reitern hoch ist; kein zusätzliches Zuklappen | Tobias: Die Bauleiste müsste sich zuklappen lassen oder „aus der Baufläche raus“. Claudes Lösung: Die Leiste liegt dann unter der Karte statt darüber; „✕“ schließt wie bisher. |
+| 09.11.2026 | Der zuletzt geöffnete Reiter bleibt gemerkt (auch nach dem Neuladen, bei den Einstellungen) | Claudes Wahl: Nach dem Bauen will man meist im selben Reiter weiterbauen. |
+| 09.11.2026 | Abreißen gibt Waren auch über die Grenze des Laden-Lagers zurück | So war es schon immer (nichts geht verloren); Tobias hatte nach dem Abreißen 1.500 Waren bei 1.000 Plätzen und hat sie durch Neubauen wieder unter 1.000 gebracht – für ihn in Ordnung. |
 
 ---
 
 ## 8. Offene Fragen
 
-Stand 09.11.2026 (nach v0.17.0).
+Stand 09.11.2026 (nach v0.18.0).
 
-1. **Nächstes Feedback:** Tobias testet v0.17.0 (Level 8 mit Ringelblume, Erntebank und Kräuterstube). Danach planen wir Level 9. v0.16.0 ist getestet (Beet gut sichtbar, Ernten und Säen fühlen sich gut an, Fasern → Verbände klappt, Aufträge gut). v0.14.0 ist getestet (Spiel im Hintergrund klappt, 3 Rohstoffe reichen, die neuen Warenbilder erkennt Tobias und sie gefallen); das Lagerhaus ohne Nachschub hat Tobias nicht erwähnt. Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Vorhängeschlössern sehr viel Gold.
+1. **Nächstes Feedback:** Tobias testet v0.18.0 (Bauleiste mit Reitern) und baut seine neue Fabrik weiter; dabei probiert er die Kräuterstube aus. v0.17.0 ist zum großen Teil getestet (das meiste funktioniert, die Ringelblume ist gut zu sehen, zwei Erntebänke statt gemischtem Vorrat). Level 9 hat Tobias hinten angestellt – was als Nächstes kommt, besprechen wir nach dem Test. **Tobias' Learning (Chat 12):** zu wenig Grundrohstoffe für alle Maschinen; er arbeitet jetzt mit einer eigenen Straße je Zwischenprodukt und Lagerhäusern als Zwischenlager, weil er bei zusammengeführten Bändern mit zwei Produkten keine Kontrolle mehr hat, was an der Maschine ankommt. Das ist gewollt (Makro-Spiel, offene Frage 13); die Weiche mit Filter (offene Frage 12) könnte später helfen. v0.16.0 ist getestet (Beet gut sichtbar, Ernten und Säen fühlen sich gut an, Fasern → Verbände klappt, Aufträge gut). v0.14.0 ist getestet (Spiel im Hintergrund klappt, 3 Rohstoffe reichen, die neuen Warenbilder erkennt Tobias und sie gefallen); das Lagerhaus ohne Nachschub hat Tobias nicht erwähnt. Weiter offen: Passen Baukosten, Mengen (10 + 5) und Werte der Kombi-Teile? Kunden kaufen sie genauso oft wie einfache Teile – dadurch bringt eine Theke mit Vorhängeschlössern sehr viel Gold.
 2. **Handel im echten Tempo:** geklärt – Tobias' Zeiten (bis Eisen etwa 45 Minuten, zweite Runde Eisen nach etwa 60 Minuten) sind in echter Zeit gemessen; nur die Eisen-Runden hat er im Testmodus beschleunigt. Früher: 2 Theken fühlen sich gut an; im Schnellmodus kommt man mit dem Nachfüllen nicht hinterher (Kunden ×10).
 3. **Laden-Lager:** seit v0.10.1 500 Plätze bis Level 3, 1.000 ab Level 4 (Tobias). Claudes Lesart: erst ab Level 4, weil es dort eng wird. Soll es schon ab Level 1 1.000 sein, ist das eine Zahl in der Datentabelle.
 4. **Aufträge (seit v0.13.0 im Spiel):** geklärt – Waren werden abgegeben, ein Auftrag nach dem anderen, Gold = Thekenwert, Erfahrung reicht genau fürs Level, Aufstieg kostet Gold. Stückzahlen passen (Tobias, v0.13.0: „machbare Menge, das Spiel soll auch fordern“). Noch offen: Passen die Aufstiegspreise (Platzhalter)? Level 7 bis 12 kommen mit dem Kräuter-Kapitel (Abschnitt 4.4). Kostet der Laden-Ausbau später zusätzlich Waren (Abschnitt 3.5)? Begrenzt das Level die kaufbare Fläche? Tobias' Erkenntnis bleibt wichtig: Man muss die Mitte finden zwischen Verkaufen (Gold für Rohstoffe) und Weiterverarbeiten.
@@ -1216,12 +1265,31 @@ Stand 09.11.2026 (nach v0.17.0).
 15. **Verbesserungen mit Erfahrung (Idee von Tobias):** Mit XP z. B. schneller Holz verarbeiten oder schnellere Förderbänder freischalten. Tobias ist sich noch nicht sicher, in welche Richtung; vorerst dient die Erfahrung nur dem Aufstieg. Das Spiel zählt schon alle Erfahrung mit (`xpTotal`), damit das später möglich ist.
 16. **Reihenfolge nach v0.13.0:** geklärt – erst das Spiel im Hintergrund (v0.14.0), dann besprechen wir gemeinsam die Vorgehensweise mit Level und Techbaum.
 17. **Rohstoff-Vorrat (seit v0.14.0):** 3 Rohstoffe je Gebäude (45 Minuten) – Tobias: „3 als Rohstoff reichen“. Soll der Vorrat später wachsen, z. B. mit dem Level oder als Verbesserung mit Erfahrung (Frage 15)? Das ist eine Zahl in der Datentabelle (`capacity`).
-18. **Kräuter-Kapitel (Abschnitt 4.4):** Geklärt (Chat 11): 1 Samen = 1 Pflanze, etwa 30 Minuten Wachszeit, ernten, kein Band am Beet, jede Pflanze im selben Beet, 1 Pflanze → 50 Fasern → 10 Verbände, Preise etwa 1.000 (Samen) und 150 (Verband). Geklärt (Chat 11, Teil 2): Pflanze einlegen wie einen Holzstamm, Ernten und Säen getrennt, Beet 2 × 2, die Maschine mit 2 Eingängen erst auf Level 8. Level 7 ist seit v0.16.0 im Spiel. Getestet (v0.16.0): passt. Level 8 geklärt (Chat 11, Teil 3; Plan in Abschnitt 6): Ringelblume in die gleiche Maschine wie Flachs, Kräuterstube mit Heilverband und Kräuterkompresse, gleicher Takt, Baukosten aus Werkzeug-Waren. Level 8 ist seit v0.17.0 im Spiel, die Flachsbreche heißt Erntebank (Tobias). Offen: Fühlt sich Level 8 im Spiel gut an (gemischte Bänder aus der Erntebank, zwei Eingänge der Kräuterstube)? Später: Level 9 (dritte Pflanze, Claudes Idee: Schafgarbe), Level 10–12 (wofür die Kräuterkompresse dort gebraucht wird), Mörser (~Level 15).
+18. **Kräuter-Kapitel (Abschnitt 4.4):** Geklärt (Chat 11): 1 Samen = 1 Pflanze, etwa 30 Minuten Wachszeit, ernten, kein Band am Beet, jede Pflanze im selben Beet, 1 Pflanze → 50 Fasern → 10 Verbände, Preise etwa 1.000 (Samen) und 150 (Verband). Geklärt (Chat 11, Teil 2): Pflanze einlegen wie einen Holzstamm, Ernten und Säen getrennt, Beet 2 × 2, die Maschine mit 2 Eingängen erst auf Level 8. Level 7 ist seit v0.16.0 im Spiel. Getestet (v0.16.0): passt. Level 8 geklärt (Chat 11, Teil 3; Plan in Abschnitt 6): Ringelblume in die gleiche Maschine wie Flachs, Kräuterstube mit Heilverband und Kräuterkompresse, gleicher Takt, Baukosten aus Werkzeug-Waren. Level 8 ist seit v0.17.0 im Spiel, die Flachsbreche heißt Erntebank (Tobias). Getestet (Chat 12): Ringelblume gut zu sehen; Tobias baut lieber zwei Erntebänke statt gemischt einzulegen. Offen: die zwei Eingänge der Kräuterstube (noch nicht getestet). Später – von Tobias hinten angestellt: Level 9 (dritte Pflanze, Claudes Idee: Schafgarbe), Level 10–12 (wofür die Kräuterkompresse dort gebraucht wird), Mörser (~Level 15).
 19. **Test-Knopf (seit v0.15.0):** Vor v1.0 entfernen (`QUEST_TEST_SKIP = false` in `data/levels.js`). Zählt die übersprungene Erfahrung auch für spätere Verbesserungen mit Erfahrung (Frage 15)? Im Moment ja (`xpTotal`).
+20. **Bauleiste (seit v0.18.0 mit Reitern):** Tobias' ursprünglicher Punkt war auch, dass man „nicht direkt checkt, was welche Maschinen machen“. Die Reiter ordnen die Gebäude nach Straße; reicht das, oder sollen die Gebäude in der Bauleiste zusätzlich ihre Waren als kleine Bilder zeigen (z. B. Sägewerk → Holzplatte, Holzstab)? Passt der Name „Kräuter“ (oder lieber „Pflanzen“)?
+21. **Laden-Lager über der Grenze:** Abreißen gibt Waren auch über die Lagergrenze zurück (Tobias hatte 1.500 bei 1.000 Plätzen). Solange das Lager zu voll ist, nimmt das Versandportal nichts an. Für Tobias in Ordnung („durch neues Bauen direkt wieder unter 1.000“); beobachten.
 
 ---
 
 ## 9. Versionshistorie
+
+### v0.18.0 – Bauleiste mit Reitern (09.11.2026)
+
+**Vorgenommen:**
+- Die Bauleiste übersichtlicher machen (Tobias, Chat 12 und 13): Reiter Holz, Stein, Eisen, Kräuter; was man oft braucht, immer sichtbar; ganz unten bauen können, ohne dass die Leiste die Fläche verdeckt.
+
+**Fragen, die wir uns gestellt haben:**
+- Reiter nach Straße (Holz, Stein, Eisen, Kräuter) oder nach Stufe (Rohstoff-Gebäude, Werkstätten, Kombi-Maschinen)? → Nach Straße (Tobias).
+- Wohin mit den Kombi-Maschinen? → Zum Stoff, zu dem sie vom Namen her passen: Zimmerei bei Holz, Feinschmiede und Schlosserei bei Eisen (Claudes Vorschlag, Tobias: „passt so“).
+- Werkzeuge als eigener Reiter oder immer sichtbar? → Immer sichtbar links, zusammen mit Lagerhaus und Versandportal (Tobias).
+- Zuklappen oder „aus der Baufläche raus“? → Die Karte bekommt unten so viel Platz, wie die Leiste samt Reitern hoch ist; so liegt die Leiste unter der Karte statt darüber. Die Leiste wird dabei nicht höher.
+
+**Gemacht:**
+- Datentabelle: `BUILD_TABS` (Reiter mit Warenbild und Gebäuden) und `BUILD_ALWAYS` in `data/buildings.js`; `BUILD_MENU` ergibt sich daraus.
+- Oberfläche: Bauleiste mit Werkzeug-Gruppe links, Trennstrich, Reitern und den Gebäuden des Reiters; gesperrte Reiter mit 🔒; Reiter wird in den Einstellungen gemerkt; eigene Größen für das Handy; Meldungen über der gerade offenen Leiste; Hinweis ausgeblendet, solange eine Leiste offen ist.
+- Kamera: unten zusätzlicher Platz (`padBottom`), gemessen an der Höhe der Bauleiste samt Reitern.
+- 255 automatische Tests (neu in `bauleiste.test.js`: Reiter und Reihenfolge, jedes Gebäude genau einmal erreichbar, immer sichtbar Lagerhaus und Versandportal, Einteilung der Kombi-Maschinen, höchstens 4 Gebäude je Reiter, Level-Fenster unverändert, Kamera mit Platz unten bei verschiedenen Zoomstufen, oben und an den Seiten unverändert) und der Browser-Test (neu: vier Reiter, „Holz“ zu Beginn offen, Werkzeuge immer links, Schloss am Reiter „Stein“ auf Level 1, Reiter „Eisen“ zeigt seine 4 Gebäude, alle Knöpfe passen auf den Bildschirm ohne herausragende Namen, Reiter bleibt gemerkt, Hinweis nicht über der Leiste, ganz nach unten geschoben liegt der Rand der Welt über den Reitern, Meldung über der Leiste; alle bisherigen Schritte wählen Gebäude jetzt über ihren Reiter) in Tablet- und Handygröße – alle bestanden.
 
 ### v0.17.0 – Ringelblume und Level 8 „Der Kräutergarten“ (09.11.2026)
 
@@ -1738,6 +1806,22 @@ Stand 09.11.2026 (nach v0.17.0).
 ---
 
 ## 10. Gesprächsprotokoll
+
+### 09.11.2026 – Chat 12 und 13: Test von v0.17.0, Plan und Umsetzung v0.18.0 (Bauleiste mit Reitern)
+
+*Chat 12 wurde nicht in der README festgehalten; Tobias hat sein Feedback und Claudes Rückfragen in Chat 13 wiederholt.*
+
+**Tobias (Test von v0.17.0):** Das meiste hat funktioniert. Er konnte nicht alles testen, weil er die komplette Fabrik neu gebaut hat – er hatte zu wenig Grundrohstoffe und konnte nicht alle Maschinen versorgen; ein wichtiges Learning. Er arbeitet jetzt viel mehr mit Lagerhäusern, um Zwischenprodukte zu lagern und Wege zu sparen: Sobald er zwei Bänder mit zwei verschiedenen Produkten zusammenführt, hat er keine Kontrolle mehr, was am Ende bei der Maschine ankommt. Deshalb baut er für jedes Zwischenprodukt eine eigene Produktionsstraße, um genug davon in seine Zwischenlager zu packen und damit neue Straßen zu errichten. Die gelbe Ringelblume ist gut zu erkennen. Weil die Erntebank wie das Holzfällerlager funktioniert, baut er lieber zwei Erntebänke und legt alles getrennt ein, um die Straßen besser zu steuern. Der Aufbau der Kräuterstube mit zwei Eingängen ergibt Sinn, ist aber noch nicht getestet. Man investiert viel Zeit, um die Straßen optimal zu bauen; das ständige Neubauen und Optimieren funktioniert sehr gut. Nach dem Abreißen hatte er 1.500 Waren im Lager, konnte das durch Neubauen aber direkt wieder unter 1.000 bringen. Beim Neubauen wurde das Baumenü mit vielen Maschinen unübersichtlich, weil man nicht direkt sieht, was welche Maschine macht – vielleicht lässt es sich übersichtlicher gestalten. Die dritte Pflanze stellt er erst einmal hinten an.
+
+**Claude (Chat 12)** hat Rückfragen gestellt: Reiter nach Straße (Holz, Stein, Eisen, Kombi, Kräuter, Lager) oder nach Stufe? Werkzeuge immer sichtbar links oder als eigener Reiter? Fehlt in der Bauleiste sonst noch etwas?
+
+**Tobias (Chat 13):** Reiter: Man tippt auf „Bauen“, dann öffnen sich Reiter wie Holz, Stein und Eisen (und jetzt die Pflanzen) mit allen spezifischen Gebäuden wie Holzfällerlager und Sägewerk. Daneben stehen die Sachen, die man öfter braucht: Förderband, Lager, Abreißen, Verschieben. Außerdem: Wenn das Baumenü offen ist und er ganz unten bauen will, sieht er die Fläche nicht mehr – das Menü müsste sich zuklappen lassen oder aus der Baufläche raus. Die Frage nach den Werkzeugen war damit beantwortet; sonst fehlt ihm nichts.
+
+**Claude** hat den Plan für v0.18.0 mit zwei Vorschaubildern (Tablet und Handy) vorgestellt: vier Reiter (Holz, Stein, Eisen, Kräuter; Zimmerei bei Holz, Feinschmiede und Schlosserei bei Eisen), links immer Förderband, Lagerhaus, Versandportal, Verschieben, Abreißen; die Karte lässt sich über die Leiste schieben; die Leiste wird nicht höher; Meldungen über der Leiste.
+
+**Tobias:** „Ja, die Einteilung passt so und du kannst gerne loslegen.“
+
+**Umgesetzt:** v0.18.0 (siehe Versionshistorie). Als Nächstes testet Tobias die Bauleiste und baut seine Fabrik weiter.
 
 ### 08.11.2026 – Chat 11: Test von v0.14.0, Test-Knopf, Vorgehen beim Kräuter-Kapitel
 

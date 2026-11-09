@@ -262,24 +262,22 @@ export const BUILDINGS = {
   },
 };
 
-// Reihenfolge im Baumenü.
-export const BUILD_MENU = [
-  'holzfaeller',
-  'steinbruch',
-  'schmelzhuette',
-  'saegewerk',
-  'steinmetz',
-  'schmiede',
-  'zimmerei',
-  'feinschmiede',
-  'schlosserei',
-  'beet',
-  'flachsbreche',
-  'webstube',
-  'kraeuterstube',
-  'lagerhaus',
-  'versandportal',
+// Reiter der Bauleiste (v0.18.0, Tobias): je Rohstoff ein Reiter mit allen
+// Gebäuden seiner „Straße“. Kombi-Maschinen stehen bei dem Stoff, zu dem sie
+// vom Namen her passen. `item` ist das Warenbild auf dem Reiter.
+export const BUILD_TABS = [
+  { id: 'holz', name: 'Holz', item: 'holzstamm', buildings: ['holzfaeller', 'saegewerk', 'zimmerei'] },
+  { id: 'stein', name: 'Stein', item: 'felsbrocken', buildings: ['steinbruch', 'steinmetz'] },
+  { id: 'eisen', name: 'Eisen', item: 'eisenerz', buildings: ['schmelzhuette', 'schmiede', 'feinschmiede', 'schlosserei'] },
+  { id: 'kraeuter', name: 'Kräuter', item: 'ringelblume', buildings: ['beet', 'flachsbreche', 'webstube', 'kraeuterstube'] },
 ];
+
+// Gebäude, die man oft braucht: stehen immer sichtbar links in der Bauleiste,
+// zusammen mit Förderband, Verschieben und Abreißen.
+export const BUILD_ALWAYS = ['lagerhaus', 'versandportal'];
+
+// Alle Gebäude, die man bauen kann (Reiter der Reihe nach, dann die immer sichtbaren).
+export const BUILD_MENU = [...BUILD_TABS.flatMap((tab) => tab.buildings), ...BUILD_ALWAYS];
 
 // Ein Feld Förderband kostet so viel (v0.7.0).
 export const BELT_COST = { holzblock: 1 };

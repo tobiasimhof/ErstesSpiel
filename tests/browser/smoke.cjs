@@ -117,6 +117,20 @@ async function touchDragTiles(page, cdp, tiles) {
 }
 
 const game = (page, fn, arg) => page.evaluate(fn, arg);
+
+// v0.18.0: Gebäude in der Bauleiste antippen – steht es in einem anderen
+// Reiter, wird zuerst dieser Reiter geöffnet.
+async function tapBuild(page, tool) {
+  const item = page.locator(`.build-item[data-tool="${tool}"]`);
+  if (!(await item.isVisible())) {
+    const tab = await item.getAttribute('data-tab');
+    if (tab) {
+      await page.tap(`.build-tab[data-tab="${tab}"]`);
+      await sleep(60);
+    }
+  }
+  await item.tap();
+}
 const beltOuts = (page, x, y) => game(page, ([bx, by]) => window.__game.state.belts[`${bx},${by}`]?.outs ?? null, [x, y]);
 const mode = (page) => game(page, () => window.__game.ui.mode);
 
@@ -245,7 +259,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   // Browser sie weggeworfen hat (Tobias: nach dem Minimieren nur noch Zahlen).
   const costIcons = () =>
     page.evaluate(() => {
-      const icons = [...document.querySelectorAll('#build-items .cost-part canvas.item-icon')];
+      const icons = [...document.querySelectorAll('#build-bar .cost-part canvas.item-icon')];
       const painted = icons.filter((c) => {
         const data = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
         for (let i = 3; i < data.length; i += 4) if (data[i] > 0) return true;
@@ -271,21 +285,104 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
   icons = await costIcons();
   check(icons.painted === icons.total, `Zurück ins Spiel: Warenbilder wieder da (${icons.painted}/${icons.total})`);
-  const barOrder = await page.locator('#build-items .build-item').evaluateAll((items) => items.map((b) => b.dataset.tool));
-  check(
-    JSON.stringify(barOrder.slice(0, 7)) === '["holzfaeller","saegewerk","lagerhaus","versandportal","belt","area","erase"]',
-    `Bauleiste: erst Holz-Gebäude und Werkzeuge, dann gesperrte (${barOrder.join(', ')})`,
-  );
   const quarryItem = page.locator('.build-item[data-tool="steinbruch"]');
   check(
     (await quarryItem.evaluate((b) => b.classList.contains('locked'))) && (await quarryItem.textContent()).includes('Level 2'),
     'Steinbruch in der Bauleiste gesperrt (🔒 Level 2)',
   );
   await shot('4-bauleiste');
-  await quarryItem.tap();
+
+  // ---------- v0.18.0: Reiter, Werkzeuge immer sichtbar, Platz unter der Karte ----------
+  const shownTools = () =>
+    page.evaluate(() => [...document.querySelectorAll('#build-bar .build-item')].filter((b) => b.offsetParent !== null).map((b) => b.dataset.tool));
+  const tabActive = (tab) => page.locator(`.build-tab[data-tab="${tab}"]`).evaluate((b) => b.classList.contains('active'));
+  const tabNames = await page.locator('.build-tab').allTextContents();
+  check(
+    tabNames.length === 4 && ['Holz', 'Stein', 'Eisen', 'Kräuter'].every((n, i) => tabNames[i].includes(n)),
+    `Bauleiste hat die Reiter Holz, Stein, Eisen, Kräuter (${tabNames.join(', ')})`,
+  );
+  check(await tabActive('holz'), 'Reiter „Holz“ ist zu Beginn offen');
+  let shown = await shownTools();
+  check(
+    shown.join(',') === 'belt,lagerhaus,versandportal,area,erase,holzfaeller,saegewerk,zimmerei',
+    `Links immer Förderband, Lagerhaus, Portal, Verschieben, Abreißen; rechts die Holz-Gebäude (${shown.join(', ')})`,
+  );
+  check(
+    (await page.locator('.build-tab[data-tab="stein"]').evaluate((b) => b.classList.contains('locked'))) &&
+      !(await page.locator('.build-tab[data-tab="holz"]').evaluate((b) => b.classList.contains('locked'))),
+    'Reiter „Stein“ trägt auf Level 1 ein Schloss, „Holz“ nicht',
+  );
+  await page.tap('.build-tab[data-tab="eisen"]');
+  await sleep(80);
+  shown = await shownTools();
+  check(
+    shown.join(',') === 'belt,lagerhaus,versandportal,area,erase,schmelzhuette,schmiede,feinschmiede,schlosserei',
+    `Reiter „Eisen“: Schmelzhütte, Schmiede, Feinschmiede, Schlosserei – die Werkzeuge bleiben (${shown.join(', ')})`,
+  );
+  const fits = await page.evaluate(() =>
+    [...document.querySelectorAll('#build-bar button')]
+      .filter((b) => b.offsetParent !== null)
+      .filter((b) => {
+        const r = b.getBoundingClientRect();
+        return r.left < 0 || r.right > window.innerWidth + 0.5 || b.scrollWidth > b.clientWidth + 1;
+      })
+      .map((b) => b.dataset.tool ?? b.dataset.tab ?? b.id),
+  );
+  check(fits.length === 0, `Alle Knöpfe und Reiter passen auf den Bildschirm, kein Name ragt heraus${fits.length ? ': ' + fits.join(', ') : ''}`);
+  const itemsScroll = await page.evaluate(() => {
+    const el = document.getElementById('build-items');
+    return el.scrollWidth - el.clientWidth;
+  });
+  check(itemsScroll <= 1, `Die 4 Eisen-Gebäude passen nebeneinander (Überstand ${itemsScroll} px)`);
+  await shot('4b-reiter-eisen');
+  await page.tap('#build-close');
+  await sleep(80);
+  await page.tap('#btn-build');
+  await sleep(80);
+  check(await tabActive('eisen'), 'Bauleiste merkt sich den zuletzt geöffneten Reiter');
+  check(
+    await page.evaluate(() => getComputedStyle(document.getElementById('hint')).opacity === '0'),
+    'Hinweis „Ziehen: verschieben …“ liegt nicht über der Bauleiste',
+  );
+  // Ganz nach unten schieben: Der untere Rand der Welt liegt über Leiste und Reitern.
+  const savedCam = await game(page, () => ({ ...window.__game.camera }));
+  const stageBox = await page.locator('#game').boundingBox();
+  for (let i = 0; i < 8; i++) {
+    const x = stageBox.x + stageBox.width / 2;
+    const y0 = stageBox.y + stageBox.height * 0.5;
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y: y0, id: 3 }] });
+    for (let st = 1; st <= 6; st++) {
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y: y0 - st * 20, id: 3 }] });
+    }
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  }
+  await sleep(80);
+  const edge = await page.evaluate(() => {
+    const { state, camera, TILE } = window.__game;
+    const cv = document.getElementById('game').getBoundingClientRect();
+    return {
+      worldBottom: cv.top + ((state.world.y + state.world.height) * TILE - camera.y) * camera.zoom,
+      tabsTop: document.getElementById('build-tabs').getBoundingClientRect().top,
+    };
+  });
+  check(
+    edge.worldBottom <= edge.tabsTop && edge.worldBottom >= edge.tabsTop - 20,
+    `Ganz nach unten geschoben: Die unterste Reihe liegt über der Bauleiste samt Reitern (Rand ${Math.round(edge.worldBottom)}, Reiter ${Math.round(edge.tabsTop)})`,
+  );
+  await shot('4c-ganz-unten');
+  await game(page, (cam) => {
+    Object.assign(window.__game.camera, { x: cam.x, y: cam.y, zoom: cam.zoom });
+    window.__game.simulate(0);
+  }, savedCam);
+
+  await tapBuild(page, 'steinbruch');
   await sleep(80);
   check((await mode(page)) === 'menu' && (await page.textContent('#toast')).includes('ab Level 2'), 'Gesperrtes Gebäude antippen sagt, ab welchem Level');
-  await page.tap('.build-item[data-tool="saegewerk"]');
+  const toastAbove = await page.evaluate(
+    () => document.getElementById('toast').getBoundingClientRect().bottom <= document.getElementById('build-tabs').getBoundingClientRect().top,
+  );
+  check(toastAbove, 'Die Meldung erscheint über der Bauleiste samt Reitern (nicht darauf)');
+  await tapBuild(page, 'saegewerk');
   await sleep(80);
   check((await mode(page)) === 'place', 'Sägewerk wählen startet die Vorschau');
   check(await game(page, () => window.__game.ui.ghost?.valid === true), 'Vorschau steht auf freier Fläche (grün)');
@@ -565,7 +662,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     await page.locator('.build-item[data-tool="saegewerk"]').evaluate((b) => b.classList.contains('short')),
     'Sägewerk ausgegraut (zu wenig Holzblöcke)',
   );
-  await page.tap('.build-item[data-tool="saegewerk"]');
+  await tapBuild(page, 'saegewerk');
   await sleep(80);
   check((await mode(page)) === 'menu' && (await page.textContent('#toast')).includes('fehlen'), 'Sägewerk antippen sagt, was fehlt');
   await shot('8-bauleiste-kosten');
@@ -800,7 +897,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
 
   // Sägewerk zum Umstellen des Rezepts
   await page.tap('#btn-build');
-  await page.tap('.build-item[data-tool="saegewerk"]');
+  await tapBuild(page, 'saegewerk');
   await sleep(80);
   const sawGhost = await game(page, () => ({ ...window.__game.ui.ghost }));
   await touchDragTiles(page, cdp, [
@@ -828,7 +925,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   // ---------- Eisen-Kette ----------
   // Schmelzhütte (18,9)-(19,10) gibt rechts bei (20,9) aus → Band bis (21,9) → Schmiede (22,9)-(23,10)
   async function buildAt(type, x, y) {
-    await page.tap(`.build-item[data-tool="${type}"]`);
+    await tapBuild(page, type);
     await sleep(80);
     const g = await game(page, () => ({ ...window.__game.ui.ghost }));
     await touchDragTiles(page, cdp, [
