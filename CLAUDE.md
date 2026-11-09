@@ -1,5 +1,9 @@
 # Hinweise für Claude
 
+## Oberste Regel (Tobias, 09.11.2026)
+
+**Nie ohne Tobias' Erlaubnis anfangen zu programmieren.** Claude stellt immer zuerst vor, was programmiert werden soll (Ziel, was sich im Spiel ändert, offene Fragen), wartet auf Tobias' ausdrückliches OK und setzt es dann gemeinsam mit ihm um. Das gilt für jede Änderung am Spiel – Code, Datentabellen, Tests. Ausgenommen sind nur reine Doku-Versionen, die Feedback oder Entscheidungen festhalten (Regel „Nichts darf verloren gehen“).
+
 ## Zu Beginn jedes Chats
 
 1. Lies **`docs/STAND.md`** (wo wir stehen, nächster Schritt, offene Fragen, die letzten 3 Arbeitsschritte) und **`docs/SPIEL.md`** (das Spiel, wie es heute ist). Das reicht, um loszulegen.
@@ -9,7 +13,7 @@
 ## Zusammenarbeit (Regeln von Tobias, 05.11.2026)
 
 - Kommuniziere auf Deutsch. Tobias programmiert nicht selbst und schreibt keine Zeile Code: Ergebnisse verständlich erklären, ohne Programmierkenntnisse vorauszusetzen.
-- **Erst planen, dann programmieren:** Vor jedem Code den Plan besprechen und Tobias' Zustimmung abwarten.
+- **Erst planen, dann programmieren:** Vor jedem Code den Plan besprechen und Tobias' Zustimmung abwarten (siehe oberste Regel).
 - **Jeder Arbeitsschritt ist eine eigene Version**, damit Fehler klein bleiben und man auf eine ältere Version zurückgehen kann. Viele Kleinigkeiten dürfen in einen größeren Schritt; lieber kleine Schritte.
 - **Wir mergen immer direkt und gehen live** (ein einziger Link, GitHub Pages aus `main`).
 - **Zurückgehen:** Jede Version ist ein eigener Merge auf `main`, erkennbar an der Versionsnummer im Titel. Läuft nach einem Merge etwas schief, stellt Claude den Stand einer älteren Version wieder her; der Live-Link zeigt dann wieder die alte Version.

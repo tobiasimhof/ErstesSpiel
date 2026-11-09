@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.18.3 – Balance bleibt, oberste Regel (09.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Antwort auf v0.18.2 festhalten (Option A) und seine neue oberste Regel in `CLAUDE.md` eintragen.
+
+**Fragen, die wir uns gestellt haben:**
+- Gilt die Regel „nie ohne Erlaubnis programmieren“ auch für reine Doku-Versionen? → Nein, die hält Claude weiter sofort fest („Nichts darf verloren gehen“); Claudes Lesart, Tobias kann sie ändern.
+
+**Gemacht:**
+- `CLAUDE.md`: neuer Abschnitt „Oberste Regel“ ganz oben.
+- `docs/STAND.md`: Status, nächster Schritt, mögliche nächste Schritte, offene Frage 3 (Balance) gestrichen und die übrigen neu nummeriert, neuer Arbeitsschritt oben (v0.18.0 fällt aus der Liste).
+- `docs/SPIEL.md`: Gold ist bewusst knapp, mehrere Spielstile; Kunden kaufen etwa 6 Stück pro Minute.
+- Archiv: Entscheidungen (Balance bleibt, Theken-Verkauf bleibt, oberste Regel), Gesprächsprotokoll Chat 14 ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.18.2 – Feedback nach einer Stunde Spielen (09.11.2026, nur Doku)
 
 **Vorgenommen:**
