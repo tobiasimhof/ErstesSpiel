@@ -6,6 +6,9 @@
 //        kind 'in' = Eingang (blauer Pfeil), 'out' = Ausgang (oranger Pfeil).
 // cost:  Baukosten in Waren aus dem Laden-Lager (v0.7.0). Abreißen gibt sie zurück.
 // level: ab diesem Laden-Level baubar (v0.9.0, siehe data/levels.js).
+// tip:   kurzer Tipp ganz unten im Infofenster (v0.19.0, Tobias: das Fenster
+//        soll übersichtlich sein; was ein Gebäude herstellt, zeigen dort die
+//        Warenbilder, deshalb gibt es keinen langen Beschreibungstext mehr).
 // production: was das Gebäude tut
 //   source   – verarbeitet eingelegte Rohstoffe nach und nach
 //              (je Rohstoff amount Stück in duration Sekunden). v0.17.0: Statt
@@ -34,8 +37,7 @@ export const BUILDINGS = {
     icon: '🪓',
     size: [2, 2],
     color: '#4f7f35',
-    description:
-      'Verarbeitet Holzstämme nach und nach zu je 200 Holzblöcken. Bis zu 3 Holzstämme passen hinein. Die Blöcke kommen am orangen Pfeil heraus.',
+    tip: 'Die Holzblöcke kommen am orangen Pfeil heraus.',
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
     production: { kind: 'source', input: 'holzstamm', output: 'holzblock', amount: 200, duration: 900, capacity: 3 },
   },
@@ -46,8 +48,7 @@ export const BUILDINGS = {
     icon: '⛏️',
     size: [2, 2],
     color: '#7d8590',
-    description:
-      'Verarbeitet Felsbrocken nach und nach zu je 200 Steinblöcken. Bis zu 3 Felsbrocken passen hinein. Die Blöcke kommen am orangen Pfeil heraus.',
+    tip: 'Die Steinblöcke kommen am orangen Pfeil heraus.',
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
     production: { kind: 'source', input: 'felsbrocken', output: 'steinblock', amount: 200, duration: 900, capacity: 3 },
   },
@@ -58,8 +59,7 @@ export const BUILDINGS = {
     icon: '🔥',
     size: [2, 2],
     color: '#8a4b32',
-    description:
-      'Schmilzt Eisenerz nach und nach zu je 200 Eisenbarren. Bis zu 3 Eisenerz passen hinein. Die Barren kommen am orangen Pfeil heraus.',
+    tip: 'Die Eisenbarren kommen am orangen Pfeil heraus.',
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
     production: { kind: 'source', input: 'eisenerz', output: 'eisenbarren', amount: 200, duration: 900, capacity: 3 },
   },
@@ -70,8 +70,7 @@ export const BUILDINGS = {
     icon: '🪚',
     size: [2, 2],
     color: '#a0703c',
-    description:
-      'Macht aus je 5 Holzblöcken eine Holzplatte oder einen Holzstab – je nach Einstellung. Holzblöcke kommen am blauen Pfeil hinein.',
+    tip: 'Holzblöcke kommen am blauen Pfeil hinein, die Teile am orangen heraus.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
@@ -85,8 +84,7 @@ export const BUILDINGS = {
     icon: '⚒️',
     size: [2, 2],
     color: '#68707a',
-    description:
-      'Macht aus je 5 Steinblöcken eine Steinplatte oder ein Stein-Zahnrad – je nach Einstellung. Steinblöcke kommen am blauen Pfeil hinein.',
+    tip: 'Steinblöcke kommen am blauen Pfeil hinein, die Teile am orangen heraus.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
@@ -100,8 +98,7 @@ export const BUILDINGS = {
     icon: '🔨',
     size: [2, 2],
     color: '#5b5f6b',
-    description:
-      'Macht aus je 5 Eisenbarren ein Eisenblech oder eine Eisenstange – je nach Einstellung. Eisenbarren kommen am blauen Pfeil hinein.',
+    tip: 'Eisenbarren kommen am blauen Pfeil hinein, die Teile am orangen heraus.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
@@ -117,8 +114,7 @@ export const BUILDINGS = {
     icon: '🛠️',
     size: [2, 2],
     color: '#7a5636',
-    description:
-      'Baut Zahnradwellen, Räderwerke oder Verstärkte Holzplatten. Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
+    tip: 'Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'in', x: 0, y: 1, side: 'W' },
@@ -133,8 +129,7 @@ export const BUILDINGS = {
     icon: '⚙️',
     size: [2, 2],
     color: '#4c5a70',
-    description:
-      'Fertigt Scharniere, Schlüssel oder Zirkel. Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
+    tip: 'Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'in', x: 0, y: 1, side: 'W' },
@@ -149,8 +144,7 @@ export const BUILDINGS = {
     icon: '🔐',
     size: [2, 2],
     color: '#6e5a2c',
-    description:
-      'Stellt Gewichtsteine, Uhrwerke oder Vorhängeschlösser her. Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
+    tip: 'Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'in', x: 0, y: 1, side: 'W' },
@@ -169,8 +163,7 @@ export const BUILDINGS = {
     icon: '🌱',
     size: [2, 2],
     color: '#6b4a2e',
-    description:
-      'Hier wächst aus einem Samen eine Pflanze. Säen, warten, bis sie reif ist (🌾), dann ernten – die Pflanze kommt ins Laden-Lager. Kein Anschluss ans Band.',
+    tip: 'Säen, warten, bis die Pflanze reif ist (🌾), dann ernten – sie kommt ins Laden-Lager. Kein Anschluss ans Band.',
     ports: [],
     // v0.17.0: Ringelblumen wachsen im selben Beet, im gleichen Takt (Tobias)
     production: {
@@ -190,8 +183,7 @@ export const BUILDINGS = {
     icon: '🪢',
     size: [2, 2],
     color: '#8a7a3e',
-    description:
-      'Verarbeitet geerntete Pflanzen nach und nach: 1 Flachspflanze → 50 Flachsfasern, 1 Ringelblume → 50 getrocknete Ringelblüten. Bis zu 3 Pflanzen passen hinein, auch gemischt. Die Waren kommen am orangen Pfeil heraus.',
+    tip: 'Nimmt jede Pflanze, auch gemischt. Die Waren kommen am orangen Pfeil heraus.',
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
     production: {
       kind: 'source',
@@ -208,7 +200,7 @@ export const BUILDINGS = {
     icon: '🧵',
     size: [2, 2],
     color: '#7f6a8f',
-    description: 'Webt aus je 5 Flachsfasern einen Verband. Flachsfasern kommen am blauen Pfeil hinein.',
+    tip: 'Flachsfasern kommen am blauen Pfeil hinein, die Verbände am orangen heraus.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
@@ -224,8 +216,7 @@ export const BUILDINGS = {
     icon: '🌿',
     size: [2, 2],
     color: '#4f7a4a',
-    description:
-      'Macht Heilverbände (Verband + Ringelblüten) oder Kräuterkompressen (Flachsfasern + Ringelblüten). Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
+    tip: 'Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'in', x: 0, y: 1, side: 'W' },
@@ -240,8 +231,7 @@ export const BUILDINGS = {
     icon: '📦',
     size: [2, 1],
     color: '#8b6b4a',
-    description:
-      'Zwischenlager mit 3 Fächern zu je 50 Waren. Eingang oben links (blauer Pfeil), Ausgang unten rechts (oranger Pfeil). Was hineinläuft, wird gelagert und weitergegeben, sobald am Ausgang Platz ist. Lässt sich von Hand aus dem Laden-Lager befüllen; ist es leer, füllst du es neu.',
+    tip: 'Eingang oben links, Ausgang unten rechts. Was hineinläuft, wird gelagert und weitergegeben, sobald am Ausgang Platz ist. Nur von Hand befüllen.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'N' },
       { kind: 'out', x: 1, y: 0, side: 'S' },
@@ -255,8 +245,7 @@ export const BUILDINGS = {
     icon: '🌀',
     size: [1, 1],
     color: '#5f4b8b',
-    description:
-      'Schickt alles, was am blauen Pfeil hineinläuft, direkt ins Lager deines Ladens. Mit „Drehen“ zeigt der Eingang in eine andere Richtung.',
+    tip: 'Schickt alles, was am blauen Pfeil hineinläuft, ins Laden-Lager. „Drehen“ dreht den Eingang.',
     ports: [{ kind: 'in', x: 0, y: 0, side: 'W' }],
     production: { kind: 'shipping' },
   },
@@ -269,7 +258,9 @@ export const BUILD_TABS = [
   { id: 'holz', name: 'Holz', item: 'holzstamm', buildings: ['holzfaeller', 'saegewerk', 'zimmerei'] },
   { id: 'stein', name: 'Stein', item: 'felsbrocken', buildings: ['steinbruch', 'steinmetz'] },
   { id: 'eisen', name: 'Eisen', item: 'eisenerz', buildings: ['schmelzhuette', 'schmiede', 'feinschmiede', 'schlosserei'] },
-  { id: 'kraeuter', name: 'Kräuter', item: 'ringelblume', buildings: ['beet', 'flachsbreche', 'webstube', 'kraeuterstube'] },
+  // v0.19.0 (Tobias): Der Reiter heißt „Erde“ – Holz, Stein, Eisen, Erde. Die
+  // id bleibt, damit der gemerkte Reiter in den Einstellungen weiter passt.
+  { id: 'kraeuter', name: 'Erde', item: 'ringelblume', buildings: ['beet', 'flachsbreche', 'webstube', 'kraeuterstube'] },
 ];
 
 // Gebäude, die man oft braucht: stehen immer sichtbar links in der Bauleiste,

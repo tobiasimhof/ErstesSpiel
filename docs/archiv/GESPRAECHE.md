@@ -37,6 +37,10 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Umgesetzt:** v0.18.5 (nur Doku): Plan für v0.19.0 „Übersichtliches Infofenster und Reiter ‚Erde‘“ in `PLAENE.md`.
 
+**Tobias:** „Finde das passt so. Sieht sehr übersichtlich aus und ansprechend. Go für v19.“
+
+**Umgesetzt:** v0.19.0 (siehe Versionshistorie). Beim Prüfen fielen zwei Kleinigkeiten auf und wurden behoben: „Kräuterkompresse“ ragte auf dem Handy aus dem grünen Kasten (lange Namen brechen jetzt um), „10 / 10 ✓“ wurde auf dem Tablet knapp abgeschnitten.
+
 ### 09.11.2026 – Chat 12 und 13: Test von v0.17.0, Plan und Umsetzung v0.18.0 (Bauleiste mit Reitern)
 
 *Chat 12 wurde nicht in der README festgehalten; Tobias hat sein Feedback und Claudes Rückfragen in Chat 13 wiederholt.*

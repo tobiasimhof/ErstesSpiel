@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.18.3). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.19.0). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
@@ -36,7 +36,9 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 
 **Rohstoff-Gebäude** (Holzfällerlager, Steinbruch, Schmelzhütte, Erntebank): Rohstoff einlegen → 200 Blöcke bzw. Barren in 15 Minuten (Erntebank: 1 Pflanze → 50 Fasern bzw. Blüten in 10 Minuten). **Vorrat bis 3**, der Reihe nach verarbeitet; drei Punkte am Gebäude zeigen ihn. „⏫ Auffüllen“ füllt bis zum Rand: erst aus dem Laden-Lager, was fehlt, kauft es beim Händler (Erntebank nur aus dem Laden-Lager). Die **Erntebank** nimmt jede Pflanze, auch gemischt; je Pflanze ein Knopf „➕ … einlegen“, Auffüllen nimmt die Pflanze, die gerade läuft. Tobias baut lieber zwei Erntebänke und legt getrennt ein, damit die Straßen steuerbar bleiben.
 
-**Maschinen** verarbeiten nach Rezept. Im Infofenster stellt man ein, was sie herstellen (Grundmaschinen 2 Einstellungen, Kombi-Maschinen 2–3). Beim Umstellen bleiben alle Teile in der Maschine; „↩ Reste ins Laden-Lager“ holt ungebrauchte heraus. Das Infofenster zeigt alle Rezepte und was fehlt; fehlt eine Zutat, zeigt die Maschine ein kleines Bild davon.
+**Maschinen** verarbeiten nach Rezept (Grundmaschinen 2 Einstellungen, Kombi-Maschinen 2–3, Webstube 1). Beim Umstellen bleiben alle Teile in der Maschine; „↩ Reste ins Laden-Lager“ holt ungebrauchte heraus. Fehlt eine Zutat, zeigt die Maschine auf der Karte ein kleines Bild davon.
+
+**Infofenster** (Gebäude antippen): oben Name und Statuslicht mit kurzem Text. Bei Maschinen ein grüner Kasten **„Stellt gerade her“** mit den Warenbildern vom Band – jede Zutat mit „hat / braucht“ (fehlend rot, vollständig grün mit Haken) → Ergebnis, darunter was noch fehlt, Zeit je Stück und Wert. Darunter **„Umstellen auf“**: jede andere Einstellung als Knopf mit ihrem Rezept in Bildern und ihrem Wert; Antippen stellt um. Bei Rohstoff-Gebäuden zeigt der Kasten Rohstoff → Waren (Zeit, leer in etwa …), darunter den Vorrat als Bilder (leere Plätze blass) und was im Laden-Lager liegt; „⏫ Auffüllen“ groß, „➕ 1 einlegen“ und „🧺 Kaufen“ kleiner. Beet, Lagerhaus und Versandportal zeigen Textzeilen. Unten bei allen Gebäuden klein „↔ Verschieben“, „↻ Drehen“, „🗑 Abreißen“ und ein kurzer Tipp.
 
 **Beet** (2 × 2, kein Band): „🌱 Säen“ (je Samensorte ein Knopf; der Samen kommt aus dem Laden-Lager, sonst kauft der Knopf einen beim Händler) → die Pflanze wächst sichtbar **30 Minuten** → 🌾 reif → „🌾 Ernten“ legt sie ins Laden-Lager. Säen und Ernten sind getrennte Schritte, 1 Samen = 1 Pflanze. Ernten geht nicht bei vollem Laden-Lager. Wird ein Beet reif, erscheint eine Meldung. Abreißen: Samen und reife Pflanze kommen zurück, eine halb gewachsene geht verloren (mit Rückfrage).
 
@@ -46,7 +48,7 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 
 **Bauen und Umbauen**
 - **Bauen geht sofort** und kostet **Waren** aus dem Laden-Lager (Tabelle in Abschnitt 6), kein Gold. Abreißen gibt die bezahlten Waren zurück – auch über die Grenze des Laden-Lagers (die Startgebäude geben nichts zurück). Verschieben und Drehen kosten nichts.
-- **Bauleiste** („🔨 Bauen“ unten rechts): links immer Förderband, Lagerhaus, Portal (Versandportal), Verschieben, Abreißen; rechts die Gebäude des gewählten **Reiters Holz, Stein, Eisen oder Kräuter** (die Reiter ragen oben aus der Leiste). Gesperrte Gebäude stehen hinten mit „🔒 Level …“, ein ganz gesperrter Reiter trägt ein 🔒. Was die Waren nicht hergeben, ist ausgegraut und sagt beim Antippen, was fehlt. Der zuletzt geöffnete Reiter bleibt gemerkt. Die Karte lässt sich unten so weit schieben, dass die unterste Reihe über der Leiste liegt.
+- **Bauleiste** („🔨 Bauen“ unten rechts): links immer Förderband, Lagerhaus, Portal (Versandportal), Verschieben, Abreißen; rechts die Gebäude des gewählten **Reiters Holz, Stein, Eisen oder Erde** (Erde: die Gebäude des Kräuter-Kapitels) (die Reiter ragen oben aus der Leiste). Gesperrte Gebäude stehen hinten mit „🔒 Level …“, ein ganz gesperrter Reiter trägt ein 🔒. Was die Waren nicht hergeben, ist ausgegraut und sagt beim Antippen, was fehlt. Der zuletzt geöffnete Reiter bleibt gemerkt. Die Karte lässt sich unten so weit schieben, dass die unterste Reihe über der Leiste liegt.
 - **Platzieren:** Vorschau (grün/rot) mit dem Finger schieben, „↻ Drehen“, „✓ Bauen“. **Taste R** dreht die Vorschau, sonst das angetippte Gebäude oder Band.
 - **„✥ Verschieben“:** Bereich markieren (Rechteck ziehen oder ein Teil antippen; halb erfasste Gebäude gehören dazu) → alles auf einmal verschieben, um 90° drehen oder abreißen. In der Gruppe bleibt alles verbunden, Waren ziehen mit. Ein Finger markiert, zwei Finger bewegen die Karte.
 - **„🧹 Abreißen“:** antippen oder mit dem Finger über viele Bänder wischen.
@@ -94,10 +96,10 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 | 🔨 Schmiede | Eisen | 2 × 2 | „Bleche“ oder „Stangen“: 5 Eisenbarren → 1 | 3 | 10 Steinplatten + 30 Eisenbarren |
 | ⚙️ Feinschmiede | Eisen | 2 × 2, 2 Eingänge | Scharnier · Schlüssel · Zirkel | 5 | 10 Eisenbleche + 2 Räderwerke |
 | 🔐 Schlosserei | Eisen | 2 × 2, 2 Eingänge | Gewichtstein · Uhrwerk · Vorhängeschloss | 6 | 1 Scharnier + 2 Verstärkte Holzplatten |
-| 🌱 Beet | Kräuter | 2 × 2, kein Band | 1 Samen → 1 Pflanze (30 min), säen und ernten von Hand | 7 | 10 Holzplatten + 10 Steinplatten |
-| 🪢 Erntebank | Kräuter | 2 × 2 | 1 Pflanze → 50 Flachsfasern bzw. Ringelblüten (10 min), Vorrat 3, auch gemischt | 7 | 10 Holzplatten + 2 Zahnradwellen |
-| 🧵 Webstube | Kräuter | 2 × 2 | 5 Flachsfasern → 1 Verband | 7 | 20 Holzstäbe + 2 Räderwerke |
-| 🌿 Kräuterstube | Kräuter | 2 × 2, 2 Eingänge | „Heilverbände“ · „Kompressen“ | 8 | 10 Holzplatten + 5 Eisenbleche + 2 Zahnradwellen |
+| 🌱 Beet | Erde | 2 × 2, kein Band | 1 Samen → 1 Pflanze (30 min), säen und ernten von Hand | 7 | 10 Holzplatten + 10 Steinplatten |
+| 🪢 Erntebank | Erde | 2 × 2 | 1 Pflanze → 50 Flachsfasern bzw. Ringelblüten (10 min), Vorrat 3, auch gemischt | 7 | 10 Holzplatten + 2 Zahnradwellen |
+| 🧵 Webstube | Erde | 2 × 2 | 5 Flachsfasern → 1 Verband | 7 | 20 Holzstäbe + 2 Räderwerke |
+| 🌿 Kräuterstube | Erde | 2 × 2, 2 Eingänge | „Heilverbände“ · „Kompressen“ | 8 | 10 Holzplatten + 5 Eisenbleche + 2 Zahnradwellen |
 | 📦 Lagerhaus | immer sichtbar | 2 × 1 | Zwischenlager 3 × 50, von Hand befüllen | 1 | 8 Holzplatten |
 | 🌀 Versandportal | immer sichtbar | 1 × 1 | schickt Waren ins Laden-Lager | 1 | 10 Holzblöcke |
 | ➡️ Förderband | immer sichtbar | 1 × 1 | transportiert | 1 | 1 Holzblock je Feld |

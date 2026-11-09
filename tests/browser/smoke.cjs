@@ -131,6 +131,50 @@ async function tapBuild(page, tool) {
   }
   await item.tap();
 }
+// v0.19.0: Infofenster mit Warenbildern – Knöpfe über ihren Schlüssel, Text
+// aus Statuszeile (unter dem Namen), Inhalt und Textzeilen zusammen.
+const infoButton = (page, key) => page.locator(`#info-panel button[data-key="${key}"]`);
+const recipeOption = (page, recipe) => page.locator(`#info-body .recipe-option[data-recipe="${recipe}"]`);
+async function infoText(page) {
+  const parts = await Promise.all(['#info-meta', '#info-body', '#info-status'].map((sel) => page.textContent(sel)));
+  return parts.join(' | ');
+}
+// Was der grüne Kasten zeigt: Zutaten mit hat / braucht und das Ergebnis
+const infoCard = (page) =>
+  page.evaluate(() => {
+    const card = document.querySelector('#info-body .info-card');
+    if (!card) return null;
+    return {
+      caption: card.querySelector('.info-cap')?.textContent,
+      inputs: [...card.querySelectorAll('.flow-item')].map((n) => `${n.dataset.item} ${n.querySelector('.flow-count').textContent}`),
+      outputs: [...card.querySelectorAll('.flow-out')].map((n) => `${n.dataset.item} ${n.textContent}`),
+      sub: card.querySelector('.info-sub')?.textContent ?? '',
+      lack: [...card.querySelectorAll('.flow-item.lack')].map((n) => n.dataset.item),
+    };
+  });
+// Kein Knopf schneidet seinen Text ab, und nichts ragt aus dem Infofenster
+// oder aus dem grünen Kasten (z. B. ein langer Warenname)
+const infoFits = (page) =>
+  page.evaluate(() => {
+    const panel = document.getElementById('info-panel').getBoundingClientRect();
+    const card = document.querySelector('#info-body .info-card')?.getBoundingClientRect();
+    const bad = [...document.querySelectorAll('#info-panel button')]
+      .filter((b) => !b.hidden && b.offsetParent && b.scrollWidth > b.clientWidth + 1)
+      .map((b) => b.textContent || b.title);
+    for (const node of document.querySelectorAll('#info-panel *')) {
+      if (!node.offsetParent && node.tagName !== 'CANVAS') continue;
+      const r = node.getBoundingClientRect();
+      if (r.width === 0) continue;
+      const inCard = card && node.closest('.info-card');
+      const right = inCard ? card.right : panel.right;
+      const left = inCard ? card.left : panel.left;
+      const name = (node.textContent?.trim() || node.className).slice(0, 40);
+      if (r.right > right + 0.5 || r.left < left - 0.5) bad.push(name);
+      // Text, der über seinen eigenen Rahmen hinausläuft, zählt nicht zur Breite
+      else if (node.tagName !== 'CANVAS' && node.clientWidth > 0 && node.scrollWidth > node.clientWidth + 1) bad.push(`abgeschnitten: ${name}`);
+    }
+    return bad;
+  });
 const beltOuts = (page, x, y) => game(page, ([bx, by]) => window.__game.state.belts[`${bx},${by}`]?.outs ?? null, [x, y]);
 const mode = (page) => game(page, () => window.__game.ui.mode);
 
@@ -200,19 +244,37 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   // ---------- Gebäude antippen, drehen ----------
   await tapTile(page, 10, 6);
   check((await page.textContent('#info-title')) === 'Holzfällerlager', 'Antippen zeigt Infofenster „Holzfällerlager“');
-  const actionTexts = await page.locator('#info-actions button').allTextContents();
+  const actionKeys = await page.locator('#info-panel button[data-key]').evaluateAll((list) => list.map((b) => b.dataset.key));
   check(
-    ['Auffüllen', 'Holzstamm einlegen', 'Verschieben', 'Drehen', 'Abreißen'].every((t) => actionTexts.some((a) => a.includes(t))),
-    `Infofenster hat Auffüllen, Einlegen, Verschieben, Drehen, Abreißen (${actionTexts.join(', ')})`,
+    ['refill', 'load:holzstamm', 'buy:holzstamm', 'move', 'rotate', 'remove'].every((k) => actionKeys.includes(k)),
+    `Infofenster hat Auffüllen, Einlegen, Kaufen, Verschieben, Drehen, Abreißen (${actionKeys.join(', ')})`,
   );
-  check((await page.textContent('#info-status')).includes('Holzstämme im Laden-Lager: 1'), 'Infofenster zeigt Vorrat im Laden-Lager');
-  check((await page.textContent('#info-status')).includes('Vorrat: 0 / 3 Holzstämme'), 'Infofenster zeigt den Vorrat im Gebäude (0 / 3)');
+  check(
+    (await page.locator('#info-tools button').allTextContents()).join(',') === '↔ Verschieben,↻ Drehen,🗑 Abreißen',
+    'v0.19.0: Verschieben, Drehen, Abreißen klein in einer Zeile unten',
+  );
+  check((await page.textContent('#info-meta')).includes('Leer – Rohstoff nachlegen'), 'Status steht unter dem Namen');
+  const startCard = await infoCard(page);
+  check(
+    startCard?.caption === 'Stellt her' && startCard.inputs.join() === 'holzstamm 1' && startCard.outputs.join().startsWith('holzblock 200 Holzblöcke'),
+    `Grüner Kasten: 1 Holzstamm → 200 Holzblöcke (${JSON.stringify(startCard)})`,
+  );
+  const startText = await infoText(page);
+  check(startText.includes('Im Laden-Lager: 1 Holzstamm'), 'Infofenster zeigt Vorrat im Laden-Lager');
+  check(startText.includes('Vorrat 0 / 3'), 'Infofenster zeigt den Vorrat im Gebäude (0 / 3)');
+  check(
+    (await page.locator('#info-body .source-slots .item-icon.empty').count()) === 3,
+    'Vorrat als 3 Bilder, alle blass (leer)',
+  );
+  check(!(await page.isVisible('#info-text')) && (await page.textContent('#info-hint')).includes('orangen Pfeil'), 'Kurzer Tipp ganz unten statt langer Beschreibung');
+  const startFit = await infoFits(page);
+  check(startFit.length === 0, `Alle Knöpfe passen ins Infofenster (${startFit.join(' | ')})`);
   check(
     (await page.locator('#info-actions button', { hasText: 'Auffüllen' }).textContent()) === '⏫ Auffüllen: 1 Holzstamm',
     'Auffüllen nimmt den Holzstamm aus dem Laden-Lager (Gold reicht nicht für mehr)',
   );
-  check(await page.locator('#info-actions button', { hasText: 'Holzstamm kaufen' }).isDisabled(), 'Mit 500 Gold reicht es noch nicht für einen Holzstamm (550)');
-  await page.locator('#info-actions button', { hasText: 'Drehen' }).tap();
+  check(await infoButton(page, 'buy:holzstamm').isDisabled(), 'Mit 500 Gold reicht es noch nicht für einen Holzstamm (550)');
+  await page.locator('#info-tools button', { hasText: 'Drehen' }).tap();
   await sleep(80);
   check((await game(page, () => window.__game.state.buildings[0].rot)) === 1, 'Drehen dreht das Gebäude');
   await shot('2-info');
@@ -298,7 +360,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const tabActive = (tab) => page.locator(`.build-tab[data-tab="${tab}"]`).evaluate((b) => b.classList.contains('active'));
   const tabNames = await page.locator('.build-tab').allTextContents();
   check(
-    tabNames.length === 4 && ['Holz', 'Stein', 'Eisen', 'Kräuter'].every((n, i) => tabNames[i].includes(n)),
+    tabNames.length === 4 && ['Holz', 'Stein', 'Eisen', 'Erde'].every((n, i) => tabNames[i].includes(n)),
     `Bauleiste hat die Reiter Holz, Stein, Eisen, Kräuter (${tabNames.join(', ')})`,
   );
   check(await tabActive('holz'), 'Reiter „Holz“ ist zu Beginn offen');
@@ -544,7 +606,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
 
   // ---------- Gebäude abreißen ----------
   await tapTile(page, 14, 9);
-  await page.locator('#info-actions button', { hasText: 'Abreißen' }).tap();
+  await page.locator('#info-tools button', { hasText: 'Abreißen' }).tap();
   await sleep(80);
   check(await page.isVisible('#dialog'), 'Abreißen fragt nach');
   check((await page.textContent('#dialog-text')).includes('nichts gekostet'), 'Startgebäude: keine Baukosten zurück (Hinweis)');
@@ -681,16 +743,23 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await game(page, () => window.__game.state.storage.holzblock)) === 15, '5 Felder Band kosten 5 der 20 Start-Holzblöcke');
 
   await tapTile(page, 10, 6);
-  await page.locator('#info-actions button', { hasText: 'Holzstamm einlegen' }).tap();
+  await infoButton(page, 'load:holzstamm').tap();
   await sleep(80);
   const afterLoad = await game(page, () => ({
     logs: window.__game.state.storage.holzstamm ?? 0,
     loaded: window.__game.state.buildings.find((b) => b.type === 'holzfaeller').prod.loaded,
   }));
   check(afterLoad.loaded && afterLoad.logs === 0, 'Gratis-Holzstamm eingelegt');
-  check((await page.textContent('#info-status')).includes('Vorrat: 1 / 3 Holzstamm'), 'Vorrat 1 / 3');
+  await sleep(450);
+  check((await infoText(page)).includes('Vorrat 1 / 3'), 'Vorrat 1 / 3');
   check(
-    await page.locator('#info-actions button', { hasText: 'Holzstamm einlegen' }).isDisabled(),
+    (await page.locator('#info-body .source-slots .item-icon:not(.empty)').count()) === 1 &&
+      (await page.locator('#info-body .source-slots .item-icon.empty').count()) === 2,
+    'Vorrat als Bilder: 1 voll, 2 blass',
+  );
+  check((await infoCard(page))?.caption === 'Stellt gerade her', 'Läuft: „Stellt gerade her“');
+  check(
+    await infoButton(page, 'load:holzstamm').isDisabled(),
     'Ohne Holzstamm im Laden-Lager lässt sich keiner mehr einlegen',
   );
   await page.tap('#info-close');
@@ -912,12 +981,20 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
 
   await tapTile(page, 14, 10);
   check((await page.textContent('#info-title')) === 'Sägewerk', 'Sägewerk antippen zeigt Infofenster');
-  await page.locator('#info-actions button', { hasText: 'Stäbe' }).tap();
+  const sawCard = await infoCard(page);
+  check(
+    sawCard?.inputs.join() === 'holzblock 0 / 5' && sawCard.outputs.join() === 'holzplatte Holzplatte' && sawCard.lack.join() === 'holzblock',
+    `Grüner Kasten: 0 / 5 Holzblöcke (rot) → Holzplatte (${JSON.stringify(sawCard)})`,
+  );
+  check((await recipeOption(page, 'holzstab').getAttribute('aria-label')) === 'Umstellen auf Holzstab: 5 Holzblöcke', 'Umstellen auf: Holzstab aus 5 Holzblöcken');
+  await recipeOption(page, 'holzstab').tap();
   await sleep(450);
   check((await game(page, () => window.__game.state.buildings.find((b) => b.type === 'saegewerk').prod.recipe)) === 'holzstab', 'Rezept auf Stäbe umgestellt');
   check(
-    await page.locator('#info-actions button', { hasText: 'Stäbe' }).evaluate((b) => b.classList.contains('primary')),
-    'Gewähltes Rezept ist hervorgehoben',
+    (await infoCard(page))?.outputs.join() === 'holzstab Holzstab' &&
+      (await recipeOption(page, 'holzplatte').count()) === 1 &&
+      (await recipeOption(page, 'holzstab').count()) === 0,
+    'Gewähltes Rezept steht oben im grünen Kasten, das andere darunter zum Umstellen',
   );
   await shot('12-saegewerk');
   await page.tap('#info-close');
@@ -950,7 +1027,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(iron.includes('schmelzhuette@18,9') && iron.includes('schmiede@22,9'), `Schmelzhütte und Schmiede gebaut (${iron.join(' ')})`);
   await tapTile(page, 18, 9);
   check((await page.textContent('#info-title')) === 'Schmelzhütte', 'Schmelzhütte antippen zeigt Infofenster');
-  await page.locator('#info-actions button', { hasText: 'Eisenerz einlegen' }).tap();
+  await infoButton(page, 'load:eisenerz').tap();
   await sleep(80);
   check((await game(page, () => window.__game.state.storage.eisenerz ?? 0)) === 1, 'Eisenerz eingelegt (eins bleibt im Lager)');
   await page.tap('#info-close');
@@ -962,10 +1039,14 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(smithy.stock > 0 || smithy.busy || smithy.out, `Eisenbarren kommen in der Schmiede an (${JSON.stringify(smithy)})`);
   await tapTile(page, 22, 9);
   check((await page.textContent('#info-title')) === 'Schmiede', 'Schmiede antippen zeigt Infofenster');
-  await page.locator('#info-actions button', { hasText: 'Stangen' }).tap();
+  await recipeOption(page, 'eisenstange').tap();
   await sleep(450);
   check((await game(page, () => window.__game.state.buildings.find((b) => b.type === 'schmiede').prod.recipe)) === 'eisenstange', 'Schmiede auf Stangen umgestellt');
-  check((await page.textContent('#info-status')).includes('5 Eisenbarren → 1 Eisenstange'), 'Rezept zeigt 5 Barren → 1 Eisenstange');
+  const smithCard = await infoCard(page);
+  check(
+    /^eisenbarren \d+ \/ 5/.test(smithCard?.inputs.join() ?? '') && smithCard.outputs.join() === 'eisenstange Eisenstange',
+    `Grüner Kasten: Eisenbarren (… / 5) → Eisenstange (${JSON.stringify(smithCard)})`,
+  );
   await shot('13-eisen');
   await page.tap('#info-close');
 
@@ -1003,26 +1084,35 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   });
   await tapTile(page, 26, 13);
   check((await page.textContent('#info-title')) === 'Zimmerei', 'Zimmerei antippen zeigt Infofenster');
-  const zimButtons = await page.locator('#info-actions button').allTextContents();
+  const zimCard = await infoCard(page);
   check(
-    ['Wellen', 'Räderwerke', 'Verst. Platten'].every((t) => zimButtons.some((b) => b.includes(t))),
-    `Drei Einstellungen (${zimButtons.slice(0, 3).join(', ')})`,
+    zimCard?.caption === 'Stellt gerade her' &&
+      zimCard.inputs.join() === 'holzstab 10 / 10 ✓,steinzahnrad 2 / 5' &&
+      zimCard.outputs.join() === 'zahnradwelle Zahnradwelle' &&
+      zimCard.lack.join() === 'steinzahnrad' &&
+      zimCard.sub.includes('Fehlt noch: 3 Stein-Zahnräder') &&
+      zimCard.sub.includes('20 s je Stück') &&
+      zimCard.sub.includes('Wert 324'),
+    `Grüner Kasten: 10/10 Holzstäbe + 2/5 Stein-Zahnräder (rot) → Zahnradwelle, fehlt noch 3 (${JSON.stringify(zimCard)})`,
   );
-  const zimStatus = await page.textContent('#info-status');
+  check((await page.textContent('#info-meta')).includes('Wartet auf Stein-Zahnrad (2 / 5)'), 'Status unter dem Namen nennt die fehlende Zutat');
+  const zimOptions = await page.locator('#info-body .recipe-option').evaluateAll((list) => list.map((b) => b.getAttribute('aria-label')));
   check(
-    zimStatus.includes('10 Holzstäbe + 5 Stein-Zahnräder → 1 Zahnradwelle') && zimStatus.includes('Stein-Zahnrad: 2 / 5 – fehlt noch 3'),
-    'Infofenster zeigt Rezept und welche Zutat wie viel fehlt',
+    zimOptions.join(' | ') ===
+      'Umstellen auf Räderwerk: 10 Stein-Zahnräder + 5 Holzstäbe | Umstellen auf Verstärkte Holzplatte: 10 Holzplatten + 5 Eisenstangen',
+    `Umstellen auf: die beiden anderen Rezepte (${zimOptions.join(' | ')})`,
   );
-  check(zimStatus.includes('Wartet auf Stein-Zahnrad (2 / 5)'), 'Status nennt die fehlende Zutat');
   check(
-    zimStatus.includes('Andere Einstellungen') && zimStatus.includes('Räderwerke: 10 Stein-Zahnräder + 5 Holzstäbe'),
-    'Infofenster zeigt die Rezepte der anderen Einstellungen',
+    (await recipeOption(page, 'raederwerk').textContent()).includes('324 🪙'),
+    'Jedes andere Rezept zeigt seinen Wert',
   );
+  const zimFit = await infoFits(page);
+  check(zimFit.length === 0, `Alle Knöpfe passen ins Infofenster (${zimFit.join(' | ')})`);
   check(!(await page.locator('#info-actions button', { hasText: 'Reste' }).isVisible()), 'Ohne Reste kein Knopf „Reste ins Laden-Lager“');
   await shot('14-zimmerei');
   // v0.10.1: Umstellen lässt die Teile in der Maschine (vorher: ins Laden-Lager)
   const sticksBefore = await game(page, () => window.__game.state.storage.holzstab ?? 0);
-  await page.locator('#info-actions button', { hasText: 'Verst. Platten' }).tap();
+  await recipeOption(page, 'verstaerkteholzplatte').tap();
   await sleep(450);
   const zimStock = () =>
     game(page, () => {
@@ -1035,15 +1125,15 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     `Umstellen: die Teile bleiben in der Maschine (${JSON.stringify(switched)})`,
   );
   check(
-    (await page.textContent('#info-status')).includes('Liegt noch in der Maschine: 10 Holzstäbe + 2 Stein-Zahnräder'),
+    (await infoText(page)).includes('Liegt noch in der Maschine: 10 Holzstäbe + 2 Stein-Zahnräder'),
     'Infofenster zeigt, was noch in der Maschine liegt',
   );
   await shot('14b-zimmerei-umgestellt');
-  await page.locator('#info-actions button', { hasText: 'Wellen' }).tap();
+  await recipeOption(page, 'zahnradwelle').tap();
   await sleep(450);
   const back = await zimStock();
   check(back.recipe === 'zahnradwelle' && back.stock.holzstab === 10, `Zurückgestellt: die Holzstäbe sind noch da (${JSON.stringify(back)})`);
-  await page.locator('#info-actions button', { hasText: 'Verst. Platten' }).tap();
+  await recipeOption(page, 'verstaerkteholzplatte').tap();
   await sleep(450);
   await page.locator('#info-actions button', { hasText: 'Reste ins Laden-Lager' }).tap();
   await sleep(150);
@@ -1105,7 +1195,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await jamFeed();
   await tapTile(page, 26, 13);
   check(
-    (await page.textContent('#info-status')).includes('Eingang blockiert: Holzblock wird hier nicht gebraucht'),
+    (await page.textContent('#info-meta')).includes('Eingang blockiert: Holzblock wird hier nicht gebraucht'),
     'Zimmerei zeigt den Stau',
   );
   const feedButton = page.locator('#info-actions button', { hasText: 'Zulauf leeren' });
@@ -1219,7 +1309,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const stillEmpty = await plates();
   check(stillEmpty.inStore === 0 && stillEmpty.inShop === 40, `Leeres Lagerhaus bleibt leer, die Holzplatten bleiben im Laden-Lager (${JSON.stringify(stillEmpty)})`);
   await sleep(450);
-  check((await page.textContent('#info-status')).includes('Leer.'), 'Infofenster: Lagerhaus leer');
+  check((await page.textContent('#info-meta')).includes('Leer.'), 'Infofenster: Lagerhaus leer');
   // Ausräumen: alles zurück ins Laden-Lager
   await game(page, () => {
     const st = window.__game.state;
@@ -1412,7 +1502,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(450);
   const sown = await beetState();
   check(sown.crop === 'leinsamen' && sown.seeds === 0, `Gesät: der Leinsamen aus dem Laden-Lager (${JSON.stringify(sown)})`);
-  const growingText = await page.textContent('#info-status');
+  const growingText = await infoText(page);
   check(growingText.includes('Flachspflanze wächst') && growingText.includes('Reif in etwa'), `Infofenster: wächst, reif in etwa … (${growingText.slice(0, 120)})`);
   const reapButton = page.locator('#info-actions button', { hasText: 'Ernten' });
   check((await reapButton.isVisible()) && (await reapButton.isDisabled()), 'Während es wächst: „🌾 Ernten“ gesperrt');
@@ -1423,7 +1513,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     window.__game.simulate(1);
   });
   await sleep(500);
-  const ripeText = await page.textContent('#info-status');
+  const ripeText = await infoText(page);
   check(ripeText.includes('Reif – Flachspflanze ernten'), `Nach 30 Minuten reif (${ripeText.slice(0, 80)})`);
   check(await page.locator('#toast', { hasText: 'Ein Beet ist reif' }).isVisible(), 'Meldung: „Ein Beet ist reif“');
   check(await reapButton.isEnabled(), 'Reif: „🌾 Ernten: 1 Flachspflanze“');
@@ -1442,8 +1532,12 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(450);
   const refillButton = page.locator('#info-actions button', { hasText: 'Auffüllen' });
   check((await refillButton.textContent()) === '⏫ Auffüllen: 1 Flachspflanze', `Auffüllen aus dem Laden-Lager (${await refillButton.textContent()})`);
-  check((await page.locator('#info-actions button', { hasText: 'kaufen' }).count()) === 0, 'Kein Kaufen-Knopf: Flachspflanzen gibt es nicht beim Händler');
-  check((await page.textContent('#info-status')).includes('1 Flachspflanze → 50 Flachsfasern in 10:00 min'), 'Rezept: 1 Flachspflanze → 50 Flachsfasern in 10 Minuten');
+  check((await page.locator('#info-panel button[data-key^="buy:"]').count()) === 0, 'Kein Kaufen-Knopf: Flachspflanzen gibt es nicht beim Händler');
+  const bankCard7 = await infoCard(page);
+  check(
+    bankCard7?.inputs.join() === 'flachspflanze 1' && bankCard7.outputs.join() === 'flachsfaser 50 Flachsfasern' && bankCard7.sub.includes('in 10:00 min'),
+    `Grüner Kasten: 1 Flachspflanze → 50 Flachsfasern in 10 Minuten, keine Ringelblume auf Level 7 (${JSON.stringify(bankCard7)})`,
+  );
   await refillButton.tap();
   await sleep(450);
   const breche = await game(page, () => {
@@ -1460,9 +1554,12 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await tapTile(page, bx + 4, by + 3);
   check((await page.textContent('#info-title')) === 'Webstube', 'Webstube antippen zeigt Infofenster');
   await sleep(450);
-  const webText = await page.textContent('#info-status');
-  check(webText.includes('5 Flachsfasern → 1 Verband') && webText.includes('Wartet auf Flachsfasern'), `Webstube: 5 Flachsfasern → 1 Verband (${webText.slice(0, 100)})`);
-  check((await page.locator('#info-actions button', { hasText: 'Verbände' }).count()) === 0, 'Webstube: kein Umstellen (nur Verbände)');
+  const webCard = await infoCard(page);
+  check(
+    /^flachsfaser \d+ \/ 5/.test(webCard?.inputs.join() ?? '') && webCard.outputs.join() === 'verband Verband' && (await page.textContent('#info-meta')).includes('Wartet auf Flachsfasern'),
+    `Webstube: Flachsfasern (… / 5) → Verband (${JSON.stringify(webCard)})`,
+  );
+  check((await page.locator('#info-body .recipe-option').count()) === 0, 'Webstube: kein Umstellen (nur Verbände)');
   // Neu säen (kauft einen Leinsamen) – das Beet wächst nachher im Hintergrund weiter
   await tapTile(page, bx, by);
   await sleep(450);
@@ -1548,7 +1645,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const sownRing = await beet2();
   check(sownRing.crop === 'ringelblumensamen' && sownRing.seeds === 0, `Ringelblumensamen gesät (${JSON.stringify(sownRing)})`);
   check(!(await sowRing.isVisible()) && !(await sowLein.isVisible()), 'Während es wächst: keine Säen-Knöpfe');
-  check((await page.textContent('#info-status')).includes('Ringelblume wächst'), 'Infofenster: Ringelblume wächst');
+  check((await infoText(page)).includes('Ringelblume wächst'), 'Infofenster: Ringelblume wächst');
   await game(page, ([x, y]) => {
     window.__game.state.buildings.find((g) => g.type === 'beet' && g.x === x && g.y === y).prod.timer = 1799.5;
     window.__game.simulate(1);
@@ -1563,15 +1660,21 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await tapTile(page, bx + 4, by);
   check((await page.textContent('#info-title')) === 'Erntebank', 'Erntebank antippen zeigt Infofenster');
   await sleep(450);
-  const loadRing = page.locator('#info-actions button', { hasText: '➕ 1 Ringelblume einlegen' });
+  const loadRing = infoButton(page, 'load:ringelblume');
   check(await loadRing.isEnabled(), 'Erntebank: Knopf „➕ 1 Ringelblume einlegen“');
   await loadRing.tap();
   await sleep(450);
-  const bankText = await page.textContent('#info-status');
-  check(
-    bankText.includes('1 Ringelblume → 50 Ringelblüten in 10:00 min') && bankText.includes('Vorrat: 2 / 3 (1 Flachspflanze, 1 Ringelblume)'),
-    `Erntebank: gemischter Vorrat (${bankText.slice(0, 160)})`,
+  const bankText = await infoText(page);
+  const bankSlots = await page.locator('#info-body .source-slots .item-icon').evaluateAll((list) =>
+    list.map((c) => `${c.dataset.item}${c.classList.contains('empty') ? '(leer)' : ''}`),
   );
+  check(
+    bankText.includes('Vorrat 2 / 3') && bankSlots.join() === 'flachspflanze,ringelblume,flachspflanze(leer)',
+    `Erntebank: gemischter Vorrat als Bilder (${bankSlots.join()} – ${bankText.slice(0, 120)})`,
+  );
+  check((await infoCard(page))?.outputs.join() === 'flachsfaser 50 Flachsfasern', 'Erntebank: der Kasten zeigt, was gerade läuft (Flachs)');
+  const bankFit = await infoFits(page);
+  check(bankFit.length === 0, `Alle Knöpfe passen ins Infofenster der Erntebank (${bankFit.join(' | ')})`);
   const bankState = await game(page, () => {
     const b = window.__game.state.buildings.find((x) => x.type === 'flachsbreche');
     return { input: b.prod.input, queue: b.prod.queue };
@@ -1582,18 +1685,25 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await tapTile(page, bx, by + 6);
   check((await page.textContent('#info-title')) === 'Kräuterstube', 'Kräuterstube antippen zeigt Infofenster');
   await sleep(450);
+  const stubeCard = await infoCard(page);
   check(
-    (await page.locator('#info-actions button', { hasText: 'Heilverbände' }).isVisible()) &&
-      (await page.locator('#info-actions button', { hasText: 'Kompressen' }).isVisible()),
-    'Kräuterstube: Einstellungen „Heilverbände“ und „Kompressen“',
+    /^verband \d+ \/ 1( ✓)?,ringelbluete \d+ \/ 5/.test(stubeCard?.inputs.join() ?? '') && stubeCard.outputs.join() === 'heilverband Heilverband',
+    `Kräuterstube: Verband + Ringelblüten → Heilverband (${JSON.stringify(stubeCard)})`,
   );
-  check((await page.textContent('#info-status')).includes('1 Verband + 5 Ringelblüten → 1 Heilverband'), 'Rezept: 1 Verband + 5 Ringelblüten → 1 Heilverband');
-  await page.locator('#info-actions button', { hasText: 'Kompressen' }).tap();
+  check(
+    (await recipeOption(page, 'kraeuterkompresse').getAttribute('aria-label')) === 'Umstellen auf Kräuterkompresse: 10 Flachsfasern + 5 Ringelblüten',
+    'Umstellen auf: Kräuterkompresse aus 10 Flachsfasern + 5 Ringelblüten',
+  );
+  await recipeOption(page, 'kraeuterkompresse').tap();
   await sleep(450);
+  const kompCard = await infoCard(page);
   check(
-    (await page.textContent('#info-status')).includes('10 Flachsfasern + 5 Ringelblüten → 1 Kräuterkompresse'),
-    'Umgestellt: 10 Flachsfasern + 5 Ringelblüten → 1 Kräuterkompresse',
+    /^flachsfaser \d+ \/ 10( ✓)?,ringelbluete \d+ \/ 5/.test(kompCard?.inputs.join() ?? '') && kompCard.outputs.join() === 'kraeuterkompresse Kräuterkompresse',
+    `Umgestellt: Flachsfasern + Ringelblüten → Kräuterkompresse (${JSON.stringify(kompCard)})`,
   );
+  check((await recipeOption(page, 'heilverband').count()) === 1, 'Heilverband steht jetzt unter „Umstellen auf“');
+  const kompFit = await infoFits(page);
+  check(kompFit.length === 0, `Langer Name „Kräuterkompresse“ passt in den grünen Kasten (${kompFit.join(' | ')})`);
   await shot('19d-kraeuterstube');
   await page.tap('#info-close');
   await game(page, (c) => Object.assign(window.__game.camera, c), camLand);
@@ -1617,7 +1727,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   // Holzstamm direkt im Infofenster kaufen
   await tapTile(page, 10, 6);
   const goldBeforeLog = await game(page, () => window.__game.state.gold);
-  await page.locator('#info-actions button', { hasText: 'Holzstamm kaufen' }).tap();
+  await infoButton(page, 'buy:holzstamm').tap();
   await sleep(80);
   const logBought = await game(page, () => ({ gold: window.__game.state.gold, logs: window.__game.state.storage.holzstamm ?? 0 }));
   check(logBought.logs === 1 && logBought.gold <= goldBeforeLog - 550 + 200, `Holzstamm im Infofenster gekauft (${goldBeforeLog} → ${logBought.gold})`);
@@ -1644,10 +1754,11 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     refilled.inside === 3 && refilled.logs === 0 && refilled.gold <= beforeRefill.gold - toBuy * 550 + 200,
     `Auffüllen: 3 / 3 Holzstämme im Holzfällerlager (${JSON.stringify(beforeRefill)} → ${JSON.stringify(refilled)})`,
   );
-  check((await page.textContent('#info-status')).includes('Vorrat: 3 / 3 Holzstämme'), 'Infofenster: Vorrat 3 / 3');
+  check((await infoText(page)).includes('Vorrat 3 / 3'), 'Infofenster: Vorrat 3 / 3');
+  check((await page.locator('#info-body .source-slots .item-icon.empty').count()) === 0, 'Vorrat voll: alle 3 Bilder voll');
   check(
     (await page.locator('#info-actions button', { hasText: 'Vorrat voll' }).isDisabled()) &&
-      (await page.locator('#info-actions button', { hasText: 'Holzstamm einlegen' }).isDisabled()),
+      (await infoButton(page, 'load:holzstamm').isDisabled()),
     'Bei vollem Vorrat: „Vorrat voll“, Einlegen gesperrt',
   );
   await shot('17b-vorrat-voll');

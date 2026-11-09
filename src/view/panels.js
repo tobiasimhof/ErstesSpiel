@@ -11,8 +11,18 @@ function el(tag, className, text) {
   return node;
 }
 
-function makeButton({ label, onClick, danger = false, primary = false, disabled = false }) {
-  const button = el('button', [danger && 'danger', primary && 'primary'].filter(Boolean).join(' '), label);
+// label: Text oder (v0.19.0) eine Liste aus Texten und Elementen, z. B. ein
+// Warenbild mitten im Knopf. title: ausgeschriebener Text (für Vorlesen).
+// size (v0.19.0): 'wide' = eigene Zeile, 'half' = zwei nebeneinander.
+function makeButton({ label, title, onClick, danger = false, primary = false, disabled = false, size, key }) {
+  const button = el('button', [danger && 'danger', primary && 'primary', size].filter(Boolean).join(' '));
+  if (Array.isArray(label)) button.append(...label);
+  else button.textContent = label;
+  if (title) {
+    button.title = title;
+    button.setAttribute('aria-label', title);
+  }
+  if (key) button.dataset.key = key;
   button.type = 'button';
   button.disabled = disabled;
   onPress(button, onClick);
@@ -28,6 +38,10 @@ export function createPanels() {
   const infoSoon = document.getElementById('info-soon');
   const infoActions = document.getElementById('info-actions');
   const infoStatus = document.getElementById('info-status');
+  // v0.19.0: Warenbilder-Bereich, Knopfzeile unten, kurzer Tipp ganz unten
+  const infoBody = document.getElementById('info-body');
+  const infoTools = document.getElementById('info-tools');
+  const infoHint = document.getElementById('info-hint');
   let onInfoClose = null;
   onPress(document.getElementById('info-close'), () => onInfoClose?.());
 
@@ -64,34 +78,48 @@ export function createPanels() {
       onInfoClose = handler;
     },
 
-    // Zeigt das Infofenster. Gibt { buttons, setStatus } zurück: Knöpfe mit
-    // "key" lassen sich später ändern (Beschriftung, gesperrt, hervorgehoben),
-    // ohne neu erzeugt zu werden – so geht kein Tippen verloren.
-    showInfo({ icon, title, meta, text, soon, actions = [], status = [] }) {
+    // Zeigt das Infofenster. Gibt { buttons, setStatus, setMeta } zurück:
+    // Knöpfe mit "key" lassen sich später ändern (Beschriftung, gesperrt,
+    // hervorgehoben), ohne neu erzeugt zu werden – so geht kein Tippen verloren.
+    // v0.19.0 (Tobias: übersichtlicher): body = eigener Inhalt mit
+    // Warenbildern (src/view/buildingInfo.js), tools = kleine Knöpfe in einer
+    // Zeile unten (Verschieben, Drehen, Abreißen), hint = kurzer Tipp ganz unten.
+    showInfo({ icon, title, meta, text, hint, body, soon, actions = [], tools = [], status = [] }) {
       infoIcon.textContent = icon;
       infoTitle.textContent = title;
-      infoMeta.textContent = meta ?? '';
-      infoMeta.hidden = !meta;
-      infoText.textContent = text;
+      const setMeta = (value) => {
+        infoMeta.textContent = value ?? '';
+        infoMeta.hidden = !value;
+      };
+      setMeta(meta);
+      infoText.textContent = text ?? '';
+      infoText.hidden = !text;
+      infoBody.replaceChildren(...(body ? [body] : []));
+      infoBody.hidden = !body;
       infoSoon.textContent = soon ? `Bald: ${soon}` : '';
       infoSoon.hidden = !soon;
       const buttons = new Map();
+      const make = (action) => {
+        const button = makeButton(action);
+        if (action.key) buttons.set(action.key, button);
+        return button;
+      };
       infoActions.replaceChildren(
-        ...actions.flatMap((action) => {
-          const button = makeButton(action);
-          if (action.key) buttons.set(action.key, button);
-          // group: beginnt eine neue Zeile (z. B. nach den Rezept-Knöpfen)
-          return action.group ? [el('div', 'actions-break'), button] : [button];
-        }),
+        // group: beginnt eine neue Zeile (z. B. nach den Rezept-Knöpfen)
+        ...actions.flatMap((action) => (action.group ? [el('div', 'actions-break'), make(action)] : [make(action)])),
       );
       infoActions.hidden = actions.length === 0;
+      infoTools.replaceChildren(...tools.map(make));
+      infoTools.hidden = tools.length === 0;
+      infoHint.textContent = hint ?? '';
+      infoHint.hidden = !hint;
       const setStatus = (lines) => {
         infoStatus.replaceChildren(...lines.map((line) => el('div', 'status-line', line)));
         infoStatus.hidden = lines.length === 0;
       };
       setStatus(status);
       info.hidden = false;
-      return { buttons, setStatus };
+      return { buttons, setStatus, setMeta };
     },
 
     hideInfo() {

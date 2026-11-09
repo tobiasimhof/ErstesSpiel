@@ -61,7 +61,9 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### v0.19.0 – Übersichtliches Infofenster und Reiter „Erde“ (Entwurf, wartet auf Tobias' OK)
+### v0.19.0 – Übersichtliches Infofenster und Reiter „Erde“ (fertig)
+
+Tobias (Chat 14): „Finde das passt so. Sieht sehr übersichtlich aus und ansprechend. Go für v19.“ Umgesetzt wie geplant; zusätzlich: Kaufen-Knopf heißt „🧺 Kaufen · 550 🪙“ (passt in eine Zeile), das Infofenster ist 10 Pixel breiter (320), lange Warennamen brechen mit Trennstrich um.
 
 Ersetzt den Entwurf „Warenbilder in der Bauleiste“ (darunter). Tobias (Chat 14): Variante B, aber in der Bauleiste nur Symbol, Name und Kosten – was ein Gebäude herstellt, soll dort nicht stehen. Reiter „Pflanzenkunde“ zu lang, „Pflanzen“ klingt komisch → „Erde“. Stattdessen soll das Infofenster beim Antippen eines Gebäudes übersichtlicher werden, „dann prägt man sich das auch besser ein“: ganz oben, was gerade hergestellt wird und was man dafür braucht, darunter, was die anderen Einstellungen kosten.
 

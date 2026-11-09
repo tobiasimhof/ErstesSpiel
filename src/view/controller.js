@@ -10,7 +10,6 @@
 
 import { BELT_COST, BUILDINGS } from '../core/data/buildings.js';
 import { ITEMS } from '../core/data/items.js';
-import { RECIPES } from '../core/data/recipes.js';
 import { DIR_NAMES } from '../core/dirs.js';
 import { footprintSize } from '../core/geometry.js';
 import {
@@ -57,23 +56,20 @@ import {
   inputJam,
   loadInput,
   sourceInputTypes,
-  sourceInputs,
-  sourceStock,
   losesWorkOnRemove,
   productionOf,
   returnUnusedStock,
   setRecipe,
-  sourceCapacity,
-  sourceCount,
   sourceRoom,
   unusedStock,
-  workshopInputs,
 } from '../core/production.js';
 import { affordableCount, canAfford, missingFor, storageCapacity, storageCount, storageTotal } from '../core/shop.js';
 import { beltAt, buildingAt, findBuilding, isInWorld, isOwned } from '../core/state.js';
 import { emptyWarehouse, warehouseTotal } from '../core/warehouse.js';
 import { TILE, panBy, screenToWorld } from './camera.js';
-import { costText, itemCount, numberFormat } from './format.js';
+import { createBuildingBody } from './buildingInfo.js';
+import { costText, formatDuration, numberFormat } from './format.js';
+import { createItemIcon } from './itemArt.js';
 
 const TEXT = {
   place: (name, cost) => `${name} (kostet ${cost}): Vorschau mit dem Finger an die gewünschte Stelle schieben.`,
@@ -116,7 +112,8 @@ export function createController({
 }) {
   let mode = 'normal';
   let drag = null;
-  let info = null; // { buttons, setStatus } des offenen Infofensters
+  let info = null; // { buttons, setStatus, setMeta } des offenen Infofensters
+  let infoBody = null; // v0.19.0: Warenbilder im Infofenster eines Gebäudes ({ node, update })
   let infoRefresh = null; // aktualisiert das offene Infofenster
 
   const changed = () => onChange();
@@ -140,19 +137,13 @@ export function createController({
   function select(selection) {
     ui.selected = selection;
     infoRefresh = null;
+    infoBody = null;
     if (selection) showSelectionInfo();
     else panels.hideInfo();
     requestDraw();
   }
 
   const DOT = { work: '🟢', idle: '🟡', blocked: '🔴' };
-
-  function formatDuration(seconds) {
-    const s = Math.max(0, Math.round(seconds));
-    if (s < 60) return `${s} s`;
-    const m = Math.floor(s / 60);
-    return `${m}:${String(s % 60).padStart(2, '0')} min`;
-  }
 
   // v0.14.0: Beschriftung von „Auffüllen“ – was der Knopf gerade tun würde
   function refillLabel(plan, input) {
@@ -176,45 +167,30 @@ export function createController({
     return `🌱 Säen: ${name}`;
   }
 
-  // Aktualisiert Statuszeilen und Knöpfe eines Gebäude-Infofensters.
+  // Aktualisiert Status, Warenbilder, Textzeilen und Knöpfe eines
+  // Gebäude-Infofensters. v0.19.0 (Tobias): Das Statuslicht steht oben unter
+  // dem Namen; Maschinen und Rohstoff-Gebäude zeigen ihre Waren als Bilder
+  // (src/view/buildingInfo.js), die übrigen Gebäude weiter Textzeilen.
   function updateBuildingInfo(id) {
     const b = findBuilding(state, id);
     if (!b) return select(null);
     const p = productionOf(b.type);
     const prod = b.prod;
     const status = buildingStatus(state, b);
-    const lines = [`${DOT[status.level]} ${status.text}`];
+    info.setMeta(`${DOT[status.level]} ${status.text}`);
+    infoBody?.update(b);
+    const lines = [];
     if (p?.kind === 'source') {
-      // v0.17.0: Die Erntebank verarbeitet mehrere Pflanzen – gezeigt wird,
-      // was auf diesem Level schon freigeschaltet ist.
-      const inputs = sourceInputs(p);
-      const all = Object.keys(inputs);
-      const types = all.filter((t) => isItemUnlocked(state, t));
-      for (const t of types) lines.push(`1 ${ITEMS[t].name} → ${p.amount} ${ITEMS[inputs[t]].plural} in ${formatDuration(p.duration)}`);
-      // v0.14.0: Vorrat von bis zu 3 Rohstoffen
-      const inside = sourceCount(b);
-      if (all.length === 1) {
-        const input = ITEMS[all[0]];
-        lines.push(`Vorrat: ${inside} / ${sourceCapacity(b)} ${inside === 1 ? input.name : input.plural}`);
-      } else {
-        const list = Object.entries(sourceStock(b)).map(([t, n]) => itemCount(t, n)).join(', ');
-        lines.push(`Vorrat: ${inside} / ${sourceCapacity(b)}${list ? ` (${list})` : ''}`);
-      }
-      if (prod.loaded) {
-        const left = prod.remaining + (prod.queued ?? 0) * p.amount;
-        lines.push(`Leer in etwa ${formatDuration(left * (p.duration / p.amount))}`);
-      }
-      for (const t of types) lines.push(`${ITEMS[t].plural} im Laden-Lager: ${storageCount(state, t)}`);
+      // v0.14.0: Auffüllen – erst aus dem Laden-Lager, sonst kaufen
       const plan = refillPlan(state, b);
       const refill = info.buttons.get('refill');
       refill.textContent = refillLabel(plan, ITEMS[plan.input]);
       refill.disabled = plan.fromStorage + plan.buy === 0;
       const room = sourceRoom(b);
-      for (const t of all) {
+      for (const t of sourceInputTypes(b.type)) {
         const load = info.buttons.get(`load:${t}`);
         if (load) {
           load.hidden = !isItemUnlocked(state, t);
-          load.textContent = `➕ 1 ${ITEMS[t].name} einlegen`;
           load.disabled = room < 1 || storageCount(state, t) < 1;
         }
         // v0.16.0: Flachspflanzen gibt es nicht beim Händler – dann fehlt der Knopf
@@ -247,44 +223,12 @@ export function createController({
       reap.classList.toggle('primary', isRipe(b));
       reap.textContent = isRipe(b) ? `🌾 Ernten: 1 ${ITEMS[crop.plant].name}` : '🌾 Ernten – noch nicht reif';
     } else if (p?.kind === 'workshop') {
-      const recipe = RECIPES[prod.recipe];
-      const inputs = workshopInputs(b);
-      const outName = recipe.amount === 1 ? ITEMS[recipe.output].name : ITEMS[recipe.output].plural;
-      const ingredients = inputs.map((i) => itemCount(i.type, i.need)).join(' + ');
-      lines.push(`Rezept: ${ingredients} → ${recipe.amount} ${outName} (${recipe.time} s)`);
-      if (inputs.length === 1) {
-        const [{ type, have, need }] = inputs;
-        lines.push(`Am Eingang: ${have} / ${need * 2} ${ITEMS[type].plural}`);
-      } else {
-        // v0.10.0: jede Zutat mit Vorrat – fehlt etwas, steht es dabei
-        for (const i of inputs) {
-          const mark = i.done ? '✅' : '⬜';
-          const lack = i.done ? '' : ` – fehlt noch ${i.need - i.have}`;
-          lines.push(`${mark} ${ITEMS[i.type].name}: ${i.have} / ${i.need}${lack}`);
-        }
-        lines.push(`Wert: ${numberFormat.format(ITEMS[recipe.output].price)} 🪙 je ${ITEMS[recipe.output].name}`);
-      }
-      // v0.10.1 (Tobias): Rezepte der anderen Einstellungen ansehen, ohne umzustellen
-      const others = p.recipes.filter((key) => key !== prod.recipe);
-      if (others.length > 0) {
-        lines.push('Andere Einstellungen:');
-        for (const key of others) {
-          const r = RECIPES[key];
-          const out = ITEMS[r.output];
-          const ins = Object.entries(r.inputs).map(([type, n]) => itemCount(type, n)).join(' + ');
-          lines.push(`• ${r.label}: ${ins} · ${numberFormat.format(out.price * r.amount)} 🪙`);
-        }
-      }
-      // Zutaten für eine andere Einstellung bleiben in der Maschine
-      const rest = unusedStock(b);
-      const hasRest = Object.keys(rest).length > 0;
-      if (hasRest) lines.push(`Liegt noch in der Maschine: ${costText(rest)} – für eine andere Einstellung.`);
+      // Reste für eine andere Einstellung zurückholen (der Hinweis steht im Inhalt)
       const restButton = info.buttons.get('leftovers');
-      if (restButton) restButton.hidden = !hasRest;
+      if (restButton) restButton.hidden = Object.keys(unusedStock(b)).length === 0;
       // v0.12.0: Stau am Eingang – Zulauf leeren
       const feedButton = info.buttons.get('clearFeed');
       if (feedButton) feedButton.hidden = !inputJam(state, b);
-      for (const key of p.recipes) info.buttons.get(`recipe:${key}`)?.classList.toggle('primary', key === prod.recipe);
     } else if (p?.kind === 'storage') {
       for (let i = 0; i < p.slots; i++) {
         const slot = prod.slots[i];
@@ -322,7 +266,6 @@ export function createController({
       if (!b) return select(null);
       const def = BUILDINGS[b.type];
       const p = productionOf(b.type);
-      const size = footprintSize(b.type, b.rot);
       const actions = [];
       if (p?.kind === 'source') {
         // v0.14.0 (Tobias): bis zum Rand füllen – erst aus dem Laden-Lager,
@@ -333,6 +276,7 @@ export function createController({
           key: 'refill',
           label: '',
           primary: true,
+          size: 'wide',
           onClick: () => {
             const machine = findBuilding(state, b.id);
             if (!machine) return;
@@ -350,11 +294,14 @@ export function createController({
           },
         });
         // v0.17.0: je Rohstoff ein Knopf „einlegen“ (die Erntebank nimmt mehrere Pflanzen)
+        // v0.19.0: kleiner, mit dem Warenbild statt des Namens
         for (const type of sourceInputTypes(b.type)) {
           const input = ITEMS[type];
           actions.push({
             key: `load:${type}`,
-            label: '',
+            label: ['➕ 1 ', createItemIcon(type, 20), ' einlegen'],
+            title: `1 ${input.name} einlegen`,
+            size: 'half',
             onClick: () => {
               const machine = findBuilding(state, b.id);
               if (!machine) return;
@@ -367,11 +314,16 @@ export function createController({
             },
           });
         }
-        for (const type of sourceInputTypes(b.type).filter(isBuyable)) {
+        const buyable = sourceInputTypes(b.type).filter(isBuyable);
+        for (const type of buyable) {
           const input = ITEMS[type];
+          const price = ` · ${numberFormat.format(input.buyPrice)} 🪙`;
           actions.push({
             key: `buy:${type}`,
-            label: `🧺 ${input.name} kaufen · ${numberFormat.format(input.buyPrice)} 🪙`,
+            // Gibt es nur einen Rohstoff, reicht „Kaufen“ (passt in eine Zeile)
+            label: buyable.length > 1 ? ['🧺 ', createItemIcon(type, 20), ` kaufen${price}`] : `🧺 Kaufen${price}`,
+            title: `${input.name} kaufen · ${numberFormat.format(input.buyPrice)} Gold`,
+            size: 'half',
             onClick: () => {
               const result = buyRaw(state, type);
               if (result === 'ok') {
@@ -425,20 +377,8 @@ export function createController({
         });
       }
       if (p?.kind === 'workshop') {
-        // v0.16.0: Mit nur einer Einstellung (Webstube) gibt es nichts umzustellen.
-        if (p.recipes.length > 1) for (const key of p.recipes) {
-          actions.push({
-            key: `recipe:${key}`,
-            label: RECIPES[key].label,
-            onClick: () => {
-              // v0.10.1: Zutaten bleiben in der Maschine (vorher kamen sie
-              // ins Laden-Lager – das sah aus, als wären sie verschwunden).
-              setRecipe(b, key);
-              changed();
-              infoRefresh?.();
-            },
-          });
-        }
+        // v0.19.0: Umgestellt wird über die Knöpfe „Umstellen auf“ im Inhalt
+        // (src/view/buildingInfo.js); die Webstube hat nur eine Einstellung.
         actions.push({
           key: 'leftovers',
           label: '↩ Reste ins Laden-Lager',
@@ -487,18 +427,33 @@ export function createController({
           },
         );
       }
-      actions.push(
-        { label: '↔ Verschieben', group: actions.length > 0, onClick: () => startPlace(b.type, b) },
-        { label: '↻ Drehen', onClick: () => rotateBuildingInPlace(b) },
-        { label: '🗑 Abreißen', danger: true, onClick: () => askRemoveBuilding(b) },
-      );
+      // v0.19.0 (Tobias: übersichtlicher): klein in einer Zeile unten
+      const tools = [
+        { key: 'move', label: '↔ Verschieben', onClick: () => startPlace(b.type, b) },
+        { key: 'rotate', label: '↻ Drehen', onClick: () => rotateBuildingInPlace(b) },
+        { key: 'remove', label: '🗑 Abreißen', danger: true, onClick: () => askRemoveBuilding(b) },
+      ];
+      // v0.10.1: Beim Umstellen bleiben die Zutaten in der Maschine (vorher
+      // kamen sie ins Laden-Lager – das sah aus, als wären sie verschwunden).
+      const body = createBuildingBody(state, b, {
+        onRecipe: (key) => {
+          const machine = findBuilding(state, b.id);
+          if (!machine) return;
+          setRecipe(machine, key);
+          changed();
+          infoRefresh?.();
+        },
+      });
       info = panels.showInfo({
         icon: def.icon,
         title: def.name,
-        meta: `${size.width} × ${size.height} Felder`,
-        text: def.description,
+        meta: '',
+        hint: def.tip,
+        body: body?.node,
         actions,
+        tools,
       });
+      infoBody = body;
       infoRefresh = () => updateBuildingInfo(b.id);
       infoRefresh();
     } else if (sel.kind === 'belt') {

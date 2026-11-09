@@ -4,6 +4,24 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.19.0 – Übersichtliches Infofenster und Reiter „Erde“ (09.11.2026)
+
+**Vorgenommen:**
+- Das Infofenster eines Gebäudes übersichtlicher machen (Tobias, Chat 14): oben, was gerade hergestellt wird und was dafür fehlt, darunter die anderen Einstellungen. Der Reiter „Kräuter“ heißt „Erde“.
+
+**Fragen, die wir uns gestellt haben:**
+- Warenbilder in der Bauleiste oder im Infofenster? → Im Infofenster; die Bauleiste bleibt bei Symbol, Name, Kosten (Tobias).
+- Welche Bilder? → Dieselben wie auf dem Band, etwas größer – eine Ware sieht überall gleich aus (Tobias' Idee).
+- Wie geht beim ständigen Aktualisieren kein Tippen verloren? → Der Inhalt wird einmal gebaut und danach nur geändert; neu gebaut wird nur, wenn sich der Aufbau ändert (anderes Rezept, anderer Rohstoff im Vorrat).
+
+**Gemacht:**
+- Neu `src/view/buildingInfo.js` (grüner Kasten „Stellt gerade her“, „Umstellen auf“, Vorrat als Bilder). `panels.js`: Bereich für Warenbilder, kleine Knopfzeile unten, kurzer Tipp, Status im Kopf, Knöpfe mit Bild und Schlüssel (`data-key`). `controller.js`: Rezept-Knöpfe entfallen, Einlegen/Kaufen kleiner, Verschieben/Drehen/Abreißen in die Knopfzeile. `production.js`: `sourceSlots` (Vorrat der Reihe nach). `format.js`: `formatDuration`. Datentabelle: `tip` statt `description`, Reiter „Erde“. CSS für das neue Fenster (Tablet und Handy), Infofenster 320 statt 310 Pixel breit.
+- Spielstand-Format unverändert.
+
+**Geprüft:**
+- 262 automatische Tests (neu in `infofenster.test.js`: Reiter „Erde“ mit gleicher Kennung, kurze Tipps statt Beschreibung, Warenbilder für alle Rezepte und Rohstoff-Gebäude, Vorrat der Reihe nach, hat / braucht beim Umstellen, Zeitangaben) – alle bestanden.
+- Browser-Test in Tablet- und Handygröße (neu: Knöpfe über ihren Schlüssel, Statuszeile, grüner Kasten mit hat / braucht und roten Zutaten, Umstellen per Tippen auf ein Rezept, Vorrat als Bilder voll/blass, Knopfzeile unten, Tipp statt Beschreibung, Reiter „Erde“; nichts ragt aus dem Fenster oder dem grünen Kasten – diese Prüfung fand zwei echte Fehler, die behoben sind) – alle bestanden.
+
 ### v0.18.5 – Plan: übersichtliches Infofenster (09.11.2026, nur Doku)
 
 **Vorgenommen:**
