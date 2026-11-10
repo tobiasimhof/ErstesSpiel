@@ -63,6 +63,15 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 ### Entwurf v0.21.0 – Maschinen zeigen, was sie herstellen (noch nicht freigegeben)
 
+**Stand nach Tobias' Antwort (v0.20.2):** Variante B ist gewählt, soll aber luftiger werden („wirkt etwas gequetscht“). Neue Fassung, Vorschaubilder im Chat:
+- **Fortschritt als Ring** um die helle Scheibe mit dem Produkt (gelb auf dunklem Rand; bei Rohstoff-Gebäuden: wie viel vom laufenden Rohstoff noch da ist). Die Leiste oben entfällt bei diesen Gebäuden; das Beet behält sie.
+- **Kein Gebäudebild** mehr auf Maschinen und Rohstoff-Gebäuden (Farbe und Name bleiben). Alternative, falls Tobias es vermisst: kleines Gebäudebild unten links hinter der Scheibe.
+- **Oben:** links die Punkte für den Vorrat (Rohstoff-Gebäude) oder das gelbe „?“-Schild mit der fehlenden Zutat (wartende Kombi-Maschine), rechts das Statuslicht. Unten nur der Name.
+- **Lagerhaus:** die Waren der Fächer auf einem hellen Schild, etwas schmaler, damit das Statuslicht frei bleibt.
+- **Dazu aus dem Belastungstest (wenn Tobias zustimmt):** nur noch zeichnen, was im Bild ist; im Testmodus „Bilder pro Sekunde“ anzeigen.
+
+**Erster Entwurf (v0.20.1):**
+
 Tobias (Chat 15): Die Waren an den Maschinen sind sehr klein, man kann nur erahnen, was produziert wird. Claudes Entwurf mit Vorschaubildern (Tablet, nah und weit herausgezoomt; im Chat gezeigt, nicht im Projekt gespeichert). Tobias' Wahl steht aus.
 
 - **Heute:** Gebäudebild (Emoji), Name, Statuslicht, Fortschrittsleiste, Punkte für den Vorrat; nur wartende Kombi-Maschinen zeigen klein, was **fehlt**. Was hergestellt wird, steht nicht auf der Karte.
@@ -74,7 +83,25 @@ Tobias (Chat 15): Die Waren an den Maschinen sind sehr klein, man kann nur erahn
 - **Prüfen:** Was gezeigt wird, als eigene Funktion mit Tests (Maschine je Einstellung, Rohstoff-Gebäude leer und voll, Erntebank mit zwei Pflanzen, Lagerhaus mit 0 bis 3 Waren); Browser-Test mit Screenshots nah und weit, Tablet und Handy.
 - **Fragen an Tobias:** A oder B? Auch Rohstoff-Gebäude? Passt das gelbe „?“-Schild?
 
+### Belastungstest (v0.20.2, reine Messung)
+
+In einer Kopie des Spiels, Testrechner ohne Grafikchip (das Tablet zeichnet mit Grafikchip – die Zeichen-Werte sind deshalb nur ein Anhaltspunkt). Zwei voll bebaute Fabriken auf 38 × 30 Feldern: „Maschinen“ (60 kurze Straßen Rohstoff-Gebäude → Maschine → Versandportal: 180 Gebäude, 120 Bänder) und „Bänder“ (15 lange Strecken: 30 Gebäude, 1.065 Bänder).
+
+| Messung | Maschinen | Bänder | Urteil |
+|---|---|---|---|
+| Ein Takt, alles in Bewegung | 0,21 ms | 0,22 ms | unkritisch (10 Takte je Sekunde; Testmodus 100) |
+| 8 Stunden Abwesenheit nachrechnen | 0,02 s | 1,3 s | gut; läuft alles 45 Minuten durch, hochgerechnet etwa 6 s |
+| Spielstand | 31 KB | 49 KB | unkritisch (Grenze des Browsers etwa 5.000 KB) |
+| Ein Bild zeichnen, ganz herausgezoomt | 21 ms | 18 ms | zu langsam für 60 Bilder pro Sekunde (16,7 ms) |
+| Ein Bild zeichnen, Zoom 1 | 19 ms | 18 ms | fast gleich teuer – es wird auch Unsichtbares gezeichnet |
+
+Zum Vergleich: leere Fläche 6 ms, kleine Fabrik (20 Gebäude, 18 Bänder) 8 bis 10 ms. Ein Gebäude kostet etwa 0,085 ms, ein Band 0,011 ms; Tobias' Fabrik (etwa 60 Gebäude) läge auf dem Testrechner bei etwa 14 ms.
+
+**Mögliche Verbesserungen** (erst nach Tobias' OK): nur zeichnen, was im Bild ist (`draw` in `src/view/renderer.js` geht heute über alle Gebäude und Bänder); Gebäudebilder zwischenspeichern statt sie in jedem Bild neu zu zeichnen (das Emoji ist teuer); den Status eines Gebäudes nicht in jedem Bild neu berechnen; Anzeige „Bilder pro Sekunde“ im Testmodus, um auf dem Tablet zu messen. Noch offen: gründliche Durchsicht des ganzen Codes auf Fehler.
+
 ### Weitere mögliche Schritte (Claudes Vorschläge, Chat 15 – Tobias wählt)
+
+**Tobias' Antwort (v0.20.2):** Ja zu Spielstand sichern (er will den Stand anderen zum Testen zeigen), Bereich kopieren („sehr wichtig“), Weiche („sehr sinnvoll“), Belastungstest (erledigt, siehe oben). Nein zu „Umlagern“ und „Alle auffüllen“ (das händische Arbeiten ginge verloren) und zur Fabrik-Übersicht (nicht in dieser Phase). Verbesserungen mit Erfahrung später. **Reihenfolge (Claudes Vorschlag):** v0.21.0 Maschinen zeigen, was sie herstellen → Spielstand sichern und was Tester brauchen → Bereich kopieren → Weiche.
 
 | Schritt | Was es bringt | Umfang |
 |---|---|---|

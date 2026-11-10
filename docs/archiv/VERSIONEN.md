@@ -4,6 +4,20 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.20.2 – Tobias' Wahl, Variante B luftiger, Belastungstest (10.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Antworten auf die Vorschläge festhalten, Variante B überarbeiten, den Belastungstest als Messung durchführen.
+
+**Fragen, die wir uns gestellt haben:**
+- Warum wirkte Variante B gequetscht? → Leiste, Punkte, Statuslicht, Scheibe, Gebäudebild, „?“-Schild und Name teilten sich ein kleines Feld. Neu: Fortschritt als Ring um das Produkt, kein Gebäudebild.
+- Geht Tobias' Spielstand verloren, wenn andere testen? → Nein, jedes Gerät hat seinen eigenen; nur auf demselben Gerät teilt man ihn.
+- Hält das Spiel eine voll bebaute Fläche aus? → Rechnen ja, mit großem Abstand; das Zeichnen ist der Engpass.
+
+**Gemacht:**
+- Neue Vorschaubilder (im Chat). Belastungstest in einer Kopie des Spiels (Ergebnisse im Gesprächsprotokoll und in `docs/archiv/PLAENE.md`). `docs/STAND.md`: Status, nächste Schritte, offene Fragen 1, 5, 7, 13, 14 (die Frage „Alle auffüllen“ ist entschieden), neuer Arbeitsschritt oben (v0.19.1 fällt aus der Liste). Entscheidungen und Gespräch ergänzt, `docs/TECHNIK.md` mit den Messwerten.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.20.1 – Plan: Maschinen zeigen, was sie herstellen (10.11.2026, nur Doku)
 
 **Vorgenommen:**
