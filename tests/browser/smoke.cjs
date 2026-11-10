@@ -152,6 +152,24 @@ const infoCard = (page) =>
       lack: [...card.querySelectorAll('.flow-item.lack')].map((n) => n.dataset.item),
     };
   });
+// v0.20.0: Fächer des Lagerhauses und Kasten des Versandportals
+const storeSlots = (page) =>
+  page.evaluate(() => ({
+    total: document.querySelector('#info-body .cap-count')?.textContent ?? '',
+    slots: [...document.querySelectorAll('#info-body .store-slot')].map((n) =>
+      n.classList.contains('empty') ? 'frei' : `${n.dataset.item} ${n.querySelector('.slot-count').textContent}${n.querySelector('.fill-bar.full') ? ' voll' : ''}`,
+    ),
+    sub: document.querySelector('#info-body .info-sub')?.textContent ?? '',
+  }));
+const shipCard = (page) =>
+  page.evaluate(() => ({
+    caption: document.querySelector('#info-body .info-card .info-cap')?.textContent ?? '',
+    recent: [...document.querySelectorAll('#info-body .ship-flow .flow-item')].map((n) => n.dataset.item),
+    store: document.querySelector('#info-body .ship-store .slot-count')?.textContent ?? '',
+    bad: Boolean(document.querySelector('#info-body .ship-store .fill-bar.bad')),
+    sub: document.querySelector('#info-body .info-sub:not(.warn)')?.textContent ?? '',
+    warn: [...document.querySelectorAll('#info-body .info-sub.warn')].filter((n) => !n.hidden).map((n) => n.textContent).join(),
+  }));
 // Kein Knopf schneidet seinen Text ab, und nichts ragt aus dem Infofenster
 // oder aus dem grünen Kasten (z. B. ein langer Warenname)
 const infoFits = (page) =>
@@ -1289,11 +1307,53 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     `120 Eisenbarren im Lagerhaus, sie laufen aufs Band (${JSON.stringify(filled)})`,
   );
   check(!(await page.isVisible('#modal')), 'Fenster schließt sich nach dem Befüllen');
-  check((await page.textContent('#info-status')).includes('Fach 1: Eisenbarren'), 'Infofenster zeigt die Fächer');
+  // v0.20.0: die Fächer als Bilder mit Menge und Füllbalken, der Reihe nach
+  const slots14 = await storeSlots(page);
+  check(
+    slots14.slots[0]?.startsWith('eisenbarren ') && slots14.slots.length === 3 && /^\d+ \/ 150$/.test(slots14.total),
+    `Infofenster zeigt die 3 Fächer mit Bild und Menge (${JSON.stringify(slots14)})`,
+  );
+  check((await infoFits(page)).length === 0, `Lagerhaus: nichts ragt aus dem Fenster (${(await infoFits(page)).join(', ')})`);
   await shot('14g-lagerhaus-befuellt');
   await game(page, () => window.__game.simulate(90));
   const shipped = await ironCount();
   check(shipped.inShop === 120 && shipped.inStore === 0, `Über Band und Versandportal zurück im Laden-Lager (${JSON.stringify(shipped)})`);
+  // v0.20.0: Versandportal – was zuletzt ankam, wie voll das Laden-Lager ist
+  await tapTile(page, 15, 16);
+  check((await page.textContent('#info-title')) === 'Versandportal', 'Versandportal antippen zeigt Infofenster');
+  await sleep(450);
+  const portal14 = await shipCard(page);
+  const storeUse = await game(page, () => {
+    const st = window.__game.state;
+    return `${Object.values(st.storage).reduce((a, b) => a + b, 0)} / ${window.__game.storageCapacity()}`;
+  });
+  check(
+    portal14.caption === 'Schickt ins Laden-Lager' && portal14.recent.join() === 'eisenbarren' && portal14.sub === 'Zuletzt: Eisenbarren · bisher 120 Waren' && !portal14.bad && portal14.warn === '',
+    `Versandportal: Eisenbarren → Laden-Lager, bisher 120 Waren (${JSON.stringify(portal14)})`,
+  );
+  // Die Fabrik läuft weiter – die Zahl darf sich in der Zwischenzeit um ein paar Waren ändern
+  const [shownUse, shownCap] = portal14.store.replace(/\./g, '').split(' / ').map(Number);
+  const [realUse, realCap] = storeUse.split(' / ').map(Number);
+  check(shownCap === realCap && Math.abs(shownUse - realUse) <= 10, `Versandportal zeigt das Laden-Lager (${portal14.store}, im Spiel ${storeUse})`);
+  check((await infoFits(page)).length === 0, `Versandportal: nichts ragt aus dem Fenster (${(await infoFits(page)).join(', ')})`);
+  await shot('14h-versandportal');
+  // Laden-Lager voll: roter Balken, das Portal nimmt nichts an
+  const filler = await game(page, () => {
+    const st = window.__game.state;
+    const free = window.__game.storageCapacity() - Object.values(st.storage).reduce((a, b) => a + b, 0);
+    st.storage.steinblock = (st.storage.steinblock ?? 0) + free;
+    return free;
+  });
+  await sleep(450);
+  const portalFull = await shipCard(page);
+  check(
+    portalFull.bad && portalFull.warn.includes('Erst verkaufen oder verbauen') && (await page.textContent('#info-meta')).includes('Laden-Lager voll'),
+    `Laden-Lager voll: roter Balken und Hinweis (${JSON.stringify(portalFull)})`,
+  );
+  await shot('14i-versandportal-voll');
+  await game(page, (n) => (window.__game.state.storage.steinblock -= n), filler);
+  await tapTile(page, 10, 14);
+  check((await page.textContent('#info-title')) === 'Lagerhaus', 'Zurück zum Lagerhaus');
   // v0.14.0: Leer bleibt leer – das Lagerhaus holt nichts von selbst aus dem Laden-Lager
   const plates = () =>
     game(page, () => {
@@ -1310,13 +1370,36 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(stillEmpty.inStore === 0 && stillEmpty.inShop === 40, `Leeres Lagerhaus bleibt leer, die Holzplatten bleiben im Laden-Lager (${JSON.stringify(stillEmpty)})`);
   await sleep(450);
   check((await page.textContent('#info-meta')).includes('Leer.'), 'Infofenster: Lagerhaus leer');
-  // Ausräumen: alles zurück ins Laden-Lager
-  await game(page, () => {
+  const emptySlots = await storeSlots(page);
+  check(
+    emptySlots.slots.join() === 'frei,frei,frei' && emptySlots.total === '0 / 150' && emptySlots.sub.includes('Leer'),
+    `Leeres Lagerhaus: drei freie Fächer, 0 / 150 (${JSON.stringify(emptySlots)})`,
+  );
+  // Gemischt (wie bei Tobias: Zahnräder und Stäbe): je Fach eine Ware, ein volles Fach orange.
+  // Fach 1 geht zuerst hinaus – das volle Fach steht deshalb an zweiter Stelle.
+  const mixBefore = await game(page, () => {
+    const st = window.__game.state;
+    st.buildings.find((b) => b.type === 'lagerhaus' && b.x === 10).prod.slots = [
+      { type: 'holzstab', count: 42 },
+      { type: 'steinzahnrad', count: 50 },
+    ];
+    return { steinzahnrad: st.storage.steinzahnrad ?? 0, holzstab: st.storage.holzstab ?? 0 };
+  });
+  await sleep(450); // das Infofenster aktualisiert sich in festen Abständen
+  const mixed = await storeSlots(page);
+  check(
+    /^holzstab \d+ \/ 50$/.test(mixed.slots[0]) && mixed.slots[1] === 'steinzahnrad 50 / 50 voll' && mixed.slots[2] === 'frei',
+    `Gemischtes Lagerhaus: Holzstäbe, Stein-Zahnräder (voll), ein Fach frei (${JSON.stringify(mixed)})`,
+  );
+  await shot('14j-lagerhaus-gemischt');
+  // Ausräumen: alles zurück ins Laden-Lager (die gemischten Waren von eben wieder weg)
+  await game(page, (before) => {
     const st = window.__game.state;
     st.buildings.find((b) => b.type === 'lagerhaus' && b.x === 10).prod.slots = [{ type: 'holzplatte', count: 7 }];
     st.storage.holzplatte = 33;
-    for (const b of Object.values(st.belts)) if (b.item?.type === 'holzplatte') b.item = null;
-  });
+    Object.assign(st.storage, before);
+    for (const b of Object.values(st.belts)) if (['holzplatte', 'steinzahnrad', 'holzstab'].includes(b.item?.type)) b.item = null;
+  }, mixBefore);
   await sleep(450);
   await page.locator('#info-actions button', { hasText: 'Ausräumen' }).tap();
   await sleep(450);
@@ -1494,9 +1577,20 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await tapTile(page, bx, by);
   check((await page.textContent('#info-title')) === 'Beet', 'Beet antippen zeigt Infofenster');
   await sleep(450);
-  const sowButton = page.locator('#info-actions button', { hasText: '🌱 Säen: Leinsamen' });
-  check((await sowButton.textContent()) === '🌱 Säen: Leinsamen' && (await sowButton.isEnabled()), 'Leeres Beet: „🌱 Säen: Leinsamen“ (aus dem Laden-Lager)');
+  // v0.20.0: Säen-Knopf mit dem Bild des Samens, Kasten „Wächst hier“
+  const sowButton = infoButton(page, 'sow:leinsamen');
+  check(
+    (await sowButton.textContent()).trim() === 'Säen: Leinsamen' && (await sowButton.isEnabled()) && (await sowButton.locator('canvas[data-item="leinsamen"]').count()) === 1,
+    `Leeres Beet: „Säen: Leinsamen“ mit Bild des Samens, aus dem Laden-Lager (${await sowButton.textContent()})`,
+  );
   check(!(await page.locator('#info-actions button', { hasText: 'Ernten' }).isVisible()), 'Leeres Beet: kein Ernten-Knopf');
+  const beetEmpty = await infoCard(page);
+  check(
+    beetEmpty?.caption === 'Wächst hier' && beetEmpty.inputs.join() === 'leinsamen 1' && beetEmpty.outputs.join() === 'flachspflanze Flachspflanze' && beetEmpty.sub.includes('in 30:00 min'),
+    `Leeres Beet: 1 Leinsamen → Flachspflanze in 30 Minuten (${JSON.stringify(beetEmpty)})`,
+  );
+  check((await page.textContent('#info-body')).includes('Im Laden-Lager: 1 Leinsamen'), 'Leeres Beet: Leinsamen im Laden-Lager');
+  check((await infoFits(page)).length === 0, `Beet: nichts ragt aus dem Fenster (${(await infoFits(page)).join(', ')})`);
   await shot('18-beet-leer');
   await sowButton.tap();
   await sleep(450);
@@ -1504,6 +1598,10 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(sown.crop === 'leinsamen' && sown.seeds === 0, `Gesät: der Leinsamen aus dem Laden-Lager (${JSON.stringify(sown)})`);
   const growingText = await infoText(page);
   check(growingText.includes('Flachspflanze wächst') && growingText.includes('Reif in etwa'), `Infofenster: wächst, reif in etwa … (${growingText.slice(0, 120)})`);
+  check(
+    (await infoCard(page))?.caption === 'Wächst gerade' && (await page.locator('#info-body .info-card .fill-bar').count()) === 1,
+    'Während es wächst: Kasten „Wächst gerade“ mit Balken',
+  );
   const reapButton = page.locator('#info-actions button', { hasText: 'Ernten' });
   check((await reapButton.isVisible()) && (await reapButton.isDisabled()), 'Während es wächst: „🌾 Ernten“ gesperrt');
   check(!(await sowButton.isVisible()), 'Während es wächst: kein Säen-Knopf');
@@ -1517,6 +1615,12 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(ripeText.includes('Reif – Flachspflanze ernten'), `Nach 30 Minuten reif (${ripeText.slice(0, 80)})`);
   check(await page.locator('#toast', { hasText: 'Ein Beet ist reif' }).isVisible(), 'Meldung: „Ein Beet ist reif“');
   check(await reapButton.isEnabled(), 'Reif: „🌾 Ernten: 1 Flachspflanze“');
+  const ripeCard = await infoCard(page);
+  check(
+    ripeCard?.caption === 'Reif zum Ernten' && ripeCard.sub.includes('Ernten legt sie ins Laden-Lager') &&
+      (await page.locator('#info-body .fill-bar .fill').evaluate((n) => n.style.width)) === '100%',
+    `Reif: Kasten „Reif zum Ernten“, Balken voll (${JSON.stringify(ripeCard)})`,
+  );
   await shot('18b-beet-reif');
   await reapButton.tap();
   await sleep(450);
@@ -1526,6 +1630,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     (await sowButton.isVisible()) && (await sowButton.textContent()).includes('kauft 1 für 1.000'),
     'Danach neu säen – ohne Leinsamen im Lager kauft der Knopf einen für 1.000 Gold',
   );
+  check((await infoFits(page)).length === 0, `Beet mit Kaufen-Knopf: nichts ragt aus dem Fenster (${(await infoFits(page)).join(', ')})`);
   // Flachsbreche: Pflanze einlegen wie einen Holzstamm; kaufen kann man Pflanzen nicht
   await tapTile(page, bx + 4, by);
   check((await page.textContent('#info-title')) === 'Erntebank', 'Erntebank (bisher Flachsbreche) antippen zeigt Infofenster');
@@ -1632,9 +1737,16 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   // Ringelblume säen, reif werden lassen, ernten
   await tapTile(page, bx, by + 3);
   await sleep(450);
-  const sowRing = page.locator('#info-actions button', { hasText: '🌱 Säen: Ringelblumensamen' });
-  const sowLein = page.locator('#info-actions button', { hasText: '🌱 Säen: Leinsamen' });
+  const sowRing = infoButton(page, 'sow:ringelblumensamen');
+  const sowLein = infoButton(page, 'sow:leinsamen');
   check((await sowRing.isVisible()) && (await sowLein.isVisible()), 'Leeres Beet auf Level 8: zwei Knöpfe – Leinsamen und Ringelblumensamen');
+  const beet8 = await infoCard(page);
+  check(
+    beet8?.inputs.join() === 'leinsamen 1,ringelblumensamen 1' && beet8.outputs.join() === 'flachspflanze Flachspflanze,ringelblume Ringelblume',
+    `Leeres Beet auf Level 8: beide Pflanzen im Kasten (${JSON.stringify(beet8)})`,
+  );
+  check((await infoFits(page)).length === 0, `Beet auf Level 8: nichts ragt aus dem Fenster (${(await infoFits(page)).join(', ')})`);
+  await shot('19a-beet-zwei-samen');
   await sowRing.tap();
   await sleep(450);
   const beet2 = () =>
@@ -1826,7 +1938,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     localStorage.setItem(key, JSON.stringify(data));
     return data.saveVersion;
   });
-  check(backdated === 14, `Spielstand-Version 14 (${backdated})`);
+  check(backdated === 15, `Spielstand-Version 15 (${backdated})`);
   await page2.goto(baseUrl);
   await waitForGame(page2);
   await page2.waitForFunction(() => !window.__game.isCatchingUp(), null, { timeout: 20000 });

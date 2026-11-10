@@ -61,9 +61,9 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.20.0 – Infofenster für Beet, Lagerhaus und Versandportal (noch nicht freigegeben)
+### v0.20.0 – Infofenster für Beet, Lagerhaus und Versandportal (fertig)
 
-Claudes Entwurf aus Chat 15; Tobias' Antwort steht aus (offene Frage 13). Vor dem Programmieren zeigt Claude Vorschaubilder (Tablet und Handy).
+Claudes Entwurf aus Chat 15. Tobias: Variante A; „Ja, codiere erst die neuen Infofenster für die Sachen, die noch nicht gemacht sind, wie wir das bei der letzten Version gemacht haben.“ Umgesetzt wie unten beschrieben, ohne vorherige Vorschaubilder (Tobias bekam Screenshots aus dem Browser-Test). Abweichungen: Säen-Knöpfe zeigen das Bild des Samens statt „im Laden-Lager: …“ (das steht unter dem Kasten); beim Lagerhaus steht der Status oben wie bei allen Gebäuden („Voll – nimmt nichts mehr an.“), der Kasten nennt nur „Leer – …“, wenn nichts darin liegt.
 
 - **Vorher entscheiden:** Versandportal behalten (A, Empfehlung), mit dem Lagerhaus zusammenlegen (B) oder weglassen (C). Bei B: Lagerhaus mit Schalter „📤 Ins Laden-Lager schicken“, vorhandene Portale umwandeln (Spielstand-Format, `SAVE_VERSION` erhöhen; was tun, wenn das 2 × 1-Lagerhaus nicht aufs Feld passt?).
 - **🌱 Beet:** grüner Kasten „Wächst gerade“: Samen-Bild → Pflanzen-Bild mit Fortschrittsbalken und „reif in etwa …“; leer: je Samen ein Knopf mit Bild und „im Laden-Lager: …“ (sonst mit Kaufpreis); reif: „🌾 Ernten“ groß.

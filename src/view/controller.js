@@ -63,13 +63,20 @@ import {
   sourceRoom,
   unusedStock,
 } from '../core/production.js';
-import { affordableCount, canAfford, missingFor, storageCapacity, storageCount, storageTotal } from '../core/shop.js';
+import { affordableCount, canAfford, missingFor, storageCount } from '../core/shop.js';
 import { beltAt, buildingAt, findBuilding, isInWorld, isOwned } from '../core/state.js';
 import { emptyWarehouse, warehouseTotal } from '../core/warehouse.js';
 import { TILE, panBy, screenToWorld } from './camera.js';
 import { createBuildingBody } from './buildingInfo.js';
 import { costText, formatDuration, numberFormat } from './format.js';
 import { createItemIcon } from './itemArt.js';
+
+// Textteil eines Knopfs mit Bild (wird beim Aktualisieren neu beschriftet)
+function textSpan() {
+  const span = document.createElement('span');
+  span.className = 'btn-text';
+  return span;
+}
 
 const TEXT = {
   place: (name, cost) => `${name} (kostet ${cost}): Vorschau mit dem Finger an die gewünschte Stelle schieben.`,
@@ -158,28 +165,27 @@ export function createController({
   }
 
   // v0.16.0: Beschriftung von „Säen“ – was der Knopf gerade tun würde
+  // (v0.20.0: vorne steht das Bild des Samens statt 🌱)
   function sowLabel(plan) {
-    if (!plan.seed) return '🌱 Säen';
+    if (!plan.seed) return 'Säen';
     const name = ITEMS[plan.seed].name;
-    if (plan.result === 'locked') return `🌱 ${name} gibt es erst ab Level ${itemLevel(plan.seed)}`;
-    if (plan.result === 'gold') return `🌱 Säen – kein ${name} im Lager, Gold reicht nicht`;
-    if (plan.buy) return `🌱 Säen: ${name} · kauft 1 für ${numberFormat.format(plan.cost)} 🪙`;
-    return `🌱 Säen: ${name}`;
+    if (plan.result === 'locked') return `${name} gibt es erst ab Level ${itemLevel(plan.seed)}`;
+    if (plan.result === 'gold') return `Säen – kein ${name} im Lager, Gold reicht nicht`;
+    if (plan.buy) return `Säen: ${name} · kauft 1 für ${numberFormat.format(plan.cost)} 🪙`;
+    return `Säen: ${name}`;
   }
 
-  // Aktualisiert Status, Warenbilder, Textzeilen und Knöpfe eines
-  // Gebäude-Infofensters. v0.19.0 (Tobias): Das Statuslicht steht oben unter
-  // dem Namen; Maschinen und Rohstoff-Gebäude zeigen ihre Waren als Bilder
-  // (src/view/buildingInfo.js), die übrigen Gebäude weiter Textzeilen.
+  // Aktualisiert Status, Warenbilder und Knöpfe eines Gebäude-Infofensters.
+  // v0.19.0 (Tobias): Das Statuslicht steht oben unter dem Namen; die Waren
+  // stehen als Bilder im Inhalt (src/view/buildingInfo.js) – seit v0.20.0 auch
+  // bei Beet, Lagerhaus und Versandportal.
   function updateBuildingInfo(id) {
     const b = findBuilding(state, id);
     if (!b) return select(null);
     const p = productionOf(b.type);
-    const prod = b.prod;
     const status = buildingStatus(state, b);
     info.setMeta(`${DOT[status.level]} ${status.text}`);
     infoBody?.update(b);
-    const lines = [];
     if (p?.kind === 'source') {
       // v0.14.0: Auffüllen – erst aus dem Laden-Lager, sonst kaufen
       const plan = refillPlan(state, b);
@@ -200,21 +206,15 @@ export function createController({
     } else if (p?.kind === 'garden') {
       // v0.16.0 (Tobias): Beet – säen, wachsen lassen, ernten (zwei Schritte)
       // v0.17.0: alle freigeschalteten Samen (Leinsamen, Ringelblumensamen)
+      // v0.20.0: Was wächst und wie weit, steht als Bild im Inhalt
       const seeds = gardenSeeds(b.type).filter((seed) => isItemUnlocked(state, seed));
-      for (const seed of seeds) {
-        const c = p.crops[seed];
-        lines.push(`1 ${ITEMS[seed].name} → 1 ${ITEMS[c.plant].name} in ${formatDuration(c.time)}`);
-      }
       const crop = gardenCrop(b);
-      if (crop && !isRipe(b)) lines.push(`Reif in etwa ${formatDuration(growthLeft(b))}`);
-      if (crop && isRipe(b)) lines.push(`🌾 Die ${ITEMS[crop.plant].name} ist reif. Nach dem Ernten liegt sie im Laden-Lager.`);
-      for (const seed of seeds) lines.push(`${ITEMS[seed].name} im Laden-Lager: ${storageCount(state, seed)}`);
       for (const seed of gardenSeeds(b.type)) {
         const sow = info.buttons.get(`sow:${seed}`);
         if (!sow) continue;
         const plan = sowPlan(state, b, seed);
         sow.hidden = Boolean(crop) || !seeds.includes(seed);
-        sow.textContent = sowLabel(plan);
+        sow.querySelector('.btn-text').textContent = sowLabel(plan);
         sow.disabled = plan.result !== 'ok';
       }
       const reap = info.buttons.get('harvest');
@@ -230,16 +230,9 @@ export function createController({
       const feedButton = info.buttons.get('clearFeed');
       if (feedButton) feedButton.hidden = !inputJam(state, b);
     } else if (p?.kind === 'storage') {
-      for (let i = 0; i < p.slots; i++) {
-        const slot = prod.slots[i];
-        lines.push(slot ? `Fach ${i + 1}: ${ITEMS[slot.type].name} ${slot.count} / ${p.slotSize}` : `Fach ${i + 1}: leer`);
-      }
+      // v0.20.0: die Fächer stehen als Bilder mit Füllstand im Inhalt
       info.buttons.get('empty').disabled = warehouseTotal(b) === 0;
-    } else if (p?.kind === 'shipping') {
-      lines.push(`Bisher versendet: ${numberFormat.format(prod.shipped)} Waren`);
-      lines.push(`Laden-Lager: ${storageTotal(state)} / ${storageCapacity(state)}`);
     }
-    info.setStatus(lines);
   }
 
   function updateBeltInfo(x, y) {
@@ -340,10 +333,13 @@ export function createController({
       if (p?.kind === 'garden') {
         // v0.16.0 (Tobias): Säen und Ernten sind zwei getrennte Schritte
         // v0.17.0: je Samen ein Knopf (Leinsamen, Ringelblumensamen)
+        // v0.20.0: vorne das Bild des Samens, groß in einer eigenen Zeile
         for (const seed of gardenSeeds(b.type)) actions.push({
           key: `sow:${seed}`,
-          label: '',
+          label: [createItemIcon(seed, 20), ' ', textSpan()],
+          title: `${ITEMS[seed].name} säen`,
           primary: true,
+          size: 'wide',
           onClick: () => {
             const beet = findBuilding(state, b.id);
             if (!beet) return;
@@ -362,6 +358,7 @@ export function createController({
         actions.push({
           key: 'harvest',
           label: '🌾 Ernten',
+          size: 'wide',
           onClick: () => {
             const beet = findBuilding(state, b.id);
             if (!beet) return;
@@ -409,10 +406,12 @@ export function createController({
         // v0.12.0 (Tobias): Das Lagerhaus als Gegenstück zum Versandportal.
         // v0.14.0 (Tobias): nur noch von Hand befüllen, kein Nachschub.
         actions.push(
-          { key: 'fill', label: '📥 Befüllen', primary: true, onClick: () => warehouseView.open(b.id) },
+          // v0.20.0: Befüllen groß, Ausräumen kleiner
+          { key: 'fill', label: '📥 Befüllen', primary: true, size: 'wide', onClick: () => warehouseView.open(b.id) },
           {
             key: 'empty',
-            label: '↩ Ausräumen',
+            label: '↩ Ausräumen ins Laden-Lager',
+            size: 'half',
             onClick: () => {
               const store = findBuilding(state, b.id);
               if (!store) return;

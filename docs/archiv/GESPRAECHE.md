@@ -18,7 +18,13 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 - Entwurf v0.20.0: Beet, Lagerhaus und Versandportal bekommen das Infofenster im neuen Stil (Bilder statt Textzeilen), mit Vorschaubildern vorab. Danach: Maschinen zeigen auf der Karte, was sie herstellen; dann Weiche mit Filter, Verbesserungen mit Erfahrung, Level 9.
 - Fragen an Tobias: A, B oder C? Wie nutzt er Portal und Lagerhaus heute (baut er noch Portale oder räumt er die Lagerhäuser am Ende von Hand aus – und warum)? Zusatzlager so lassen? Passt die Reihenfolge?
 
-**Umgesetzt:** v0.19.1 (nur Doku). Tobias' Antwort steht aus.
+**Umgesetzt:** v0.19.1 (nur Doku).
+
+**Tobias:** „Okay, perfekt. Ich baue aktuell keine Versandportale, deswegen hab ich mich gefragt, ob das noch sinnvoll ist. Von mir aus lassen wir gerne A. Ich benutze es aktuell so, dass ich z. B. Zahnräder, die in einem Lager voll laufen, weil die Holzstäbe der anderen Straße nicht hinterherkommen, in das andere Zwischenlager packe, weil ich die Produktion einmal gespiegelt gebaut habe mit einem anderen Produkt (einmal sind es zu wenig Zahnräder, einmal zu wenig Holzstäbe). Dann räume ich die Zahnräder vom Lagerhaus raus, sie sind kurz im Laden-Lager, und packe sie in das andere Lagerhaus wieder rein, damit die Produktion weitergehen kann. Das war genau der Sinn der Lager, dass man dort Sachen lagern kann, die man für spätere Produktionen braucht. Aber aktuell nutze ich das Portal gar nicht mehr, weil ich nur noch teurere Einzelteile produziere und keine 500 Stäbe, die ich ins Laden-Lager schicken muss. Frage 3: Hab ich dir, glaube ich, gerade beantwortet. 4. Ja, codiere erst die neuen Infofenster für die Sachen, die noch nicht gemacht sind, wie wir das bei der letzten Version gemacht haben.“
+
+**Claude** hat das als OK für v0.20.0 genommen (Variante A, Lagerhäuser bleiben Zusatzlager, Ausräumen ohne Grenze) und die drei Infofenster im Stil von v0.19.0 gebaut, ohne vorherige Vorschaubilder – Tobias hat sie im Chat als Screenshots aus dem Browser-Test bekommen. Idee für später (noch nicht besprochen): ein Knopf „Umlagern“, der direkt von einem Lagerhaus ins andere packt.
+
+**Umgesetzt:** v0.20.0 (siehe Versionshistorie).
 
 ### 09.11.2026 – Chat 14: Feedback nach einer Stunde Spielen (v0.18.1)
 

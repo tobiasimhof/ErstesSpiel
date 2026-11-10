@@ -231,7 +231,8 @@ export const BUILDINGS = {
     icon: '📦',
     size: [2, 1],
     color: '#8b6b4a',
-    tip: 'Eingang oben links, Ausgang unten rechts. Was hineinläuft, wird gelagert und weitergegeben, sobald am Ausgang Platz ist. Nur von Hand befüllen.',
+    // v0.20.0 (Tobias, Chat 15): Zwischenlager in der Fabrik – das Gegenstück zum Versandportal
+    tip: 'Zwischenlager: Was oben links hineinläuft, geht unten rechts weiter, sobald dort Platz ist. Befüllen holt Waren aus dem Laden-Lager.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'N' },
       { kind: 'out', x: 1, y: 0, side: 'S' },
@@ -245,9 +246,10 @@ export const BUILDINGS = {
     icon: '🌀',
     size: [1, 1],
     color: '#5f4b8b',
-    tip: 'Schickt alles, was am blauen Pfeil hineinläuft, ins Laden-Lager. „Drehen“ dreht den Eingang.',
+    // v0.20.0 (Tobias, Chat 15): bleibt – der Ausgang der Fabrik, liefert von selbst in den Laden
+    tip: 'Ausgang der Fabrik: schickt alles, was am blauen Pfeil hineinläuft, von selbst ins Laden-Lager. „Drehen“ dreht den Eingang.',
     ports: [{ kind: 'in', x: 0, y: 0, side: 'W' }],
-    production: { kind: 'shipping' },
+    production: { kind: 'shipping', recent: 3 },
   },
 };
 
