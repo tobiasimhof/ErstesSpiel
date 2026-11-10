@@ -10,7 +10,19 @@ import { placeBuilding } from '../src/core/buildings.js';
 import { BUILDINGS, BUILD_TABS } from '../src/core/data/buildings.js';
 import { ITEMS } from '../src/core/data/items.js';
 import { RECIPES } from '../src/core/data/recipes.js';
-import { addRawToSource, loadInput, productionOf, setRecipe, sourceSlots, workshopInputs } from '../src/core/production.js';
+import {
+  accept,
+  addRawToSource,
+  buildingStatus,
+  canAccept,
+  loadInput,
+  productionOf,
+  setRecipe,
+  sourceSlots,
+  workshopInputs,
+} from '../src/core/production.js';
+import { SAVE_VERSION, deserializeGame, isValidState, serializeGame } from '../src/core/save.js';
+import { storageCapacity, storageCount } from '../src/core/shop.js';
 import { createNewGame } from '../src/core/state.js';
 import { formatDuration } from '../src/view/format.js';
 
@@ -92,4 +104,77 @@ test('Zeitangaben im Infofenster', () => {
   assert.equal(formatDuration(20), '20 s');
   assert.equal(formatDuration(900), '15:00 min');
   assert.equal(formatDuration(1925), '32:05 min');
+});
+
+// ---------- v0.20.0: Beet, Lagerhaus und Versandportal (Tobias, Chat 15) ----------
+
+const clone = (state) => deserializeGame(serializeGame(state)).state;
+
+test('Versandportal merkt sich die zuletzt versendeten Waren: neueste vorn, jede einmal, höchstens 3', () => {
+  const state = level8();
+  const portal = placeBuilding(state, 'versandportal', 10, 6);
+  assert.deepEqual(portal.prod.recent, [], 'neu gebaut: noch nichts versendet');
+  const ship = (type) => {
+    assert.ok(canAccept(state, portal, type));
+    accept(state, portal, type);
+  };
+  ship('holzplatte');
+  ship('holzplatte');
+  ship('holzstab');
+  assert.deepEqual(portal.prod.recent, ['holzstab', 'holzplatte']);
+  ship('holzplatte');
+  assert.deepEqual(portal.prod.recent, ['holzplatte', 'holzstab'], 'die neueste rückt nach vorn, keine doppelt');
+  ship('steinplatte');
+  ship('eisenblech');
+  assert.deepEqual(portal.prod.recent, ['eisenblech', 'steinplatte', 'holzplatte'], 'höchstens 3 – die älteste fällt weg');
+  assert.equal(portal.prod.recent.length, productionOf('versandportal').recent);
+  assert.equal(portal.prod.shipped, 6);
+  assert.equal(storageCount(state, 'holzplatte'), 3, 'alles liegt im Laden-Lager');
+});
+
+test('Versandportal und Lagerhaus: Status, wenn nichts mehr hineinpasst', () => {
+  const state = level8();
+  const portal = placeBuilding(state, 'versandportal', 10, 6);
+  assert.equal(buildingStatus(state, portal).level, 'work');
+  state.storage = { holzblock: storageCapacity(state) };
+  assert.deepEqual(buildingStatus(state, portal), { level: 'blocked', text: 'Laden-Lager voll – nimmt nichts an.' });
+  assert.equal(canAccept(state, portal, 'holzplatte'), false);
+  const lager = placeBuilding(state, 'lagerhaus', 12, 6);
+  assert.deepEqual(buildingStatus(state, lager), { level: 'idle', text: 'Leer.' });
+  lager.prod.slots = [{ type: 'steinzahnrad', count: 42 }];
+  assert.deepEqual(buildingStatus(state, lager), { level: 'work', text: '42 Waren gelagert.' });
+  lager.prod.slots = ['steinzahnrad', 'holzstab', 'holzplatte'].map((type) => ({ type, count: 50 }));
+  assert.deepEqual(buildingStatus(state, lager), { level: 'blocked', text: 'Voll – nimmt nichts mehr an.' });
+});
+
+test('Spielstand (Version 15): Versandportale behalten ihre Liste, Ungültiges wird erkannt', () => {
+  assert.ok(SAVE_VERSION >= 15);
+  const state = level8();
+  const portal = placeBuilding(state, 'versandportal', 10, 6);
+  accept(state, portal, 'holzstab');
+  accept(state, portal, 'heilverband');
+  assert.deepEqual(clone(state).buildings[0].prod.recent, ['heilverband', 'holzstab']);
+  for (const change of [
+    (p) => (p.recent = ['gibtsnicht']),
+    (p) => (p.recent = ['holzstab', 'holzstab']),
+    (p) => (p.recent = ['holzstab', 'holzplatte', 'steinplatte', 'eisenblech']),
+    (p) => (p.recent = 'holzstab'),
+    (p) => delete p.recent,
+  ]) {
+    const copy = clone(state);
+    change(copy.buildings[0].prod);
+    assert.equal(isValidState(copy), false, change.toString());
+  }
+});
+
+test('Spielstand aus v0.19 (Version 14): Versandportale bekommen eine leere Liste, sonst bleibt alles', () => {
+  const v14 = createNewGame(14);
+  const portal = v14.buildings.find((b) => b.type === 'versandportal');
+  portal.prod.shipped = 1234;
+  delete portal.prod.recent; // so sah es in Version 14 aus
+  const loaded = deserializeGame(JSON.stringify({ saveVersion: 14, savedAt: 1, state: v14 }));
+  assert.ok(loaded, 'Spielstand gültig');
+  assert.equal(loaded.migratedFrom, 14);
+  const p = loaded.state.buildings.find((b) => b.type === 'versandportal').prod;
+  assert.deepEqual([p.shipped, p.recent], [1234, []]);
 });

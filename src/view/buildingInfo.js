@@ -7,6 +7,10 @@
 // - Rohstoff-Gebäude und Erntebank: „Stellt gerade her“ (Rohstoff → Waren),
 //   darunter der Vorrat als Bilder und was im Laden-Lager liegt.
 //
+// v0.20.0 (Tobias, Chat 15): auch Beet (was wächst, wie weit), Lagerhaus (die
+// 3 Fächer mit Füllstand) und Versandportal (was zuletzt ankam, wie voll das
+// Laden-Lager ist).
+//
 // Die Bilder sind dieselben wie auf dem Band. Alles wird einmal gebaut und
 // danach nur aktualisiert (update), damit kein Tippen verloren geht; nur wenn
 // sich der Aufbau ändert (anderes Rezept, anderer Rohstoff), wird neu gebaut.
@@ -15,6 +19,11 @@ import { ITEMS } from '../core/data/items.js';
 import { RECIPES } from '../core/data/recipes.js';
 import { isItemUnlocked } from '../core/levels.js';
 import {
+  gardenCrop,
+  gardenSeeds,
+  growth,
+  growthLeft,
+  isRipe,
   productionOf,
   sourceCapacity,
   sourceCount,
@@ -23,7 +32,8 @@ import {
   unusedStock,
   workshopInputs,
 } from '../core/production.js';
-import { storageCount } from '../core/shop.js';
+import { storageCapacity, storageCount, storageTotal } from '../core/shop.js';
+import { warehouseTotal } from '../core/warehouse.js';
 import { costText, formatDuration, itemCount, numberFormat } from './format.js';
 import { createItemIcon } from './itemArt.js';
 import { onPress } from './press.js';
@@ -67,6 +77,21 @@ function chip(type, n, size) {
   const node = el('span', 'flow-chip', numberFormat.format(n));
   node.append(createItemIcon(type, size));
   return node;
+}
+
+// Füllbalken (Wachstum, Fach, Laden-Lager): set(0..1, 'full' | 'bad' | '')
+function fillBar() {
+  const node = el('div', 'fill-bar');
+  const fill = el('span', 'fill');
+  node.append(fill);
+  return {
+    node,
+    set(fraction, tone = '') {
+      fill.style.width = `${Math.round(Math.max(0, Math.min(1, fraction)) * 100)}%`;
+      node.classList.toggle('full', tone === 'full');
+      node.classList.toggle('bad', tone === 'bad');
+    },
+  };
 }
 
 function card(caption) {
@@ -230,11 +255,208 @@ function sourceBody(state, building) {
   return { node: root, update };
 }
 
-// Inhalt fürs Infofenster eines Gebäudes, oder null (Beet, Lagerhaus,
-// Versandportal zeigen weiter Textzeilen).
+// ---------- Beet (v0.20.0) ----------
+
+function gardenBody(state, building) {
+  const root = el('div', 'building-body');
+  let layout = null;
+  let parts = null;
+
+  // leer, wächst oder reif
+  const phase = (b) => (!gardenCrop(b) ? 'empty' : isRipe(b) ? 'ripe' : 'growing');
+
+  // Was der Kasten zeigt: wächst etwas, nur das; sonst alle Samen, die auf
+  // diesem Level schon freigeschaltet sind.
+  function shownSeeds(b) {
+    const crop = gardenCrop(b);
+    if (crop) return [crop.seed];
+    const all = gardenSeeds(b.type);
+    const open = all.filter((t) => isItemUnlocked(state, t));
+    return open.length > 0 ? open : all.slice(0, 1);
+  }
+
+  const layoutKey = (b) => `${phase(b)}|${shownSeeds(b).join(',')}`;
+
+  function render(b) {
+    const p = productionOf(b.type);
+    const s = sizes();
+    layout = layoutKey(b);
+    const now = phase(b);
+    const main = card({ empty: 'Wächst hier', growing: 'Wächst gerade', ripe: 'Reif zum Ernten' }[now]);
+    for (const seed of shownSeeds(b)) {
+      const flow = el('div', 'recipe-flow');
+      flow.dataset.input = seed;
+      flow.append(stackedItem(seed, s.input, '1').box, op('→'), outputItem(p.crops[seed].plant, 1, s.output));
+      main.node.append(flow);
+    }
+    const bar = now === 'empty' ? null : fillBar();
+    if (bar) main.node.append(bar.node);
+    const sub = el('div', 'info-sub');
+    main.node.append(sub);
+    const store = el('div', 'info-sub store-line');
+    root.replaceChildren(main.node, store);
+    parts = { bar, sub, store };
+  }
+
+  function update(b) {
+    if (layoutKey(b) !== layout) render(b);
+    const p = productionOf(b.type);
+    const now = phase(b);
+    parts.bar?.set(growth(b) ?? 0);
+    if (now === 'growing') parts.sub.textContent = `Reif in etwa ${formatDuration(growthLeft(b))}`;
+    else if (now === 'ripe') parts.sub.textContent = 'Ernten legt sie ins Laden-Lager, danach neu säen.';
+    else {
+      const times = new Set(shownSeeds(b).map((seed) => p.crops[seed].time));
+      const time = times.size === 1 ? `in ${formatDuration([...times][0])} · ` : '';
+      parts.sub.textContent = `${time}1 Samen = 1 Pflanze`;
+    }
+    const seeds = gardenSeeds(b.type).filter((t) => isItemUnlocked(state, t));
+    parts.store.textContent = `Im Laden-Lager: ${seeds.map((t) => itemCount(t, storageCount(state, t))).join(' · ')}`;
+  }
+
+  render(building);
+  update(building);
+  return { node: root, update };
+}
+
+// ---------- Lagerhaus (v0.20.0) ----------
+
+function storageBody(state, building) {
+  const root = el('div', 'building-body');
+  let layout = null;
+  let parts = null;
+
+  // Neu gebaut wird nur, wenn sich die Waren in den Fächern ändern.
+  const layoutKey = (b) => b.prod.slots.map((slot) => slot.type).join(',');
+
+  function render(b) {
+    const p = productionOf(b.type);
+    const s = sizes();
+    layout = layoutKey(b);
+    const main = card('Im Lagerhaus');
+    const total = el('span', 'cap-count');
+    main.cap.append(total);
+    const rows = [];
+    // Ein Fach je Zeile, in der Reihenfolge, in der sie am Ausgang weitergehen
+    for (let i = 0; i < p.slots; i++) {
+      const slot = b.prod.slots[i];
+      const row = el('div', 'store-slot');
+      if (slot) {
+        row.dataset.item = slot.type;
+        const head = el('div', 'slot-head');
+        const count = el('span', 'slot-count');
+        head.append(el('span', 'slot-name', ITEMS[slot.type].name), count);
+        const bar = fillBar();
+        const text = el('div', 'slot-main');
+        text.append(head, bar.node);
+        row.append(createItemIcon(slot.type, s.slot), text);
+        rows.push({ count, bar });
+      } else {
+        row.classList.add('empty');
+        const blank = el('span', 'slot-blank');
+        blank.style.width = blank.style.height = `${s.slot}px`;
+        row.append(blank, el('span', 'slot-name', 'Fach frei'));
+        rows.push(null);
+      }
+      main.node.append(row);
+    }
+    const sub = el('div', 'info-sub');
+    main.node.append(sub);
+    root.replaceChildren(main.node);
+    parts = { total, rows, sub };
+  }
+
+  function update(b) {
+    if (layoutKey(b) !== layout) render(b);
+    const p = productionOf(b.type);
+    const sum = warehouseTotal(b);
+    parts.total.textContent = `${numberFormat.format(sum)} / ${numberFormat.format(p.slots * p.slotSize)}`;
+    b.prod.slots.forEach((slot, i) => {
+      const row = parts.rows[i];
+      if (!row) return;
+      row.count.textContent = `${slot.count} / ${p.slotSize}`;
+      row.bar.set(slot.count / p.slotSize, slot.count >= p.slotSize ? 'full' : '');
+    });
+    // Wie es weitergeht, sagt der Tipp unten; hier nur ein Hinweis, wenn es leer ist
+    parts.sub.textContent = sum === 0 ? 'Leer – „Befüllen“ oder ein Band an den Eingang legen.' : '';
+    parts.sub.hidden = sum > 0;
+  }
+
+  render(building);
+  update(building);
+  return { node: root, update };
+}
+
+// ---------- Versandportal (v0.20.0) ----------
+
+function shippingBody(state, building) {
+  const root = el('div', 'building-body');
+  let layout = null;
+  let parts = null;
+
+  // Die zuletzt angekommenen Waren in fester Reihenfolge (wie in der
+  // Warentabelle), damit die Bilder bei gemischten Bändern nicht springen.
+  const order = Object.keys(ITEMS);
+  const recent = (b) => [...(b.prod.recent ?? [])].sort((a, c) => order.indexOf(a) - order.indexOf(c));
+  const layoutKey = (b) => recent(b).join(',');
+
+  function render(b) {
+    const s = sizes();
+    layout = layoutKey(b);
+    const types = recent(b);
+    const main = card('Schickt ins Laden-Lager');
+    const flow = el('div', 'recipe-flow ship-flow');
+    for (const type of types) {
+      const item = el('span', 'flow-item');
+      item.dataset.item = type;
+      item.title = ITEMS[type].name;
+      item.append(createItemIcon(type, s.input));
+      flow.append(item);
+    }
+    if (types.length > 0) flow.append(op('→'));
+    // Ziel: das Laden-Lager mit Füllstand
+    const target = el('div', 'ship-store');
+    const head = el('div', 'slot-head');
+    const count = el('span', 'slot-count');
+    head.append(el('span', 'slot-name', 'Laden-Lager'), count);
+    const bar = fillBar();
+    target.append(head, bar.node);
+    flow.append(target);
+    const warn = el('div', 'info-sub warn', 'Erst verkaufen oder verbauen, dann geht es weiter.');
+    const sub = el('div', 'info-sub');
+    main.node.append(flow, warn, sub);
+    root.replaceChildren(main.node);
+    parts = { count, bar, warn, sub };
+  }
+
+  function update(b) {
+    if (layoutKey(b) !== layout) render(b);
+    const used = storageTotal(state);
+    const cap = storageCapacity(state);
+    const full = used >= cap;
+    parts.count.textContent = `${numberFormat.format(used)} / ${numberFormat.format(cap)}`;
+    parts.bar.set(used / cap, full ? 'bad' : '');
+    // Laden-Lager voll: steht schon oben im Status – hier, was man tun kann
+    parts.warn.hidden = !full;
+    const names = recent(b).map((t) => ITEMS[t].name);
+    parts.sub.textContent =
+      names.length > 0
+        ? `Zuletzt: ${names.join(', ')} · bisher ${numberFormat.format(b.prod.shipped)} Waren`
+        : 'Noch nichts angekommen – ein Band an den blauen Pfeil legen.';
+  }
+
+  render(building);
+  update(building);
+  return { node: root, update };
+}
+
+// Inhalt fürs Infofenster eines Gebäudes, oder null (Gebäude ohne Produktion).
 export function createBuildingBody(state, building, handlers) {
   const kind = productionOf(building.type)?.kind;
   if (kind === 'workshop') return workshopBody(state, building, handlers);
   if (kind === 'source') return sourceBody(state, building);
+  if (kind === 'garden') return gardenBody(state, building);
+  if (kind === 'storage') return storageBody(state, building);
+  if (kind === 'shipping') return shippingBody(state, building);
   return null;
 }

@@ -470,6 +470,106 @@ button.danger {
   opacity: 0.25;
 }
 
+/* v0.20.0: Füllbalken – Beet (Wachstum), Lagerhaus (Fach), Versandportal (Laden-Lager) */
+.fill-bar {
+  height: 7px;
+  margin-top: 3px;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.fill-bar .fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--ok);
+  border-radius: 4px;
+}
+
+.fill-bar.full .fill {
+  background: #c27c0e;
+}
+
+.fill-bar.bad .fill {
+  background: #c2410c;
+}
+
+/* Rechts in der Überschrift des Kastens: „120 / 150“ */
+.info-card .info-cap .cap-count {
+  float: right;
+  color: var(--ink);
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: 0.8;
+}
+
+/* Lagerhaus: ein Fach je Zeile – Bild, Name, Menge, Füllbalken */
+.store-slot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.store-slot + .store-slot {
+  margin-top: 6px;
+}
+
+.store-slot .item-icon {
+  display: block;
+  flex: 0 0 auto;
+}
+
+.slot-blank {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  border: 2px dashed rgba(138, 106, 63, 0.45);
+  border-radius: 6px;
+}
+
+.slot-main,
+.ship-store {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.slot-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  column-gap: 6px;
+  font-size: 13.5px;
+  line-height: 1.2;
+}
+
+.slot-name {
+  min-width: 0;
+  font-weight: 700;
+  hyphens: auto;
+  overflow-wrap: anywhere;
+}
+
+.slot-count {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.store-slot.empty .slot-name {
+  font-weight: 400;
+  opacity: 0.55;
+}
+
+/* Versandportal: zuletzt angekommene Waren → Laden-Lager */
+.info-sub.warn {
+  color: #c2410c;
+  font-weight: 700;
+  opacity: 1;
+}
+
+.ship-flow .flow-item {
+  min-width: 0;
+}
+
 /* Verschieben, Drehen, Abreißen: klein in einer Zeile unten */
 .info-tools {
   display: flex;
@@ -1381,6 +1481,14 @@ button.level-up {
 
   .option-price {
     font-size: 12px;
+  }
+
+  .slot-head {
+    font-size: 12.5px;
+  }
+
+  .store-slot + .store-slot {
+    margin-top: 4px;
   }
 
   .panel-actions button.half {

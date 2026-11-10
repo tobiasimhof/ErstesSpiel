@@ -4,6 +4,24 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.20.0 – Infofenster für Beet, Lagerhaus und Versandportal (10.11.2026)
+
+**Vorgenommen:**
+- Die drei Gebäude, die noch Textzeilen zeigten, im Stil von v0.19.0 darstellen (Tobias, Chat 15). Das Versandportal bleibt (Variante A).
+
+**Fragen, die wir uns gestellt haben:**
+- Woher weiß das Versandportal, was ankommt? → Es merkt sich die zuletzt angekommenen Waren (bis 3); dafür Spielstand-Format 15, alte Portale beginnen mit einer leeren Liste.
+- Springen die Bilder bei gemischten Bändern? → Nein, sie stehen in fester Reihenfolge (wie in der Warentabelle).
+- Wie bleibt der Kasten ruhig, wenn sich etwas ändert? → Wie in v0.19.0: einmal bauen, danach nur Zahlen und Balken ändern; neu gebaut wird nur, wenn sich die Waren ändern (anderer Samen, andere Waren in den Fächern, andere Waren am Portal).
+
+**Gemacht:**
+- `src/view/buildingInfo.js`: Inhalte für Beet („Wächst hier / Wächst gerade / Reif zum Ernten“, Samen → Pflanze, Wachstumsbalken, Samen im Laden-Lager), Lagerhaus („Im Lagerhaus“ mit Summe, je Fach Bild, Name, Menge, Füllbalken; freie Fächer gestrichelt) und Versandportal („Schickt ins Laden-Lager“: zuletzt angekommene Waren → Laden-Lager mit Füllstand, roter Hinweis, wenn voll; bisher versendet); Füllbalken als gemeinsames Bauteil.
+- `controller.js`: Textzeilen für die drei Gebäude entfallen; Säen-Knöpfe groß mit Bild des Samens, Ernten groß, Befüllen groß, „Ausräumen ins Laden-Lager“ kleiner. `production.js`: Portal merkt sich `recent`; Status „Voll – nimmt nichts mehr an.“ und „Laden-Lager voll – nimmt nichts an.“ `data/buildings.js`: neue Tipps, `recent: 3`. `save.js`: Format 15. `main.js`: `storageCapacity` für den Browser-Test. CSS für Füllbalken und Fächer (Tablet und Handy).
+
+**Geprüft:**
+- 266 automatische Tests (neu in `infofenster.test.js`: zuletzt versendete Waren – neueste vorn, jede einmal, höchstens 3; Status von Portal und Lagerhaus; Spielstand-Format 15 mit Prüfung ungültiger Listen; alter Spielstand bekommt eine leere Liste) – alle bestanden.
+- Browser-Test in Tablet- und Handygröße (neu: Beet leer / wächst / reif mit Kasten, Balken und Säen-Knopf mit Samenbild, zwei Samen auf Level 8; Lagerhaus mit 3 Fächern, gemischt mit vollem Fach, leer; Versandportal mit zuletzt angekommenen Eisenbarren und Laden-Lager, Laden-Lager voll mit rotem Balken; nichts ragt aus dem Fenster) – alle bestanden.
+
 ### v0.19.1 – Gespräch: Braucht es das Versandportal noch? (10.11.2026, nur Doku)
 
 **Vorgenommen:**

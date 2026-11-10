@@ -40,7 +40,8 @@ export function createProductionState(type) {
     case 'storage':
       return { slots: [], blocked: false };
     case 'shipping':
-      return { shipped: 0, blocked: false };
+      // v0.20.0: recent = die zuletzt versendeten Waren (neueste zuerst), fürs Infofenster
+      return { shipped: 0, recent: [], blocked: false };
     case 'garden':
       // v0.16.0: crop = gesäter Samen (oder null), timer = so lange wächst er schon
       return { crop: null, timer: 0, blocked: false };
@@ -85,8 +86,20 @@ export function accept(state, building, type) {
     case 'shipping':
       addToStorage(state, type, 1);
       prod.shipped++;
+      noteShipped(p, prod, type);
       break;
   }
+}
+
+// v0.20.0: Das Versandportal merkt sich, welche Waren zuletzt ankamen (jede
+// Ware einmal, die neueste vorn) – das Infofenster zeigt sie als Bilder.
+function noteShipped(p, prod, type) {
+  const recent = prod.recent ?? (prod.recent = []);
+  if (recent[0] === type) return;
+  const i = recent.indexOf(type);
+  if (i >= 0) recent.splice(i, 1);
+  recent.unshift(type);
+  if (recent.length > (p.recent ?? 3)) recent.length = p.recent ?? 3;
 }
 
 // ---------- Ausgeben ----------
@@ -471,11 +484,11 @@ export function buildingStatus(state, building) {
   if (p?.kind === 'storage') {
     const total = prod.slots.reduce((sum, s) => sum + s.count, 0);
     const full = prod.slots.length >= p.slots && prod.slots.every((s) => s.count >= p.slotSize);
-    if (full) return { level: 'blocked', text: 'Lager voll.' };
+    if (full) return { level: 'blocked', text: 'Voll – nimmt nichts mehr an.' };
     return total > 0 ? { level: 'work', text: `${total} Waren gelagert.` } : { level: 'idle', text: 'Leer.' };
   }
   if (p?.kind === 'shipping') {
-    if (storageFree(state) <= 0) return { level: 'blocked', text: 'Laden-Lager voll.' };
+    if (storageFree(state) <= 0) return { level: 'blocked', text: 'Laden-Lager voll – nimmt nichts an.' };
     return { level: 'work', text: 'Bereit zum Versenden.' };
   }
   if (p?.kind === 'garden') {

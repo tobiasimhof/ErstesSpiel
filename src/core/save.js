@@ -38,6 +38,9 @@
 //               mehrere Pflanzen. Rohstoff-Gebäude merken sich, welcher
 //               Rohstoff läuft (prod.input) und welche warten (prod.queue);
 //               bestehende bekommen ihren bisherigen Rohstoff eingetragen.
+//  15 (v0.20.0): Versandportale merken sich, welche Waren zuletzt ankamen
+//               (prod.recent, fürs Infofenster). Bestehende beginnen mit einer
+//               leeren Liste; sonst bleibt alles gleich.
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
@@ -53,7 +56,7 @@ import { createQuestState } from './quests.js';
 import { addAllToStorage, counterSizeFor, fitCounters } from './shop.js';
 import { START_PLOT, WORLD, parseTileKey } from './state.js';
 
-export const SAVE_VERSION = 14;
+export const SAVE_VERSION = 15;
 
 // v0.13.0 (Tobias): Namen, die zu den Zutaten passen. Rezepte und Werte bleiben.
 const RENAMED_V11 = {
@@ -200,6 +203,12 @@ function migrate(state, from, notes = []) {
       const first = sourceInputTypes(b.type)[0];
       if (b.prod.input === undefined) b.prod.input = b.prod.loaded ? first : null;
       if (b.prod.queue === undefined) b.prod.queue = isCount(b.prod.queued) ? Array(b.prod.queued).fill(first) : [];
+    }
+  }
+  if (from < 15 && Array.isArray(state.buildings)) {
+    // v0.19 → v0.20: Versandportale merken sich die zuletzt versendeten Waren.
+    for (const b of state.buildings) {
+      if (isObj(b?.prod) && productionOf(b.type)?.kind === 'shipping' && b.prod.recent === undefined) b.prod.recent = [];
     }
   }
   return state;
@@ -435,7 +444,14 @@ function isValidProduction(b) {
         prod.slots.every((s) => isObj(s) && isItem(s.type) && isInt(s.count) && s.count > 0 && s.count <= p.slotSize)
       );
     case 'shipping':
-      return isCount(prod.shipped);
+      // v0.20.0: zuletzt versendete Waren, jede höchstens einmal
+      return (
+        isCount(prod.shipped) &&
+        Array.isArray(prod.recent) &&
+        prod.recent.length <= (p.recent ?? 3) &&
+        prod.recent.every(isItem) &&
+        new Set(prod.recent).size === prod.recent.length
+      );
     case 'garden':
       // v0.16.0: leer (crop null, timer 0) oder ein Samen, der wächst
       if (prod.crop === null) return prod.timer === 0;

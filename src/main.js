@@ -18,6 +18,7 @@ import { START_GOLD } from './core/data/shop.js';
 import { LAND } from './core/data/land.js';
 import { canLevelUp } from './core/levels.js';
 import { canDeliver, currentQuest, xpNeeded } from './core/quests.js';
+import { storageCapacity } from './core/shop.js';
 import { isRipe, productionOf } from './core/production.js';
 import { createLevelView, unlockText } from './view/levels.js';
 import { costText, numberFormat } from './view/format.js';
@@ -392,4 +393,6 @@ window.__game = {
   // v0.13.0: für den Browser-Test – Erfahrung, die das aktuelle Level zum Aufstieg braucht
   xpNeeded: () => xpNeeded(state.shopLevel),
   currentQuest: () => currentQuest(state),
+  // v0.20.0: für den Browser-Test – Plätze im Laden-Lager
+  storageCapacity: () => storageCapacity(state),
 };

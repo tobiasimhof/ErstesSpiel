@@ -247,8 +247,8 @@ test('Testpaket auf Level 8: Ringelblüten, Heilverbände und Kompressen je 5, k
   for (const type of ['ringelblumensamen', 'ringelblume']) assert.equal(storageCount(state, type), 0, type);
 });
 
-test('Spielstand (Version 14): gemischter Vorrat der Erntebank bleibt erhalten, Ungültiges wird erkannt', () => {
-  assert.equal(SAVE_VERSION, 14);
+test('Spielstand (seit Version 14): gemischter Vorrat der Erntebank bleibt erhalten, Ungültiges wird erkannt', () => {
+  assert.ok(SAVE_VERSION >= 14);
   const state = level8();
   state.storage = { flachspflanze: 1, ringelblume: 1 };
   const bank = placeBuilding(state, 'flachsbreche', 10, 6, 0);
