@@ -36,7 +36,22 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 Weitere Vorschläge für die nächsten Schritte (Claude): „Umlagern“ von Lagerhaus zu Lagerhaus; Fabrik-Übersicht (je Ware hergestellt und verbraucht pro Minute, zeigt Engpässe); Spielstand sichern und auf ein anderes Gerät mitnehmen; „Alle auffüllen“ mit Gesamtpreis (Frage, ob das zu „Nachlegen ist Handarbeit“ passt); Bereich kopieren; Weiche mit Filter; erste Wirtschaft aus M3 (Nachfrage des Tages oder Sonderaufträge); Verbesserungen mit Erfahrung; Belastungstest mit großer Fabrik und Durchsicht des Codes; Level 9. Empfohlene Reihenfolge nach v0.21.0: Umlagern, Fabrik-Übersicht, Spielstand sichern.
 
-**Umgesetzt:** v0.20.1 (nur Doku). Tobias' Wahl steht aus.
+**Umgesetzt:** v0.20.1 (nur Doku).
+
+**Tobias:** „Ich würde mich für Variante B entscheiden, aber finde das nicht so 100 % hübsch. Finde, das wirkt etwas gequetscht. Ich würde von allen Punkten eher den dritten Punkt nehmen, weil ich diesen Zustand gerne schon anderen Menschen zeigen wollen würde, damit diese das Spiel auch testen können, ohne dass mein Spielstand verloren geht. Ich hoffe, ich verstehe den dritten Punkt richtig. Finde den ersten Punkt nicht gut, weil dadurch das händische Arbeiten verloren geht. Wie viel die Minute hergestellt wird, finde ich auch nicht gut bzw. zur jetzigen Phase des Spiels. Alle auffüllen finde ich nicht gut. Bereich kopieren und das Ganze nochmal bauen finde ich sehr wichtig, und daran hatte ich heute Morgen auch gedacht. Eine Weiche, die z. B. eine Spur in 2 Spuren trennt, sodass man sagen kann, hier laufen nur Stäbe und hier nur Bleche, finde ich auch sehr sinnvoll, damit die Produktionsstraßen länger werden. Verbesserung mit Erfahrungen würde ich erst später einführen wollen. Den Belastungstest finde ich auch sinnvoll, dass wir den [mit dem neuen Modell] durchführen.“
+
+**Claude** hat Variante B überarbeitet und neue Vorschaubilder gezeigt (wieder aus einer Kopie des Spiels): Der Fortschritt läuft als gelber Ring um das Produkt statt als Leiste oben, das Gebäudebild fällt weg (Farbe und Name bleiben), die Punkte für den Vorrat rücken in die Zeile des Statuslichts, das gelbe „?“-Schild steht oben links. Als Alternative dieselbe Fassung mit kleinem Gebäudebild unten links. Zum dritten Punkt: Jedes Gerät hat seinen eigenen Spielstand im Browser – wer den Link auf dem eigenen Gerät öffnet, beginnt bei Level 1 und berührt Tobias' Fabrik nicht; nur wenn andere auf seinem Tablet spielen, spielen sie in seinem Spielstand. Rückfragen: eigene Geräte oder sein Tablet? Bei Level 1 anfangen oder seine Fabrik laden? Kurze Einführung für Tester?
+
+**Belastungstest** (reine Messung in einer Kopie, nichts am Spiel geändert; Testrechner ohne Grafikchip): zwei voll bebaute Fabriken auf 38 × 30 Feldern – 180 Gebäude und 120 Bänder bzw. 30 Gebäude und 1.065 Bänder.
+- Rechnen: 0,2 Millisekunden je Takt, also etwa 2 Millisekunden je Sekunde Spiel; im Testmodus (×10) etwa 22. Unkritisch.
+- Abwesenheit nachrechnen: 8 Stunden in 0,02 bis 1,3 Sekunden, wenn die Fabrik bald steht; läuft alles 45 Minuten durch, hochgerechnet etwa 6 Sekunden (auf dem Tablet eher 10 bis 20).
+- Spielstand: 31 bis 49 KB, Speichern unter 1 Millisekunde, Laden 1 bis 2.
+- Zeichnen: leere Fläche 6 Millisekunden je Bild, kleine Fabrik (20 Gebäude) 8 bis 10, volle Fabrik 18 bis 21 – für flüssige 60 Bilder pro Sekunde dürfen es höchstens 16,7 sein. Bei Zoom 1 kostet es fast so viel wie ganz herausgezoomt: Das Spiel zeichnet auch, was nicht im Bild ist. Ein Gebäude kostet etwa 0,085, ein Band 0,011 Millisekunden.
+- Keine Fehler in der Konsole. Vorschlag: mit v0.21.0 nur noch zeichnen, was im Bild ist, und im Testmodus „Bilder pro Sekunde“ anzeigen, damit Tobias auf dem Tablet selbst messen kann.
+
+Claudes Vorschlag für die Reihenfolge: v0.21.0 Maschinen zeigen, was sie herstellen (mit den beiden Punkten aus dem Belastungstest), dann Spielstand sichern und was Tester brauchen, Bereich kopieren, Weiche.
+
+**Umgesetzt:** v0.20.2 (nur Doku). Tobias' OK für v0.21.0 steht aus.
 
 ### 09.11.2026 – Chat 14: Feedback nach einer Stunde Spielen (v0.18.1)
 
