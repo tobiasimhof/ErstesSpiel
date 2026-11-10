@@ -4,6 +4,18 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.19.1 – Gespräch: Braucht es das Versandportal noch? (10.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Frage aus Chat 15 festhalten (Versandportal neben dem Lagerhaus noch sinnvoll?) und die nächsten Schritte theoretisch durchgehen, bevor etwas programmiert wird.
+
+**Fragen, die wir uns gestellt haben:**
+- Machen Versandportal und Lagerhaus dasselbe? → Nur beim Ausräumen. Das Portal liefert automatisch und ohne Mengengrenze, das Lagerhaus puffert 150 Stück und bringt Ware aus dem Laden-Lager zurück aufs Band. Varianten A (behalten), B (zusammenlegen), C (weglassen) – Tobias entscheidet (offene Frage 13).
+
+**Gemacht:**
+- `docs/STAND.md`: Status, nächster Schritt, mögliche nächste Schritte, offene Frage 13, neuer Arbeitsschritt oben (v0.18.4 fällt aus der Liste). Gespräch ergänzt, Entwurf v0.20.0 in `docs/archiv/PLAENE.md`.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.19.0 – Übersichtliches Infofenster und Reiter „Erde“ (09.11.2026)
 
 **Vorgenommen:**

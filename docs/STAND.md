@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.19.0 – Übersichtliches Infofenster und Reiter „Erde“ |
+| **Aktuelle Version** | v0.19.1 – Gespräch: Braucht es das Versandportal noch? (nur Doku) |
 | **Phase** | M2 – Produktionsketten (Kräuter-Kapitel ab Level 7) |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias spielt mit dem neuen Infofenster weiter (Eisen ausbauen, Kräuterstube ausprobieren) und gibt Feedback. Danach wählen wir gemeinsam den nächsten Schritt; Claude stellt ihn vor und programmiert erst nach Tobias' OK. |
+| **Nächster Schritt** | Tobias entscheidet über das Versandportal (offene Frage 13) und ob als Nächstes Beet, Lagerhaus und Versandportal das neue Infofenster bekommen (Entwurf v0.20.0 in `docs/archiv/PLAENE.md`). Claude zeigt dafür erst Vorschaubilder und programmiert erst nach Tobias' OK. |
 
 **Tobias' Fabrik** (Screenshot vom 09.11.2026, ca. 1 Stunde in Echtzeit gespielt, 6.036 Gold): Level 8. Links zwei gleiche Holz-Stein-Straßen (je 3 Holzfällerlager → Sägewerk, 3 Steinbrüche → Steinmetz, Zimmerei, Lagerhäuser als Zwischenlager). Oben 2 Holzfällerlager → Sägewerk, 5 Schmelzhütten → 5 Schmieden, 3 Steinbrüche → Steinmetz; darunter Zimmerei, 2 Feinschmieden und 1 Schlosserei (nur Vorhängeschlösser), jede Ausgabe endet in einem Lagerhaus. Unten 3 Beete, 2 Erntebänke, Webstube und Kräuterstube. Zimmerei und eine Feinschmiede warten auf Eisenstangen. Er spielt auf dem Tablet und nutzt für Aufträge den Test-Knopf.
 
@@ -24,7 +24,7 @@
 | M6 | Clans & Handel | Clans, Handel zwischen Spielern |
 | M7 | App | Android und iOS |
 
-**Mögliche nächste Schritte** (Tobias wählt): Maschinen zeigen auf der Karte, was sie herstellen (Frage 1), Level 9 mit der dritten Pflanze (hinten angestellt), Weiche mit Filter (Frage 5), Verbesserungen mit Erfahrung (Frage 7).
+**Mögliche nächste Schritte** (Tobias wählt; Claudes Reihenfolge): Infofenster für Beet, Lagerhaus und Versandportal (Frage 1 und 13), Maschinen zeigen auf der Karte, was sie herstellen (Frage 1), Weiche mit Filter (Frage 5), Verbesserungen mit Erfahrung (Frage 7), Level 9 mit der dritten Pflanze (hinten angestellt).
 
 ## Offene Fragen
 
@@ -40,8 +40,15 @@
 10. **Einstieg:** Tobias' Idee, am Anfang vor allem die Massenproduktion auszubauen – später austesten.
 11. **Pleiteschutz:** Ein Rohstoff ohne passendes Gebäude verhindert das Geschenk – bewusst so gelassen, beobachten.
 12. **Vor v1.0:** Test-Knopf entfernen (`QUEST_TEST_SKIP = false`). Später: Schwarzmarkt und verbundene Läden (M5), Arbeitstitel.
+13. **Braucht es das Versandportal noch?** (Tobias, Chat 15) Die Überschneidung mit dem Lagerhaus ist nur „Ausräumen“: Das Portal schickt automatisch und ohne Mengengrenze ins Laden-Lager und hält die Fabrik im Hintergrund am Laufen; ein Lagerhaus am Ende einer Straße ist nach 150 Stück voll (eine Straße mit 3 Holzfällerlagern: nach etwa 19 von 45 Minuten), dann steht sie. Varianten: **A** beide behalten, Rollen klar trennen (Claudes Empfehlung), **B** zusammenlegen (Lagerhaus mit Schalter „Ins Laden-Lager schicken“, Portal fällt weg), **C** Portal weglassen. Dazu: Was im Lagerhaus liegt, zählt nicht zum Laden-Lager, und Ausräumen darf es überfüllen – 10 Lagerhäuser sind 1.500 Plätze mehr. So lassen (Claudes Empfehlung: beobachten) oder Ausräumen nur bis zur Grenze? Und: Wie nutzt Tobias beide heute?
 
 ## Die letzten 3 Arbeitsschritte
+
+### v0.19.1 – Gespräch: Braucht es das Versandportal noch? (10.11.2026, nur Doku)
+
+- **Tobias (Chat 15):** Beet, Lagerhaus und Versandportal sind noch nicht aufs neue Infofenster umgestellt. Macht das Versandportal noch Sinn, wenn das Lagerhaus die gleiche Funktion hat? „Lass uns erst die nächsten Schritte theoretisch durchgehen.“
+- **Claude:** Vergleich beider Gebäude (offene Frage 13): Das Portal ist der automatische Ausgang der Fabrik in den Laden, das Lagerhaus Puffer und Eingang aus dem Laden-Lager; ohne Portal stünde jede Straße nach 150 Stück still. Empfehlung: beide behalten (A), Alternativen B (zusammenlegen) und C (weglassen). Entwurf v0.20.0: Infofenster für Beet, Lagerhaus, Versandportal mit Bildern; danach Maschinen zeigen auf der Karte, was sie herstellen. Tobias' Antwort steht aus.
+- Spiel unverändert, nur die Versionsnummer steigt.
 
 ### v0.19.0 – Übersichtliches Infofenster und Reiter „Erde“ (09.11.2026)
 
@@ -53,10 +60,4 @@
 
 - **Tobias:** Variante B, aber in der Bauleiste nur Symbol, Name und Kosten – keine Waren. „Pflanzenkunde“ zu lang, „Pflanzen“ klingt komisch → Reiter „Erde“. Stattdessen das Infofenster beim Antippen übersichtlicher: oben, was gerade hergestellt wird und was man dafür braucht, darunter, was die anderen Einstellungen kosten – „dann prägt man sich das auch besser ein“. „Ansonsten hast du mein Go.“
 - **Claude:** Vorschaubilder fürs neue Infofenster (Feinschmiede, Holzfällerlager; Tablet und Handy); Plan für v0.19.0 in `docs/archiv/PLAENE.md`. Weil der Entwurf neu ist, wartet Claude nach der obersten Regel auf Tobias' OK.
-- Spiel unverändert, nur die Versionsnummer steigt.
-
-### v0.18.4 – Plan: Warenbilder in der Bauleiste (09.11.2026, nur Doku)
-
-- **Tobias:** „Gerne Punkt 1“; der Reiter „Kräuter“ darf „Pflanzen“ oder „Pflanzenkunde“ heißen. Frage: Wie kann man die Gebäude darstellen – einfach das Warenbild vom Band, nur etwas größer?
-- **Claude:** Ja, genau so machen es Fabrikspiele – eine Ware sieht überall gleich aus. Vorschaubilder für Tablet und Handy: Variante B (Waren in eigener Zeile, empfohlen), C (Waren als Hauptbild); A passt nicht. Gebäude-Emojis bleiben vorerst, eigene Gebäudebilder in M4. Plan in `docs/archiv/PLAENE.md`. Tobias' Wahl steht aus.
 - Spiel unverändert, nur die Versionsnummer steigt.

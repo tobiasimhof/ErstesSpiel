@@ -61,6 +61,17 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.20.0 – Infofenster für Beet, Lagerhaus und Versandportal (noch nicht freigegeben)
+
+Claudes Entwurf aus Chat 15; Tobias' Antwort steht aus (offene Frage 13). Vor dem Programmieren zeigt Claude Vorschaubilder (Tablet und Handy).
+
+- **Vorher entscheiden:** Versandportal behalten (A, Empfehlung), mit dem Lagerhaus zusammenlegen (B) oder weglassen (C). Bei B: Lagerhaus mit Schalter „📤 Ins Laden-Lager schicken“, vorhandene Portale umwandeln (Spielstand-Format, `SAVE_VERSION` erhöhen; was tun, wenn das 2 × 1-Lagerhaus nicht aufs Feld passt?).
+- **🌱 Beet:** grüner Kasten „Wächst gerade“: Samen-Bild → Pflanzen-Bild mit Fortschrittsbalken und „reif in etwa …“; leer: je Samen ein Knopf mit Bild und „im Laden-Lager: …“ (sonst mit Kaufpreis); reif: „🌾 Ernten“ groß.
+- **📦 Lagerhaus:** die 3 Fächer als Warenbilder mit Füllbalken („42 / 50“), leere Fächer blass; Status „gibt weiter“ / „voll – die Straße staut“ / „leer“; „📥 Befüllen“ groß, „↩ Ausräumen“ klein.
+- **🌀 Versandportal:** Kasten „Schickt ins Laden-Lager“ mit den zuletzt versendeten Waren als Bilder (merkt sich das Portal heute noch nicht), das Laden-Lager als Füllbalken (rot, wenn voll), „bisher versendet: …“.
+- **Kurze Tipps**, die die Rollen klar machen: Portal = Ausgang der Fabrik in den Laden; Lagerhaus = Puffer zwischen zwei Straßen und Eingang aus dem Laden-Lager.
+- **Danach (Vorschlag):** Maschinen zeigen auf der Karte, was sie herstellen; Weiche mit Filter; Verbesserungen mit Erfahrung; Level 9.
+
 ### v0.19.0 – Übersichtliches Infofenster und Reiter „Erde“ (fertig)
 
 Tobias (Chat 14): „Finde das passt so. Sieht sehr übersichtlich aus und ansprechend. Go für v19.“ Umgesetzt wie geplant; zusätzlich: Kaufen-Knopf heißt „🧺 Kaufen · 550 🪙“ (passt in eine Zeile), das Infofenster ist 10 Pixel breiter (320), lange Warennamen brechen mit Trennstrich um.
