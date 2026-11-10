@@ -4,6 +4,22 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 10.11.2026 – Chat 15: Braucht es das Versandportal noch? (v0.19.0)
+
+**Tobias:** „Hi, informiere dich über den aktuellen Stand der Dinge. Im letzten Chat haben wir v19 auf GitHub veröffentlicht. Beet, Lagerhaus und Versandportal haben wir noch nicht umgestellt. Ich habe mich gefragt, ob das Versandportal noch Sinn macht, wenn wir die gleiche Funktion mit dem Lagerhaus haben. Das Versandportal schickt die Ware direkt ins Laden-Lager. Lass uns erst die nächsten Schritte theoretisch durchgehen.“
+
+**Claude** hat beide Gebäude verglichen (Zahlen aus den Datentabellen und dem Code):
+- **Versandportal:** 1 × 1, 10 Holzblöcke; schickt jedes Stück sofort und ohne Mengengrenze ins Laden-Lager, auch im Hintergrund, bis das Laden-Lager voll ist. Die Ware steht sofort für Theken, Aufträge und Bauen bereit.
+- **Lagerhaus:** 2 × 1, 8 Holzplatten; 3 Fächer × 50 (höchstens 3 Waren), gibt am Ausgang weiter; Befüllen aus dem Laden-Lager, Ausräumen von Hand ins Laden-Lager (darf es überfüllen). Was darin liegt, zählt nicht zum Laden-Lager.
+- Die Überschneidung ist nur das Ausräumen. Beispiel: Eine Straße mit 3 aufgefüllten Holzfällerlagern und Sägewerk macht in 45 Minuten 360 Platten oder Stäbe (etwa 8 pro Minute). Ein Lagerhaus am Ende ist nach etwa 19 Minuten voll, dann steht die Straße, bis man ausräumt; mit Versandportal läuft sie die ganzen 45 Minuten.
+- Die beiden sind Gegenstücke: Portal = Band → Laden-Lager (automatisch), Lagerhaus = Laden-Lager → Band (von Hand) und Puffer zwischen zwei Straßen.
+- Varianten: **A** beide behalten, Rollen klar trennen und im Infofenster zeigen (Empfehlung); **B** zusammenlegen – Lagerhaus mit Schalter „📤 Ins Laden-Lager schicken“, Portal fällt weg (Nachteile: 2 × 1 statt 1 × 1 bei knappem Platz, teurer, vorhandene Portale müssten umgewandelt werden und das größere Lagerhaus passt nicht immer auf ihr Feld, ein Gebäude mit zwei Betriebsarten ist schwerer zu durchschauen); **C** Portal weglassen, nur Ausräumen (nicht empfohlen: die Fabrik liefe im Hintergrund nur noch, bis die Lagerhäuser voll sind, und Level 1 hätte keinen automatischen Weg in den Laden).
+- Nebenbei: Lagerhäuser am Ende der Straßen sind ein Zusatzlager neben dem Laden-Lager (10 Lagerhäuser = 1.500 Plätze). Empfehlung: erst einmal so lassen und beobachten (wie beim Abreißen über die Grenze).
+- Entwurf v0.20.0: Beet, Lagerhaus und Versandportal bekommen das Infofenster im neuen Stil (Bilder statt Textzeilen), mit Vorschaubildern vorab. Danach: Maschinen zeigen auf der Karte, was sie herstellen; dann Weiche mit Filter, Verbesserungen mit Erfahrung, Level 9.
+- Fragen an Tobias: A, B oder C? Wie nutzt er Portal und Lagerhaus heute (baut er noch Portale oder räumt er die Lagerhäuser am Ende von Hand aus – und warum)? Zusatzlager so lassen? Passt die Reihenfolge?
+
+**Umgesetzt:** v0.19.1 (nur Doku). Tobias' Antwort steht aus.
+
 ### 09.11.2026 – Chat 14: Feedback nach einer Stunde Spielen (v0.18.1)
 
 **Tobias** (mit Screenshot seiner Fabrik auf Level 8, 6.036 Gold): „Ich hab jetzt ca. eine Stunde lang im normalen Spieltempo gespielt, und konnte langsam immer stetiger wachsen. Ich bin immer am Ball geblieben, weil ich meine ganzen Fabriken voll machen wollte mit Rohstoffen, was jetzt auch ganz gut geklappt hat, nur die Eisenvorräte könnten noch besser sein. Immer wenn ich Rohstoffe voll machen wollte, bin ich quasi pleite gegangen und musste erst warten, bis ich genug Ware produziert hatte, um diese zu verkaufen. Aktuell hab ich zwar 6000 Gold, aber müsste noch Eisen dazu kaufen und wäre wieder bei fast 0. Ich finde, es macht Spaß, und man kann sich so langsam an die Kräutersachen machen. Außerdem muss ich noch mehr Eisenproduktionen bauen, weil ich bei der Schlosserei aktuell nur ein Produkt herstelle, weshalb man nicht reich wird, aber man kommt langsam voran.“
