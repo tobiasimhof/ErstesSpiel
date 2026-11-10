@@ -26,6 +26,18 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Umgesetzt:** v0.20.0 (siehe Versionshistorie).
 
+**Tobias:** „Die neuen Vorschaubilder sehen gut aus. Jetzt ist alles übersichtlich dargestellt. Aktuell werden die produzierten Rohstoffe oder Produkte sehr klein auf den Maschinen dargestellt, sodass man erahnen kann, was gerade produziert wird. Mach mir gerne einen Vorschlag, wie du das ändern wollen würdest.“ Er nutzt seit heute ein neueres Claude-Modell und möchte deshalb noch weitere Vorschläge, was die nächsten Schritte sein könnten.
+
+**Claude** hat nachgeschaut, was die Karte heute zeigt: Gebäudebild (Emoji), Name, Statuslicht, Fortschrittsleiste, Punkte für den Rohstoff-Vorrat – und nur bei Kombi-Maschinen, die warten, ein kleines dunkles Schild mit der **fehlenden** Zutat. Was eine Maschine herstellt, steht nirgends; zwei Schmieden (Bleche, Stangen) sehen gleich aus. Vorschaubilder (Tablet, nah und weit herausgezoomt; aus einer Kopie des Spiels, nicht im Projekt gespeichert):
+- **Variante A – Schild in der Ecke:** Das Gebäudebild bleibt groß, das Produkt steht als rundes helles Schild unten rechts.
+- **Variante B – Produkt in der Mitte (Empfehlung):** Das Produkt steht groß auf einer hellen Scheibe in der Mitte, das Gebäudebild klein unten rechts; Farbe und Name bleiben. Herausgezoomt bleibt es lesbar. Wartet eine Kombi-Maschine, steht unten ein gelbes Schild „? + fehlende Zutat“ (statt des dunklen Schildes oben).
+- In beiden Varianten: Rohstoff-Gebäude zeigen, was herauskommt (leer = blass; die Erntebank das, was gerade läuft), das Lagerhaus zeigt die Waren seiner Fächer (bis 3) statt des Pakets. Beet und Versandportal bleiben. Nur Darstellung, Spielregeln und Spielstand bleiben gleich.
+- Fragen: A oder B? Auch Rohstoff-Gebäude? Passt das gelbe „?“-Schild?
+
+Weitere Vorschläge für die nächsten Schritte (Claude): „Umlagern“ von Lagerhaus zu Lagerhaus; Fabrik-Übersicht (je Ware hergestellt und verbraucht pro Minute, zeigt Engpässe); Spielstand sichern und auf ein anderes Gerät mitnehmen; „Alle auffüllen“ mit Gesamtpreis (Frage, ob das zu „Nachlegen ist Handarbeit“ passt); Bereich kopieren; Weiche mit Filter; erste Wirtschaft aus M3 (Nachfrage des Tages oder Sonderaufträge); Verbesserungen mit Erfahrung; Belastungstest mit großer Fabrik und Durchsicht des Codes; Level 9. Empfohlene Reihenfolge nach v0.21.0: Umlagern, Fabrik-Übersicht, Spielstand sichern.
+
+**Umgesetzt:** v0.20.1 (nur Doku). Tobias' Wahl steht aus.
+
 ### 09.11.2026 – Chat 14: Feedback nach einer Stunde Spielen (v0.18.1)
 
 **Tobias** (mit Screenshot seiner Fabrik auf Level 8, 6.036 Gold): „Ich hab jetzt ca. eine Stunde lang im normalen Spieltempo gespielt, und konnte langsam immer stetiger wachsen. Ich bin immer am Ball geblieben, weil ich meine ganzen Fabriken voll machen wollte mit Rohstoffen, was jetzt auch ganz gut geklappt hat, nur die Eisenvorräte könnten noch besser sein. Immer wenn ich Rohstoffe voll machen wollte, bin ich quasi pleite gegangen und musste erst warten, bis ich genug Ware produziert hatte, um diese zu verkaufen. Aktuell hab ich zwar 6000 Gold, aber müsste noch Eisen dazu kaufen und wäre wieder bei fast 0. Ich finde, es macht Spaß, und man kann sich so langsam an die Kräutersachen machen. Außerdem muss ich noch mehr Eisenproduktionen bauen, weil ich bei der Schlosserei aktuell nur ein Produkt herstelle, weshalb man nicht reich wird, aber man kommt langsam voran.“

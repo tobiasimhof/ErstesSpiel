@@ -61,6 +61,36 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.21.0 – Maschinen zeigen, was sie herstellen (noch nicht freigegeben)
+
+Tobias (Chat 15): Die Waren an den Maschinen sind sehr klein, man kann nur erahnen, was produziert wird. Claudes Entwurf mit Vorschaubildern (Tablet, nah und weit herausgezoomt; im Chat gezeigt, nicht im Projekt gespeichert). Tobias' Wahl steht aus.
+
+- **Heute:** Gebäudebild (Emoji), Name, Statuslicht, Fortschrittsleiste, Punkte für den Vorrat; nur wartende Kombi-Maschinen zeigen klein, was **fehlt**. Was hergestellt wird, steht nicht auf der Karte.
+- **Variante A – Schild in der Ecke:** Gebäudebild bleibt groß (etwas nach links oben), Produkt als rundes helles Schild unten rechts (etwa 40 % der Gebäudebreite). Das Schild für fehlende Zutaten bleibt wie heute oben.
+- **Variante B – Produkt in der Mitte (Empfehlung):** Produkt auf einer hellen Scheibe in der Mitte (etwa 55 % der Gebäudebreite), Gebäudebild klein unten rechts; Farbe und Name bleiben. Wartet eine Kombi-Maschine, steht statt des Gebäudebildes unten ein gelbes Schild „? + fehlende Zutat(en)“. Grund für die Empfehlung: Die Scheibe wächst und schrumpft mit dem Gebäude und bleibt herausgezoomt lesbar (Tobias' Fabrik ist bis 38 × 30 Felder groß).
+- **Beide Varianten:** dasselbe Warenbild wie auf dem Band; Maschinen zeigen ihr Produkt immer klar (ob sie arbeiten, sagt das Statuslicht); Rohstoff-Gebäude zeigen, was herauskommt (leer = blass; Erntebank: was gerade läuft); das Lagerhaus zeigt die Waren seiner Fächer (bis 3 nebeneinander) statt 📦, leer bleibt 📦; Beet und Versandportal bleiben.
+- **Beim Umsetzen beachten:** gedrehte Gebäude (Scheibe und kleines Bild dürfen keine Ein- und Ausgangspfeile verdecken – freie Ecke suchen wie beim Namen), 2 × 1-Lagerhaus in beiden Drehungen, Handy-Größe, Vorschau beim Platzieren (ohne Produkt).
+- **Nur Darstellung** (`src/view/renderer.js`): Spielregeln und Spielstand-Format bleiben.
+- **Prüfen:** Was gezeigt wird, als eigene Funktion mit Tests (Maschine je Einstellung, Rohstoff-Gebäude leer und voll, Erntebank mit zwei Pflanzen, Lagerhaus mit 0 bis 3 Waren); Browser-Test mit Screenshots nah und weit, Tablet und Handy.
+- **Fragen an Tobias:** A oder B? Auch Rohstoff-Gebäude? Passt das gelbe „?“-Schild?
+
+### Weitere mögliche Schritte (Claudes Vorschläge, Chat 15 – Tobias wählt)
+
+| Schritt | Was es bringt | Umfang |
+|---|---|---|
+| **„Umlagern“** | Im Lagerhaus eine Ware direkt in ein anderes Lagerhaus packen (heute: Ausräumen, dann im anderen Befüllen) – Tobias' Handgriff zwischen seinen gespiegelten Straßen | klein |
+| **Fabrik-Übersicht** | Ein Fenster: je Ware, wie viel pro Minute hergestellt und verbraucht wird, Engpässe rot (z. B. „Holzstäbe: 8 hergestellt, 12 gebraucht“); dazu im Infofenster einer Maschine „braucht bei voller Arbeit … pro Minute“ | mittel |
+| **Spielstand sichern und mitnehmen** | Spielstand als Datei oder Text speichern und auf einem anderen Gerät laden (Tablet ↔ Handy); schützt Tobias' Fabrik, falls der Browser seine Daten löscht | klein |
+| **„Alle auffüllen“** | Ein Knopf füllt alle Rohstoff-Gebäude und zeigt vorher den Gesamtpreis (offene Frage 13: passt das zu „Nachlegen ist Handarbeit“?) | klein |
+| **Bereich kopieren** | Einen markierten Bereich als Ganzes noch einmal bauen, wenn die Waren reichen (Tobias baut gleiche Straßen mehrfach) | mittel |
+| **Weiche mit Filter** | Ein Band-Feld zweigt eine Ware ab, der Rest läuft geradeaus (offene Frage 5) | mittel |
+| **Erste Wirtschaft (M3)** | Nachfrage des Tages (eine Ware bringt eine Zeit lang mehr) oder Sonderaufträge mit Frist – ein Grund, die Produktion umzustellen (Tobias' Leitidee) | groß |
+| **Verbesserungen mit Erfahrung** | Offene Frage 7 | groß |
+| **Belastungstest und Durchsicht** | Prüfen, ob eine volle 38 × 30-Fabrik auf dem Tablet flüssig läuft und lange Abwesenheit schnell nachgerechnet wird; den ganzen Code gründlich auf Fehler durchsehen (für Tobias unsichtbar) | klein bis mittel |
+| **Level 9** | Dritte Pflanze – von Tobias hinten angestellt | mittel |
+
+Claudes Reihenfolge nach v0.21.0: Umlagern, Fabrik-Übersicht, Spielstand sichern.
+
 ### v0.20.0 – Infofenster für Beet, Lagerhaus und Versandportal (fertig)
 
 Claudes Entwurf aus Chat 15. Tobias: Variante A; „Ja, codiere erst die neuen Infofenster für die Sachen, die noch nicht gemacht sind, wie wir das bei der letzten Version gemacht haben.“ Umgesetzt wie unten beschrieben, ohne vorherige Vorschaubilder (Tobias bekam Screenshots aus dem Browser-Test). Abweichungen: Säen-Knöpfe zeigen das Bild des Samens statt „im Laden-Lager: …“ (das steht unter dem Kasten); beim Lagerhaus steht der Status oben wie bei allen Gebäuden („Voll – nimmt nichts mehr an.“), der Kasten nennt nur „Leer – …“, wenn nichts darin liegt.

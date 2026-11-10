@@ -4,6 +4,19 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.20.1 – Plan: Maschinen zeigen, was sie herstellen (10.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zu v0.20.0 und seinen Wunsch festhalten (auf der Karte besser sehen, was eine Maschine herstellt); Vorschlag mit Vorschaubildern und weitere mögliche Schritte.
+
+**Fragen, die wir uns gestellt haben:**
+- Was zeigt die Karte heute? → Nur, was einer wartenden Kombi-Maschine fehlt – nicht, was sie herstellt.
+- Schild in der Ecke (A) oder Produkt in der Mitte (B)? → Claude empfiehlt B (herausgezoomt lesbar); Tobias entscheidet.
+
+**Gemacht:**
+- `docs/archiv/PLAENE.md`: Entwurf v0.21.0 und die Liste weiterer Schritte. `docs/STAND.md`: Status, nächster Schritt, mögliche nächste Schritte, offene Fragen 1 und 13, neuer Arbeitsschritt oben (v0.19.0 fällt aus der Liste). Gespräch ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.20.0 – Infofenster für Beet, Lagerhaus und Versandportal (10.11.2026)
 
 **Vorgenommen:**
