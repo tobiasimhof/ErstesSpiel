@@ -4,6 +4,20 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.21.2 – Ring bleibt, Bilder pro Sekunde gemessen, Plan „Spielstand sichern“ (11.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Entscheidung zum Ring und seine Messung festhalten; Entwurf für den nächsten Schritt.
+
+**Fragen, die wir uns gestellt haben:**
+- Ring pro Stück oder Rest des Rohstoffs? → Rest des Rohstoffs bleibt (Tobias: so sieht man, wann das Gebäude leer ist).
+- Läuft das Spiel auf dem Tablet flüssig? → Ja, 60 bis 90 Bilder pro Sekunde im Testmodus.
+- Brauchen Tester auf Tobias' Tablet einen zweiten Spielstand? → Nicht, wenn man den Spielstand sichern und wieder laden kann.
+
+**Gemacht:**
+- `docs/STAND.md`: Status, offene Frage 1 (jetzt der Entwurf v0.22.0), Frage 14 erledigt, neuer Arbeitsschritt oben. `docs/SPIEL.md`: Satz zum langsamen Ring. `docs/archiv/PLAENE.md`: Entwurf v0.22.0. Gespräch und Entscheidungen ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.21.1 – Rückmeldung zur Karte: Ring der Rohstoff-Gebäude (11.11.2026, nur Doku)
 
 **Vorgenommen:**
