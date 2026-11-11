@@ -4,11 +4,14 @@
 // wird in renderer.js.
 //
 // Ergebnis:
-//   { kind: 'product', item, faded, ring, missing, dots }
+//   { kind: 'product', item, faded, ring, ringKind, missing, dots }
 //       Maschinen und Rohstoff-Gebäude. item = Ware auf der hellen Scheibe;
 //       faded = blass (Rohstoff-Gebäude ist leer); ring = Fortschritt als Ring
 //       um die Scheibe (0 … 1, Maschine: laufendes Stück, Rohstoff-Gebäude:
-//       was vom laufenden Rohstoff noch übrig ist); missing = fehlende
+//       was vom laufenden Rohstoff noch übrig ist); ringKind = 'work'
+//       (Maschine, gelb) oder 'supply' (Rohstoff-Gebäude, grün – v0.21.3,
+//       Tobias: „Kreislauf zur Fertigung gelb, Kreislauf bis etwas leer ist
+//       grün“); missing = fehlende
 //       Zutaten einer wartenden Kombi-Maschine (gelbes „?“-Schild);
 //       dots = Rohstoff-Vorrat { capacity, filled } oder null.
 //   { kind: 'storage', items }   Lagerhaus: die Waren seiner Fächer (bis 3,
@@ -42,6 +45,7 @@ export function buildingFace(building) {
         item: RECIPES[prod.recipe].output,
         faded: false,
         ring: live ? ring : null,
+        ringKind: 'work',
         missing: live ? missingInputs(probe) : [],
         dots: null,
       };
@@ -58,6 +62,7 @@ export function buildingFace(building) {
         item,
         faded: !running,
         ring: live ? (running ? buildingProgress(probe) : 0) : null,
+        ringKind: 'supply',
         missing: [],
         dots: live && capacity > 1 ? { capacity, filled: sourceCount(probe) } : null,
       };

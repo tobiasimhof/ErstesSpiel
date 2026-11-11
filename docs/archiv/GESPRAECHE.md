@@ -34,6 +34,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Umgesetzt:** v0.21.2 (nur Doku).
 
+**Tobias:** „Bevor wir weitermachen, schreib die nächsten Schritte erstmal auf. Ich dachte auch daran, dass wir den Kreis der Rohstoffgebäude einfach in einer anderen Farbe machen. Dann machen wir Kreislauf zur Fertigung gelb und Kreislauf, bis etwas leer ist, evtl. grün, damit man das auch klarer erkennen kann. Das kannst du gerne jetzt schon codieren, ich würde danach in einem neuen Chat weitermachen.“
+
+**Claude** hat die nächsten Schritte als nummerierte Liste oben in `docs/STAND.md` geschrieben (v0.22.0 Spielstand sichern und laden mit den 4 offenen Fragen, was Tester brauchen, Bereich kopieren, Weiche, später) und den Ring der Rohstoff-Gebäude grün gemacht – als v0.21.3 (Feinschliff nach Tobias' Test), damit „Spielstand sichern“ v0.22.0 bleibt. Die Vorrat-Punkte bleiben gelb.
+
+**Umgesetzt:** v0.21.3 (siehe Versionshistorie). Weiter geht es in einem neuen Chat.
+
 ### 10.11.2026 – Chat 15: Braucht es das Versandportal noch? (v0.19.0)
 
 **Tobias:** „Hi, informiere dich über den aktuellen Stand der Dinge. Im letzten Chat haben wir v19 auf GitHub veröffentlicht. Beet, Lagerhaus und Versandportal haben wir noch nicht umgestellt. Ich habe mich gefragt, ob das Versandportal noch Sinn macht, wenn wir die gleiche Funktion mit dem Lagerhaus haben. Das Versandportal schickt die Ware direkt ins Laden-Lager. Lass uns erst die nächsten Schritte theoretisch durchgehen.“

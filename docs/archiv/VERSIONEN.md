@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.21.3 – Grüner Ring für Rohstoff-Gebäude (11.11.2026)
+
+**Vorgenommen:**
+- Tobias' Idee: Ring der Fertigung gelb, Ring „bis der Rohstoff leer ist“ grün. Dazu die nächsten Schritte aufschreiben, bevor ein neuer Chat beginnt.
+
+**Fragen, die wir uns gestellt haben:**
+- v0.21.3 oder v0.22.0? → v0.21.3: kleiner Feinschliff nach Tobias' Test (wie v0.10.1); „Spielstand sichern und laden“ bleibt v0.22.0.
+- Auch die Vorrat-Punkte grün? → Nein, nur der Ring (Tobias hat nur den Ring genannt).
+
+**Gemacht:**
+- `src/view/buildingFace.js`: Art des Rings (`ringKind`: `work` bzw. `supply`). `src/view/renderer.js`: grüner Ring für Rohstoff-Gebäude. `tests/karte.test.js` ergänzt. Doku: `STAND.md` (nächste Schritte als Liste), `SPIEL.md`, `TECHNIK.md`, Archiv. Spielstand-Format unverändert.
+
+**Geprüft:**
+- `npm test` bestanden, Browser-Test in Tablet- und Handygröße bestanden, Screenshots angesehen.
+
 ### v0.21.2 – Ring bleibt, Bilder pro Sekunde gemessen, Plan „Spielstand sichern“ (11.11.2026, nur Doku)
 
 **Vorgenommen:**

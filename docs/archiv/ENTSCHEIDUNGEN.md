@@ -236,3 +236,4 @@ Neue Entscheidungen kommen unten in die Tabelle (älteste oben). Wird eine Entsc
 | 11.11.2026 | Kein Gebäudebild auf der Karte, Farben je Reiter bleiben, wie sie sind | Tobias nach dem Spielen von v0.21.0: „Das Gebäudebild vermisse ich nicht. Farben passen alle so und ist mir ehrlich gesagt gar nicht aktiv aufgefallen, deswegen ist die Farbe so gut.“ |
 | 11.11.2026 | Der Ring der Rohstoff-Gebäude zeigt weiter, wie viel vom laufenden Rohstoff übrig ist (nicht jedes einzelne Stück) | Tobias: „Ist tatsächlich besser so, dann weiß man ca., wann das Rohstoffgebäude leer ist.“ |
 | 11.11.2026 | Vorerst keine weitere Arbeit an der Geschwindigkeit des Zeichnens | Tobias' Tablet zeigt im Testmodus 60 bis 90 Bilder pro Sekunde – flüssig. |
+| 11.11.2026 | Ring der Rohstoff-Gebäude grün (bis der Rohstoff leer ist), Ring der Maschinen gelb (Fertigung) | Tobias: „damit man das auch klarer erkennen kann“. |

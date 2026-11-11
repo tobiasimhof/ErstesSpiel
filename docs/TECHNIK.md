@@ -62,7 +62,7 @@ Wie das Spiel gebaut ist. Nur lesen, wenn programmiert wird; die Arbeitsregeln d
 | `src/view/input.js` | Touch, Maus und Mausrad (Antippen, Ziehen, zwei Finger) |
 | `src/view/controller.js` | Modi (Ansehen, Bauleiste, Platzieren, Förderband, Abreißen, Bereich markieren und verschieben) und was Gesten und die Taste R darin tun |
 | `src/view/renderer.js` | Zeichnet Spielfeld, Bänder, Waren, Gebäude mit Statuslicht, Vorschau; seit v0.21.0 nur, was im Bild ist. Gebäude: oben eine Zeile (Vorrat-Punkte oder gelbes „?“-Schild, Statuslicht), in der Mitte die Scheibe mit Produkt und Fortschrittsring, unten der Name; Pfeile bleiben frei (`portReserve`), der Name sucht seinen Platz (`nameBox`); Lagerhaus mit Warenschild |
-| `src/view/buildingFace.js` | Was ein Gebäude auf der Karte zeigt (v0.21.0): Produkt, blass, Ring, fehlende Zutaten, Vorrat; Waren im Lagerhaus – reine Abfrage ohne Zeichnen, damit testbar |
+| `src/view/buildingFace.js` | Was ein Gebäude auf der Karte zeigt (v0.21.0): Produkt, blass, Ring (seit v0.21.3 mit Art: `work` gelb bei Maschinen, `supply` grün bei Rohstoff-Gebäuden), fehlende Zutaten, Vorrat; Waren im Lagerhaus – reine Abfrage ohne Zeichnen, damit testbar |
 | `src/view/itemArt.js` | Aussehen der Waren (auf dem Band und in Listen); kleine Warenbilder lassen sich neu zeichnen |
 | `src/view/hud.js` | Obere Leiste (Gold, Knopf „Laden-Level“ mit kleiner Erfahrungsleiste, ⬆ und ❗) und Menü ☰ |
 | `src/view/panels.js` | Infofenster (seit v0.19.0 mit Bereich für Warenbilder, kleiner Knopfzeile unten und kurzem Tipp), großes Fenster, Rückfragen, Meldungen |
