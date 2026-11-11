@@ -61,6 +61,29 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Überlegung: Gold-Gleichgewicht (Chat 17, v0.21.4, noch nicht entschieden)
+
+**Tobias (Chat 17):** Er hat einige Versionen lang auf Level 8 weitergespielt, ohne Aufträge, um den Platz zu testen (jede Ware mindestens einmal herstellen). Stand: 43.870 Gold und Waren für 166.579 Gold. „Ist das so in Ordnung, dass man quasi längere Zeit auf einem Level verbringt, um damit ‚unendlich Gold‘ zu generieren, oder wie können wir das steuern? … Viel Gold bedeutet viele Möglichkeiten.“
+
+**Claudes Rechnung** (aus den Datentabellen, v0.21.3):
+- **Was das Spiel an Gold verlangt:** alle Aufstiege bis Level 8 zusammen 10.850, die ganze Fläche 4.000 – zusammen 14.850, beides einmalig. Aufträge kosten unterm Strich nichts (der Warenwert kommt als Gold zurück); alle Aufträge von Level 1 bis 8 verlangen zusammen Waren für 65.629 Gold. Gebäude kosten Waren, kein Gold. Tobias' Gold allein ist das Dreifache von allem, was das Spiel je in Gold verlangt hat.
+- **Gewinn je Ware gegenüber dem Rohstoff:** Grundteile +31 %; Zahnradwelle, Räderwerk, Verstärkte Holzplatte, Scharnier, Schlüssel, Gewichtstein +57 %; Zirkel +81 %; Uhrwerk und Vorhängeschloss +89 %; Verband +50 %, Heilverband +58 %, Kräuterkompresse +47 %. Die Kräuter-Waren von Level 7/8 bringen also weniger als die besten Waren von Level 5/6 – beim Gold lohnt sich Weiterspielen gerade nicht.
+- **Eine Schmelzhütte** (4 Eisenerz pro Stunde, durchgehend nachgelegt) bringt als Eisenstangen etwa 2.700 Gold Gewinn pro Stunde, als Scharniere 5.000, als Zirkel 7.100, als Vorhängeschlösser 7.800. Tobias' Fabrik (etwa 7 Schmelzhütten, 8 Holzfällerlager, 9 Steinbrüche) verdient, wenn alles läuft, grob 30.000 bis 50.000 Gold pro Stunde; der Aufstieg auf Level 8 (4.000) sind wenige Minuten davon.
+- **Die Theken bremsen teure Waren nicht:** Kunden kaufen etwa 6 Stück pro Minute (360 pro Stunde). Mit Holzplatten sind das höchstens 6.480 Gold pro Stunde, mit Zirkeln bis 715.000. Die Theken (5 × 30 = 150 Stück) begrenzen nur, wie lange ohne einen verkauft wird (etwa 25 Minuten).
+- **Alle heutigen Bremsen begrenzen die Zeit, nicht die Menge:** Rohstoff-Vorrat 3 (45 Minuten), Theken 150 Stück, Laden-Lager 1.000 Stück (Lagerhäuser und Ausräumen gehen darüber hinaus). Wer regelmäßig vorbeischaut, verdient ohne Grenze.
+- **„Viel Gold = viele Möglichkeiten“ stimmt heute nur halb:** Gold kauft nur Rohstoffe, die Fläche endet bei 38 × 30. Die Gefahr ist eher, dass ein reicher Spieler im nächsten Level sofort alles kaufen kann – das Sparen und Abwägen, das Tobias am Anfang gefällt („Gold ist bewusst knapp“), fällt dann weg.
+
+**Möglichkeiten:**
+- **A – Aufstiege teurer** (nur Zahlen in `data/levels.js`): Jeder Aufstieg kostet etwa 1–2 Stunden dessen, was eine normale Fabrik auf diesem Level verdient. Einfach, bremst allein das Farmen aber nicht.
+- **B – Nachfrage: gleiche Ware wird billiger** (steht schon unter „Ideen für später“, M3): Jedes verkaufte Stück drückt den Preis dieser Ware ein wenig (z. B. bis höchstens auf die Hälfte), mit der Zeit erholt er sich. Fünf Theken nur mit Zirkeln bringen dann nicht mehr endlos viel; Vielfalt lohnt sich – passt zu Tobias' Ansatz „jede Ware mindestens einmal herstellen“. Die natürlichste Bremse, aber der größte Schritt.
+- **C – Kasse mit Obergrenze** (wie die Gold-Lager in Clash of Clans): z. B. auf Level 8 höchstens 20.000 Gold; ist die Kasse voll, kaufen keine Kunden mehr (nichts geht verloren, die Waren bleiben auf der Theke); ein Laden-Ausbau hebt die Grenze. Klar und bekannt, fühlt sich aber wie eine Wand an; Tobias' jetziges Gold müsste bleiben dürfen.
+- **D – Mehr, wofür man Gold ausgibt:** Laden-Ausbau mit Gold und Waren (mehr Theken, größeres Laden-Lager, mehr Kunden), mehr Fläche über 38 × 30 mit steigendem Preis (offene Frage 4), Verbesserungen (offene Frage 7). So wird „viel Gold = viele Möglichkeiten“ etwas Gutes, und wir bestimmen, welche Möglichkeiten es gibt und was sie kosten.
+- **E – Laufende Kosten** (z. B. Löhne je Gebäude): nicht empfohlen – dann macht man doch Minus, und im Hintergrund würde das Gold schmelzen.
+
+**Claudes Empfehlung:** Farmen erlauben (wer gern optimiert, soll belohnt werden), aber Weiterspielen soll sich mehr lohnen als Farmen: zuerst D + A (Gold bekommt wieder einen Zweck, Aufstiege passen zum Einkommen), B als eigentliche Bremse in M3, C nur, wenn Tobias eine harte Grenze möchte. Neue Level sollten Waren bringen, die mehr einbringen als die alten. Nichts davon ist für die ersten Tester nötig; v0.22.0 bleibt der nächste Schritt.
+
+**Fragen an Tobias:** Soll Gold durchgehend knapp bleiben – oder ist es in Ordnung, dass später Fläche, Zeit und Waren die Grenze sind und Gold eher ein Punktestand ist? Welche Bremse gefällt ihm (B, C, keine)? Wie viele Stunden hat er ungefähr auf Level 8 gespielt (damit sich die Preise an echten Zahlen ausrichten lassen)? Reicht ihm der Platz, wenn jede Ware einmal hergestellt wird?
+
 ### Entwurf v0.22.0 – Spielstand sichern und laden (noch nicht freigegeben)
 
 Tobias (Chat 15): Er möchte den Stand anderen zum Testen zeigen, ohne dass sein Spielstand verloren geht – frühestens ab der Woche ab 16.11.2026 (Chat 16). Claudes Entwurf (Chat 16):

@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 11.11.2026 – Chat 17: Gold-Gleichgewicht (v0.21.4)
+
+**Tobias** (mit drei Screenshots: seine Fabrik, das Laden-Lager): „Informiere dich über den aktuellen Spielstand. Ich bin auf Level 8 und hab aufgrund der Entwicklung erstmal weiter auf Level 8 gespielt ohne die Missionen zu machen, weil ich testen wollte, wie es mit dem Platz aussieht, wenn ich meine Fabrik so baue, dass ich jedes Teil mindestens 1x irgendwie herstellen kann, damit ich es auch verkaufen kann bzw. ich es nutzen kann, um die Missionen abzuschließen. Da ich die ganzen Missionen nie gemacht habe, habe ich natürlich keinen Vergleich bzgl. Balancing von Gold. Ich hab jetzt einige Versionen auf Level 8 gespielt und wollte dir mal zeigen, was ich alles habe, damit du das einordnen kannst. Ich hab einmal die komplette Fabrik (ich hab alles gebaut bis auf die komplette Reihe der Pflanzen, also keine richtige Produktion angefangen, sondern nur einmal gebaut) und hab jede Menge im Inventar (glaube einen Wert von 160.000 Gold). Meine Frage lautet: Ist das so in Ordnung, dass man quasi längere Zeit auf einem Level verbringt, um damit ‚unendlich Gold‘ zu generieren, oder wie können wir das steuern? Natürlich verstehe ich, dass man alles bauen muss, damit man die Missionen abschließen kann und man als Spieler eher damit beschäftigt ist, die Missionen zu machen, aber viel Gold bedeutet viele Möglichkeiten.“
+
+**Claude** hat aus den Datentabellen nachgerechnet und eingeordnet (ausführlich in `PLAENE.md`, „Überlegung: Gold-Gleichgewicht“): Auf einem Level zu bleiben ist an sich in Ordnung, lohnt sich heute aber ohne Grenze. Gold fließt nur in Rohstoffe (die mit Gewinn zurückkommen), Aufstiege und Fläche (zusammen bisher 14.850 Gold, einmalig) – Tobias' Gold allein ist das Dreifache. Seine Fabrik verdient grob 30.000 bis 50.000 Gold pro Stunde, wenn alles läuft. Die Theken bremsen teure Waren nicht (mit Zirkeln bis 12.000 Gold pro Minute); alle heutigen Bremsen begrenzen nur, wie lange die Fabrik ohne einen läuft. Level 7/8 bringen beim Gold weniger als die besten Waren von Level 5/6. Fünf Möglichkeiten: A Aufstiege teurer, B Nachfrage (gleiche Ware wird billiger), C Kasse mit Obergrenze, D mehr, wofür man Gold ausgibt, E laufende Kosten (nicht empfohlen). Empfehlung: Farmen erlauben, aber Weiterspielen soll sich mehr lohnen – D + A zuerst, B als Bremse in M3. Nichts davon ist vor den ersten Testern nötig. Fragen an Tobias: Soll Gold durchgehend knapp bleiben? Welche Bremse? Wie viele Stunden auf Level 8? Reicht der Platz?
+
+**Umgesetzt:** v0.21.4 (nur Doku).
+
 ### 11.11.2026 – Chat 16: Antworten auf die Fragen aus Chat 15 (v0.20.3)
 
 **Tobias** hat die Fragen vom Ende von Chat 15 wiederholt und beantwortet:
