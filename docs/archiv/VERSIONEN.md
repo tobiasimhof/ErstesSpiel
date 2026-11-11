@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.20.3 – Antworten zum Belastungstest und zu den Testern (11.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Antworten auf die Fragen aus Chat 15 festhalten (Regel „Nichts darf verloren gehen“).
+
+**Fragen, die wir uns gestellt haben:**
+- Gehören die beiden Punkte aus dem Belastungstest in v0.21.0? → Ja (Tobias: „Passt“).
+- Ist das Zeichnen auf dem Tablet ein Problem? → Nein, es ruckelt auch herausgezoomt nicht; die Verbesserung ist Vorsorge für größere Fabriken.
+- Was brauchen Tester? → Hat Zeit; Tobias zeigt das Spiel frühestens nächste Woche.
+- Darf Claude mit v0.21.0 anfangen? → Noch nicht: Die Frage zu Variante B (ohne oder mit kleinem Gebäudebild) ist unbeantwortet, ein ausdrückliches OK fehlt.
+
+**Gemacht:**
+- `docs/STAND.md`: Status, nächste Schritte, offene Fragen 1, 13, 14, neuer Arbeitsschritt oben (v0.20.0 fällt aus der Liste). Gespräch, Entscheidungen und Entwurf v0.21.0 in `docs/archiv/PLAENE.md` ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.20.2 – Tobias' Wahl, Variante B luftiger, Belastungstest (10.11.2026, nur Doku)
 
 **Vorgenommen:**

@@ -68,7 +68,8 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 - **Kein Gebäudebild** mehr auf Maschinen und Rohstoff-Gebäuden (Farbe und Name bleiben). Alternative, falls Tobias es vermisst: kleines Gebäudebild unten links hinter der Scheibe.
 - **Oben:** links die Punkte für den Vorrat (Rohstoff-Gebäude) oder das gelbe „?“-Schild mit der fehlenden Zutat (wartende Kombi-Maschine), rechts das Statuslicht. Unten nur der Name.
 - **Lagerhaus:** die Waren der Fächer auf einem hellen Schild, etwas schmaler, damit das Statuslicht frei bleibt.
-- **Dazu aus dem Belastungstest (wenn Tobias zustimmt):** nur noch zeichnen, was im Bild ist; im Testmodus „Bilder pro Sekunde“ anzeigen.
+- **Dazu aus dem Belastungstest:** nur noch zeichnen, was im Bild ist; im Testmodus „Bilder pro Sekunde“ anzeigen. Tobias (Chat 16): „Passt.“ Auf seinem Tablet ruckelt es nicht, auch herausgezoomt nicht – das ist also Vorsorge für größere Fabriken.
+- **Noch offen (Chat 16):** ohne oder mit kleinem Gebäudebild, auch Rohstoff-Gebäude, und Tobias' ausdrückliches OK.
 
 **Erster Entwurf (v0.20.1):**
 
