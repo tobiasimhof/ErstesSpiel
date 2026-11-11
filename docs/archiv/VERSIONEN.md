@@ -4,6 +4,20 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.21.4 – Frage zum Gold-Gleichgewicht (11.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Frage aus Chat 17 festhalten (Regel „Nichts darf verloren gehen“): Ist es in Ordnung, lange auf einem Level zu bleiben und „unendlich Gold“ zu verdienen, und wie lässt sich das steuern? Dazu seine Screenshots (Fabrik, die jede Ware mindestens einmal herstellt; Laden-Lager mit Waren für 166.579 Gold).
+
+**Fragen, die wir uns gestellt haben:**
+- Wie viel verdient eine Fabrik auf Level 8, und was verlangt das Spiel dagegen? → Grob 30.000 bis 50.000 Gold pro Stunde, wenn alles läuft; alle Aufstiege und die ganze Fläche zusammen 14.850 Gold, einmalig.
+- Bremsen die Theken? → Nur billige Waren (6 Stück pro Minute); bei teuren Waren begrenzen sie nur die Zeit ohne den Spieler.
+- Lohnt sich Weiterspielen beim Gold? → Gerade nicht: Level 7/8 bringen +47 % bis +58 %, Zirkel und Vorhängeschloss (Level 5/6) +81 % bis +89 %.
+
+**Gemacht:**
+- `docs/STAND.md`: Status, Tobias' Fabrik nach den neuen Screenshots, nächste Schritte (Punkt 5), offene Fragen 4 und 14, neuer Arbeitsschritt oben (v0.21.1 fällt aus der Liste). `docs/archiv/PLAENE.md`: Überlegung „Gold-Gleichgewicht“ mit Rechnung, fünf Möglichkeiten und Empfehlung. Gespräch ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.21.3 – Grüner Ring für Rohstoff-Gebäude (11.11.2026)
 
 **Vorgenommen:**
