@@ -727,6 +727,11 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.tap('#menu-new-game');
   await sleep(80);
   check(await page.isVisible('#dialog'), '„Neues Spiel“ fragt nach');
+  // v0.22.0: … und bietet an, die Fabrik erst zu sichern
+  check(
+    (await page.isVisible('#dialog-alt')) && (await page.textContent('#dialog-alt')) === '💾 Erst sichern',
+    '„Neues Spiel“ bietet „💾 Erst sichern“ an',
+  );
   await Promise.all([page.waitForNavigation(), page.tap('#dialog-ok')]);
   await waitForGame(page);
   const fresh = await game(page, () => ({
@@ -1996,6 +2001,149 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   });
   check(beetAfter.crop === 'leinsamen' && beetAfter.timer === 1800, `Beet im Hintergrund gewachsen (${JSON.stringify(beetAfter)})`);
   await page2.screenshot({ path: path.join(OUT, `${device.name}-17d-willkommen-nach-2-std.png`) });
+  await page2.locator('#modal-content button', { hasText: 'Weiter' }).tap();
+  await sleep(120);
+
+  // ---------- Spielstand sichern und laden (v0.22.0) ----------
+  const shot2 = (name) => page2.screenshot({ path: path.join(OUT, `${device.name}-${name}.png`) });
+  const toastText = () => page2.textContent('#toast');
+  const factory = () =>
+    game(page2, () => ({
+      level: window.__game.state.shopLevel,
+      buildings: window.__game.state.buildings.length,
+      belts: Object.keys(window.__game.state.belts).length,
+    }));
+  await page2.tap('#btn-menu');
+  await sleep(80);
+  check(
+    (await page2.isVisible('#menu-save-file')) && (await page2.isVisible('#menu-load-file')),
+    'Menü: „💾 Spielstand sichern“ und „📂 Spielstand laden“',
+  );
+  const menuBox = await page2.locator('#menu').boundingBox();
+  const viewport = page2.viewportSize();
+  check(menuBox.y + menuBox.height <= viewport.height && menuBox.x >= 0, 'Menü passt auf den Bildschirm');
+  await shot2('22-menue');
+  await page2.tap('#menu-save-file');
+  await sleep(80);
+  const saveDialog = await page2.textContent('#dialog-text');
+  check(
+    (await page2.textContent('#dialog-title')) === '💾 Spielstand sichern' && /Level \d+ · [\d.]+ Gold · \d+ Gebäude/.test(saveDialog) && saveDialog.includes('.txt“'),
+    `Sichern: Rückfrage mit Level, Gold, Gebäuden und Dateiname (${saveDialog.slice(0, 120)})`,
+  );
+  check(
+    !(await page2.isVisible('#dialog-alt')) && (await page2.textContent('#dialog-ok')) === '⬇️ In „Downloads“ speichern',
+    'Ohne Teilen-Menü: nur „In Downloads speichern“',
+  );
+  await shot2('22b-sichern');
+  const saved = await factory();
+  const [download] = await Promise.all([page2.waitForEvent('download'), page2.tap('#dialog-ok')]);
+  const backupName = download.suggestedFilename();
+  check(/^Fabrik Level \d+ - \d\d\.\d\d\.\d{4} \d\d-\d\d\.txt$/.test(backupName), `Dateiname „${backupName}“`);
+  const backupPath = path.join(OUT, `${device.name}-sicherung.txt`);
+  await download.saveAs(backupPath);
+  const backupData = JSON.parse(fs.readFileSync(backupPath, 'utf8'));
+  check(
+    backupData.saveVersion === 15 && backupData.state.buildings.length === saved.buildings && Math.abs(Date.now() - backupData.savedAt) < 60000,
+    `Datei enthält den Spielstand (Format ${backupData.saveVersion}, ${backupData.state.buildings.length} Gebäude)`,
+  );
+  await sleep(100);
+  check((await toastText()).includes('Gesichert') && (await toastText()).includes('Downloads'), 'Meldung: Gesichert, liegt in „Downloads“');
+
+  // Teilen-Menü (wie auf dem Tablet): hier nachgebildet
+  await game(page2, () => {
+    window.__shared = [];
+    Object.defineProperty(navigator, 'canShare', { configurable: true, value: () => true });
+    Object.defineProperty(navigator, 'share', {
+      configurable: true,
+      value: async (data) => {
+        window.__shared.push(...data.files.map((f) => f.name));
+      },
+    });
+  });
+  await page2.tap('#btn-menu');
+  await page2.tap('#menu-save-file');
+  await sleep(80);
+  check(
+    (await page2.textContent('#dialog-ok')) === '📤 Teilen …' && (await page2.textContent('#dialog-alt')) === '⬇️ In „Downloads“',
+    'Mit Teilen-Menü: „📤 Teilen …“ und „⬇️ In Downloads“',
+  );
+  await shot2('22c-sichern-teilen');
+  await page2.tap('#dialog-ok');
+  await sleep(150);
+  const shared = await game(page2, () => window.__shared);
+  check(shared.length === 1 && shared[0].endsWith('.txt'), `Teilen: Datei übergeben (${shared.join(', ')})`);
+
+  // Neues Spiel mit „Erst sichern“
+  await page2.tap('#btn-menu');
+  await page2.tap('#menu-new-game');
+  await sleep(80);
+  await shot2('22d-neues-spiel-erst-sichern');
+  await page2.tap('#dialog-alt');
+  await sleep(80);
+  check((await page2.textContent('#dialog-title')) === '💾 Spielstand sichern', '„Erst sichern“ öffnet das Sichern');
+  await page2.tap('#dialog-ok');
+  await sleep(150);
+  check(
+    (await game(page2, () => window.__shared.length)) === 2 && (await page2.textContent('#dialog-title')).startsWith('Gesichert'),
+    'Nach dem Sichern: „Gesichert – jetzt neues Spiel starten?“',
+  );
+  await Promise.all([page2.waitForNavigation(), page2.tap('#dialog-ok')]);
+  await waitForGame(page2);
+  const freshGame = await factory();
+  check(freshGame.buildings === 2 && freshGame.belts === 0 && freshGame.level === 1, `Neues Spiel nach dem Sichern (${JSON.stringify(freshGame)})`);
+
+  // Laden: Datei 2 Stunden alt machen – die Fabrik holt die Zeit nach
+  backupData.savedAt -= 2 * 3600 * 1000;
+  fs.writeFileSync(backupPath, JSON.stringify(backupData));
+  await page2.tap('#btn-menu');
+  const [chooser] = await Promise.all([page2.waitForEvent('filechooser'), page2.tap('#menu-load-file')]);
+  await chooser.setFiles(backupPath);
+  await page2.waitForSelector('#dialog:not([hidden])');
+  const loadDialog = await page2.textContent('#dialog-text');
+  check(
+    (await page2.textContent('#dialog-title')) === '📂 Spielstand laden?' &&
+      loadDialog.includes(`-sicherung.txt“`) &&
+      loadDialog.includes(`Level ${saved.level} ·`) &&
+      loadDialog.includes(`${saved.buildings} Gebäude, gesichert am`) &&
+      loadDialog.includes('ersetzt'),
+    `Laden: Vorschau mit Level, Gebäuden und Datum (${loadDialog.slice(0, 160)})`,
+  );
+  check((await page2.textContent('#dialog-alt')) === '💾 Jetzigen erst sichern', 'Laden bietet „Jetzigen erst sichern“ an');
+  await shot2('22e-laden-frage');
+  await Promise.all([page2.waitForNavigation(), page2.tap('#dialog-ok')]);
+  await waitForGame(page2);
+  await page2.waitForFunction(() => !window.__game.isCatchingUp(), null, { timeout: 20000 });
+  await sleep(200);
+  const restored = await factory();
+  check(
+    restored.level === saved.level && restored.buildings === saved.buildings && restored.belts === saved.belts,
+    `Fabrik geladen (${JSON.stringify(saved)} → ${JSON.stringify(restored)})`,
+  );
+  check((await toastText()).includes('-sicherung.txt“ geladen'), `Meldung: Spielstand geladen (${await toastText()})`);
+  check(
+    (await page2.textContent('#modal-content h2')) === '📂 Spielstand geladen' &&
+      (await page2.textContent('#modal-content')).includes('Seit dem Sichern sind 2 Std. vergangen'),
+    'Nach dem Laden holt die Fabrik die 2 Stunden seit dem Sichern nach („Seit dem Sichern sind 2 Std. vergangen“)',
+  );
+  const keptCopy = await game(page2, () => JSON.parse(localStorage.getItem('erstesspiel-spielstand-vor-dem-laden')).state.buildings.length);
+  check(keptCopy === 2, 'Der vorige Spielstand bleibt als Sicherheitskopie im Browser');
+  await shot2('22f-geladen');
+  await page2.locator('#modal-content button', { hasText: 'Weiter' }).tap();
+  await sleep(120);
+
+  // Falsche Datei: wird abgelehnt, nichts ändert sich
+  const wrongPath = path.join(OUT, `${device.name}-keine-sicherung.txt`);
+  fs.writeFileSync(wrongPath, 'Einkaufsliste: Brot, Milch');
+  await page2.tap('#btn-menu');
+  const [chooser2] = await Promise.all([page2.waitForEvent('filechooser'), page2.tap('#menu-load-file')]);
+  await chooser2.setFiles(wrongPath);
+  await sleep(200);
+  check(
+    !(await page2.isVisible('#dialog')) && (await toastText()).includes('ist kein Spielstand'),
+    `Falsche Datei: Hinweis statt Rückfrage (${await toastText()})`,
+  );
+  check((await factory()).buildings === saved.buildings, 'Falsche Datei: Fabrik bleibt, wie sie ist');
+  await shot2('22g-falsche-datei');
 
   check(errors.length === 0, `Keine Fehler in der Konsole${errors.length ? ': ' + errors.join(' | ') : ''}`);
   await context.close();

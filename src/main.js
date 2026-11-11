@@ -23,7 +23,8 @@ import { isRipe, productionOf } from './core/production.js';
 import { createLevelView, unlockText } from './view/levels.js';
 import { costText, numberFormat } from './view/format.js';
 import { redrawItemIcons } from './view/itemArt.js';
-import { clearGame, loadGame, loadSettings, saveGame, saveSettings } from './view/storage.js';
+import { clearGame, loadGame, loadSettings, rememberLoadedFile, replaceGame, saveGame, saveSettings, takeLoadedFile } from './view/storage.js';
+import { createBackup } from './view/backup.js';
 import { OFFLINE } from './core/data/offline.js';
 import { catchUpProgress, extendCatchUp, offlineReport, runCatchUp, startCatchUp } from './core/offline.js';
 import { createOfflineView } from './view/offline.js';
@@ -77,19 +78,51 @@ function onChange() {
   scheduleSave();
 }
 
+// v0.22.0: Vor dem Neuanfang fragen, ob die Fabrik erst gesichert werden soll.
 async function newGame() {
-  const ok = await panels.confirm({
+  const choice = await panels.confirm({
     title: 'Neues Spiel starten?',
-    text: 'Deine Fabrik wird gelöscht und du beginnst von vorn.',
+    text: 'Deine Fabrik wird gelöscht und du beginnst von vorn. Willst du sie behalten, sichere sie vorher als Datei.',
     okLabel: 'Neues Spiel',
     danger: true,
+    altLabel: '💾 Erst sichern',
   });
-  if (!ok) return;
+  if (choice === 'alt') {
+    if (!(await backup.save())) return;
+    const ok = await panels.confirm({
+      title: 'Gesichert – jetzt neues Spiel starten?',
+      text: 'Deine Fabrik liegt jetzt als Datei vor. Mit „📂 Spielstand laden“ im Menü holst du sie zurück.',
+      okLabel: 'Neues Spiel',
+      danger: true,
+    });
+    if (!ok) return;
+  } else if (choice !== true) return;
   resetting = true;
   clearTimeout(saveTimer);
   clearGame();
   location.reload();
 }
+
+// v0.22.0: Spielstand als Datei sichern und laden. Beim Laden ersetzt die
+// Datei den Spielstand im Browser, dann startet die Seite neu und holt – wie
+// beim normalen Öffnen – die Zeit seit dem Sichern nach.
+const backup = createBackup({
+  panels,
+  getState: () => state,
+  isBusy: () => Boolean(catchUpJob),
+  onReplace(text, fileName) {
+    saveNow(); // damit die Sicherheitskopie des jetzigen Spielstands aktuell ist
+    resetting = true;
+    clearTimeout(saveTimer);
+    if (!replaceGame(text)) {
+      resetting = false;
+      panels.toast('Laden hat nicht geklappt – der Browser lässt nichts speichern.', 5000);
+      return;
+    }
+    rememberLoadedFile(fileName);
+    location.reload();
+  },
+});
 
 // ---------- Oberfläche ----------
 
@@ -139,6 +172,11 @@ const hud = createHud({
   onToggleTestMode: toggleTestMode,
   onTestPack: testPack,
   onLevel: () => openLevel(),
+  onSaveFile: () => {
+    controller.closeInfo();
+    backup.save();
+  },
+  onLoadFile: () => backup.pickFile(),
 });
 hud.setTestMode(Boolean(settings.testMode), TEST_SPEED);
 
@@ -238,6 +276,11 @@ new ResizeObserver(handleResize).observe(canvas);
 handleResize();
 hud.update(state);
 
+// v0.22.0: Spielstand gerade aus einer Datei geladen? Dann sagt das
+// Nachrechnen „Seit dem Sichern …“ statt „Du warst … weg“.
+const loadedFile = loaded.status === 'ok' ? takeLoadedFile() : null;
+let catchUpFromFile = Boolean(loadedFile);
+
 if (loaded.status === 'ok' && loaded.migratedFrom) {
   const from = loaded.migratedFrom;
   const notes = [
@@ -259,8 +302,9 @@ if (loaded.status === 'ok' && loaded.migratedFrom) {
     ...(loaded.notes ?? []),
     loaded.counterNote ?? '',
   ].filter(Boolean);
-  panels.toast(notes.join(' '), 9000);
-} else if (loaded.status === 'ok' && loaded.counterNote) panels.toast(`Spielstand geladen. ${loaded.counterNote}`, 6000);
+  panels.toast([loadedFile ? `Spielstand „${loadedFile}“ geladen.` : '', ...notes].filter(Boolean).join(' '), 9000);
+} else if (loadedFile) panels.toast(`Spielstand „${loadedFile}“ geladen.${loaded.counterNote ? ` ${loaded.counterNote}` : ''}`, 5000);
+else if (loaded.status === 'ok' && loaded.counterNote) panels.toast(`Spielstand geladen. ${loaded.counterNote}`, 6000);
 else if (loaded.status === 'ok') panels.toast('Spielstand geladen.', 1600);
 else if (loaded.status === 'invalid') panels.toast('Spielstand war beschädigt – neues Spiel gestartet.', 3500);
 
@@ -284,7 +328,7 @@ function continueCatchUp() {
   do finished = runCatchUp(catchUpJob, 200);
   while (!finished && performance.now() - start < CATCH_UP_MS);
   if (!finished) {
-    offlineView.showProgress(catchUpJob.seconds, catchUpProgress(catchUpJob));
+    offlineView.showProgress(catchUpJob.seconds, catchUpProgress(catchUpJob), catchUpFromFile);
     return false;
   }
   const report = offlineReport(catchUpJob);
@@ -293,8 +337,9 @@ function continueCatchUp() {
   offlineView.hideProgress();
   if (report.seconds >= OFFLINE.toastSeconds) {
     controller.closeInfo();
-    offlineView.report(report);
+    offlineView.report(report, catchUpFromFile);
   }
+  catchUpFromFile = false;
   onChange();
   saveNow();
   return true;
@@ -302,6 +347,7 @@ function continueCatchUp() {
 
 // Beim Öffnen: Zeit seit dem letzten Speichern nachrechnen
 if (loaded.status === 'ok' && loaded.savedAt > 0) beginCatchUp((Date.now() - loaded.savedAt) / 1000);
+if (!catchUpJob) catchUpFromFile = false; // nichts nachzuholen (Datei gerade erst gesichert)
 
 // ---------- Takt ----------
 // Die Simulation läuft in festen Takten (TICK). Pro Bild werden so viele Takte

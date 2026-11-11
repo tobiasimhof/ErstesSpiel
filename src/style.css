@@ -972,6 +972,12 @@ button.danger {
   width: min(400px, 100%);
 }
 
+/* v0.22.0: Zeilenumbrüche im Text der Rückfrage (Spielstand sichern und laden) */
+#dialog-text {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
 /* ---------- Laden-Fenster: Reiter, Theken, Händler ---------- */
 
 .tabs {

@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 11.11.2026 – Chat 17: Gold-Gleichgewicht (v0.21.4 bis v0.21.6)
+### 11.11.2026 – Chat 17: Gold-Gleichgewicht, Spielstand sichern (v0.21.4 bis v0.22.0)
 
 **Tobias** (mit drei Screenshots: seine Fabrik, das Laden-Lager): „Informiere dich über den aktuellen Spielstand. Ich bin auf Level 8 und hab aufgrund der Entwicklung erstmal weiter auf Level 8 gespielt ohne die Missionen zu machen, weil ich testen wollte, wie es mit dem Platz aussieht, wenn ich meine Fabrik so baue, dass ich jedes Teil mindestens 1x irgendwie herstellen kann, damit ich es auch verkaufen kann bzw. ich es nutzen kann, um die Missionen abzuschließen. Da ich die ganzen Missionen nie gemacht habe, habe ich natürlich keinen Vergleich bzgl. Balancing von Gold. Ich hab jetzt einige Versionen auf Level 8 gespielt und wollte dir mal zeigen, was ich alles habe, damit du das einordnen kannst. Ich hab einmal die komplette Fabrik (ich hab alles gebaut bis auf die komplette Reihe der Pflanzen, also keine richtige Produktion angefangen, sondern nur einmal gebaut) und hab jede Menge im Inventar (glaube einen Wert von 160.000 Gold). Meine Frage lautet: Ist das so in Ordnung, dass man quasi längere Zeit auf einem Level verbringt, um damit ‚unendlich Gold‘ zu generieren, oder wie können wir das steuern? Natürlich verstehe ich, dass man alles bauen muss, damit man die Missionen abschließen kann und man als Spieler eher damit beschäftigt ist, die Missionen zu machen, aber viel Gold bedeutet viele Möglichkeiten.“
 
@@ -23,6 +23,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat die Entscheidungen festgehalten und den Entwurf v0.23.0 angepasst (siehe `PLAENE.md`). Rückfrage zur Lesart: Gelten die Zahlen für die 2 Start-Theken zusammen (je Theke 3 / 1,5 / 0,75 pro Minute), und jede gekaufte Theke legt ihren Anteil drauf? Sonst brächte eine gekaufte Theke keinen zusätzlichen Verkauf. „1–2“ = 1,5 im Schnitt? Kein Mindest-Level? Dazu die Folgen für Tobias' Fabrik: Auf Level 8 mit 2 Theken verkauft er 90 Stück pro Stunde; sein Laden-Lager ist im Schnitt 166 Gold je Stück wert (so verkauft etwa 15.000 Gold pro Stunde), eine volle Füllung seiner Fabrik kostet etwa 74.000 Gold – er muss also vor allem teure Teile verkaufen oder Theken dazukaufen. Weil Tobias zu v0.22.0 noch nicht geantwortet hat, hat Claude zu den 4 Fragen Vorschläge gemacht (Teilen-Menü, sonst „Downloads“; Testmodus und Test-Knopf bleiben sichtbar; die Fabrik läuft nach dem Laden nach) und um ein OK für beide Schritte gebeten – erst v0.22.0, damit Tobias seine Fabrik sichern kann, bevor sie auf 2 Theken zurückgeht.
 
 **Umgesetzt:** v0.21.6 (nur Doku).
+
+**Tobias:** „Ja, die Lesart stimmt. Jede Theke verkauft, damit der Zukauf von Theken sich auch lohnt. Später kann man bei den Upgrades auch die Theke upgraden, damit man 10 % mehr Kundschaft oder so was bekommt. Wir können das gerne so machen in der Reihenfolge. Ich versteh das mit dem Sichern noch nicht so ganz. Das bedeutet, ich speichere, und wenn ich lade, rechnet das Spiel, wie viel Zeit vergangen ist, und rechnet das dann auf die gespeicherte Datei, die ich hochlade? Du kannst gerne damit anfangen.“
+
+**Claude** hat v0.22.0 gebaut (Claudes Vorschläge zu den 4 Fragen, Tobias hat keine Einwände genannt) und die Frage beantwortet: Ja – die Datei ist ein Schnappschuss der Fabrik mit Uhrzeit. Beim Laden nimmt das Spiel diesen Schnappschuss und rechnet die Zeit seit dem Sichern nach, als wäre das Spiel so lange zu gewesen (bis etwas leer ist); was in der Zwischenzeit im jetzigen Spiel passiert ist, wird ersetzt. Die Datei endet auf `.txt`, weil Chrome auf Android `.json` nicht teilt. Theken-Upgrade (+10 % Kundschaft) bei den Verbesserungen vermerkt (offene Frage 7). v0.23.0 kommt, sobald Tobias seine Fabrik gesichert hat.
+
+**Umgesetzt:** v0.22.0 (siehe Versionshistorie).
 
 ### 11.11.2026 – Chat 16: Antworten auf die Fragen aus Chat 15 (v0.20.3)
 

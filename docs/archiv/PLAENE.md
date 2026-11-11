@@ -61,7 +61,13 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.23.0 – Theken kaufen, langsamer verkaufen (noch nicht freigegeben)
+### v0.22.0 – Spielstand sichern und laden (fertig)
+
+Umgesetzt wie im Entwurf unten mit Claudes Vorschlägen (Tobias, Chat 17: „Du kannst gerne damit anfangen“). Ergänzungen: Datei endet auf `.txt` (Chrome auf Android teilt keine `.json`); wo das Gerät teilen kann, stehen „📤 Teilen …“ und „⬇️ In Downloads“ zur Wahl; beim Laden „💾 Jetzigen erst sichern“ und eine Sicherheitskopie des vorigen Spielstands im Browser; nach dem Laden heißt das Fenster „📂 Spielstand geladen – Seit dem Sichern sind … vergangen“. Technik: Die Datei ersetzt den Spielstand im Browser, die Seite startet neu und rechnet wie beim normalen Öffnen nach.
+
+### Entwurf v0.23.0 – Theken kaufen, langsamer verkaufen (freigegeben, kommt nach v0.22.0)
+
+**Freigabe (Tobias, Chat 17):** „Ja, die Lesart stimmt. Jede Theke verkauft, damit der Zukauf von Theken sich auch lohnt. … Wir können das gerne so machen in der Reihenfolge.“ Gilt mit der Tempo-Tabelle unten (2 Start-Theken zusammen 6 / 3 / 1,5 pro Minute), nur Gold, kein Mindest-Level, Tobias' Fabrik zurück auf 2 Theken. Start, sobald Tobias seine Fabrik mit v0.22.0 gesichert hat.
 
 **Stand nach Tobias' Antwort (v0.21.6):**
 - **Tobias (Chat 17):** „Das Tempo passt so für mich, aber wir könnten es ja nochmal drosseln, dass wir sagen von Level 1–3 sind es 6 die Minute, ab Level 4 sind es nur noch 3 die Minute und ab Level 7 sind es nur noch 1–2 die Minute, damit reguliert sich der Verkauf ohnehin und der Anfang wird nicht so ‚zäh‘. Finde die Idee, dass Theken Gold kosten sollen, sinnvoller. Ja, ändere das bei mir auch direkt auf 2 Theken, damit ich ein besseres Gefühl dafür bekommen kann. Immerhin muss ich genug Gold verdienen, dass ich meine Fabriken mit Rohstoffen befüllen kann. Aktuell geht das, und mir bleibt noch jede Menge Gold übrig.“
@@ -119,7 +125,7 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Fragen an Tobias:** Soll Gold durchgehend knapp bleiben – oder ist es in Ordnung, dass später Fläche, Zeit und Waren die Grenze sind und Gold eher ein Punktestand ist? Welche Bremse gefällt ihm (B, C, keine)? Wie viele Stunden hat er ungefähr auf Level 8 gespielt (damit sich die Preise an echten Zahlen ausrichten lassen)? Reicht ihm der Platz, wenn jede Ware einmal hergestellt wird?
 
-### Entwurf v0.22.0 – Spielstand sichern und laden (noch nicht freigegeben)
+### Entwurf v0.22.0 – Spielstand sichern und laden (umgesetzt, siehe oben)
 
 **Claudes Vorschläge zu den 4 Fragen (Chat 17, v0.21.6)**, falls Tobias nichts anderes sagt: Der Entwurf bleibt so; Datei über das Teilen-Menü, wo das Gerät es kann, sonst „Downloads“; Testmodus und Test-Knopf bleiben für Tester sichtbar (Prototyp; Tobias sagt ihnen, wofür sie sind); nach dem Laden läuft die Fabrik ab dem Sicherungszeitpunkt nach (wie „Willkommen zurück“) – so verliert Tobias' Fabrik keine Zeit, während ein Tester auf seinem Tablet spielt.
 

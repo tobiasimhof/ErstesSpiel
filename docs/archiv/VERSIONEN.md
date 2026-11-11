@@ -4,6 +4,25 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.22.0 – Spielstand sichern und laden (11.11.2026)
+
+**Vorgenommen:**
+- Entwurf v0.22.0 mit Claudes Vorschlägen zu den 4 Fragen (Tobias, Chat 17: „Wir können das gerne so machen in der Reihenfolge … Du kannst gerne damit anfangen“): Spielstand als Datei sichern (Downloads oder Teilen) und laden, Vorschau und Rückfrage, Nachrechnen seit dem Sichern, „Erst sichern?“ bei „Neues Spiel“; Testmodus und Test-Knopf bleiben sichtbar.
+
+**Fragen, die wir uns gestellt haben:**
+- `.json` oder `.txt`? → `.txt`: Chrome auf Android teilt nur bestimmte Dateiarten, `.json` gehört nicht dazu. Laden nimmt beides.
+- Downloads oder Teilen? → Beides zur Wahl, wo das Gerät teilen kann („📤 Teilen …“ und „⬇️ In Downloads“); sonst nur Downloads.
+- Wie holt die Fabrik die Zeit nach? → Die Datei ersetzt den Spielstand im Browser, die Seite startet neu und rechnet wie beim normalen Öffnen ab `savedAt` nach – derselbe, schon getestete Weg wie „Willkommen zurück“.
+- Was, wenn man versehentlich lädt? → Vorher „💾 Jetzigen erst sichern“; außerdem bleibt der vorige Spielstand als Sicherheitskopie im Browser (`erstesspiel-spielstand-vor-dem-laden`), damit Claude ihn notfalls retten kann. Vor dem Ersetzen wird der jetzige Stand noch einmal gespeichert (fiel im Browser-Test auf).
+- Was sagt das Fenster nach dem Laden? → „📂 Spielstand geladen – Seit dem Sichern sind … vergangen“ statt „Willkommen zurück! Du warst … weg“.
+
+**Gemacht:**
+- Neu `src/view/backup.js` (Dateiname, Vorschau, `readBackup`, Downloads/Teilen, Dateiauswahl). `src/view/storage.js`: `replaceGame`, Dateiname über den Neustart. `src/view/panels.js`: Rückfrage mit optionalem dritten Knopf. `src/view/hud.js`, `index.html`: Menü „💾 Spielstand sichern“, „📂 Spielstand laden“, versteckte Dateiauswahl. `src/view/offline.js`: Texte nach dem Laden. `src/main.js`: alles verbunden, „Neues Spiel“ mit „Erst sichern“. `src/style.css`: Zeilenumbrüche in Rückfragen. Spielstand-Format unverändert (15).
+- Tests: `tests/sichern.test.js` (7 Tests), Browser-Test ergänzt (sichern, teilen, neues Spiel mit „Erst sichern“, laden mit 2 Stunden Nachrechnen, Sicherheitskopie, falsche Datei). Doku: `STAND.md`, `SPIEL.md`, `TECHNIK.md`, Archiv.
+
+**Geprüft:**
+- `npm test` bestanden (283 Tests), Browser-Test in Tablet- und Handygröße bestanden (661 Prüfungen), Screenshots angesehen (Menü, Sichern mit und ohne Teilen, Neues Spiel, Laden-Frage, Geladen, falsche Datei).
+
 ### v0.21.6 – Theken: Tempo je Level, nur Gold, Tobias auf 2 Theken (11.11.2026, nur Doku)
 
 **Vorgenommen:**

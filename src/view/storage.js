@@ -54,6 +54,45 @@ export function saveGame(state) {
   }
 }
 
+// v0.22.0: Spielstand aus einer Datei übernehmen (der Text wurde vorher mit
+// readBackup geprüft). Der bisherige Spielstand bleibt zur Sicherheit unter
+// einem eigenen Schlüssel liegen – so ließe er sich notfalls von Hand retten.
+// Gibt false zurück, wenn der Browser nichts speichern lässt.
+export function replaceGame(text) {
+  try {
+    const previous = localStorage.getItem(KEY);
+    if (previous) localStorage.setItem(`${KEY}-vor-dem-laden`, previous);
+  } catch {
+    // dann eben ohne Sicherheitskopie
+  }
+  try {
+    localStorage.setItem(KEY, text);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// v0.22.0: Nach dem Laden einer Datei startet die Seite neu – der Dateiname
+// wird so lange gemerkt, damit das Spiel danach Bescheid sagen kann.
+const LOADED_KEY = 'erstesspiel-geladen-aus-datei';
+export function rememberLoadedFile(name) {
+  try {
+    sessionStorage.setItem(LOADED_KEY, name);
+  } catch {
+    // nichts zu tun
+  }
+}
+export function takeLoadedFile() {
+  try {
+    const name = sessionStorage.getItem(LOADED_KEY);
+    sessionStorage.removeItem(LOADED_KEY);
+    return name;
+  } catch {
+    return null;
+  }
+}
+
 export function clearGame() {
   try {
     localStorage.removeItem(KEY);

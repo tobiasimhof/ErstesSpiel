@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.21.3). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.22.0). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
@@ -21,7 +21,8 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 
 - **Echtzeit.** Die Fabrik läuft auch bei geschlossenem Spiel weiter, **bis etwas leer ist**: Rohstoff-Gebäude, bis ihr Vorrat verarbeitet ist; Maschinen, bis Zutaten fehlen; Lagerhäuser, bis sie leer sind; das Versandportal, bis das Laden-Lager voll ist; Kunden, bis die Theken leer sind; Beete wachsen, bis sie reif sind. Nachlegen ist immer Handarbeit („wie Clash of Clans, nur umgekehrt“, Tobias).
 - **Zurückkommen:** Die verpasste Zeit wird nachgerechnet. Nach mehr als 1 Minute kurze Meldung, nach mehr als 10 Minuten das Fenster „👋 Willkommen zurück!“ (wie lange weg, Verkäufe, was ins Laden-Lager kam, was leer gelaufen ist, reife Beete, Laden-Lager voll, Theken leer).
-- **Menü ☰:** Neues Spiel, Testmodus (Zeit ×10, ein Testpaket mit Waren und oben die Anzeige „🎞️ … Bilder/s“, wie flüssig das Spiel läuft). Oben: Gold, Knopf „Laden-Level“, Vollbild, Versionsnummer.
+- **Menü ☰:** Spielstand sichern und laden, Testmodus (Zeit ×10, ein Testpaket mit Waren und oben die Anzeige „🎞️ … Bilder/s“, wie flüssig das Spiel läuft), Neues Spiel. Oben: Gold, Knopf „Laden-Level“, Vollbild, Versionsnummer.
+- **Spielstand sichern und laden:** „💾 Spielstand sichern“ legt eine kleine Datei an („Fabrik Level 8 - 11.11.2026 21-45.txt“) – in „Downloads“ oder über „📤 Teilen …“ (WhatsApp, E-Mail, Drive), wo das Gerät es kann. „📂 Spielstand laden“: Datei wählen → Vorschau (Level, Gold, Gebäude, wann gesichert) → „Laden“ (oder „💾 Jetzigen erst sichern“). Danach holt die Fabrik die Zeit seit dem Sichern nach, wie beim Zurückkommen („📂 Spielstand geladen – Seit dem Sichern sind … vergangen“). Falsche Dateien werden abgelehnt, das Spiel bleibt dann, wie es ist. „🔄 Neues Spiel“ bietet zuerst „💾 Erst sichern“ an. So können Tester auch auf Tobias' Tablet spielen: sichern → neues Spiel → Tester spielt → laden.
 
 ## 3. Die Fabrik
 
