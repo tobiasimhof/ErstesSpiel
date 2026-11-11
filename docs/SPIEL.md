@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.20.0). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.21.0). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
@@ -21,7 +21,7 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 
 - **Echtzeit.** Die Fabrik läuft auch bei geschlossenem Spiel weiter, **bis etwas leer ist**: Rohstoff-Gebäude, bis ihr Vorrat verarbeitet ist; Maschinen, bis Zutaten fehlen; Lagerhäuser, bis sie leer sind; das Versandportal, bis das Laden-Lager voll ist; Kunden, bis die Theken leer sind; Beete wachsen, bis sie reif sind. Nachlegen ist immer Handarbeit („wie Clash of Clans, nur umgekehrt“, Tobias).
 - **Zurückkommen:** Die verpasste Zeit wird nachgerechnet. Nach mehr als 1 Minute kurze Meldung, nach mehr als 10 Minuten das Fenster „👋 Willkommen zurück!“ (wie lange weg, Verkäufe, was ins Laden-Lager kam, was leer gelaufen ist, reife Beete, Laden-Lager voll, Theken leer).
-- **Menü ☰:** Neues Spiel, Testmodus (Zeit ×10 und ein Testpaket mit Waren). Oben: Gold, Knopf „Laden-Level“, Vollbild, Versionsnummer.
+- **Menü ☰:** Neues Spiel, Testmodus (Zeit ×10, ein Testpaket mit Waren und oben die Anzeige „🎞️ … Bilder/s“, wie flüssig das Spiel läuft). Oben: Gold, Knopf „Laden-Level“, Vollbild, Versionsnummer.
 
 ## 3. Die Fabrik
 
@@ -34,9 +34,11 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 
 **Anschlüsse und Licht:** Pfeile am Gebäude – blau = Eingang, orange = Ausgang. Maschinen (2 × 2): Eingang links oben, Ausgang rechts oben. Kombi-Maschinen: zwei Eingänge links oben und links unten, jeder nimmt jede passende Zutat (am sichersten jede Zutat über ihren eigenen Eingang). Statuslicht: grün = arbeitet, gelb = wartet, rot = blockiert.
 
+**Auf der Karte** zeigt jede Maschine groß auf einer hellen Scheibe, was sie herstellt (das Warenbild vom Band); ein gelber Ring um die Scheibe zeigt, wie weit das laufende Stück ist. Rohstoff-Gebäude zeigen ihre Ware (leer = blass, die Erntebank die Ware der laufenden Pflanze); ihr Ring zeigt, wie viel vom laufenden Rohstoff noch übrig ist. Oben rechts das Statuslicht, oben links die Punkte für den Rohstoff-Vorrat oder – wenn eine Kombi-Maschine wartet – ein gelbes Schild „?“ mit den fehlenden Zutaten; unten der Name. Lagerhäuser zeigen die Waren ihrer Fächer (leer: 📦), Beet und Versandportal ihr eigenes Bild. Jeder Reiter hat seine Farbe: Holz braun, Stein steingrau, Eisen stahlblau, Erde grün; Lagerhaus sandfarben, Versandportal lila. Ein Gebäudebild gibt es auf der Karte nicht mehr (eigene Gebäudegrafik kommt später, M4).
+
 **Rohstoff-Gebäude** (Holzfällerlager, Steinbruch, Schmelzhütte, Erntebank): Rohstoff einlegen → 200 Blöcke bzw. Barren in 15 Minuten (Erntebank: 1 Pflanze → 50 Fasern bzw. Blüten in 10 Minuten). **Vorrat bis 3**, der Reihe nach verarbeitet; drei Punkte am Gebäude zeigen ihn. „⏫ Auffüllen“ füllt bis zum Rand: erst aus dem Laden-Lager, was fehlt, kauft es beim Händler (Erntebank nur aus dem Laden-Lager). Die **Erntebank** nimmt jede Pflanze, auch gemischt; je Pflanze ein Knopf „➕ … einlegen“, Auffüllen nimmt die Pflanze, die gerade läuft. Tobias baut lieber zwei Erntebänke und legt getrennt ein, damit die Straßen steuerbar bleiben.
 
-**Maschinen** verarbeiten nach Rezept (Grundmaschinen 2 Einstellungen, Kombi-Maschinen 2–3, Webstube 1). Beim Umstellen bleiben alle Teile in der Maschine; „↩ Reste ins Laden-Lager“ holt ungebrauchte heraus. Fehlt eine Zutat, zeigt die Maschine auf der Karte ein kleines Bild davon.
+**Maschinen** verarbeiten nach Rezept (Grundmaschinen 2 Einstellungen, Kombi-Maschinen 2–3, Webstube 1). Beim Umstellen bleiben alle Teile in der Maschine; „↩ Reste ins Laden-Lager“ holt ungebrauchte heraus.
 
 **Infofenster** (Gebäude antippen): oben Name und Statuslicht mit kurzem Text. Bei Maschinen ein grüner Kasten **„Stellt gerade her“** mit den Warenbildern vom Band – jede Zutat mit „hat / braucht“ (fehlend rot, vollständig grün mit Haken) → Ergebnis, darunter was noch fehlt, Zeit je Stück und Wert. Darunter **„Umstellen auf“**: jede andere Einstellung als Knopf mit ihrem Rezept in Bildern und ihrem Wert; Antippen stellt um. Bei Rohstoff-Gebäuden zeigt der Kasten Rohstoff → Waren (Zeit, leer in etwa …), darunter den Vorrat als Bilder (leere Plätze blass) und was im Laden-Lager liegt; „⏫ Auffüllen“ groß, „➕ 1 einlegen“ und „🧺 Kaufen“ kleiner. Beim **Beet** zeigt der Kasten Samen → Pflanze („Wächst hier“, „Wächst gerade“ mit Balken und „reif in etwa …“, „Reif zum Ernten“), darunter die Samen im Laden-Lager. Beim **Lagerhaus** steht jedes der 3 Fächer als Zeile mit Warenbild, Menge („42 / 50“) und Füllbalken (volles Fach orange), oben die Summe („91 / 150“). Beim **Versandportal** stehen die zuletzt angekommenen Waren (bis 3) → Laden-Lager mit Füllstand (roter Balken und Hinweis, wenn es voll ist) und wie viele Waren es bisher verschickt hat. Unten bei allen Gebäuden klein „↔ Verschieben“, „↻ Drehen“, „🗑 Abreißen“ und ein kurzer Tipp.
 

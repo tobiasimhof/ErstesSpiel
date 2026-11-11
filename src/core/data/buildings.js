@@ -28,6 +28,17 @@
 //              Kein Anschluss ans Band. Im Beet wächst jede Pflanze: crops
 //              sagt, welcher Samen welche Pflanze in welcher Zeit ergibt.
 // Alle Zahlen sind Platzhalter. Maschinen sind 2 × 2 (docs/SPIEL.md, Abschnitt 6).
+// color: Farbe auf der Karte. v0.21.0 (Tobias, Chat 16): Seit die Karte statt
+//        des Gebäudebildes das Produkt zeigt, haben alle Gebäude eines Reiters
+//        dieselbe Farbe – Holz braun, Stein steingrau, Eisen stahlblau, Erde
+//        grün (ein Test prüft das). Lagerhaus und Versandportal haben eigene.
+
+export const TAB_COLORS = {
+  holz: '#8a5a2e',
+  stein: '#8d8a82',
+  eisen: '#4a5c7c',
+  kraeuter: '#2f6b4f',
+};
 
 export const BUILDINGS = {
   holzfaeller: {
@@ -36,7 +47,7 @@ export const BUILDINGS = {
     cost: { holzplatte: 10, holzstab: 10 },
     icon: '🪓',
     size: [2, 2],
-    color: '#4f7f35',
+    color: TAB_COLORS.holz,
     tip: 'Die Holzblöcke kommen am orangen Pfeil heraus.',
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
     production: { kind: 'source', input: 'holzstamm', output: 'holzblock', amount: 200, duration: 900, capacity: 3 },
@@ -47,7 +58,7 @@ export const BUILDINGS = {
     cost: { holzplatte: 10, holzstab: 5 },
     icon: '⛏️',
     size: [2, 2],
-    color: '#7d8590',
+    color: TAB_COLORS.stein,
     tip: 'Die Steinblöcke kommen am orangen Pfeil heraus.',
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
     production: { kind: 'source', input: 'felsbrocken', output: 'steinblock', amount: 200, duration: 900, capacity: 3 },
@@ -58,7 +69,7 @@ export const BUILDINGS = {
     cost: { steinplatte: 20, holzplatte: 10 },
     icon: '🔥',
     size: [2, 2],
-    color: '#8a4b32',
+    color: TAB_COLORS.eisen,
     tip: 'Die Eisenbarren kommen am orangen Pfeil heraus.',
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
     production: { kind: 'source', input: 'eisenerz', output: 'eisenbarren', amount: 200, duration: 900, capacity: 3 },
@@ -69,7 +80,7 @@ export const BUILDINGS = {
     cost: { holzblock: 40 },
     icon: '🪚',
     size: [2, 2],
-    color: '#a0703c',
+    color: TAB_COLORS.holz,
     tip: 'Holzblöcke kommen am blauen Pfeil hinein, die Teile am orangen heraus.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
@@ -83,7 +94,7 @@ export const BUILDINGS = {
     cost: { steinblock: 30, holzstab: 5 },
     icon: '⚒️',
     size: [2, 2],
-    color: '#68707a',
+    color: TAB_COLORS.stein,
     tip: 'Steinblöcke kommen am blauen Pfeil hinein, die Teile am orangen heraus.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
@@ -97,7 +108,7 @@ export const BUILDINGS = {
     cost: { steinplatte: 10, eisenbarren: 30 },
     icon: '🔨',
     size: [2, 2],
-    color: '#5b5f6b',
+    color: TAB_COLORS.eisen,
     tip: 'Eisenbarren kommen am blauen Pfeil hinein, die Teile am orangen heraus.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
@@ -113,7 +124,7 @@ export const BUILDINGS = {
     cost: { holzplatte: 20, eisenstange: 10 },
     icon: '🛠️',
     size: [2, 2],
-    color: '#7a5636',
+    color: TAB_COLORS.holz,
     tip: 'Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
@@ -128,7 +139,7 @@ export const BUILDINGS = {
     cost: { eisenblech: 10, raederwerk: 2 },
     icon: '⚙️',
     size: [2, 2],
-    color: '#4c5a70',
+    color: TAB_COLORS.eisen,
     tip: 'Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
@@ -143,7 +154,7 @@ export const BUILDINGS = {
     cost: { scharnier: 1, verstaerkteholzplatte: 2 },
     icon: '🔐',
     size: [2, 2],
-    color: '#6e5a2c',
+    color: TAB_COLORS.eisen,
     tip: 'Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
@@ -162,7 +173,7 @@ export const BUILDINGS = {
     cost: { holzplatte: 10, steinplatte: 10 },
     icon: '🌱',
     size: [2, 2],
-    color: '#6b4a2e',
+    color: TAB_COLORS.kraeuter,
     tip: 'Säen, warten, bis die Pflanze reif ist (🌾), dann ernten – sie kommt ins Laden-Lager. Kein Anschluss ans Band.',
     ports: [],
     // v0.17.0: Ringelblumen wachsen im selben Beet, im gleichen Takt (Tobias)
@@ -182,7 +193,7 @@ export const BUILDINGS = {
     cost: { holzplatte: 10, zahnradwelle: 2 },
     icon: '🪢',
     size: [2, 2],
-    color: '#8a7a3e',
+    color: TAB_COLORS.kraeuter,
     tip: 'Nimmt jede Pflanze, auch gemischt. Die Waren kommen am orangen Pfeil heraus.',
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
     production: {
@@ -199,7 +210,7 @@ export const BUILDINGS = {
     cost: { holzstab: 20, raederwerk: 2 },
     icon: '🧵',
     size: [2, 2],
-    color: '#7f6a8f',
+    color: TAB_COLORS.kraeuter,
     tip: 'Flachsfasern kommen am blauen Pfeil hinein, die Verbände am orangen heraus.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
@@ -215,7 +226,7 @@ export const BUILDINGS = {
     cost: { holzplatte: 10, eisenblech: 5, zahnradwelle: 2 },
     icon: '🌿',
     size: [2, 2],
-    color: '#4f7a4a',
+    color: TAB_COLORS.kraeuter,
     tip: 'Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
@@ -230,7 +241,7 @@ export const BUILDINGS = {
     cost: { holzplatte: 8 },
     icon: '📦',
     size: [2, 1],
-    color: '#8b6b4a',
+    color: '#b39a68',
     // v0.20.0 (Tobias, Chat 15): Zwischenlager in der Fabrik – das Gegenstück zum Versandportal
     tip: 'Zwischenlager: Was oben links hineinläuft, geht unten rechts weiter, sobald dort Platz ist. Befüllen holt Waren aus dem Laden-Lager.',
     ports: [
@@ -257,12 +268,12 @@ export const BUILDINGS = {
 // Gebäuden seiner „Straße“. Kombi-Maschinen stehen bei dem Stoff, zu dem sie
 // vom Namen her passen. `item` ist das Warenbild auf dem Reiter.
 export const BUILD_TABS = [
-  { id: 'holz', name: 'Holz', item: 'holzstamm', buildings: ['holzfaeller', 'saegewerk', 'zimmerei'] },
-  { id: 'stein', name: 'Stein', item: 'felsbrocken', buildings: ['steinbruch', 'steinmetz'] },
-  { id: 'eisen', name: 'Eisen', item: 'eisenerz', buildings: ['schmelzhuette', 'schmiede', 'feinschmiede', 'schlosserei'] },
+  { id: 'holz', name: 'Holz', item: 'holzstamm', color: TAB_COLORS.holz, buildings: ['holzfaeller', 'saegewerk', 'zimmerei'] },
+  { id: 'stein', name: 'Stein', item: 'felsbrocken', color: TAB_COLORS.stein, buildings: ['steinbruch', 'steinmetz'] },
+  { id: 'eisen', name: 'Eisen', item: 'eisenerz', color: TAB_COLORS.eisen, buildings: ['schmelzhuette', 'schmiede', 'feinschmiede', 'schlosserei'] },
   // v0.19.0 (Tobias): Der Reiter heißt „Erde“ – Holz, Stein, Eisen, Erde. Die
   // id bleibt, damit der gemerkte Reiter in den Einstellungen weiter passt.
-  { id: 'kraeuter', name: 'Erde', item: 'ringelblume', buildings: ['beet', 'flachsbreche', 'webstube', 'kraeuterstube'] },
+  { id: 'kraeuter', name: 'Erde', item: 'ringelblume', color: TAB_COLORS.kraeuter, buildings: ['beet', 'flachsbreche', 'webstube', 'kraeuterstube'] },
 ];
 
 // Gebäude, die man oft braucht: stehen immer sichtbar links in der Bauleiste,

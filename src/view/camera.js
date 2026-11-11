@@ -26,6 +26,22 @@ export function worldToScreen(cam, wx, wy) {
   return { x: (wx - cam.x) * cam.zoom, y: (wy - cam.y) * cam.zoom };
 }
 
+// v0.21.0 (Belastungstest): sichtbarer Ausschnitt der Welt, um margin
+// Welteinheiten vergrößert. Der Renderer zeichnet nur, was hineinragt.
+export function visibleRect(cam, margin = 0) {
+  return {
+    x0: cam.x - margin,
+    y0: cam.y - margin,
+    x1: cam.x + cam.viewWidth / cam.zoom + margin,
+    y1: cam.y + cam.viewHeight / cam.zoom + margin,
+  };
+}
+
+// Ragt das Rechteck (Welteinheiten) in den Ausschnitt?
+export function intersects(view, x, y, width, height) {
+  return x < view.x1 && x + width > view.x0 && y < view.y1 && y + height > view.y0;
+}
+
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
 }

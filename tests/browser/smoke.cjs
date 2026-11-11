@@ -1823,6 +1823,27 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.tap('#info-close').catch(() => {});
   await shot('17-fabrik');
 
+  // v0.21.0: Maschinen zeigen auf der Karte, was sie herstellen – nah und weit
+  const camFactory = await game(page, () => ({ ...window.__game.camera }));
+  await game(page, () => {
+    const { camera, state, TILE } = window.__game;
+    const z = state.buildings.find((b) => b.type === 'zimmerei');
+    camera.zoom = 1.6;
+    camera.x = (z.x + 1) * TILE - camera.viewWidth / camera.zoom / 2;
+    camera.y = (z.y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
+  });
+  await sleep(150);
+  await shot('21-karte-nah');
+  await game(page, () => {
+    const { camera, state, TILE } = window.__game;
+    camera.zoom = 0.35;
+    camera.x = (state.plot.x + state.plot.width / 2) * TILE - camera.viewWidth / camera.zoom / 2;
+    camera.y = (state.plot.y + state.plot.height / 2) * TILE - camera.viewHeight / camera.zoom / 2;
+  });
+  await sleep(150);
+  await shot('21-karte-weit');
+  await game(page, (c) => Object.assign(window.__game.camera, c), camFactory);
+
   await page.tap('#btn-menu');
   await page.tap('#menu-test-mode');
   await sleep(80);
@@ -1832,9 +1853,23 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(3000);
   const tAfter = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'holzfaeller').prod.remaining);
   check(tBefore - tAfter >= 3, `Im Testmodus läuft die Zeit schneller (${tBefore - tAfter} Blöcke in 3 s)`);
+  // v0.21.0: Bilder pro Sekunde im Testmodus
+  const fpsText = (await page.isVisible('#hud-fps')) ? await page.textContent('#hud-fps') : '';
+  const fpsValue = Number(/(\d+) Bilder\/s/.exec(fpsText)?.[1] ?? 0);
+  check(fpsValue > 0, `Testmodus zeigt Bilder pro Sekunde („${fpsText}“)`);
+  const hudFits = await page.evaluate(() => {
+    const hud = document.getElementById('hud').getBoundingClientRect();
+    return [...document.querySelectorAll('#hud > *:not(.menu)')].every((el) => {
+      const r = el.getBoundingClientRect();
+      return el.hidden || (r.left >= hud.left - 1 && r.right <= hud.right + 1);
+    });
+  });
+  check(hudFits, 'Obere Leiste mit Testmodus-Anzeigen passt auf den Bildschirm');
+  await shot('17a-testmodus-bilder');
   await page.tap('#btn-menu');
   await page.tap('#menu-test-mode');
   check(!(await page.isVisible('#hud-speed')), 'Testmodus nach dem Zeittest aus');
+  check(!(await page.isVisible('#hud-fps')), 'Bilder pro Sekunde nur im Testmodus');
 
   // Holzstamm direkt im Infofenster kaufen
   await tapTile(page, 10, 6);
