@@ -54,6 +54,9 @@ const COLORS = {
   discEdge: 'rgba(0, 0, 0, 0.5)',
   ringBack: 'rgba(28, 20, 12, 0.55)',
   ringFill: '#ffe066',
+  // v0.21.3 (Tobias): Der Ring der Rohstoff-Gebäude (wie viel vom Rohstoff
+  // übrig ist) ist grün, der Ring der Maschinen (laufendes Stück) gelb.
+  ringSupply: '#69db7c',
   askFill: '#fff3bf',
   askEdge: '#f2b705',
   askText: '#7a4a00',
@@ -611,7 +614,7 @@ export function createRenderer(canvas) {
       ctx.arc(cx, cy, R - ringW / 2, 0, Math.PI * 2);
       ctx.stroke();
       if (face.ring > 0) {
-        ctx.strokeStyle = COLORS.ringFill;
+        ctx.strokeStyle = face.ringKind === 'supply' ? COLORS.ringSupply : COLORS.ringFill;
         ctx.beginPath();
         ctx.arc(cx, cy, R - ringW / 2, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.min(1, face.ring));
         ctx.stroke();

@@ -44,6 +44,7 @@ test('Maschine: Ring zeigt den Fortschritt des laufenden Stücks', () => {
   const saw = placeBuilding(state, 'saegewerk', 10, 6);
   setRecipe(saw, 'holzstab');
   assert.equal(buildingFace(saw).ring, 0, 'wartet: leerer Ring');
+  assert.equal(buildingFace(saw).ringKind, 'work', 'Ring der Maschinen: gelb (Fertigung)');
   saw.prod.stock.holzblock = 5;
   updateProduction(state, saw, 0); // fängt an
   updateProduction(state, saw, RECIPES.holzstab.time / 2);
@@ -80,6 +81,7 @@ test('Rohstoff-Gebäude: leer blass, gefüllt klar, Ring = was vom laufenden Roh
   face = buildingFace(lager);
   assert.equal(face.faded, false);
   assert.equal(face.ring, 1, 'frischer Holzstamm: voller Ring');
+  assert.equal(face.ringKind, 'supply', 'Ring der Rohstoff-Gebäude: grün (bis der Rohstoff leer ist), v0.21.3');
   assert.deepEqual(face.dots, { capacity: 3, filled: 2 });
   const p = productionOf('holzfaeller');
   lager.prod.remaining = p.amount / 4;
@@ -137,6 +139,7 @@ test('Vorschau beim Platzieren (noch ohne Zustand): Produkt der ersten Einstellu
     item: 'zahnradwelle',
     faded: false,
     ring: null,
+    ringKind: 'work',
     missing: [],
     dots: null,
   });
