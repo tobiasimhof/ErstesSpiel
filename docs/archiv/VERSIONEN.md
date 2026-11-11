@@ -4,6 +4,20 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.21.5 – Antworten zum Gold-Gleichgewicht, Entwurf „Theken kaufen“ (11.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Antworten aus Chat 17 festhalten (Platz reicht, 5–6-mal aufgefüllt, Schwerpunkt Massenproduktion, Möglichkeit D, Theken langsamer) und daraus einen Entwurf machen.
+
+**Fragen, die wir uns gestellt haben:**
+- Bringt eine gekaufte Theke heute etwas? → Kaum: Die Kunden kaufen zusammen etwa 6 Stück pro Minute, egal wie viele Theken es gibt. Deshalb soll jede Theke eigene Kunden bekommen.
+- Wie langsam? → Vorschlag 1 Stück pro Minute je Theke: Billige Waren lohnen kaum, Tobias' Fabrik stößt mit 2 Theken an die Grenze, der Anfang wird langsamer.
+- Was kostet die 3. Theke, damit man sie um Level 8 schafft? → Platzhalter 40.000 Gold (die Aufträge bis Level 7 bringen rund 52.000, die Aufstiege bis Level 8 kosten 10.850).
+
+**Gemacht:**
+- `docs/STAND.md`: Status, Tobias' Fabrik, nächste Schritte (Punkt 5 jetzt v0.23.0), offene Frage 4 jetzt der Entwurf v0.23.0 (die Frage zur Weltgröße ist beantwortet), Frage 14 erledigt, neuer Arbeitsschritt oben (v0.21.2 fällt aus der Liste). `docs/SPIEL.md`: Schwerpunkt Massenproduktion. `docs/archiv/PLAENE.md`: Entwurf v0.23.0. Entscheidungen und Gespräch ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.21.4 – Frage zum Gold-Gleichgewicht (11.11.2026, nur Doku)
 
 **Vorgenommen:**
