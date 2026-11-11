@@ -57,10 +57,14 @@ export function createOfflineView({ panels }) {
       .join(', ');
   }
 
-  function showReport(report) {
+  // v0.22.0: Nach dem Laden einer Datei heißt es „Seit dem Sichern …“ statt „Du warst … weg“.
+  const awayText = (seconds, fromFile) =>
+    fromFile ? `Seit dem Sichern sind ${durationText(seconds)} vergangen` : `Du warst ${durationText(seconds)} weg`;
+
+  function showReport(report, fromFile) {
     panels.showModal((box, { makeButton }) => {
-      box.append(el('h2', null, '👋 Willkommen zurück!'));
-      box.append(el('p', null, `Du warst ${durationText(report.seconds)} weg. Deine Fabrik lief weiter, bis etwas leer war:`));
+      box.append(el('h2', null, fromFile ? '📂 Spielstand geladen' : '👋 Willkommen zurück!'));
+      box.append(el('p', null, `${awayText(report.seconds, fromFile)}. Deine Fabrik lief weiter, bis etwas leer war:`));
       const rows = el('div', 'away-rows');
       const row = (icon, text, extra) => {
         const r = el('div', 'away-row');
@@ -96,8 +100,8 @@ export function createOfflineView({ panels }) {
 
   return {
     // Während des Nachrechnens: dunkler Hinweis mit Fortschritt
-    showProgress(seconds, progress) {
-      overlayText.textContent = `Du warst ${durationText(seconds)} weg. Die Fabrik holt die Zeit nach …`;
+    showProgress(seconds, progress, fromFile = false) {
+      overlayText.textContent = `${awayText(seconds, fromFile)}. Die Fabrik holt die Zeit nach …`;
       overlayFill.style.width = `${Math.round(progress * 100)}%`;
       overlay.hidden = false;
     },
@@ -106,9 +110,10 @@ export function createOfflineView({ panels }) {
     },
     // Nach dem Nachrechnen: nach kurzer Abwesenheit eine Meldung (wenn etwas
     // passiert ist), nach längerer das Fenster „Willkommen zurück“.
-    report(report) {
+    // fromFile (v0.22.0): Spielstand gerade aus einer Datei geladen
+    report(report, fromFile = false) {
       if (report.seconds >= OFFLINE.reportSeconds) {
-        showReport(report);
+        showReport(report, fromFile);
         return 'window';
       }
       if (report.seconds < OFFLINE.toastSeconds) return null;
@@ -120,7 +125,7 @@ export function createOfflineView({ panels }) {
       if (emptied > 0) parts.push(`${emptied} ${emptied === 1 ? 'Rohstoff-Gebäude ist' : 'Rohstoff-Gebäude sind'} leer`);
       if (report.ripe > 0) parts.push(`${report.ripe} ${report.ripe === 1 ? 'Beet ist' : 'Beete sind'} reif`);
       if (parts.length === 0) return null;
-      panels.toast(`Du warst ${durationText(report.seconds)} weg – deine Fabrik lief weiter: ${parts.join(', ')}.`, 5000);
+      panels.toast(`${awayText(report.seconds, fromFile)} – deine Fabrik lief weiter: ${parts.join(', ')}.`, 5000);
       return 'toast';
     },
   };

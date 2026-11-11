@@ -6,7 +6,7 @@ import { onPress } from './press.js';
 
 const numberFormat = new Intl.NumberFormat('de-DE');
 
-export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, onLevel }) {
+export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, onLevel, onSaveFile, onLoadFile }) {
   const gold = document.getElementById('hud-gold');
   const goldGain = document.getElementById('hud-gold-gain');
   const testPackButton = document.getElementById('menu-test-pack');
@@ -46,6 +46,15 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
   onPress(testPackButton, () => {
     closeMenu();
     onTestPack();
+  });
+  // v0.22.0: Spielstand als Datei sichern und laden
+  onPress(document.getElementById('menu-save-file'), () => {
+    closeMenu();
+    onSaveFile();
+  });
+  onPress(document.getElementById('menu-load-file'), () => {
+    closeMenu();
+    onLoadFile();
   });
   onPress(document.getElementById('menu-new-game'), () => {
     closeMenu();

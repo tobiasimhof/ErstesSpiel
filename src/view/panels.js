@@ -55,6 +55,8 @@ export function createPanels() {
   const dialogText = document.getElementById('dialog-text');
   const dialogOk = document.getElementById('dialog-ok');
   const dialogCancel = document.getElementById('dialog-cancel');
+  // v0.22.0: dritter Knopf, z. B. „💾 Erst sichern“ (sonst ausgeblendet)
+  const dialogAlt = document.getElementById('dialog-alt');
   let resolveDialog = null;
   function closeDialog(result) {
     dialog.hidden = true;
@@ -63,6 +65,7 @@ export function createPanels() {
   }
   onPress(dialogOk, () => closeDialog(true));
   onPress(dialogCancel, () => closeDialog(false));
+  onPress(dialogAlt, () => closeDialog('alt'));
   onBackdropPress(dialog, () => closeDialog(false));
 
   const toastEl = document.getElementById('toast');
@@ -144,10 +147,14 @@ export function createPanels() {
       else if (!modal.hidden) hideModal();
     },
 
-    confirm({ title, text, okLabel = 'OK', danger = false }) {
+    // Ergebnis: true (OK), false (Abbrechen) oder – nur mit altLabel – 'alt'
+    // für den dritten Knopf (v0.22.0). Zeilenumbrüche im Text bleiben stehen.
+    confirm({ title, text, okLabel = 'OK', danger = false, altLabel = null }) {
       if (resolveDialog) closeDialog(false);
       dialogTitle.textContent = title;
       dialogText.textContent = text;
+      dialogAlt.textContent = altLabel ?? '';
+      dialogAlt.hidden = !altLabel;
       dialogOk.textContent = okLabel;
       dialogOk.className = danger ? 'danger' : 'primary';
       dialog.hidden = false;
