@@ -63,6 +63,24 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 ### Entwurf v0.23.0 – Theken kaufen, langsamer verkaufen (noch nicht freigegeben)
 
+**Stand nach Tobias' Antwort (v0.21.6):**
+- **Tobias (Chat 17):** „Das Tempo passt so für mich, aber wir könnten es ja nochmal drosseln, dass wir sagen von Level 1–3 sind es 6 die Minute, ab Level 4 sind es nur noch 3 die Minute und ab Level 7 sind es nur noch 1–2 die Minute, damit reguliert sich der Verkauf ohnehin und der Anfang wird nicht so ‚zäh‘. Finde die Idee, dass Theken Gold kosten sollen, sinnvoller. Ja, ändere das bei mir auch direkt auf 2 Theken, damit ich ein besseres Gefühl dafür bekommen kann. Immerhin muss ich genug Gold verdienen, dass ich meine Fabriken mit Rohstoffen befüllen kann. Aktuell geht das, und mir bleibt noch jede Menge Gold übrig.“
+- **Tempo je Level** (ersetzt „1 Stück pro Minute je Theke“). Claudes Lesart, noch zu bestätigen: Tobias' Zahlen gelten für die 2 Start-Theken zusammen, jede gekaufte Theke legt ihren Anteil drauf.
+
+  | Level | 2 Theken zusammen | je Theke | Stück pro Stunde (2 Theken) |
+  |---|---|---|---|
+  | 1–3 | 6 pro Minute (wie heute) | 3 | 360 |
+  | 4–6 | 3 pro Minute | 1,5 | 180 |
+  | ab 7 | 1,5 pro Minute („1–2“) | 0,75 | 90 |
+
+  Beispiel: Level 8 mit 3 Theken = 2,25 pro Minute (135 pro Stunde).
+- **Theken kosten nur Gold** (keine Waren), Platzhalter 40.000 / 100.000 / 200.000; Claudes Vorschlag: kein Mindest-Level, der Preis reicht.
+- **Tobias' Fabrik geht auf 2 Theken zurück** (alle alten Spielstände): Die ersten beiden Theken bleiben, die Waren der übrigen kommen ins Laden-Lager (auch über die Grenze, wie beim Ausräumen).
+- **Was das für Tobias heißt** (Level 8, 2 Theken = 90 Stück pro Stunde): Sein Laden-Lager (1.004 Stück) ist im Schnitt 166 Gold je Stück wert – so verkauft bringt es etwa 15.000 Gold pro Stunde. Eine volle Füllung seiner Fabrik (je 3 Rohstoffe in 8 Holzfällerlagern, 9 Steinbrüchen, 7 Schmelzhütten) kostet etwa 74.000 Gold, voll ausgelastet braucht sie Rohstoffe für etwa 99.000 Gold pro Stunde – das schafft er nur, wenn er fast nur Teile ab etwa 1.100 Gold verkauft (Scharnier, Schlüssel, Zirkel, Vorhängeschloss) oder Theken dazukauft. Mit seinen 43.870 Gold könnte er die 3. Theke sofort kaufen, dann blieben ihm 3.870 für Rohstoffe.
+- **Noch offen:** Lesart der Zahlen bestätigen, „1–2“ = 1,5 im Schnitt, kein Mindest-Level, Reihenfolge (Claude: erst v0.22.0) und Tobias' OK.
+
+**Erster Entwurf (v0.21.5):**
+
 **Tobias (Chat 17)** auf die Überlegung unten: „Der Platz reicht mir. Ich hab bestimmt die ganzen Fabriken 5–6x aufgefüllt. Die läuft ja auch ohne mich weiter. Ich finde, Gold sollte Teil des Spiels sein, aber der Hauptfokus sollte auf der Massenproduktion sein, sodass man immer längere Straßen bauen kann, um Werkzeuge herzustellen und diese dann zu verkaufen. Ich finde das Optimieren und Automatisieren von Prozessen bei diesen Spielen am besten, deswegen sollte darauf auch der Fokus liegen. Von allen Ideen, die du genannt hast, finde ich D am besten. So kann man z. B. die Vergrößerung der Ladentheke teuer machen, damit man erst auf Level 8 es überhaupt schafft, die dritte freizuschalten. Ich hatte auch daran gedacht, dass wir die Ladentheke ‚langsamer‘ machen können. Wenn man auf mehr Produkten sitzen bleibt, ist man auch gezwungen, die Produkte in längere Produktionsstraßen einzusetzen. Die Geschwindigkeit des Verkaufs haben wir ganz am Anfang gemacht, um Gold zu generieren, deswegen liegt dort noch kein Feintuning drin.“ (5–6-mal aufgefüllt sind etwa 4 bis 4,5 Stunden Produktion – passt zu Claudes Schätzung von 30.000 bis 50.000 Gold pro Stunde.)
 
 **Claudes Entwurf:**
@@ -102,6 +120,8 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 **Fragen an Tobias:** Soll Gold durchgehend knapp bleiben – oder ist es in Ordnung, dass später Fläche, Zeit und Waren die Grenze sind und Gold eher ein Punktestand ist? Welche Bremse gefällt ihm (B, C, keine)? Wie viele Stunden hat er ungefähr auf Level 8 gespielt (damit sich die Preise an echten Zahlen ausrichten lassen)? Reicht ihm der Platz, wenn jede Ware einmal hergestellt wird?
 
 ### Entwurf v0.22.0 – Spielstand sichern und laden (noch nicht freigegeben)
+
+**Claudes Vorschläge zu den 4 Fragen (Chat 17, v0.21.6)**, falls Tobias nichts anderes sagt: Der Entwurf bleibt so; Datei über das Teilen-Menü, wo das Gerät es kann, sonst „Downloads“; Testmodus und Test-Knopf bleiben für Tester sichtbar (Prototyp; Tobias sagt ihnen, wofür sie sind); nach dem Laden läuft die Fabrik ab dem Sicherungszeitpunkt nach (wie „Willkommen zurück“) – so verliert Tobias' Fabrik keine Zeit, während ein Tester auf seinem Tablet spielt.
 
 Tobias (Chat 15): Er möchte den Stand anderen zum Testen zeigen, ohne dass sein Spielstand verloren geht – frühestens ab der Woche ab 16.11.2026 (Chat 16). Claudes Entwurf (Chat 16):
 
