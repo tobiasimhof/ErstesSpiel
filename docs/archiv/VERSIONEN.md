@@ -4,6 +4,19 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.21.6 – Theken: Tempo je Level, nur Gold, Tobias auf 2 Theken (11.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Antworten zum Entwurf v0.23.0 festhalten: Verkaufstempo je Level (6 / 3 / 1–2 pro Minute), Theken nur mit Gold, seine Fabrik direkt auf 2 Theken.
+
+**Fragen, die wir uns gestellt haben:**
+- Gelten Tobias' Zahlen für alle Theken zusammen oder je Theke? → Claudes Lesart: für die 2 Start-Theken zusammen, jede gekaufte Theke legt ihren Anteil drauf (sonst brächte eine gekaufte Theke keinen zusätzlichen Verkauf) – Tobias bestätigt noch.
+- Was heißt das für Tobias' Fabrik? → Level 8 mit 2 Theken: 90 Stück pro Stunde; eine volle Füllung kostet etwa 74.000 Gold – er muss vor allem teure Teile verkaufen oder Theken dazukaufen.
+
+**Gemacht:**
+- `docs/STAND.md`: Status, nächste Schritte, offene Fragen 1 (Claudes Vorschläge zu v0.22.0) und 4, neuer Arbeitsschritt oben (v0.21.3 fällt aus der Liste). `docs/archiv/PLAENE.md`: Entwurf v0.23.0 angepasst, Vorschläge zu v0.22.0. Entscheidungen und Gespräch ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.21.5 – Antworten zum Gold-Gleichgewicht, Entwurf „Theken kaufen“ (11.11.2026, nur Doku)
 
 **Vorgenommen:**
