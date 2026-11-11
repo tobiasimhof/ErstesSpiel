@@ -228,3 +228,5 @@ Neue Entscheidungen kommen unten in die Tabelle (älteste oben). Wird eine Entsc
 | 10.11.2026 | Es kommt eine Weiche, die eine Spur in zwei trennt (hier nur Stäbe, dort nur Bleche) | Tobias: „sehr sinnvoll, damit die Produktionsstraßen länger werden“. Einzelheiten werden noch geplant. |
 | 10.11.2026 | Verbesserungen mit Erfahrung erst später | Tobias. |
 | 10.11.2026 | Belastungstest als reine Messung durchgeführt; Verbesserungen daraus (nur zeichnen, was im Bild ist; Bilder pro Sekunde im Testmodus) erst nach Tobias' OK | Tobias fand den Test sinnvoll; Claude hat nur gemessen und nichts am Spiel geändert. |
+| 11.11.2026 | „Nur zeichnen, was im Bild ist“ und „Bilder pro Sekunde“ im Testmodus kommen mit in v0.21.0 | Tobias: „Passt.“ Auf seinem Tablet ruckelt es nicht – Vorsorge für größere Fabriken. |
+| 11.11.2026 | Was Tester brauchen (eigenes Gerät oder Tablet, Level 1 oder Tobias' Fabrik, Einführung), wird erst vor dem ersten Tester entschieden | Tobias: „Das können wir im Hinterkopf behalten, aber ich möchte frühestens nächste Woche jemandem das Spiel zeigen.“ |

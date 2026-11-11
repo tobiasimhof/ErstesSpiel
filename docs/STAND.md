@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.20.2 – Tobias' Wahl, Variante B luftiger, Belastungstest (nur Doku) |
+| **Aktuelle Version** | v0.20.3 – Antworten zum Belastungstest und zu den Testern (nur Doku) |
 | **Phase** | M2 – Produktionsketten (Kräuter-Kapitel ab Level 7) |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias sagt, ob die luftigere Variante B passt (ohne oder mit kleinem Gebäudebild, offene Frage 1) und gibt sein OK für v0.21.0; dazu seine Antworten zu „anderen das Spiel zeigen“ (offene Frage 13). Claude programmiert erst nach seinem OK. |
+| **Nächster Schritt** | Tobias sagt, ob die luftigere Variante B passt (ohne oder mit kleinem Gebäudebild, auch Rohstoff-Gebäude; offene Frage 1) und gibt sein OK für v0.21.0. Die beiden Punkte aus dem Belastungstest kommen mit hinein (Tobias: „Passt“). Claude programmiert erst nach seinem OK. |
 
 **Tobias' Fabrik** (Screenshot vom 09.11.2026, ca. 1 Stunde in Echtzeit gespielt, 6.036 Gold): Level 8. Links zwei gleiche Holz-Stein-Straßen (je 3 Holzfällerlager → Sägewerk, 3 Steinbrüche → Steinmetz, Zimmerei, Lagerhäuser als Zwischenlager). Oben 2 Holzfällerlager → Sägewerk, 5 Schmelzhütten → 5 Schmieden, 3 Steinbrüche → Steinmetz; darunter Zimmerei, 2 Feinschmieden und 1 Schlosserei (nur Vorhängeschlösser), jede Ausgabe endet in einem Lagerhaus. Unten 3 Beete, 2 Erntebänke, Webstube und Kräuterstube. Zimmerei und eine Feinschmiede warten auf Eisenstangen. Er spielt auf dem Tablet und nutzt für Aufträge den Test-Knopf. **Versandportale baut er nicht mehr** (er stellt nur noch teure Einzelteile her); läuft in einer der gespiegelten Straßen ein Lagerhaus voll (z. B. Zahnräder, weil die Holzstäbe nicht hinterherkommen), räumt er es aus und befüllt damit das Lagerhaus der anderen Straße (Chat 15).
 
@@ -24,11 +24,11 @@
 | M6 | Clans & Handel | Clans, Handel zwischen Spielern |
 | M7 | App | Android und iOS |
 
-**Nächste Schritte** (Tobias' Auswahl in Chat 15; Reihenfolge ist Claudes Vorschlag, ausführlich in `docs/archiv/PLAENE.md`): v0.21.0 Maschinen zeigen, was sie herstellen (dabei nur noch zeichnen, was im Bild ist – Ergebnis des Belastungstests); danach Spielstand sichern und was Tester brauchen (Frage 13); Bereich kopieren (Tobias: „sehr wichtig“); Weiche (Frage 5). Später: Verbesserungen mit Erfahrung (Frage 7), Level 9. Noch offen: gründliche Durchsicht des Codes. Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute.
+**Nächste Schritte** (Tobias' Auswahl in Chat 15; Reihenfolge ist Claudes Vorschlag, ausführlich in `docs/archiv/PLAENE.md`): v0.21.0 Maschinen zeigen, was sie herstellen (dazu nur noch zeichnen, was im Bild ist, und „Bilder pro Sekunde“ im Testmodus – Tobias: „Passt“); danach Spielstand sichern und was Tester brauchen (Frage 13; Tobias zeigt das Spiel frühestens ab nächster Woche, 16.11.2026); Bereich kopieren (Tobias: „sehr wichtig“); Weiche (Frage 5). Später: Verbesserungen mit Erfahrung (Frage 7), Level 9. Noch offen: gründliche Durchsicht des Codes. Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute.
 
 ## Offene Fragen
 
-1. **Maschinen zeigen, was sie herstellen** (Entwurf v0.21.0): Tobias wählt Variante B (Produkt in der Mitte), fand den ersten Entwurf aber „etwas gequetscht“. Neue Vorschaubilder: Fortschritt als Ring um das Produkt statt Leiste oben, kein Gebäudebild, gelbes „?“-Schild oben links. Passt das so – ohne Gebäudebild (Claudes Empfehlung) oder mit kleinem Gebäudebild unten links? Sollen auch Rohstoff-Gebäude ihr Produkt zeigen (Claude: ja)?
+1. **Maschinen zeigen, was sie herstellen** (Entwurf v0.21.0): Tobias wählt Variante B (Produkt in der Mitte), fand den ersten Entwurf aber „etwas gequetscht“. Neue Vorschaubilder: Fortschritt als Ring um das Produkt statt Leiste oben, kein Gebäudebild, gelbes „?“-Schild oben links. Passt das so – ohne Gebäudebild (Claudes Empfehlung) oder mit kleinem Gebäudebild unten links? Sollen auch Rohstoff-Gebäude ihr Produkt zeigen (Claude: ja)? In Chat 16 noch unbeantwortet; Tobias' ausdrückliches OK für v0.21.0 steht aus.
 2. **Kräuterstube mit 2 Eingängen** ist gebaut und angeschlossen (v0.18.2), Tobias' Urteil steht noch aus.
 3. **Platzhalter-Zahlen:** Aufstiegspreise, Auftragsmengen, Baukosten. Kostet der Laden-Ausbau später zusätzlich Waren? Begrenzt das Level die kaufbare Fläche?
 4. **Weltgröße:** Reichen 38 × 30 Felder für die Masse der höheren Level, oder gibt es später mehr Fläche (`perSide` in `data/land.js`)?
@@ -40,10 +40,16 @@
 10. **Einstieg:** Tobias' Idee, am Anfang vor allem die Massenproduktion auszubauen – später austesten.
 11. **Pleiteschutz:** Ein Rohstoff ohne passendes Gebäude verhindert das Geschenk – bewusst so gelassen, beobachten.
 12. **Vor v1.0:** Test-Knopf entfernen (`QUEST_TEST_SKIP = false`). Später: Schwarzmarkt und verbundene Läden (M5), Arbeitstitel.
-13. **Anderen das Spiel zeigen** (Tobias, Chat 15): Er möchte den jetzigen Stand anderen zum Testen geben, ohne dass sein Spielstand verloren geht. Jedes Gerät hat seinen eigenen Spielstand – wer den Link auf seinem eigenen Gerät öffnet, beginnt ein neues Spiel und berührt Tobias' Fabrik nicht. Offen: Spielen die anderen auf eigenen Geräten oder auf Tobias' Tablet (dann braucht es einen zweiten Spielstand)? Sollen sie bei Level 1 anfangen oder Tobias' Fabrik laden können? Brauchen sie eine kurze Einführung? „Spielstand sichern und mitnehmen“ bleibt als Sicherung sinnvoll.
-14. **Belastungstest (v0.20.2):** Das Rechnen ist auch bei voll bebauter Fläche unkritisch, das Zeichnen ist der Engpass (das Spiel zeichnet auch, was nicht im Bild ist). Gemessen ohne Grafikchip – wie flüssig es auf Tobias' Tablet wirklich läuft, zeigt erst eine Anzeige „Bilder pro Sekunde“ im Testmodus (Vorschlag für v0.21.0).
+13. **Anderen das Spiel zeigen** (Tobias, Chat 15): Er möchte den jetzigen Stand anderen zum Testen geben, ohne dass sein Spielstand verloren geht. Jedes Gerät hat seinen eigenen Spielstand – wer den Link auf seinem eigenen Gerät öffnet, beginnt ein neues Spiel und berührt Tobias' Fabrik nicht. Tobias (Chat 16): „Das können wir im Hinterkopf behalten, aber ich möchte frühestens nächste Woche jemandem das Spiel zeigen.“ Noch offen, rechtzeitig vor dem ersten Tester: eigene Geräte oder Tobias' Tablet (dann braucht es einen zweiten Spielstand)? Bei Level 1 anfangen oder Tobias' Fabrik laden? Kurze Einführung? „Spielstand sichern und mitnehmen“ bleibt als Sicherung sinnvoll.
+14. **Belastungstest (v0.20.2):** Das Rechnen ist auch bei voll bebauter Fläche unkritisch, das Zeichnen ist der Engpass (das Spiel zeichnet auch, was nicht im Bild ist). Auf Tobias' Tablet ruckelt es nicht, auch herausgezoomt nicht (Chat 16). Mit v0.21.0 kommen „nur zeichnen, was im Bild ist“ und „Bilder pro Sekunde“ im Testmodus (Tobias: „Passt“) – damit bleibt es flüssig, wenn die Fabrik wächst.
 
 ## Die letzten 3 Arbeitsschritte
+
+### v0.20.3 – Antworten zum Belastungstest und zu den Testern (11.11.2026, nur Doku)
+
+- **Tobias (Chat 16):** Die beiden Punkte aus dem Belastungstest sollen in v0.21.0 mit hinein („Passt“). Auf seinem Tablet ruckelt das Spiel nicht, auch herausgezoomt nicht. Tester: „Das können wir im Hinterkopf behalten, aber ich möchte frühestens nächste Woche jemandem das Spiel zeigen.“ Die Frage zu Variante B (ohne oder mit kleinem Gebäudebild) und sein OK für v0.21.0 sind noch unbeantwortet.
+- **Claude:** Antworten festgehalten, bei Variante B nachgefragt (offene Frage 1).
+- Spiel unverändert, nur die Versionsnummer steigt.
 
 ### v0.20.2 – Tobias' Wahl, Variante B luftiger, Belastungstest (10.11.2026, nur Doku)
 
@@ -56,9 +62,3 @@
 - **Tobias (Chat 15):** Die neuen Infofenster sehen gut aus, „jetzt ist alles übersichtlich dargestellt“. Auf der Karte sind die Waren an den Maschinen aber sehr klein – man kann nur erahnen, was gerade produziert wird. Er möchte einen Vorschlag dafür und weitere Vorschläge für die nächsten Schritte.
 - **Claude:** Heute zeigt das kleine Schild nur, was einer Kombi-Maschine **fehlt**; was sie herstellt, steht nirgends auf der Karte. Vorschaubilder für zwei Varianten (A: Schild in der Ecke, B: Produkt in der Mitte – empfohlen), dazu Lagerhäuser mit den Waren ihrer Fächer. Liste weiterer Schritte. Tobias' Antwort: siehe v0.20.2.
 - Spiel unverändert, nur die Versionsnummer steigt.
-
-### v0.20.0 – Infofenster für Beet, Lagerhaus und Versandportal (10.11.2026)
-
-- **Warum (Tobias, Chat 15):** Die drei Gebäude zeigten noch Textzeilen. Das Versandportal bleibt (Variante A), auch wenn Tobias es gerade nicht nutzt; Lagerhäuser bleiben Zusatzlager. „Codiere erst die neuen Infofenster für die Sachen, die noch nicht gemacht sind, wie wir das bei der letzten Version gemacht haben.“
-- **Umgesetzt:** Beet mit Kasten „Wächst hier / Wächst gerade / Reif zum Ernten“ (Samen → Pflanze, Balken, „reif in etwa …“) und Säen-Knöpfen mit dem Bild des Samens; Lagerhaus mit den 3 Fächern als Bildern, Menge und Füllbalken (volles Fach orange), „Befüllen“ groß, „Ausräumen ins Laden-Lager“ kleiner; Versandportal mit den zuletzt angekommenen Waren → Laden-Lager mit Füllbalken (rot, wenn voll). Kürzere Tipps, die die Rollen erklären (Portal = Ausgang der Fabrik, Lagerhaus = Zwischenlager). Spielstand-Format 15.
-- **Tobias:** „Die neuen Vorschaubilder sehen gut aus. Jetzt ist alles übersichtlich dargestellt.“

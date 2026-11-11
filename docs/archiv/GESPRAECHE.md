@@ -4,6 +4,18 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 11.11.2026 – Chat 16: Antworten auf die Fragen aus Chat 15 (v0.20.3)
+
+**Tobias** hat die Fragen vom Ende von Chat 15 wiederholt und beantwortet:
+- „Passt Variante B so, ohne Gebäudebild oder mit kleinem? Wenn ja, ist das dein OK für v0.21.0?“ – ohne Antwort.
+- „Sollen die beiden Punkte aus dem Belastungstest in v0.21.0 mit hinein?“ – „Passt.“
+- „Ruckelt das Spiel bei dir auf dem Tablet manchmal, vor allem herausgezoomt?“ – „Nein.“
+- „Spielen deine Tester auf eigenen Geräten oder auf deinem Tablet? Sollen sie bei Level 1 anfangen oder deine Fabrik laden können? Brauchen sie eine kurze Einführung? Die gibt es bisher nicht.“ – „Das können wir im Hinterkopf behalten, aber ich möchte frühestens nächste Woche jemandem das Spiel zeigen.“
+
+**Claude** hat die Antworten festgehalten: Nur zeichnen, was im Bild ist, und „Bilder pro Sekunde“ im Testmodus kommen mit in v0.21.0; da das Tablet nicht ruckelt, ist das Vorsorge für größere Fabriken, kein dringender Fehler. Die Tester-Fragen bleiben bis zum Schritt „Spielstand sichern und was Tester brauchen“ offen, der ohnehin nach v0.21.0 kommt. Weil die erste Frage unbeantwortet ist, hat Claude nach der obersten Regel nicht angefangen zu programmieren, sondern nachgefragt: ohne oder mit kleinem Gebäudebild, auch Rohstoff-Gebäude, OK für v0.21.0?
+
+**Umgesetzt:** v0.20.3 (nur Doku).
+
 ### 10.11.2026 – Chat 15: Braucht es das Versandportal noch? (v0.19.0)
 
 **Tobias:** „Hi, informiere dich über den aktuellen Stand der Dinge. Im letzten Chat haben wir v19 auf GitHub veröffentlicht. Beet, Lagerhaus und Versandportal haben wir noch nicht umgestellt. Ich habe mich gefragt, ob das Versandportal noch Sinn macht, wenn wir die gleiche Funktion mit dem Lagerhaus haben. Das Versandportal schickt die Ware direkt ins Laden-Lager. Lass uns erst die nächsten Schritte theoretisch durchgehen.“
