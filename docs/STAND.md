@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.21.0 – Maschinen zeigen, was sie herstellen |
+| **Aktuelle Version** | v0.21.1 – Rückmeldung zur Karte: Ring der Rohstoff-Gebäude (nur Doku) |
 | **Phase** | M2 – Produktionsketten (Kräuter-Kapitel ab Level 7) |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias spielt v0.21.0: Erkennt er auf der Karte, was jede Maschine herstellt, passen die Farben je Reiter (offene Frage 1)? Wie viele Bilder pro Sekunde zeigt der Testmodus auf seinem Tablet (offene Frage 14)? Danach Plan für „Spielstand sichern und was Tester brauchen“ – Claude programmiert erst nach seinem OK. |
+| **Nächster Schritt** | Tobias' OK für v0.21.2 (offene Frage 1): Ring der Rohstoff-Gebäude zeigt jedes einzelne Stück (wie bei Maschinen), der Rest des laufenden Rohstoffs steht im ersten Vorrat-Punkt. Dazu: Hatte er den Testmodus an, als er keine „Bilder/s“ sah (offene Frage 14)? Danach Plan für „Spielstand sichern und was Tester brauchen“. Claude programmiert erst nach seinem OK. |
 
 **Tobias' Fabrik** (Screenshot vom 09.11.2026, ca. 1 Stunde in Echtzeit gespielt, 6.036 Gold): Level 8. Links zwei gleiche Holz-Stein-Straßen (je 3 Holzfällerlager → Sägewerk, 3 Steinbrüche → Steinmetz, Zimmerei, Lagerhäuser als Zwischenlager). Oben 2 Holzfällerlager → Sägewerk, 5 Schmelzhütten → 5 Schmieden, 3 Steinbrüche → Steinmetz; darunter Zimmerei, 2 Feinschmieden und 1 Schlosserei (nur Vorhängeschlösser), jede Ausgabe endet in einem Lagerhaus. Unten 3 Beete, 2 Erntebänke, Webstube und Kräuterstube. Zimmerei und eine Feinschmiede warten auf Eisenstangen. Er spielt auf dem Tablet und nutzt für Aufträge den Test-Knopf. **Versandportale baut er nicht mehr** (er stellt nur noch teure Einzelteile her); läuft in einer der gespiegelten Straßen ein Lagerhaus voll (z. B. Zahnräder, weil die Holzstäbe nicht hinterherkommen), räumt er es aus und befüllt damit das Lagerhaus der anderen Straße (Chat 15).
 
@@ -28,7 +28,7 @@
 
 ## Offene Fragen
 
-1. **Karte mit Produkten und Farben (v0.21.0):** Maschinen und Rohstoff-Gebäude zeigen ihr Produkt statt des Gebäudebildes, jeder Reiter hat seine Farbe (Holz braun, Stein steingrau, Eisen stahlblau, Erde grün). Tobias' Urteil steht aus: Erkennt er alles, auch herausgezoomt? Fehlt ihm das Gebäudebild? Passen die Farben (je eine Zahl in `data/buildings.js`)? Eigene Gebäudebilder kommen später mit echter Grafik (M4).
+1. **Ring der Rohstoff-Gebäude (v0.21.0):** Tobias: Der gelbe Kreis der Rohstoff-Gebäude bleibt nach einiger Zeit stehen, „es wirkt so, als würde die Maschine zum Stillstand kommen“. Ursache: Der Ring zeigt, wie viel vom laufenden Rohstoff übrig ist – beim Holzfällerlager 1/200 je Block, also 1,8° alle 4,5 Sekunden (Erntebank 7,2° alle 12 Sekunden); die Gebäude arbeiten weiter. Claudes Vorschlag für v0.21.2: Der Ring zeigt jedes einzelne Stück (füllt sich in 4,5 bzw. 12 Sekunden, wie bei den Maschinen; bleibt voll und das Licht rot, wenn der Ausgang voll ist); wie viel vom laufenden Rohstoff übrig ist, zeigt der erste Vorrat-Punkt als kleines Tortenstück, das sich in 15 Minuten leert. Gebäudebild vermisst Tobias nicht, die Farben passen („ist mir ehrlich gesagt gar nicht aktiv aufgefallen, deswegen ist die Farbe so gut“).
 2. **Kräuterstube mit 2 Eingängen** ist gebaut und angeschlossen (v0.18.2), Tobias' Urteil steht noch aus.
 3. **Platzhalter-Zahlen:** Aufstiegspreise, Auftragsmengen, Baukosten. Kostet der Laden-Ausbau später zusätzlich Waren? Begrenzt das Level die kaufbare Fläche?
 4. **Weltgröße:** Reichen 38 × 30 Felder für die Masse der höheren Level, oder gibt es später mehr Fläche (`perSide` in `data/land.js`)?
@@ -41,24 +41,18 @@
 11. **Pleiteschutz:** Ein Rohstoff ohne passendes Gebäude verhindert das Geschenk – bewusst so gelassen, beobachten.
 12. **Vor v1.0:** Test-Knopf entfernen (`QUEST_TEST_SKIP = false`). Später: Schwarzmarkt und verbundene Läden (M5), Arbeitstitel.
 13. **Anderen das Spiel zeigen** (Tobias, Chat 15): Er möchte den jetzigen Stand anderen zum Testen geben, ohne dass sein Spielstand verloren geht. Jedes Gerät hat seinen eigenen Spielstand – wer den Link auf seinem eigenen Gerät öffnet, beginnt ein neues Spiel und berührt Tobias' Fabrik nicht. Tobias (Chat 16): „Das können wir im Hinterkopf behalten, aber ich möchte frühestens nächste Woche jemandem das Spiel zeigen.“ Noch offen, rechtzeitig vor dem ersten Tester: eigene Geräte oder Tobias' Tablet (dann braucht es einen zweiten Spielstand)? Bei Level 1 anfangen oder Tobias' Fabrik laden? Kurze Einführung? „Spielstand sichern und mitnehmen“ bleibt als Sicherung sinnvoll.
-14. **Flüssig auch mit großer Fabrik?** Auf Tobias' Tablet ruckelt es nicht (Chat 16). Seit v0.21.0 zeichnet das Spiel nur, was im Bild ist, und speichert die Warenbilder zwischen; die Rechenarbeit fürs Zeichnen hat sich nah dran und ganz herausgezoomt etwa halbiert (Testrechner ohne Grafikchip). Der Testmodus zeigt oben „🎞️ … Bilder/s“: Welche Zahl sieht Tobias mit seiner Fabrik, nah und ganz herausgezoomt? (Das Tab S9 schafft bis zu 120; ab etwa 50 wirkt es flüssig.)
+14. **Flüssig auch mit großer Fabrik?** Auf Tobias' Tablet ruckelt es nicht (Chat 16). Seit v0.21.0 zeichnet das Spiel nur, was im Bild ist, und speichert die Warenbilder zwischen; die Rechenarbeit fürs Zeichnen hat sich nah dran und ganz herausgezoomt etwa halbiert (Testrechner ohne Grafikchip). Der Testmodus zeigt oben „🎞️ … Bilder/s“: Welche Zahl sieht Tobias mit seiner Fabrik, nah und ganz herausgezoomt? (Das Tab S9 schafft bis zu 120; ab etwa 50 wirkt es flüssig.) Tobias (Chat 16): „Ich sehe leider keine Bilder/s.“ Die Anzeige erscheint nur im Testmodus (☰ → „⏩ Testmodus“); im Browser-Test war sie da. Offen: War der Testmodus an? Soll sie auch ohne Testmodus einschaltbar sein?
 
 ## Die letzten 3 Arbeitsschritte
+
+### v0.21.1 – Rückmeldung zur Karte: Ring der Rohstoff-Gebäude (11.11.2026, nur Doku)
+
+- **Tobias (Chat 16):** Das Gebäudebild vermisst er nicht, die Farben passen. Er sieht keine „Bilder/s“. Der gelbe Kreis der Rohstoff-Gebäude bleibt nach einiger Zeit stehen – „es wirkt so, als würde die Maschine zum Stillstand kommen“.
+- **Claude:** nachgerechnet – die Gebäude arbeiten weiter, der Ring bewegt sich nur 1,8° alle 4,5 Sekunden. Vorschlag für v0.21.2 (offene Frage 1); Rückfrage zum Testmodus (offene Frage 14).
+- Spiel unverändert, nur die Versionsnummer steigt.
 
 ### v0.21.0 – Maschinen zeigen, was sie herstellen (11.11.2026)
 
 - **Warum (Tobias, Chat 15/16):** Auf der Karte waren die Waren an den Maschinen so klein, dass man nur erahnen konnte, was hergestellt wird. Er wählte Variante B ohne Gebäudebild („noch nicht so aussagekräftig, später werden daraus echte 2D- bzw. 3D-Grafiken“), auch für Rohstoff-Gebäude, und schlug vor, die Gebäude je Reiter einzufärben, „so haben wir immerhin eine kleine Trennung“. Dazu die beiden Punkte aus dem Belastungstest. „Ja, du hast mein Okay.“
 - **Umgesetzt:** Produkt groß auf einer hellen Scheibe, Fortschritt als gelber Ring darum; Rohstoff-Gebäude zeigen ihre Ware (leer blass), die Erntebank die der laufenden Pflanze; oben links Vorrat-Punkte oder gelbes „?“-Schild mit den fehlenden Zutaten, rechts das Statuslicht; Lagerhaus mit den Waren seiner Fächer. Farben je Reiter. Nur zeichnen, was im Bild ist; Warenbilder zwischengespeichert; „🎞️ … Bilder/s“ im Testmodus. Spielstand-Format unverändert.
 - **Offen:** Tobias' Urteil (offene Fragen 1 und 14).
-
-### v0.20.3 – Antworten zum Belastungstest und zu den Testern (11.11.2026, nur Doku)
-
-- **Tobias (Chat 16):** Die beiden Punkte aus dem Belastungstest sollen in v0.21.0 mit hinein („Passt“). Auf seinem Tablet ruckelt das Spiel nicht, auch herausgezoomt nicht. Tester: „Das können wir im Hinterkopf behalten, aber ich möchte frühestens nächste Woche jemandem das Spiel zeigen.“ Die Frage zu Variante B (ohne oder mit kleinem Gebäudebild) und sein OK für v0.21.0 sind noch unbeantwortet.
-- **Claude:** Antworten festgehalten, bei Variante B nachgefragt (offene Frage 1).
-- Spiel unverändert, nur die Versionsnummer steigt.
-
-### v0.20.2 – Tobias' Wahl, Variante B luftiger, Belastungstest (10.11.2026, nur Doku)
-
-- **Tobias (Chat 15):** Variante B, aber „nicht so 100 % hübsch, wirkt etwas gequetscht“. Spielstand sichern gefällt ihm, weil er den Stand anderen zum Testen zeigen möchte, ohne seinen Spielstand zu verlieren. Bereich kopieren „sehr wichtig“, eine Weiche „sehr sinnvoll“, der Belastungstest sinnvoll. Nein zu „Umlagern“ und „Alle auffüllen“ (das händische Arbeiten ginge verloren) und zur Übersicht pro Minute (nicht in dieser Phase); Verbesserungen mit Erfahrung erst später.
-- **Claude:** neue Vorschaubilder für Variante B (Fortschritt als Ring um das Produkt, kein Gebäudebild, „?“-Schild oben links; als Alternative mit kleinem Gebäudebild). Erklärt, dass jedes Gerät seinen eigenen Spielstand hat (offene Frage 13). Belastungstest als reine Messung: Rechnen unkritisch, Zeichnen ist der Engpass (offene Frage 14). Vorschlag für die Reihenfolge der nächsten Versionen.
-- Spiel unverändert, nur die Versionsnummer steigt.

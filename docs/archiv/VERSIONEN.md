@@ -4,6 +4,19 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.21.1 – Rückmeldung zur Karte: Ring der Rohstoff-Gebäude (11.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zu v0.21.0 festhalten (Regel „Nichts darf verloren gehen“) und einen Vorschlag für den Ring der Rohstoff-Gebäude machen.
+
+**Fragen, die wir uns gestellt haben:**
+- Bleiben die Rohstoff-Gebäude wirklich stehen? → Nein, der Ring zeigt den Rest des laufenden Rohstoffs und bewegt sich nur 1,8° alle 4,5 Sekunden (Erntebank 7,2° alle 12 Sekunden).
+- Warum sieht Tobias keine „Bilder/s“? → Die Anzeige gibt es nur im Testmodus; im Browser-Test war sie da. Rückfrage an Tobias.
+
+**Gemacht:**
+- `docs/STAND.md`: Status, offene Fragen 1 und 14, neuer Arbeitsschritt oben (v0.20.3 fällt aus der Liste). Gespräch und Entscheidungen ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.21.0 – Maschinen zeigen, was sie herstellen (11.11.2026)
 
 **Vorgenommen:**

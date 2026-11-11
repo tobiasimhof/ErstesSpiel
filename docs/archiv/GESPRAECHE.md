@@ -22,6 +22,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Umgesetzt:** v0.21.0 (siehe Versionshistorie).
 
+**Tobias:** „Das Gebäudebild vermisse ich nicht. Farben passen alle so und ist mir ehrlich gesagt gar nicht aktiv aufgefallen, deswegen ist die Farbe so gut. Ich sehe leider keine Bilder/s. Das Einzige, was mir aufgefallen ist, dass die Rohstoffgebäude nach einiger Zeit, bzw. der gelbe Kreis der Gebäude, einfach stehen bleibt und nicht mehr weiterläuft. Es wirkt so, als würde die Maschine zum Stillstand kommen.“
+
+**Claude** hat nachgerechnet (Holzfällerlager und Erntebank mit Versandportal am Ausgang, Simulation): Die Gebäude arbeiten weiter. Der Ring zeigt aber, wie viel vom laufenden Rohstoff übrig ist – beim Holzfällerlager nimmt er je Block um 1/200 ab, also 1,8° alle 4,5 Sekunden (nach 2 Minuten 313° statt 360°); bei der Erntebank 7,2° alle 12 Sekunden. Neben den Maschinen, deren Ring sich alle 5 bis 20 Sekunden ganz füllt, sieht das aus wie Stillstand. Vorschlag für v0.21.2: Der Ring der Rohstoff-Gebäude zeigt jedes einzelne Stück (füllt sich in 4,5 bzw. 12 Sekunden, wie bei den Maschinen; ist der Ausgang voll, bleibt er voll und das Licht ist rot); wie viel vom laufenden Rohstoff übrig ist, zeigt der erste Vorrat-Punkt als kleines Tortenstück, das sich in 15 bzw. 10 Minuten leert (genauer im Infofenster: „leer in etwa …“). Zu „Bilder/s“: Die Anzeige erscheint nur im Testmodus (☰ → „⏩ Testmodus“, dann oben „⏩ ×10“ und „🎞️ … Bilder/s“); im Browser-Test auf Tablet und Handy war sie zu sehen. Rückfrage, ob der Testmodus an war und ob die Anzeige auch ohne Testmodus einschaltbar sein soll.
+
+**Umgesetzt:** v0.21.1 (nur Doku).
+
 ### 10.11.2026 – Chat 15: Braucht es das Versandportal noch? (v0.19.0)
 
 **Tobias:** „Hi, informiere dich über den aktuellen Stand der Dinge. Im letzten Chat haben wir v19 auf GitHub veröffentlicht. Beet, Lagerhaus und Versandportal haben wir noch nicht umgestellt. Ich habe mich gefragt, ob das Versandportal noch Sinn macht, wenn wir die gleiche Funktion mit dem Lagerhaus haben. Das Versandportal schickt die Ware direkt ins Laden-Lager. Lass uns erst die nächsten Schritte theoretisch durchgehen.“
