@@ -28,6 +28,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Umgesetzt:** v0.21.1 (nur Doku).
 
+**Tobias:** „Okay, das wusste ich nicht. Ist tatsächlich besser so, dann weiß man ca., wann das Rohstoffgebäude leer ist. Können wir gerne so lassen. Hab den Testmodus angemacht, und die Anzeige ist zwischen 60–90 Bilder/s immer geswitcht.“
+
+**Claude** hat festgehalten: Der Ring bleibt, v0.21.2 wird nicht programmiert. 60 bis 90 Bilder pro Sekunde heißt: flüssig; dass die Zahl springt, ist normal (das Tablet stellt die Bildwiederholung je nach Bedarf zwischen 60 und 120 um, um Strom zu sparen). Als Nächstes hat Claude den Entwurf für v0.22.0 „Spielstand sichern und laden“ vorgestellt (siehe `PLAENE.md`) – mit dem Gedanken, dass Tester damit auch auf Tobias' Tablet spielen können, ohne einen zweiten Spielstand: sichern → neues Spiel → Tester spielt → laden.
+
+**Umgesetzt:** v0.21.2 (nur Doku).
+
 ### 10.11.2026 – Chat 15: Braucht es das Versandportal noch? (v0.19.0)
 
 **Tobias:** „Hi, informiere dich über den aktuellen Stand der Dinge. Im letzten Chat haben wir v19 auf GitHub veröffentlicht. Beet, Lagerhaus und Versandportal haben wir noch nicht umgestellt. Ich habe mich gefragt, ob das Versandportal noch Sinn macht, wenn wir die gleiche Funktion mit dem Lagerhaus haben. Das Versandportal schickt die Ware direkt ins Laden-Lager. Lass uns erst die nächsten Schritte theoretisch durchgehen.“

@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.21.1 – Rückmeldung zur Karte: Ring der Rohstoff-Gebäude (nur Doku) |
+| **Aktuelle Version** | v0.21.2 – Ring bleibt, Bilder pro Sekunde gemessen, Plan „Spielstand sichern“ (nur Doku) |
 | **Phase** | M2 – Produktionsketten (Kräuter-Kapitel ab Level 7) |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias' OK für v0.21.2 (offene Frage 1): Ring der Rohstoff-Gebäude zeigt jedes einzelne Stück (wie bei Maschinen), der Rest des laufenden Rohstoffs steht im ersten Vorrat-Punkt. Dazu: Hatte er den Testmodus an, als er keine „Bilder/s“ sah (offene Frage 14)? Danach Plan für „Spielstand sichern und was Tester brauchen“. Claude programmiert erst nach seinem OK. |
+| **Nächster Schritt** | Tobias sagt, ob der Entwurf für v0.22.0 „Spielstand sichern und laden“ passt (offene Frage 1), und gibt sein OK. Claude programmiert erst nach seinem OK. |
 
 **Tobias' Fabrik** (Screenshot vom 09.11.2026, ca. 1 Stunde in Echtzeit gespielt, 6.036 Gold): Level 8. Links zwei gleiche Holz-Stein-Straßen (je 3 Holzfällerlager → Sägewerk, 3 Steinbrüche → Steinmetz, Zimmerei, Lagerhäuser als Zwischenlager). Oben 2 Holzfällerlager → Sägewerk, 5 Schmelzhütten → 5 Schmieden, 3 Steinbrüche → Steinmetz; darunter Zimmerei, 2 Feinschmieden und 1 Schlosserei (nur Vorhängeschlösser), jede Ausgabe endet in einem Lagerhaus. Unten 3 Beete, 2 Erntebänke, Webstube und Kräuterstube. Zimmerei und eine Feinschmiede warten auf Eisenstangen. Er spielt auf dem Tablet und nutzt für Aufträge den Test-Knopf. **Versandportale baut er nicht mehr** (er stellt nur noch teure Einzelteile her); läuft in einer der gespiegelten Straßen ein Lagerhaus voll (z. B. Zahnräder, weil die Holzstäbe nicht hinterherkommen), räumt er es aus und befüllt damit das Lagerhaus der anderen Straße (Chat 15).
 
@@ -24,11 +24,11 @@
 | M6 | Clans & Handel | Clans, Handel zwischen Spielern |
 | M7 | App | Android und iOS |
 
-**Nächste Schritte** (Tobias' Auswahl in Chat 15; Reihenfolge ist Claudes Vorschlag, ausführlich in `docs/archiv/PLAENE.md`): Spielstand sichern und was Tester brauchen (Frage 13; Tobias zeigt das Spiel frühestens ab nächster Woche, 16.11.2026); Bereich kopieren (Tobias: „sehr wichtig“); Weiche (Frage 5). Später: Verbesserungen mit Erfahrung (Frage 7), Level 9. Noch offen: gründliche Durchsicht des Codes. Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute.
+**Nächste Schritte** (Tobias' Auswahl in Chat 15; Reihenfolge ist Claudes Vorschlag, ausführlich in `docs/archiv/PLAENE.md`): v0.22.0 Spielstand sichern und laden, dazu was Tester brauchen (Fragen 1 und 13; Tobias zeigt das Spiel frühestens ab nächster Woche, 16.11.2026); Bereich kopieren (Tobias: „sehr wichtig“); Weiche (Frage 5). Später: Verbesserungen mit Erfahrung (Frage 7), Level 9. Noch offen: gründliche Durchsicht des Codes. Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute.
 
 ## Offene Fragen
 
-1. **Ring der Rohstoff-Gebäude (v0.21.0):** Tobias: Der gelbe Kreis der Rohstoff-Gebäude bleibt nach einiger Zeit stehen, „es wirkt so, als würde die Maschine zum Stillstand kommen“. Ursache: Der Ring zeigt, wie viel vom laufenden Rohstoff übrig ist – beim Holzfällerlager 1/200 je Block, also 1,8° alle 4,5 Sekunden (Erntebank 7,2° alle 12 Sekunden); die Gebäude arbeiten weiter. Claudes Vorschlag für v0.21.2: Der Ring zeigt jedes einzelne Stück (füllt sich in 4,5 bzw. 12 Sekunden, wie bei den Maschinen; bleibt voll und das Licht rot, wenn der Ausgang voll ist); wie viel vom laufenden Rohstoff übrig ist, zeigt der erste Vorrat-Punkt als kleines Tortenstück, das sich in 15 Minuten leert. Gebäudebild vermisst Tobias nicht, die Farben passen („ist mir ehrlich gesagt gar nicht aktiv aufgefallen, deswegen ist die Farbe so gut“).
+1. **Spielstand sichern und laden** (Entwurf v0.22.0, ausführlich in `docs/archiv/PLAENE.md`): Im Menü ☰ „💾 Spielstand sichern“ (eine kleine Datei) und „📂 Spielstand laden“ (Vorschau mit Level, Gold, Gebäuden und Datum, dann Rückfrage); bei „Neues Spiel“ zuerst „Erst sichern?“. So können Tester auch auf Tobias' Tablet spielen: sichern → neues Spiel → Tester spielt → laden. Fragen an Tobias: Passt das? Datei in „Downloads“ oder über das Teilen-Menü (WhatsApp, E-Mail, Drive)? Sollen Tester Testmodus und Test-Knopf sehen? Läuft die Fabrik nach dem Laden ab dem Sicherungszeitpunkt nach (wie „Willkommen zurück“)?
 2. **Kräuterstube mit 2 Eingängen** ist gebaut und angeschlossen (v0.18.2), Tobias' Urteil steht noch aus.
 3. **Platzhalter-Zahlen:** Aufstiegspreise, Auftragsmengen, Baukosten. Kostet der Laden-Ausbau später zusätzlich Waren? Begrenzt das Level die kaufbare Fläche?
 4. **Weltgröße:** Reichen 38 × 30 Felder für die Masse der höheren Level, oder gibt es später mehr Fläche (`perSide` in `data/land.js`)?
@@ -41,9 +41,14 @@
 11. **Pleiteschutz:** Ein Rohstoff ohne passendes Gebäude verhindert das Geschenk – bewusst so gelassen, beobachten.
 12. **Vor v1.0:** Test-Knopf entfernen (`QUEST_TEST_SKIP = false`). Später: Schwarzmarkt und verbundene Läden (M5), Arbeitstitel.
 13. **Anderen das Spiel zeigen** (Tobias, Chat 15): Er möchte den jetzigen Stand anderen zum Testen geben, ohne dass sein Spielstand verloren geht. Jedes Gerät hat seinen eigenen Spielstand – wer den Link auf seinem eigenen Gerät öffnet, beginnt ein neues Spiel und berührt Tobias' Fabrik nicht. Tobias (Chat 16): „Das können wir im Hinterkopf behalten, aber ich möchte frühestens nächste Woche jemandem das Spiel zeigen.“ Noch offen, rechtzeitig vor dem ersten Tester: eigene Geräte oder Tobias' Tablet (dann braucht es einen zweiten Spielstand)? Bei Level 1 anfangen oder Tobias' Fabrik laden? Kurze Einführung? „Spielstand sichern und mitnehmen“ bleibt als Sicherung sinnvoll.
-14. **Flüssig auch mit großer Fabrik?** Auf Tobias' Tablet ruckelt es nicht (Chat 16). Seit v0.21.0 zeichnet das Spiel nur, was im Bild ist, und speichert die Warenbilder zwischen; die Rechenarbeit fürs Zeichnen hat sich nah dran und ganz herausgezoomt etwa halbiert (Testrechner ohne Grafikchip). Der Testmodus zeigt oben „🎞️ … Bilder/s“: Welche Zahl sieht Tobias mit seiner Fabrik, nah und ganz herausgezoomt? (Das Tab S9 schafft bis zu 120; ab etwa 50 wirkt es flüssig.) Tobias (Chat 16): „Ich sehe leider keine Bilder/s.“ Die Anzeige erscheint nur im Testmodus (☰ → „⏩ Testmodus“); im Browser-Test war sie da. Offen: War der Testmodus an? Soll sie auch ohne Testmodus einschaltbar sein?
 
 ## Die letzten 3 Arbeitsschritte
+
+### v0.21.2 – Ring bleibt, Bilder pro Sekunde gemessen, Plan „Spielstand sichern“ (11.11.2026, nur Doku)
+
+- **Tobias (Chat 16):** Der Ring der Rohstoff-Gebäude bleibt, wie er ist: „Ist tatsächlich besser so, dann weiß man ca., wann das Rohstoffgebäude leer ist.“ Mit Testmodus zeigt sein Tablet 60 bis 90 Bilder pro Sekunde – das Spiel läuft flüssig.
+- **Claude:** Entscheidung und Messung festgehalten; Entwurf für v0.22.0 „Spielstand sichern und laden“ mit Fragen (offene Frage 1).
+- Spiel unverändert, nur die Versionsnummer steigt.
 
 ### v0.21.1 – Rückmeldung zur Karte: Ring der Rohstoff-Gebäude (11.11.2026, nur Doku)
 

@@ -61,6 +61,18 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.22.0 – Spielstand sichern und laden (noch nicht freigegeben)
+
+Tobias (Chat 15): Er möchte den Stand anderen zum Testen zeigen, ohne dass sein Spielstand verloren geht – frühestens ab der Woche ab 16.11.2026 (Chat 16). Claudes Entwurf (Chat 16):
+
+- **Menü ☰ → „💾 Spielstand sichern“:** Das Spiel legt eine kleine Datei an (etwa 30 bis 50 KB), z. B. „Fabrik Level 8 – 11.11.2026.json“. Auf dem Tablet landet sie in „Downloads“; wo das Gerät es kann, öffnet sich stattdessen das Teilen-Menü (WhatsApp, E-Mail, Google Drive …).
+- **Menü ☰ → „📂 Spielstand laden“:** Datei auswählen → Vorschau („Level 8 · 6.036 Gold · 62 Gebäude · gesichert am 11.11.2026, 10:15“) → Rückfrage „Dein jetziger Spielstand wird ersetzt“ → laden. Ältere Spielstände werden umgewandelt wie beim normalen Laden; beschädigte oder fremde Dateien werden abgelehnt, der jetzige Spielstand bleibt dann unberührt.
+- **Nach dem Laden** läuft die Fabrik ab dem Zeitpunkt des Sicherns nach, wie bei „Willkommen zurück“ (Frage an Tobias).
+- **„🔄 Neues Spiel“** fragt zuerst: „Erst sichern?“ (Sichern / Ohne Sichern neu anfangen / Abbrechen).
+- **Tester:** Auf eigenen Geräten beginnen sie automatisch bei Level 1; Tobias' Fabrik können sie laden, wenn er ihnen die Datei schickt. Auf Tobias' Tablet: sichern → neues Spiel → Tester spielt → laden – kein zweiter Spielstand nötig.
+- **Fragen an Tobias:** Passt das? Datei in „Downloads“ oder lieber über das Teilen-Menü? Sollen Tester Testmodus und Test-Knopf „Auftrag erledigen“ sehen? Fabrik nach dem Laden nachrechnen? Eine kurze Einführung bleibt im Hinterkopf (M4).
+- **Technik:** Spielstand-Format bleibt (Text aus `serializeGame`, Laden über `deserializeGame` mit Prüfung und Umwandlung). Tests: Sichern und Laden ergeben denselben Spielstand, beschädigte Datei wird abgelehnt; Browser-Test mit Datei-Auswahl.
+
 ### v0.21.0 – Maschinen zeigen, was sie herstellen (fertig)
 
 Tobias' OK in Chat 16: ohne Gebäudebild, auch Rohstoff-Gebäude, dazu seine Idee „Farbe je Reiter“ und die beiden Punkte aus dem Belastungstest. Umgesetzt wie im Entwurf unten (luftige Fassung), mit diesen Ergänzungen:
