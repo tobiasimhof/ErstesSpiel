@@ -20,6 +20,7 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
   const menu = document.getElementById('menu');
   const hint = document.getElementById('hint');
   const speedBadge = document.getElementById('hud-speed');
+  const fpsBadge = document.getElementById('hud-fps');
   const testModeButton = document.getElementById('menu-test-mode');
 
   document.getElementById('hud-version').textContent = `v${version}`;
@@ -101,7 +102,12 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
       testModeButton.textContent = `⏩ Testmodus: ${on ? 'an' : 'aus'} (Zeit ×${factor})`;
       speedBadge.textContent = `⏩ ×${factor}`;
       speedBadge.hidden = !on;
+      fpsBadge.hidden = !on;
       testPackButton.hidden = !on;
+    },
+    // v0.21.0 (Belastungstest): Bilder pro Sekunde, nur im Testmodus zu sehen
+    setFps(fps) {
+      fpsBadge.textContent = `🎞️ ${Math.round(fps)} Bilder/s`;
     },
     closeMenu,
   };

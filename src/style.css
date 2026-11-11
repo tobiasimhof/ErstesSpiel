@@ -178,6 +178,18 @@ button.danger {
   font-weight: 700;
 }
 
+/* v0.21.0: Bilder pro Sekunde im Testmodus */
+.hud-fps {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(42, 29, 18, 0.85);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
 .hud-version {
   font-size: 12px;
   font-weight: 500;

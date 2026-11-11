@@ -4,6 +4,25 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.21.0 – Maschinen zeigen, was sie herstellen (11.11.2026)
+
+**Vorgenommen:**
+- Variante B in der luftigen Fassung (Tobias, Chat 15/16): Produkt groß in der Mitte, Fortschritt als Ring, kein Gebäudebild, auch Rohstoff-Gebäude. Tobias' Idee dazu: Farbe je Reiter. Aus dem Belastungstest: nur zeichnen, was im Bild ist; Bilder pro Sekunde im Testmodus.
+
+**Fragen, die wir uns gestellt haben:**
+- Was zeigt ein leeres Rohstoff-Gebäude? → Seine Ware blass; die Erntebank die Ware der ersten Pflanze (oder der, die noch am Ausgang wartet).
+- Was zeigt die Vorschau beim Platzieren? → Das Produkt der ersten Einstellung, ohne Ring und Schild; beim Verschieben das, was das Gebäude gerade herstellt.
+- Wo ist Platz, wenn Pfeile oben oder unten sitzen (gedrehte Gebäude) oder der Name auf der Kante steht? → Jede Seite hält so viel frei, wie ihre Pfeile hineinragen; die obere Zeile rutscht nach unten, die Scheibe wird etwas kleiner.
+- Darf das Lagerhaus braun bleiben? → Nein, dann sähe es aus wie ein Holz-Gebäude; es ist jetzt sandfarben.
+- Wird das Zeichnen wirklich schneller? → Die neue Scheibe kostet mehr als das Emoji; erst mit zwischengespeicherten Warenbildern und dem Boden in einem Rutsch ist die Rechenarbeit nah dran und ganz herausgezoomt etwa halbiert, bei mittlerem Zoom gleich.
+
+**Gemacht:**
+- `src/view/buildingFace.js` (neu): was ein Gebäude zeigt (Produkt, blass, Ring, fehlende Zutaten, Vorrat, Lagerhaus-Waren). `src/view/renderer.js`: neue Aufteilung der Gebäude (obere Zeile, Scheibe mit Ring, Name; Pfeile bleiben frei), Lagerhaus mit Warenschild, nur zeichnen, was im Bild ist, Boden in einem Rutsch, zwischengespeicherte Warenbilder. `src/view/camera.js`: sichtbarer Ausschnitt. `src/core/data/buildings.js`: Farbe je Reiter (`TAB_COLORS`), Lagerhaus sandfarben. `main.js`, `hud.js`, `index.html`, `style.css`: „🎞️ … Bilder/s“ im Testmodus. Spielstand-Format unverändert.
+- Tests: `tests/karte.test.js` (neu), Browser-Test mit Screenshots der Karte nah und weit und der Anzeige im Testmodus. Doku: `STAND.md`, `SPIEL.md`, `TECHNIK.md`, Archiv.
+
+**Geprüft:**
+- `npm test` bestanden, Browser-Test in Tablet- und Handygröße bestanden, Screenshots angesehen (auch eine eigene Testfabrik mit allen Gebäuden in allen Drehungen, Zoom 0,35 bis 2). Messung alt gegen neu mit voll bebauter Fläche.
+
 ### v0.20.3 – Antworten zum Belastungstest und zu den Testern (11.11.2026, nur Doku)
 
 **Vorgenommen:**

@@ -16,6 +16,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Umgesetzt:** v0.20.3 (nur Doku).
 
+**Tobias:** „Das Gebäudebild ist noch nicht so aussagekräftig, und später werden aus diesen Bildern ja echte 2D- bzw. 3D-Grafiken ähnlich wie bei Clash of Clans. Von daher können wir das gerne ohne Gebäudebild machen. Alternativ kann man die Farbe evtl. ändern: die Holzgebäude in einem Braun, die Steingebäude in einer Steinfarbe und Eisen und Kräuter eben auch in einer spezifischen Farbe, so haben wir immerhin eine kleine Trennung. Rohstoffgebäude können wir auch miteinbetten. Ist eine gute Idee. Ja, du hast mein Okay.“
+
+**Claude** hat v0.21.0 gebaut und Tobias' Farb-Idee mit hineingenommen (sie ersetzt das Gebäudebild als Unterscheidung): Holz braun, Stein steingrau, Eisen stahlblau, Erde grün; Lagerhaus sandfarben (vorher braun wie Holz), Versandportal bleibt lila. Beim Messen fiel auf, dass die neue Scheibe mit dem Warenbild mehr Rechenarbeit kostet als das alte Emoji; deshalb werden die Warenbilder jetzt zwischengespeichert und der Boden in einem Rutsch gezeichnet. Ergebnis (Testrechner ohne Grafikchip, 130 Gebäude, 360 Bänder): Rechenarbeit fürs Zeichnen nah dran etwa halbiert, ganz herausgezoomt fast halbiert, bei mittlerem Zoom etwa gleich. Wie es auf dem Tablet läuft, zeigt die neue Anzeige im Testmodus.
+
+**Umgesetzt:** v0.21.0 (siehe Versionshistorie).
+
 ### 10.11.2026 – Chat 15: Braucht es das Versandportal noch? (v0.19.0)
 
 **Tobias:** „Hi, informiere dich über den aktuellen Stand der Dinge. Im letzten Chat haben wir v19 auf GitHub veröffentlicht. Beet, Lagerhaus und Versandportal haben wir noch nicht umgestellt. Ich habe mich gefragt, ob das Versandportal noch Sinn macht, wenn wir die gleiche Funktion mit dem Lagerhaus haben. Das Versandportal schickt die Ware direkt ins Laden-Lager. Lass uns erst die nächsten Schritte theoretisch durchgehen.“

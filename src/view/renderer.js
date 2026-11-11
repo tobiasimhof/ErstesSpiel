@@ -1,23 +1,15 @@
 // Zeichnet die Welt auf die Zeichenfläche (Canvas).
 // Liest nur den Spielzustand, verändert ihn nie.
 
-import { TILE } from './camera.js';
+import { intersects, TILE, visibleRect } from './camera.js';
 import { BUILDINGS } from '../core/data/buildings.js';
 import { DELTA, opposite, step } from '../core/dirs.js';
 import { buildingPorts, footprintSize } from '../core/geometry.js';
 import { beltLine, inputSides, pathDirections } from '../core/belts.js';
 import { landOffer, landOffers } from '../core/land.js';
-import {
-  buildingProgress,
-  buildingStatus,
-  gardenCrop,
-  growth,
-  isRipe,
-  missingInputs,
-  sourceCapacity,
-  sourceCount,
-} from '../core/production.js';
+import { buildingProgress, buildingStatus, gardenCrop, growth, isRipe } from '../core/production.js';
 import { BELT_SPEED, TICK } from '../core/sim.js';
+import { buildingFace } from './buildingFace.js';
 import { drawItem } from './itemArt.js';
 import { beltAt, isOwned, parseTileKey } from '../core/state.js';
 
@@ -57,6 +49,14 @@ const COLORS = {
   areaOk: 'rgba(81, 207, 102, 0.3)',
   areaBad: 'rgba(255, 107, 107, 0.6)',
   lineMark: 'rgba(255, 212, 59, 0.3)',
+  // v0.21.0: helle Scheibe mit dem Produkt, Ring für den Fortschritt, gelbes „?“-Schild
+  disc: '#fbf3dc',
+  discEdge: 'rgba(0, 0, 0, 0.5)',
+  ringBack: 'rgba(28, 20, 12, 0.55)',
+  ringFill: '#ffe066',
+  askFill: '#fff3bf',
+  askEdge: '#f2b705',
+  askText: '#7a4a00',
 };
 
 // v0.16.0: Aussehen der Pflanzen im Beet (Stängel, Blätter, Blüten)
@@ -73,6 +73,31 @@ const LABEL_FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
 export function createRenderer(canvas) {
   const ctx = canvas.getContext('2d');
   let dpr = 1;
+  let zoom = 1;
+
+  // v0.21.0 (Belastungstest): Warenbilder auf Bändern und Gebäuden als fertige
+  // kleine Bilder zwischenspeichern, statt sie in jedem Bild neu zu malen. Die
+  // Größe wird in Stufen (etwa 19 %) aufgerundet und dann leicht verkleinert.
+  const sprites = new Map();
+  function drawItemCached(type, cx, cy, size) {
+    const px = size * dpr * zoom;
+    if (!(px >= 4)) {
+      drawItem(ctx, type, cx, cy, size);
+      return;
+    }
+    const step = 2 ** (Math.ceil(Math.log2(px) * 4) / 4);
+    const key = `${type}|${step}`;
+    let sprite = sprites.get(key);
+    if (!sprite) {
+      if (sprites.size > 400) sprites.clear();
+      sprite = document.createElement('canvas');
+      sprite.width = sprite.height = Math.ceil(step * 1.5);
+      drawItem(sprite.getContext('2d'), type, sprite.width / 2, sprite.height / 2, step);
+      sprites.set(key, sprite);
+    }
+    const drawn = (sprite.width * size) / step;
+    ctx.drawImage(sprite, cx - drawn / 2, cy - drawn / 2, drawn, drawn);
+  }
 
   function resize() {
     dpr = window.devicePixelRatio || 1;
@@ -88,10 +113,16 @@ export function createRenderer(canvas) {
     ctx.fillStyle = COLORS.background;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    zoom = cam.zoom;
     const scale = dpr * cam.zoom;
     ctx.setTransform(scale, 0, 0, scale, -cam.x * scale, -cam.y * scale);
 
-    drawGround(state, cam);
+    // v0.21.0 (Belastungstest): nur zeichnen, was im Bild ist. Der Rand ist so
+    // groß, dass auch Namen neben und unter einem Gebäude ganz zu sehen sind
+    // (unter Zoom 0,5 gibt es keine Namen).
+    const view = visibleRect(cam, cam.zoom >= 0.5 ? Math.max(TILE, 80 / cam.zoom) : TILE);
+
+    drawGround(state, cam, view);
 
     // v0.11.0: Beim Verschieben eines Bereichs bleibt er an der alten Stelle
     // blass stehen, die Vorschau zeigt die neue.
@@ -101,12 +132,12 @@ export function createRenderer(canvas) {
     const dimBelts = areaGhost ? new Set(area.sel.belts) : null;
     const dimBuildings = areaGhost ? new Set(area.sel.buildings) : null;
     if (dimBelts) {
-      drawBelts(state, simAlpha, (key) => !dimBelts.has(key));
+      drawBelts(state, simAlpha, (key) => !dimBelts.has(key), view);
       ctx.globalAlpha = 0.3;
-      drawBelts(state, simAlpha, (key) => dimBelts.has(key));
+      drawBelts(state, simAlpha, (key) => dimBelts.has(key), view);
       ctx.globalAlpha = 1;
     } else {
-      drawBelts(state, simAlpha);
+      drawBelts(state, simAlpha, null, view);
     }
 
     // Auswahlrahmen vor den Gebäuden zeichnen: er liegt in der Lücke um das
@@ -114,13 +145,21 @@ export function createRenderer(canvas) {
     drawSelection(state, cam, ui.selected);
 
     const movingId = ui.ghost?.movingId ?? null;
+    let moving = null;
     for (const building of state.buildings) {
+      if (building.id === movingId) moving = building;
+      const { width, height } = footprintSize(building.type, building.rot);
+      if (!intersects(view, building.x * TILE, building.y * TILE, width * TILE, height * TILE)) continue;
       const dim = building.id === movingId || Boolean(dimBuildings?.has(building.id));
       drawBuilding(building, cam, { alpha: dim ? 0.3 : 1, state });
     }
 
     if (ui.beltPreview) drawBeltPreview(state, ui.beltPreview);
-    if (ui.ghost) drawBuilding(ui.ghost, cam, { alpha: 0.7, outline: ui.ghost.valid ? COLORS.ghostOk : COLORS.ghostBad });
+    // Beim Verschieben zeigt die Vorschau, was das Gebäude gerade herstellt.
+    if (ui.ghost) {
+      const ghost = moving ? { ...ui.ghost, prod: moving.prod } : ui.ghost;
+      drawBuilding(ghost, cam, { alpha: 0.7, outline: ui.ghost.valid ? COLORS.ghostOk : COLORS.ghostBad });
+    }
     if (area && ui.mode === 'area') drawAreaMarks(state, cam, area);
     if (areaGhost?.plan) drawAreaGhost(cam, areaGhost, simAlpha);
 
@@ -166,25 +205,41 @@ export function createRenderer(canvas) {
 
   // ---------- Boden ----------
 
-  function drawGround(state, cam) {
+  function drawGround(state, cam, view) {
     // Die Welt beginnt seit v0.10.2 nicht mehr bei Feld 0, 0 (oben bei y = −3).
+    // v0.21.0: nur die Felder im Bild, jede Farbe in einem Rutsch
     const w = state.world;
-    for (let ty = w.y; ty < w.y + w.height; ty++) {
-      for (let tx = w.x; tx < w.x + w.width; tx++) {
-        const owned = isOwned(state, tx, ty);
-        const alt = Math.abs(tx + ty) % 2 === 1;
-        ctx.fillStyle = owned ? (alt ? COLORS.ownedAlt : COLORS.owned) : alt ? COLORS.lockedAlt : COLORS.locked;
-        ctx.fillRect(tx * TILE, ty * TILE, TILE, TILE);
-        if (!owned) {
-          ctx.strokeStyle = COLORS.lockedHatch;
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.moveTo(tx * TILE, (ty + 1) * TILE);
-          ctx.lineTo((tx + 1) * TILE, ty * TILE);
-          ctx.stroke();
+    const tx0 = Math.max(w.x, Math.floor(view.x0 / TILE));
+    const tx1 = Math.min(w.x + w.width, Math.ceil(view.x1 / TILE));
+    const ty0 = Math.max(w.y, Math.floor(view.y0 / TILE));
+    const ty1 = Math.min(w.y + w.height, Math.ceil(view.y1 / TILE));
+    if (tx1 <= tx0 || ty1 <= ty0) return;
+    const pass = (color, wanted) => {
+      ctx.beginPath();
+      for (let ty = ty0; ty < ty1; ty++) {
+        for (let tx = tx0; tx < tx1; tx++) {
+          if (wanted(isOwned(state, tx, ty), Math.abs(tx + ty) % 2 === 1)) ctx.rect(tx * TILE, ty * TILE, TILE, TILE);
         }
       }
+      ctx.fillStyle = color;
+      ctx.fill();
+    };
+    ctx.fillStyle = COLORS.locked;
+    ctx.fillRect(tx0 * TILE, ty0 * TILE, (tx1 - tx0) * TILE, (ty1 - ty0) * TILE);
+    pass(COLORS.lockedAlt, (owned, alt) => !owned && alt);
+    pass(COLORS.owned, (owned, alt) => owned && !alt);
+    pass(COLORS.ownedAlt, (owned, alt) => owned && alt);
+    ctx.strokeStyle = COLORS.lockedHatch;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let ty = ty0; ty < ty1; ty++) {
+      for (let tx = tx0; tx < tx1; tx++) {
+        if (isOwned(state, tx, ty)) continue;
+        ctx.moveTo(tx * TILE, (ty + 1) * TILE);
+        ctx.lineTo((tx + 1) * TILE, ty * TILE);
+      }
     }
+    ctx.stroke();
 
     const p = state.plot;
     ctx.strokeStyle = COLORS.gridLine;
@@ -232,9 +287,14 @@ export function createRenderer(canvas) {
   // Nachbarbändern ragen ein kleines Stück über die Feldgrenze, damit dort
   // keine feine Fuge durchscheint.
   // filter(key): nur diese Bänder zeichnen (v0.11.0); Form und Anschlüsse
-  // richten sich trotzdem nach allen Bändern.
-  function drawBelts(state, simAlpha, filter = null) {
-    const entries = Object.entries(state.belts).filter(([key]) => !filter || filter(key));
+  // richten sich trotzdem nach allen Bändern. view (v0.21.0): nur Bänder im Bild.
+  function drawBelts(state, simAlpha, filter = null, view = null) {
+    const inView = (key) => {
+      if (!view) return true;
+      const { x, y } = parseTileKey(key);
+      return intersects(view, x * TILE, y * TILE, TILE, TILE);
+    };
+    const entries = Object.entries(state.belts).filter(([key]) => (!filter || filter(key)) && inView(key));
     const tiles = entries.map(([key, belt]) => {
       const { x, y } = parseTileKey(key);
       let ins = inputSides(state, x, y);
@@ -280,7 +340,7 @@ export function createRenderer(canvas) {
         px = cx + DELTA[exit].x * TILE * 0.5 * f;
         py = cy + DELTA[exit].y * TILE * 0.5 * f;
       }
-      drawItem(ctx, item.type, px, py, TILE * 0.34);
+      drawItemCached(item.type, px, py, TILE * 0.34);
     }
   }
 
@@ -371,6 +431,7 @@ export function createRenderer(canvas) {
     const w = width * TILE - 2 * inset;
     const h = height * TILE - 2 * inset;
     const radius = 10;
+    const live = Boolean(state && building.prod);
 
     ctx.globalAlpha = alpha;
 
@@ -389,66 +450,68 @@ export function createRenderer(canvas) {
     roundRect(x + 3, y + 3, w - 6, h * 0.35, radius - 3);
     ctx.fill();
 
-    // v0.16.0: Beet – Erde mit Furchen, darauf die Pflanze (groß, Tobias)
-    const garden = def.production?.kind === 'garden';
-    const crop = garden && building.prod ? gardenCrop(building) : null;
-    if (garden) drawGarden(building, crop, x, y, w, h);
+    // v0.21.0: Aufteilung des Gebäudes. Oben eine Zeile (links Vorrat oder
+    // „?“-Schild, rechts das Statuslicht), in der Mitte das Produkt, unten der
+    // Name. Ein- und Ausgangspfeile bleiben frei. u = ein Bildschirmpixel,
+    // höchstens so groß, dass alles ins Gebäude passt.
+    const ports = buildingPorts(building);
+    const reserve = portReserve(ports);
+    const label = cam.zoom >= 0.5 ? nameBox(def.name, ports, x, y, w, h, cam) : null;
+    const u = Math.min(1 / cam.zoom, Math.min(w, h) / 80);
+    const pad = Math.min(4 / cam.zoom, Math.min(w, h) * 0.08);
+    const r = Math.min(6 / cam.zoom, Math.min(w, h) * 0.13);
+    const topReserve = Math.max(reserve.N, label?.where === 'top' ? label.boxH / 2 + 2 * u : 0);
+    const row = { top: y + Math.max(pad, topReserve), h: Math.max(20 * u, 2 * r) };
+    row.mid = row.top + row.h / 2;
+    const light = { x: x + w - Math.max(pad, reserve.E) - r, y: row.mid, r };
+    const layout = { x, y, w, h, u, pad, row, light, reserve, label };
 
-    // Symbol (deckende Füllfarbe, sonst werden farbige Emojis durchsichtig).
-    // Im Beet nur, solange nichts wächst – dann ist die Pflanze das Bild.
+    const face = buildingFace(building);
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    if (!crop) {
-      const iconSize = Math.min(w, h) * (garden ? 0.4 : 0.55);
-      ctx.fillStyle = '#000';
-      ctx.font = `${iconSize}px ${EMOJI_FONT}`;
-      ctx.fillText(def.icon, x + w / 2, y + h * 0.46);
+    if (face.kind === 'product') {
+      drawProduct(face, layout, live);
+    } else if (face.kind === 'storage' && face.items.length > 0) {
+      drawStorage(face.items, layout);
+    } else {
+      // v0.16.0: Beet – Erde mit Furchen, darauf die Pflanze (groß, Tobias).
+      // Das Bild (deckende Füllfarbe, sonst werden farbige Emojis
+      // durchsichtig) steht nur noch auf Beet, leerem Lagerhaus und Versandportal.
+      const garden = face.kind === 'garden';
+      const crop = garden && building.prod ? gardenCrop(building) : null;
+      if (garden) drawGarden(building, crop, x, y, w, h);
+      if (!crop) {
+        const iconSize = Math.min(w, h) * (garden ? 0.4 : 0.55);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#000';
+        ctx.font = `${iconSize}px ${EMOJI_FONT}`;
+        ctx.fillText(def.icon, x + w / 2, y + h * 0.46);
+      }
     }
 
-    // Name: bleibt auf dem Bildschirm etwa 12 px groß. Er sucht sich die erste
-    // Stelle, an der er keinen Ein-/Ausgangspfeil verdeckt: Unterkante,
-    // Oberkante, unter dem Gebäude, über dem Gebäude. Bei kleinen Gebäuden (auf
-    // dem Bildschirm) nur außerhalb, damit das Symbol sichtbar bleibt. Bei sehr
-    // kleinem Zoom ausgeblendet.
-    const ports = buildingPorts(building);
-    if (cam.zoom >= 0.5) {
-      const fontSize = 12 / cam.zoom;
-      ctx.font = `600 ${fontSize}px ${LABEL_FONT}`;
-      const textW = ctx.measureText(def.name).width;
-      const padX = 6 / cam.zoom;
-      const boxW = textW + 2 * padX;
-      const boxH = fontSize * 1.5;
-      const boxX = x + w / 2 - boxW / 2;
-      const clear = TILE * 0.26; // Abstand, damit Pfeile frei bleiben (größer als portBox)
-      const candidates = [
-        y + h - boxH / 2, // auf der Unterkante
-        y - boxH / 2, // auf der Oberkante
-        y + h + clear, // unter dem Gebäude
-        y - boxH - clear, // über dem Gebäude
-      ];
-      const small = h * cam.zoom < 56;
-      const arrows = ports.map((port) => portBox(port));
-      const free = (by) =>
-        arrows.every((a) => boxX + boxW < a.x0 || boxX > a.x1 || by + boxH < a.y0 || by > a.y1);
-      const options = small ? candidates.slice(2) : candidates;
-      const boxY = options.find(free) ?? options[0];
+    // Name: bleibt auf dem Bildschirm etwa 12 px groß (Platz sucht nameBox).
+    if (label) {
+      ctx.font = `600 ${label.fontSize}px ${LABEL_FONT}`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
       ctx.fillStyle = COLORS.labelBg;
-      roundRect(boxX, boxY, boxW, boxH, boxH / 2);
+      roundRect(label.x, label.y, label.boxW, label.boxH, label.boxH / 2);
       ctx.fill();
       ctx.fillStyle = COLORS.labelText;
-      ctx.fillText(def.name, x + w / 2, boxY + boxH / 2 + fontSize * 0.05);
+      ctx.fillText(def.name, x + w / 2, label.y + label.boxH / 2 + label.fontSize * 0.05);
     }
 
     // Ein- und Ausgänge zuletzt, damit der Name sie nicht verdeckt
     for (const port of ports) drawPort(port);
 
-    // Status (nur gebaute Gebäude): Licht oben rechts, Fortschrittsleiste oben
-    if (state && building.prod) {
+    // Status (nur gebaute Gebäude): Licht oben rechts. Das Beet behält seine
+    // Fortschrittsleiste; Maschinen und Rohstoff-Gebäude zeigen den Fortschritt
+    // seit v0.21.0 als Ring um das Produkt.
+    if (live) {
       const status = buildingStatus(state, building);
-      // Licht etwa 12 px groß, bei kleinen Gebäuden (z. B. 1 × 1 auf dem Handy) kleiner
-      const r = Math.min(6 / cam.zoom, Math.min(w, h) * 0.13);
       ctx.beginPath();
-      ctx.arc(x + w - r - 4 / cam.zoom, y + r + 4 / cam.zoom, r, 0, Math.PI * 2);
+      ctx.arc(light.x, light.y, r, 0, Math.PI * 2);
       ctx.fillStyle =
         status.level === 'work' ? COLORS.statusWork : status.level === 'blocked' ? COLORS.statusBlocked : COLORS.statusIdle;
       ctx.fill();
@@ -456,39 +519,19 @@ export function createRenderer(canvas) {
       ctx.lineWidth = 2 / cam.zoom;
       ctx.stroke();
 
-      const progress = buildingProgress(building);
-      if (progress !== null) {
-        const barH = 5 / cam.zoom;
-        const barX = x + 8;
-        const barW = w - 16 - 2 * r - 8 / cam.zoom;
-        const barY = y + 4 / cam.zoom + r - barH / 2;
-        ctx.fillStyle = COLORS.barBack;
-        roundRect(barX, barY, barW, barH, barH / 2);
-        ctx.fill();
-        ctx.fillStyle = COLORS.barFill;
-        roundRect(barX, barY, Math.max(barH, barW * progress), barH, barH / 2);
-        ctx.fill();
-      }
-
-      // v0.10.0: Kombi-Maschine wartet – kleines Bild der fehlenden Zutat(en)
-      const missing = missingInputs(building);
-      if (missing.length > 0 && cam.zoom >= 0.3) drawMissing(missing, ports, x, y, w, h, cam, x + w - 2 * r - 4 / cam.zoom);
-
-      // v0.14.0: Rohstoff-Vorrat – ein Punkt je Platz, gefüllt = Rohstoff darin
-      const capacity = sourceCapacity(building);
-      if (capacity > 1 && cam.zoom >= 0.3) {
-        const dot = Math.min(4 / cam.zoom, w * 0.05);
-        const gap = dot * 1.1;
-        const dotY = y + 4 / cam.zoom + r + 5 / cam.zoom + dot * 1.6;
-        const filled = sourceCount(building);
-        for (let i = 0; i < capacity; i++) {
-          ctx.beginPath();
-          ctx.arc(x + 8 + dot + i * (2 * dot + gap), dotY, dot, 0, Math.PI * 2);
-          ctx.fillStyle = i < filled ? COLORS.barFill : COLORS.barBack;
+      if (face.kind === 'garden') {
+        const progress = buildingProgress(building);
+        if (progress !== null) {
+          const barH = 5 / cam.zoom;
+          const barX = x + 8;
+          const barW = light.x - r - 4 / cam.zoom - barX;
+          const barY = light.y - barH / 2;
+          ctx.fillStyle = COLORS.barBack;
+          roundRect(barX, barY, barW, barH, barH / 2);
           ctx.fill();
-          ctx.strokeStyle = 'rgba(0, 0, 0, 0.55)';
-          ctx.lineWidth = 1.2 / cam.zoom;
-          ctx.stroke();
+          ctx.fillStyle = COLORS.barFill;
+          roundRect(barX, barY, Math.max(barH, barW * progress), barH, barH / 2);
+          ctx.fill();
         }
       }
     }
@@ -506,6 +549,176 @@ export function createRenderer(canvas) {
       }
     }
     ctx.globalAlpha = 1;
+  }
+
+  // Wie tief die Pfeile an jeder Seite ins Gebäude ragen (plus etwas Luft):
+  // blaue Eingänge zeigen hinein und ragen weiter als orange Ausgänge.
+  function portReserve(ports) {
+    const reserve = { N: 0, E: 0, S: 0, W: 0 };
+    for (const port of ports) {
+      const depth = (port.kind === 'out' ? 0.1 : 0.16) * TILE + 1.5;
+      reserve[port.side] = Math.max(reserve[port.side], depth);
+    }
+    return reserve;
+  }
+
+  // Platz für den Namen: die erste Stelle, an der er keinen Pfeil verdeckt –
+  // Unterkante, Oberkante, unter dem Gebäude, über dem Gebäude. Bei kleinen
+  // Gebäuden (auf dem Bildschirm) nur außerhalb, damit das Produkt frei bleibt.
+  function nameBox(name, ports, x, y, w, h, cam) {
+    const fontSize = 12 / cam.zoom;
+    ctx.font = `600 ${fontSize}px ${LABEL_FONT}`;
+    const textW = ctx.measureText(name).width;
+    const padX = 6 / cam.zoom;
+    const boxW = textW + 2 * padX;
+    const boxH = fontSize * 1.5;
+    const boxX = x + w / 2 - boxW / 2;
+    const clear = TILE * 0.26; // Abstand, damit Pfeile frei bleiben (größer als portBox)
+    const candidates = [
+      { where: 'bottom', y: y + h - boxH / 2 },
+      { where: 'top', y: y - boxH / 2 },
+      { where: 'below', y: y + h + clear },
+      { where: 'above', y: y - boxH - clear },
+    ];
+    const small = h * cam.zoom < 56;
+    const arrows = ports.map((port) => portBox(port));
+    const free = (c) => arrows.every((a) => boxX + boxW < a.x0 || boxX > a.x1 || c.y + boxH < a.y0 || c.y > a.y1);
+    const options = small ? candidates.slice(2) : candidates;
+    const pick = options.find(free) ?? options[0];
+    return { where: pick.where, x: boxX, y: pick.y, boxW, boxH, fontSize };
+  }
+
+  // v0.21.0 (Tobias: Variante B): Das Produkt steht groß auf einer hellen
+  // Scheibe, der Ring darum zeigt den Fortschritt. Oben links der
+  // Rohstoff-Vorrat (Punkte) oder das gelbe „?“-Schild mit den fehlenden
+  // Zutaten einer wartenden Kombi-Maschine.
+  function drawProduct(face, layout, live) {
+    const { x, y, w, h, u, pad, row, light, reserve, label } = layout;
+    const gap = 2 * u;
+    const top = row.top + row.h + gap;
+    const bottom = y + h - Math.max(pad, reserve.S, label?.where === 'bottom' ? label.boxH / 2 + gap : 0);
+    const cx = x + w / 2;
+    const left = x + reserve.W + gap;
+    const right = x + w - reserve.E - gap;
+    const R = Math.min(Math.min(w, h) * 0.3, (bottom - top) / 2, cx - left, right - cx);
+    if (R > 4) {
+      const cy = (top + bottom) / 2;
+      const ringW = R * 0.17;
+      ctx.lineCap = 'butt';
+      ctx.lineWidth = ringW;
+      ctx.strokeStyle = COLORS.ringBack;
+      ctx.beginPath();
+      ctx.arc(cx, cy, R - ringW / 2, 0, Math.PI * 2);
+      ctx.stroke();
+      if (face.ring > 0) {
+        ctx.strokeStyle = COLORS.ringFill;
+        ctx.beginPath();
+        ctx.arc(cx, cy, R - ringW / 2, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.min(1, face.ring));
+        ctx.stroke();
+      }
+      ctx.fillStyle = COLORS.disc;
+      ctx.beginPath();
+      ctx.arc(cx, cy, R - ringW, 0, Math.PI * 2);
+      ctx.fill();
+      const base = ctx.globalAlpha;
+      if (face.faded) ctx.globalAlpha = base * 0.35; // leer: blass
+      drawItemCached(face.item, cx, cy, (R - ringW) * 1.2);
+      ctx.globalAlpha = base;
+    }
+    if (!live) return;
+
+    const rowLeft = x + Math.max(2 * pad, reserve.W + gap);
+    const rowRight = light.x - light.r - 3 * u;
+    if (face.missing.length > 0) drawAsk(face.missing, rowLeft, rowRight, row, u);
+    else if (face.dots) {
+      // v0.14.0: Rohstoff-Vorrat – ein Punkt je Platz, gefüllt = Rohstoff darin
+      const dot = Math.min(row.h * 0.22, ((rowRight - rowLeft) / face.dots.capacity) * 0.35);
+      const step = dot * 3.1;
+      for (let i = 0; i < face.dots.capacity; i++) {
+        ctx.beginPath();
+        ctx.arc(rowLeft + dot + i * step, row.mid, dot, 0, Math.PI * 2);
+        ctx.fillStyle = i < face.dots.filled ? COLORS.barFill : COLORS.barBack;
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.55)';
+        ctx.lineWidth = 1.2 * u;
+        ctx.stroke();
+      }
+    }
+  }
+
+  // Gelbes Schild „? + fehlende Zutat(en)“ in der oberen Zeile. Ist zu wenig
+  // Platz, wird es kleiner.
+  function drawAsk(types, left, right, row, u) {
+    let pillH = row.h;
+    const sizes = (hgt) => {
+      const pad = hgt * 0.16;
+      const s = hgt - 2 * pad;
+      const qW = s * 0.62;
+      return { pad, s, qW, pillW: pad + qW + pad * 0.7 + types.length * s + (types.length - 1) * pad * 0.5 + pad };
+    };
+    let m = sizes(pillH);
+    if (m.pillW > right - left && right > left) {
+      pillH *= (right - left) / m.pillW;
+      m = sizes(pillH);
+    }
+    const top = row.mid - pillH / 2;
+    ctx.fillStyle = COLORS.askFill;
+    roundRect(left, top, m.pillW, pillH, pillH / 2);
+    ctx.fill();
+    ctx.strokeStyle = COLORS.askEdge;
+    ctx.lineWidth = Math.max(1.5 * u, pillH * 0.08);
+    ctx.stroke();
+    ctx.fillStyle = COLORS.askText;
+    ctx.font = `800 ${m.s * 1.05}px ${LABEL_FONT}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('?', left + m.pad + m.qW / 2, row.mid + m.s * 0.04);
+    types.forEach((type, i) => {
+      const ix = left + m.pad + m.qW + m.pad * 0.7 + m.s / 2 + i * (m.s + m.pad * 0.5);
+      drawItemCached(type, ix, row.mid, m.s * 0.82);
+    });
+  }
+
+  // v0.21.0: Lagerhaus – die Waren seiner Fächer auf einem hellen Schild,
+  // entlang der langen Seite; das Statuslicht und die Pfeile bleiben frei.
+  function drawStorage(items, layout) {
+    const { x, y, w, h, u, pad, light, reserve } = layout;
+    const gap = 2 * u;
+    const horizontal = w >= h;
+    let x0 = x + Math.max(pad, reserve.W) + gap;
+    let x1 = x + w - Math.max(pad, reserve.E) - gap;
+    let y0 = y + Math.max(pad, reserve.N) + gap;
+    const y1 = y + h - Math.max(pad, reserve.S) - gap;
+    if (horizontal) x1 = Math.min(x1, light.x - light.r - gap);
+    else y0 = Math.max(y0, light.y + light.r + gap);
+    const along = horizontal ? x1 - x0 : y1 - y0;
+    const across = horizontal ? y1 - y0 : x1 - x0;
+    const n = items.length;
+    let T = Math.min(across, 30 * u);
+    let s = T * 0.74;
+    let ipad = (T - s) / 2;
+    const need = n * s + (n + 1) * ipad;
+    if (need > along) {
+      const k = along / need;
+      T *= k;
+      s *= k;
+      ipad *= k;
+    }
+    const L = n * s + (n + 1) * ipad;
+    const cx = (x0 + x1) / 2;
+    const cy = (y0 + y1) / 2;
+    const bw = horizontal ? L : T;
+    const bh = horizontal ? T : L;
+    ctx.fillStyle = COLORS.disc;
+    roundRect(cx - bw / 2, cy - bh / 2, bw, bh, T / 2);
+    ctx.fill();
+    ctx.strokeStyle = COLORS.discEdge;
+    ctx.lineWidth = Math.max(1, 1.5 * u);
+    ctx.stroke();
+    items.forEach((type, i) => {
+      const offset = -L / 2 + ipad + s / 2 + i * (s + ipad);
+      drawItemCached(type, horizontal ? cx + offset : cx, horizontal ? cy : cy + offset, s * 0.9);
+    });
   }
 
   // v0.16.0: Beet. Die Pflanze wächst sichtbar in Stufen: Keimling, kleine
@@ -603,35 +816,6 @@ export function createRenderer(canvas) {
   }
 
   // Ungefähre Fläche eines Pfeils (für die Platzierung des Namens).
-  // Kleine Sprechblase mit den fehlenden Zutaten: oben zwischen Eingangspfeilen
-  // und Statuslicht, wenn dort Platz ist (und kein Pfeil im Weg), sonst mittig
-  // unter dem Symbol – nicht unten, dort steht meist der Name.
-  function drawMissing(types, ports, x, y, w, h, cam, lightLeft) {
-    const s = Math.min(19 / cam.zoom, Math.min(w, h) * 0.25);
-    const pad = s * 0.28;
-    const pillW = types.length * s + (types.length + 1) * pad;
-    const pillH = s + 2 * pad;
-    const left = x + 12 / cam.zoom;
-    const right = lightLeft - 3 / cam.zoom;
-    const top = { cx: (left + right) / 2, cy: y + 5 / cam.zoom + pillH / 2 };
-    const middle = { cx: x + w / 2, cy: y + h * 0.7 };
-    const arrows = ports.map((port) => portBox(port));
-    const fits = ({ cx, cy }) =>
-      arrows.every(
-        (a) => cx + pillW / 2 < a.x0 || cx - pillW / 2 > a.x1 || cy + pillH / 2 < a.y0 || cy - pillH / 2 > a.y1,
-      );
-    const { cx, cy } = right - left >= pillW && fits(top) ? top : middle;
-    ctx.fillStyle = 'rgba(36, 26, 16, 0.88)';
-    roundRect(cx - pillW / 2, cy - pillH / 2, pillW, pillH, pillH / 2);
-    ctx.fill();
-    ctx.strokeStyle = COLORS.statusIdle;
-    ctx.lineWidth = 1.5 / cam.zoom;
-    ctx.stroke();
-    types.forEach((type, i) => {
-      drawItem(ctx, type, cx - pillW / 2 + pad + s / 2 + i * (s + pad), cy, s * 0.85);
-    });
-  }
-
   function portBox(port) {
     const d = DELTA[port.side];
     const ex = (port.tile.x + 0.5) * TILE + d.x * (TILE / 2 - 4);
@@ -757,5 +941,11 @@ export function createRenderer(canvas) {
     ctx.closePath();
   }
 
-  return { resize, draw };
+  // Der Browser kann zwischengespeicherte Bilder wegwerfen (z. B. App im
+  // Hintergrund) – dann neu malen.
+  function clearCache() {
+    sprites.clear();
+  }
+
+  return { resize, draw, clearCache };
 }

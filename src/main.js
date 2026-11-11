@@ -211,10 +211,17 @@ document.addEventListener('keydown', (event) => {
 
 // v0.10.2: Zurück aus dem Hintergrund (z. B. App minimiert) – der Browser kann
 // die kleinen Warenbilder weggeworfen haben, also alle neu zeichnen.
+// v0.21.0: ebenso die zwischengespeicherten Warenbilder auf der Karte.
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') redrawItemIcons();
+  if (document.visibilityState === 'visible') {
+    redrawItemIcons();
+    renderer.clearCache();
+  }
 });
-window.addEventListener('pageshow', () => redrawItemIcons());
+window.addEventListener('pageshow', () => {
+  redrawItemIcons();
+  renderer.clearCache();
+});
 
 function handleResize() {
   const size = renderer.resize();
@@ -310,6 +317,10 @@ let lastGifts = state.market.gifts;
 const questKey = () => `${state.shopLevel}|${state.quest.index}`;
 let questReadyKey = canDeliver(state) ? questKey() : null;
 
+// v0.21.0 (Belastungstest): Bilder pro Sekunde zählen – im Testmodus oben zu sehen,
+// damit Tobias auf dem Tablet selbst sieht, wie flüssig es läuft.
+const fps = { frames: 0, since: performance.now(), value: 0 };
+
 function frame(now) {
   const realDt = Math.min(0.25, Math.max(0, (now - lastTime) / 1000));
   lastTime = now;
@@ -336,6 +347,13 @@ function frame(now) {
 
   renderer.draw(state, camera, ui);
   needsDraw = false;
+  fps.frames++;
+  if (now - fps.since >= 1000) {
+    fps.value = (fps.frames * 1000) / (now - fps.since);
+    fps.frames = 0;
+    fps.since = now;
+    if (settings.testMode) hud.setFps(fps.value);
+  }
 
   if (now - lastRefresh > 400) {
     lastRefresh = now;
@@ -395,4 +413,6 @@ window.__game = {
   currentQuest: () => currentQuest(state),
   // v0.20.0: für den Browser-Test – Plätze im Laden-Lager
   storageCapacity: () => storageCapacity(state),
+  // v0.21.0: für den Browser-Test – zuletzt gemessene Bilder pro Sekunde
+  fps: () => fps.value,
 };

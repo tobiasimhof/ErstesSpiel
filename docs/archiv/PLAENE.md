@@ -61,7 +61,16 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.21.0 – Maschinen zeigen, was sie herstellen (noch nicht freigegeben)
+### v0.21.0 – Maschinen zeigen, was sie herstellen (fertig)
+
+Tobias' OK in Chat 16: ohne Gebäudebild, auch Rohstoff-Gebäude, dazu seine Idee „Farbe je Reiter“ und die beiden Punkte aus dem Belastungstest. Umgesetzt wie im Entwurf unten (luftige Fassung), mit diesen Ergänzungen:
+- **Farben:** Holz `#8a5a2e`, Stein `#8d8a82`, Eisen `#4a5c7c`, Erde `#2f6b4f` (`TAB_COLORS` in `data/buildings.js`), Lagerhaus `#b39a68`, Versandportal `#5f4b8b`. Ein Test prüft, dass alle Gebäude eines Reiters seine Farbe haben.
+- **Platz:** Jede Seite hält so viel frei, wie ihre Pfeile ins Gebäude ragen; steht der Name auf der Ober- oder Unterkante, rückt der Rest zur Seite. Die Scheibe ist höchstens 60 % des Gebäudes breit.
+- **Leer und Vorschau:** Leere Rohstoff-Gebäude zeigen ihre Ware blass; die Vorschau beim Platzieren zeigt das Produkt der ersten Einstellung, beim Verschieben das aktuelle.
+- **Zeichnen:** nur, was im Bild ist (Rand für Namen), Boden in einem Rutsch, Warenbilder zwischengespeichert. Messung (130 Gebäude, 360 Bänder, Rechenarbeit ohne das Malen der Pixel, Testrechner ohne Grafikchip): Zoom 1 von 8,3 auf 3,9 ms, ganz herausgezoomt von 12,8 auf 7,5 ms, Zoom 0,6 etwa gleich (7 bis 8 ms).
+- **Bilder pro Sekunde:** im Testmodus oben in der Leiste („🎞️ 60 Bilder/s“), jede Sekunde neu.
+
+### Entwurf v0.21.0 – Maschinen zeigen, was sie herstellen (umgesetzt, siehe oben)
 
 **Stand nach Tobias' Antwort (v0.20.2):** Variante B ist gewählt, soll aber luftiger werden („wirkt etwas gequetscht“). Neue Fassung, Vorschaubilder im Chat:
 - **Fortschritt als Ring** um die helle Scheibe mit dem Produkt (gelb auf dunklem Rand; bei Rohstoff-Gebäuden: wie viel vom laufenden Rohstoff noch da ist). Die Leiste oben entfällt bei diesen Gebäuden; das Beet behält sie.
