@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.22.1 – Rohstoffpreise und Rezepte durchgerechnet (12.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zu v0.22.0 („Hat funktioniert“) und seine neue Idee festhalten (Rohstoffe billiger, weniger Teile je Rezept) und mit seiner Fabrik durchrechnen.
+
+**Fragen, die wir uns gestellt haben:**
+- Wächst der Wert je Schritt aufs Dreifache? → Nein, +20 % auf die Zutaten; die großen Zahlen kommen von der Menge (15 Teile in einer Welle).
+- Was bringt „Rohstoffe billiger“? → Alles halbiert sich, auch die Kosten – wirkt nur gegenüber festen Preisen.
+- Was bringt „weniger Teile“? → Gleicher Gewinn je Rohstoff, wirkt nur über die Theken-Grenze; weniger Massenproduktion.
+- Was trifft genau die höheren Level? → Kleinerer Aufschlag ab Level 4 (C).
+
+**Gemacht:**
+- `docs/STAND.md`: Status, offene Frage 1 (jetzt Gold auf höheren Leveln), neuer Arbeitsschritt oben (v0.21.5 fällt aus der Liste). `docs/archiv/PLAENE.md`: Überlegung mit Tabelle. Gespräch und Entscheidungen ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.22.0 – Spielstand sichern und laden (11.11.2026)
 
 **Vorgenommen:**

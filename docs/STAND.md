@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.22.0 – Spielstand sichern und laden |
+| **Aktuelle Version** | v0.22.1 – Rohstoffpreise und Rezepte durchgerechnet (nur Doku) |
 | **Phase** | M2 – Produktionsketten (Kräuter-Kapitel ab Level 7) |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias probiert v0.22.0 aus und **sichert seine Fabrik als Datei** (☰ → „💾 Spielstand sichern“). Danach baut Claude v0.23.0 „Theken kaufen, langsamer verkaufen“ – von Tobias freigegeben (offene Frage 4); seine Fabrik geht dabei auf 2 Theken zurück. |
+| **Nächster Schritt** | Tobias entscheidet, wie es mit dem Gold weitergeht (offene Frage 1). Claudes Empfehlung: erst v0.23.0 „Theken kaufen, langsamer verkaufen“ wie freigegeben, danach – wenn nötig – kleinerer Aufschlag ab Level 4. Tobias' Fabrik ist als Datei gesichert. |
 
 **Tobias' Fabrik** (Screenshots vom 11.11.2026): Level 8, ganze Fläche gekauft (38 × 30), **43.870 Gold**, Laden-Lager 1.004 / 1.000, Waren im Wert von **166.579 Gold** (u. a. 61 Zahnradwellen, 69 Räderwerke, 70 Verstärkte Holzplatten, 38 Gewichtsteine). Er spielt seit einigen Versionen auf Level 8 weiter, ohne Aufträge, um zu testen, ob eine Fabrik, die **jede Ware mindestens einmal** herstellt, auf die Fläche passt: Sie passt (alles außer der Pflanzenreihe in voller Größe), rechts und unten in der Mitte ist noch Platz frei – „Der Platz reicht mir.“ Alle Rohstoff-Gebäude hat er 5- bis 6-mal aufgefüllt (etwa 4 bis 4,5 Stunden Produktion). Etwa 8 Holzfällerlager, 9 Steinbrüche, 7 Schmelzhütten, 6 Schmieden, 3 Sägewerke, 3 Steinmetze, 3 Zimmereien, 3 Feinschmieden (Scharnier, Schlüssel, Zirkel), 3 Schlossereien, 5 Beete, 2 Erntebänke, Webstube, Kräuterstube; jede Ausgabe endet in einem Lagerhaus. **Versandportale baut er nicht** – volle Lagerhäuser räumt er von Hand aus oder füllt damit das Lagerhaus einer anderen Straße. Er spielt auf dem Tablet und nutzt für Aufträge den Test-Knopf.
 
@@ -36,7 +36,7 @@ Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute, 
 
 ## Offene Fragen
 
-1. **Spielstand sichern und laden** (v0.22.0): Tobias' Eindruck steht aus – klappt Sichern über „Downloads“ und über Teilen auf dem Tablet, findet er die Datei beim Laden wieder? Die Datei endet auf `.txt` (Chrome auf Android teilt keine `.json`-Dateien).
+1. **Gold auf höheren Leveln** (Tobias, Chat 17): „dass man auf höheren Leveln nicht unbedingt Gold drucken kann, aber auch nicht verarmt“. Seine Idee: Rohstoffe billiger und weniger Teile je Rezept. Claude hat mit seiner Fabrik nachgerechnet (`docs/archiv/PLAENE.md`, alles läuft durchgehend): heute bis 70.900 Gold Gewinn pro Stunde, mit v0.23.0 (2 Theken) 53.600; **A** Rohstoffe halb so teuer: alles halbiert (26.800), aber auch die Rohstoffkosten – wirkt nur wie doppelt so teure Aufstiege und Theken; **B** weniger Teile (4 + 2 statt 10 + 5): Gewinn je Rohstoff gleich, wirkt nur über die Theken-Grenze (31.900), braucht aber 2,5-mal weniger Rohstoff-Gebäude – weniger Massenproduktion; **C** Aufschlag +10 % statt +20 % ab Level 4: 36.800, Anfang unverändert, lange Straßen lohnen sich weiter. Empfehlung: erst v0.23.0 spielen, dann bei Bedarf C; A und B nicht. Antwort von Tobias steht aus.
 2. **Kräuterstube mit 2 Eingängen** ist gebaut und angeschlossen (v0.18.2), Tobias' Urteil steht noch aus.
 3. **Platzhalter-Zahlen:** Aufstiegspreise, Auftragsmengen, Baukosten. Kostet der Laden-Ausbau später zusätzlich Waren? Begrenzt das Level die kaufbare Fläche?
 4. **Theken kaufen, langsamer verkaufen** (Entwurf v0.23.0, **freigegeben**, ausführlich in `docs/archiv/PLAENE.md`): Jede Theke verkauft für sich; Tempo je Level für die 2 Start-Theken zusammen: Level 1–3 6 Stück pro Minute, ab Level 4 3, ab Level 7 1,5 (je Theke 3 / 1,5 / 0,75), jede gekaufte Theke legt ihren Anteil drauf (Tobias: „Jede Theke verkauft, damit der Zukauf von Theken sich auch lohnt“). Weitere Theken nur mit Gold (Platzhalter: 3. Theke 40.000, 4. 100.000, 5. 200.000), kein Mindest-Level; Aufstiege bringen keine Theken mehr. Tobias' Fabrik geht auf 2 Theken zurück (Waren der übrigen ins Laden-Lager).
@@ -52,21 +52,21 @@ Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute, 
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.22.1 – Rohstoffpreise und Rezepte durchgerechnet (12.11.2026, nur Doku)
+
+- **Tobias (Chat 17):** Sichern und Laden „hat funktioniert“. Neue Idee: Rohstoffe billiger machen und für bestimmte Waren weniger Teile nehmen, „damit man auf höheren Leveln nicht unbedingt Gold drucken kann, aber auch nicht verarmt“ – bitte mit seiner Fabrik durchrechnen.
+- **Claude:** durchgerechnet (offene Frage 1, `docs/archiv/PLAENE.md`); Empfehlung: erst v0.23.0, danach bei Bedarf kleinerer Aufschlag ab Level 4.
+- Spiel unverändert, nur die Versionsnummer steigt.
+
 ### v0.22.0 – Spielstand sichern und laden (11.11.2026)
 
 - **Warum (Tobias, Chat 15):** Er möchte das Spiel anderen zeigen, ohne dass seine Fabrik verloren geht – und vor v0.23.0 (Theken) seine Fabrik sichern können.
 - **Umgesetzt:** Im Menü ☰ „💾 Spielstand sichern“ (Datei in „Downloads“ oder über Teilen – WhatsApp, E-Mail, Drive) und „📂 Spielstand laden“ (Vorschau, dann Rückfrage; „💾 Jetzigen erst sichern“). Nach dem Laden holt die Fabrik die Zeit seit dem Sichern nach („📂 Spielstand geladen – Seit dem Sichern sind … vergangen“). „Neues Spiel“ bietet „💾 Erst sichern“ an. Falsche Dateien werden abgelehnt; der vorige Spielstand bleibt als Sicherheitskopie im Browser.
 - **Tobias (Chat 17):** Lesart zu v0.23.0 bestätigt, Reihenfolge und Start freigegeben; Rückfrage, wie das Nachrechnen nach dem Laden funktioniert (im Chat erklärt).
-- **Offen:** Tobias' Eindruck auf dem Tablet; danach v0.23.0.
+- **Tobias (Chat 17):** „Hat funktioniert.“ Seine Fabrik ist als Datei gesichert.
 
 ### v0.21.6 – Theken: Tempo je Level, nur Gold, Tobias auf 2 Theken (11.11.2026, nur Doku)
 
 - **Tobias (Chat 17):** „Das Tempo passt so für mich, aber wir könnten es ja nochmal drosseln, dass wir sagen von Level 1–3 sind es 6 die Minute, ab Level 4 sind es nur noch 3 die Minute und ab Level 7 sind es nur noch 1–2 die Minute.“ Theken sollen nur Gold kosten. Seine Fabrik soll direkt auf 2 Theken zurück, „damit ich ein besseres Gefühl dafür bekommen kann. Immerhin muss ich genug Gold verdienen, dass ich meine Fabriken mit Rohstoffen befüllen kann.“
 - **Claude:** Entscheidungen festgehalten, Entwurf v0.23.0 angepasst; Rückfrage zur Lesart der Zahlen und Vorschläge zu den offenen Fragen von v0.22.0.
-- Spiel unverändert, nur die Versionsnummer steigt.
-
-### v0.21.5 – Antworten zum Gold-Gleichgewicht, Entwurf „Theken kaufen“ (11.11.2026, nur Doku)
-
-- **Tobias (Chat 17):** Der Platz reicht; die Fabrik hat er 5- bis 6-mal aufgefüllt. „Ich finde, Gold sollte Teil des Spiels sein, aber der Hauptfokus sollte auf der Massenproduktion sein, sodass man immer längere Straßen bauen kann.“ Von den Möglichkeiten gefällt ihm D am besten: Theken teuer machen, sodass man die dritte erst auf Level 8 schafft; dazu die Theken „langsamer“ machen, damit man auf Produkten sitzen bleibt und sie in längere Straßen steckt.
-- **Claude:** Entscheidungen festgehalten; Entwurf v0.23.0 „Theken kaufen, langsamer verkaufen“ mit Zahlen und 4 Fragen (offene Frage 4). Die frühere Frage zur Weltgröße und die Frage zum Gold-Gleichgewicht sind beantwortet.
 - Spiel unverändert, nur die Versionsnummer steigt.

@@ -249,3 +249,4 @@ Neue Entscheidungen kommen unten in die Tabelle (älteste oben). Wird eine Entsc
 | 11.11.2026 | Spielstand-Datei: Downloads oder Teilen (beides zur Wahl), Endung `.txt`; nach dem Laden läuft die Fabrik ab dem Sichern nach; Testmodus und Test-Knopf bleiben für Tester sichtbar | Claudes Vorschläge (Chat 17), Tobias: „Du kannst gerne damit anfangen.“ `.txt`, weil Chrome auf Android `.json` nicht teilt. |
 | 11.11.2026 | Beim Laden bleibt der vorige Spielstand als Sicherheitskopie im Browser | Claude: Schutz vor versehentlichem Laden der falschen Datei. |
 | 11.11.2026 | Später: Theke verbessern (z. B. 10 % mehr Kundschaft) bei den Verbesserungen | Tobias' Idee (Chat 17), gehört zu offener Frage 7. |
+| 12.11.2026 | Spielstand sichern und laden klappt auf Tobias' Tablet; seine Fabrik ist als Datei gesichert | Tobias: „Hat funktioniert.“ |
