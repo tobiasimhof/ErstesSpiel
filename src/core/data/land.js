@@ -12,12 +12,12 @@
 //          Spielständen von vor v0.10.2 möglich) kostet anteilig weniger.
 // roundTo: Preise werden auf so viel Gold gerundet.
 //
-// Beispiel: Der erste Streifen rechts (4 × 14 = 56 Felder) kostet 500 Gold,
-// jeder weitere Streifen auch.
+// Beispiel: Der erste Streifen rechts (4 × 14 = 56 Felder) kostet 170 Gold,
+// jeder weitere Streifen auch (v0.23.0: durch 3 wie alle Preise, vorher 500).
 
 export const LAND = {
   depth: 4,
   perSide: 2,
-  price: 500,
+  price: 170,
   roundTo: 10,
 };

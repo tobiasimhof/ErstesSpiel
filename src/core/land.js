@@ -2,7 +2,7 @@
 // streifenweise an einer Seite (oben, rechts, unten, links) – bis an den Rand
 // der Welt. Gebäude und Bänder bleiben, wo sie sind. Kennt keine Grafik.
 //
-// v0.10.2: Jeder Streifen ist 4 Felder tief und kostet 500 Gold, egal wie oft
+// v0.10.2: Jeder Streifen ist 4 Felder tief und kostet gleich viel (LAND.price), egal wie oft
 // man schon gekauft hat. Die Welt reicht auf jeder Seite 2 Streifen weit, damit
 // lässt sich jede Seite 2× erweitern.
 
@@ -45,7 +45,7 @@ export function landStrip(state, side) {
 
 // Preis eines Streifens: ein voller Streifen kostet immer LAND.price. Nur ein
 // Rest-Streifen am Rand der Welt (bei Spielständen von vor v0.10.2, die schon
-// 2 Reihen gekauft hatten) kostet anteilig weniger, z. B. 2 Reihen 250 Gold.
+// 2 Reihen gekauft hatten) kostet anteilig weniger, z. B. 2 Reihen 90 Gold.
 export function landPrice(depth) {
   if (depth >= LAND.depth) return LAND.price;
   const raw = (LAND.price * depth) / LAND.depth;

@@ -14,7 +14,8 @@ import { createController } from './view/controller.js';
 import { createShopView } from './view/shop.js';
 import { createWarehouseView } from './view/warehouse.js';
 import { applyTestPack } from './core/market.js';
-import { START_GOLD } from './core/data/shop.js';
+import { TEST_PACK } from './core/data/shop.js';
+import { ITEMS } from './core/data/items.js';
 import { LAND } from './core/data/land.js';
 import { canLevelUp } from './core/levels.js';
 import { canDeliver, currentQuest, xpNeeded } from './core/quests.js';
@@ -137,7 +138,9 @@ function testPack() {
   applyTestPack(state);
   onChange();
   controller.refresh();
-  panels.toast('Testpaket: 1.000 Gold und von jeder freigeschalteten Ware 50 Stück (Kombi-Teile je 5) ins Laden-Lager gelegt.');
+  panels.toast(
+    `Testpaket: ${numberFormat.format(TEST_PACK.gold)} Gold und von jeder freigeschalteten Ware ${TEST_PACK.each} Stück (Kombi-Teile je ${TEST_PACK.eachAdvanced}) ins Laden-Lager gelegt.`,
+  );
 }
 
 // ---------- Laden-Level (v0.9.0) ----------
@@ -288,7 +291,7 @@ if (loaded.status === 'ok' && loaded.migratedFrom) {
     from < 5 ? 'Neu: Handel! Im Laden gibt es jetzt Theken und den Händler; Bauen kostet Waren aus dem Laden-Lager.' : '',
     from === 5 ? 'Neu: Die Schmiede macht Eisenstangen statt Nägel.' : '',
     from < 7 ? 'Neu: Fläche kaufen – tippe auf die ＋-Schilder am Rand. Deine Fabrik hat Laden-Level 3, alles bleibt freigeschaltet.' : '',
-    from < 8 ? `Neu: ${START_GOLD} Gold Startkapital – du bekommst es einmalig nachgezahlt.` : '',
+    from < 8 ? 'Neu: Startkapital – du bekommst es einmalig nachgezahlt.' : '',
     from < 9 ? `Neu: Fläche kostet jetzt immer ${numberFormat.format(LAND.price)} Gold für ${LAND.depth} Reihen; jede Seite lässt sich ${LAND.perSide}× erweitern.` : '',
     from < 10 ? 'Neu: Lagerhäuser lassen sich aus dem Laden-Lager befüllen, Bänder lassen sich leeren.' : '',
     from < 11 ? 'Neu: Aufträge der Bewohner – tippe oben auf „Laden-Level“. Einige Waren heißen jetzt anders, z. B. Mechanischer Schalter → Räderwerk, Mini-Schloss → Vorhängeschloss.' : '',
@@ -298,6 +301,9 @@ if (loaded.status === 'ok' && loaded.migratedFrom) {
     from < 13 ? 'Neu: Level 7 „Die Heilstube“ – Beet, Erntebank und Webstube. Aus Leinsamen wachsen Flachspflanzen, daraus werden Fasern und Verbände.' : '',
     from < 14
       ? 'Neu: Level 8 „Der Kräutergarten“ – Ringelblumen im Beet und die Kräuterstube für Heilverbände und Kräuterkompressen. Die Flachsbreche heißt jetzt Erntebank und verarbeitet alle Pflanzen.'
+      : '',
+    from < 16
+      ? `Neu: Alle Preise sind durch 3 geteilt – ein Holzblock kostet ${ITEMS.holzblock.price} Gold, ein Zirkel ${numberFormat.format(ITEMS.zirkel.price)}. Dein Gold ist mit umgerechnet und genauso viel wert wie vorher.`
       : '',
     ...(loaded.notes ?? []),
     loaded.counterNote ?? '',

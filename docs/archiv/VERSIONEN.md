@@ -4,6 +4,26 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.23.0 – Preise durch 3 (12.11.2026)
+
+**Vorgenommen:**
+- Entwurf „Preise durch 3“ aus v0.22.3 (Tobias, Chat 18: „Das kannst du gerne schon mal machen. Ich würde gerne zuerst die Preise teilen und danach die Theken machen.“): alle Preise und festen Gold-Beträge durch 3, +20 % je Stufe bleibt, Erfahrung bleibt, alte Spielstände umrechnen.
+
+**Fragen, die wir uns gestellt haben:**
+- 733 oder 732 für Eisenerz? → 732 – Eisen kostet genau viermal so viel wie Holz (eine Regel, die ein Test prüft).
+- Was sieht Tobias beim ersten Öffnen? → Sein Gold ist durch 3 geteilt (43.870 → 14.623), dazu ein Hinweis, dass alle Preise durch 3 geteilt sind.
+- Was ist mit Spielständen von vor v0.9.1, die noch Startkapital bekommen? → Sie bekommen die damaligen 500 Gold und danach durch 3, wie alle anderen.
+
+**Gemacht:**
+- `data/items.js`: alle Preise durch 3 (Holzblock 1, Eisenbarren 4, Grundteile 6, Eisenteile 24, Zahnradwelle/Räderwerk 108, Verstärkte Holzplatte/Gewichtstein 216, Scharnier/Schlüssel 432, Zirkel 662, Uhrwerk 259, Vorhängeschloss 648; Holzstamm/Felsbrocken 183, Eisenerz 732; Leinsamen 320, Faser 8, Verband 48, Ringelblumensamen 500, Blüte 12, Heilverband 130, Kompresse 168).
+- `data/shop.js`: Startgold 170, Testpaket 330. `data/land.js`: Streifen 170. `data/levels.js`: Aufstiege 30 / 80 / 170 / 330 / 670 / 1.000 / 1.330, Erfahrung 3 je 10 Gold (`xpPerGold` 0,3) – Erfahrung je Level wie vorher (Level 6–8 durch Rundung 1.840 / 816 / 1.305).
+- `save.js`: Format 16 – Gold und „Letzte Verkäufe“ durch 3 (gerundet). `main.js`: Hinweis beim Öffnen alter Spielstände, Testpaket-Meldung aus der Datentabelle.
+- Tests auf die neuen Zahlen umgestellt, neuer Test für das Umwandeln von Format 15 (Tobias' Fabrik); Browser-Test ebenso. Doku: `SPIEL.md` (alle Tabellen), `STAND.md`, `TECHNIK.md`.
+
+**Geprüft:**
+- `npm test`: 284 von 284 bestanden. Browser-Test in Tablet- und Handygröße: alle Prüfungen bestanden; Screenshots angesehen (Händler 183 / 183 / 732, Flächen-Schilder „+ 170“, Zimmerei „Wert 108“, Auftrag „+30“).
+- Eigener Browser-Versuch mit einem Spielstand im Format 15 (Level 8, 43.870 Gold): oben 14.623 Gold, Hinweis erscheint.
+
 ### v0.22.3 – Preise durch 3 statt kleinerem Aufschlag (12.11.2026, nur Doku)
 
 **Vorgenommen:**

@@ -125,10 +125,10 @@ test('Auffüllen: erst aus dem Laden-Lager, was fehlt, wird beim Händler gekauf
   state.shopLevel = 3;
   const wood = placeBuilding(state, 'holzfaeller', 10, 6, 0);
   state.storage.holzstamm = 1;
-  state.gold = 1200;
-  assert.deepEqual(refillPlan(state, wood), { input: 'holzstamm', room: 3, fromStorage: 1, buy: 2, cost: 1100, short: 0 });
+  state.gold = 400;
+  assert.deepEqual(refillPlan(state, wood), { input: 'holzstamm', room: 3, fromStorage: 1, buy: 2, cost: 366, short: 0 });
   refillSource(state, wood);
-  assert.deepEqual([sourceCount(wood), storageCount(state, 'holzstamm'), state.gold], [3, 0, 100]);
+  assert.deepEqual([sourceCount(wood), storageCount(state, 'holzstamm'), state.gold], [3, 0, 34]);
   assert.deepEqual(refillPlan(state, wood), { input: 'holzstamm', room: 0, fromStorage: 0, buy: 0, cost: 0, short: 0 });
 });
 
@@ -137,11 +137,11 @@ test('Auffüllen: kauft nur so viel, wie das Gold reicht; braucht keinen Platz i
   state.shopLevel = 3;
   const smelter = placeBuilding(state, 'schmelzhuette', 10, 6, 0);
   state.storage = { holzblock: 500 }; // Laden-Lager voll
-  state.gold = 5000;
-  assert.deepEqual(refillPlan(state, smelter), { input: 'eisenerz', room: 3, fromStorage: 0, buy: 2, cost: 4400, short: 1 });
+  state.gold = 1600;
+  assert.deepEqual(refillPlan(state, smelter), { input: 'eisenerz', room: 3, fromStorage: 0, buy: 2, cost: 1464, short: 1 });
   refillSource(state, smelter);
   assert.equal(sourceCount(smelter), 2);
-  assert.equal(state.gold, 600);
+  assert.equal(state.gold, 136);
 });
 
 test('Auffüllen: gesperrte Rohstoffe werden nicht gekauft', () => {
@@ -198,10 +198,10 @@ test('Hintergrund: Kunden kaufen weiter, bis die Theken leer sind', () => {
     { type: 'holzplatte', count: 0 },
     { type: 'holzstab', count: 0 },
   ]);
-  assert.equal(state.gold, 30 * 18, '30 Teile à 18 Gold');
+  assert.equal(state.gold, 30 * 6, '30 Teile à 6 Gold');
   assert.equal(state.gold, live.gold, 'genau wie im laufenden Spiel');
   assert.deepEqual(report.sold, { holzplatte: 20, holzstab: 10 });
-  assert.equal(report.gold, 540);
+  assert.equal(report.gold, 180);
   assert.equal(report.countersEmpty, true);
   assert.equal(storageCount(state, 'holzplatte'), 20, 'das Laden-Lager füllt die Theken nicht von selbst nach');
 });

@@ -241,7 +241,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(JSON.stringify(types) === '["holzfaeller","versandportal"]', 'Start nur mit Holz: Holzfällerlager und Versandportal');
   check((await page.textContent('#btn-level')).includes('Laden-Level 1'), 'Oben steht „Laden-Level 1“');
   check(!(await page.isVisible('#hud-level-ready')), 'Noch kein Aufstieg möglich (kein ⬆)');
-  check((await page.textContent('#hud-gold')) === '500', 'Start mit 500 Gold Startkapital');
+  check((await page.textContent('#hud-gold')) === '170', 'Start mit 170 Gold Startkapital');
   check(await page.isVisible('#btn-shop'), 'Knopf „Laden“ sichtbar');
   check(await page.isVisible('#btn-build'), 'Knopf „Bauen“ sichtbar');
 
@@ -291,7 +291,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     (await page.locator('#info-actions button', { hasText: 'Auffüllen' }).textContent()) === '⏫ Auffüllen: 1 Holzstamm',
     'Auffüllen nimmt den Holzstamm aus dem Laden-Lager (Gold reicht nicht für mehr)',
   );
-  check(await infoButton(page, 'buy:holzstamm').isDisabled(), 'Mit 500 Gold reicht es noch nicht für einen Holzstamm (550)');
+  check(await infoButton(page, 'buy:holzstamm').isDisabled(), 'Mit 170 Gold reicht es noch nicht für einen Holzstamm (183)');
   await page.locator('#info-tools button', { hasText: 'Drehen' }).tap();
   await sleep(80);
   check((await game(page, () => window.__game.state.buildings[0].rot)) === 1, 'Drehen dreht das Gebäude');
@@ -324,7 +324,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.tap('#menu-test-pack');
   await sleep(80);
   const pack = await game(page, () => ({ gold: window.__game.state.gold, blocks: window.__game.state.storage.holzblock }));
-  check(pack.gold >= 1000 && pack.blocks >= 70, `Testpaket gibt Gold und Waren (${pack.gold} Gold, ${pack.blocks} Holzblöcke)`);
+  check(pack.gold >= 330 && pack.blocks >= 70, `Testpaket gibt Gold und Waren (${pack.gold} Gold, ${pack.blocks} Holzblöcke)`);
   await page.tap('#btn-menu');
   await page.tap('#menu-test-mode');
   check(!(await page.isVisible('#hud-speed')), 'Testmodus wieder aus');
@@ -560,13 +560,13 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await page.textContent('#info-meta')).includes('4 Spalten links · 56 Felder'), 'Angebot: 4 Spalten links, 56 Felder (schon auf Level 1)');
   check((await page.textContent('#info-text')).includes('noch 2×'), 'Infofenster: an dieser Seite noch 2 Käufe');
   const landButton = page.locator('#info-actions button', { hasText: 'Kaufen' });
-  check((await landButton.textContent()).includes('500'), 'Streifen kostet 500 Gold');
+  check((await landButton.textContent()).includes('170'), 'Streifen kostet 170 Gold');
   await shot('6b-flaeche-angebot');
   const goldBeforeLand = await game(page, () => window.__game.state.gold);
   await landButton.tap();
   await sleep(120);
   const land = await game(page, () => ({ plot: { ...window.__game.state.plot }, gold: window.__game.state.gold }));
-  check(land.plot.x === plot.px - 4 && land.plot.width === 26 && land.gold === goldBeforeLand - 500, `Fläche gekauft (Grundstück ${land.plot.width} × ${land.plot.height}, Gold ${goldBeforeLand} → ${land.gold})`);
+  check(land.plot.x === plot.px - 4 && land.plot.width === 26 && land.gold === goldBeforeLand - 170, `Fläche gekauft (Grundstück ${land.plot.width} × ${land.plot.height}, Gold ${goldBeforeLand} → ${land.gold})`);
   check(!(await page.isVisible('#info-panel')), 'Nach dem Kauf schließt das Fenster');
   await shot('6c-flaeche-gekauft');
 
@@ -855,10 +855,11 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   );
   check(counter.type === 'holzblock' && counter.count + counter.sold === 20, `„Alle“ füllt Theke 1 auf 20 Holzblöcke (${JSON.stringify(counter)})`);
   await shot('9-theken');
+  const goldBeforeSales = await game(page, () => window.__game.state.gold);
   await game(page, () => window.__game.simulate(90));
   await sleep(500);
   const sold = await game(page, () => ({ gold: window.__game.state.gold, sales: window.__game.state.market.sales.length }));
-  check(sold.gold > 500 && sold.sales > 0, `Kunden kaufen und zahlen (${sold.gold} Gold, ${sold.sales} Verkäufe)`);
+  check(sold.gold > goldBeforeSales && sold.sales > 0, `Kunden kaufen und zahlen (${sold.gold} Gold, ${sold.sales} Verkäufe)`);
   // Kunden kaufen live weiter; die Leiste zieht spätestens nach 0,4 s nach.
   const hudSynced = await page
     .waitForFunction(() => document.getElementById('hud-gold').textContent === new Intl.NumberFormat('de-DE').format(window.__game.state.gold), null, { timeout: 3000 })
@@ -895,7 +896,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     'Level-Fenster zeigt Bauabschnitt und den ersten Auftrag',
   );
   check(
-    levelText.includes('Erfahrung für Level 2') && levelText.includes('0 / 81') && levelText.includes('Belohnung: +9 Erfahrung · +90'),
+    levelText.includes('Erfahrung für Level 2') && levelText.includes('0 / 81') && levelText.includes('Belohnung: +9 Erfahrung · +30'),
     'Erfahrungsleiste 0 / 81 und Belohnung',
   );
   check((await page.locator('#modal-content .goal-row.done').count()) === 1, 'Ware liegt im Laden-Lager (abgehakt)');
@@ -910,8 +911,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(200);
   const after1 = await game(page, () => ({ plates: window.__game.state.storage.holzplatte, gold: window.__game.state.gold, quest: window.__game.state.quest }));
   check(
-    after1.plates === before1.plates - 5 && after1.gold >= before1.gold + 90 && after1.quest.index === 1 && after1.quest.xp === 9,
-    `Abgeben: 5 Holzplatten weg, +90 Gold, +9 Erfahrung (${JSON.stringify(after1)})`,
+    after1.plates === before1.plates - 5 && after1.gold >= before1.gold + 30 && after1.quest.index === 1 && after1.quest.xp === 9,
+    `Abgeben: 5 Holzplatten weg, +30 Gold, +9 Erfahrung (${JSON.stringify(after1)})`,
   );
   const text2 = await page.textContent('#modal-content');
   check(text2.includes('Auftrag erledigt') && text2.includes('Auftrag 2 von 3') && text2.includes('9 / 81'), 'Nächster Auftrag rückt nach, Leiste wächst');
@@ -924,11 +925,11 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(done1.includes('du kannst aufsteigen'), 'Genug Erfahrung und Gold');
   await shot('10c-level-bereit');
   const goldBeforeUp = await game(page, () => window.__game.state.gold);
-  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 2 · 100' }).tap();
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 2 · 30' }).tap();
   await sleep(150);
   const lvl2 = await game(page, () => ({ level: window.__game.state.shopLevel, rocks: window.__game.state.storage.felsbrocken ?? 0, gold: window.__game.state.gold }));
   check(lvl2.level === 2 && lvl2.rocks === 1, `Aufgestiegen auf Level 2, Gratis-Felsbrocken im Lager (${JSON.stringify(lvl2)})`);
-  check(lvl2.gold >= goldBeforeUp - 100 && lvl2.gold <= goldBeforeUp - 100 + 200, `Der Aufstieg kostet 100 Gold (${goldBeforeUp} → ${lvl2.gold})`);
+  check(lvl2.gold >= goldBeforeUp - 30 && lvl2.gold <= goldBeforeUp - 30 + 70, `Der Aufstieg kostet 30 Gold (${goldBeforeUp} → ${lvl2.gold})`);
   const text3 = await page.textContent('#modal-content');
   check(text3.includes('Level 2 erreicht') && text3.includes('Wege und Brunnen') && text3.includes('Steinmetzin Berta'), 'Level-Fenster gratuliert, Aufträge von Level 2');
   check((await page.textContent('#hud-level')) === '2', 'Oben steht Level 2');
@@ -980,10 +981,10 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.locator('#modal-content .trade-row', { hasText: 'Eisenerz' }).locator('button').tap();
   await sleep(80);
   const bought = await game(page, () => ({ gold: window.__game.state.gold, ore: window.__game.state.storage.eisenerz ?? 0 }));
-  // Kunden kaufen währenddessen weiter (Holzblöcke à 3 Gold) – das Gold darf
-  // deshalb etwas über „vorher − 2.200“ liegen.
+  // Kunden kaufen währenddessen weiter (Holzblöcke à 1 Gold) – das Gold darf
+  // deshalb etwas über „vorher − 732“ liegen.
   const paid = goldBeforeBuy - bought.gold;
-  check(bought.ore === 2 && paid <= 2200 && paid > 2200 - 60, `Händler: Eisenerz für 2.200 Gold gekauft (${goldBeforeBuy} → ${bought.gold}, jetzt ${bought.ore} Eisenerz)`);
+  check(bought.ore === 2 && paid <= 732 && paid > 732 - 20, `Händler: Eisenerz für 732 Gold gekauft (${goldBeforeBuy} → ${bought.gold}, jetzt ${bought.ore} Eisenerz)`);
   await shot('11-haendler');
   await page.tap('#modal-close');
 
@@ -1115,7 +1116,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
       zimCard.lack.join() === 'steinzahnrad' &&
       zimCard.sub.includes('Fehlt noch: 3 Stein-Zahnräder') &&
       zimCard.sub.includes('20 s je Stück') &&
-      zimCard.sub.includes('Wert 324'),
+      zimCard.sub.includes('Wert 108'),
     `Grüner Kasten: 10/10 Holzstäbe + 2/5 Stein-Zahnräder (rot) → Zahnradwelle, fehlt noch 3 (${JSON.stringify(zimCard)})`,
   );
   check((await page.textContent('#info-meta')).includes('Wartet auf Stein-Zahnrad (2 / 5)'), 'Status unter dem Namen nennt die fehlende Zutat');
@@ -1126,7 +1127,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     `Umstellen auf: die beiden anderen Rezepte (${zimOptions.join(' | ')})`,
   );
   check(
-    (await recipeOption(page, 'raederwerk').textContent()).includes('324 🪙'),
+    (await recipeOption(page, 'raederwerk').textContent()).includes('108 🪙'),
     'Jedes andere Rezept zeigt seinen Wert',
   );
   const zimFit = await infoFits(page);
@@ -1461,20 +1462,20 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }
   const allSkipped = await page.textContent('#modal-content');
   check(
-    allSkipped.includes('Alle Aufträge dieses Bauabschnitts sind erledigt') && allSkipped.includes('1.841 / 1.841'),
+    allSkipped.includes('Alle Aufträge dieses Bauabschnitts sind erledigt') && allSkipped.includes('1.840 / 1.840'),
     'Alle 4 Aufträge vom Stadttor per Test-Knopf erledigt, Erfahrung voll',
   );
   check((await page.locator('#modal-content button.quest-skip').count()) === 0, 'Ohne Auftrag kein Test-Knopf mehr');
-  // v0.16.0: Aufsteigen auf Level 7 „Die Heilstube“ (3.000 Gold; das Gold
+  // v0.16.0: Aufsteigen auf Level 7 „Die Heilstube“ (1.000 Gold; das Gold
   // kommt hier dazu, damit der weitere Ablauf gleich bleibt)
   check(
     allSkipped.includes('Beet') && allSkipped.includes('Erntebank') && allSkipped.includes('Webstube') &&
       allSkipped.includes('Leinsamen beim Händler') && !allSkipped.includes('Flachspflanze beim Händler'),
     'Level 7 kündigt Beet, Erntebank, Webstube und Leinsamen beim Händler an',
   );
-  await game(page, () => (window.__game.state.gold += 3000));
+  await game(page, () => (window.__game.state.gold += 1000));
   await sleep(450);
-  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 7 · 3.000' }).tap();
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 7 · 1.000' }).tap();
   await sleep(150);
   const lvl7 = await game(page, () => ({
     level: window.__game.state.shopLevel,
@@ -1487,7 +1488,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     lvl7Text.includes('Level 7 erreicht') && lvl7Text.includes('Die Heilstube') && lvl7Text.includes('Heilerin Agnes') && lvl7Text.includes('5 Verbände'),
     'Level-Fenster: Heilerin Agnes möchte 5 Verbände',
   );
-  check(lvl7Text.includes('0 / 850'), 'Erfahrung für Level 8: 0 / 850');
+  check(lvl7Text.includes('0 / 816'), 'Erfahrung für Level 8: 0 / 816');
   await shot('15c-level-7');
   await page.tap('#modal-close');
   await page.tap('#btn-shop');
@@ -1502,7 +1503,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await page.textContent('#modal-content .modal-meta')).includes('/ 1.000'), 'Laden-Lager fasst 1.000 Waren');
   await shot('16-fuenf-theken');
   await page.tap('#modal-close');
-  // v0.10.2: Jeder Streifen kostet 500 Gold, jede Seite geht 2×
+  // v0.10.2: Jeder Streifen kostet gleich viel (seit v0.23.0 170 Gold), jede Seite geht 2×
   const plotNow = await game(page, () => ({ ...window.__game.state.plot }));
   await tapTile(page, plotNow.x + plotNow.width, plotNow.y + 3);
   check((await page.textContent('#info-title')) === 'Fläche kaufen', 'Fläche rechts antippen bietet Fläche an');
@@ -1511,9 +1512,9 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     `Angebot: 4 Spalten (${await page.textContent('#info-meta')})`,
   );
   await shot('16b-flaeche-level6');
-  // 1.000 Gold dazu, damit die beiden Käufe den weiteren Ablauf nicht arm machen
-  const goldRight = await game(page, () => (window.__game.state.gold += 1000));
-  await page.locator('#info-actions button', { hasText: 'Kaufen · 500' }).tap();
+  // 340 Gold dazu, damit die beiden Käufe den weiteren Ablauf nicht arm machen
+  const goldRight = await game(page, () => (window.__game.state.gold += 340));
+  await page.locator('#info-actions button', { hasText: 'Kaufen · 170' }).tap();
   await sleep(120);
   // Karte so schieben, dass der nächste Streifen rechts zu sehen ist (danach zurück)
   const camLand = await game(page, () => ({ x: window.__game.camera.x, y: window.__game.camera.y }));
@@ -1523,7 +1524,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }, plotNow.x + plotNow.width + 4);
   await tapTile(page, plotNow.x + plotNow.width + 4, plotNow.y + 3);
   check((await page.textContent('#info-text')).includes('letzte Kauf'), `Zweiter Streifen rechts ist der letzte an dieser Seite (Gold ${goldRight})`);
-  await page.locator('#info-actions button', { hasText: 'Kaufen · 500' }).tap();
+  await page.locator('#info-actions button', { hasText: 'Kaufen · 170' }).tap();
   await sleep(120);
   const right = await game(page, () => ({
     plot: { ...window.__game.state.plot },
@@ -1535,7 +1536,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     `Rechts 2× gekauft: Grundstück reicht bis an den Rand der Welt (${right.plot.width} × ${right.plot.height})`,
   );
   // Kunden können währenddessen kaufen, deshalb höchstens etwas mehr Gold
-  check(right.gold <= goldRight - 1000 + 200 && right.gold >= goldRight - 1000, `Beide Streifen kosten je 500 Gold (${goldRight} → ${right.gold})`);
+  check(right.gold <= goldRight - 340 + 70 && right.gold >= goldRight - 340, `Beide Streifen kosten je 170 Gold (${goldRight} → ${right.gold})`);
   await shot('16c-flaeche-rechts-fertig');
 
   // ---------- Level 7: Beet, Flachsbreche, Webstube (v0.16.0) ----------
@@ -1632,8 +1633,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const reaped = await beetState();
   check(reaped.crop === null && reaped.plants === 1, `Geerntet: Flachspflanze im Laden-Lager, Beet leer (${JSON.stringify(reaped)})`);
   check(
-    (await sowButton.isVisible()) && (await sowButton.textContent()).includes('kauft 1 für 1.000'),
-    'Danach neu säen – ohne Leinsamen im Lager kauft der Knopf einen für 1.000 Gold',
+    (await sowButton.isVisible()) && (await sowButton.textContent()).includes('kauft 1 für 320'),
+    'Danach neu säen – ohne Leinsamen im Lager kauft der Knopf einen für 320 Gold',
   );
   check((await infoFits(page)).length === 0, `Beet mit Kaufen-Knopf: nichts ragt aus dem Fenster (${(await infoFits(page)).join(', ')})`);
   // Flachsbreche: Pflanze einlegen wie einen Holzstamm; kaufen kann man Pflanzen nicht
@@ -1673,13 +1674,13 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   // Neu säen (kauft einen Leinsamen) – das Beet wächst nachher im Hintergrund weiter
   await tapTile(page, bx, by);
   await sleep(450);
-  const goldSow = await game(page, () => (window.__game.state.gold += 1000));
+  const goldSow = await game(page, () => (window.__game.state.gold += 320));
   await sowButton.tap();
   await sleep(200);
   const resown = await beetState();
   check(
-    resown.crop === 'leinsamen' && resown.gold >= goldSow - 1000 && resown.gold <= goldSow - 1000 + 200,
-    `Neu gesät, Leinsamen für 1.000 Gold gekauft (${goldSow} → ${resown.gold})`,
+    resown.crop === 'leinsamen' && resown.gold >= goldSow - 320 && resown.gold <= goldSow - 320 + 70,
+    `Neu gesät, Leinsamen für 320 Gold gekauft (${goldSow} → ${resown.gold})`,
   );
   await page.tap('#info-close');
   // Händler: Leinsamen ja, Flachspflanze nein
@@ -1692,7 +1693,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.tap('#modal-close');
 
   // ---------- Level 8: Ringelblume, Erntebank, Kräuterstube (v0.17.0) ----------
-  // Aufträge von Level 7 mit dem Test-Knopf, dann aufsteigen (4.000 Gold kommen dazu)
+  // Aufträge von Level 7 mit dem Test-Knopf, dann aufsteigen (1.330 Gold kommen dazu)
   await page.tap('#btn-level');
   await sleep(150);
   for (let i = 0; i < 4; i++) {
@@ -1701,18 +1702,18 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }
   const l7done = await page.textContent('#modal-content');
   check(
-    l7done.includes('850 / 850') && l7done.includes('Nächstes Level: Level 8 · Der Kräutergarten') && l7done.includes('Kräuterstube') &&
+    l7done.includes('816 / 816') && l7done.includes('Nächstes Level: Level 8 · Der Kräutergarten') && l7done.includes('Kräuterstube') &&
       l7done.includes('Ringelblumensamen beim Händler'),
     'Level 7 erledigt; Level 8 kündigt Kräuterstube und Ringelblumensamen an',
   );
-  await game(page, () => (window.__game.state.gold += 4000));
+  await game(page, () => (window.__game.state.gold += 1330));
   await sleep(450);
-  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 8 · 4.000' }).tap();
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 8 · 1.330' }).tap();
   await sleep(150);
   const lvl8 = await game(page, () => ({ level: window.__game.state.shopLevel, seeds: window.__game.state.storage.ringelblumensamen ?? 0 }));
   check(lvl8.level === 8 && lvl8.seeds === 1, `Level 8: 1 Ringelblumensamen gratis (${JSON.stringify(lvl8)})`);
   const lvl8Text = await page.textContent('#modal-content');
-  check(lvl8Text.includes('Der Kräutergarten') && lvl8Text.includes('50 Ringelblüten') && lvl8Text.includes('0 / 1.332'), 'Level 8: Agnes möchte 50 Ringelblüten, Erfahrung 0 / 1.332');
+  check(lvl8Text.includes('Der Kräutergarten') && lvl8Text.includes('50 Ringelblüten') && lvl8Text.includes('0 / 1.305'), 'Level 8: Agnes möchte 50 Ringelblüten, Erfahrung 0 / 1.305');
   await shot('19-level-8');
   await page.tap('#modal-close');
   await game(page, ([x, y]) => {
@@ -1882,9 +1883,9 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await infoButton(page, 'buy:holzstamm').tap();
   await sleep(80);
   const logBought = await game(page, () => ({ gold: window.__game.state.gold, logs: window.__game.state.storage.holzstamm ?? 0 }));
-  check(logBought.logs === 1 && logBought.gold <= goldBeforeLog - 550 + 200, `Holzstamm im Infofenster gekauft (${goldBeforeLog} → ${logBought.gold})`);
+  check(logBought.logs === 1 && logBought.gold <= goldBeforeLog - 183 + 70, `Holzstamm im Infofenster gekauft (${goldBeforeLog} → ${logBought.gold})`);
   // v0.14.0: Auffüllen – erst der Holzstamm aus dem Laden-Lager, der Rest wird gekauft
-  await game(page, () => (window.__game.state.gold += 2000));
+  await game(page, () => (window.__game.state.gold += 700));
   await sleep(450);
   const refillText = await page.locator('#info-actions button', { hasText: 'Auffüllen' }).textContent();
   const beforeRefill = await game(page, () => {
@@ -1893,7 +1894,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   });
   const toBuy = 3 - beforeRefill.inside - 1;
   check(
-    refillText === `⏫ Auffüllen: ${3 - beforeRefill.inside} Holzstämme${toBuy > 0 ? ` · kauft ${toBuy} für ${(toBuy * 550).toLocaleString('de-DE')} 🪙` : ''}`,
+    refillText === `⏫ Auffüllen: ${3 - beforeRefill.inside} Holzstämme${toBuy > 0 ? ` · kauft ${toBuy} für ${(toBuy * 183).toLocaleString('de-DE')} 🪙` : ''}`,
     `Knopf sagt, was Auffüllen tut („${refillText}“)`,
   );
   await page.locator('#info-actions button', { hasText: 'Auffüllen' }).tap();
@@ -1903,7 +1904,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     return { inside: (b.prod.loaded ? 1 : 0) + b.prod.queued, logs: window.__game.state.storage.holzstamm ?? 0, gold: window.__game.state.gold };
   });
   check(
-    refilled.inside === 3 && refilled.logs === 0 && refilled.gold <= beforeRefill.gold - toBuy * 550 + 200,
+    refilled.inside === 3 && refilled.logs === 0 && refilled.gold <= beforeRefill.gold - toBuy * 183 + 70,
     `Auffüllen: 3 / 3 Holzstämme im Holzfällerlager (${JSON.stringify(beforeRefill)} → ${JSON.stringify(refilled)})`,
   );
   check((await infoText(page)).includes('Vorrat 3 / 3'), 'Infofenster: Vorrat 3 / 3');
@@ -1940,7 +1941,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
       return (b.prod.loaded ? 1 : 0) + b.prod.queued;
     })(),
   }));
-  check(awayAfter.counter === 0 && awayAfter.gold >= awayBefore.gold + 180, `Kunden haben die Theke leer gekauft (${JSON.stringify(awayAfter)})`);
+  check(awayAfter.counter === 0 && awayAfter.gold >= awayBefore.gold + 60, `Kunden haben die Theke leer gekauft (${JSON.stringify(awayAfter)})`);
   check(awayAfter.inside >= 1 && awayAfter.inside <= 2, `Nach 20 Minuten ist mindestens ein Holzstamm verarbeitet (${awayAfter.inside} im Vorrat)`);
   await shot('17c-willkommen-zurueck');
   await page.locator('#modal-content button', { hasText: 'Weiter' }).tap();
@@ -1978,7 +1979,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     localStorage.setItem(key, JSON.stringify(data));
     return data.saveVersion;
   });
-  check(backdated === 15, `Spielstand-Version 15 (${backdated})`);
+  check(backdated === 16, `Spielstand-Version 16 (${backdated})`);
   await page2.goto(baseUrl);
   await waitForGame(page2);
   await page2.waitForFunction(() => !window.__game.isCatchingUp(), null, { timeout: 20000 });
@@ -2043,7 +2044,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await download.saveAs(backupPath);
   const backupData = JSON.parse(fs.readFileSync(backupPath, 'utf8'));
   check(
-    backupData.saveVersion === 15 && backupData.state.buildings.length === saved.buildings && Math.abs(Date.now() - backupData.savedAt) < 60000,
+    backupData.saveVersion === 16 && backupData.state.buildings.length === saved.buildings && Math.abs(Date.now() - backupData.savedAt) < 60000,
     `Datei enthält den Spielstand (Format ${backupData.saveVersion}, ${backupData.state.buildings.length} Gebäude)`,
   );
   await sleep(100);

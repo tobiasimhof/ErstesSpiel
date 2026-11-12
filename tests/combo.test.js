@@ -127,15 +127,16 @@ test('Rezepte aus Grundteilen: 10 + 5 Stück, zwei verschiedene Zutaten, jedes R
 
 test('Werte der neuen Waren: Zutaten + 20 % (Tabelle in docs/SPIEL.md)', () => {
   const expected = {
-    zahnradwelle: 324,
-    raederwerk: 324,
-    verstaerkteholzplatte: 648,
-    scharnier: 1296,
-    schluessel: 1296,
-    zirkel: 1987,
-    gewichtstein: 648,
-    uhrwerk: 778,
-    vorhaengeschloss: 1944,
+    // v0.23.0: alle Preise durch 3 (vorher 324, 324, 648, 1.296, 1.296, 1.987, 648, 778, 1.944)
+    zahnradwelle: 108,
+    raederwerk: 108,
+    verstaerkteholzplatte: 216,
+    scharnier: 432,
+    schluessel: 432,
+    zirkel: 662,
+    gewichtstein: 216,
+    uhrwerk: 259,
+    vorhaengeschloss: 648,
   };
   for (const [type, price] of Object.entries(expected)) {
     assert.equal(ITEMS[type].price, price, type);

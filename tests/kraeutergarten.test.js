@@ -75,21 +75,22 @@ test('Kräuterstube: 2 × 2, zwei Eingänge, Heilverband und Kräuterkompresse',
 });
 
 test('Preise: Ringelblume teurer, bringt aber mehr – 1 Leinsamen + 1 Ringelblumensamen → 10 Heilverbände', () => {
-  assert.equal(ITEMS.ringelblumensamen.buyPrice, 1500);
-  assert.equal(50 * ITEMS.ringelbluete.price, 1800);
+  // v0.23.0: durch 3 wie alle Preise (vorher 1.500, 1.800, 330 → 396, 430 → 516, 2.500 → 3.960)
+  assert.equal(ITEMS.ringelblumensamen.buyPrice, 500);
+  assert.equal(50 * ITEMS.ringelbluete.price, 600);
   const verband = RECIPES.heilverband;
-  assert.equal(worth(verband.inputs), 330);
-  assert.equal(ITEMS.heilverband.price, 396);
-  assert.equal(worth(RECIPES.kraeuterkompresse.inputs), 430);
-  assert.equal(ITEMS.kraeuterkompresse.price, 516);
+  assert.equal(worth(verband.inputs), 108);
+  assert.equal(ITEMS.heilverband.price, 130);
+  assert.equal(worth(RECIPES.kraeuterkompresse.inputs), 140);
+  assert.equal(ITEMS.kraeuterkompresse.price, 168);
   // 50 Ringelblüten + 10 Verbände (= 1 Flachspflanze) → 10 Heilverbände
   const seeds = ITEMS.leinsamen.buyPrice + ITEMS.ringelblumensamen.buyPrice;
-  assert.deepEqual([seeds, 10 * ITEMS.heilverband.price], [2500, 3960]);
+  assert.deepEqual([seeds, 10 * ITEMS.heilverband.price], [820, 1300]);
 });
 
 test('Baukosten der Kräuterstube nur aus Werkzeug-Waren (Tobias)', () => {
   assert.deepEqual(BUILDINGS.kraeuterstube.cost, { holzplatte: 10, eisenblech: 5, zahnradwelle: 2 });
-  assert.equal(worth(BUILDINGS.kraeuterstube.cost), 1188);
+  assert.equal(worth(BUILDINGS.kraeuterstube.cost), 396, 'v0.23.0: durch 3 (vorher 1.188)');
   for (const type of ['beet', 'flachsbreche', 'webstube', 'kraeuterstube']) {
     for (const item of Object.keys(BUILDINGS[type].cost)) {
       assert.ok(itemLevel(item) <= 6, `${type}: ${item} ist eine Werkzeug-Ware`);
@@ -106,24 +107,24 @@ test('Ringelblume ist ein Rohstoff zum Einlegen: nicht kaufen, nicht verkaufen',
 
 // ---------- Level 8 ----------
 
-test('Level 8 „Der Kräutergarten“: Kräuterstube und Ringelblumensamen, Aufstieg 4.000 Gold, 4 Aufträge', () => {
+test('Level 8 „Der Kräutergarten“: Kräuterstube und Ringelblumensamen, Aufstieg 1.330 Gold, 4 Aufträge', () => {
   assert.deepEqual(unlocksOf(8), { buildings: ['kraeuterstube'], raws: ['ringelblumensamen'] });
   assert.equal(LEVELS[8].name, 'Der Kräutergarten');
   assert.equal(LEVELS[8].quests.length, 4);
-  assert.equal(xpNeeded(8), 1332);
+  assert.equal(xpNeeded(8), 1305, 'v0.23.0: 1.305 statt 1.332 (Kräuter-Preise gerundet)');
   const state = createNewGame(8);
   state.shopLevel = 7;
   state.quest.xp = xpNeeded(7);
-  state.gold = 4000;
+  state.gold = 1330;
   const up = levelUp(state);
-  assert.deepEqual([up.level, up.gift, up.cost], [8, { ringelblumensamen: 1 }, 4000]);
+  assert.deepEqual([up.level, up.gift, up.cost], [8, { ringelblumensamen: 1 }, 1330]);
   assert.equal(storageCount(state, 'ringelblumensamen'), 1);
   assert.equal(state.gold, 0);
 });
 
 // ---------- Beet ----------
 
-test('Beet: Ringelblumensamen säen (aus dem Lager oder für 1.500 Gold gekauft), nach 30 Minuten ernten', () => {
+test('Beet: Ringelblumensamen säen (aus dem Lager oder für 500 Gold gekauft), nach 30 Minuten ernten', () => {
   const state = level8();
   state.storage.ringelblumensamen = 1;
   const beet = placeBuilding(state, 'beet', 10, 6, 0);
@@ -134,10 +135,10 @@ test('Beet: Ringelblumensamen säen (aus dem Lager oder für 1.500 Gold gekauft)
   assert.equal(isRipe(beet), true);
   assert.equal(harvest(state, beet), 'ok');
   assert.equal(storageCount(state, 'ringelblume'), 1);
-  state.gold = 1499;
+  state.gold = 499;
   assert.equal(sowPlan(state, beet, 'ringelblumensamen').result, 'gold');
-  state.gold = 1500;
-  assert.deepEqual([sowSeed(state, beet, 'ringelblumensamen').cost, state.gold], [1500, 0]);
+  state.gold = 500;
+  assert.deepEqual([sowSeed(state, beet, 'ringelblumensamen').cost, state.gold], [500, 0]);
 });
 
 test('Unter Level 8 lassen sich keine Ringelblumen säen', () => {
@@ -224,7 +225,7 @@ test('Kette: Ringelblume → Erntebank → Band → Kräuterstube (mit Verbände
   assert.ok(loadInput(state, bank, 'ringelblume'));
   simulate(state, 600 + 60);
   assert.equal(storageCount(state, 'heilverband'), 10);
-  assert.equal(storageCount(state, 'heilverband') * ITEMS.heilverband.price, 3960);
+  assert.equal(storageCount(state, 'heilverband') * ITEMS.heilverband.price, 1300);
 });
 
 test('Kräuterstube umstellen: Kräuterkompresse aus 10 Flachsfasern + 5 Ringelblüten', () => {
