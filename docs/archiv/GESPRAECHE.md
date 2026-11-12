@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 12.11.2026 – Chat 18: Preise durch 3 (v0.22.3)
+
+**Tobias:** „Informiere dich über den aktuellen Stand der Dinge. Aktuell haben [wir] über das Balancing von Gold verdienen gesprochen. Ich hab jetzt nochmal ein wenig weitergespielt und eine Produktion weiter angepasst, sodass ich meine Scharniere nicht mehr über die Theke verkaufen kann, sondern diese brauche, um Zirkel und Vorhängeschlösser herzustellen. Ich glaube, wir müssen gar nicht so sehr an diesen Stellschrauben drehen. Mir ist nur aufgefallen, wenn man sich z. B. auf die Produktion von goldstarken Produkten konzentriert, dass man dort viel Gold verdienen kann, aber man muss trotzdem andere Dinge herstellen, um im Level aufzusteigen. Lies dir gerne mal alles durch, um auf den aktuellsten Stand der Dinge zu sein. Ich glaube, wenn wir alles durch 3 teilen, haben wir a) nicht so hohe Beträge, z. B. ein Zirkel knapp 2.000 Gold, und b) können wir den ‚Abverkauf‘ weiterhin über die Theken steuern.“
+
+**Claude** hat „alles durch 3“ mit den Datentabellen durchgerechnet (Entwurf v0.24.0 in `PLAENE.md`): Weil alles aus Blöcken zu 3 Gold entsteht, geht die Werkzeug-Kette fast glatt auf (Holzblock 1, Holzplatte 6, Zahnradwelle 108, Scharnier 432, Zirkel 662, Vorhängeschloss 648); bei den Kräutern Leinsamen 320 statt 333, damit eine Faser 8 Gold kostet (Tobias' Verhältnis bleibt). Mit umgerechnet: Startgold, Fläche, Aufstiege, Theken-Preise, Testpaket, Gold im Spielstand; die Erfahrung bleibt gleich (3 je 10 Gold statt 1). Lesart: +20 % je Stufe bleibt – das Gleichgewicht ändert sich nicht, nur die Zahlen; gebremst wird über die Theken. Zur Beobachtung: Die Aufträge verlangen bestimmte Waren und bremsen so „nur teure Waren“ – mit dem Test-Knopf fällt das weg. Vorschlag: erst v0.23.0 (freigegeben), direkt danach v0.24.0. Fragen: Lesart, Rundung, Leinsamen 320, Reihenfolge und OK.
+
+**Umgesetzt:** v0.22.3 (nur Doku).
+
 ### 12.11.2026 – Chat 17 (Fortsetzung): Rohstoffpreise und Rezepte (v0.22.1, v0.22.2)
 
 **Tobias:** „Hat funktioniert. Bevor wir damit weitermachen, hatte ich vor dem Schlafen noch eine Idee. Wir könnten das ja auch regulieren, indem wir die Rohstoffpreise geringer machen und für die Produktion von bestimmten Stoffen weniger Teile nehmen. So könnten wir doch geringere Preise erzielen und langsamer skalieren? Aktuell machen wir bei jedem Produktionsschritt immer das Dreifache mehr? Ich möchte eigentlich nur erreichen, dass man auf höheren Leveln nicht unbedingt Gold drucken kann, aber auch nicht verarmt. Kannst du mir das mal durchrechnen? Nimm als Vergleich unseren aktuellen Spielstand. Da hattest du bereits ausgerechnet, wie viel Gold wir in der Stunde produzieren, und wie wäre es, wenn wir das Ganze mit dieser Variante mal gegenrechnen würden?“
