@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.22.0). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.23.0). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
@@ -26,7 +26,7 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 
 ## 3. Die Fabrik
 
-**Grundstück:** Raster aus Feldern, Start 22 × 14. An jeder Seite steht ein Schild: Ein Streifen Fläche (4 Reihen über die ganze Seite) kostet 500 Gold, jede Seite lässt sich 2× erweitern → höchstens 38 × 30 Felder (zusammen 4.000 Gold). Zum Start stehen ein Holzfällerlager und ein Versandportal darauf.
+**Grundstück:** Raster aus Feldern, Start 22 × 14. An jeder Seite steht ein Schild: Ein Streifen Fläche (4 Reihen über die ganze Seite) kostet 170 Gold, jede Seite lässt sich 2× erweitern → höchstens 38 × 30 Felder (zusammen 1.360 Gold). Zum Start stehen ein Holzfällerlager und ein Versandportal darauf.
 
 **Förderbänder** (1 × 1, 1 Holzblock je Feld) transportieren Waren Stück für Stück.
 - **Aufteilen:** von einem bestehenden Band aus ziehen (bis zu 3 Richtungen je Feld; Abzweige verteilen abwechselnd). **Zusammenführen:** auf ein bestehendes Band ziehen.
@@ -58,31 +58,31 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 
 ## 4. Wirtschaft
 
-- **Feste Preise** (alles ×10, damit jede Ware ganze Gold kostet). Regel: Blöcke bringen etwa 9 % mehr, als der Rohstoff kostet; jede weitere Stufe rund 20 % mehr als ihre Zutaten – so macht man beim Verkaufen nie Minus. Holz und Stein kosten und bringen gleich viel, Eisen viermal so viel. Ein Test prüft die Stufen.
+- **Feste Preise** in einem Maßstab, der zum Mittelalter passt (Tobias): Ein Holzblock kostet 1 Gold, ein Zirkel 662. Regel: Blöcke bringen etwa 9 % mehr, als der Rohstoff kostet; jede weitere Stufe rund 20 % mehr als ihre Zutaten – so macht man beim Verkaufen nie Minus. Holz und Stein kosten und bringen gleich viel, Eisen viermal so viel. Ein Test prüft die Stufen.
 - **Laden** (Knopf „⚖️ Laden“ unten links) mit den Reitern **Lager, Theken, Händler**:
   - **Laden-Lager:** 500 Plätze bis Level 3, 1.000 ab Level 4. Gefüllt über Versandportale, Ernten und Abreißen.
   - **Theken** bestückt man von Hand mit genau eingestellter Menge (0, −5, −1, +1, +5, Alle). Level 1–3: 2 Theken à 20; Level 4: 3 à 25; Level 5: 4 à 30; ab Level 6: 5 à 30.
   - **Kunden** kommen alle 10–30 Sekunden und kaufen 1–3 Stück zum festen Wert, jedes Stück von einer zufälligen gefüllten Theke (teure Teile genauso oft wie einfache). Das sind etwa 6 Stück pro Minute, egal wie viele Theken – mehr Gold bringen nur teurere Waren. „Letzte Verkäufe“ zeigt die letzten 5.
   - **Händler:** nur Rohstoffe und Samen kaufen. Verkauft wird nur über die Theken.
-- **Start:** 500 Gold, 1 Holzstamm, 20 Holzblöcke.
+- **Start:** 170 Gold, 1 Holzstamm, 20 Holzblöcke.
 - **Pleiteschutz:** Wer weniger Gold hat, als ein Holzstamm kostet, keinen Rohstoff im Lager oder in Arbeit hat und dessen Waren zusammen weniger wert sind als ein Holzstamm, bekommt einen Holzstamm geschenkt.
 
 ## 5. Fortschritt: Laden-Level und Aufträge
 
-- **Level-Fenster** (oben auf „Laden-Level“ tippen) mit den Reitern „📜 Aufträge“ und „🏘️ Ort & Level“. Es gibt immer **genau einen Auftrag** eines Bewohners; „✓ Abgeben“ nimmt die Waren aus dem Laden-Lager und gibt **Erfahrung** (1 je 10 Gold Warenwert) und **Gold** (so viel, wie die Waren an der Theke bringen). 2–5 Aufträge je Level, nicht überspringbar. Die Erfahrung aller Aufträge eines Levels reicht genau für den Aufstieg; **der Aufstieg kostet Gold**. Erfahrung schaltet frei, Gold kauft das Level, Waren bauen die Maschinen. Am Knopf zeigt ❗ einen abgebbaren Auftrag, ⬆ einen möglichen Aufstieg.
+- **Level-Fenster** (oben auf „Laden-Level“ tippen) mit den Reitern „📜 Aufträge“ und „🏘️ Ort & Level“. Es gibt immer **genau einen Auftrag** eines Bewohners; „✓ Abgeben“ nimmt die Waren aus dem Laden-Lager und gibt **Erfahrung** (3 je 10 Gold Warenwert) und **Gold** (so viel, wie die Waren an der Theke bringen). 2–5 Aufträge je Level, nicht überspringbar. Die Erfahrung aller Aufträge eines Levels reicht genau für den Aufstieg; **der Aufstieg kostet Gold**. Erfahrung schaltet frei, Gold kauft das Level, Waren bauen die Maschinen. Am Knopf zeigt ❗ einen abgebbaren Auftrag, ⬆ einen möglichen Aufstieg.
 - **„🧪 Test: Auftrag erledigen“** (im Prototyp immer sichtbar, lila gestrichelt): gibt die Erfahrung, nimmt keine Waren, gibt kein Gold. Vor v1.0 entfernen (`QUEST_TEST_SKIP` in `data/levels.js`).
 - Beim Aufstieg gibt es einen Rohstoff gratis.
 
 | Level | Bauabschnitt | Neu | Aufträge (der Reihe nach) | Erfahrung | Aufstieg kostet | Geschenk |
 |---|---|---|---|---|---|---|
 | 1 | Die ersten Hütten | Holzfällerlager, Sägewerk, Lagerhaus, Versandportal, Förderband; Holzstamm | Zimmermann Jakob: 5 Holzplatten · Jakob: 10 Holzstäbe · Bürgermeisterin Hilde: 20 Holzstäbe + 10 Holzplatten | 81 | – (Start) | 1 Holzstamm (Start) |
-| 2 | Wege und Brunnen | Steinbruch, Steinmetz; Felsbrocken | Steinmetzin Berta: 10 Steinplatten · Berta: 10 Stein-Zahnräder · Hilde: 20 Steinplatten + 10 Holzstäbe | 90 | 100 | 1 Felsbrocken |
-| 3 | Die Dorfschmiede | Schmelzhütte, Schmiede; Eisenerz | Schmied Konrad: 5 Eisenstangen · Konrad: 5 Eisenbleche · Hilde: 10 Eisenstangen + 10 Holzplatten | 162 | 250 | 1 Eisenerz |
-| 4 | Die Mühle am Fluss | Zimmerei, 3. Theke | Müllerin Grete: 2 Zahnradwellen · Grete: 4 Räderwerke · Grete: 2 Verstärkte Holzplatten · Hilde: 8 Räderwerke + 4 Zahnradwellen | 714 | 500 | 1 Eisenerz |
-| 5 | Der Markt | Feinschmiede, 4. Theke | Händlerin Marta: 2 Scharniere · Marta: 2 Schlüssel · Baumeister Anton: 1 Zirkel · Marta: 3 Scharniere + 3 Schlüssel | 1.495 | 1.000 | 1 Eisenerz |
-| 6 | Das Stadttor | Schlosserei, 5. Theke | Torwächter Ulrich: 4 Gewichtsteine · Ulrich: 2 Vorhängeschlösser · Hilde: 2 Uhrwerke · Ulrich: 4 Vorhängeschlösser + 4 Gewichtsteine | 1.841 | 2.000 | 1 Eisenerz |
-| 7 | Die Heilstube | Beet, Erntebank, Webstube; Leinsamen | Heilerin Agnes: 5 Verbände · Agnes: 50 Flachsfasern · Ulrich: 15 Verbände · Hilde: 20 Verbände + 50 Flachsfasern | 850 | 3.000 | 1 Leinsamen |
-| 8 | Der Kräutergarten | Kräuterstube; Ringelblumensamen | Agnes: 50 Ringelblüten · Agnes: 5 Heilverbände · Ulrich: 5 Kräuterkompressen · Hilde: 10 Heilverbände + 20 Verbände | 1.332 (sammelt sich, bis es Level 9 gibt) | 4.000 | 1 Ringelblumensamen |
+| 2 | Wege und Brunnen | Steinbruch, Steinmetz; Felsbrocken | Steinmetzin Berta: 10 Steinplatten · Berta: 10 Stein-Zahnräder · Hilde: 20 Steinplatten + 10 Holzstäbe | 90 | 30 | 1 Felsbrocken |
+| 3 | Die Dorfschmiede | Schmelzhütte, Schmiede; Eisenerz | Schmied Konrad: 5 Eisenstangen · Konrad: 5 Eisenbleche · Hilde: 10 Eisenstangen + 10 Holzplatten | 162 | 80 | 1 Eisenerz |
+| 4 | Die Mühle am Fluss | Zimmerei, 3. Theke | Müllerin Grete: 2 Zahnradwellen · Grete: 4 Räderwerke · Grete: 2 Verstärkte Holzplatten · Hilde: 8 Räderwerke + 4 Zahnradwellen | 714 | 170 | 1 Eisenerz |
+| 5 | Der Markt | Feinschmiede, 4. Theke | Händlerin Marta: 2 Scharniere · Marta: 2 Schlüssel · Baumeister Anton: 1 Zirkel · Marta: 3 Scharniere + 3 Schlüssel | 1.495 | 330 | 1 Eisenerz |
+| 6 | Das Stadttor | Schlosserei, 5. Theke | Torwächter Ulrich: 4 Gewichtsteine · Ulrich: 2 Vorhängeschlösser · Hilde: 2 Uhrwerke · Ulrich: 4 Vorhängeschlösser + 4 Gewichtsteine | 1.840 | 670 | 1 Eisenerz |
+| 7 | Die Heilstube | Beet, Erntebank, Webstube; Leinsamen | Heilerin Agnes: 5 Verbände · Agnes: 50 Flachsfasern · Ulrich: 15 Verbände · Hilde: 20 Verbände + 50 Flachsfasern | 816 | 1.000 | 1 Leinsamen |
+| 8 | Der Kräutergarten | Kräuterstube; Ringelblumensamen | Agnes: 50 Ringelblüten · Agnes: 5 Heilverbände · Ulrich: 5 Kräuterkompressen · Hilde: 10 Heilverbände + 20 Verbände | 1.305 (sammelt sich, bis es Level 9 gibt) | 1.330 | 1 Ringelblumensamen |
 
 „Erfahrung“ = was die Aufträge des Levels zusammen geben (genau so viel braucht der nächste Aufstieg). Ab Level 4 sind die Stückzahlen so gewählt, dass man auf Masse gehen muss; das Kräuter-Kapitel (Level 7) fängt wieder einfach an.
 
@@ -107,7 +107,7 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 | 🌀 Versandportal | immer sichtbar | 1 × 1 | schickt Waren ins Laden-Lager | 1 | 10 Holzblöcke |
 | ➡️ Förderband | immer sichtbar | 1 × 1 | transportiert | 1 | 1 Holzblock je Feld |
 
-**Regeln für Baukosten:** Das Sägewerk kostet nur Holzblöcke (erste Maschine ohne Platten). Jedes Gebäude kostet Waren früherer Stufen, damit sie ihren Wert behalten. Kein Gebäude kostet mehr, als ein Rohstoff seines Levels als Teile einbringt (Holz und Stein 720 Gold, ab Eisen 2.880; Kräuter-Gebäude höchstens 1.500). Kräuter-Gebäude kosten nur Werkzeug-Waren (Tobias: aus Verbänden wird keine Maschine). Ein Test prüft die Grenze.
+**Regeln für Baukosten:** Das Sägewerk kostet nur Holzblöcke (erste Maschine ohne Platten). Jedes Gebäude kostet Waren früherer Stufen, damit sie ihren Wert behalten. Kein Gebäude kostet mehr, als ein Rohstoff seines Levels als Teile einbringt (Holz und Stein 240 Gold, ab Eisen 960; Kräuter-Gebäude höchstens 480, so viel wie ein Leinsamen als Verbände). Kräuter-Gebäude kosten nur Werkzeug-Waren (Tobias: aus Verbänden wird keine Maschine). Ein Test prüft die Grenze.
 
 Intern heißt die Erntebank `flachsbreche` (alter Name, damit Spielstände passen).
 
@@ -115,35 +115,35 @@ Intern heißt die Erntebank `flachsbreche` (alter Name, damit Spielstände passe
 
 | Ware | Herstellung | Zeit | Wert (Gold) |
 |---|---|---|---|
-| Holzstamm | Händler (ab Level 1) | – | 550 (Kauf) |
-| Felsbrocken | Händler (ab Level 2) | – | 550 (Kauf) |
-| Eisenerz | Händler (ab Level 3) | – | 2.200 (Kauf) |
-| Holzblock / Steinblock | Holzfällerlager / Steinbruch | 4,5 s je Stück | 3 |
-| Eisenbarren | Schmelzhütte | 4,5 s je Stück | 12 |
-| Holzplatte / Holzstab | Sägewerk: 5 Holzblöcke → 1 | 5 s | 18 |
-| Steinplatte / Stein-Zahnrad | Steinmetz: 5 Steinblöcke → 1 | 5 s | 18 |
-| Eisenblech / Eisenstange | Schmiede: 5 Eisenbarren → 1 | 5 s | 72 |
-| Zahnradwelle | Zimmerei: 10 Holzstäbe + 5 Stein-Zahnräder | 20 s | 324 |
-| Räderwerk | Zimmerei: 10 Stein-Zahnräder + 5 Holzstäbe | 20 s | 324 |
-| Verstärkte Holzplatte | Zimmerei: 10 Holzplatten + 5 Eisenstangen | 20 s | 648 |
-| Scharnier | Feinschmiede: 10 Eisenbleche + 5 Eisenstangen | 20 s | 1.296 |
-| Schlüssel | Feinschmiede: 10 Eisenstangen + 5 Eisenbleche | 20 s | 1.296 |
-| Zirkel | Feinschmiede: 1 Scharnier + 5 Eisenstangen | 30 s | 1.987 |
-| Gewichtstein | Schlosserei: 10 Steinplatten + 5 Eisenstangen | 20 s | 648 |
-| Uhrwerk | Schlosserei: 1 Zahnradwelle + 1 Räderwerk | 30 s | 778 |
-| Vorhängeschloss | Schlosserei: 1 Scharnier + 1 Räderwerk | 30 s | 1.944 |
-| Leinsamen | Händler (ab Level 7) | – | 1.000 (Kauf) |
+| Holzstamm | Händler (ab Level 1) | – | 183 (Kauf) |
+| Felsbrocken | Händler (ab Level 2) | – | 183 (Kauf) |
+| Eisenerz | Händler (ab Level 3) | – | 732 (Kauf) |
+| Holzblock / Steinblock | Holzfällerlager / Steinbruch | 4,5 s je Stück | 1 |
+| Eisenbarren | Schmelzhütte | 4,5 s je Stück | 4 |
+| Holzplatte / Holzstab | Sägewerk: 5 Holzblöcke → 1 | 5 s | 6 |
+| Steinplatte / Stein-Zahnrad | Steinmetz: 5 Steinblöcke → 1 | 5 s | 6 |
+| Eisenblech / Eisenstange | Schmiede: 5 Eisenbarren → 1 | 5 s | 24 |
+| Zahnradwelle | Zimmerei: 10 Holzstäbe + 5 Stein-Zahnräder | 20 s | 108 |
+| Räderwerk | Zimmerei: 10 Stein-Zahnräder + 5 Holzstäbe | 20 s | 108 |
+| Verstärkte Holzplatte | Zimmerei: 10 Holzplatten + 5 Eisenstangen | 20 s | 216 |
+| Scharnier | Feinschmiede: 10 Eisenbleche + 5 Eisenstangen | 20 s | 432 |
+| Schlüssel | Feinschmiede: 10 Eisenstangen + 5 Eisenbleche | 20 s | 432 |
+| Zirkel | Feinschmiede: 1 Scharnier + 5 Eisenstangen | 30 s | 662 |
+| Gewichtstein | Schlosserei: 10 Steinplatten + 5 Eisenstangen | 20 s | 216 |
+| Uhrwerk | Schlosserei: 1 Zahnradwelle + 1 Räderwerk | 30 s | 259 |
+| Vorhängeschloss | Schlosserei: 1 Scharnier + 1 Räderwerk | 30 s | 648 |
+| Leinsamen | Händler (ab Level 7) | – | 320 (Kauf) |
 | Flachspflanze | Beet: 1 Leinsamen | 30 min | – (nicht verkäuflich, wird eingelegt) |
-| Flachsfaser | Erntebank: 1 Flachspflanze → 50 | 12 s je Stück | 25 |
-| Verband | Webstube: 5 Flachsfasern → 1 | 10 s | 150 |
-| Ringelblumensamen | Händler (ab Level 8) | – | 1.500 (Kauf) |
+| Flachsfaser | Erntebank: 1 Flachspflanze → 50 | 12 s je Stück | 8 |
+| Verband | Webstube: 5 Flachsfasern → 1 | 10 s | 48 |
+| Ringelblumensamen | Händler (ab Level 8) | – | 500 (Kauf) |
 | Ringelblume | Beet: 1 Ringelblumensamen | 30 min | – (nicht verkäuflich, wird eingelegt) |
-| Ringelblüte (getrocknet) | Erntebank: 1 Ringelblume → 50 | 12 s je Stück | 36 |
-| Heilverband | Kräuterstube: 1 Verband + 5 Ringelblüten | 20 s | 396 |
-| Kräuterkompresse | Kräuterstube: 10 Flachsfasern + 5 Ringelblüten | 20 s | 516 |
+| Ringelblüte (getrocknet) | Erntebank: 1 Ringelblume → 50 | 12 s je Stück | 12 |
+| Heilverband | Kräuterstube: 1 Verband + 5 Ringelblüten | 20 s | 130 |
+| Kräuterkompresse | Kräuterstube: 10 Flachsfasern + 5 Ringelblüten | 20 s | 168 |
 
 - Rohstoffe und Pflanzen kommen nicht aufs Band und nicht ins Lagerhaus; man legt sie direkt ins Gebäude. Pflanzen kann man nicht kaufen und nicht verkaufen.
-- **Rechenbeispiele:** 1 Holzstamm (550) → 200 Holzblöcke (600) → 40 Teile (720). 1 Leinsamen (1.000) → 50 Fasern (1.250) → 10 Verbände (1.500). 1 Holzstamm + 1 Felsbrocken ergeben etwa 5 Zahnradwellen oder Räderwerke. 1 Beet Flachs + 1 Beet Ringelblumen = genau 10 Heilverbände; 10 Kräuterkompressen brauchen 2 Flachspflanzen und 1 Ringelblume. 3 Beete versorgen eine Erntebank (3 × 10 Minuten = eine Wachszeit).
+- **Rechenbeispiele:** 1 Holzstamm (183) → 200 Holzblöcke (200) → 40 Teile (240). 1 Eisenerz (732) → 200 Eisenbarren (800) → 40 Teile (960). 1 Leinsamen (320) → 50 Fasern (400) → 10 Verbände (480). 1 Holzstamm + 1 Felsbrocken ergeben etwa 5 Zahnradwellen oder Räderwerke. 1 Beet Flachs + 1 Beet Ringelblumen = genau 10 Heilverbände; 10 Kräuterkompressen brauchen 2 Flachspflanzen und 1 Ringelblume. 3 Beete versorgen eine Erntebank (3 × 10 Minuten = eine Wachszeit).
 - Verwendung: Jedes Grundteil wird von mindestens einem Kombi-Rezept gebraucht (die Steinplatte vom Gewichtstein); Eisen etwas mehr als Holz und Stein, weil es mehr bringt. Der Verband ist für Wunden, die Kräuterkompresse für Prellungen und Schwellungen.
 
 ## 8. Ausblick

@@ -24,7 +24,7 @@ export function backupFileName(state, date = new Date()) {
   return `Fabrik Level ${state.shopLevel} - ${day} ${pad(date.getHours())}-${pad(date.getMinutes())}.txt`;
 }
 
-// „Level 8 · 43.870 Gold · 70 Gebäude“
+// „Level 8 · 14.623 Gold · 70 Gebäude“
 export function backupSummary(state) {
   return `Level ${state.shopLevel} · ${numberFormat.format(state.gold)} Gold · ${state.buildings.length} Gebäude`;
 }

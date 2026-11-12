@@ -30,15 +30,16 @@ function fillFor(state, quest) {
 // ---------- Neue Namen ----------
 
 test('Neue Namen passen zu den Zutaten, Rezepte und Werte bleiben', () => {
+  // Werte seit v0.23.0 durch 3 (vorher 324, 324, 1.296, 1.987, 648, 778, 1.944, 72)
   const r = (key) => [RECIPES[key].inputs, ITEMS[key].price];
-  assert.deepEqual(r('zahnradwelle'), [{ holzstab: 10, steinzahnrad: 5 }, 324]);
-  assert.deepEqual(r('raederwerk'), [{ steinzahnrad: 10, holzstab: 5 }, 324]);
-  assert.deepEqual(r('schluessel'), [{ eisenstange: 10, eisenblech: 5 }, 1296]);
-  assert.deepEqual(r('zirkel'), [{ scharnier: 1, eisenstange: 5 }, 1987]);
-  assert.deepEqual(r('gewichtstein'), [{ steinplatte: 10, eisenstange: 5 }, 648]);
-  assert.deepEqual(r('uhrwerk'), [{ zahnradwelle: 1, raederwerk: 1 }, 778]);
-  assert.deepEqual(r('vorhaengeschloss'), [{ scharnier: 1, raederwerk: 1 }, 1944]);
-  assert.deepEqual(r('eisenblech'), [{ eisenbarren: 5 }, 72]);
+  assert.deepEqual(r('zahnradwelle'), [{ holzstab: 10, steinzahnrad: 5 }, 108]);
+  assert.deepEqual(r('raederwerk'), [{ steinzahnrad: 10, holzstab: 5 }, 108]);
+  assert.deepEqual(r('schluessel'), [{ eisenstange: 10, eisenblech: 5 }, 432]);
+  assert.deepEqual(r('zirkel'), [{ scharnier: 1, eisenstange: 5 }, 662]);
+  assert.deepEqual(r('gewichtstein'), [{ steinplatte: 10, eisenstange: 5 }, 216]);
+  assert.deepEqual(r('uhrwerk'), [{ zahnradwelle: 1, raederwerk: 1 }, 259]);
+  assert.deepEqual(r('vorhaengeschloss'), [{ scharnier: 1, raederwerk: 1 }, 648]);
+  assert.deepEqual(r('eisenblech'), [{ eisenbarren: 5 }, 24]);
   for (const old of ['minieisenplatte', 'handkurbel', 'schalter', 'eisenfeder', 'kugellager', 'steinkette', 'regler', 'minischloss']) {
     assert.equal(ITEMS[old], undefined, `${old} gibt es nicht mehr`);
   }
@@ -46,12 +47,13 @@ test('Neue Namen passen zu den Zutaten, Rezepte und Werte bleiben', () => {
 
 // ---------- Belohnung ----------
 
-test('Belohnung: Gold so viel wie an der Theke, Erfahrung 1 je 10 Gold Warenwert', () => {
+test('Belohnung: Gold so viel wie an der Theke, Erfahrung 3 je 10 Gold Warenwert', () => {
+  // v0.23.0: Preise durch 3, dafür 3 statt 1 Erfahrung je 10 Gold – die Erfahrung bleibt gleich
   const quest = { items: { raederwerk: 4 } };
-  assert.equal(questValue(quest), 1296);
-  assert.deepEqual(questReward(quest), { gold: 1296, xp: 130 });
-  assert.deepEqual(questReward({ items: { holzplatte: 5 } }), { gold: 90, xp: 9 });
-  assert.deepEqual(questReward({ items: { holzstab: 20, holzplatte: 10 } }), { gold: 540, xp: 54 });
+  assert.equal(questValue(quest), 432);
+  assert.deepEqual(questReward(quest), { gold: 432, xp: 130 });
+  assert.deepEqual(questReward({ items: { holzplatte: 5 } }), { gold: 30, xp: 9 });
+  assert.deepEqual(questReward({ items: { holzstab: 20, holzplatte: 10 } }), { gold: 180, xp: 54 });
 });
 
 test('Die Erfahrung aller Aufträge eines Levels reicht genau für den Aufstieg', () => {
@@ -71,7 +73,9 @@ test('Die Erfahrung aller Aufträge eines Levels reicht genau für den Aufstieg'
 
 test('Erfahrung je Level: steigt im Werkzeug-Kapitel, das Kräuter-Kapitel fängt wieder klein an', () => {
   const needs = Object.keys(LEVELS).map((level) => xpNeeded(Number(level)));
-  assert.deepEqual(needs, [81, 90, 162, 714, 1495, 1841, 850, 1332]);
+  // v0.23.0: wie vorher, nur Level 6–8 durch das Runden der Preise etwas weniger
+  // (vorher 1.841, 850, 1.332)
+  assert.deepEqual(needs, [81, 90, 162, 714, 1495, 1840, 816, 1305]);
 });
 
 // ---------- Abgeben ----------
@@ -90,9 +94,9 @@ test('Immer nur ein Auftrag; Abgeben nimmt die Waren aus dem Laden-Lager und gib
   assert.deepEqual(questNeeds(state), [{ type: 'holzplatte', need: 5, have: 5, done: true }], 'have höchstens need');
   const gold = state.gold;
   const result = deliverQuest(state);
-  assert.deepEqual([result.gold, result.xp], [90, 9]);
+  assert.deepEqual([result.gold, result.xp], [30, 9]);
   assert.equal(state.storage.holzplatte, 2, '5 Holzplatten abgegeben');
-  assert.equal(state.gold, gold + 90);
+  assert.equal(state.gold, gold + 30);
   assert.deepEqual(state.quest, { index: 1, xp: 9 });
   assert.equal(state.xpTotal, 9);
   assert.deepEqual(currentQuest(state).items, { holzstab: 10 }, 'der nächste Auftrag rückt nach');
@@ -157,7 +161,7 @@ test('Test-Knopf geht auch ohne die Waren; danach ist Abgeben wieder normal', ()
   assert.ok(skipQuest(state));
   fillFor(state, currentQuest(state));
   const result = deliverQuest(state);
-  assert.deepEqual([result.xp, result.gold], [18, 180]);
+  assert.deepEqual([result.xp, result.gold], [18, 60]);
   assert.deepEqual(state.quest, { index: 2, xp: 27 });
 });
 

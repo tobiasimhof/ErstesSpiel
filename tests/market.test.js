@@ -40,9 +40,9 @@ function path(state, from, to) {
 // ---------- Händler ----------
 
 test('Händler: Rohstoff kaufen kostet Gold und landet im Laden-Lager', () => {
-  const state = emptyGame({}, 1000);
+  const state = emptyGame({}, 300);
   assert.equal(buyRaw(state, 'holzstamm'), 'ok');
-  assert.equal(state.gold, 1000 - ITEMS.holzstamm.buyPrice);
+  assert.equal(state.gold, 300 - ITEMS.holzstamm.buyPrice);
   assert.equal(storageCount(state, 'holzstamm'), 1);
   assert.equal(buyRaw(state, 'holzstamm'), 'gold', 'zu wenig Gold');
   assert.equal(storageCount(state, 'holzstamm'), 1);
@@ -56,10 +56,11 @@ test('Händler: Bei vollem Laden-Lager gibt es nichts', () => {
   assert.equal(state.gold, 5000);
 });
 
-test('Preise des Händlers wie festgelegt: Holz und Stein 550, Eisen 2.200', () => {
-  assert.equal(ITEMS.holzstamm.buyPrice, 550);
-  assert.equal(ITEMS.felsbrocken.buyPrice, 550);
-  assert.equal(ITEMS.eisenerz.buyPrice, 2200);
+test('Preise des Händlers wie festgelegt: Holz und Stein 183, Eisen 732', () => {
+  // v0.23.0: durch 3 (vorher 550 und 2.200); Eisen bleibt genau viermal so teuer
+  assert.equal(ITEMS.holzstamm.buyPrice, 183);
+  assert.equal(ITEMS.felsbrocken.buyPrice, 183);
+  assert.equal(ITEMS.eisenerz.buyPrice, 732);
 });
 
 // ---------- Theken ----------

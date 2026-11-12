@@ -180,7 +180,7 @@ test('Spielstand aus v0.6.1 (Version 4): Fabrik, Gold und Lager bleiben, Theken 
   const loaded = deserializeGame(JSON.stringify({ saveVersion: 4, savedAt: 5, state: v4 }));
   assert.ok(loaded);
   assert.equal(loaded.migratedFrom, 4);
-  assert.equal(loaded.state.gold, 600, 'Gold bleibt, dazu 500 Startkapital (v0.9.1)');
+  assert.equal(loaded.state.gold, 200, 'Gold bleibt, dazu 500 Startkapital (v0.9.1), seit v0.23.0 alles durch 3');
   // v0.13.0: Mini-Eisenplatte heißt jetzt Eisenblech
   assert.deepEqual(loaded.state.storage, { holzstamm: 2, holzplatte: 37, eisenblech: 12 });
   assert.equal(JSON.stringify(loaded.state.buildings), before.buildings, 'Gebäude unverändert, nichts nachträglich berechnet');
@@ -235,8 +235,8 @@ test('Spielstand aus v0.7 (Version 5): je 5 Eisennägel werden zu 1 Eisenstange,
   assert.equal(s.belts['12,8'].item, null);
   assert.equal(s.belts['13,8'].item, null);
   assert.equal(s.belts['14,8'].item.type, 'holzblock');
-  assert.deepEqual(s.market.sales, [{ id: 2, items: { steinzahnrad: 2 }, gold: 50 }]);
-  assert.equal(s.gold, 3600, 'Gold bleibt, dazu 500 Startkapital (v0.9.1)');
+  assert.deepEqual(s.market.sales, [{ id: 2, items: { steinzahnrad: 2 }, gold: 17 }], 'v0.23.0: 50 Gold durch 3');
+  assert.equal(s.gold, 1200, 'Gold bleibt, dazu 500 Startkapital (v0.9.1), seit v0.23.0 alles durch 3');
   // 140 + 2 (Bänder) + 7 (Theke) + 5 (Schmiede) + 53 (Lagerhaus) = 207 Nägel
   assert.deepEqual(loaded.notes, ['207 Eisennägel wurden zu 43 Eisenstangen.']);
 });
@@ -267,7 +267,7 @@ test('Spielstand aus v0.8 (Version 6): bestehende Fabrik bekommt Level 3, nichts
   assert.equal(s.shopLevel, 3);
   assert.deepEqual(s.produced, {});
   assert.equal(s.landBought, 0);
-  assert.equal(s.gold, 3478, 'Gold bleibt, dazu 500 Startkapital (v0.9.1)');
+  assert.equal(s.gold, 1159, 'Gold bleibt, dazu 500 Startkapital (v0.9.1), seit v0.23.0 alles durch 3 (3.478 / 3)');
   assert.deepEqual(s.storage, { holzplatte: 30, eisenstange: 28, felsbrocken: 1 }, 'kein Geschenk, nichts weg');
   assert.equal(JSON.stringify(s.buildings), before.buildings);
   assert.equal(JSON.stringify(s.belts), before.belts);
@@ -285,14 +285,14 @@ test('Spielstand aus v0.9.0 (Version 7): 500 Gold Startkapital werden einmalig n
   const loaded = deserializeGame(JSON.stringify({ saveVersion: 7, savedAt: 5, state: v7 }));
   assert.ok(loaded);
   assert.equal(loaded.migratedFrom, 7);
-  assert.equal(loaded.state.gold, 872);
+  assert.equal(loaded.state.gold, 291, '372 + 500, seit v0.23.0 durch 3');
   assert.equal(loaded.state.shopLevel, 2, 'Level bleibt');
   assert.deepEqual(loaded.state.produced, v7.produced, 'Zähler bleiben');
   assert.deepEqual(loaded.state.storage, { felsbrocken: 1 });
   assert.deepEqual(loaded.notes, []);
   // Nur einmal: erneut speichern und laden gibt nichts mehr dazu
   const again = deserializeGame(serializeGame(loaded.state));
-  assert.equal(again.state.gold, 872);
+  assert.equal(again.state.gold, 291);
   assert.equal(again.migratedFrom, undefined);
 });
 
@@ -318,14 +318,14 @@ test('Spielstand aus v0.10.1 (Version 8): Welt bekommt eine Ecke, gekaufte Fläc
   assert.deepEqual(s.world, { x: 0, y: -3, width: 38, height: 30 });
   assert.deepEqual(s.plot, v8.plot, 'Grundstück unverändert');
   assert.equal(JSON.stringify({ buildings: s.buildings, belts: s.belts }), before, 'Gebäude und Bänder unverändert');
-  assert.deepEqual([s.gold, s.shopLevel, s.landBought], [1234, 4, 5], 'kein Startkapital doppelt, Level bleibt');
+  assert.deepEqual([s.gold, s.shopLevel, s.landBought], [411, 4, 5], 'kein Startkapital doppelt (1.234 / 3), Level bleibt');
   assert.deepEqual(loaded.notes, []);
-  // Was schon gekauft ist, zählt mit: rechts noch 2 Spalten (Rest, 250 Gold),
-  // oben noch 3 Reihen (380 Gold), links und unten je 2 volle Streifen.
-  assert.deepEqual([landOffer(s, 'E').depth, landOffer(s, 'E').price], [2, 250]);
-  assert.deepEqual([landOffer(s, 'N').depth, landOffer(s, 'N').price], [3, 380]);
-  assert.deepEqual([landOffer(s, 'W').depth, landOffer(s, 'W').price], [4, 500]);
-  assert.deepEqual([landOffer(s, 'S').depth, landOffer(s, 'S').price], [4, 500]);
+  // Was schon gekauft ist, zählt mit: rechts noch 2 Spalten (Rest, 90 Gold),
+  // oben noch 3 Reihen (130 Gold), links und unten je 2 volle Streifen (170).
+  assert.deepEqual([landOffer(s, 'E').depth, landOffer(s, 'E').price], [2, 90]);
+  assert.deepEqual([landOffer(s, 'N').depth, landOffer(s, 'N').price], [3, 130]);
+  assert.deepEqual([landOffer(s, 'W').depth, landOffer(s, 'W').price], [4, 170]);
+  assert.deepEqual([landOffer(s, 'S').depth, landOffer(s, 'S').price], [4, 170]);
 });
 
 test('Spielstand aus v0.10.1, der schon weiter reicht: die Welt wächst mit, nichts geht verloren', () => {
@@ -336,8 +336,8 @@ test('Spielstand aus v0.10.1, der schon weiter reicht: die Welt wächst mit, nic
   assert.deepEqual(loaded.state.world, { x: 0, y: -3, width: 40, height: 30 });
   assert.deepEqual(loaded.state.plot, v8.plot);
   assert.equal(landOffer(loaded.state, 'E'), null, 'rechts ist nichts mehr zu kaufen');
-  // unten reicht die Welt jetzt bis y = 27 (Start 19 + 8): noch 1 Reihe für 130 Gold
-  assert.deepEqual([landOffer(loaded.state, 'S').depth, landOffer(loaded.state, 'S').price], [1, 130]);
+  // unten reicht die Welt jetzt bis y = 27 (Start 19 + 8): noch 1 Reihe für 40 Gold
+  assert.deepEqual([landOffer(loaded.state, 'S').depth, landOffer(loaded.state, 'S').price], [1, 40]);
 });
 
 test('Ungültiges Level, Zähler oder Flächenkäufe werden erkannt', () => {
@@ -374,6 +374,37 @@ test('Kaputte oder fremde Daten werden abgelehnt', () => {
   assert.equal(deserializeGame('null'), null);
   assert.equal(deserializeGame(JSON.stringify({ saveVersion: SAVE_VERSION + 1, state: createNewGame() })), null);
   assert.equal(deserializeGame(JSON.stringify({ saveVersion: SAVE_VERSION })), null);
+});
+
+test('Spielstand aus v0.22 (Version 15): Preise durch 3 – Gold und letzte Verkäufe auch, sonst bleibt alles', () => {
+  // Wie Tobias' Fabrik (Chat 17): Level 8, 43.870 Gold, Aufträge über den Test-Knopf
+  const v15 = createNewGame(15);
+  v15.shopLevel = 8;
+  v15.gold = 43870;
+  v15.storage = { zirkel: 10, scharnier: 5, holzplatte: 40 };
+  v15.quest = { index: 4, xp: 1400 };
+  v15.xpTotal = 8000;
+  v15.market.sales = [
+    { id: 2, items: { zirkel: 2 }, gold: 3974 },
+    { id: 1, items: { holzplatte: 1 }, gold: 18 },
+  ];
+  v15.market.nextSaleId = 3;
+  const loaded = deserializeGame(JSON.stringify({ saveVersion: 15, savedAt: 1, state: v15 }));
+  assert.ok(loaded, 'Spielstand gültig');
+  assert.equal(loaded.migratedFrom, 15);
+  const s = loaded.state;
+  assert.equal(s.gold, 14623, '43.870 / 3, gerundet');
+  assert.deepEqual(
+    s.market.sales.map((sale) => sale.gold),
+    [1325, 6],
+  );
+  assert.deepEqual(s.storage, v15.storage, 'Waren bleiben');
+  assert.deepEqual([s.shopLevel, s.quest, s.xpTotal], [8, { index: 4, xp: 1400 }, 8000], 'Level und Erfahrung bleiben');
+  assert.deepEqual(loaded.notes, []);
+  // Nur einmal: erneut speichern und laden teilt nicht noch einmal
+  const again = deserializeGame(serializeGame(s));
+  assert.equal(again.migratedFrom, undefined);
+  assert.equal(again.state.gold, 14623);
 });
 
 test('Ungültige Inhalte im Spielstand werden erkannt', () => {

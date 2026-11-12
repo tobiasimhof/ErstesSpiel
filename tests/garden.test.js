@@ -80,23 +80,31 @@ test('Datentabellen: Beet 2 × 2 ohne Band, 1 Leinsamen → 1 Flachspflanze in 3
   for (const type of ['beet', 'flachsbreche', 'webstube']) assert.deepEqual(BUILDINGS[type].size, [2, 2], type);
 });
 
-test('Preise (Tobias): Samen 1.000, aus einem Samen 1.500 Gold – jede Stufe bringt mehr', () => {
+test('Preise (Tobias): Samen 320, aus einem Samen 480 Gold – jede Stufe bringt mehr', () => {
+  // v0.16.0: 1.000 → 1.250 → 1.500; v0.23.0 durch 3, das Verhältnis bleibt.
   const seed = ITEMS.leinsamen.buyPrice;
   const fibers = 50 * ITEMS.flachsfaser.price;
   const bandages = 10 * ITEMS.verband.price;
-  assert.deepEqual([seed, fibers, bandages], [1000, 1250, 1500]);
+  assert.deepEqual([seed, fibers, bandages], [320, 400, 480]);
+  assert.equal(fibers / seed, 1.25);
+  assert.equal(bandages / fibers, 1.2);
   assert.ok(seed < fibers && fibers < bandages);
 });
 
+// Waren des Kräuter-Kapitels – daraus wird keine Maschine (Tobias)
+const HERB_GOODS = ['flachsfaser', 'verband', 'ringelbluete', 'heilverband', 'kraeuterkompresse'];
+
 test('Baukosten aus Waren von Level 1–6, keins teurer, als ein Samen einbringt', () => {
   const worth = (cost) => Object.entries(cost).reduce((sum, [t, n]) => sum + ITEMS[t].price * n, 0);
-  assert.equal(worth(BUILDINGS.beet.cost), 360);
-  assert.equal(worth(BUILDINGS.flachsbreche.cost), 828);
-  assert.equal(worth(BUILDINGS.webstube.cost), 1008);
+  // v0.23.0: durch 3 wie alle Preise (vorher 360, 828, 1.008 – höchstens 1.500)
+  assert.equal(worth(BUILDINGS.beet.cost), 120);
+  assert.equal(worth(BUILDINGS.flachsbreche.cost), 276);
+  assert.equal(worth(BUILDINGS.webstube.cost), 336);
+  const fromSeed = 10 * ITEMS.verband.price;
   for (const type of ['beet', 'flachsbreche', 'webstube']) {
-    assert.ok(worth(BUILDINGS[type].cost) <= 1500, type);
+    assert.ok(worth(BUILDINGS[type].cost) <= fromSeed, type);
     for (const item of Object.keys(BUILDINGS[type].cost)) {
-      assert.ok(ITEMS[item].price > 0 && ITEMS[item].price < 1000, `${type}: ${item} aus dem Werkzeug-Kapitel`);
+      assert.ok(ITEMS[item].price > 0 && !HERB_GOODS.includes(item), `${type}: ${item} aus dem Werkzeug-Kapitel`);
     }
   }
 });
@@ -116,22 +124,22 @@ test('Die Flachspflanze ist ein Rohstoff zum Einlegen: nicht kaufen, nicht verka
 
 // ---------- Level 7 ----------
 
-test('Level 7 „Die Heilstube“: Beet, Flachsbreche, Webstube, Leinsamen beim Händler; Aufstieg 3.000 Gold', () => {
+test('Level 7 „Die Heilstube“: Beet, Flachsbreche, Webstube, Leinsamen beim Händler; Aufstieg 1.000 Gold', () => {
   assert.deepEqual(unlocksOf(7), { buildings: ['beet', 'flachsbreche', 'webstube'], raws: ['leinsamen'] });
   const state = createNewGame(7);
   state.shopLevel = 6;
   assert.equal(isItemUnlocked(state, 'leinsamen'), false);
-  state.gold = 2999;
+  state.gold = 999;
   state.quest.xp = xpNeeded(6);
   assert.equal(levelUp(state), null, 'zu wenig Gold');
-  state.gold = 3000;
+  state.gold = 1000;
   const up = levelUp(state);
-  assert.deepEqual([up.level, up.gift, up.cost], [7, { leinsamen: 1 }, 3000]);
+  assert.deepEqual([up.level, up.gift, up.cost], [7, { leinsamen: 1 }, 1000]);
   assert.equal(state.gold, 0);
   assert.equal(storageCount(state, 'leinsamen'), 1);
   assert.equal(isItemUnlocked(state, 'leinsamen'), true);
   assert.equal(LEVELS[7].name, 'Die Heilstube');
-  assert.equal(xpNeeded(7), 850);
+  assert.equal(xpNeeded(7), 816, 'v0.23.0: 816 statt 850 (Verband 48 statt 50)');
 });
 
 // ---------- Beet ----------
@@ -175,17 +183,17 @@ test('Ernten und Säen sind zwei Schritte (Tobias): Ernten legt die Pflanze ins 
   assert.equal(beet.prod.crop, null, 'nichts wächst von allein nach');
 });
 
-test('Säen ohne Samen im Laden-Lager kauft einen (1.000 Gold); ohne Gold oder unter Level 7 geht es nicht', () => {
+test('Säen ohne Samen im Laden-Lager kauft einen (320 Gold); ohne Gold oder unter Level 7 geht es nicht', () => {
   const state = level7();
   const beet = placeBuilding(state, 'beet', 10, 6, 0);
-  state.gold = 999;
-  assert.deepEqual([sowPlan(state, beet).result, sowPlan(state, beet).cost], ['gold', 1000]);
+  state.gold = 319;
+  assert.deepEqual([sowPlan(state, beet).result, sowPlan(state, beet).cost], ['gold', 320]);
   assert.equal(sowSeed(state, beet).result, 'gold');
   assert.equal(beet.prod.crop, null);
-  state.gold = 1500;
+  state.gold = 500;
   const plan = sowSeed(state, beet);
-  assert.deepEqual([plan.result, plan.buy, plan.cost], ['ok', true, 1000]);
-  assert.equal(state.gold, 500);
+  assert.deepEqual([plan.result, plan.buy, plan.cost], ['ok', true, 320]);
+  assert.equal(state.gold, 180);
   assert.equal(beet.prod.crop, 'leinsamen');
   assert.equal(storageCount(state, 'leinsamen'), 0, 'direkt gesät, nicht im Laden-Lager');
 
@@ -245,7 +253,7 @@ test('Flachsbreche: Pflanze einlegen wie einen Holzstamm, 1 Pflanze → 50 Faser
   assert.deepEqual([refillPlan(noPlants, empty).fromStorage, refillPlan(noPlants, empty).buy], [0, 0]);
 });
 
-test('Ganze Kette: 1 Flachspflanze → 50 Fasern → 10 Verbände im Laden-Lager (1.500 Gold)', () => {
+test('Ganze Kette: 1 Flachspflanze → 50 Fasern → 10 Verbände im Laden-Lager (480 Gold)', () => {
   const state = level7();
   state.storage.flachspflanze = 1;
   const breche = placeBuilding(state, 'flachsbreche', 10, 6, 0);
@@ -264,7 +272,7 @@ test('Ganze Kette: 1 Flachspflanze → 50 Fasern → 10 Verbände im Laden-Lager
   assert.equal(sourceCount(breche), 0);
   assert.equal(state.produced.flachsfaser, 50);
   assert.equal(storageCount(state, 'verband'), 10);
-  assert.equal(storageCount(state, 'verband') * ITEMS.verband.price, 1500);
+  assert.equal(storageCount(state, 'verband') * ITEMS.verband.price, 480);
 });
 
 test('Rhythmus: 3 Beete füllen eine Flachsbreche für genau eine Wachszeit', () => {
@@ -343,7 +351,7 @@ test('Ungültige Beete im Spielstand werden erkannt', () => {
   }
 });
 
-test('Spielstand aus v0.15 (Version 12) öffnet sich unverändert', () => {
+test('Spielstand aus v0.15 (Version 12) öffnet sich unverändert (nur das Gold ist seit v0.23.0 durch 3)', () => {
   const v12 = createNewGame(12);
   v12.shopLevel = 6;
   v12.gold = 4321;
@@ -352,5 +360,5 @@ test('Spielstand aus v0.15 (Version 12) öffnet sich unverändert', () => {
   assert.ok(loaded);
   assert.equal(loaded.migratedFrom, 12);
   assert.deepEqual(loaded.notes, []);
-  assert.deepEqual([loaded.state.shopLevel, loaded.state.gold, loaded.state.storage], [6, 4321, { holzplatte: 20 }]);
+  assert.deepEqual([loaded.state.shopLevel, loaded.state.gold, loaded.state.storage], [6, 1440, { holzplatte: 20 }]);
 });

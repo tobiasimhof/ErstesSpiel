@@ -41,12 +41,15 @@
 //  15 (v0.20.0): Versandportale merken sich, welche Waren zuletzt ankamen
 //               (prod.recent, fürs Infofenster). Bestehende beginnen mit einer
 //               leeren Liste; sonst bleibt alles gleich.
+//  16 (v0.23.0): Alle Preise durch 3 (Tobias, Chat 18). Gold und die Beträge
+//               der „Letzten Verkäufe“ werden durch 3 geteilt (gerundet), damit
+//               das Gleichgewicht bleibt. Waren, Gebäude und Erfahrung bleiben.
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
 import { RECIPES } from './data/recipes.js';
 import { MAX_LEVEL } from './data/levels.js';
-import { SALES_LOG_SIZE, START_GOLD, START_STORAGE } from './data/shop.js';
+import { SALES_LOG_SIZE, START_STORAGE } from './data/shop.js';
 import { canPlaceBuilding, findFreeSpot } from './buildings.js';
 import { isDir, sortDirs } from './dirs.js';
 import { footprintSize, rotateLocal } from './geometry.js';
@@ -56,7 +59,7 @@ import { createQuestState } from './quests.js';
 import { addAllToStorage, counterSizeFor, fitCounters } from './shop.js';
 import { START_PLOT, WORLD, parseTileKey } from './state.js';
 
-export const SAVE_VERSION = 15;
+export const SAVE_VERSION = 16;
 
 // v0.13.0 (Tobias): Namen, die zu den Zutaten passen. Rezepte und Werte bleiben.
 const RENAMED_V11 = {
@@ -81,6 +84,11 @@ const NAILS_PER_BAR = 5;
 // v0.9.0: Bestehende Fabriken haben schon Holz, Stein und Eisen – sie bekommen
 // dieses Level, damit nichts gesperrt wird.
 const EXISTING_FACTORY_LEVEL = 3;
+// v0.9.1: So viel Startkapital gab es damals (vor den Preisen durch 3,
+// die danach auch dieses Gold teilen).
+const V8_START_GOLD = 500;
+// v0.23.0: Alle Preise sind durch diese Zahl geteilt.
+const PRICE_DIVISOR = 3;
 // v0.6.1: So groß wurde die Welt damals (ab Feld 0, 0).
 const V4_WORLD = { width: 40, height: 26 };
 
@@ -162,7 +170,7 @@ function migrate(state, from, notes = []) {
   }
   if (from < 8 && isNum(state.gold)) {
     // v0.9.0 → v0.9.1: Das Startkapital gibt es für bestehende Spielstände einmalig dazu.
-    state.gold += START_GOLD;
+    state.gold += V8_START_GOLD;
   }
   if (from < 9) fitWorld(state);
   if (from < 10 && Array.isArray(state.buildings)) {
@@ -209,6 +217,13 @@ function migrate(state, from, notes = []) {
     // v0.19 → v0.20: Versandportale merken sich die zuletzt versendeten Waren.
     for (const b of state.buildings) {
       if (isObj(b?.prod) && productionOf(b.type)?.kind === 'shipping' && b.prod.recent === undefined) b.prod.recent = [];
+    }
+  }
+  if (from < 16) {
+    // v0.22 → v0.23: Alle Preise durch 3 – Gold und die letzten Verkäufe auch.
+    if (isNum(state.gold)) state.gold = Math.round(state.gold / PRICE_DIVISOR);
+    for (const sale of Array.isArray(state.market?.sales) ? state.market.sales : []) {
+      if (isObj(sale) && isNum(sale.gold)) sale.gold = Math.round(sale.gold / PRICE_DIVISOR);
     }
   }
   return state;

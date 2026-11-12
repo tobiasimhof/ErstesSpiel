@@ -61,7 +61,17 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.24.0 – Preise durch 3 (Chat 18, v0.22.3; Tobias' OK fehlt)
+### v0.23.0 – Preise durch 3 (fertig; Entwurf aus v0.22.3, dort noch als v0.24.0)
+
+**Freigabe (Tobias, Chat 18):** „Die Idee, alles durch 3 zu teilen, finde ich sehr sinnvoll, weil alle Beträge dadurch kleiner werden. Das kannst du gerne schon mal machen. Ich würde gerne zuerst die Preise teilen und danach die Theken machen. … Ich hab jetzt ein wenig die Angst, dass wir zu viel regulieren, aber fang gerne mal an und dann testen wir das einfach.“ Damit wird „Preise durch 3“ v0.23.0 und die Theken v0.24.0. Lesart (+20 % bleibt), Rundung und Leinsamen 320 ohne Einwand übernommen.
+
+**Umgesetzt wie im Entwurf unten, mit drei Ergänzungen:**
+- **Eisenerz 732 statt 733:** Ein Test hält fest, dass Eisen genau viermal so viel kostet wie Holz (4 × 183); 200 Eisenbarren bringen weiter rund 9 % mehr (800).
+- **Hinweis beim Öffnen** eines alten Spielstands: „Neu: Alle Preise sind durch 3 geteilt – ein Holzblock kostet 1 Gold, ein Zirkel 662. Dein Gold ist mit umgerechnet und genauso viel wert wie vorher.“
+- Die Meldung zum Testpaket nennt den Betrag aus der Datentabelle (330 statt fest „1.000“). Uralte Spielstände (vor v0.9.1) bekommen ihr Startkapital wie damals (500) und danach durch 3.
+
+**Entwurf (v0.22.3):**
+
 
 **Tobias (Chat 18):** „Aktuell haben wir über das Balancing von Gold verdienen gesprochen. Ich hab jetzt nochmal ein wenig weitergespielt und eine Produktion weiter angepasst, sodass ich meine Scharniere nicht mehr über die Theke verkaufen kann, sondern diese brauche, um Zirkel und Vorhängeschlösser herzustellen. Ich glaube, wir müssen gar nicht so sehr an diesen Stellschrauben drehen. Mir ist nur aufgefallen, wenn man sich z. B. auf die Produktion von goldstarken Produkten konzentriert, dass man dort viel Gold verdienen kann, aber man muss trotzdem andere Dinge herstellen, um im Level aufzusteigen. … Ich glaube, wenn wir alles durch 3 teilen, haben wir a) nicht so hohe Beträge, z. B. ein Zirkel knapp 2.000 Gold, und b) können wir den ‚Abverkauf‘ weiterhin über die Theken steuern.“
 
@@ -158,7 +168,10 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 Umgesetzt wie im Entwurf unten mit Claudes Vorschlägen (Tobias, Chat 17: „Du kannst gerne damit anfangen“). Ergänzungen: Datei endet auf `.txt` (Chrome auf Android teilt keine `.json`); wo das Gerät teilen kann, stehen „📤 Teilen …“ und „⬇️ In Downloads“ zur Wahl; beim Laden „💾 Jetzigen erst sichern“ und eine Sicherheitskopie des vorigen Spielstands im Browser; nach dem Laden heißt das Fenster „📂 Spielstand geladen – Seit dem Sichern sind … vergangen“. Technik: Die Datei ersetzt den Spielstand im Browser, die Seite startet neu und rechnet wie beim normalen Öffnen nach.
 
-### Entwurf v0.23.0 – Theken kaufen, langsamer verkaufen (freigegeben, kommt nach v0.22.0)
+### Entwurf v0.24.0 (bisher v0.23.0) – Theken kaufen, langsamer verkaufen (freigegeben)
+
+**Stand nach v0.23.0:** Seit den Preisen durch 3 kosten die Theken 13.000 / 33.000 / 67.000 Gold (statt 40.000 / 100.000 / 200.000); alle Gold-Beträge unten sind noch die alten (durch 3 teilen). Das Tempo je Level (2 Start-Theken zusammen 6 / 3 / 1,5 pro Minute) bleibt – Tobias (Chat 18): „Wir hatten im letzten Chat auch dokumentiert, dass man Level 1–3 mehr Verkäufe pro Minute hat als auf Level 7, um den ganzen Cash-Flow auch etwas zu steuern.“
+
 
 **Freigabe (Tobias, Chat 17):** „Ja, die Lesart stimmt. Jede Theke verkauft, damit der Zukauf von Theken sich auch lohnt. … Wir können das gerne so machen in der Reihenfolge.“ Gilt mit der Tempo-Tabelle unten (2 Start-Theken zusammen 6 / 3 / 1,5 pro Minute), nur Gold, kein Mindest-Level, Tobias' Fabrik zurück auf 2 Theken. Start, sobald Tobias seine Fabrik mit v0.22.0 gesichert hat.
 

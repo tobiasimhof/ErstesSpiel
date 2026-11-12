@@ -33,7 +33,8 @@ export const CUSTOMERS = { minInterval: 10, maxInterval: 30, minItems: 1, maxIte
 // (Level 1); den Felsbrocken gibt es beim Aufstieg auf Level 2.
 // v0.9.1: 500 Gold Startkapital (Tobias) – der erste Holzstamm muss auch die
 // ersten Gebäude bezahlen und brachte allein nie genug für den zweiten.
-export const START_GOLD = 500;
+// v0.23.0: durch 3 wie alle Preise (500 → 170).
+export const START_GOLD = 170;
 export const START_STORAGE = { holzstamm: 1, holzblock: 20 };
 
 // Pleiteschutz: Wer gar nicht mehr weiterkommt, bekommt diesen Rohstoff geschenkt.
@@ -42,7 +43,8 @@ export const BAILOUT_ITEM = 'holzstamm';
 // Testpaket im Testmodus: Gold und von jeder freigeschalteten Ware (ohne
 // Rohstoffe) diese Menge. v0.10.0: Kombi-Teile (ab Level 4) nur je
 // eachAdvanced Stück, sonst wäre das Laden-Lager sofort übervoll.
-export const TEST_PACK = { gold: 1000, each: 50, eachAdvanced: 5, advancedLevel: 4 };
+// v0.23.0: Gold durch 3 wie alle Preise (1.000 → 330).
+export const TEST_PACK = { gold: 330, each: 50, eachAdvanced: 5, advancedLevel: 4 };
 
 // So viele Verkäufe merkt sich der Laden für die Anzeige „Letzte Verkäufe“.
 export const SALES_LOG_SIZE = 5;

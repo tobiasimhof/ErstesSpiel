@@ -20,6 +20,8 @@
 //         from: wer bestellt, text: wofür, items: was abgegeben wird.
 // Mengen sind Platzhalter (Tobias: Man soll für die Stückzahl schon ein wenig
 // in die Masse gehen müssen).
+// v0.23.0: Aufstiegspreise durch 3 wie alle Preise, auf 10 gerundet
+// (vorher 100, 250, 500, 1.000, 2.000, 3.000, 4.000).
 
 export const LEVELS = {
   1: {
@@ -34,7 +36,7 @@ export const LEVELS = {
   2: {
     name: 'Wege und Brunnen',
     story: 'Der Ort wächst. Die Wege versinken im Matsch, und Wasser holt man noch mit Eimern am Fluss.',
-    cost: 100,
+    cost: 30,
     gift: { felsbrocken: 1 },
     quests: [
       { from: 'Steinmetzin Berta', text: 'Der Weg zum Fluss wird gepflastert. Dafür brauche ich Steinplatten.', items: { steinplatte: 10 } },
@@ -45,7 +47,7 @@ export const LEVELS = {
   3: {
     name: 'Die Dorfschmiede',
     story: 'Mit dem Eisen kommt ein Schmied in den Ort. Werkzeug, Beschläge, Pflüge – alle wollen jetzt etwas aus Eisen.',
-    cost: 250,
+    cost: 80,
     gift: { eisenerz: 1 },
     quests: [
       { from: 'Schmied Konrad', text: 'Meine Esse brennt! Für Hämmer und Zangen brauche ich Eisenstangen.', items: { eisenstange: 5 } },
@@ -58,7 +60,7 @@ export const LEVELS = {
   4: {
     name: 'Die Mühle am Fluss',
     story: 'Das Korn muss gemahlen werden. Müllerin Grete baut eine Mühle am Fluss – mit Wellen und Räderwerken aus deiner Zimmerei.',
-    cost: 500,
+    cost: 170,
     gift: { eisenerz: 1 },
     quests: [
       { from: 'Müllerin Grete', text: 'Das Mühlrad dreht sich schon. Jetzt fehlen die Wellen, die seine Kraft ins Haus tragen.', items: { zahnradwelle: 2 } },
@@ -70,7 +72,7 @@ export const LEVELS = {
   5: {
     name: 'Der Markt',
     story: 'Händler kommen in den Ort, und mit ihnen Marktstände, Kassen und große Pläne.',
-    cost: 1000,
+    cost: 330,
     gift: { eisenerz: 1 },
     quests: [
       { from: 'Händlerin Marta', text: 'Meine Marktstände bekommen Klappen, die man hochklappen kann.', items: { scharnier: 2 } },
@@ -82,7 +84,7 @@ export const LEVELS = {
   6: {
     name: 'Das Stadttor',
     story: 'Aus dem Dorf wird eine kleine Stadt. Sie bekommt eine Mauer, ein Tor mit Zugbrücke und einen Torturm mit Uhr.',
-    cost: 2000,
+    cost: 670,
     gift: { eisenerz: 1 },
     quests: [
       { from: 'Torwächter Ulrich', text: 'Die Zugbrücke hebt sich nur mit Gegengewichten.', items: { gewichtstein: 4 } },
@@ -98,7 +100,7 @@ export const LEVELS = {
     name: 'Die Heilstube',
     story:
       'Vor dem neuen Stadttor rasten Reisende, Händler und Wachen – und manche kommen verletzt an. Heilerin Agnes zieht in den Ort und richtet eine Heilstube ein. Was sie braucht, wächst auf dem Feld: Flachs.',
-    cost: 3000,
+    cost: 1000,
     gift: { leinsamen: 1 },
     quests: [
       { from: 'Heilerin Agnes', text: 'Ich richte am Stadttor eine Heilstube ein. Für den Anfang brauche ich saubere Verbände.', items: { verband: 5 } },
@@ -112,7 +114,7 @@ export const LEVELS = {
   8: {
     name: 'Der Kräutergarten',
     story: 'Die Heilstube ist voll. Agnes legt hinter dem Haus einen Kräutergarten an – die Ringelblume heilt Wunden schneller als jeder Verband allein.',
-    cost: 4000,
+    cost: 1330,
     gift: { ringelblumensamen: 1 },
     quests: [
       { from: 'Heilerin Agnes', text: 'Hinter der Heilstube lege ich einen Kräutergarten an. Bring mir getrocknete Ringelblüten.', items: { ringelbluete: 50 } },
@@ -127,8 +129,10 @@ export const MAX_LEVEL = Math.max(...Object.keys(LEVELS).map(Number));
 
 // Belohnung eines Auftrags, berechnet aus dem Wert der verlangten Waren:
 // Gold genau so viel wie an der Theke (Tobias: nicht mehr – man macht die
-// Aufträge wegen der Erfahrung), Erfahrung 1 je 10 Gold Warenwert.
-export const QUEST_REWARD = { goldFactor: 1, xpPerGold: 0.1 };
+// Aufträge wegen der Erfahrung), Erfahrung 3 je 10 Gold Warenwert.
+// v0.23.0: Seit die Preise durch 3 geteilt sind, gibt es 3 statt 1 Erfahrung
+// je 10 Gold – so bleibt die Erfahrung je Auftrag und Level wie vorher.
+export const QUEST_REWARD = { goldFactor: 1, xpPerGold: 0.3 };
 
 // v0.15.0 (Tobias): Test-Knopf „🧪 Test: Auftrag erledigen“ im Level-Fenster,
 // solange das Spiel ein Prototyp ist (bis v1.0 immer sichtbar). Er gibt die

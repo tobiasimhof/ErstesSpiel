@@ -340,19 +340,21 @@ test('Wirtschaft: Jede Stufe bringt mehr als ihre Zutaten (Preistabelle)', () =>
   }
   // Werte aus der Tabelle (docs/SPIEL.md, Abschnitt 7)
   assert.equal(ITEMS.eisenerz.buyPrice, 4 * ITEMS.holzstamm.buyPrice, 'Eisen kostet viermal so viel');
-  assert.equal(200 * ITEMS.holzblock.price, 600);
-  assert.equal(40 * ITEMS.holzplatte.price, 720);
-  assert.equal(200 * ITEMS.eisenbarren.price, 2400);
-  assert.equal(40 * ITEMS.eisenblech.price, 2880);
-  assert.equal(40 * ITEMS.eisenstange.price, 2880);
-  // v0.16.0: Kräuter-Kapitel, Level 7
-  assert.equal(ITEMS.leinsamen.buyPrice, 1000);
-  assert.equal(50 * ITEMS.flachsfaser.price, 1250);
-  assert.equal(10 * ITEMS.verband.price, 1500);
-  // v0.17.0: Level 8 – teurer, bringt aber mehr
-  assert.equal(ITEMS.ringelblumensamen.buyPrice, 1500);
-  assert.equal(50 * ITEMS.ringelbluete.price, 1800);
-  assert.equal(10 * ITEMS.heilverband.price, 3960);
+  // v0.23.0: alle Preise durch 3 (vorher 600, 720, 2.400, 2.880)
+  assert.equal(200 * ITEMS.holzblock.price, 200);
+  assert.equal(40 * ITEMS.holzplatte.price, 240);
+  assert.equal(200 * ITEMS.eisenbarren.price, 800);
+  assert.equal(40 * ITEMS.eisenblech.price, 960);
+  assert.equal(40 * ITEMS.eisenstange.price, 960);
+  // v0.16.0: Kräuter-Kapitel, Level 7 (v0.23.0 durch 3: vorher 1.000, 1.250, 1.500;
+  // Leinsamen 320 statt 333, damit die Faser ganze 8 Gold kostet)
+  assert.equal(ITEMS.leinsamen.buyPrice, 320);
+  assert.equal(50 * ITEMS.flachsfaser.price, 400);
+  assert.equal(10 * ITEMS.verband.price, 480);
+  // v0.17.0: Level 8 – teurer, bringt aber mehr (vorher 1.500, 1.800, 3.960)
+  assert.equal(ITEMS.ringelblumensamen.buyPrice, 500);
+  assert.equal(50 * ITEMS.ringelbluete.price, 600);
+  assert.equal(10 * ITEMS.heilverband.price, 1300);
 });
 
 test('Datentabellen passen zusammen: Rezepte, Werkstätten, Waren', () => {
