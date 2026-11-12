@@ -61,6 +61,30 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Überlegung: Rohstoffpreise und Rezepte (Chat 17, v0.22.1, noch nicht entschieden)
+
+**Tobias (Chat 17):** „Wir könnten das ja auch regulieren, indem wir die Rohstoffpreise geringer machen und für die Produktion von bestimmten Stoffen weniger Teile nehmen. So könnten wir doch geringere Preise erzielen und langsamer skalieren? Aktuell machen wir bei jedem Produktionsschritt immer das Dreifache mehr? Ich möchte eigentlich nur erreichen, dass man auf höheren Leveln nicht unbedingt Gold drucken kann, aber auch nicht verarmt. Kannst du mir das mal durchrechnen? Nimm als Vergleich unseren aktuellen Spielstand.“
+
+**Wie die Preise heute entstehen:** Nicht das Dreifache je Schritt, sondern **+20 % auf den Wert der Zutaten** (Blöcke +9 % auf den Rohstoff). Die großen Sprünge kommen von der Menge: Eine Zahnradwelle besteht aus 15 Teilen à 18 Gold = 270, +20 % = 324. Gewinn gegenüber dem Rohstoff: Grundteile +31 %, Kombi-Teile +57 %, Zirkel +81 %, Uhrwerk und Vorhängeschloss +89 %.
+
+**Rechnung** (Tobias' Fabrik: 8 Holzfällerlager, 9 Steinbrüche, 7 Schmelzhütten, alles läuft durchgehend; Holz und Stein → Zahnradwellen/Räderwerke, Eisen → Zirkel; Theken verkaufen zuerst die gewinnreichsten Waren; Obergrenze – Tobias' echter Ertrag lag bei etwa 47.000 Gold pro Stunde):
+
+| Variante | Welle / Zirkel | Volle Füllung | fertige Teile pro Stunde | Gewinn pro Stunde ohne Theken-Grenze | mit v0.23.0, 2 Theken (90 Stück pro Stunde) | 3. Theke (40.000) nach |
+|---|---|---|---|---|---|---|
+| Heute | 324 / 1.986 | 74.250 | 237 | 70.900 | 53.600 | 45 Min. |
+| A: Rohstoffe halb so teuer (alle Preise halb) | 162 / 993 | 37.125 | 237 | 35.400 | 26.800 | 1,5 Std. |
+| B: weniger Teile (Kombi 4 + 2 statt 10 + 5, Zirkel: Scharnier + 2 Stangen) | 129 / 794 | 74.250 | 593 | 70.900 | 31.900 | 1,3 Std. |
+| A + B | 65 / 397 | 37.125 | 593 | 35.400 | 15.900 | 2,5 Std. |
+| C: Aufschlag +10 % statt +20 % ab Level 4 (Kombi-Teile und höher) | 297 / 1.701 | 74.250 | 237 | 50.100 | 36.800 | 1,1 Std. |
+
+**Einordnung:**
+- **A** halbiert alles – den Gewinn, aber auch die Rohstoffkosten und die volle Füllung. Gemessen an dem, was man für Rohstoffe zahlt, ändert sich nichts (weiter +57 bis +89 %). Es wirkt nur gegenüber festen Preisen (Aufstieg, Fläche, Theken) – das ist dasselbe, als würde man diese doppelt so teuer machen. Dazu kosteten Blöcke 1,5 Gold (Regel „ganze Gold“).
+- **B** lässt den Gewinn je Rohstoff gleich (jeder Schritt bleibt +20 %); man bekommt aus demselben Rohstoff nur mehr, billigere Waren. Ohne Theken-Grenze ändert sich nichts; mit langsamen Theken wirkt es stark, weil die Theken Stück verkaufen, nicht Gold. Nachteil: Ein Zirkel braucht 8 statt 20 Teile – für dieselbe Menge reichen 2,5-mal weniger Rohstoff-Gebäude, also weniger Massenproduktion (gegen Tobias' Schwerpunkt). Aufträge und Baukosten müssten neu abgestimmt werden.
+- **C** trifft genau die höheren Level: Der Anfang (Grundteile +31 %) bleibt, lange Straßen lohnen sich weiter (Welle +44 %, Zirkel +55 %), nur weniger. Masse bleibt nötig. Es ändern sich nur Zahlen in `data/items.js` (und der Test der Stufen).
+- **Nicht verarmen:** In allen Varianten bringt jeder Schritt Gewinn; wer nur so viel Rohstoff kauft, wie die Theken verkaufen, verliert nie Gold. Was die Theken nicht schaffen, bleibt als Ware (zum Bauen, für Aufträge).
+
+**Claudes Empfehlung:** Erst v0.23.0 wie freigegeben (Tobias spürt die Theken-Grenze selbst), danach – wenn er noch zu viel Gold hat – C als kleiner Feinschliff. A nicht (nur kleinere Zahlen), B nicht (weniger Massenproduktion, großer Umbau). Eine Änderung nach der anderen, damit Tobias jede spürt.
+
 ### v0.22.0 – Spielstand sichern und laden (fertig)
 
 Umgesetzt wie im Entwurf unten mit Claudes Vorschlägen (Tobias, Chat 17: „Du kannst gerne damit anfangen“). Ergänzungen: Datei endet auf `.txt` (Chrome auf Android teilt keine `.json`); wo das Gerät teilen kann, stehen „📤 Teilen …“ und „⬇️ In Downloads“ zur Wahl; beim Laden „💾 Jetzigen erst sichern“ und eine Sicherheitskopie des vorigen Spielstands im Browser; nach dem Laden heißt das Fenster „📂 Spielstand geladen – Seit dem Sichern sind … vergangen“. Technik: Die Datei ersetzt den Spielstand im Browser, die Seite startet neu und rechnet wie beim normalen Öffnen nach.
