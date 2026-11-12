@@ -61,6 +61,62 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.24.0 – Preise durch 3 (Chat 18, v0.22.3; Tobias' OK fehlt)
+
+**Tobias (Chat 18):** „Aktuell haben wir über das Balancing von Gold verdienen gesprochen. Ich hab jetzt nochmal ein wenig weitergespielt und eine Produktion weiter angepasst, sodass ich meine Scharniere nicht mehr über die Theke verkaufen kann, sondern diese brauche, um Zirkel und Vorhängeschlösser herzustellen. Ich glaube, wir müssen gar nicht so sehr an diesen Stellschrauben drehen. Mir ist nur aufgefallen, wenn man sich z. B. auf die Produktion von goldstarken Produkten konzentriert, dass man dort viel Gold verdienen kann, aber man muss trotzdem andere Dinge herstellen, um im Level aufzusteigen. … Ich glaube, wenn wir alles durch 3 teilen, haben wir a) nicht so hohe Beträge, z. B. ein Zirkel knapp 2.000 Gold, und b) können wir den ‚Abverkauf‘ weiterhin über die Theken steuern.“
+
+**Claudes Lesart (noch zu bestätigen):** Der Aufschlag von +20 % je Stufe bleibt (kein kleinerer Aufschlag), Rezepte bleiben. Alle Gold-Beträge werden durch 3 geteilt, damit die Zahlen mittelalterlicher wirken; gebremst wird über die Theken (v0.23.0). Das Gleichgewicht bleibt, wie es ist – nur die Zahlen werden kleiner. Zu Tobias' Beobachtung: Die Aufträge verlangen bestimmte Waren (z. B. Level 6 Gewichtsteine und Uhrwerke) – das bremst „nur teure Waren“ von selbst. Mit dem Test-Knopf fällt diese Bremse weg; ohne ihn (ab v1.0) greift sie.
+
+**Neue Preise** (Blöcke 1 bzw. 4 Gold, jede Stufe wie heute +20 % auf die Zutaten):
+
+| Ware | heute | neu |
+|---|---|---|
+| Holzstamm / Felsbrocken (Kauf) | 550 | 183 |
+| Eisenerz (Kauf) | 2.200 | 733 |
+| Holzblock / Steinblock | 3 | 1 |
+| Eisenbarren | 12 | 4 |
+| Holzplatte, Holzstab, Steinplatte, Stein-Zahnrad | 18 | 6 |
+| Eisenblech, Eisenstange | 72 | 24 |
+| Zahnradwelle, Räderwerk | 324 | 108 |
+| Verstärkte Holzplatte, Gewichtstein | 648 | 216 |
+| Scharnier, Schlüssel | 1.296 | 432 |
+| Zirkel | 1.987 | 662 |
+| Uhrwerk | 778 | 259 |
+| Vorhängeschloss | 1.944 | 648 |
+| Leinsamen (Kauf) | 1.000 | 320 |
+| Flachsfaser | 25 | 8 |
+| Verband | 150 | 48 |
+| Ringelblumensamen (Kauf) | 1.500 | 500 |
+| Ringelblüte | 36 | 12 |
+| Heilverband | 396 | 130 |
+| Kräuterkompresse | 516 | 168 |
+| (ein nächstes Produkt aus Zirkel + Vorhängeschloss) | 4.717 | 1.572 |
+
+- **Warum Leinsamen 320 statt 333:** Eine Flachsfaser kann nicht 8⅓ Gold kosten. Mit 8 Gold bleibt Tobias' Verhältnis genau erhalten (heute 1.000 → 50 Fasern 1.250 → 10 Verbände 1.500, neu 320 → 400 → 480). Mit 333 brächten die Fasern nur noch +20 % statt +25 %.
+- Holzstamm 183 und Eisenerz 733 sind genau ein Drittel; 200 Blöcke bringen weiter rund 9 % mehr (200 bzw. 800 Gold).
+
+**Feste Gold-Beträge** (durch 3, auf 10 gerundet; Theken auf 1.000):
+
+| | heute | neu |
+|---|---|---|
+| Startgold | 500 | 170 |
+| Fläche je Streifen (alle 8 zusammen) | 500 (4.000) | 170 (1.360) |
+| Aufstieg auf Level 2 / 3 / 4 / 5 / 6 / 7 / 8 | 100 / 250 / 500 / 1.000 / 2.000 / 3.000 / 4.000 | 30 / 80 / 170 / 330 / 670 / 1.000 / 1.330 |
+| 3. / 4. / 5. Theke (v0.23.0) | 40.000 / 100.000 / 200.000 | 13.000 / 33.000 / 67.000 |
+| Testpaket im Testmodus | 1.000 | 330 |
+
+- **Von selbst** (aus den Preisen berechnet): Gold der Aufträge, was Kunden zahlen, Kosten beim Auffüllen, Pleiteschutz (Holzstamm 183).
+- **Erfahrung bleibt gleich:** Heute gibt es 1 Erfahrung je 10 Gold Warenwert, künftig 3 je 10 Gold – sonst würden auch alle Erfahrungszahlen durch 3 geteilt und Tobias' Erfahrung müsste umgerechnet werden. Level 1–6 wie heute (81, 90, 162, 714, 1.495, 1.840 statt 1.841), Level 7 816 statt 850, Level 8 1.305 statt 1.332 (wegen der Kräuter-Rundung).
+- **Baukosten** sind Waren und bleiben gleich (ihr Wert sinkt mit, z. B. Holzfällerlager 360 → 120). Die Grenze „kein Gebäude teurer, als ein Rohstoff seines Levels einbringt“ wird 240 (Holz, Stein), 960 (ab Eisen) und 500 (Kräuter).
+
+**Tobias' Fabrik nach dem Umrechnen** (Zahlen vom 11.11.2026): 43.870 Gold → 14.623; Waren 166.579 → etwa 55.500; eine volle Füllung seiner Fabrik 74.250 → 24.750. Die 3. Theke (13.000) wäre weiter sofort bezahlbar.
+
+**Technik:** Preise in `data/items.js`; Startgold, Testpaket und Theken-Preise in `data/shop.js`; Fläche in `data/land.js`; Aufstiege und Erfahrung je Gold (0,3) in `data/levels.js`. Spielstand: `SAVE_VERSION` + 1, Gold und „Letzte Verkäufe“ durch 3 (gerundet). Tests mit festen Zahlen anpassen (Preisstufen, Kräuter-Verhältnis, Erfahrung je Level, Fläche, Baukosten-Grenze, Umwandeln alter Spielstände). Doku: Tabellen in `docs/SPIEL.md`.
+
+**Reihenfolge (Claudes Vorschlag):** erst v0.23.0 (freigegeben), direkt danach v0.24.0. Die Theken ändern, wie sich das Spiel anfühlt – das spürt Tobias am besten mit den Zahlen, die er kennt; „durch 3“ ändert nur die Zahlen und ist schnell gemacht. Beides in einem Schritt ginge auch, dann wäre bei einem Fehler aber mehr zurückzunehmen.
+
+**Fragen an Tobias:** (1) Lesart: +20 % bleibt, nur durch 3? (2) Rundung so (Aufstiege und Fläche auf 10, Theken auf 1.000)? (3) Leinsamen 320? (4) Reihenfolge und sein OK.
+
 ### Überlegung: Rohstoffpreise und Rezepte (Chat 17, v0.22.1; Stand v0.22.2: erst die Theken, Preise später)
 
 **Tobias' Entscheidung (v0.22.2):** „Dann lass uns bei der Grundidee bleiben mit den Theken und das darüber regulieren. In einem anderen Schritt könnte man sich Gedanken darüber machen, dass man keine 20 % Aufschlag nimmt, sondern weniger. Ich finde es nur etwas viel Gold, wenn man für einen Holzblock 12 Gold zahlt und einen Zirkel knapp 2.000 Gold. Ich fand das Verhältnis etwas zu hoch. Für mich wäre es ansehnlicher, wenn ich für einen Holzblock z. B. 1 Gold bezahle und für den Zirkel dann mehrere hundert Gold, weil wir im Mittelalter sind. Ich fand 2.000 Gold für den Zirkel nur etwas viel, weil wenn wir weitermachen in der Produktion, bringen die nächsten Produkte dann 5.000 Gold oder so was.“ (Ein Holzblock kostet 3 Gold, ein Eisenbarren 12.)

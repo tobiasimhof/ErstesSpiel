@@ -4,6 +4,20 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.22.3 – Preise durch 3 statt kleinerem Aufschlag (12.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung festhalten (Scharniere gehen bei ihm in Zirkel und Vorhängeschlösser; teure Waren bringen viel Gold, für den Aufstieg braucht man trotzdem andere; an den Stellschrauben muss kaum gedreht werden) und seinen Vorschlag „alles durch 3“ durchrechnen.
+
+**Fragen, die wir uns gestellt haben:**
+- Geht „durch 3“ glatt auf? → In der Werkzeug-Kette fast (alles entsteht aus Blöcken zu 3 Gold; Zirkel 662, Uhrwerk 259); bei den Kräutern Leinsamen 320, damit die Faser 8 Gold kostet.
+- Was muss mit umgerechnet werden? → Startgold, Fläche, Aufstiege, Theken-Preise, Testpaket, Gold und „Letzte Verkäufe“ im Spielstand. Die Erfahrung bleibt gleich (3 je 10 Gold statt 1).
+- Ändert sich das Gleichgewicht? → Nein, nur die Zahlen; gebremst wird über die Theken (v0.23.0).
+
+**Gemacht:**
+- `docs/STAND.md`: Status, nächster Schritt (Reihenfolge v0.23.0 → v0.24.0), Tobias' Fabrik, nächste Schritte (Preise jetzt Punkt 2), offene Frage 1, neuer Arbeitsschritt oben (v0.22.0 fällt aus der Liste). `docs/archiv/PLAENE.md`: Entwurf v0.24.0 mit Preistabelle. Gespräch und Entscheidungen ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.22.2 – Erst die Theken, Preise später (12.11.2026, nur Doku)
 
 **Vorgenommen:**
