@@ -250,3 +250,5 @@ Neue Entscheidungen kommen unten in die Tabelle (älteste oben). Wird eine Entsc
 | 11.11.2026 | Beim Laden bleibt der vorige Spielstand als Sicherheitskopie im Browser | Claude: Schutz vor versehentlichem Laden der falschen Datei. |
 | 11.11.2026 | Später: Theke verbessern (z. B. 10 % mehr Kundschaft) bei den Verbesserungen | Tobias' Idee (Chat 17), gehört zu offener Frage 7. |
 | 12.11.2026 | Spielstand sichern und laden klappt auf Tobias' Tablet; seine Fabrik ist als Datei gesichert | Tobias: „Hat funktioniert.“ |
+| 12.11.2026 | Gold wird zuerst über die Theken reguliert (v0.23.0 wie freigegeben); Rohstoffpreise und Rezepte bleiben vorerst | Tobias: „Dann lass uns bei der Grundidee bleiben mit den Theken und das darüber regulieren.“ |
+| 12.11.2026 | Später eigener Schritt „Preise überarbeiten“: weniger als +20 % Aufschlag und eine mittelalterliche Preisskala (Holzblock etwa 1 Gold, Zirkel einige hundert) | Tobias: „Ich fand 2.000 Gold für den Zirkel nur etwas viel, weil wenn wir weitermachen in der Produktion, bringen die nächsten Produkte dann 5.000 Gold oder so was.“ |
