@@ -4,6 +4,19 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.22.2 – Erst die Theken, Preise später (12.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Entscheidung festhalten (Gold über die Theken regulieren, v0.23.0 wie freigegeben; kleinerer Aufschlag und mittelalterliche Preise in einem eigenen Schritt) und den Stand für den neuen Chat vorbereiten.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie sähe „Holzblock 1 Gold, Zirkel einige hundert“ aus? → Alle Preise durch 3 (Zirkel 662), mit +10 % ab Level 4 Zirkel 567; ein nächstes Produkt aus Zirkel + Vorhängeschloss 1.223 statt 4.717.
+- Was ist beim Umstellen zu beachten? → Gold im Spielstand, Aufstiege, Fläche, Theken und Startgold mit umrechnen.
+
+**Gemacht:**
+- `docs/STAND.md`: Status, nächster Schritt (v0.23.0 im neuen Chat), nächste Schritte (Punkt 5 „Preise überarbeiten“), offene Frage 1, neuer Arbeitsschritt oben (v0.21.6 fällt aus der Liste). `docs/archiv/PLAENE.md`: Entscheidung und Preistabelle. Gespräch und Entscheidungen ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.22.1 – Rohstoffpreise und Rezepte durchgerechnet (12.11.2026, nur Doku)
 
 **Vorgenommen:**

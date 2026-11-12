@@ -61,7 +61,20 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Überlegung: Rohstoffpreise und Rezepte (Chat 17, v0.22.1, noch nicht entschieden)
+### Überlegung: Rohstoffpreise und Rezepte (Chat 17, v0.22.1; Stand v0.22.2: erst die Theken, Preise später)
+
+**Tobias' Entscheidung (v0.22.2):** „Dann lass uns bei der Grundidee bleiben mit den Theken und das darüber regulieren. In einem anderen Schritt könnte man sich Gedanken darüber machen, dass man keine 20 % Aufschlag nimmt, sondern weniger. Ich finde es nur etwas viel Gold, wenn man für einen Holzblock 12 Gold zahlt und einen Zirkel knapp 2.000 Gold. Ich fand das Verhältnis etwas zu hoch. Für mich wäre es ansehnlicher, wenn ich für einen Holzblock z. B. 1 Gold bezahle und für den Zirkel dann mehrere hundert Gold, weil wir im Mittelalter sind. Ich fand 2.000 Gold für den Zirkel nur etwas viel, weil wenn wir weitermachen in der Produktion, bringen die nächsten Produkte dann 5.000 Gold oder so was.“ (Ein Holzblock kostet 3 Gold, ein Eisenbarren 12.)
+
+**Claudes Rechnung zur Preisskala** (für den späteren Schritt „Preise überarbeiten“):
+
+| | Holzstamm | Holzblock | Holzplatte | Zahnradwelle | Scharnier | Zirkel | Vorhängeschloss | Eisenerz | nächstes Produkt (Zirkel + Vorhängeschloss) |
+|---|---|---|---|---|---|---|---|---|---|
+| Heute | 550 | 3 | 18 | 324 | 1.296 | 1.987 | 1.944 | 2.200 | 4.717 |
+| Alles durch 3 | 183 | 1 | 6 | 108 | 432 | 662 | 648 | 733 | 1.572 |
+| Durch 3 und +10 % ab Level 4 | 183 | 1 | 6 | 99 | 396 | 567 | 545 | 733 | 1.223 |
+
+- „Alles durch 3“ allein ändert das Gleichgewicht nicht (wie Variante A), nur die Zahlen – dafür müssen Gold im Spielstand, Aufstiege, Fläche, Theken und Startgold mit umgerechnet werden. Der kleinere Aufschlag (C) bremst wirklich.
+- Damit die Preise bei längeren Ketten nicht davonlaufen, sollten neue Rezepte wenige Teile kombinieren (z. B. 1 Zirkel + 1 Vorhängeschloss statt 10 + 5).
 
 **Tobias (Chat 17):** „Wir könnten das ja auch regulieren, indem wir die Rohstoffpreise geringer machen und für die Produktion von bestimmten Stoffen weniger Teile nehmen. So könnten wir doch geringere Preise erzielen und langsamer skalieren? Aktuell machen wir bei jedem Produktionsschritt immer das Dreifache mehr? Ich möchte eigentlich nur erreichen, dass man auf höheren Leveln nicht unbedingt Gold drucken kann, aber auch nicht verarmt. Kannst du mir das mal durchrechnen? Nimm als Vergleich unseren aktuellen Spielstand.“
 

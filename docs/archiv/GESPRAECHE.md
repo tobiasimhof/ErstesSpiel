@@ -4,13 +4,19 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 12.11.2026 – Chat 17 (Fortsetzung): Rohstoffpreise und Rezepte (v0.22.1)
+### 12.11.2026 – Chat 17 (Fortsetzung): Rohstoffpreise und Rezepte (v0.22.1, v0.22.2)
 
 **Tobias:** „Hat funktioniert. Bevor wir damit weitermachen, hatte ich vor dem Schlafen noch eine Idee. Wir könnten das ja auch regulieren, indem wir die Rohstoffpreise geringer machen und für die Produktion von bestimmten Stoffen weniger Teile nehmen. So könnten wir doch geringere Preise erzielen und langsamer skalieren? Aktuell machen wir bei jedem Produktionsschritt immer das Dreifache mehr? Ich möchte eigentlich nur erreichen, dass man auf höheren Leveln nicht unbedingt Gold drucken kann, aber auch nicht verarmt. Kannst du mir das mal durchrechnen? Nimm als Vergleich unseren aktuellen Spielstand. Da hattest du bereits ausgerechnet, wie viel Gold wir in der Stunde produzieren, und wie wäre es, wenn wir das Ganze mit dieser Variante mal gegenrechnen würden?“
 
 **Claude** hat erklärt, dass jeder Schritt +20 % auf die Zutaten bringt (nicht das Dreifache; die großen Zahlen kommen von der Menge), und mit Tobias' Fabrik fünf Varianten gerechnet (Tabelle in `PLAENE.md`): heute bis 70.900 Gold Gewinn pro Stunde, mit v0.23.0 53.600; Rohstoffe halb so teuer halbiert alles, auch die Kosten (26.800); weniger Teile wirkt nur über die Theken-Grenze (31.900) und braucht weniger Masse; beides zusammen 15.900; kleinerer Aufschlag ab Level 4 36.800. Empfehlung: erst v0.23.0 wie freigegeben spielen, danach bei Bedarf den kleineren Aufschlag ab Level 4; Rohstoffpreise und Rezepte so lassen.
 
 **Umgesetzt:** v0.22.1 (nur Doku).
+
+**Tobias:** „Okay, perfekt. Schreib das so rein. Ich würde dann gleich in einem neuen Chat starten. Dann lass uns bei der Grundidee bleiben mit den Theken und das darüber regulieren. In einem anderen Schritt könnte man sich Gedanken darüber machen, dass man keine 20 % Aufschlag nimmt, sondern weniger. Ich finde es nur etwas viel Gold, wenn man für einen Holzblock 12 Gold zahlt und einen Zirkel knapp 2.000 Gold. Ich fand das Verhältnis etwas zu hoch. Für mich wäre es ansehnlicher, wenn ich für einen Holzblock z. B. 1 Gold bezahle und für den Zirkel dann mehrere hundert Gold, weil wir im Mittelalter sind. Ich fand 2.000 Gold für den Zirkel nur etwas viel, weil wenn wir weitermachen in der Produktion, bringen die nächsten Produkte dann 5.000 Gold oder so was.“
+
+**Claude** hat festgehalten: v0.23.0 kommt im neuen Chat wie freigegeben; „Preise überarbeiten“ (kleinerer Aufschlag, mittelalterliche Preisskala) wird ein eigener Schritt danach. Hinweis: Ein Holzblock kostet 3 Gold (12 Gold ist der Eisenbarren). Rechnung: Holzblock 1 Gold heißt alle Preise durch 3 (Zirkel 662); mit +10 % ab Level 4 Zirkel 567; ein nächstes Produkt aus Zirkel + Vorhängeschloss läge bei 1.223 statt 4.717. Beim Umstellen müssten Gold, Aufstiege, Fläche und Theken mit umgerechnet werden.
+
+**Umgesetzt:** v0.22.2 (nur Doku).
 
 ### 11.11.2026 – Chat 17: Gold-Gleichgewicht, Spielstand sichern (v0.21.4 bis v0.22.0)
 
