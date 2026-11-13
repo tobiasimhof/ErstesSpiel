@@ -6,37 +6,26 @@ export function storageCapacity(state) {
   return SHOP_LEVELS[state.shopLevel]?.storage ?? SHOP_LEVELS[1].storage;
 }
 
-// ---------- Anzahl und Größe der Theken (v0.10.0) ----------
-
-export function counterCountFor(level) {
-  return (SHOP_LEVELS[level] ?? SHOP_LEVELS[1]).counters;
-}
+// ---------- Größe und Tempo der Theken ----------
 
 // Plätze auf jeder Theke auf diesem Level (v0.10.1: alle Theken gleich groß).
 export function counterSizeFor(level) {
   return (SHOP_LEVELS[level] ?? SHOP_LEVELS[1]).counterSize;
 }
 
+// v0.24.0: So viele Stück kaufen die Kunden einer Theke im Schnitt pro Minute.
+export function perCounterFor(level) {
+  return (SHOP_LEVELS[level] ?? SHOP_LEVELS[1]).perCounter;
+}
+
 export function emptyCounter() {
   return { type: null, count: 0 };
 }
 
-// Stellt so viele leere Theken dazu, wie das Laden-Level vorsieht (nach dem
-// Aufstieg und beim Laden eines Spielstands). Gibt die Anzahl neuer Theken zurück.
-export function addMissingCounters(state) {
-  let added = 0;
-  while (state.counters.length < counterCountFor(state.shopLevel)) {
-    state.counters.push(emptyCounter());
-    added++;
-  }
-  return added;
-}
-
-// Beim Laden eines Spielstands: fehlende Theken dazu, und was nicht mehr auf
-// eine Theke passt, zurück ins Laden-Lager (v0.10.1: In v0.10.0 fasste
-// Theke 5 noch 35 Stück, jetzt höchstens 30). Gibt zurück, was zurückkam.
+// Beim Laden eines Spielstands: Was nicht mehr auf eine Theke passt, zurück
+// ins Laden-Lager (v0.10.1: In v0.10.0 fasste Theke 5 noch 35 Stück, jetzt
+// höchstens 30). Gibt zurück, was zurückkam.
 export function fitCounters(state) {
-  addMissingCounters(state);
   const size = counterSizeFor(state.shopLevel);
   const returned = {};
   for (const counter of state.counters) {

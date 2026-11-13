@@ -61,6 +61,18 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### v0.24.0 – Theken kaufen, langsamer verkaufen (fertig)
+
+**Freigabe (Tobias, Chat 19):** „Test v23 war gut, hat sich gut angefühlt. Wir können mit v24 anfangen, aber lass uns die Thekenpreise noch etwas mehr runden. Die dritte für 15.000, die vierte für 35.000 und die fünfte für 70.000. Wir brauchen im späteren Spielverlauf noch eine sechste, damit die Thekenansicht auch voll ist, aber da können wir den Preis noch offen lassen.“
+
+**Umgesetzt wie im Entwurf unten (Tempo-Tabelle, nur Gold, kein Mindest-Level, Tobias' Fabrik zurück auf 2 Theken), mit diesen Festlegungen:**
+- **Preise:** 3. Theke 15.000, 4. 35.000, 5. 70.000 Gold; die 6. hat noch keinen Preis (`COUNTERS.prices` in `data/shop.js`: `[15000, 35000, 70000, null]`).
+- **Kunden je Theke:** Jeder kauft 1 Stück. Abstand im Schnitt 60 ÷ Tempo Sekunden (20 / 40 / 80), zufällig 25 % früher oder später: Level 1–3 alle 15–25 Sekunden, ab Level 4 alle 30–50, ab Level 7 alle 60–100. Eine leere Theke verkauft nichts – ihre Kunden gehen ohne Kauf.
+- **Theken-Ansicht:** immer 6 Plätze (2 Spalten × 3 Reihen): gekaufte Theken (mit „🧑 Nächster Kunde in etwa … s“), die nächste mit „🛒 Kaufen · 15.000 🪙“ (gesperrt mit „Dir fehlen noch …“, wenn das Gold nicht reicht), spätere ausgegraut mit Preis („erst Theke 3 kaufen“), die 6. „🔒 Kommt später im Spiel“. Darüber ein Satz zum Tempo des Levels. „Letzte Verkäufe“ nennt die Theke.
+- **Kauf mit Rückfrage:** „Theke 3 kaufen? Für 15.000 Gold bekommst du eine weitere Theke mit eigenen Kunden – auf Level 8 verkauft sie etwa 0,75 Stück pro Minute. Danach hast du noch … Gold.“
+- **Alte Spielstände (Format 17):** Die ersten beiden Theken bleiben, die Waren der übrigen kommen ins Laden-Lager (auch über die Grenze); jede Theke bekommt ihren Kunden-Takt. Hinweis beim Öffnen: „Neu: Jede Theke hat ihre eigenen Kunden, und ab Level 4 kaufen sie langsamer. Jeder Laden beginnt mit 2 Theken – weitere kaufst du mit Gold im Laden, Reiter „Theken“ (die 3. für 15.000 Gold). Deine Theken 3 bis 5 sind abgebaut – … Waren davon liegen wieder im Laden-Lager.“
+- **Level-Fenster:** Level 4–6 kündigen keine Theke mehr an (mittlere und große Theken sowie das größere Laden-Lager bleiben).
+
 ### v0.23.0 – Preise durch 3 (fertig; Entwurf aus v0.22.3, dort noch als v0.24.0)
 
 **Freigabe (Tobias, Chat 18):** „Die Idee, alles durch 3 zu teilen, finde ich sehr sinnvoll, weil alle Beträge dadurch kleiner werden. Das kannst du gerne schon mal machen. Ich würde gerne zuerst die Preise teilen und danach die Theken machen. … Ich hab jetzt ein wenig die Angst, dass wir zu viel regulieren, aber fang gerne mal an und dann testen wir das einfach.“ Damit wird „Preise durch 3“ v0.23.0 und die Theken v0.24.0. Lesart (+20 % bleibt), Rundung und Leinsamen 320 ohne Einwand übernommen.
@@ -168,7 +180,7 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 Umgesetzt wie im Entwurf unten mit Claudes Vorschlägen (Tobias, Chat 17: „Du kannst gerne damit anfangen“). Ergänzungen: Datei endet auf `.txt` (Chrome auf Android teilt keine `.json`); wo das Gerät teilen kann, stehen „📤 Teilen …“ und „⬇️ In Downloads“ zur Wahl; beim Laden „💾 Jetzigen erst sichern“ und eine Sicherheitskopie des vorigen Spielstands im Browser; nach dem Laden heißt das Fenster „📂 Spielstand geladen – Seit dem Sichern sind … vergangen“. Technik: Die Datei ersetzt den Spielstand im Browser, die Seite startet neu und rechnet wie beim normalen Öffnen nach.
 
-### Entwurf v0.24.0 (bisher v0.23.0) – Theken kaufen, langsamer verkaufen (freigegeben)
+### Entwurf v0.24.0 (bisher v0.23.0) – Theken kaufen, langsamer verkaufen (umgesetzt, siehe oben)
 
 **Stand nach v0.23.0:** Seit den Preisen durch 3 kosten die Theken 13.000 / 33.000 / 67.000 Gold (statt 40.000 / 100.000 / 200.000); alle Gold-Beträge unten sind noch die alten (durch 3 teilen). Das Tempo je Level (2 Start-Theken zusammen 6 / 3 / 1,5 pro Minute) bleibt – Tobias (Chat 18): „Wir hatten im letzten Chat auch dokumentiert, dass man Level 1–3 mehr Verkäufe pro Minute hat als auf Level 7, um den ganzen Cash-Flow auch etwas zu steuern.“
 

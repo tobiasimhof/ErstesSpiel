@@ -3,9 +3,11 @@
 //
 // - Händler: verkauft Rohstoffe gegen Gold, sie landen im Laden-Lager.
 // - Theken: werden von Hand aus dem Laden-Lager bestückt, je eine Sorte.
-// - Kunden: kommen in zufälligen Abständen und kaufen zufällig 1–3 Stück von
-//   den Theken zum festen Wert der Ware. Der Zufall steckt im Spielstand
-//   (market.rng), damit sich Abläufe in Tests wiederholen lassen.
+//   Jeder beginnt mit 2 Theken, weitere kauft man mit Gold (v0.24.0).
+// - Kunden: Jede Theke hat ihre eigenen Kunden (v0.24.0). Sie kommen in
+//   zufälligen Abständen (market.timers, einer je Theke) und kaufen zum festen
+//   Wert der Ware; wie oft, hängt vom Level ab. Der Zufall steckt im
+//   Spielstand (market.rng), damit sich Abläufe in Tests wiederholen lassen.
 // - Pleiteschutz: Wer gar nicht mehr weiterkommt, bekommt einen Holzstamm.
 // - Auffüllen (v0.14.0): Holzfällerlager & Co. bis zum Rand füllen – erst aus
 //   dem Laden-Lager, was fehlt, direkt beim Händler gekauft.
@@ -13,7 +15,7 @@
 //   beim Händler gekauft.
 
 import { ITEMS } from './data/items.js';
-import { BAILOUT_ITEM, CUSTOMERS, SALES_LOG_SIZE, SHOP_LEVELS, TEST_PACK } from './data/shop.js';
+import { BAILOUT_ITEM, COUNTERS, CUSTOMERS, SALES_LOG_SIZE, SHOP_LEVELS, TEST_PACK } from './data/shop.js';
 import { isItemUnlocked, itemLevel } from './levels.js';
 import {
   addRawToSource,
@@ -29,9 +31,9 @@ import {
 } from './production.js';
 import {
   addToStorage,
-  counterCountFor,
   counterSizeFor,
   emptyCounter,
+  perCounterFor,
   storageCount,
   storageFree,
   takeFromStorage,
@@ -52,22 +54,45 @@ function randomInt(market, min, max) {
   return min + Math.floor(nextRandom(market) * (max - min + 1));
 }
 
-function customerInterval(market) {
-  return CUSTOMERS.minInterval + nextRandom(market) * (CUSTOMERS.maxInterval - CUSTOMERS.minInterval);
+// v0.24.0: Im Schnitt so viele Sekunden zwischen zwei Kunden einer Theke –
+// so oft, dass sie perCounter Stück pro Minute verkauft.
+export function customerSeconds(level) {
+  const items = (CUSTOMERS.minItems + CUSTOMERS.maxItems) / 2;
+  return (items * 60) / perCounterFor(level);
 }
 
-export function createMarket(seed = (Math.random() * 4294967296) >>> 0) {
-  const market = { rng: seed >>> 0, timer: 0, sales: [], nextSaleId: 1, gifts: 0 };
-  market.timer = customerInterval(market);
+// Kürzester und längster Abstand zwischen zwei Kunden einer Theke (für Texte).
+export function customerRange(level) {
+  const avg = customerSeconds(level);
+  return { min: avg * (1 - CUSTOMERS.spread), max: avg * (1 + CUSTOMERS.spread) };
+}
+
+function customerInterval(market, level) {
+  const { min, max } = customerRange(level);
+  return min + nextRandom(market) * (max - min);
+}
+
+// counters: so viele Theken bekommen gleich ihren ersten Kunden.
+export function createMarket(seed = (Math.random() * 4294967296) >>> 0, counters = COUNTERS.start, level = 1) {
+  const market = { rng: seed >>> 0, timers: [], sales: [], nextSaleId: 1, gifts: 0 };
+  while (market.timers.length < counters) market.timers.push(customerInterval(market, level));
   return market;
+}
+
+// v0.24.0: Jede Theke hat genau einen Kunden-Takt. Fehlt einer (neue Theke,
+// alter Spielstand), bekommt sie einen; überzählige fallen weg.
+export function syncCustomerTimers(state) {
+  const timers = state.market.timers;
+  while (timers.length < state.counters.length) timers.push(customerInterval(state.market, state.shopLevel));
+  if (timers.length > state.counters.length) timers.length = state.counters.length;
 }
 
 export function shopLevelData(state) {
   return SHOP_LEVELS[state.shopLevel] ?? SHOP_LEVELS[1];
 }
 
-export function createCounters(level = 1) {
-  return Array.from({ length: counterCountFor(level) }, emptyCounter);
+export function createCounters() {
+  return Array.from({ length: COUNTERS.start }, emptyCounter);
 }
 
 // Darf eine Ware auf die Theke? (Rohstoffe haben keinen Verkaufswert.)
@@ -234,38 +259,74 @@ export function clearCounter(state, index) {
   return true;
 }
 
+// ---------- Theken kaufen (v0.24.0) ----------
+
+// Preis der nächsten Theke – null, wenn es (noch) keine weitere zu kaufen gibt.
+export function nextCounterPrice(state) {
+  if (state.counters.length >= COUNTERS.max) return null;
+  return COUNTERS.prices[state.counters.length - COUNTERS.start] ?? null;
+}
+
+// Alle Plätze der Theken-Ansicht (COUNTERS.max): { index, status, price }.
+// status: 'owned' (gekauft) | 'next' (als Nächste zu kaufen) | 'later' (erst
+// die davor kaufen) | 'locked' (Preis noch offen, kommt später im Spiel)
+export function counterSlots(state) {
+  return Array.from({ length: Math.max(COUNTERS.max, state.counters.length) }, (_, index) => {
+    if (index < state.counters.length) return { index, status: 'owned', price: null };
+    const price = COUNTERS.prices[index - COUNTERS.start] ?? null;
+    if (price === null) return { index, status: 'locked', price };
+    return { index, status: index === state.counters.length ? 'next' : 'later', price };
+  });
+}
+
+// Kauft die nächste Theke (nur Gold, kein Mindest-Level).
+// Ergebnis: 'ok' | 'gold' (zu wenig Gold) | 'later' (gibt es noch nicht)
+export function buyCounter(state) {
+  const price = nextCounterPrice(state);
+  if (price === null) return 'later';
+  if (state.gold < price) return 'gold';
+  state.gold -= price;
+  state.counters.push(emptyCounter());
+  syncCustomerTimers(state);
+  return 'ok';
+}
+
 // ---------- Kunden ----------
 
-// Ein Kunde kauft 1–3 Stück, jedes Stück von einer zufälligen nicht leeren
-// Theke. Gibt den Verkauf zurück (oder null, wenn die Theken leer sind).
-export function serveCustomer(state) {
+// Ein Kunde kommt an Theke index und kauft minItems–maxItems Stück, so viele
+// dort liegen. Gibt den Verkauf zurück (oder null, wenn die Theke leer ist –
+// dann geht er ohne Kauf).
+export function serveCustomer(state, index) {
   const market = state.market;
   const wants = randomInt(market, CUSTOMERS.minItems, CUSTOMERS.maxItems);
-  const items = {};
-  let gold = 0;
-  for (let i = 0; i < wants; i++) {
-    const stocked = state.counters.filter((c) => c.type && c.count > 0);
-    if (stocked.length === 0) break;
-    const counter = stocked[Math.floor(nextRandom(market) * stocked.length)];
-    counter.count--;
-    items[counter.type] = (items[counter.type] ?? 0) + 1;
-    gold += ITEMS[counter.type].price;
-  }
-  if (gold === 0) return null;
+  const counter = state.counters[index];
+  if (!counter?.type || counter.count <= 0) return null;
+  const n = Math.min(wants, counter.count);
+  counter.count -= n;
+  const gold = n * ITEMS[counter.type].price;
   state.gold += gold;
-  const sale = { id: market.nextSaleId++, items, gold };
+  const sale = { id: market.nextSaleId++, counter: index, items: { [counter.type]: n }, gold };
   market.sales.unshift(sale);
   market.sales.length = Math.min(market.sales.length, SALES_LOG_SIZE);
   return sale;
 }
 
-// Wird in jedem Takt der Simulation aufgerufen.
+// Sekunden, bis der nächste Kunde an Theke index kommt.
+export function nextCustomerIn(state, index) {
+  return state.market.timers[index] ?? 0;
+}
+
+// Wird in jedem Takt der Simulation aufgerufen. v0.24.0: Jede Theke hat
+// ihren eigenen Kunden-Takt.
 export function updateMarket(state, dt) {
   const market = state.market;
-  market.timer -= dt;
-  while (market.timer <= 0) {
-    market.timer += customerInterval(market);
-    serveCustomer(state);
+  syncCustomerTimers(state);
+  for (let i = 0; i < state.counters.length; i++) {
+    market.timers[i] -= dt;
+    while (market.timers[i] <= 0) {
+      market.timers[i] += customerInterval(market, state.shopLevel);
+      serveCustomer(state, i);
+    }
   }
   checkBailout(state);
 }

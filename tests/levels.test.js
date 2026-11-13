@@ -180,7 +180,7 @@ test('Aufstieg auf Level 2: erst genug Erfahrung, dann kostet er Gold; dafür gi
   assert.equal(levelUp(state), null);
   state.gold = 450;
   assert.equal(canLevelUp(state), true);
-  assert.deepEqual(levelUp(state), { level: 2, gift: { felsbrocken: 1 }, counters: 0, cost: 30 });
+  assert.deepEqual(levelUp(state), { level: 2, gift: { felsbrocken: 1 }, cost: 30 });
   assert.equal(state.gold, 420, '30 Gold bezahlt');
   assert.equal(storageCount(state, 'felsbrocken'), 1, 'Gratis-Felsbrocken im Laden-Lager');
   assert.deepEqual(state.quest, { index: 0, xp: 0 }, 'Aufträge von Level 2 beginnen');
@@ -188,7 +188,7 @@ test('Aufstieg auf Level 2: erst genug Erfahrung, dann kostet er Gold; dafür gi
   assert.equal(levelUpBlocker(state), 'xp');
 });
 
-test('Level 4 bis 6: Eisenerz als Geschenk und je eine neue Theke; Level 7 und 8 mit Samen; danach ist Schluss', () => {
+test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 und 8 mit Samen; danach ist Schluss', () => {
   const state = createNewGame(3);
   state.shopLevel = 3;
   state.gold = 100000;
@@ -199,16 +199,16 @@ test('Level 4 bis 6: Eisenerz als Geschenk und je eine neue Theke; Level 7 und 8
   }
   assert.deepEqual(results, [
     // v0.23.0: Aufstiege durch 3 (vorher 500, 1.000, 2.000, 3.000, 4.000)
-    { level: 4, gift: { eisenerz: 1 }, counters: 1, cost: 170 },
-    { level: 5, gift: { eisenerz: 1 }, counters: 1, cost: 330 },
-    { level: 6, gift: { eisenerz: 1 }, counters: 1, cost: 670 },
+    { level: 4, gift: { eisenerz: 1 }, cost: 170 },
+    { level: 5, gift: { eisenerz: 1 }, cost: 330 },
+    { level: 6, gift: { eisenerz: 1 }, cost: 670 },
     // v0.16.0: Kräuter-Kapitel – der Laden bleibt wie auf Level 6
-    { level: 7, gift: { leinsamen: 1 }, counters: 0, cost: 1000 },
+    { level: 7, gift: { leinsamen: 1 }, cost: 1000 },
     // v0.17.0: Level 8 „Der Kräutergarten“
-    { level: 8, gift: { ringelblumensamen: 1 }, counters: 0, cost: 1330 },
+    { level: 8, gift: { ringelblumensamen: 1 }, cost: 1330 },
   ]);
   assert.equal(state.gold, 100000 - 3500);
-  assert.equal(state.counters.length, 5);
+  assert.equal(state.counters.length, 2, 'Theken gibt es nur noch für Gold');
   assert.equal(storageCount(state, 'eisenerz'), 3);
   assert.equal(storageCount(state, 'leinsamen'), 1);
   assert.equal(storageCount(state, 'ringelblumensamen'), 1);
@@ -246,7 +246,7 @@ test('Ein neues Spiel lässt sich von Holz bis Eisen durchspielen', () => {
   simulate(state, 300);
   assert.ok(deliverQuest(state), 'Zahnräder für die Brunnenwinde abgegeben');
   deliverWithGoods(state);
-  assert.deepEqual(levelUp(state), { level: 3, gift: { eisenerz: 1 }, counters: 0, cost: 80 });
+  assert.deepEqual(levelUp(state), { level: 3, gift: { eisenerz: 1 }, cost: 80 });
   Object.assign(state.storage, { steinplatte: 30, holzplatte: 10, eisenbarren: 30 });
   assert.equal(typeof buyBuilding(state, 'schmelzhuette', 18, 12, 0), 'object');
   assert.equal(typeof buyBuilding(state, 'schmiede', 20, 12, 0), 'object');

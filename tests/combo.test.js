@@ -271,7 +271,7 @@ test('Anschlüsse drehen mit: gedrehte Zimmerei hat zwei Eingänge oben', () => 
 
 // ---------- Theken ----------
 
-test('Theken: 2 bis Level 3, dann je Aufstieg eine mehr; alle wachsen mit: klein 20, mittel 25, groß 30 (v0.10.1)', () => {
+test('Theken: Aufstiege bringen keine Theke mehr (v0.24.0); alle wachsen mit: klein 20, mittel 25, groß 30 (v0.10.1)', () => {
   const state = createNewGame(1);
   assert.equal(state.counters.length, 2);
   assert.equal(counterSize(state), 20);
@@ -286,9 +286,9 @@ test('Theken: 2 bis Level 3, dann je Aufstieg eine mehr; alle wachsen mit: klein
     sizes.push([state.shopLevel, state.counters.length, counterSize(state)]);
   }
   assert.deepEqual(sizes, [
-    [4, 3, 25],
-    [5, 4, 30],
-    [6, 5, 30],
+    [4, 2, 25],
+    [5, 2, 30],
+    [6, 2, 30],
   ]);
 });
 
@@ -302,7 +302,7 @@ test('Auf Level 6 fasst jede Theke 30 Stück – auch die erste', () => {
   assert.equal(fillCounter(state, 0), 30);
   assert.equal(fillCounter(state, 4), 30);
   const before = state.gold;
-  serveCustomer(state);
+  serveCustomer(state, 4);
   assert.ok(state.gold > before);
 });
 
@@ -355,11 +355,11 @@ test('Menge einstellen: genau 8 Stück auf die Theke, zu viel kommt zurück ins 
   assert.equal(counterMaxFor(state, 1, 'holzstab'), 6, 'Theke + Lager');
 });
 
-test('Spielstand: Level 4 mit nur 2 Theken bekommt die dritte beim Laden dazu', () => {
+test('Spielstand: Level 4 mit 2 Theken bleibt bei 2 – seit v0.24.0 kauft man Theken', () => {
   const state = createNewGame(4);
   state.shopLevel = 4;
   assert.equal(state.counters.length, 2);
   const loaded = deserializeGame(serializeGame(state));
-  assert.equal(loaded.state.counters.length, 3);
-  assert.deepEqual(loaded.state.counters[2], { type: null, count: 0 });
+  assert.equal(loaded.state.counters.length, 2);
+  assert.equal(loaded.state.market.timers.length, 2);
 });

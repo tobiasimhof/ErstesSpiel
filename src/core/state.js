@@ -48,7 +48,7 @@ export function createNewGame(seed) {
     // Laden-Lager: Ware → Anzahl
     storage: { ...START_STORAGE },
     // Verkaufstheken (v0.7.0): je eine Sorte, { type, count }
-    counters: createCounters(1),
+    counters: createCounters(),
     // Kunden, Zufall, letzte Verkäufe, Pleiteschutz (v0.7.0)
     market: createMarket(seed),
     // Bisher hergestellte Waren: Ware → Anzahl (v0.9.0, für die Level)

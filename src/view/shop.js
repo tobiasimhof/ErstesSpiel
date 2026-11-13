@@ -1,4 +1,6 @@
 // Laden-Fenster mit drei Reitern: Lager, Theken, Händler (v0.7.0).
+// v0.24.0: Der Reiter „Theken“ zeigt immer 6 Plätze – die gekauften Theken,
+// dann die nächste zum Kaufen, die späteren ausgegraut.
 //
 // Das Fenster wird regelmäßig aktualisiert, weil die Fabrik weiterläuft und
 // Kunden kaufen. Knöpfe werden dabei nicht neu erzeugt, sondern nur ihre
@@ -9,17 +11,22 @@
 import { ITEMS } from '../core/data/items.js';
 import { CUSTOMERS } from '../core/data/shop.js';
 import {
+  buyCounter,
   buyRaw,
   clearCounter,
   counterMaxFor,
   counterSize,
+  counterSlots,
+  customerRange,
   fillCounter,
   isSellable,
+  nextCounterPrice,
+  nextCustomerIn,
   setCounterAmount,
   setCounterItem,
 } from '../core/market.js';
 import { isItemUnlocked, itemLevel } from '../core/levels.js';
-import { storageCapacity, storageCount, storageFree, storageTotal } from '../core/shop.js';
+import { perCounterFor, storageCapacity, storageCount, storageFree, storageTotal } from '../core/shop.js';
 import { createItemIcon } from './itemArt.js';
 import { itemCount, numberFormat } from './format.js';
 
@@ -97,7 +104,7 @@ export function createShopView({ state, panels, onChange }) {
   function thekenSig() {
     if (amountFor) return `amount|${amountFor.index}|${amountFor.type}`;
     if (picking !== null) return `pick|${picking}|${sellableInStorage().join(',')}`;
-    return `theken|${state.shopLevel}|${state.counters.map((c) => c.type ?? '-').join(',')}`;
+    return `theken|${state.shopLevel}|${state.counters.length}|${state.counters.map((c) => c.type ?? '-').join(',')}`;
   }
 
   // Öffnet die Mengenwahl. draft: vorgeschlagene Anzahl (null = so viele wie möglich).
@@ -110,7 +117,36 @@ export function createShopView({ state, panels, onChange }) {
 
   function salesText(sale) {
     const items = Object.entries(sale.items).map(([type, n]) => itemCount(type, n));
-    return `🧑 kaufte ${items.join(', ')} · +${numberFormat.format(sale.gold)} 🪙`;
+    const where = Number.isInteger(sale.counter) ? `Theke ${sale.counter + 1}: ` : '';
+    return `🧑 ${where}kaufte ${items.join(', ')} · +${numberFormat.format(sale.gold)} 🪙`;
+  }
+
+  // v0.24.0: „Jede Theke hat ihre eigenen Kunden: Auf Level 8 kommt etwa alle
+  // 60–100 Sekunden einer und kauft 1 Stück.“
+  function customersText() {
+    const { min, max } = customerRange(state.shopLevel);
+    const items =
+      CUSTOMERS.minItems === CUSTOMERS.maxItems ? `${CUSTOMERS.minItems} Stück` : `${CUSTOMERS.minItems}–${CUSTOMERS.maxItems} Stück`;
+    return `Jede Theke hat ihre eigenen Kunden: Auf Level ${state.shopLevel} kommt etwa alle ${Math.round(min)}–${Math.round(max)} Sekunden einer und kauft ${items}. Mehr Theken verkaufen mehr.`;
+  }
+
+  // v0.24.0: Theke kaufen – mit Rückfrage, weil es viel Gold kostet.
+  async function askBuyCounter() {
+    const price = nextCounterPrice(state);
+    if (price === null) return;
+    const number = state.counters.length + 1;
+    const ok = await panels.confirm({
+      title: `Theke ${number} kaufen?`,
+      text: `Für ${numberFormat.format(price)} Gold bekommst du eine weitere Theke mit eigenen Kunden – auf Level ${state.shopLevel} verkauft sie etwa ${numberFormat.format(perCounterFor(state.shopLevel))} Stück pro Minute.\nDanach hast du noch ${numberFormat.format(Math.max(0, state.gold - price))} Gold.`,
+      okLabel: `🛒 Kaufen · ${numberFormat.format(price)} 🪙`,
+    });
+    if (!ok) return;
+    const result = buyCounter(state);
+    if (result === 'ok') {
+      changed();
+      panels.toast(`Theke ${number} gekauft – stell eine Ware darauf.`);
+    } else if (result === 'gold') panels.toast('Dafür reicht dein Gold nicht.');
+    refresh();
   }
 
   function buildPicker(body, { makeButton }) {
@@ -237,79 +273,24 @@ export function createShopView({ state, panels, onChange }) {
     if (amountFor) return buildAmount(body, helpers);
     if (picking !== null) return buildPicker(body, helpers);
     const { makeButton } = helpers;
-    body.append(
-      el(
-        'p',
-        null,
-        `Kunden kommen alle ${CUSTOMERS.minInterval}–${CUSTOMERS.maxInterval} Sekunden und kaufen ${CUSTOMERS.minItems}–${CUSTOMERS.maxItems} Stück von deinen Theken.`,
-      ),
-    );
+    const intro = el('p', null);
     const grid = el('div', 'counters');
-    const cards = state.counters.map((counter, index) => {
-      const card = el('div', 'counter-card');
-      const head = el('div', 'counter-head', `Theke ${index + 1} · ${counterSize(state)} Plätze`);
-      const ware = el('div', 'counter-ware');
-      const amount = el('span', 'counter-amount');
-      if (counter.type) {
-        const def = ITEMS[counter.type];
-        const text = el('div', 'counter-text');
-        text.append(el('span', 'item-name', def.name), el('span', 'item-note', `je ${numberFormat.format(def.price)} 🪙`));
-        ware.append(createItemIcon(counter.type, 34), text, amount);
-      } else {
-        ware.append(el('span', 'counter-empty', 'Leer'));
-      }
-      const pick = makeButton({
-        label: counter.type ? '🔄 Ware' : '➕ Ware wählen',
-        primary: !counter.type,
-        onClick: () => {
-          picking = index;
-          refresh();
-        },
-      });
-      const fill = (n) => () => {
-        if (fillCounter(state, index, n) > 0) changed();
-        else panels.toast(`Kein ${ITEMS[counter.type].name} mehr im Laden-Lager.`);
-      };
-      const buttons = el('div', 'counter-buttons');
-      // v0.10.0: „Menge“ statt +1/+5 – stellt genau die gewünschte Anzahl ein
-      const amountButton = makeButton({
-        label: '🔢 Menge',
-        onClick: () => startAmount(index, counter.type, counter.count),
-      });
-      amountButton.dataset.counterAction = 'menge';
-      const full = makeButton({ label: 'Auffüllen', primary: true, onClick: fill(Infinity) });
-      const back = makeButton({
-        label: '↩ Abräumen',
-        onClick: () => {
-          clearCounter(state, index);
-          changed();
-        },
-      });
-      back.title = 'Zurück ins Laden-Lager';
-      if (counter.type) buttons.append(amountButton, full, back);
-      buttons.append(pick);
-      card.append(head, ware, buttons);
-      grid.append(card);
-      return { amount, full };
-    });
+    const updates = [];
+    for (const slot of counterSlots(state)) {
+      if (slot.status === 'owned') updates.push(ownedCard(grid, slot.index, makeButton));
+      else updates.push(buyCard(grid, slot, makeButton));
+    }
     const next = el('p', 'modal-meta');
     const salesBox = el('div', 'sales');
-    body.append(grid, next, el('h3', null, 'Letzte Verkäufe'), salesBox);
+    body.append(intro, grid, next, el('h3', null, 'Letzte Verkäufe'), salesBox);
     let salesShown = null;
 
     return () => {
-      state.counters.forEach((counter, index) => {
-        const c = cards[index];
-        if (!counter.type) return;
-        const size = counterSize(state);
-        c.amount.textContent = `${counter.count} / ${size}`;
-        const room = counter.count < size && storageCount(state, counter.type) > 0;
-        c.full.disabled = !room;
-      });
+      intro.textContent = customersText();
+      for (const update of updates) update();
       const anything = state.counters.some((c) => c.count > 0);
-      next.textContent = anything
-        ? `Nächster Kunde in etwa ${Math.max(1, Math.ceil(state.market.timer))} s.`
-        : 'Deine Theken sind leer – Kunden gehen ohne Kauf wieder.';
+      next.textContent = anything ? '' : 'Deine Theken sind leer – Kunden gehen ohne Kauf wieder.';
+      next.hidden = anything;
       const latest = state.market.sales[0]?.id ?? 0;
       if (latest !== salesShown) {
         salesShown = latest;
@@ -319,6 +300,100 @@ export function createShopView({ state, panels, onChange }) {
           salesBox.replaceChildren(...state.market.sales.map((sale) => el('div', 'sale-line', salesText(sale))));
         }
       }
+    };
+  }
+
+  // Eine gekaufte Theke: Ware, Menge, Knöpfe, nächster Kunde.
+  function ownedCard(grid, index, makeButton) {
+    const counter = state.counters[index];
+    const card = el('div', 'counter-card');
+    card.dataset.counter = String(index);
+    const head = el('div', 'counter-head', `Theke ${index + 1} · ${counterSize(state)} Plätze`);
+    const ware = el('div', 'counter-ware');
+    const amount = el('span', 'counter-amount');
+    if (counter.type) {
+      const def = ITEMS[counter.type];
+      const text = el('div', 'counter-text');
+      text.append(el('span', 'item-name', def.name), el('span', 'item-note', `je ${numberFormat.format(def.price)} 🪙`));
+      ware.append(createItemIcon(counter.type, 34), text, amount);
+    } else {
+      ware.append(el('span', 'counter-empty', 'Leer'));
+    }
+    // v0.24.0: Wann der nächste Kunde dieser Theke kommt
+    const customer = el('div', 'counter-next');
+    const pick = makeButton({
+      label: counter.type ? '🔄 Ware' : '➕ Ware wählen',
+      primary: !counter.type,
+      onClick: () => {
+        picking = index;
+        refresh();
+      },
+    });
+    const fill = (n) => () => {
+      if (fillCounter(state, index, n) > 0) changed();
+      else panels.toast(`Kein ${ITEMS[counter.type].name} mehr im Laden-Lager.`);
+    };
+    const buttons = el('div', 'counter-buttons');
+    // v0.10.0: „Menge“ statt +1/+5 – stellt genau die gewünschte Anzahl ein
+    const amountButton = makeButton({
+      label: '🔢 Menge',
+      onClick: () => startAmount(index, counter.type, counter.count),
+    });
+    amountButton.dataset.counterAction = 'menge';
+    const full = makeButton({ label: 'Auffüllen', primary: true, onClick: fill(Infinity) });
+    const back = makeButton({
+      label: '↩ Abräumen',
+      onClick: () => {
+        clearCounter(state, index);
+        changed();
+      },
+    });
+    back.title = 'Zurück ins Laden-Lager';
+    if (counter.type) buttons.append(amountButton, full, back);
+    buttons.append(pick);
+    card.append(head, ware, customer, buttons);
+    grid.append(card);
+    return () => {
+      const size = counterSize(state);
+      customer.hidden = !counter.type;
+      if (!counter.type) return;
+      amount.textContent = `${counter.count} / ${size}`;
+      full.disabled = !(counter.count < size && storageCount(state, counter.type) > 0);
+      customer.textContent =
+        counter.count > 0
+          ? `🧑 Nächster Kunde in etwa ${Math.max(1, Math.ceil(nextCustomerIn(state, index)))} s`
+          : 'Leer verkauft – Kunden gehen ohne Kauf.';
+    };
+  }
+
+  // v0.24.0: Ein Platz für eine Theke, die man noch kaufen kann (oder später).
+  function buyCard(grid, slot, makeButton) {
+    const card = el('div', `counter-card counter-slot counter-slot-${slot.status}`);
+    card.dataset.counter = String(slot.index);
+    card.append(el('div', 'counter-head', `Theke ${slot.index + 1}`));
+    grid.append(card);
+    if (slot.status === 'locked') {
+      card.append(el('div', 'counter-empty', '🔒 Kommt später im Spiel'));
+      return () => {};
+    }
+    const price = `${numberFormat.format(slot.price)} 🪙`;
+    if (slot.status === 'later') {
+      card.append(el('div', 'counter-empty', `${price} · erst Theke ${slot.index} kaufen`));
+      return () => {};
+    }
+    const text = el('div', 'counter-next');
+    const missing = el('div', 'counter-missing');
+    const button = makeButton({ label: `🛒 Kaufen · ${price}`, primary: true, onClick: askBuyCounter });
+    button.dataset.counterAction = 'kaufen';
+    const buttons = el('div', 'counter-buttons');
+    buttons.append(button);
+    card.append(text, missing, buttons);
+    return () => {
+      text.textContent = `Noch nicht gekauft · eigene Kunden: +${numberFormat.format(perCounterFor(state.shopLevel))} Stück pro Minute`;
+      const lack = slot.price - state.gold;
+      button.disabled = lack > 0;
+      missing.textContent = lack > 0 ? `Dir fehlen noch ${numberFormat.format(Math.ceil(lack))} 🪙` : '';
+      missing.hidden = lack <= 0;
     };
   }
 

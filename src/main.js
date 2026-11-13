@@ -14,7 +14,7 @@ import { createController } from './view/controller.js';
 import { createShopView } from './view/shop.js';
 import { createWarehouseView } from './view/warehouse.js';
 import { applyTestPack } from './core/market.js';
-import { TEST_PACK } from './core/data/shop.js';
+import { COUNTERS, TEST_PACK } from './core/data/shop.js';
 import { ITEMS } from './core/data/items.js';
 import { LAND } from './core/data/land.js';
 import { canLevelUp } from './core/levels.js';
@@ -305,10 +305,15 @@ if (loaded.status === 'ok' && loaded.migratedFrom) {
     from < 16
       ? `Neu: Alle Preise sind durch 3 geteilt – ein Holzblock kostet ${ITEMS.holzblock.price} Gold, ein Zirkel ${numberFormat.format(ITEMS.zirkel.price)}. Dein Gold ist mit umgerechnet und genauso viel wert wie vorher.`
       : '',
+    from < 17
+      ? `Neu: Jede Theke hat ihre eigenen Kunden, und ab Level 4 kaufen sie langsamer. Jeder Laden beginnt mit ${COUNTERS.start} Theken – weitere kaufst du mit Gold im Laden, Reiter „Theken“ (die ${COUNTERS.start + 1}. für ${numberFormat.format(COUNTERS.prices[0])} Gold).`
+      : '',
     ...(loaded.notes ?? []),
     loaded.counterNote ?? '',
   ].filter(Boolean);
-  panels.toast([loadedFile ? `Spielstand „${loadedFile}“ geladen.` : '', ...notes].filter(Boolean).join(' '), 9000);
+  const text = [loadedFile ? `Spielstand „${loadedFile}“ geladen.` : '', ...notes].filter(Boolean).join(' ');
+  // v0.24.0: Lange Hinweise bleiben länger stehen (etwa 20 Zeichen pro Sekunde).
+  panels.toast(text, Math.max(9000, text.length * 50));
 } else if (loadedFile) panels.toast(`Spielstand „${loadedFile}“ geladen.${loaded.counterNote ? ` ${loaded.counterNote}` : ''}`, 5000);
 else if (loaded.status === 'ok' && loaded.counterNote) panels.toast(`Spielstand geladen. ${loaded.counterNote}`, 6000);
 else if (loaded.status === 'ok') panels.toast('Spielstand geladen.', 1600);

@@ -44,22 +44,26 @@
 //  16 (v0.23.0): Alle Preise durch 3 (Tobias, Chat 18). Gold und die Beträge
 //               der „Letzten Verkäufe“ werden durch 3 geteilt (gerundet), damit
 //               das Gleichgewicht bleibt. Waren, Gebäude und Erfahrung bleiben.
+//  17 (v0.24.0): Theken kaufen, jede Theke hat ihre eigenen Kunden
+//               (market.timers statt market.timer; Verkäufe merken sich ihre
+//               Theke). Alle Läden beginnen mit 2 Theken: Was auf den übrigen
+//               stand, kommt ins Laden-Lager (auch über die Grenze).
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
 import { RECIPES } from './data/recipes.js';
 import { MAX_LEVEL } from './data/levels.js';
-import { SALES_LOG_SIZE, START_STORAGE } from './data/shop.js';
+import { COUNTERS, SALES_LOG_SIZE, START_STORAGE } from './data/shop.js';
 import { canPlaceBuilding, findFreeSpot } from './buildings.js';
 import { isDir, sortDirs } from './dirs.js';
 import { footprintSize, rotateLocal } from './geometry.js';
 import { buildingContents, createProductionState, productionOf, sourceInputTypes, sourceInputs } from './production.js';
-import { createCounters, createMarket } from './market.js';
+import { createCounters, createMarket, syncCustomerTimers } from './market.js';
 import { createQuestState } from './quests.js';
 import { addAllToStorage, counterSizeFor, fitCounters } from './shop.js';
 import { START_PLOT, WORLD, parseTileKey } from './state.js';
 
-export const SAVE_VERSION = 16;
+export const SAVE_VERSION = 17;
 
 // v0.13.0 (Tobias): Namen, die zu den Zutaten passen. Rezepte und Werte bleiben.
 const RENAMED_V11 = {
@@ -112,9 +116,10 @@ export function deserializeGame(text) {
   const state = migrate(data.state, from, migrationNotes);
   if (!isValidState(state)) return null;
   for (const belt of Object.values(state.belts)) belt.outs = sortDirs(belt.outs);
-  // v0.10.0/v0.10.1: Theken passend zum Level – fehlende kommen leer dazu,
-  // was nicht mehr auf eine Theke passt, ins Laden-Lager. Format unverändert.
+  // v0.10.1: Was nicht mehr auf eine Theke passt, kommt ins Laden-Lager.
   const trimmed = fitCounters(state);
+  // v0.24.0: Jede Theke hat ihren Kunden-Takt.
+  syncCustomerTimers(state);
   const result = { state, savedAt: Number(data.savedAt) || 0 };
   if (from < SAVE_VERSION) {
     result.migratedFrom = from;
@@ -157,7 +162,7 @@ function migrate(state, from, notes = []) {
   if (from < 5) {
     // v0.6.1 → v0.7.0: Theken und Kunden kommen dazu. Gold, Gebäude und Lager
     // bleiben, wie sie sind; was schon steht, wird nicht nachträglich berechnet.
-    state.counters = createCounters(isInt(state.shopLevel) ? state.shopLevel : 1);
+    state.counters = createCounters();
     state.market = createMarket();
   }
   if (from < 6) convertNails(state, notes);
@@ -226,7 +231,30 @@ function migrate(state, from, notes = []) {
       if (isObj(sale) && isNum(sale.gold)) sale.gold = Math.round(sale.gold / PRICE_DIVISOR);
     }
   }
+  if (from < 17) shrinkCounters(state, notes);
   return state;
+}
+
+// v0.23 → v0.24: Theken kaufen (Tobias, Chat 17: „ändere das bei mir auch
+// direkt auf 2 Theken“). Die ersten beiden Theken bleiben, die Waren der
+// übrigen kommen ins Laden-Lager (auch über die Grenze, damit nichts verloren
+// geht). Jede Theke bekommt nach der Prüfung ihren eigenen Kunden-Takt.
+// Daten werden hier noch nicht geprüft, deshalb vorsichtig.
+function shrinkCounters(state, notes) {
+  if (isObj(state.market)) {
+    delete state.market.timer;
+    state.market.timers = [];
+  }
+  if (!Array.isArray(state.counters) || state.counters.length <= COUNTERS.start || !isObj(state.storage)) return;
+  const removed = state.counters.length - COUNTERS.start;
+  let goods = 0;
+  for (const c of state.counters.splice(COUNTERS.start)) {
+    if (!isObj(c) || !isItem(c.type) || !isCount(c.count) || c.count === 0) continue;
+    state.storage[c.type] = (isCount(state.storage[c.type]) ? state.storage[c.type] : 0) + c.count;
+    goods += c.count;
+  }
+  const which = removed === 1 ? `Theke ${COUNTERS.start + 1} ist` : `Theken ${COUNTERS.start + 1} bis ${COUNTERS.start + removed} sind`;
+  notes.push(`Deine ${which} abgebaut${goods > 0 ? ` – ${goods} Waren davon liegen wieder im Laden-Lager` : ''}.`);
 }
 
 // v0.12 → v0.13: Benennt Waren (und gleichnamige Rezepte) überall im
@@ -482,11 +510,18 @@ function isValidCost(cost) {
 
 function isValidMarket(m) {
   if (!isObj(m)) return false;
-  if (!isCount(m.rng) || m.rng > 0xffffffff || !isNum(m.timer)) return false;
+  // v0.24.0: ein Kunden-Takt je Theke (fehlende ergänzt syncCustomerTimers)
+  if (!isCount(m.rng) || m.rng > 0xffffffff || !Array.isArray(m.timers) || !m.timers.every(isNum)) return false;
   if (!isInt(m.nextSaleId) || m.nextSaleId < 1 || !isCount(m.gifts)) return false;
   if (!Array.isArray(m.sales) || m.sales.length > SALES_LOG_SIZE) return false;
   return m.sales.every(
-    (sale) => isObj(sale) && isInt(sale.id) && sale.id < m.nextSaleId && isCount(sale.gold) && isValidCost(sale.items),
+    (sale) =>
+      isObj(sale) &&
+      isInt(sale.id) &&
+      sale.id < m.nextSaleId &&
+      isCount(sale.gold) &&
+      isValidCost(sale.items) &&
+      (sale.counter === undefined || isCount(sale.counter)),
   );
 }
 

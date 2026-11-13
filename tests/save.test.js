@@ -186,7 +186,8 @@ test('Spielstand aus v0.6.1 (Version 4): Fabrik, Gold und Lager bleiben, Theken 
   assert.equal(JSON.stringify(loaded.state.buildings), before.buildings, 'Gebäude unverändert, nichts nachträglich berechnet');
   assert.equal(JSON.stringify(loaded.state.belts), before.belts);
   assert.equal(loaded.state.counters.length, 2);
-  assert.ok(loaded.state.market.timer > 0);
+  assert.equal(loaded.state.market.timers.length, 2, 'v0.24.0: je Theke ein Kunden-Takt');
+  assert.ok(loaded.state.market.timers.every((t) => t > 0));
   assert.deepEqual(loaded.notes, []);
 });
 
