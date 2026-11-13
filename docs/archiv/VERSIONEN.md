@@ -4,6 +4,19 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.24.1 – Kunden schneller, danach der Techbaum (13.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zu v0.24.0 festhalten (Regel „Nichts darf verloren gehen“) und den nächsten Schritt entwerfen.
+
+**Fragen, die wir uns gestellt haben:**
+- Was heißt „Zeiten angleichen“ in Zahlen? → Je Theke kommt Level 4–6 alle 25–45 Sekunden ein Kunde (vorher 30–50), ab Level 7 alle 45–60 (vorher 60–100); Level 1–3 bleibt bei 15–25. Ab Level 7 verkauft eine Theke damit etwa 1,1 statt 0,75 Stück pro Minute; Tobias' 4 Theken etwa 274 statt 180 Stück pro Stunde.
+- Was meint Tobias mit den „überproportional vielen Zirkeln“? → Claudes Lesart (noch zu bestätigen): Ab Level 7 verlangt nichts mehr Werkzeug-Waren, die Straßen laufen aber weiter. Gehört in die Planung von Level 9.
+
+**Gemacht:**
+- `docs/STAND.md`: Status, Tobias' Fabrik (4 Theken, 6.000 Gold), neue Reihenfolge der nächsten Schritte (Tempo, Techbaum ab Level 9; Tester, Bereich kopieren und Weiche nach hinten), offene Fragen 1 und 14, neuer Arbeitsschritt oben (v0.22.3 fällt aus der Liste). `docs/SPIEL.md`: Ausblick Level 9. `docs/archiv/PLAENE.md`: Entwurf v0.25.0. Gespräch und Entscheidungen ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.24.0 – Theken kaufen, langsamer verkaufen (13.11.2026)
 
 **Vorgenommen:**

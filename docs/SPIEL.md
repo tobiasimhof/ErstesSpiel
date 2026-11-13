@@ -155,7 +155,7 @@ Intern heißt die Erntebank `flachsbreche` (alter Name, damit Spielstände passe
 |---|---|---|
 | 7 | Flachs → Fasern → Verbände (wie Level 1) | im Spiel |
 | 8 | Ringelblume, Kräuterstube mit 2 Eingängen (wie Level 2) | im Spiel |
-| 9 | dritte Pflanze (Claudes Idee: Schafgarbe, das Wundkraut des Mittelalters) und der nächste Schritt, z. B. eine zweite Verbands-Version (wie Level 3) | von Tobias erst einmal hinten angestellt |
+| 9 | dritte Pflanze (Claudes Idee: Schafgarbe, das Wundkraut des Mittelalters) und der nächste Schritt, z. B. eine zweite Verbands-Version (wie Level 3) | nächster großer Schritt (Tobias, Chat 19), noch zu planen – dabei sollen die Werkzeug-Waren im Kräuter-Kapitel weiter gebraucht werden |
 | 10 | Fasern + 3 Pflanzen (wie Holz, Stein, Eisen); wieder mehr investieren, auf Masse gehen (wie Level 4) | später |
 | 11–12 | die Pflanzen weiter kombinieren (z. B. Kompresse + Heilverband zu Größerem), Abschluss des Kapitels | später |
 | ab 13 | neues Kapitel, z. B. Sand → Glas, über die Kräuter-Maschinen auch Sandstaub für die Zauberei | später |
