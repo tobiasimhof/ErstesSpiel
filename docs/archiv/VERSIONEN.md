@@ -18,7 +18,7 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 - Tests (`theken.test.js`) auf die neuen Zeiten umgestellt (Level 8 mit 4 Theken etwa 274 Stück pro Stunde), Browser-Test prüft die Texte. Doku: `STAND.md`, `SPIEL.md` (Kunden, Ausblick: drei Bereiche parallel), `TECHNIK.md`, Archiv; dazu Tobias' Bild vom Techbaum (offene Frage 14).
 
 **Geprüft:**
-- `npm test`: 300 von 300 bestanden. Browser-Test in Tablet- und Handygröße: siehe unten.
+- `npm test`: 300 von 300 bestanden. Browser-Test in Tablet- und Handygröße: alle 681 Prüfungen bestanden; Screenshots angesehen (Theken-Reiter „alle 45–60 Sekunden“, Kauf-Karte, Rückfrage). Eine Prüfung war vom laufenden Verkauf abhängig („Dir fehlen noch 1.000“ – ein Kunde hatte gerade 1 Gold gebracht, es stand 999 da); sie verträgt das jetzt.
 
 ### v0.24.1 – Kunden schneller, danach der Techbaum (13.11.2026, nur Doku)
 
