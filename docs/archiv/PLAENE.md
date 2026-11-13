@@ -61,6 +61,23 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.25.0 – Kunden-Tempo angleichen (wartet auf Tobias' OK)
+
+**Tobias (Chat 19):** „Ich finde, die Zeiten könnte man etwas angleichen: Level 4–6 auf 25–45 Sekunden und ab Level 7 auf 45–60 Sekunden. Man stellt jetzt deutlich mehr Ware her, als man verkauft … Ich möchte damit erreichen, dass ich meine Erzeugnisse, die ich aktuell nicht weiter verarbeiten kann, schneller verkaufen kann, damit das Lager nicht zu voll wird.“
+
+**Was sich ändert** (je Theke; jeder Kunde kauft weiter 1 Stück):
+
+| Level | Kunde je Theke | Stück pro Minute je Theke | 2 Theken pro Stunde | 4 Theken pro Stunde |
+|---|---|---|---|---|
+| 1–3 | alle 15–25 s (bleibt) | 3 | 360 | 720 |
+| 4–6 | alle 25–45 s (vorher 30–50) | etwa 1,7 (vorher 1,5) | etwa 206 (vorher 180) | etwa 411 (vorher 360) |
+| ab 7 | alle 45–60 s (vorher 60–100) | etwa 1,1 (vorher 0,75) | etwa 137 (vorher 90) | etwa 274 (vorher 180) |
+
+- **Tobias' Fabrik** (Level 8, 4 Theken): etwa 274 statt 180 Stück pro Stunde – ungefähr so viel, wie seine Fabrik voll ausgelastet herstellt (grob 240 fertige Teile pro Stunde, Schätzung aus Chat 17). Das Lager sollte damit nicht mehr volllaufen, solange die Theken bestückt sind.
+- **Gold:** Bei den Waren in seinem Lager (im Schnitt etwa 55 Gold je Stück) bringen 4 Theken etwa 15.000 statt 10.000 Gold pro Stunde; mit teuren Waren entsprechend mehr. Die Theken-Preise bleiben (15.000 / 35.000 / 70.000).
+- **Technik:** In `data/shop.js` steht je Level direkt „Kunde alle … bis … Sekunden“ (`customerSeconds: [25, 45]`) statt Stück pro Minute und Streuung – so lassen sich Tobias' Zahlen eins zu eins eintragen. Der Laden zeigt die Zeiten wie bisher („Auf Level 8 kommt etwa alle 45–60 Sekunden einer“), die Kauf-Karte „eigene Kunden: alle 45–60 s“. Das Spielstand-Format bleibt; laufende Kunden-Takte laufen ab und folgen dann dem neuen Tempo. Tests: Tempo je Level und Theken-Zahl neu gemessen; Browser-Test mit den neuen Texten.
+- **Fragen an Tobias:** Level 1–3 bleibt bei 15–25 Sekunden? OK für den Entwurf?
+
 ### v0.24.0 – Theken kaufen, langsamer verkaufen (fertig)
 
 **Freigabe (Tobias, Chat 19):** „Test v23 war gut, hat sich gut angefühlt. Wir können mit v24 anfangen, aber lass uns die Thekenpreise noch etwas mehr runden. Die dritte für 15.000, die vierte für 35.000 und die fünfte für 70.000. Wir brauchen im späteren Spielverlauf noch eine sechste, damit die Thekenansicht auch voll ist, aber da können wir den Preis noch offen lassen.“

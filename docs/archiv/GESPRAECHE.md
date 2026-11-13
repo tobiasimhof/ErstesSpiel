@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 13.11.2026 – Chat 19 (Fortsetzung): Kunden schneller, danach der Techbaum (v0.24.1)
+
+**Tobias** (nach dem Test von v0.24.0): „Ich finde, die Zeiten könnte man etwas angleichen: Level 4–6 auf 25–45 Sekunden und ab Level 7 auf 45–60 Sekunden. Man stellt jetzt deutlich mehr Ware her, als man verkauft, deswegen sollten wir dieses Verhältnis auch ein wenig anpassen. Ich bin der Meinung, wenn man nun im Techbaum weiter die Kräuter macht, dann produziert man überproportional viele Zirkel etc., deswegen würde ich da nochmal drauf schauen. Was Tester brauchen, Bereiche kopieren und Weiche, die eine Spur trennt, können wir noch etwas weiter nach hinten verschieben. Ich konnte mit dem ganzen Geld, das ich hatte, Theke 3 und 4 kaufen, alles auffüllen und habe noch 6.000 Gold. Theke 5 ist daher noch in weiter Ferne, und ich wollte nebenbei die Missionen machen, damit ich ‚realistischer‘ auf Level 9 kommen kann. Ich möchte damit erreichen, dass ich meine Erzeugnisse, die ich aktuell nicht weiter verarbeiten kann, schneller verkaufen kann, damit das Lager nicht zu voll wird. Die Kräutersachen laufen eigentlich relativ gut und schnell, wodurch ich nicht glaube, dass man lange auf den Kräuterleveln bleiben wird, daher sollten wir uns dann auch weiter mit dem Techbaum beschäftigen für Level 9, 10 etc.“
+
+**Claude** hat die Rückmeldung als v0.24.1 festgehalten und v0.25.0 „Kunden-Tempo angleichen“ entworfen (Tabelle in `PLAENE.md`): ab Level 7 je Theke etwa 1,1 statt 0,75 Stück pro Minute, Tobias' 4 Theken etwa 274 statt 180 Stück pro Stunde – ungefähr so viel, wie seine Fabrik voll ausgelastet herstellt (grob 240 fertige Teile pro Stunde, Schätzung aus Chat 17). Lesart zu den Zirkeln: Ab Level 7 verlangt nichts mehr Werkzeug-Waren, die Straßen laufen aber weiter; Ideen für Level 9 und weiter: Kräuter-Rezepte mit Werkzeug-Zutaten, Aufträge mit Werkzeug-Waren, Gebäude, die teure Werkzeug-Waren kosten. Neue Reihenfolge: v0.25.0, dann Techbaum ab Level 9; Tester, Bereich kopieren und Weiche später. Fragen: OK für v0.25.0 (Level 1–3 bleibt), Lesart zu den Zirkeln.
+
+**Umgesetzt:** v0.24.1 (nur Doku).
+
 ### 13.11.2026 – Chat 19: Theken kaufen, langsamer verkaufen (v0.24.0)
 
 **Tobias:** „Hey, informiere dich über den aktuellen Stand und was die geplanten nächsten Schritte waren.“

@@ -4,12 +4,12 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.24.0 – Theken kaufen, langsamer verkaufen |
+| **Aktuelle Version** | v0.24.1 – Kunden schneller, danach der Techbaum (nur Doku) |
 | **Phase** | M2 – Produktionsketten (Kräuter-Kapitel ab Level 7) |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | **Tobias testet v0.24.0** (seine Fabrik hat jetzt 2 Theken, die 3. kostet 15.000 Gold). Danach gemeinsam das Gold-Gleichgewicht prüfen (offene Frage 1) und den nächsten Schritt wählen (Liste unten). |
+| **Nächster Schritt** | **v0.25.0 „Kunden-Tempo angleichen“** (je Theke Level 4–6 alle 25–45 s, ab Level 7 alle 45–60 s ein Kunde) – Entwurf in `docs/archiv/PLAENE.md`, **wartet auf Tobias' OK**. Danach den Techbaum ab Level 9 planen (offene Frage 14). |
 
-**Tobias' Fabrik** (Screenshots vom 11.11.2026, Gold und Werte vor v0.23.0 – seitdem durch 3): Level 8, ganze Fläche gekauft (38 × 30), **43.870 Gold** (heute 14.623), Laden-Lager 1.004 / 1.000, Waren im Wert von **166.579 Gold** (heute etwa 55.500) (u. a. 61 Zahnradwellen, 69 Räderwerke, 70 Verstärkte Holzplatten, 38 Gewichtsteine). Er spielt seit einigen Versionen auf Level 8 weiter, ohne Aufträge, um zu testen, ob eine Fabrik, die **jede Ware mindestens einmal** herstellt, auf die Fläche passt: Sie passt (alles außer der Pflanzenreihe in voller Größe), rechts und unten in der Mitte ist noch Platz frei – „Der Platz reicht mir.“ Alle Rohstoff-Gebäude hat er 5- bis 6-mal aufgefüllt (etwa 4 bis 4,5 Stunden Produktion). Etwa 8 Holzfällerlager, 9 Steinbrüche, 7 Schmelzhütten, 6 Schmieden, 3 Sägewerke, 3 Steinmetze, 3 Zimmereien, 3 Feinschmieden (Scharnier, Schlüssel, Zirkel), 3 Schlossereien, 5 Beete, 2 Erntebänke, Webstube, Kräuterstube; jede Ausgabe endet in einem Lagerhaus. **Versandportale baut er nicht** – volle Lagerhäuser räumt er von Hand aus oder füllt damit das Lagerhaus einer anderen Straße. Er spielt auf dem Tablet und nutzt für Aufträge den Test-Knopf. Chat 18: Er hat eine Straße umgebaut – seine Scharniere kommen nicht mehr auf die Theke, sondern gehen in Zirkel und Vorhängeschlösser. Seit v0.24.0 hat er 2 Theken (vorher 5); was auf den Theken 3 bis 5 stand, liegt im Laden-Lager. Den Test von v0.23.0 fand er gut („hat sich gut angefühlt“, Chat 19).
+**Tobias' Fabrik** (Screenshots vom 11.11.2026, Gold und Werte vor v0.23.0 – seitdem durch 3): Level 8, ganze Fläche gekauft (38 × 30), **43.870 Gold** (heute 14.623), Laden-Lager 1.004 / 1.000, Waren im Wert von **166.579 Gold** (heute etwa 55.500) (u. a. 61 Zahnradwellen, 69 Räderwerke, 70 Verstärkte Holzplatten, 38 Gewichtsteine). Er spielt seit einigen Versionen auf Level 8 weiter, ohne Aufträge, um zu testen, ob eine Fabrik, die **jede Ware mindestens einmal** herstellt, auf die Fläche passt: Sie passt (alles außer der Pflanzenreihe in voller Größe), rechts und unten in der Mitte ist noch Platz frei – „Der Platz reicht mir.“ Alle Rohstoff-Gebäude hat er 5- bis 6-mal aufgefüllt (etwa 4 bis 4,5 Stunden Produktion). Etwa 8 Holzfällerlager, 9 Steinbrüche, 7 Schmelzhütten, 6 Schmieden, 3 Sägewerke, 3 Steinmetze, 3 Zimmereien, 3 Feinschmieden (Scharnier, Schlüssel, Zirkel), 3 Schlossereien, 5 Beete, 2 Erntebänke, Webstube, Kräuterstube; jede Ausgabe endet in einem Lagerhaus. **Versandportale baut er nicht** – volle Lagerhäuser räumt er von Hand aus oder füllt damit das Lagerhaus einer anderen Straße. Er spielt auf dem Tablet und nutzt für Aufträge den Test-Knopf. Chat 18: Er hat eine Straße umgebaut – seine Scharniere kommen nicht mehr auf die Theke, sondern gehen in Zirkel und Vorhängeschlösser. Seit v0.24.0 hat er 2 Theken (vorher 5); was auf den Theken 3 bis 5 stand, liegt im Laden-Lager. Den Test von v0.23.0 fand er gut („hat sich gut angefühlt“, Chat 19). Mit v0.24.0 hat er sofort Theke 3 und 4 gekauft und alles aufgefüllt – danach blieben etwa 6.000 Gold, Theke 5 ist „noch in weiter Ferne“. Er macht jetzt nebenbei die Aufträge, um „realistischer“ auf Level 9 zu kommen.
 
 ## Fahrplan
 
@@ -24,18 +24,21 @@
 | M6 | Clans & Handel | Clans, Handel zwischen Spielern |
 | M7 | App | Android und iOS |
 
-**Nächste Schritte** (der Reihe nach; Auswahl von Tobias in Chat 15, Reihenfolge von Claude vorgeschlagen; jeder Schritt erst nach Tobias' OK):
+**Nächste Schritte** (der Reihe nach; neu geordnet von Tobias in Chat 19; jeder Schritt erst nach Tobias' OK):
 
-1. **Was Tester brauchen** – mit v0.22.0 können Tester auch auf Tobias' Tablet spielen (sichern → neues Spiel → Tester spielt → laden); Testmodus und Test-Knopf bleiben sichtbar. Eine kurze Einführung bleibt im Hinterkopf (M4) (offene Frage 13).
-2. **Bereich kopieren** (Tobias: „sehr wichtig“) – einen markierten Bereich als Ganzes noch einmal bauen, wenn die Waren reichen (Tobias baut gleiche Straßen mehrfach). Plan noch zu machen.
-3. **Weiche** (Tobias: „sehr sinnvoll“, offene Frage 5) – trennt eine Spur in zwei (hier nur Stäbe, dort nur Bleche). Plan noch zu machen.
-4. **Später:** Verbesserungen mit Erfahrung (Frage 7), Level 9 (dritte Pflanze), gründliche Durchsicht des Codes.
+1. **v0.25.0 Kunden-Tempo angleichen** (Tobias, Chat 19): je Theke Level 4–6 alle 25–45 Sekunden, ab Level 7 alle 45–60 Sekunden ein Kunde, Level 1–3 bleibt. Entwurf in `docs/archiv/PLAENE.md`, wartet auf OK.
+2. **Techbaum ab Level 9** (Tobias, Chat 19): „Die Kräutersachen laufen eigentlich relativ gut und schnell, wodurch ich nicht glaube, dass man lange auf den Kräuterleveln bleiben wird, daher sollten wir uns dann auch weiter mit dem Techbaum beschäftigen für Level 9, 10 etc.“ Dabei klären, wie das Kräuter-Kapitel die Werkzeug-Waren weiter braucht (offene Frage 14). Plan noch zu machen.
+3. **Nach hinten verschoben** (Tobias, Chat 19): die drei folgenden Schritte.
+4. **Was Tester brauchen** – mit v0.22.0 können Tester auch auf Tobias' Tablet spielen (sichern → neues Spiel → Tester spielt → laden); Testmodus und Test-Knopf bleiben sichtbar. Eine kurze Einführung bleibt im Hinterkopf (M4) (offene Frage 13).
+5. **Bereich kopieren** (Tobias: „sehr wichtig“) – einen markierten Bereich als Ganzes noch einmal bauen, wenn die Waren reichen (Tobias baut gleiche Straßen mehrfach). Plan noch zu machen.
+6. **Weiche** (Tobias: „sehr sinnvoll“, offene Frage 5) – trennt eine Spur in zwei (hier nur Stäbe, dort nur Bleche). Plan noch zu machen.
+7. **Später:** Verbesserungen mit Erfahrung (Frage 7), gründliche Durchsicht des Codes.
 
 Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute, Ring pro Stück bei Rohstoff-Gebäuden.
 
 ## Offene Fragen
 
-1. **Gold-Gleichgewicht testen** (Tobias, Chat 18): Er möchte verhindern, dass es Produkte gibt, „mit denen man zu schnell zu viel Gold macht“, hat aber „ein wenig die Angst, dass wir zu viel regulieren“ – deshalb: umsetzen und testen. Beobachtung: Scharniere direkt verkaufen brachte ihm viel Gold; seit seine Straßen Zirkel und Vorhängeschlösser machen, fällt dieser Gewinn weg. Claudes Rechnung: Je Rohstoff bringt die längere Straße mehr (1 Eisenerz = 2⅔ Scharniere für 1.152 Gold oder 2 Zirkel für 1.324); je Minute kann es weniger sein, weil Zirkel und Vorhängeschloss je 30 s brauchen und die Räderwerke jetzt ins Schloss gehen statt auf die Theke. Seit v0.24.0 zählen die Theken Stück (ab Level 7 je Theke 0,75 pro Minute) – teure Waren aus langen Straßen bringen damit deutlich mehr als viele billige. **Jetzt gemeinsam prüfen;** Stellschrauben sind das Tempo je Level und die Theken-Preise (je eine Zahl in `data/shop.js`). Der kleinere Aufschlag bleibt in der Hinterhand.
+1. **Gold-Gleichgewicht testen** (Tobias, Chat 18): Er möchte verhindern, dass es Produkte gibt, „mit denen man zu schnell zu viel Gold macht“, hat aber „ein wenig die Angst, dass wir zu viel regulieren“ – deshalb: umsetzen und testen. Beobachtung: Scharniere direkt verkaufen brachte ihm viel Gold; seit seine Straßen Zirkel und Vorhängeschlösser machen, fällt dieser Gewinn weg. Claudes Rechnung: Je Rohstoff bringt die längere Straße mehr (1 Eisenerz = 2⅔ Scharniere für 1.152 Gold oder 2 Zirkel für 1.324); je Minute kann es weniger sein, weil Zirkel und Vorhängeschloss je 30 s brauchen und die Räderwerke jetzt ins Schloss gehen statt auf die Theke. Seit v0.24.0 zählen die Theken Stück (ab Level 7 je Theke 0,75 pro Minute) – teure Waren aus langen Straßen bringen damit deutlich mehr als viele billige. Stellschrauben sind das Tempo je Level und die Theken-Preise (je eine Zahl in `data/shop.js`). Der kleinere Aufschlag bleibt in der Hinterhand. **Test von v0.24.0 (Chat 19):** Mit seinem Gold konnte Tobias Theke 3 und 4 kaufen und alles auffüllen (6.000 Gold blieben). Aber: „Man stellt jetzt deutlich mehr Ware her, als man verkauft, deswegen sollten wir dieses Verhältnis auch ein wenig anpassen.“ Er möchte Waren, die er gerade nicht weiterverarbeiten kann, schneller verkaufen, „damit das Lager nicht zu voll wird“ → v0.25.0.
 2. **Kräuterstube mit 2 Eingängen** ist gebaut und angeschlossen (v0.18.2), Tobias' Urteil steht noch aus.
 3. **Platzhalter-Zahlen:** Aufstiegspreise, Auftragsmengen, Baukosten. Kostet der Laden-Ausbau später zusätzlich Waren? Begrenzt das Level die kaufbare Fläche?
 4. **6. Theke** (Tobias, Chat 19): „Wir brauchen im späteren Spielverlauf noch eine sechste, damit die Thekenansicht auch voll ist, aber da können wir den Preis noch offen lassen.“ Bis dahin steht sie als „🔒 Kommt später im Spiel“ im Laden (ein Preis in `COUNTERS.prices` in `data/shop.js` macht sie kaufbar).
@@ -47,9 +50,17 @@ Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute, 
 10. **Einstieg:** Tobias' Idee, am Anfang vor allem die Massenproduktion auszubauen – später austesten.
 11. **Pleiteschutz:** Ein Rohstoff ohne passendes Gebäude verhindert das Geschenk – bewusst so gelassen, beobachten.
 12. **Vor v1.0:** Test-Knopf entfernen (`QUEST_TEST_SKIP = false`). Später: Schwarzmarkt und verbundene Läden (M5), Arbeitstitel.
-13. **Anderen das Spiel zeigen** (Tobias, Chat 15): Er möchte den jetzigen Stand anderen zum Testen geben, ohne dass sein Spielstand verloren geht. Jedes Gerät hat seinen eigenen Spielstand – wer den Link auf seinem eigenen Gerät öffnet, beginnt ein neues Spiel und berührt Tobias' Fabrik nicht. Tobias (Chat 16): „Das können wir im Hinterkopf behalten, aber ich möchte frühestens nächste Woche jemandem das Spiel zeigen.“ Seit v0.22.0 geht beides ohne zweiten Spielstand: auf eigenen Geräten (Start bei Level 1 oder Tobias' Datei laden) oder auf Tobias' Tablet (sichern → neues Spiel → Tester spielt → laden). Testmodus und Test-Knopf bleiben sichtbar. Noch offen: kurze Einführung?
+13. **Anderen das Spiel zeigen** (nach hinten verschoben, Chat 19) (Tobias, Chat 15): Er möchte den jetzigen Stand anderen zum Testen geben, ohne dass sein Spielstand verloren geht. Jedes Gerät hat seinen eigenen Spielstand – wer den Link auf seinem eigenen Gerät öffnet, beginnt ein neues Spiel und berührt Tobias' Fabrik nicht. Tobias (Chat 16): „Das können wir im Hinterkopf behalten, aber ich möchte frühestens nächste Woche jemandem das Spiel zeigen.“ Seit v0.22.0 geht beides ohne zweiten Spielstand: auf eigenen Geräten (Start bei Level 1 oder Tobias' Datei laden) oder auf Tobias' Tablet (sichern → neues Spiel → Tester spielt → laden). Testmodus und Test-Knopf bleiben sichtbar. Noch offen: kurze Einführung?
+
+14. **Werkzeug-Waren im Kräuter-Kapitel** (Tobias, Chat 19): „Ich bin der Meinung, wenn man nun im Techbaum weiter die Kräuter macht, dann produziert man überproportional viele Zirkel etc., deswegen würde ich da nochmal drauf schauen.“ Claudes Lesart (noch zu bestätigen): Ab Level 7 verlangt nichts mehr Zirkel und Co., die Werkzeug-Straßen laufen aber weiter – die Waren stapeln sich. Ideen für Level 9 und weiter: (a) Kräuter-Rezepte mit Werkzeug-Zutaten (dauerhafter Verbrauch, die Kapitel greifen ineinander), (b) Aufträge der Kräuter-Level, die auch Werkzeug-Waren verlangen, (c) neue Gebäude, die teure Werkzeug-Waren kosten. Beim Planen von Level 9 gemeinsam entscheiden.
 
 ## Die letzten 3 Arbeitsschritte
+
+### v0.24.1 – Kunden schneller, danach der Techbaum (13.11.2026, nur Doku)
+
+- **Tobias (Chat 19), Test von v0.24.0:** Theke 3 und 4 gekauft, alles aufgefüllt, 6.000 Gold übrig. Man stellt deutlich mehr her, als man verkauft – er will Waren, die er nicht weiterverarbeiten kann, schneller verkaufen. Wunsch: je Theke Level 4–6 alle 25–45 Sekunden, ab Level 7 alle 45–60 Sekunden ein Kunde. Im Kräuter-Kapitel entstehen „überproportional viele Zirkel etc.“; die Kräuter-Level gehen schnell – als Nächstes der Techbaum für Level 9, 10 … Tester, Bereich kopieren und Weiche kommen später.
+- **Claude:** Entwurf v0.25.0 „Kunden-Tempo angleichen“ (offene Frage 1), Lesart und Ideen zu den Werkzeug-Waren (offene Frage 14), neue Reihenfolge der nächsten Schritte.
+- Spiel unverändert, nur die Versionsnummer steigt.
 
 ### v0.24.0 – Theken kaufen, langsamer verkaufen (13.11.2026)
 
@@ -62,9 +73,3 @@ Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute, 
 - **Warum (Tobias, Chat 18):** „Auf der einen Seite sind mir die Beträge zu hoch, dass man mit einem Zirkel 2.000 Gold verdienen kann … Die Idee, alles durch 3 zu teilen, finde ich sehr sinnvoll, weil alle Beträge dadurch kleiner werden.“ Erst die Preise, danach die Theken.
 - **Umgesetzt:** Alle Preise durch 3 (Holzblock 1, Eisenbarren 4, Holzplatte 6, Zahnradwelle 108, Scharnier 432, Zirkel 662, Vorhängeschloss 648; Holzstamm 183, Eisenerz 732, Leinsamen 320), +20 % je Stufe bleibt. Startgold und Fläche je 170, Aufstiege 30 bis 1.330, Testpaket 330. Die Erfahrung bleibt gleich (3 je 10 Gold). Alte Spielstände: Gold und letzte Verkäufe durch 3 (Tobias: 43.870 → 14.623), beim Öffnen erscheint ein Hinweis.
 - **Tobias (Chat 19):** „Test v23 war gut, hat sich gut angefühlt.“ Weiter mit v0.24.0.
-
-### v0.22.3 – Preise durch 3 statt kleinerem Aufschlag (12.11.2026, nur Doku)
-
-- **Tobias (Chat 18):** Er hat eine Straße umgebaut – seine Scharniere gehen jetzt in Zirkel und Vorhängeschlösser statt auf die Theke. Wer sich auf teure Waren konzentriert, verdient viel Gold, muss für den Aufstieg aber trotzdem andere Waren herstellen. „Ich glaube, wir müssen gar nicht so sehr an diesen Stellschrauben drehen.“ Vorschlag: alles durch 3 – kleinere Beträge (Zirkel 662 statt knapp 2.000), und den Abverkauf weiter über die Theken steuern.
-- **Claude:** durchgerechnet, Entwurf v0.24.0 „Preise durch 3“ (offene Frage 1); Vorschlag: erst v0.23.0, direkt danach v0.24.0.
-- Spiel unverändert, nur die Versionsnummer steigt.
