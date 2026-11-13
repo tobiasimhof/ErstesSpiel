@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.23.0). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.24.0). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
@@ -61,8 +61,9 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 - **Feste Preise** in einem Maßstab, der zum Mittelalter passt (Tobias): Ein Holzblock kostet 1 Gold, ein Zirkel 662. Regel: Blöcke bringen etwa 9 % mehr, als der Rohstoff kostet; jede weitere Stufe rund 20 % mehr als ihre Zutaten – so macht man beim Verkaufen nie Minus. Holz und Stein kosten und bringen gleich viel, Eisen viermal so viel. Ein Test prüft die Stufen.
 - **Laden** (Knopf „⚖️ Laden“ unten links) mit den Reitern **Lager, Theken, Händler**:
   - **Laden-Lager:** 500 Plätze bis Level 3, 1.000 ab Level 4. Gefüllt über Versandportale, Ernten und Abreißen.
-  - **Theken** bestückt man von Hand mit genau eingestellter Menge (0, −5, −1, +1, +5, Alle). Level 1–3: 2 Theken à 20; Level 4: 3 à 25; Level 5: 4 à 30; ab Level 6: 5 à 30.
-  - **Kunden** kommen alle 10–30 Sekunden und kaufen 1–3 Stück zum festen Wert, jedes Stück von einer zufälligen gefüllten Theke (teure Teile genauso oft wie einfache). Das sind etwa 6 Stück pro Minute, egal wie viele Theken – mehr Gold bringen nur teurere Waren. „Letzte Verkäufe“ zeigt die letzten 5.
+  - **Theken** bestückt man von Hand mit genau eingestellter Menge (0, −5, −1, +1, +5, Alle). Jede Theke fasst Level 1–3 20 Stück, Level 4 25, ab Level 5 30.
+  - **Theken kaufen:** Jeder Laden hat 2 Theken; Aufstiege bringen keine dazu. Weitere kauft man im Reiter „Theken“ nur mit Gold, ohne Mindest-Level und nach einer Rückfrage: Theke 3 15.000, Theke 4 35.000, Theke 5 70.000 Gold. Eine 6. Theke kommt viel später (Preis offen). Die Ansicht zeigt immer 6 Plätze: die gekauften Theken, die nächste zum Kaufen (reicht das Gold nicht: „Dir fehlen noch …“), die späteren ausgegraut, die 6. mit „🔒 Kommt später im Spiel“.
+  - **Kunden:** Jede Theke hat ihre eigenen Kunden. Jeder kauft 1 Stück zum festen Wert (teure Teile genauso oft wie einfache). Je Theke kommt auf Level 1–3 alle 15–25 Sekunden einer (3 Stück pro Minute), ab Level 4 alle 30–50 Sekunden (1,5), ab Level 7 alle 60–100 Sekunden (0,75) – so verkauft der Laden am Anfang schnell, später langsamer. Eine leere Theke verkauft nichts; jede gekaufte Theke legt ihren Anteil drauf (Level 8 mit 3 Theken: 2,25 Stück pro Minute). Mehr Gold bringen also mehr Theken oder teurere Waren. Jede Theke zeigt, wann ihr nächster Kunde kommt; „Letzte Verkäufe“ zeigt die letzten 5 mit ihrer Theke.
   - **Händler:** nur Rohstoffe und Samen kaufen. Verkauft wird nur über die Theken.
 - **Start:** 170 Gold, 1 Holzstamm, 20 Holzblöcke.
 - **Pleiteschutz:** Wer weniger Gold hat, als ein Holzstamm kostet, keinen Rohstoff im Lager oder in Arbeit hat und dessen Waren zusammen weniger wert sind als ein Holzstamm, bekommt einen Holzstamm geschenkt.
@@ -78,9 +79,9 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 | 1 | Die ersten Hütten | Holzfällerlager, Sägewerk, Lagerhaus, Versandportal, Förderband; Holzstamm | Zimmermann Jakob: 5 Holzplatten · Jakob: 10 Holzstäbe · Bürgermeisterin Hilde: 20 Holzstäbe + 10 Holzplatten | 81 | – (Start) | 1 Holzstamm (Start) |
 | 2 | Wege und Brunnen | Steinbruch, Steinmetz; Felsbrocken | Steinmetzin Berta: 10 Steinplatten · Berta: 10 Stein-Zahnräder · Hilde: 20 Steinplatten + 10 Holzstäbe | 90 | 30 | 1 Felsbrocken |
 | 3 | Die Dorfschmiede | Schmelzhütte, Schmiede; Eisenerz | Schmied Konrad: 5 Eisenstangen · Konrad: 5 Eisenbleche · Hilde: 10 Eisenstangen + 10 Holzplatten | 162 | 80 | 1 Eisenerz |
-| 4 | Die Mühle am Fluss | Zimmerei, 3. Theke | Müllerin Grete: 2 Zahnradwellen · Grete: 4 Räderwerke · Grete: 2 Verstärkte Holzplatten · Hilde: 8 Räderwerke + 4 Zahnradwellen | 714 | 170 | 1 Eisenerz |
-| 5 | Der Markt | Feinschmiede, 4. Theke | Händlerin Marta: 2 Scharniere · Marta: 2 Schlüssel · Baumeister Anton: 1 Zirkel · Marta: 3 Scharniere + 3 Schlüssel | 1.495 | 330 | 1 Eisenerz |
-| 6 | Das Stadttor | Schlosserei, 5. Theke | Torwächter Ulrich: 4 Gewichtsteine · Ulrich: 2 Vorhängeschlösser · Hilde: 2 Uhrwerke · Ulrich: 4 Vorhängeschlösser + 4 Gewichtsteine | 1.840 | 670 | 1 Eisenerz |
+| 4 | Die Mühle am Fluss | Zimmerei | Müllerin Grete: 2 Zahnradwellen · Grete: 4 Räderwerke · Grete: 2 Verstärkte Holzplatten · Hilde: 8 Räderwerke + 4 Zahnradwellen | 714 | 170 | 1 Eisenerz |
+| 5 | Der Markt | Feinschmiede | Händlerin Marta: 2 Scharniere · Marta: 2 Schlüssel · Baumeister Anton: 1 Zirkel · Marta: 3 Scharniere + 3 Schlüssel | 1.495 | 330 | 1 Eisenerz |
+| 6 | Das Stadttor | Schlosserei | Torwächter Ulrich: 4 Gewichtsteine · Ulrich: 2 Vorhängeschlösser · Hilde: 2 Uhrwerke · Ulrich: 4 Vorhängeschlösser + 4 Gewichtsteine | 1.840 | 670 | 1 Eisenerz |
 | 7 | Die Heilstube | Beet, Erntebank, Webstube; Leinsamen | Heilerin Agnes: 5 Verbände · Agnes: 50 Flachsfasern · Ulrich: 15 Verbände · Hilde: 20 Verbände + 50 Flachsfasern | 816 | 1.000 | 1 Leinsamen |
 | 8 | Der Kräutergarten | Kräuterstube; Ringelblumensamen | Agnes: 50 Ringelblüten · Agnes: 5 Heilverbände · Ulrich: 5 Kräuterkompressen · Hilde: 10 Heilverbände + 20 Verbände | 1.305 (sammelt sich, bis es Level 9 gibt) | 1.330 | 1 Ringelblumensamen |
 

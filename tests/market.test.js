@@ -104,31 +104,38 @@ test('Theke umstellen oder abräumen: Waren kommen zurück ins Lager', () => {
 
 // ---------- Kunden ----------
 
-test('Kunde kauft 1–3 Stück zum festen Wert und zahlt in Gold', () => {
+// v0.24.0: Jeder Kunde kauft an seiner Theke (Stückzahl aus CUSTOMERS).
+test('Kunde kauft an seiner Theke zum festen Wert und zahlt in Gold', () => {
   const state = emptyGame({ holzplatte: 20, eisenstange: 20 });
   setCounterItem(state, 0, 'holzplatte');
   fillCounter(state, 0);
   setCounterItem(state, 1, 'eisenstange');
   fillCounter(state, 1);
   for (let i = 0; i < 10; i++) {
+    const index = i % 2;
+    const type = state.counters[index].type;
     const before = { gold: state.gold, a: state.counters[0].count, b: state.counters[1].count };
-    const sale = serveCustomer(state);
+    const sale = serveCustomer(state, index);
     const boughtA = before.a - state.counters[0].count;
     const boughtB = before.b - state.counters[1].count;
-    assert.ok(boughtA + boughtB >= CUSTOMERS.minItems && boughtA + boughtB <= CUSTOMERS.maxItems);
-    const gold = boughtA * ITEMS.holzplatte.price + boughtB * ITEMS.eisenstange.price;
+    const bought = index === 0 ? boughtA : boughtB;
+    assert.equal(index === 0 ? boughtB : boughtA, 0, 'die andere Theke bleibt, wie sie ist');
+    assert.ok(bought >= CUSTOMERS.minItems && bought <= CUSTOMERS.maxItems);
+    const gold = bought * ITEMS[type].price;
     assert.equal(state.gold - before.gold, gold);
     assert.equal(sale.gold, gold);
+    assert.equal(sale.counter, index);
+    assert.deepEqual(sale.items, { [type]: bought });
   }
 });
 
-test('Leere Theken: Kunde geht ohne Kauf', () => {
+test('Leere Theke: Kunde geht ohne Kauf', () => {
   const state = emptyGame({ holzplatte: 5 });
-  assert.equal(serveCustomer(state), null);
+  assert.equal(serveCustomer(state, 0), null);
   assert.equal(state.gold, 0);
 });
 
-test('Kunden kommen alle 10–30 Sekunden (im Schnitt etwa 6 Stück pro Minute)', () => {
+test('Kunden einer Theke: auf Level 1 im Schnitt 3 Stück pro Minute', () => {
   const state = emptyGame({ holzplatte: 1000 });
   setCounterItem(state, 0, 'holzplatte');
   let sold = 0;
@@ -144,8 +151,8 @@ test('Kunden kommen alle 10–30 Sekunden (im Schnitt etwa 6 Stück pro Minute)'
   }
   sold = 1000 - storageCount(state, 'holzplatte') - state.counters[0].count;
   assert.ok(customers === state.market.nextSaleId - 1);
-  assert.ok(customers >= 60 * 2 && customers <= 60 * 6, `${customers} Kunden in einer Stunde`);
-  assert.ok(sold >= customers && sold <= customers * 3);
+  assert.ok(customers >= 160 && customers <= 200, `${customers} Kunden in einer Stunde (im Schnitt 180)`);
+  assert.ok(sold >= customers * CUSTOMERS.minItems && sold <= customers * CUSTOMERS.maxItems);
   assert.equal(state.gold, sold * ITEMS.holzplatte.price);
 });
 
@@ -166,7 +173,7 @@ test('Letzte Verkäufe: höchstens 5, der neueste zuerst', () => {
   const state = emptyGame({ holzplatte: 20 });
   setCounterItem(state, 0, 'holzplatte');
   fillCounter(state, 0);
-  for (let i = 0; i < 8; i++) serveCustomer(state);
+  for (let i = 0; i < 8; i++) serveCustomer(state, 0);
   assert.equal(state.market.sales.length, 5);
   assert.ok(state.market.sales[0].id > state.market.sales[1].id);
 });

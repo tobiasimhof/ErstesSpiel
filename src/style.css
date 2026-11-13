@@ -1066,6 +1066,28 @@ button.danger {
   grid-column: 1 / -1;
 }
 
+/* v0.24.0: nächster Kunde einer Theke, Theken zum Kaufen */
+.counter-next {
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.counter-missing {
+  font-size: 13px;
+  font-weight: 700;
+  color: #9a3b1f;
+}
+
+.counter-slot {
+  border-style: dashed;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.counter-slot-later,
+.counter-slot-locked {
+  opacity: 0.6;
+}
+
 /* v0.10.0: Menge für eine Theke wählen */
 .amount-stepper {
   display: flex;

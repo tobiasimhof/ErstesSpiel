@@ -36,7 +36,8 @@ function el(tag, className, text) {
 
 // „🪓 Holzfällerlager, 🪚 Sägewerk · Holzstamm beim Händler“
 // v0.10.0/v0.10.1: dazu der Laden-Ausbau, z. B.
-// „🛒 Theke 3 · mittlere Theken (25 Plätze) · 📦 Laden-Lager 1.000 Plätze“
+// „mittlere Theken (25 Plätze) · 📦 Laden-Lager 1.000 Plätze“ (Theken gibt es
+// seit v0.24.0 nicht mehr mit dem Level, man kauft sie im Laden)
 export function unlockText(level) {
   const { buildings, raws } = unlocksOf(level);
   const parts = buildings.map((type) => `${BUILDINGS[type].icon} ${BUILDINGS[type].name}`);
@@ -45,7 +46,6 @@ export function unlockText(level) {
   const now = SHOP_LEVELS[level];
   const before = SHOP_LEVELS[level - 1];
   if (now && before) {
-    for (let i = before.counters; i < now.counters; i++) shop.push(`🛒 Theke ${i + 1}`);
     if (now.counterSize > before.counterSize) {
       const name = COUNTER_SIZE_NAMES[now.counterSize];
       shop.push(`${name ? `${name} Theken` : 'größere Theken'} (${now.counterSize} Plätze)`);

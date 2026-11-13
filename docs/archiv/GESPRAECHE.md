@@ -4,6 +4,18 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 13.11.2026 – Chat 19: Theken kaufen, langsamer verkaufen (v0.24.0)
+
+**Tobias:** „Hey, informiere dich über den aktuellen Stand und was die geplanten nächsten Schritte waren.“
+
+**Claude** hat den Stand zusammengefasst (v0.23.0 live, Tobias testet; als Nächstes v0.24.0 „Theken kaufen, langsamer verkaufen“, freigegeben in Chat 17; danach Tester, Bereich kopieren, Weiche) und gefragt, wie der Test war und ob v0.24.0 starten soll.
+
+**Tobias:** „Test v23 war gut, hat sich gut angefühlt. Wir können mit v24 anfangen, aber lass uns die Thekenpreise noch etwas mehr runden. Die dritte für 15.000, die vierte für 35.000 und die fünfte für 70.000. Wir brauchen im späteren Spielverlauf noch eine sechste, damit die Thekenansicht auch voll ist, aber da können wir den Preis noch offen lassen, weil das vermutlich erst viel später im Spielverlauf kommt.“
+
+**Claude** hat v0.24.0 gebaut und dabei drei Kleinigkeiten selbst festgelegt (vor dem Merge genannt, jederzeit änderbar): Jeder Kunde kauft 1 Stück, je Theke kommt Level 1–3 alle 15–25 Sekunden einer, ab Level 4 alle 30–50, ab Level 7 alle 60–100; die Theken-Ansicht zeigt immer 6 Plätze (die 6. als „🔒 Kommt später im Spiel“); vor dem Kauf kommt eine Rückfrage.
+
+**Umgesetzt:** v0.24.0 (siehe Versionshistorie).
+
 ### 12.11.2026 – Chat 18 (Fortsetzung): Erst die Preise, dann die Theken (v0.23.0)
 
 **Tobias:** „Mir ist aufgefallen, dass ich viel Gold verdienen kann, wenn ich z. B. keine Zirkel herstelle, sondern nur Scharniere (und diese Produktionsstufe) verkaufe. Dann mach ich ordentlich viel Gold. Ich hab die Straßen jetzt an die Schlosserei angebunden und merke, dass diese Gewinne wegfallen, wenn ich mich auf Zirkel und Vorhängeschlösser konzentriere. Auf der einen Seite sind mir die Beträge zu hoch, dass man mit einem Zirkel 2.000 Gold verdienen kann, auf der anderen Seite hab ich Angst, dass es Produkte gibt, mit denen man zu schnell zu viel Gold macht, und das würde ich gerne irgendwie regulieren. Die Idee, alles durch 3 zu teilen, finde ich sehr sinnvoll, weil alle Beträge dadurch kleiner werden. Das kannst du gerne schon mal machen. Ich würde gerne zuerst die Preise teilen und danach die Theken machen. Wir hatten im letzten Chat auch dokumentiert, dass man Level 1–3 mehr Verkäufe pro Minute hat als auf Level 7, um den ganzen Cash-Flow auch etwas zu steuern. Ich hab jetzt ein wenig die Angst, dass wir zu viel regulieren, aber fang gerne mal an und dann testen wir das einfach.“

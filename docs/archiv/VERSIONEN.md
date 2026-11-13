@@ -4,6 +4,28 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.24.0 – Theken kaufen, langsamer verkaufen (13.11.2026)
+
+**Vorgenommen:**
+- Entwurf „Theken kaufen, langsamer verkaufen“ (freigegeben in Chat 17) mit Tobias' runderen Preisen aus Chat 19: „Wir können mit v24 anfangen, aber lass uns die Thekenpreise noch etwas mehr runden. Die dritte für 15.000, die vierte für 35.000 und die fünfte für 70.000.“ Eine 6. Theke kommt später, Preis offen.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie oft kommen die Kunden einer Theke? → Jeder kauft 1 Stück (wie im Entwurf „ein Kunde, der 1 Stück kauft“); je Theke im Schnitt alle 20 / 40 / 80 Sekunden (Level 1–3 / ab 4 / ab 7), 25 % früher oder später – also alle 15–25, 30–50, 60–100 Sekunden. Das ergibt genau Tobias' Tempo (2 Theken zusammen 6 / 3 / 1,5 pro Minute).
+- Wie sieht die 6. Theke aus, solange sie keinen Preis hat? → Die Ansicht zeigt immer 6 Plätze (2 × 3, „damit die Thekenansicht auch voll ist“); die 6. steht als „🔒 Kommt später im Spiel“ da, die übrigen noch nicht kaufbaren ausgegraut mit Preis.
+- Kauf mit einem Tippen? → Nein, mit Rückfrage (15.000 Gold sind viel).
+- Was passiert bei Tobias? → Theken 3 bis 5 werden abgebaut, ihre Waren kommen ins Laden-Lager (auch über die Grenze); Gold bleibt; Hinweis beim Öffnen. Mit 14.623 Gold (Stand der Screenshots) fehlen ihm für Theke 3 noch 377 Gold.
+
+**Gemacht:**
+- `data/shop.js`: `perCounter` je Level (3 / 1,5 / 0,75 Stück pro Minute je Theke) statt `counters`; `COUNTERS` (Start 2, Preise 15.000 / 35.000 / 70.000 / offen, 6 Plätze); `CUSTOMERS` jetzt Stück je Kunde und Streuung.
+- `market.js`: Kunden je Theke (`market.timers`, `syncCustomerTimers`), `serveCustomer(state, theke)`, Verkäufe merken sich ihre Theke; `buyCounter`, `nextCounterPrice`, `counterSlots`. `shop.js`: `perCounterFor`, `addMissingCounters` entfällt. `levels.js`: Aufstieg ohne Theken.
+- `save.js`: Format 17 – zurück auf 2 Theken (`shrinkCounters`), Kunden-Takte statt einem; Prüfung der Takte und der Theke je Verkauf. `main.js`: Hinweis beim Öffnen alter Spielstände, lange Hinweise bleiben länger stehen.
+- `view/shop.js` und `style.css`: Reiter „Theken“ mit Tempo-Text, nächstem Kunden je Theke, 6 Plätzen (kaufen / später / kommt später), „Dir fehlen noch …“, Rückfrage; „Letzte Verkäufe“ mit Theke. `view/levels.js`: Level 4–6 kündigen keine Theke mehr an.
+- Tests: neue Datei `theken.test.js` (16 Tests), bestehende Tests angepasst; Browser-Test mit Theken-Kauf auf Level 7. Doku: `STAND.md`, `SPIEL.md`, `TECHNIK.md`, Archiv.
+
+**Geprüft:**
+- `npm test`: 300 von 300 bestanden. Browser-Test in Tablet- und Handygröße: alle 681 Prüfungen bestanden; Screenshots angesehen (6 Plätze, gesperrter Kauf mit „Dir fehlen noch 1.000“, Rückfrage, Theke 3 gekauft, Theke 4 als Nächste).
+- Eigener Browser-Versuch mit einem Spielstand im Format 16 wie Tobias' Fabrik (Level 8, 14.623 Gold, 5 Theken): 2 Theken bleiben, 35 Waren der übrigen liegen im Laden-Lager (1.005 / 1.000), Hinweis erscheint, „Dir fehlen noch 377“; Kauf mit 16.000 Gold klappt.
+
 ### v0.23.0 – Preise durch 3 (12.11.2026)
 
 **Vorgenommen:**

@@ -8,7 +8,6 @@ import { placeBuilding } from '../src/core/buildings.js';
 import { catchUp } from '../src/core/offline.js';
 import { loadInput, sourceCount } from '../src/core/production.js';
 import { SAVE_VERSION, serializeGame } from '../src/core/save.js';
-import { addMissingCounters } from '../src/core/shop.js';
 import { createNewGame } from '../src/core/state.js';
 import { backupFileName, backupSummary, loadQuestion, readBackup, savedAtText } from '../src/view/backup.js';
 
@@ -25,7 +24,6 @@ function smallFactory() {
   state.belts = {};
   state.storage = {};
   state.shopLevel = 4; // Laden-Lager mit 1.000 Plätzen
-  addMissingCounters(state);
   const wood = placeBuilding(state, 'holzfaeller', 10, 6, 0);
   drag(state, [
     [12, 6],

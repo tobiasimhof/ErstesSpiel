@@ -948,8 +948,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const next4 = await page.textContent('#modal-content');
   check(next4.includes('Nächstes Level: Level 4 · Die Mühle am Fluss'), 'Nach Level 3 kommt Level 4 (Die Mühle am Fluss)');
   check(
-    next4.includes('Theke 3') && next4.includes('mittlere Theken (25 Plätze)') && next4.includes('Laden-Lager 1.000 Plätze'),
-    'Level 4 kündigt dritte Theke, mittlere Theken und 1.000 Lagerplätze an',
+    !next4.includes('Theke 3') && next4.includes('mittlere Theken (25 Plätze)') && next4.includes('Laden-Lager 1.000 Plätze'),
+    'Level 4 kündigt mittlere Theken und 1.000 Lagerplätze an – keine Theke mehr (v0.24.0)',
   );
   await shot('10e-level-3');
   await page.tap('#modal-content .tab[data-tab="town"]');
@@ -1081,7 +1081,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 4' }).tap();
   await sleep(150);
   const lvl4 = await game(page, () => ({ level: window.__game.state.shopLevel, counters: window.__game.state.counters.length }));
-  check(lvl4.level === 4 && lvl4.counters === 3, `Level 4: dritte Verkaufstheke (${JSON.stringify(lvl4)})`);
+  check(lvl4.level === 4 && lvl4.counters === 2, `Level 4: keine neue Theke – die kauft man mit Gold (${JSON.stringify(lvl4)})`);
   await page.tap('#modal-close');
   await game(page, () => {
     const s = window.__game.state.storage;
@@ -1413,7 +1413,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(emptied.inStore === 0 && emptied.inShop + emptied.onBelts === 40, `„Ausräumen“ legt alles ins Laden-Lager (${JSON.stringify(emptied)})`);
   await page.tap('#info-close');
 
-  // ---------- Level 5 und 6: je eine Theke mehr, 5 Theken auf Level 6 ----------
+  // ---------- Level 5 und 6 (seit v0.24.0 ohne neue Theken) ----------
   const levelUpWithXp = async (level) => {
     await game(page, () => {
       window.__game.state.quest.xp = window.__game.xpNeeded();
@@ -1428,7 +1428,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await levelUpWithXp(5);
   await levelUpWithXp(6);
   const lvl6 = await game(page, () => ({ level: window.__game.state.shopLevel, counters: window.__game.state.counters.length }));
-  check(lvl6.level === 6 && lvl6.counters === 5, `Level 6 mit 5 Verkaufstheken (${JSON.stringify(lvl6)})`);
+  check(lvl6.level === 6 && lvl6.counters === 2, `Level 6 mit weiter 2 Verkaufstheken (${JSON.stringify(lvl6)})`);
   const lvl6Text = await page.textContent('#modal-content');
   check(
     lvl6Text.includes('Torwächter Ulrich') && lvl6Text.includes('Gewichtsteine') && lvl6Text.includes('Nächstes Level: Level 7 · Die Heilstube'),
@@ -1482,7 +1482,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     seeds: window.__game.state.storage.leinsamen ?? 0,
     counters: window.__game.state.counters.length,
   }));
-  check(lvl7.level === 7 && lvl7.seeds === 1 && lvl7.counters === 5, `Level 7: 1 Leinsamen gratis, Laden bleibt bei 5 Theken (${JSON.stringify(lvl7)})`);
+  check(lvl7.level === 7 && lvl7.seeds === 1 && lvl7.counters === 2, `Level 7: 1 Leinsamen gratis, Laden bleibt bei 2 Theken (${JSON.stringify(lvl7)})`);
   const lvl7Text = await page.textContent('#modal-content');
   check(
     lvl7Text.includes('Level 7 erreicht') && lvl7Text.includes('Die Heilstube') && lvl7Text.includes('Heilerin Agnes') && lvl7Text.includes('5 Verbände'),
@@ -1495,13 +1495,58 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(80);
   await page.tap('#modal-content .tab[data-tab="theken"]');
   await sleep(80);
-  const heads = await page.locator('#modal-content .counter-head').allTextContents();
+  // v0.24.0: 2 große Theken, dazu Plätze zum Kaufen – immer 6 Karten
+  const heads = await page.locator('#modal-content .counter-card:not(.counter-slot) .counter-head').allTextContents();
   check(
-    heads.length === 5 && heads.every((h) => h.includes('30 Plätze')),
-    `Fünf große Theken mit je 30 Plätzen (${heads.join(' | ')})`,
+    heads.length === 2 && heads.every((h) => h.includes('30 Plätze')),
+    `Zwei große Theken mit je 30 Plätzen (${heads.join(' | ')})`,
   );
   check((await page.textContent('#modal-content .modal-meta')).includes('/ 1.000'), 'Laden-Lager fasst 1.000 Waren');
-  await shot('16-fuenf-theken');
+  const slots = await page.locator('#modal-content .counter-card').evaluateAll((cards) =>
+    cards.map((c) => (c.classList.contains('counter-slot') ? [...c.classList].find((k) => k.startsWith('counter-slot-')).slice(13) : 'owned')),
+  );
+  check(
+    JSON.stringify(slots) === JSON.stringify(['owned', 'owned', 'next', 'later', 'later', 'locked']),
+    `Theken-Ansicht zeigt 6 Plätze: 2 Theken, Theke 3 zum Kaufen, 4 und 5 später, 6 kommt später (${slots})`,
+  );
+  const thekenText = await page.textContent('#modal-content');
+  check(
+    thekenText.includes('Jede Theke hat ihre eigenen Kunden: Auf Level 7 kommt etwa alle 60–100 Sekunden einer und kauft 1 Stück'),
+    'Theken-Reiter erklärt das Tempo auf Level 7',
+  );
+  check(
+    thekenText.includes('Kaufen · 15.000') && thekenText.includes('35.000') && thekenText.includes('70.000') && thekenText.includes('Kommt später im Spiel'),
+    'Preise der Theken: 15.000, 35.000, 70.000, die 6. kommt später',
+  );
+  // Zu wenig Gold: Knopf gesperrt, es steht da, wie viel fehlt
+  await game(page, () => (window.__game.state.gold = 14000));
+  await sleep(1200);
+  const buyButton = page.locator('#modal-content [data-counter-action="kaufen"]');
+  check(await buyButton.isDisabled(), 'Mit 14.000 Gold ist „Kaufen“ gesperrt');
+  check((await page.textContent('#modal-content .counter-missing')).includes('Dir fehlen noch 1.000'), 'Es steht da, wie viel Gold fehlt');
+  await shot('16-theken-kaufen');
+  await game(page, () => (window.__game.state.gold = 20000));
+  await sleep(1200);
+  check(!(await buyButton.isDisabled()), 'Mit 20.000 Gold lässt sich Theke 3 kaufen');
+  await buyButton.tap();
+  await sleep(150);
+  check(
+    (await page.isVisible('#dialog')) && (await page.textContent('#dialog')).includes('Theke 3 kaufen?'),
+    'Vor dem Kauf kommt eine Rückfrage',
+  );
+  await shot('16b-theke-kaufen-frage');
+  await page.tap('#dialog-ok');
+  await sleep(200);
+  const counterBought = await game(page, () => ({
+    gold: window.__game.state.gold,
+    counters: window.__game.state.counters.length,
+    timers: window.__game.state.market.timers.length,
+  }));
+  check(counterBought.gold < 10000 && counterBought.counters === 3 && counterBought.timers === 3, `Theke 3 gekauft für 15.000 Gold (${JSON.stringify(counterBought)})`);
+  const heads3 = await page.locator('#modal-content .counter-card:not(.counter-slot) .counter-head').allTextContents();
+  check(heads3.length === 3 && heads3[2].includes('Theke 3 · 30 Plätze'), `Theke 3 steht jetzt im Laden (${heads3.join(' | ')})`);
+  check((await page.textContent('#modal-content')).includes('Kaufen · 35.000'), 'Als Nächstes lässt sich Theke 4 kaufen');
+  await shot('16c-drei-theken');
   await page.tap('#modal-close');
   // v0.10.2: Jeder Streifen kostet gleich viel (seit v0.23.0 170 Gold), jede Seite geht 2×
   const plotNow = await game(page, () => ({ ...window.__game.state.plot }));
@@ -1979,7 +2024,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     localStorage.setItem(key, JSON.stringify(data));
     return data.saveVersion;
   });
-  check(backdated === 16, `Spielstand-Version 16 (${backdated})`);
+  check(backdated === 17, `Spielstand-Version 17 (${backdated})`);
   await page2.goto(baseUrl);
   await waitForGame(page2);
   await page2.waitForFunction(() => !window.__game.isCatchingUp(), null, { timeout: 20000 });
@@ -2044,7 +2089,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await download.saveAs(backupPath);
   const backupData = JSON.parse(fs.readFileSync(backupPath, 'utf8'));
   check(
-    backupData.saveVersion === 16 && backupData.state.buildings.length === saved.buildings && Math.abs(Date.now() - backupData.savedAt) < 60000,
+    backupData.saveVersion === 17 && backupData.state.buildings.length === saved.buildings && Math.abs(Date.now() - backupData.savedAt) < 60000,
     `Datei enthält den Spielstand (Format ${backupData.saveVersion}, ${backupData.state.buildings.length} Gebäude)`,
   );
   await sleep(100);
