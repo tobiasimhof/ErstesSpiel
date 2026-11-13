@@ -13,9 +13,10 @@ export function counterSizeFor(level) {
   return (SHOP_LEVELS[level] ?? SHOP_LEVELS[1]).counterSize;
 }
 
-// v0.24.0: So viele Stück kaufen die Kunden einer Theke im Schnitt pro Minute.
-export function perCounterFor(level) {
-  return (SHOP_LEVELS[level] ?? SHOP_LEVELS[1]).perCounter;
+// v0.25.0: An jeder Theke kommt alle min–max Sekunden ein Kunde.
+export function customerSecondsFor(level) {
+  const [min, max] = (SHOP_LEVELS[level] ?? SHOP_LEVELS[1]).customerSeconds;
+  return { min, max };
 }
 
 export function emptyCounter() {

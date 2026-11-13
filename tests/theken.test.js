@@ -1,4 +1,5 @@
 // v0.24.0: Theken kaufen, langsamer verkaufen (Tobias, Chat 17 und 19).
+// v0.25.0: Kunden-Tempo angeglichen (Tobias, Chat 19).
 // Jede Theke hat ihre eigenen Kunden; wie schnell sie kaufen, hängt vom
 // Level ab. Jeder Laden beginnt mit 2 Theken, weitere kauft man mit Gold.
 import { test } from 'node:test';
@@ -12,6 +13,7 @@ import {
   customerRange,
   customerSeconds,
   fillCounter,
+  perCounterMinute,
   nextCounterPrice,
   setCounterItem,
 } from '../src/core/market.js';
@@ -53,24 +55,25 @@ const near = (value, expected, share = 0.08) => Math.abs(value - expected) <= ex
 
 // ---------- Tempo je Level ----------
 
-test('Tempo je Theke: Level 1–3 3 Stück pro Minute, ab Level 4 1,5, ab Level 7 0,75', () => {
-  const expected = { 1: 3, 2: 3, 3: 3, 4: 1.5, 5: 1.5, 6: 1.5, 7: 0.75, 8: 0.75 };
-  for (const [level, perMinute] of Object.entries(expected)) {
-    assert.equal(SHOP_LEVELS[level].perCounter, perMinute, `Level ${level}`);
+test('Tempo je Theke (v0.25.0): Level 1–3 alle 15–25 s ein Kunde, Level 4–6 alle 25–45 s, ab Level 7 alle 45–60 s', () => {
+  const expected = { 1: [15, 25], 2: [15, 25], 3: [15, 25], 4: [25, 45], 5: [25, 45], 6: [25, 45], 7: [45, 60], 8: [45, 60] };
+  for (const [level, [min, max]] of Object.entries(expected)) {
+    assert.deepEqual(SHOP_LEVELS[level].customerSeconds, [min, max], `Level ${level}`);
+    assert.deepEqual(customerRange(Number(level)), { min, max });
   }
-  // Ein Kunde kauft 1 Stück: Level 1–3 alle 15–25 s, ab Level 4 alle 30–50 s, ab Level 7 alle 60–100 s
+  // Ein Kunde kauft 1 Stück: je Theke 3 / etwa 1,7 / etwa 1,1 Stück pro Minute
   assert.deepEqual([CUSTOMERS.minItems, CUSTOMERS.maxItems], [1, 1]);
-  assert.deepEqual(customerRange(1), { min: 15, max: 25 });
-  assert.deepEqual(customerRange(4), { min: 30, max: 50 });
-  assert.deepEqual(customerRange(7), { min: 60, max: 100 });
-  assert.equal(customerSeconds(8), 80);
+  assert.equal(customerSeconds(8), 52.5);
+  assert.equal(perCounterMinute(1), 3);
+  assert.ok(Math.abs(perCounterMinute(4) - 60 / 35) < 1e-9);
+  assert.ok(Math.abs(perCounterMinute(7) - 60 / 52.5) < 1e-9);
 });
 
 test('Eine volle Theke verkauft je Level so schnell wie geplant (10 Stunden gemessen)', () => {
   for (const [level, perHour] of [
     [1, 180],
-    [4, 90],
-    [7, 45],
+    [4, 3600 / 35],
+    [7, 3600 / 52.5],
   ]) {
     const state = shop(level);
     const [sold] = sellFor(state, 600, [0]);
@@ -78,11 +81,11 @@ test('Eine volle Theke verkauft je Level so schnell wie geplant (10 Stunden geme
   }
 });
 
-test('Die 2 Start-Theken zusammen: 6 / 3 / 1,5 Stück pro Minute', () => {
+test('Die 2 Start-Theken zusammen: 360 / etwa 206 / etwa 137 Stück pro Stunde', () => {
   for (const [level, perHour] of [
     [2, 360],
-    [5, 180],
-    [8, 90],
+    [5, 7200 / 35],
+    [8, 7200 / 52.5],
   ]) {
     const state = shop(level);
     const sold = sellFor(state, 600, [0, 1]);
@@ -97,16 +100,16 @@ test('Jede Theke verkauft für sich: Eine leere Theke verkauft nichts, die ander
   const sold = sellFor(state, 600, [0]);
   assert.equal(sold[1], 0);
   assert.equal(state.counters[1].count, 0);
-  assert.ok(near(sold[0], 450), `nur Theke 1 verkauft, im gleichen Tempo (${sold[0]})`);
+  assert.ok(near(sold[0], 36000 / 52.5), `nur Theke 1 verkauft, im gleichen Tempo (${sold[0]})`);
   assert.equal(state.gold, sold[0] * ITEMS.holzplatte.price);
 });
 
-test('Jede gekaufte Theke legt ihren Anteil drauf: Level 8 mit 3 Theken etwa 2,25 Stück pro Minute', () => {
-  const state = shop(8, 3);
-  const sold = sellFor(state, 600, [0, 1, 2]);
+test('Jede gekaufte Theke legt ihren Anteil drauf: Level 8 mit 4 Theken etwa 274 Stück pro Stunde (Tobias)', () => {
+  const state = shop(8, 4);
+  const sold = sellFor(state, 600, [0, 1, 2, 3]);
   const total = sold.reduce((a, b) => a + b, 0);
-  assert.ok(near(total, 1350), `${total} Stück in 10 Stunden (erwartet etwa 1.350)`);
-  assert.ok(sold.every((n) => near(n, 450, 0.15)), `jede Theke etwa 450 (${sold})`);
+  assert.ok(near(total, 2743), `${total} Stück in 10 Stunden (erwartet etwa 2.743)`);
+  assert.ok(sold.every((n) => near(n, 686, 0.15)), `jede Theke etwa 686 (${sold})`);
 });
 
 test('Verkäufe merken sich ihre Theke', () => {
@@ -248,7 +251,7 @@ test('Spielstand aus v0.23.0: zurück auf 2 Theken, die Waren der übrigen liege
   assert.equal(s.gold, 14623, 'Gold bleibt');
   assert.equal(s.market.timer, undefined);
   assert.equal(s.market.timers.length, 2);
-  assert.ok(s.market.timers.every((t) => t >= 60 && t <= 100), 'Level 8: alle 60–100 s ein Kunde');
+  assert.ok(s.market.timers.every((t) => t >= 45 && t <= 60), 'Level 8: alle 45–60 s ein Kunde');
   assert.deepEqual(s.market.sales, [{ id: 1, items: { zirkel: 2 }, gold: 1324 }], 'alte Verkäufe bleiben stehen');
   assert.deepEqual(loaded.notes, ['Deine Theken 3 bis 5 sind abgebaut – 35 Waren davon liegen wieder im Laden-Lager.']);
   // Nur einmal: Danach bleibt alles, wie es ist.
@@ -290,11 +293,11 @@ test('Hintergrund: Jede Theke verkauft für sich weiter, bis sie leer ist', () =
   state.storage = {};
   state.counters[0] = { type: 'zirkel', count: 30 };
   state.counters[1] = { type: 'zirkel', count: 5 };
-  // 30 Minuten weg: Jede Theke verkauft etwa 22 Stück (0,75 pro Minute).
-  const report = catchUp(state, 30 * 60);
+  // 20 Minuten weg: Jede Theke verkauft etwa 23 Stück (alle 45–60 s einer).
+  const report = catchUp(state, 20 * 60);
   assert.equal(state.counters[1].count, 0, 'Theke 2 ist leer verkauft');
   const sold1 = 30 - state.counters[0].count;
-  assert.ok(sold1 >= 17 && sold1 <= 28, `Theke 1 verkauft in 30 Minuten ${sold1} Stück (etwa 22)`);
+  assert.ok(sold1 >= 19 && sold1 <= 28, `Theke 1 verkauft in 20 Minuten ${sold1} Stück (etwa 23)`);
   assert.equal(report.sold.zirkel, sold1 + 5);
   assert.equal(report.gold, (sold1 + 5) * ITEMS.zirkel.price);
   assert.equal(report.countersEmpty, false);

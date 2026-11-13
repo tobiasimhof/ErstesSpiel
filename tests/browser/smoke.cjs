@@ -1511,7 +1511,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   );
   const thekenText = await page.textContent('#modal-content');
   check(
-    thekenText.includes('Jede Theke hat ihre eigenen Kunden: Auf Level 7 kommt etwa alle 60–100 Sekunden einer und kauft 1 Stück'),
+    thekenText.includes('Jede Theke hat ihre eigenen Kunden: Auf Level 7 kommt etwa alle 45–60 Sekunden einer und kauft 1 Stück') &&
+      thekenText.includes('eigene Kunden: alle 45–60 Sekunden einer'),
     'Theken-Reiter erklärt das Tempo auf Level 7',
   );
   check(

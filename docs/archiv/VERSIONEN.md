@@ -4,6 +4,22 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.25.0 – Kunden-Tempo angeglichen (13.11.2026)
+
+**Vorgenommen:**
+- Entwurf v0.25.0 (Tobias, Chat 19: „Ja, darfst du gerne so umsetzen.“): je Theke Level 4–6 alle 25–45 Sekunden ein Kunde, ab Level 7 alle 45–60; Level 1–3 bleibt.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie trägt man Tobias' Zahlen ein? → Die Datentabelle nennt je Level direkt die Sekunden (`customerSeconds: [45, 60]`) statt Stück pro Minute mit Streuung – Tobias' Bereiche sind nicht gleichmäßig um einen Mittelwert verteilt (25–45, 45–60).
+- Braucht der Spielstand ein neues Format? → Nein. Laufende Kunden-Takte laufen ab und folgen dann dem neuen Tempo.
+
+**Gemacht:**
+- `data/shop.js`: `customerSeconds` je Level, `CUSTOMERS` ohne Streuung. `shop.js`: `customerSecondsFor`. `market.js`: Abstand der Kunden aus der Tabelle (`customerRange`, `customerSeconds`, `perCounterMinute`). `view/shop.js`: Kauf-Karte „eigene Kunden: alle 45–60 Sekunden einer“, Rückfrage mit den Sekunden.
+- Tests (`theken.test.js`) auf die neuen Zeiten umgestellt (Level 8 mit 4 Theken etwa 274 Stück pro Stunde), Browser-Test prüft die Texte. Doku: `STAND.md`, `SPIEL.md` (Kunden, Ausblick: drei Bereiche parallel), `TECHNIK.md`, Archiv; dazu Tobias' Bild vom Techbaum (offene Frage 14).
+
+**Geprüft:**
+- `npm test`: 300 von 300 bestanden. Browser-Test in Tablet- und Handygröße: siehe unten.
+
 ### v0.24.1 – Kunden schneller, danach der Techbaum (13.11.2026, nur Doku)
 
 **Vorgenommen:**
