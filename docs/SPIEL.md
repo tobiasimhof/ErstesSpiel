@@ -155,10 +155,11 @@ Intern heißt die Erntebank `flachsbreche` (alter Name, damit Spielstände passe
 |---|---|---|
 | 7 | Flachs → Fasern → Verbände (wie Level 1) | im Spiel |
 | 8 | Ringelblume, Kräuterstube mit 2 Eingängen (wie Level 2) | im Spiel |
-| 9 | dritte Pflanze (Claudes Idee: Schafgarbe, das Wundkraut des Mittelalters) und der nächste Schritt, z. B. eine zweite Verbands-Version (wie Level 3) | nächster großer Schritt (Tobias, Chat 19), noch zu planen |
-| 10 | Fasern + 3 Pflanzen (wie Holz, Stein, Eisen); wieder mehr investieren, auf Masse gehen (wie Level 4) | später |
-| 11–12 | die Pflanzen weiter kombinieren (z. B. Kompresse + Heilverband zu Größerem), Abschluss des Kapitels | später |
-| ab 13 | neues Kapitel, z. B. Sand → Glas, über die Kräuter-Maschinen auch Sandstaub für die Zauberei | später |
+| 9 | Die Schreibstube (Werkzeuge): Kohlenmeiler (Holzstamm → Holzkohle), Schreibstube: Zeichenbrett (Verstärkte Holzplatte + Flachsfasern), Reißzeug (Zirkel + Holzkohle) | Entwurf (v0.25.1, `docs/archiv/PLAENE.md`), wartet auf Tobias |
+| 10 | Das Spital (Kräuter): Schafgarbe als 3. Pflanze, Wundverband (Heilverband + Schafgarbenblüten) | Entwurf |
+| 11 | Die Uhrmacherei (Werkzeuge): Räderuhr (Uhrwerk + Gewichtstein), Kastenschloss (Vorhängeschloss + Schlüssel), Sternenuhr (Uhrwerk + Zirkel) | Entwurf |
+| 12 | Die Apotheke (Abschluss der Kräuter): Kamille als 4. Pflanze, Kräutermischung, Kamillenkissen, Heilpäckchen (Wundverband + Kräuterkompresse); Reißbrett (Zeichenbrett + Reißzeug) | Entwurf |
+| ab 13 | Tränke: Sand + Holzkohle → Glas → Kolben, Tränke aus Kolben und Kräutermischungen; über die Kräuter-Maschinen auch Sandstaub für die Zauberei; Holzkohle + Eisen → Stahl (Idee) | später |
 | ~15 | Alchemist, Mörser (getrocknete Blüten → Staub, z. B. Ringelblumenstaub), Zaubertränke (Lebens-, Mana-, Alterstrank …); Farn als Zauberkraut (Idee) | später |
 
 **Drei Bereiche wachsen parallel** (Tobias, Chat 19): Werkzeuge, Kräuter und Tränke. Aus Werkzeugen und Kräutern entstehen am Ende die Tränke – dafür braucht es neue Rohstoffe wie Glas (Kolben). Zirkel und Kräuter direkt zu kombinieren ergibt keinen Sinn; deshalb wächst auch das Werkzeug-Kapitel weiter. Bisher ohne Weiterverarbeitung: Zirkel, Schlüssel, Verstärkte Holzplatte, Vorhängeschloss, Gewichtstein, Uhrwerk. Tobias' Ideen: Schlüssel + Vorhängeschloss in einer weiteren Maschine; Verstärkte Holzplatte + Zirkel + Fasern für ein Zeichenbrett oder Ähnliches.
