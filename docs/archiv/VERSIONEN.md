@@ -4,6 +4,20 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.25.1 – Entwurf Level 9–12 (13.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Wunsch: „Du kannst mir gerne mal einen Entwurf schreiben für die Level 9 bis 12“ – mit seinen Vorgaben (Werkzeuge nicht stillstehen lassen, 2 Eingänge, 1–2 weitere Kräuter für Tränke, Holzkohle als Randidee).
+
+**Fragen, die wir uns gestellt haben:**
+- Wie wachsen Werkzeuge und Kräuter nebeneinander? → Die Level wechseln sich ab (9 und 11 Werkzeuge, 10 und 12 Kräuter), die Aufträge verlangen Waren aus beiden Bereichen.
+- Was wird aus den Werkzeug-Endprodukten? → Zirkel ins Reißzeug und in die Sternenuhr, Uhrwerk in Räder- und Sternenuhr, Gewichtstein in die Räderuhr, Schlüssel und Vorhängeschloss ins Kastenschloss, Verstärkte Holzplatte ins Zeichenbrett (mit Flachsfasern).
+- Wo kommt die Holzkohle hin? → Kohlenmeiler (Rohstoff-Gebäude, 1 Holzstamm → 100 Holzkohle) ab Level 9; zuerst fürs Reißzeug, später für Glas (Tränke) und vielleicht Stahl.
+
+**Gemacht:**
+- `docs/archiv/PLAENE.md`: Entwurf Level 9–12 mit Rezepten, Werten (+20 % je Stufe) und 5 Fragen. `docs/STAND.md`: Status, nächster Schritt, offene Frage 14, neuer Arbeitsschritt oben (v0.24.0 fällt aus der Liste). `docs/SPIEL.md`: Ausblick Level 9–13. Gespräch und Entscheidungen ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt; `npm test` bestanden.
+
 ### v0.25.0 – Kunden-Tempo angeglichen (13.11.2026)
 
 **Vorgenommen:**

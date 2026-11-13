@@ -61,7 +61,77 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Überlegung: Techbaum – Werkzeuge, Kräuter und Tränke parallel (Chat 19, noch zu planen)
+### Entwurf Level 9–12 – Werkzeuge, Kräuter und Holzkohle (v0.25.1, zur Besprechung)
+
+**Tobias (Chat 19):** „Ich wollte erstmal die ganzen Sachen sozusagen einführen, indem ich zuerst die Werkzeuge einführe, dann die Kräuter und danach die Tränke, dass man alles so ein bisschen versteht, wie das alles zusammenhängt. Aber ich wollte jetzt nicht, dass mit den Werkzeugen jetzt nichts mehr passiert von Level 7 bis 12. … man könnte ja beispielsweise auch Fasern und die Verstärkte Holzplatte schon mal zu irgendwas machen, worauf man zeichnen kann, und bloß den Zirkel dann irgendwie zu einem mathematischen Produkt oder für die Wissenschaft … Und das mit den 2 Eingängen will ich beibehalten. … Und du kannst mir gerne mal einen Entwurf schreiben für die Level 9 bis 12, damit wir noch 1, 2 Kräuter etablieren können, damit wir aus diesen Kräutern auch verschiedene Tränke machen können. Und ich finde es ganz gut, wenn wir vielleicht noch so was wie einen Schmelzofen oder so was einführen könnten, damit wir aus Baumstämmen auch Holzkohle machen können. Und aus Holzkohle kann man dann auch noch weitere Produkte machen. Nur so als kleine Randidee.“
+
+**Leitidee:**
+- Die Level wechseln sich ab: **9 und 11 bringen vor allem Werkzeuge, 10 und 12 vor allem Kräuter.** Die Aufträge jedes Levels verlangen Waren aus **beiden** Bereichen, damit keine Fabrik stillsteht.
+- **Höchstens 2 Eingänge je Maschine** (Tobias). Jedes neue Produkt entsteht logisch aus zwei Zutaten: Werkzeuge werden zu Instrumenten und Sets zusammengebaut, Kräuter zu größeren Heilmitteln.
+- **Holzkohle** (Tobias' Randidee) kommt schon mit Level 9: zuerst fürs Reißzeug, später für Glas (Kolben für die Tränke, ab Level 13) und vielleicht Stahl.
+- Werte wie bisher: jede Stufe rund 20 % mehr als ihre Zutaten. Alle Zahlen (Preise, Zeiten, Mengen) sind Platzhalter; Baukosten nach der bisherigen Regel beim Umsetzen.
+- Gegenüber dem alten Ausblick verschoben: die dritte Pflanze kommt mit Level 10 statt 9; „Kompresse + Heilverband zu Größerem“ wird das Heilpäckchen (Level 12).
+
+**Übersicht:**
+
+| Level | Bauabschnitt | Bereich | Neu |
+|---|---|---|---|
+| 9 | Die Schreibstube | Werkzeuge + Holzkohle | Kohlenmeiler, Schreibstube; Holzkohle, Zeichenbrett, Reißzeug |
+| 10 | Das Spital | Kräuter | Schafgarbe (3. Pflanze); Kräuterstube: Wundverband |
+| 11 | Die Uhrmacherei | Werkzeuge | Uhrmacherei; Räderuhr, Kastenschloss, Sternenuhr |
+| 12 | Die Apotheke | Kräuter (Abschluss) + Werkzeuge | Kamille (4. Pflanze), Apotheke; Kräutermischung, Kamillenkissen, Heilpäckchen; Schreibstube: Reißbrett |
+
+**Level 9 – Die Schreibstube** (Baumeister Anton plant den Ausbau des Ortes, im Wald arbeitet ein Köhler)
+- **Kohlenmeiler** (Reiter Holz, Rohstoff-Gebäude wie das Holzfällerlager): 1 Holzstamm → 100 Holzkohle in 15 Minuten, Vorrat 3. Holzkohle 2 Gold (100 × 2 = 200, so viel wie 200 Holzblöcke).
+- **Schreibstube** (Reiter Holz, 2 Eingänge):
+
+| Ware | Rezept | Zeit | Wert |
+|---|---|---|---|
+| Zeichenbrett | 1 Verstärkte Holzplatte + 10 Flachsfasern (mit Leinen bespannt – „etwas, worauf man zeichnen kann“) | 20 s | 355 |
+| Reißzeug | 1 Zirkel + 10 Holzkohle (Zirkel und Zeichenkohle im Etui – das Werkzeug des Baumeisters) | 30 s | 818 |
+
+- Aufträge (Idee): Zeichenbretter und Reißzeuge für Anton, dazu Verbände für die Heilstube.
+
+**Level 10 – Das Spital** (Heilerin Agnes eröffnet ein Spital, Torwächter Ulrich bringt Verwundete)
+- **Schafgarbe** (das Wundkraut des Mittelalters): Schafgarbensamen beim Händler 660 Gold, Beet 30 Minuten, Erntebank: 1 Pflanze → 50 Schafgarbenblüten à 16 Gold.
+- **Kräuterstube**, 3. Einstellung: **Wundverband** = 1 Heilverband + 5 Schafgarbenblüten (stillt Blut), 20 s, 252 Gold.
+- Aufträge (Idee): Wundverbände und Schafgarbenblüten, dazu Vorhängeschlösser für die Arzneischränke.
+
+**Level 11 – Die Uhrmacherei** (der Ort bekommt eine Ratsuhr; Uhrmacher kamen im Mittelalter aus der Schlosserzunft)
+- **Uhrmacherei** (Reiter Eisen, 2 Eingänge):
+
+| Ware | Rezept | Zeit | Wert |
+|---|---|---|---|
+| Räderuhr | 1 Uhrwerk + 1 Gewichtstein (Uhr mit Gewichtsantrieb, wie die ersten Uhren) | 30 s | 570 |
+| Kastenschloss | 1 Vorhängeschloss + 1 Schlüssel (Schloss mit passendem Schlüssel für Kassen und Kästchen – Tobias' Idee) | 30 s | 1.296 |
+| Sternenuhr | 1 Uhrwerk + 1 Zirkel (zeigt Sonne, Mond und Sterne – „für die Wissenschaft“) | 40 s | 1.105 |
+
+- Aufträge (Idee): Räderuhr für Bürgermeisterin Hilde, Kastenschloss für Händlerin Marta, Sternenuhr für einen Gelehrten; dazu Wundverbände.
+
+**Level 12 – Die Apotheke** (Abschluss des Kräuter-Kapitels; eine Apothekerin zieht in den Ort)
+- **Kamille** (beruhigt, hilft beim Schlafen): Kamillensamen 830 Gold, Erntebank: 1 Pflanze → 50 Kamillenblüten à 20 Gold.
+- **Apotheke** (Reiter Erde, 2 Eingänge):
+
+| Ware | Rezept | Zeit | Wert |
+|---|---|---|---|
+| Kräutermischung | 5 Schafgarbenblüten + 5 Kamillenblüten (Grundlage für die Tränke ab Level 13) | 20 s | 216 |
+| Kamillenkissen | 10 Flachsfasern + 5 Kamillenblüten | 20 s | 216 |
+| Heilpäckchen | 1 Wundverband + 1 Kräuterkompresse | 30 s | 504 |
+
+- **Schreibstube**, 3. Einstellung: **Reißbrett** = 1 Zeichenbrett + 1 Reißzeug (das fertige Arbeitsbrett des Baumeisters – Anton plant die Glashütte), 40 s, 1.408 Gold.
+
+**Was die neuen Stufen weiterverarbeiten:** Zirkel (Reißzeug, Sternenuhr), Uhrwerk (Räderuhr, Sternenuhr), Gewichtstein (Räderuhr), Schlüssel und Vorhängeschloss (Kastenschloss), Verstärkte Holzplatte (Zeichenbrett); dazu Flachsfasern (Zeichenbrett, Kamillenkissen), Heilverband (Wundverband), Kräuterkompresse (Heilpäckchen). Ohne Weiterverarbeitung bleiben vorerst Räderuhr, Kastenschloss, Sternenuhr, Reißbrett, Kamillenkissen und Heilpäckchen – die Tränke und spätere Stufen können daran anknüpfen.
+
+**Ausblick ab Level 13 (Ideen):** Glashütte – Sand (neuer Rohstoff) + Holzkohle → Glas → Kolben; Tränke aus Kolben und Kräutermischungen (z. B. Heiltrank, Schlaftrank mit Kamille). Wie die Werkzeuge in die Tränke kommen (z. B. Verschluss aus Eisenblech, Apothekerwaage aus Gewichtsteinen), planen wir dann. Holzkohle + Eisenbarren → Stahl als neue Werkzeug-Stufe; Holzkohle in der Medizin (gegen Gift).
+
+**Fragen an Tobias:**
+1. Abwechselnd Werkzeuge (9, 11) und Kräuter (10, 12), Aufträge immer aus beiden Bereichen – passt das?
+2. Sind die Produkte logisch genug (Zeichenbrett, Reißzeug, Reißbrett, Räderuhr, Kastenschloss, Sternenuhr, Wundverband, Kräutermischung, Kamillenkissen, Heilpäckchen)? Was fehlt oder stört?
+3. Schafgarbe (Level 10) und Kamille (Level 12) – oder lieber andere Kräuter (z. B. Baldrian, Salbei, Johanniskraut)?
+4. Holzkohle schon ab Level 9 im Kohlenmeiler (1 Holzstamm → 100 Holzkohle)?
+5. Danach Level 9 als nächste Version umsetzen?
+
+### Überlegung: Techbaum – Werkzeuge, Kräuter und Tränke parallel (Chat 19; Entwurf Level 9–12 siehe oben)
 
 **Tobias (Chat 19):** Ab Level 7 konzentriert man sich auf die Kräuter und kann die Werkzeuge nicht mehr weiterverarbeiten. „Wir hatten vor, die Werkzeuge mit den Kräutern zu kombinieren, aber da wollten wir dann nach den Kräutern neue Rohstoffe einführen, wie Glas etc., damit wir Kolben herstellen können, um mit Kräutern und den Werkzeugen dann Tränke herzustellen, aber Zirkel + Kräuter ergibt für mich noch keine sinnvolle Weiterverarbeitung … Da könnte man Schlüssel und Vorhängeschloss in einer weiteren Maschine verarbeiten, genauso wie Verstärkte Holzplatte, Zirkel und Fasern für ein Zeichenbrett oder Ähnliches. Das stell ich mir eher vor, dass sowas parallel läuft, während wir Kräuter einführen und die Tränke, sodass diese 3 Kategorien (Werkzeuge, Kräuter und Tränke) parallel auch weiter wachsen.“
 
