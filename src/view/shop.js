@@ -26,7 +26,7 @@ import {
   setCounterItem,
 } from '../core/market.js';
 import { isItemUnlocked, itemLevel } from '../core/levels.js';
-import { perCounterFor, storageCapacity, storageCount, storageFree, storageTotal } from '../core/shop.js';
+import { storageCapacity, storageCount, storageFree, storageTotal } from '../core/shop.js';
 import { createItemIcon } from './itemArt.js';
 import { itemCount, numberFormat } from './format.js';
 
@@ -135,9 +135,10 @@ export function createShopView({ state, panels, onChange }) {
     const price = nextCounterPrice(state);
     if (price === null) return;
     const number = state.counters.length + 1;
+    const { min, max } = customerRange(state.shopLevel);
     const ok = await panels.confirm({
       title: `Theke ${number} kaufen?`,
-      text: `Für ${numberFormat.format(price)} Gold bekommst du eine weitere Theke mit eigenen Kunden – auf Level ${state.shopLevel} verkauft sie etwa ${numberFormat.format(perCounterFor(state.shopLevel))} Stück pro Minute.\nDanach hast du noch ${numberFormat.format(Math.max(0, state.gold - price))} Gold.`,
+      text: `Für ${numberFormat.format(price)} Gold bekommst du eine weitere Theke mit eigenen Kunden – auf Level ${state.shopLevel} kommt dort etwa alle ${min}–${max} Sekunden einer.\nDanach hast du noch ${numberFormat.format(Math.max(0, state.gold - price))} Gold.`,
       okLabel: `🛒 Kaufen · ${numberFormat.format(price)} 🪙`,
     });
     if (!ok) return;
@@ -389,7 +390,8 @@ export function createShopView({ state, panels, onChange }) {
     buttons.append(button);
     card.append(text, missing, buttons);
     return () => {
-      text.textContent = `Noch nicht gekauft · eigene Kunden: +${numberFormat.format(perCounterFor(state.shopLevel))} Stück pro Minute`;
+      const { min, max } = customerRange(state.shopLevel);
+      text.textContent = `Noch nicht gekauft · eigene Kunden: alle ${min}–${max} Sekunden einer`;
       const lack = slot.price - state.gold;
       button.disabled = lack > 0;
       missing.textContent = lack > 0 ? `Dir fehlen noch ${numberFormat.format(Math.ceil(lack))} 🪙` : '';

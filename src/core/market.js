@@ -33,7 +33,7 @@ import {
   addToStorage,
   counterSizeFor,
   emptyCounter,
-  perCounterFor,
+  customerSecondsFor,
   storageCount,
   storageFree,
   takeFromStorage,
@@ -54,17 +54,21 @@ function randomInt(market, min, max) {
   return min + Math.floor(nextRandom(market) * (max - min + 1));
 }
 
-// v0.24.0: Im Schnitt so viele Sekunden zwischen zwei Kunden einer Theke –
-// so oft, dass sie perCounter Stück pro Minute verkauft.
-export function customerSeconds(level) {
-  const items = (CUSTOMERS.minItems + CUSTOMERS.maxItems) / 2;
-  return (items * 60) / perCounterFor(level);
+// Kürzester und längster Abstand zwischen zwei Kunden einer Theke
+// (v0.25.0 direkt aus der Datentabelle).
+export function customerRange(level) {
+  return customerSecondsFor(level);
 }
 
-// Kürzester und längster Abstand zwischen zwei Kunden einer Theke (für Texte).
-export function customerRange(level) {
-  const avg = customerSeconds(level);
-  return { min: avg * (1 - CUSTOMERS.spread), max: avg * (1 + CUSTOMERS.spread) };
+// Im Schnitt so viele Sekunden zwischen zwei Kunden einer Theke.
+export function customerSeconds(level) {
+  const { min, max } = customerRange(level);
+  return (min + max) / 2;
+}
+
+// So viele Stück verkauft eine volle Theke im Schnitt pro Minute.
+export function perCounterMinute(level) {
+  return ((CUSTOMERS.minItems + CUSTOMERS.maxItems) / 2) * (60 / customerSeconds(level));
 }
 
 function customerInterval(market, level) {

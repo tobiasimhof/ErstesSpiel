@@ -1511,7 +1511,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   );
   const thekenText = await page.textContent('#modal-content');
   check(
-    thekenText.includes('Jede Theke hat ihre eigenen Kunden: Auf Level 7 kommt etwa alle 60–100 Sekunden einer und kauft 1 Stück'),
+    thekenText.includes('Jede Theke hat ihre eigenen Kunden: Auf Level 7 kommt etwa alle 45–60 Sekunden einer und kauft 1 Stück') &&
+      thekenText.includes('eigene Kunden: alle 45–60 Sekunden einer'),
     'Theken-Reiter erklärt das Tempo auf Level 7',
   );
   check(
@@ -1523,7 +1524,11 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(1200);
   const buyButton = page.locator('#modal-content [data-counter-action="kaufen"]');
   check(await buyButton.isDisabled(), 'Mit 14.000 Gold ist „Kaufen“ gesperrt');
-  check((await page.textContent('#modal-content .counter-missing')).includes('Dir fehlen noch 1.000'), 'Es steht da, wie viel Gold fehlt');
+  // Die Kunden kaufen weiter ein – das Gold kann inzwischen etwas gestiegen sein.
+  const missingText = await page.textContent('#modal-content .counter-missing');
+  const missingGold = Number((missingText.match(/Dir fehlen noch ([\d.]+)/)?.[1] ?? '').replace(/\./g, ''));
+  const goldNow = await game(page, () => window.__game.state.gold);
+  check(missingGold >= 15000 - goldNow && missingGold <= 1000 && missingGold > 900, `Es steht da, wie viel Gold fehlt („${missingText}“)`);
   await shot('16-theken-kaufen');
   await game(page, () => (window.__game.state.gold = 20000));
   await sleep(1200);

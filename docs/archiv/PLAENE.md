@@ -61,7 +61,21 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.25.0 – Kunden-Tempo angleichen (wartet auf Tobias' OK)
+### Überlegung: Techbaum – Werkzeuge, Kräuter und Tränke parallel (Chat 19, noch zu planen)
+
+**Tobias (Chat 19):** Ab Level 7 konzentriert man sich auf die Kräuter und kann die Werkzeuge nicht mehr weiterverarbeiten. „Wir hatten vor, die Werkzeuge mit den Kräutern zu kombinieren, aber da wollten wir dann nach den Kräutern neue Rohstoffe einführen, wie Glas etc., damit wir Kolben herstellen können, um mit Kräutern und den Werkzeugen dann Tränke herzustellen, aber Zirkel + Kräuter ergibt für mich noch keine sinnvolle Weiterverarbeitung … Da könnte man Schlüssel und Vorhängeschloss in einer weiteren Maschine verarbeiten, genauso wie Verstärkte Holzplatte, Zirkel und Fasern für ein Zeichenbrett oder Ähnliches. Das stell ich mir eher vor, dass sowas parallel läuft, während wir Kräuter einführen und die Tränke, sodass diese 3 Kategorien (Werkzeuge, Kräuter und Tränke) parallel auch weiter wachsen.“
+
+**Ausgangslage (Stand v0.25.0):**
+- Werkzeug-Waren ohne Weiterverarbeitung: Zirkel, Schlüssel, Verstärkte Holzplatte (nur Baukosten der Schlosserei), Vorhängeschloss, Gewichtstein, Uhrwerk.
+- Kräuter: Verband (→ Heilverband), Heilverband und Kräuterkompresse sind Endprodukte.
+- Bisherige Ideen im Ausblick: Level 9 dritte Pflanze (Schafgarbe), ab etwa Level 13 Sand → Glas, um Level 15 Alchemist, Mörser und Tränke.
+
+**Noch zu klären (gemeinsam):** Welche neuen Werkzeug-Stufen (Maschinen, Waren, Rezepte – Tobias' Beispiele: Schlüssel + Vorhängeschloss; Verstärkte Holzplatte + Zirkel + Fasern → Zeichenbrett, dafür bräuchte eine Maschine 3 Eingänge oder ein Zwischenprodukt), auf welchen Leveln sie neben den Kräutern freigeschaltet werden, wann Glas und die Tränke kommen. Regeln aus dem Ausblick gelten weiter: kleine Waren, jede Stufe rund 20 % mehr, jedes Level erzählt die Geschichte des Ortes weiter.
+
+### Entwurf v0.25.0 – Kunden-Tempo angleichen (umgesetzt in v0.25.0)
+
+**Freigabe (Tobias, Chat 19):** „Ja, darfst du gerne so umsetzen.“ Umgesetzt wie unten; Level 1–3 bleibt bei 15–25 Sekunden.
+
 
 **Tobias (Chat 19):** „Ich finde, die Zeiten könnte man etwas angleichen: Level 4–6 auf 25–45 Sekunden und ab Level 7 auf 45–60 Sekunden. Man stellt jetzt deutlich mehr Ware her, als man verkauft … Ich möchte damit erreichen, dass ich meine Erzeugnisse, die ich aktuell nicht weiter verarbeiten kann, schneller verkaufen kann, damit das Lager nicht zu voll wird.“
 
