@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 14.11.2026 – Chat 20: Rückmeldung zu Level 9, mehr Fläche ab Level 10 (v0.26.1)
+
+**Tobias** (mit Screenshot seiner Fabrik: Level 9, 24.140 Gold, Fläche fast voll): „Hey, informiere dich über den aktuellen Stand der Dinge. Du hast gerade Level 9 fertig gemacht und ich sollte dir mein Feedback dazu geben. Ich finde es ist sehr gut gelungen mit dem neuen Reiter und den Techbaum, den du entworfen hast, fande ich auch sehr gut. Ich hab dir ein Screenshot gemacht von der aktuellen Produktion. Ich hab bei Level 9 die erste Mission fertig und mache gerade die 3 Bretter fertig. Aktuell wird es mit dem Platz ein wenig eng, deswegen würde ich vorschlagen, dass man auf Level 10 zusätzlich auch noch neuen Platz kaufen kann.“
+
+**Claude** hat die Rückmeldung als v0.26.1 festgehalten und den Entwurf v0.27.0 geschrieben (`PLAENE.md`): ab Level 10 je Seite ein 3. Streifen Fläche (bis 46 × 38, je 1.000 Gold), weiter herauszoomen, damit die ganze Fläche aufs Tablet passt; Level 10 „Das Spital“ wie im Entwurf (Schafgarbe, Wundverband), Aufstieg 2.000 Gold, 4 Aufträge (Agnes: 50 Schafgarbenblüten, 5 Wundverbände; Hilde: 2 Vorhängeschlösser für die Arzneien; Ulrich: 8 Wundverbände + 10 Kräuterkompressen). 4 Fragen an Tobias.
+
+**Umgesetzt:** v0.26.1 (nur Doku).
+
 ### 14.11.2026 – Chat 19 (Fortsetzung 4): Level 9 „Die Schreibstube“ (v0.26.0)
 
 **Tobias:** „Ja, das hört sich alles sehr gut an und macht auch Sinn. Ich finde die Vorgehensweise sehr gut und können wir auch gerne so umsetzen. So gibt es weiterhin genug Abwechslung. v25 mit den schnelleren Kunden war auch gut, so macht man nicht zu schnell zu viel Geld, sondern das Ganze wird eher etwas gedrosselter. Wenn du willst, kannst du direkt anfangen mit Level 9.“

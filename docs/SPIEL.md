@@ -162,7 +162,7 @@ Intern heißt die Erntebank `flachsbreche` (alter Name, damit Spielstände passe
 | 7 | Flachs → Fasern → Verbände (wie Level 1) | im Spiel |
 | 8 | Ringelblume, Kräuterstube mit 2 Eingängen (wie Level 2) | im Spiel |
 | 9 | Die Schreibstube (Werkzeuge): Kohlenmeiler (Holzstamm → Holzkohle), Schreibstube: Zeichenbrett (Verstärkte Holzplatte + Flachsfasern), Reißzeug (Zirkel + Holzkohle) | im Spiel |
-| 10 | Das Spital (Kräuter): Schafgarbe als 3. Pflanze, Wundverband (Heilverband + Schafgarbenblüten) | Entwurf (`docs/archiv/PLAENE.md`), von Tobias gutgeheißen – als Nächstes |
+| 10 | Das Spital (Kräuter): Schafgarbe als 3. Pflanze, Wundverband (Heilverband + Schafgarbenblüten); dazu mehr Fläche (Tobias' Wunsch: je Seite ein 3. Streifen, bis 46 × 38) | Entwurf v0.27.0 (`docs/archiv/PLAENE.md`) – als Nächstes, wartet auf Tobias' OK |
 | 11 | Die Uhrmacherei (Werkzeuge): Räderuhr (Uhrwerk + Gewichtstein), Kastenschloss (Vorhängeschloss + Schlüssel), Sternenuhr (Uhrwerk + Zirkel) | Entwurf |
 | 12 | Die Apotheke (Abschluss der Kräuter): Kamille als 4. Pflanze, Kräutermischung, Kamillenkissen, Heilpäckchen (Wundverband + Kräuterkompresse); Reißbrett (Zeichenbrett + Reißzeug) | Entwurf |
 | ab 13 | Tränke: Sand + Holzkohle → Glas → Kolben, Tränke aus Kolben und Kräutermischungen; über die Kräuter-Maschinen auch Sandstaub für die Zauberei; Holzkohle + Eisen → Stahl (Idee) | später |
