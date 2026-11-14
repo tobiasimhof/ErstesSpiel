@@ -123,6 +123,23 @@ export const LEVELS = {
       { from: 'Bürgermeisterin Hilde', text: 'Der Ort baut ein kleines Spital. Agnes braucht einen Vorrat für die Kranken.', items: { heilverband: 10, verband: 20 } },
     ],
   },
+  // v0.26.0: Level 9 (Tobias, Chat 19): Die Werkzeuge wachsen weiter, während
+  // das Kräuter-Kapitel läuft – abwechselnd ein Werkzeug-Level (9, 11) und ein
+  // Kräuter-Level (10, 12), die Aufträge verlangen Waren aus beiden Bereichen.
+  // Einen neuen Rohstoff gibt es nicht: 1 Holzstamm für den Kohlenmeiler.
+  9: {
+    name: 'Die Schreibstube',
+    story:
+      'Die Stadt wächst schneller, als man bauen kann. Baumeister Anton richtet eine Schreibstube ein und zeichnet Pläne für Spital, Rathaus und eine Ratsuhr – mit Zirkel und Kohle, die ein Köhler draußen im Wald brennt.',
+    cost: 1670,
+    gift: { holzstamm: 1 },
+    quests: [
+      { from: 'Schmied Konrad', text: 'Holzkohle brennt heißer als Holz. Für meine Esse will ich nichts anderes mehr.', items: { holzkohle: 50 } },
+      { from: 'Baumeister Anton', text: 'In der Schreibstube fehlen Zeichenbretter – mit Leinen bespannt, damit die Kohle darauf hält.', items: { zeichenbrett: 3 } },
+      { from: 'Baumeister Anton', text: 'Meine Gehilfen brauchen eigenes Reißzeug: Zirkel und Zeichenkohle im Etui.', items: { reisszeug: 2 } },
+      { from: 'Bürgermeisterin Hilde', text: 'Anton zeichnet das Spital. Bis es steht, braucht Agnes Heilverbände – und Anton noch mehr Zeichenbretter.', items: { zeichenbrett: 4, heilverband: 10 } },
+    ],
+  },
 };
 
 export const MAX_LEVEL = Math.max(...Object.keys(LEVELS).map(Number));

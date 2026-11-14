@@ -532,6 +532,78 @@ export function drawItem(ctx, type, cx, cy, size) {
       }
       break;
     }
+    // v0.26.0: Level 9 „Die Schreibstube“
+    case 'charcoal': {
+      // Holzkohle: zwei schwarze Brocken mit glänzenden Bruchkanten
+      for (const [dx, dy, k] of [[-0.14, 0.08, 1], [0.22, -0.12, 0.72]]) {
+        const pts = [[-0.34, 0.06], [-0.18, -0.3], [0.16, -0.32], [0.36, -0.04], [0.24, 0.28], [-0.2, 0.3]];
+        ctx.fillStyle = def.color;
+        ctx.beginPath();
+        pts.forEach(([px, py], i) => {
+          const x = cx + (dx + px * k) * s;
+          const y = cy + (dy + py * k) * s;
+          if (i) ctx.lineTo(x, y);
+          else ctx.moveTo(x, y);
+        });
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.strokeStyle = 'rgba(200, 200, 210, 0.55)';
+        ctx.lineWidth = Math.max(1, s * 0.05);
+        ctx.beginPath();
+        ctx.moveTo(cx + (dx - 0.16 * k) * s, cy + (dy - 0.18 * k) * s);
+        ctx.lineTo(cx + (dx + 0.12 * k) * s, cy + (dy - 0.2 * k) * s);
+        ctx.stroke();
+        ctx.strokeStyle = OUTLINE;
+        ctx.lineWidth = Math.max(1, s * 0.09);
+      }
+      break;
+    }
+    case 'drawingboard': {
+      // Zeichenbrett: Holzrahmen, mit Leinen bespannt, darauf ein Hausplan in Kohle
+      ctx.fillStyle = '#b07a45';
+      roundRect(ctx, cx - s * 0.58, cy - s * 0.44, s * 1.16, s * 0.88, s * 0.08);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = def.color;
+      roundRect(ctx, cx - s * 0.46, cy - s * 0.32, s * 0.92, s * 0.64, s * 0.04);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(40, 26, 12, 0.45)';
+      ctx.lineWidth = Math.max(1, s * 0.05);
+      ctx.stroke();
+      ctx.strokeStyle = '#3a3633';
+      ctx.lineWidth = Math.max(1, s * 0.06);
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.22, cy + s * 0.22);
+      ctx.lineTo(cx - s * 0.22, cy - s * 0.04);
+      ctx.lineTo(cx, cy - s * 0.22);
+      ctx.lineTo(cx + s * 0.22, cy - s * 0.04);
+      ctx.lineTo(cx + s * 0.22, cy + s * 0.22);
+      ctx.closePath();
+      ctx.moveTo(cx - s * 0.22, cy - s * 0.04);
+      ctx.lineTo(cx + s * 0.22, cy - s * 0.04);
+      ctx.stroke();
+      break;
+    }
+    case 'drawingset': {
+      // Reißzeug: offenes Lederetui mit Zirkel und Zeichenkohle
+      roundRect(ctx, cx - s * 0.56, cy - s * 0.38, s * 1.12, s * 0.76, s * 0.12);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#8f2f2a';
+      roundRect(ctx, cx - s * 0.44, cy - s * 0.27, s * 0.88, s * 0.54, s * 0.06);
+      ctx.fill();
+      ctx.translate(cx - s * 0.1, cy);
+      thickLine(ctx, [[0, -0.2], [-0.2, 0.22]], s, 0.07, '#d4dbe4');
+      thickLine(ctx, [[0, -0.2], [0.2, 0.22]], s, 0.07, '#d4dbe4');
+      ctx.fillStyle = '#9aa3ae';
+      ctx.beginPath();
+      ctx.arc(0, -0.2 * s, 0.07 * s, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      thickLine(ctx, [[0.3, -0.18], [0.36, 0.2]], s, 0.08, '#34302d');
+      break;
+    }
     case 'log': {
       roundRect(ctx, cx - s * 0.6, cy - s * 0.3, s * 1.1, s * 0.6, s * 0.3);
       ctx.fill();

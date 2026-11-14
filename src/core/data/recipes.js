@@ -43,4 +43,11 @@ export const RECIPES = {
   // auf Wunden, die Kompresse auf Prellungen und Schwellungen.
   heilverband: { building: 'kraeuterstube', label: 'Heilverbände', inputs: { verband: 1, ringelbluete: 5 }, output: 'heilverband', amount: 1, time: 20 },
   kraeuterkompresse: { building: 'kraeuterstube', label: 'Kompressen', inputs: { flachsfaser: 10, ringelbluete: 5 }, output: 'kraeuterkompresse', amount: 1, time: 20 },
+
+  // v0.26.0: Schreibstube (Level 9, Tobias: „Fasern und die Verstärkte
+  // Holzplatte zu etwas, worauf man zeichnen kann“, den Zirkel „für die
+  // Wissenschaft“). Zeichenbrett: Holzplatte mit Leinen bespannt; Reißzeug:
+  // Zirkel und Zeichenkohle im Etui.
+  zeichenbrett: { building: 'schreibstube', label: 'Zeichenbretter', inputs: { verstaerkteholzplatte: 1, flachsfaser: 10 }, output: 'zeichenbrett', amount: 1, time: 20 },
+  reisszeug: { building: 'schreibstube', label: 'Reißzeuge', inputs: { zirkel: 1, holzkohle: 10 }, output: 'reisszeug', amount: 1, time: 30 },
 };

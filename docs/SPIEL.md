@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.25.0). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.26.0). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
@@ -9,7 +9,7 @@
 - **Makro-Spiel:** Man muss früh planen – genug Grundrohstoffe, ein Grundvorrat an Baumaterial, eigene Straßen je Zwischenprodukt, Lagerhäuser als Zwischenlager. Werden zwei Bänder mit verschiedenen Waren zusammengeführt, ist nicht mehr steuerbar, was an der Maschine ankommt.
 - **Gold ist bewusst knapp** (Tobias): Man kann nicht alles auf einmal bauen und auffüllen; das Gleichgewicht zwischen Gold verdienen und Rohstoffe nachkaufen gehört zum Spiel. Wer mehr verdienen will, muss teurere Waren anbieten. So gibt es mehrere Spielstile – z. B. auf Masse gehen oder sich auf teure Waren konzentrieren. **Der Schwerpunkt liegt auf der Massenproduktion** (Tobias, Chat 17): Prozesse optimieren und automatisieren, immer längere Straßen bauen, um Werkzeuge herzustellen und zu verkaufen; Gold gehört zum Spiel, steht aber nicht im Mittelpunkt.
 - **Roter Faden:** Der Laden liegt in einem kleinen Ort am Fluss, der wächst. Jedes Level ist ein Bauabschnitt, die Bewohner geben Aufträge.
-- **Kapitel:** Werkzeuge (Level 1–6: Holz, Stein, Eisen) und Kräuter (ab Level 7: Flachs, Ringelblume). Jedes Kapitel fängt einfach an und steigert sich; später greifen die Kapitel ineinander.
+- **Kapitel:** Werkzeuge (Level 1–6: Holz, Stein, Eisen) und Kräuter (ab Level 7: Flachs, Ringelblume); ab Level 9 wachsen die Werkzeuge weiter (Holzkohle, Schreibstube), später kommen Tränke dazu. Die Level wechseln sich ab (Werkzeuge 9 und 11, Kräuter 10 und 12), die Aufträge verlangen Waren aus beiden Bereichen. Jedes Kapitel fängt einfach an und steigert sich; später greifen die Kapitel ineinander.
 - **Kleine Waren:** Alles auf dem Band ist auch im echten Leben klein (keine Türen, Truhen, Tore). Jedes Produkt entsteht logisch aus seinen Zutaten – aus zwei Produkten das nächstmögliche, sinnvolle.
 - **Plattform:** Browser-Spiel für Tablet und Handy, **nur Querformat**, alles per Touch. Hauptgerät ist Tobias' Galaxy Tab S9, oft mit angeschlossener Tastatur. Später als App. Vorerst nur Deutsch. Draufsicht mit Platzhalter-Grafik (farbige Blöcke, Emojis, gezeichnete Warenbilder).
 - **Vorbilder nur für Mechaniken** – eigene Namen, Rezepte und Grafik: Alchemy Factory (kleine Fabrik mit Bändern), Clash of Clans (Hauptgebäude-Level, regelmäßig reinschauen, Clans), Hay Day (Handel zwischen Spielern).
@@ -35,9 +35,9 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 
 **Anschlüsse und Licht:** Pfeile am Gebäude – blau = Eingang, orange = Ausgang. Maschinen (2 × 2): Eingang links oben, Ausgang rechts oben. Kombi-Maschinen: zwei Eingänge links oben und links unten, jeder nimmt jede passende Zutat (am sichersten jede Zutat über ihren eigenen Eingang). Statuslicht: grün = arbeitet, gelb = wartet, rot = blockiert.
 
-**Auf der Karte** zeigt jede Maschine groß auf einer hellen Scheibe, was sie herstellt (das Warenbild vom Band); ein gelber Ring um die Scheibe zeigt, wie weit das laufende Stück ist. Rohstoff-Gebäude zeigen ihre Ware (leer = blass, die Erntebank die Ware der laufenden Pflanze); ihr Ring ist **grün** und zeigt, wie viel vom laufenden Rohstoff noch übrig ist – er wird deshalb nur langsam kürzer (ein Holzstamm reicht 15 Minuten), so sieht man, wann das Gebäude leer ist. Gelb = Fertigung (Maschine), grün = bis der Rohstoff leer ist. Oben rechts das Statuslicht, oben links die Punkte für den Rohstoff-Vorrat oder – wenn eine Kombi-Maschine wartet – ein gelbes Schild „?“ mit den fehlenden Zutaten; unten der Name. Lagerhäuser zeigen die Waren ihrer Fächer (leer: 📦), Beet und Versandportal ihr eigenes Bild. Jeder Reiter hat seine Farbe: Holz braun, Stein steingrau, Eisen stahlblau, Erde grün; Lagerhaus sandfarben, Versandportal lila. Ein Gebäudebild gibt es auf der Karte nicht mehr (eigene Gebäudegrafik kommt später, M4).
+**Auf der Karte** zeigt jede Maschine groß auf einer hellen Scheibe, was sie herstellt (das Warenbild vom Band); ein gelber Ring um die Scheibe zeigt, wie weit das laufende Stück ist. Rohstoff-Gebäude zeigen ihre Ware (leer = blass, die Erntebank die Ware der laufenden Pflanze); ihr Ring ist **grün** und zeigt, wie viel vom laufenden Rohstoff noch übrig ist – er wird deshalb nur langsam kürzer (ein Holzstamm reicht 15 Minuten), so sieht man, wann das Gebäude leer ist. Gelb = Fertigung (Maschine), grün = bis der Rohstoff leer ist. Oben rechts das Statuslicht, oben links die Punkte für den Rohstoff-Vorrat oder – wenn eine Kombi-Maschine wartet – ein gelbes Schild „?“ mit den fehlenden Zutaten; unten der Name. Lagerhäuser zeigen die Waren ihrer Fächer (leer: 📦), Beet und Versandportal ihr eigenes Bild. Jeder Reiter hat seine Farbe: Holz braun, Stein steingrau, Eisen stahlblau, Erde grün, Werkstatt ziegelrot; Lagerhaus sandfarben, Versandportal lila. Ein Gebäudebild gibt es auf der Karte nicht mehr (eigene Gebäudegrafik kommt später, M4).
 
-**Rohstoff-Gebäude** (Holzfällerlager, Steinbruch, Schmelzhütte, Erntebank): Rohstoff einlegen → 200 Blöcke bzw. Barren in 15 Minuten (Erntebank: 1 Pflanze → 50 Fasern bzw. Blüten in 10 Minuten). **Vorrat bis 3**, der Reihe nach verarbeitet; drei Punkte am Gebäude zeigen ihn. „⏫ Auffüllen“ füllt bis zum Rand: erst aus dem Laden-Lager, was fehlt, kauft es beim Händler (Erntebank nur aus dem Laden-Lager). Die **Erntebank** nimmt jede Pflanze, auch gemischt; je Pflanze ein Knopf „➕ … einlegen“, Auffüllen nimmt die Pflanze, die gerade läuft. Tobias baut lieber zwei Erntebänke und legt getrennt ein, damit die Straßen steuerbar bleiben.
+**Rohstoff-Gebäude** (Holzfällerlager, Steinbruch, Schmelzhütte, Kohlenmeiler, Erntebank): Rohstoff einlegen → 200 Blöcke bzw. Barren in 15 Minuten (Kohlenmeiler: 1 Holzstamm → 100 Holzkohle in 15 Minuten; Erntebank: 1 Pflanze → 50 Fasern bzw. Blüten in 10 Minuten). **Vorrat bis 3**, der Reihe nach verarbeitet; drei Punkte am Gebäude zeigen ihn. „⏫ Auffüllen“ füllt bis zum Rand: erst aus dem Laden-Lager, was fehlt, kauft es beim Händler (Erntebank nur aus dem Laden-Lager). Die **Erntebank** nimmt jede Pflanze, auch gemischt; je Pflanze ein Knopf „➕ … einlegen“, Auffüllen nimmt die Pflanze, die gerade läuft. Tobias baut lieber zwei Erntebänke und legt getrennt ein, damit die Straßen steuerbar bleiben.
 
 **Maschinen** verarbeiten nach Rezept (Grundmaschinen 2 Einstellungen, Kombi-Maschinen 2–3, Webstube 1). Beim Umstellen bleiben alle Teile in der Maschine; „↩ Reste ins Laden-Lager“ holt ungebrauchte heraus.
 
@@ -51,7 +51,7 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 
 **Bauen und Umbauen**
 - **Bauen geht sofort** und kostet **Waren** aus dem Laden-Lager (Tabelle in Abschnitt 6), kein Gold. Abreißen gibt die bezahlten Waren zurück – auch über die Grenze des Laden-Lagers (die Startgebäude geben nichts zurück). Verschieben und Drehen kosten nichts.
-- **Bauleiste** („🔨 Bauen“ unten rechts): links immer Förderband, Lagerhaus, Portal (Versandportal), Verschieben, Abreißen; rechts die Gebäude des gewählten **Reiters Holz, Stein, Eisen oder Erde** (Erde: die Gebäude des Kräuter-Kapitels) (die Reiter ragen oben aus der Leiste). Gesperrte Gebäude stehen hinten mit „🔒 Level …“, ein ganz gesperrter Reiter trägt ein 🔒. Was die Waren nicht hergeben, ist ausgegraut und sagt beim Antippen, was fehlt. Der zuletzt geöffnete Reiter bleibt gemerkt. Die Karte lässt sich unten so weit schieben, dass die unterste Reihe über der Leiste liegt.
+- **Bauleiste** („🔨 Bauen“ unten rechts): links immer Förderband, Lagerhaus, Portal (Versandportal), Verschieben, Abreißen; rechts die Gebäude des gewählten **Reiters Holz, Stein, Eisen, Erde oder Werkstatt** (Erde: die Gebäude des Kräuter-Kapitels; Werkstatt: die Werkzeug-Maschinen ab Level 9) (die Reiter ragen oben aus der Leiste). Höchstens 4 Gebäude je Reiter, damit sie auch auf dem Handy nebeneinander passen. Gesperrte Gebäude stehen hinten mit „🔒 Level …“, ein ganz gesperrter Reiter zeigt ein 🔒 statt seines Warenbilds. Was die Waren nicht hergeben, ist ausgegraut und sagt beim Antippen, was fehlt. Der zuletzt geöffnete Reiter bleibt gemerkt. Die Karte lässt sich unten so weit schieben, dass die unterste Reihe über der Leiste liegt.
 - **Platzieren:** Vorschau (grün/rot) mit dem Finger schieben, „↻ Drehen“, „✓ Bauen“. **Taste R** dreht die Vorschau, sonst das angetippte Gebäude oder Band.
 - **„✥ Verschieben“:** Bereich markieren (Rechteck ziehen oder ein Teil antippen; halb erfasste Gebäude gehören dazu) → alles auf einmal verschieben, um 90° drehen oder abreißen. In der Gruppe bleibt alles verbunden, Waren ziehen mit. Ein Finger markiert, zwei Finger bewegen die Karte.
 - **„🧹 Abreißen“:** antippen oder mit dem Finger über viele Bänder wischen.
@@ -83,7 +83,8 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 | 5 | Der Markt | Feinschmiede | Händlerin Marta: 2 Scharniere · Marta: 2 Schlüssel · Baumeister Anton: 1 Zirkel · Marta: 3 Scharniere + 3 Schlüssel | 1.495 | 330 | 1 Eisenerz |
 | 6 | Das Stadttor | Schlosserei | Torwächter Ulrich: 4 Gewichtsteine · Ulrich: 2 Vorhängeschlösser · Hilde: 2 Uhrwerke · Ulrich: 4 Vorhängeschlösser + 4 Gewichtsteine | 1.840 | 670 | 1 Eisenerz |
 | 7 | Die Heilstube | Beet, Erntebank, Webstube; Leinsamen | Heilerin Agnes: 5 Verbände · Agnes: 50 Flachsfasern · Ulrich: 15 Verbände · Hilde: 20 Verbände + 50 Flachsfasern | 816 | 1.000 | 1 Leinsamen |
-| 8 | Der Kräutergarten | Kräuterstube; Ringelblumensamen | Agnes: 50 Ringelblüten · Agnes: 5 Heilverbände · Ulrich: 5 Kräuterkompressen · Hilde: 10 Heilverbände + 20 Verbände | 1.305 (sammelt sich, bis es Level 9 gibt) | 1.330 | 1 Ringelblumensamen |
+| 8 | Der Kräutergarten | Kräuterstube; Ringelblumensamen | Agnes: 50 Ringelblüten · Agnes: 5 Heilverbände · Ulrich: 5 Kräuterkompressen · Hilde: 10 Heilverbände + 20 Verbände | 1.305 | 1.330 | 1 Ringelblumensamen |
+| 9 | Die Schreibstube | Kohlenmeiler, Schreibstube (Reiter „Werkstatt“) | Schmied Konrad: 50 Holzkohle · Baumeister Anton: 3 Zeichenbretter · Anton: 2 Reißzeuge · Hilde: 4 Zeichenbretter + 10 Heilverbände | 1.657 (sammelt sich, bis es Level 10 gibt) | 1.670 | 1 Holzstamm |
 
 „Erfahrung“ = was die Aufträge des Levels zusammen geben (genau so viel braucht der nächste Aufstieg). Ab Level 4 sind die Stückzahlen so gewählt, dass man auf Masse gehen muss; das Kräuter-Kapitel (Level 7) fängt wieder einfach an.
 
@@ -104,6 +105,8 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 | 🪢 Erntebank | Erde | 2 × 2 | 1 Pflanze → 50 Flachsfasern bzw. Ringelblüten (10 min), Vorrat 3, auch gemischt | 7 | 10 Holzplatten + 2 Zahnradwellen |
 | 🧵 Webstube | Erde | 2 × 2 | 5 Flachsfasern → 1 Verband | 7 | 20 Holzstäbe + 2 Räderwerke |
 | 🌿 Kräuterstube | Erde | 2 × 2, 2 Eingänge | „Heilverbände“ · „Kompressen“ | 8 | 10 Holzplatten + 5 Eisenbleche + 2 Zahnradwellen |
+| ♨️ Kohlenmeiler | Holz | 2 × 2 | 1 Holzstamm → 100 Holzkohle (15 min), Vorrat 3 | 9 | 20 Steinplatten + 2 Verstärkte Holzplatten |
+| 📐 Schreibstube | Werkstatt | 2 × 2, 2 Eingänge | „Zeichenbretter“ · „Reißzeuge“ | 9 | 1 Verstärkte Holzplatte + 1 Zirkel |
 | 📦 Lagerhaus | immer sichtbar | 2 × 1 | Zwischenlager 3 × 50, von Hand befüllen | 1 | 8 Holzplatten |
 | 🌀 Versandportal | immer sichtbar | 1 × 1 | schickt Waren ins Laden-Lager | 1 | 10 Holzblöcke |
 | ➡️ Förderband | immer sichtbar | 1 × 1 | transportiert | 1 | 1 Holzblock je Feld |
@@ -142,27 +145,30 @@ Intern heißt die Erntebank `flachsbreche` (alter Name, damit Spielstände passe
 | Ringelblüte (getrocknet) | Erntebank: 1 Ringelblume → 50 | 12 s je Stück | 12 |
 | Heilverband | Kräuterstube: 1 Verband + 5 Ringelblüten | 20 s | 130 |
 | Kräuterkompresse | Kräuterstube: 10 Flachsfasern + 5 Ringelblüten | 20 s | 168 |
+| Holzkohle | Kohlenmeiler: 1 Holzstamm → 100 | 9 s je Stück | 2 |
+| Zeichenbrett | Schreibstube: 1 Verstärkte Holzplatte + 10 Flachsfasern (mit Leinen bespannt) | 20 s | 355 |
+| Reißzeug | Schreibstube: 1 Zirkel + 10 Holzkohle (Zirkel und Zeichenkohle im Etui) | 30 s | 818 |
 
 - Rohstoffe und Pflanzen kommen nicht aufs Band und nicht ins Lagerhaus; man legt sie direkt ins Gebäude. Pflanzen kann man nicht kaufen und nicht verkaufen.
-- **Rechenbeispiele:** 1 Holzstamm (183) → 200 Holzblöcke (200) → 40 Teile (240). 1 Eisenerz (732) → 200 Eisenbarren (800) → 40 Teile (960). 1 Leinsamen (320) → 50 Fasern (400) → 10 Verbände (480). 1 Holzstamm + 1 Felsbrocken ergeben etwa 5 Zahnradwellen oder Räderwerke. 1 Beet Flachs + 1 Beet Ringelblumen = genau 10 Heilverbände; 10 Kräuterkompressen brauchen 2 Flachspflanzen und 1 Ringelblume. 3 Beete versorgen eine Erntebank (3 × 10 Minuten = eine Wachszeit).
+- **Rechenbeispiele:** 1 Holzstamm (183) → 200 Holzblöcke (200) → 40 Teile (240); im Kohlenmeiler → 100 Holzkohle (200) → mit 10 Zirkeln 10 Reißzeuge (8.180). 1 Eisenerz (732) → 200 Eisenbarren (800) → 40 Teile (960). 1 Leinsamen (320) → 50 Fasern (400) → 10 Verbände (480). 1 Holzstamm + 1 Felsbrocken ergeben etwa 5 Zahnradwellen oder Räderwerke. 1 Beet Flachs + 1 Beet Ringelblumen = genau 10 Heilverbände; 10 Kräuterkompressen brauchen 2 Flachspflanzen und 1 Ringelblume. 3 Beete versorgen eine Erntebank (3 × 10 Minuten = eine Wachszeit).
 - Verwendung: Jedes Grundteil wird von mindestens einem Kombi-Rezept gebraucht (die Steinplatte vom Gewichtstein); Eisen etwas mehr als Holz und Stein, weil es mehr bringt. Der Verband ist für Wunden, die Kräuterkompresse für Prellungen und Schwellungen.
 
 ## 8. Ausblick
 
-**Kräuter-Kapitel (Tobias' Plan):**
+**Techbaum ab dem Kräuter-Kapitel (Tobias' Plan; Level 9–12 nach Claudes Entwurf, Chat 19):**
 
 | Level | Inhalt | Stand |
 |---|---|---|
 | 7 | Flachs → Fasern → Verbände (wie Level 1) | im Spiel |
 | 8 | Ringelblume, Kräuterstube mit 2 Eingängen (wie Level 2) | im Spiel |
-| 9 | Die Schreibstube (Werkzeuge): Kohlenmeiler (Holzstamm → Holzkohle), Schreibstube: Zeichenbrett (Verstärkte Holzplatte + Flachsfasern), Reißzeug (Zirkel + Holzkohle) | Entwurf (v0.25.1, `docs/archiv/PLAENE.md`), wartet auf Tobias |
-| 10 | Das Spital (Kräuter): Schafgarbe als 3. Pflanze, Wundverband (Heilverband + Schafgarbenblüten) | Entwurf |
+| 9 | Die Schreibstube (Werkzeuge): Kohlenmeiler (Holzstamm → Holzkohle), Schreibstube: Zeichenbrett (Verstärkte Holzplatte + Flachsfasern), Reißzeug (Zirkel + Holzkohle) | im Spiel |
+| 10 | Das Spital (Kräuter): Schafgarbe als 3. Pflanze, Wundverband (Heilverband + Schafgarbenblüten) | Entwurf (`docs/archiv/PLAENE.md`), von Tobias gutgeheißen – als Nächstes |
 | 11 | Die Uhrmacherei (Werkzeuge): Räderuhr (Uhrwerk + Gewichtstein), Kastenschloss (Vorhängeschloss + Schlüssel), Sternenuhr (Uhrwerk + Zirkel) | Entwurf |
 | 12 | Die Apotheke (Abschluss der Kräuter): Kamille als 4. Pflanze, Kräutermischung, Kamillenkissen, Heilpäckchen (Wundverband + Kräuterkompresse); Reißbrett (Zeichenbrett + Reißzeug) | Entwurf |
 | ab 13 | Tränke: Sand + Holzkohle → Glas → Kolben, Tränke aus Kolben und Kräutermischungen; über die Kräuter-Maschinen auch Sandstaub für die Zauberei; Holzkohle + Eisen → Stahl (Idee) | später |
 | ~15 | Alchemist, Mörser (getrocknete Blüten → Staub, z. B. Ringelblumenstaub), Zaubertränke (Lebens-, Mana-, Alterstrank …); Farn als Zauberkraut (Idee) | später |
 
-**Drei Bereiche wachsen parallel** (Tobias, Chat 19): Werkzeuge, Kräuter und Tränke. Aus Werkzeugen und Kräutern entstehen am Ende die Tränke – dafür braucht es neue Rohstoffe wie Glas (Kolben). Zirkel und Kräuter direkt zu kombinieren ergibt keinen Sinn; deshalb wächst auch das Werkzeug-Kapitel weiter. Bisher ohne Weiterverarbeitung: Zirkel, Schlüssel, Verstärkte Holzplatte, Vorhängeschloss, Gewichtstein, Uhrwerk. Tobias' Ideen: Schlüssel + Vorhängeschloss in einer weiteren Maschine; Verstärkte Holzplatte + Zirkel + Fasern für ein Zeichenbrett oder Ähnliches.
+**Drei Bereiche wachsen parallel** (Tobias, Chat 19): Werkzeuge, Kräuter und Tränke. Aus Werkzeugen und Kräutern entstehen am Ende die Tränke – dafür braucht es neue Rohstoffe wie Glas (Kolben). Zirkel und Kräuter direkt zu kombinieren ergibt keinen Sinn; deshalb wächst auch das Werkzeug-Kapitel weiter. Seit Level 9 weiterverarbeitet: Zirkel (Reißzeug) und Verstärkte Holzplatte (Zeichenbrett). Noch ohne Weiterverarbeitung: Schlüssel, Vorhängeschloss, Gewichtstein, Uhrwerk – im Entwurf mit Level 11 (Uhrmacherei: Räderuhr, Kastenschloss, Sternenuhr).
 
 **Leitlinien für neue Inhalte:** Jedes Kapitel fängt einfach an; neue Pflanzen wachsen im selben Beet und laufen durch dieselbe Erntebank; Gebäude kosten Werkzeug-Waren; jede Stufe bringt rund 20 % mehr; jedes neue Level erzählt die Geschichte des Ortes weiter (neue Bewohner, neuer Bauabschnitt); nur kleine Waren; häppchenweise planen und umsetzen.
 

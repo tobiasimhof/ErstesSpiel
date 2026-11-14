@@ -73,4 +73,13 @@ export const ITEMS = {
   // Kräuterstube: Verband (bzw. Fasern) + Kraut. Wert = Zutaten + 20 %.
   heilverband: { name: 'Heilverband', plural: 'Heilverbände', price: 130, color: '#f4f1e8', herb: '#f59f00', shape: 'bandage' },
   kraeuterkompresse: { name: 'Kräuterkompresse', plural: 'Kräuterkompressen', price: 168, color: '#efe3c2', herb: '#f08c00', shape: 'compress' },
+
+  // v0.26.0: Level 9 „Die Schreibstube“ (Tobias, Chat 19): Die Werkzeuge
+  // wachsen weiter, während das Kräuter-Kapitel läuft. Holzkohle aus dem
+  // Kohlenmeiler (1 Holzstamm → 100 Stück, 100 × 2 = 200 Gold wie 200
+  // Holzblöcke); Zeichenbrett und Reißzeug aus der Schreibstube.
+  // Wert = Zutaten + 20 %.
+  holzkohle: { name: 'Holzkohle', plural: 'Holzkohle', price: 2, color: '#34302d', shape: 'charcoal' },
+  zeichenbrett: { name: 'Zeichenbrett', plural: 'Zeichenbretter', price: 355, color: '#efe6cf', shape: 'drawingboard' },
+  reisszeug: { name: 'Reißzeug', plural: 'Reißzeuge', price: 818, color: '#6b4428', shape: 'drawingset' },
 };

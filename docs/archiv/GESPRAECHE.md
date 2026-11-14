@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 14.11.2026 – Chat 19 (Fortsetzung 4): Level 9 „Die Schreibstube“ (v0.26.0)
+
+**Tobias:** „Ja, das hört sich alles sehr gut an und macht auch Sinn. Ich finde die Vorgehensweise sehr gut und können wir auch gerne so umsetzen. So gibt es weiterhin genug Abwechslung. v25 mit den schnelleren Kunden war auch gut, so macht man nicht zu schnell zu viel Geld, sondern das Ganze wird eher etwas gedrosselter. Wenn du willst, kannst du direkt anfangen mit Level 9.“
+
+**Claude** hat Level 9 gebaut wie im Entwurf und dabei festgelegt (vor dem Merge genannt, jederzeit änderbar): eigener Reiter „Werkstatt“ für die Schreibstube (je Reiter passen nur 4 Gebäude aufs Handy), gesperrte Reiter zeigen das Schloss statt des Warenbilds, 1 Holzstamm als Geschenk, Aufstieg 1.670 Gold, 4 Aufträge (Konrad: 50 Holzkohle; Anton: 3 Zeichenbretter, 2 Reißzeuge; Hilde: 4 Zeichenbretter + 10 Heilverbände), Baukosten aus Werkzeug-Waren.
+
+**Umgesetzt:** v0.26.0 (siehe Versionshistorie).
+
 ### 13.11.2026 – Chat 19 (Fortsetzung 3): Entwurf Level 9–12 (v0.25.1)
 
 **Claude** hatte gefragt: Soll jedes Level etwas aus mehreren Bereichen bringen oder sollen sie sich abwechseln? Und für das Zeichenbrett (3 Zutaten) eine Maschine mit 3 Eingängen oder ein Zwischenprodukt?

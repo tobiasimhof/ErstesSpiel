@@ -9,10 +9,11 @@ import { unlocksOf } from '../src/core/levels.js';
 import { clampCamera, createCamera, panBy, setViewSize } from '../src/view/camera.js';
 
 // v0.19.0 (Tobias): Der Reiter „Kräuter“ heißt „Erde“.
-test('Reiter: Holz, Stein, Eisen, Erde – in dieser Reihenfolge', () => {
+// v0.26.0: dazu „Werkstatt“ für die Werkzeug-Maschinen ab Level 9.
+test('Reiter: Holz, Stein, Eisen, Erde, Werkstatt – in dieser Reihenfolge', () => {
   assert.deepEqual(
     BUILD_TABS.map((t) => t.name),
-    ['Holz', 'Stein', 'Eisen', 'Erde'],
+    ['Holz', 'Stein', 'Eisen', 'Erde', 'Werkstatt'],
   );
   assert.equal(new Set(BUILD_TABS.map((t) => t.id)).size, BUILD_TABS.length, 'Reiter-Kennungen sind eindeutig');
   for (const tab of BUILD_TABS) assert.ok(ITEMS[tab.item], `Warenbild ${tab.item} des Reiters ${tab.name} gibt es`);
@@ -31,10 +32,11 @@ test('Immer sichtbar: Lagerhaus und Versandportal', () => {
 
 test('Einteilung der Reiter (Tobias): Kombi-Maschinen beim Stoff, zu dem sie passen', () => {
   const tabOf = Object.fromEntries(BUILD_TABS.flatMap((t) => t.buildings.map((b) => [b, t.id])));
-  assert.deepEqual(BUILD_TABS.find((t) => t.id === 'holz').buildings, ['holzfaeller', 'saegewerk', 'zimmerei']);
+  assert.deepEqual(BUILD_TABS.find((t) => t.id === 'holz').buildings, ['holzfaeller', 'saegewerk', 'zimmerei', 'kohlenmeiler']);
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'stein').buildings, ['steinbruch', 'steinmetz']);
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'eisen').buildings, ['schmelzhuette', 'schmiede', 'feinschmiede', 'schlosserei']);
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'kraeuter').buildings, ['beet', 'flachsbreche', 'webstube', 'kraeuterstube']);
+  assert.deepEqual(BUILD_TABS.find((t) => t.id === 'werkstatt').buildings, ['schreibstube']);
   assert.equal(tabOf.zimmerei, 'holz');
   assert.equal(tabOf.schlosserei, 'eisen');
 });
