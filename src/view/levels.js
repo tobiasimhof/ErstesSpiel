@@ -265,7 +265,7 @@ export function createLevelView({ state, panels, onLevelUp, onQuestDone }) {
       el(
         'p',
         'modal-meta',
-        'Dein Laden liegt in einem kleinen Ort am Fluss, der wächst. Jedes Level ist ein Bauabschnitt: Die Bewohner geben Aufträge, die Erfahrung daraus schaltet das nächste Level frei, und kaufen musst du es mit Gold. Jedes Level bringt neue Gebäude oder mehr Platz im Laden – und zu Beginn einen Rohstoff gratis.',
+        'Dein Laden liegt in einem kleinen Ort am Fluss, der wächst. Jedes Level ist ein Bauabschnitt: Die Bewohner geben Aufträge, die Erfahrung daraus schaltet das nächste Level frei, und kaufen musst du es mit Gold. Jedes Level bringt neue Gebäude, Rezepte oder mehr Platz – bis Level 10 auch zu Beginn einen Rohstoff gratis.',
       ),
     );
     const list = el('div', 'level-list');

@@ -271,6 +271,24 @@ export const BUILDINGS = {
     ],
     production: { kind: 'workshop', recipes: ['zeichenbrett', 'reisszeug'] },
   },
+  // v0.28.0: Level 11 „Die Uhrmacherei“ – im Reiter „Werkstatt“ neben der
+  // Schreibstube (Tobias: „Ja, mach das in den Reiter.“; „Eisen“ hat schon 4
+  // Gebäude). Baukosten 1 Zirkel + 1 Uhrwerk (921 Gold, unter 960).
+  uhrmacherei: {
+    level: 11,
+    name: 'Uhrmacherei',
+    cost: { zirkel: 1, uhrwerk: 1 },
+    icon: '🕰️',
+    size: [2, 2],
+    color: TAB_COLORS.werkstatt,
+    tip: 'Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
+    ports: [
+      { kind: 'in', x: 0, y: 0, side: 'W' },
+      { kind: 'in', x: 0, y: 1, side: 'W' },
+      { kind: 'out', x: 1, y: 0, side: 'E' },
+    ],
+    production: { kind: 'workshop', recipes: ['raederuhr', 'kastenschloss', 'sternenuhr'] },
+  },
   lagerhaus: {
     level: 1,
     name: 'Lagerhaus',
@@ -315,7 +333,7 @@ export const BUILD_TABS = [
   // neuen Maschinen verarbeiten Waren aus mehreren Reitern und passen zu keinem
   // Stoff; je Reiter passen höchstens 4 Gebäude aufs Handy – deshalb ein
   // eigener Reiter (Schreibstube, später die Uhrmacherei).
-  { id: 'werkstatt', name: 'Werkstatt', item: 'reisszeug', color: TAB_COLORS.werkstatt, buildings: ['schreibstube'] },
+  { id: 'werkstatt', name: 'Werkstatt', item: 'reisszeug', color: TAB_COLORS.werkstatt, buildings: ['schreibstube', 'uhrmacherei'] },
 ];
 
 // Gebäude, die man oft braucht: stehen immer sichtbar links in der Bauleiste,

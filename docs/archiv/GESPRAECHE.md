@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 14.11.2026 – Chat 20 (Fortsetzung 3): Level 11 „Die Uhrmacherei“ (v0.28.0)
+
+**Tobias** (Antworten auf den Entwurf v0.28.0): „Eisenerzgeschenke brauchen wir keine mehr. Das sollte mit Level 10 enden, dass wir Geschenke bekommen. 1. Ja, mach das in den Reiter. 2. Ja, die Baukosten passen, aber ich würde das ganze etwas mit der Zeit skalieren, weil man mit diesen Produkten auch gutes Geld verdienen kann. Evtl. die Zeit auf 1 min. pro Stück nach oben. Aufstieg können wir jetzt etwas anziehen und bei 5000 Gold starten, damit wir auch etwas mit dem Cash Flow arbeiten können.“
+
+**Claude** hat v0.28.0 gebaut: Uhrmacherei im Reiter „Werkstatt“ (1 Zirkel + 1 Uhrwerk), Räderuhr, Kastenschloss und Sternenuhr je 60 s, Level 11 für 5.000 Gold ohne Geschenk, Aufträge wie im Entwurf.
+
+**Umgesetzt:** v0.28.0 (siehe Versionshistorie).
+
 ### 14.11.2026 – Chat 20 (Fortsetzung 2): Rückmeldung zu Level 10, Plan für Level 11 (v0.27.1)
 
 **Tobias** (mit Screenshot: Level 10, 18.111 Gold, 46 × 38): „Das ist das Ergebnis. Sieht sehr gut aus und fühlt sich auch gut an. Die Kräutermissionen hab ich bisher mal geskippt, weil ich die Kräuterfarm nochmal separat kleiner, praktischer bauen will. Ich würde in dieser Session gerne noch das nächste Level fertig machen, damit ich meine Produktion auch noch an die neuen Teile anschließen kann, um zu sehen, wie es mit dem Platz ist. Die Kräutersachen nehmen aktuell noch nicht so viel Platz vom Gesamtprozess ein, da kann man immer wieder eine Linie dazwischen klatschen, damit die Produktion weiterläuft.“

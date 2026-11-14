@@ -40,8 +40,8 @@ const worth = (items) => Object.entries(items).reduce((sum, [t, n]) => sum + ITE
 
 // ---------- Datentabellen ----------
 
-test('Level 9 gibt es (seit v0.27.0 ist Level 10 das höchste)', () => {
-  assert.equal(MAX_LEVEL, 10);
+test('Level 9 gibt es (seit v0.28.0 ist Level 11 das höchste)', () => {
+  assert.equal(MAX_LEVEL, 11);
 });
 
 test('Kohlenmeiler: wie das Holzfällerlager – 1 Holzstamm → 100 Holzkohle in 15 Minuten, Vorrat 3', () => {
@@ -91,7 +91,8 @@ test('Bauleiste: Kohlenmeiler im Reiter „Holz“, Schreibstube im neuen Reiter
     BUILD_TABS.map((t) => t.name),
     ['Holz', 'Stein', 'Eisen', 'Erde', 'Werkstatt'],
   );
-  assert.deepEqual(tab('werkstatt').buildings, ['schreibstube']);
+  // v0.28.0: dazu die Uhrmacherei (Level 11)
+  assert.deepEqual(tab('werkstatt').buildings, ['schreibstube', 'uhrmacherei']);
   assert.equal(tab('werkstatt').item, 'reisszeug');
 });
 

@@ -4,6 +4,23 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.28.0 – Level 11 „Die Uhrmacherei“ (14.11.2026)
+
+**Vorgenommen:**
+- Entwurf v0.28.0 mit Tobias' Änderungen (Chat 20): keine Geschenke mehr ab Level 11, je 1 Minute pro Stück, Aufstieg 5.000 Gold; Uhrmacherei im Reiter „Werkstatt“, Baukosten 1 Zirkel + 1 Uhrwerk.
+
+**Fragen, die wir uns gestellt haben:**
+- Was zeigen Level-Fenster und Meldung ohne Geschenk? → Kein „Gratis im Laden-Lager“ und keine Zeile „🎁 Gratis“; „Ort & Level“ sagt „bis Level 10 auch zu Beginn einen Rohstoff gratis“.
+- Passt der Reiter „Werkstatt“ mit 2 Gebäuden aufs Handy? → Ja (Browser-Test misst es).
+
+**Gemacht:**
+- `data/items.js`: Räderuhr (570), Kastenschloss (1.296), Sternenuhr (1.105). `data/recipes.js`: drei Rezepte der Uhrmacherei, je 60 s. `data/buildings.js`: Uhrmacherei (Level 11, Reiter „Werkstatt“). `data/levels.js`: Level 11 (5.000 Gold, ohne Geschenk). `data/shop.js`: Laden auf Level 11 wie Level 7 bis 10.
+- `main.js`: Meldung beim Aufstieg ohne „Gratis“, wenn es kein Geschenk gibt. `view/levels.js`: Text in „Ort & Level“. `view/itemArt.js`: Bilder für Räderuhr (Gehäuse mit Zifferblatt und zwei Gewichten), Kastenschloss (Schlosskasten mit Schlüssel), Sternenuhr (blaues Zifferblatt mit Sonne, Mond und Sternen).
+- Tests: neue Datei `uhrmacherei.test.js` (13 Tests), bestehende auf Level 11 umgestellt (Geschenke nur bis Level 10); Browser-Test mit Level 11. Doku: `STAND.md`, `SPIEL.md`, `TECHNIK.md`, Archiv.
+
+**Geprüft:**
+- `npm test`: 348 von 348 bestanden. Browser-Test in Tablet- und Handygröße: alle 787 Prüfungen bestanden; Screenshots angesehen (Level-11-Fenster ohne Geschenk, Reiter „Werkstatt“ mit Schreibstube und Uhrmacherei auf dem Handy, Uhrmacherei mit Sternenuhr und den beiden anderen Einstellungen).
+
 ### v0.27.1 – Rückmeldung zu Level 10, Plan für Level 11 (14.11.2026, nur Doku)
 
 **Vorgenommen:**

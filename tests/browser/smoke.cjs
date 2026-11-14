@@ -2167,6 +2167,125 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   );
   await shot('19p-rand-neben-infofenster');
   await page.tap('#info-close');
+
+  // ---------- Level 11: Die Uhrmacherei (v0.28.0) ----------
+  await page.tap('#btn-level');
+  await sleep(150);
+  for (let i = 0; i < 4; i++) {
+    await page.locator('#modal-content button', { hasText: '🧪 Test: Auftrag erledigen' }).tap();
+    await sleep(200);
+  }
+  const l10done = await page.textContent('#modal-content');
+  check(
+    l10done.includes('2.116 / 2.116') && l10done.includes('Nächstes Level: Level 11 · Die Uhrmacherei') && l10done.includes('Uhrmacherei') && !l10done.includes('🎁'),
+    'Level 10 erledigt; Level 11 kündigt die Uhrmacherei an, ohne Geschenk',
+  );
+  // Rohstoffe im Laden-Lager (die Fabrik läuft weiter und schickt Waren, Rohstoffe aber nicht)
+  const raws11 = () =>
+    game(page, () => {
+      const st = window.__game.state.storage;
+      return ['holzstamm', 'felsbrocken', 'eisenerz', 'leinsamen', 'ringelblumensamen', 'schafgarbensamen'].map((t) => `${t}:${st[t] ?? 0}`).join();
+    });
+  const storageBefore11 = await raws11();
+  await game(page, () => (window.__game.state.gold += 5000));
+  await sleep(450);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 11 · 5.000' }).tap();
+  await sleep(150);
+  const lvl11 = { level: await game(page, () => window.__game.state.shopLevel), storage: await raws11() };
+  check(lvl11.level === 11, `Aufstieg auf Level 11 für 5.000 Gold (${lvl11.level})`);
+  check(lvl11.storage === storageBefore11, `Kein Geschenk mehr: kein Rohstoff dazu (${lvl11.storage})`);
+  const lvl11Text = await page.textContent('#modal-content');
+  check(
+    lvl11Text.includes('Level 11 erreicht!') && !lvl11Text.includes('Gratis im Laden-Lager') && lvl11Text.includes('Die Uhrmacherei') && lvl11Text.includes('2 Räderuhren') && lvl11Text.includes('0 / 2.550'),
+    'Level 11: Hilde möchte 2 Räderuhren, Erfahrung 0 / 2.550, kein „Gratis“',
+  );
+  await shot('19q-level-11');
+  await page.tap('#modal-close');
+  await sleep(120);
+  const toast11 = await page.textContent('#toast');
+  check(toast11.includes('Laden-Level 11!') && toast11.includes('Uhrmacherei') && !toast11.includes('Gratis'), `Meldung nach dem Aufstieg ohne Geschenk (${toast11})`);
+  // Uhrmacherei auf einem freien Platz bauen (Reiter „Werkstatt“)
+  const spot11 = await game(page, ([x0, y0]) => {
+    const { state } = window.__game;
+    const used = new Set(Object.keys(state.belts));
+    for (const b of state.buildings) {
+      const [w0, h0] = b.type === 'lagerhaus' ? [2, 1] : b.type === 'versandportal' ? [1, 1] : [2, 2];
+      const [w, h] = b.rot % 2 ? [h0, w0] : [w0, h0];
+      for (let dx = -1; dx <= w; dx++) for (let dy = -1; dy <= h; dy++) used.add(`${b.x + dx},${b.y + dy}`);
+    }
+    const p = state.plot;
+    let best = null;
+    for (let y = p.y; y < p.y + p.height - 1; y++) {
+      for (let x = p.x; x < p.x + p.width - 2; x++) {
+        const cells = [[x, y], [x + 1, y], [x, y + 1], [x + 1, y + 1], [x + 2, y], [x + 2, y + 1]];
+        if (!cells.every(([cx, cy]) => !used.has(`${cx},${cy}`))) continue;
+        const d = Math.abs(x - x0) + Math.abs(y - y0);
+        if (!best || d < best.d) best = { x, y, d };
+      }
+    }
+    return best && [best.x, best.y];
+  }, [bx + 3, by + 6]);
+  check(Boolean(spot11), `Freier Platz für die Uhrmacherei (${JSON.stringify(spot11)})`);
+  const [ux, uy] = spot11;
+  await game(page, ([x, y]) => {
+    const { camera, TILE } = window.__game;
+    camera.zoom = 1;
+    camera.x = (x + 1) * TILE - camera.viewWidth / camera.zoom / 2;
+    camera.y = (y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
+  }, [ux, uy]);
+  await game(page, () => {
+    const s = window.__game.state.storage;
+    s.zirkel = (s.zirkel ?? 0) + 1;
+    s.uhrwerk = (s.uhrwerk ?? 0) + 1;
+  });
+  await page.tap('#btn-build');
+  await sleep(80);
+  await page.tap('.build-tab[data-tab="werkstatt"]');
+  await sleep(80);
+  const werkstatt11 = await shownTools();
+  check(werkstatt11.slice(-2).join() === 'schreibstube,uhrmacherei', `Reiter „Werkstatt“: Schreibstube und Uhrmacherei (${werkstatt11.join(', ')})`);
+  const barFits11 = await page.evaluate(() =>
+    [...document.querySelectorAll('.build-tab, .build-item')]
+      .filter((e) => e.offsetParent)
+      .every((e) => e.getBoundingClientRect().right <= innerWidth + 1),
+  );
+  check(barFits11, 'Reiter „Werkstatt“ mit zwei Gebäuden passt auf den Bildschirm');
+  await shot('19r-werkstatt-uhrmacherei');
+  await tapBuild(page, 'uhrmacherei');
+  await sleep(80);
+  check(await tabActive('werkstatt'), 'Uhrmacherei steht im Reiter „Werkstatt“');
+  const g11 = await game(page, () => ({ ...window.__game.ui.ghost }));
+  await touchDragTiles(page, cdp, [
+    [g11.x, g11.y],
+    [ux, uy],
+  ]);
+  await page.tap('#tool-confirm');
+  await sleep(80);
+  await page.tap('#build-close');
+  await sleep(80);
+  const built11 = await game(page, () => window.__game.state.buildings.filter((b) => b.type === 'uhrmacherei').map((b) => `${b.x},${b.y}`));
+  check(built11.includes(`${ux},${uy}`), `Uhrmacherei per Touch gebaut (${built11.join(' | ')})`);
+  await tapTile(page, ux, uy);
+  check((await page.textContent('#info-title')) === 'Uhrmacherei', 'Uhrmacherei antippen zeigt Infofenster');
+  await sleep(450);
+  const uhr11 = await infoCard(page);
+  check(
+    /^uhrwerk \d+ \/ 1( ✓)?,gewichtstein \d+ \/ 1/.test(uhr11?.inputs.join() ?? '') && uhr11.outputs.join() === 'raederuhr Räderuhr',
+    `Uhrmacherei: Uhrwerk + Gewichtstein → Räderuhr (${JSON.stringify(uhr11)})`,
+  );
+  check((await infoText(page)).includes('60 s je Stück'), 'Räderuhr: 60 s je Stück');
+  check(
+    (await recipeOption(page, 'kastenschloss').getAttribute('aria-label')) === 'Umstellen auf Kastenschloss: 1 Vorhängeschloss + 1 Schlüssel' &&
+      (await recipeOption(page, 'sternenuhr').getAttribute('aria-label')) === 'Umstellen auf Sternenuhr: 1 Uhrwerk + 1 Zirkel',
+    'Umstellen auf: Kastenschloss (Vorhängeschloss + Schlüssel), Sternenuhr (Uhrwerk + Zirkel)',
+  );
+  await recipeOption(page, 'sternenuhr').tap();
+  await sleep(450);
+  const stern11 = await infoCard(page);
+  check(stern11?.outputs.join() === 'sternenuhr Sternenuhr', `Umgestellt auf Sternenuhr (${JSON.stringify(stern11)})`);
+  check((await infoFits(page)).length === 0, `Infofenster der Uhrmacherei: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+  await shot('19s-uhrmacherei');
+  await page.tap('#info-close');
   await game(page, (c) => Object.assign(window.__game.camera, c), camLand);
   await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)
   await page.tap('#info-close').catch(() => {});

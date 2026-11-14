@@ -607,6 +607,140 @@ export function drawItem(ctx, type, cx, cy, size) {
       ctx.stroke();
       break;
     }
+    // v0.28.0: Level 11 „Die Uhrmacherei“
+    case 'weightclock': {
+      // Räderuhr: Holzgehäuse mit Giebel und Zifferblatt, darunter zwei
+      // Gewichte an Ketten (der Antrieb der ersten Räderuhren)
+      ctx.strokeStyle = '#6b6f73';
+      ctx.lineWidth = Math.max(1, s * 0.04);
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.16, cy + s * 0.05);
+      ctx.lineTo(cx - s * 0.16, cy + s * 0.3);
+      ctx.moveTo(cx + s * 0.16, cy + s * 0.05);
+      ctx.lineTo(cx + s * 0.16, cy + s * 0.4);
+      ctx.stroke();
+      ctx.strokeStyle = OUTLINE;
+      ctx.lineWidth = Math.max(1, s * 0.07);
+      ctx.fillStyle = '#8d8f8a';
+      for (const [dx, top] of [[-0.16, 0.26], [0.16, 0.36]]) {
+        roundRect(ctx, cx + (dx - 0.08) * s, cy + top * s, s * 0.16, s * 0.2, s * 0.04);
+        ctx.fill();
+        ctx.stroke();
+      }
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.36, cy + s * 0.08);
+      ctx.lineTo(cx - s * 0.36, cy - s * 0.38);
+      ctx.lineTo(cx, cy - s * 0.58);
+      ctx.lineTo(cx + s * 0.36, cy - s * 0.38);
+      ctx.lineTo(cx + s * 0.36, cy + s * 0.08);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#efe2c2';
+      ctx.beginPath();
+      ctx.arc(cx, cy - s * 0.2, s * 0.22, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.lineWidth = Math.max(1, s * 0.06);
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - s * 0.2);
+      ctx.lineTo(cx, cy - s * 0.36);
+      ctx.moveTo(cx, cy - s * 0.2);
+      ctx.lineTo(cx + s * 0.12, cy - s * 0.14);
+      ctx.stroke();
+      break;
+    }
+    case 'boxlock': {
+      // Kastenschloss: eiserner Schlosskasten mit Nieten, im Schlüsselloch
+      // steckt der passende Schlüssel aus Messing
+      roundRect(ctx, cx - s * 0.52, cy - s * 0.36, s * 0.92, s * 0.66, s * 0.08);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = OUTLINE;
+      for (const [dx, dy] of [[-0.42, -0.26], [0.3, -0.26], [-0.42, 0.2], [0.3, 0.2]]) {
+        ctx.beginPath();
+        ctx.arc(cx + dx * s, cy + dy * s, s * 0.04, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.beginPath();
+      ctx.arc(cx - s * 0.08, cy - s * 0.08, s * 0.08, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillRect(cx - s * 0.115, cy - s * 0.08, s * 0.07, s * 0.2);
+      // Schlüssel: Schaft aus dem Schlüsselloch nach rechts, Ring außen
+      ctx.fillStyle = '#d4a63a';
+      ctx.lineWidth = Math.max(1, s * 0.06);
+      roundRect(ctx, cx - s * 0.1, cy - s * 0.12, s * 0.42, s * 0.08, s * 0.03);
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(cx + s * 0.42, cy - s * 0.08, s * 0.13, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = OUTLINE;
+      ctx.beginPath();
+      ctx.arc(cx + s * 0.42, cy - s * 0.08, s * 0.05, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    }
+    case 'starclock': {
+      // Sternenuhr: Messingring, dunkelblaues Zifferblatt mit Sonne, Mond und
+      // Sternen, goldene Zeiger
+      ctx.fillStyle = '#c9a24a';
+      ctx.beginPath();
+      ctx.arc(cx, cy, s * 0.55, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      ctx.arc(cx, cy, s * 0.43, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      // Sonne mit Strahlen
+      ctx.strokeStyle = '#ffd43b';
+      ctx.lineWidth = Math.max(1, s * 0.04);
+      ctx.beginPath();
+      for (let k = 0; k < 8; k++) {
+        const a = (k / 8) * Math.PI * 2;
+        ctx.moveTo(cx - s * 0.2 + Math.cos(a) * s * 0.1, cy - s * 0.16 + Math.sin(a) * s * 0.1);
+        ctx.lineTo(cx - s * 0.2 + Math.cos(a) * s * 0.15, cy - s * 0.16 + Math.sin(a) * s * 0.15);
+      }
+      ctx.stroke();
+      ctx.fillStyle = '#ffd43b';
+      ctx.beginPath();
+      ctx.arc(cx - s * 0.2, cy - s * 0.16, s * 0.08, 0, Math.PI * 2);
+      ctx.fill();
+      // Mondsichel
+      ctx.fillStyle = '#f1ead2';
+      ctx.beginPath();
+      ctx.arc(cx + s * 0.2, cy - s * 0.14, s * 0.1, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      ctx.arc(cx + s * 0.25, cy - s * 0.18, s * 0.09, 0, Math.PI * 2);
+      ctx.fill();
+      // Sterne
+      ctx.fillStyle = '#fff8db';
+      for (const [dx, dy] of [[-0.24, 0.16], [0.22, 0.2], [0.02, 0.3], [0.3, 0.04], [-0.06, -0.3]]) {
+        ctx.beginPath();
+        ctx.arc(cx + dx * s, cy + dy * s, s * 0.035, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      // Zeiger
+      ctx.strokeStyle = '#c9a24a';
+      ctx.lineWidth = Math.max(1.5, s * 0.06);
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + s * 0.06, cy + s * 0.3);
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx - s * 0.16, cy + s * 0.12);
+      ctx.stroke();
+      ctx.fillStyle = '#c9a24a';
+      ctx.beginPath();
+      ctx.arc(cx, cy, s * 0.05, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    }
     case 'drawingset': {
       // Reißzeug: offenes Lederetui mit Zirkel und Zeichenkohle
       roundRect(ctx, cx - s * 0.56, cy - s * 0.38, s * 1.12, s * 0.76, s * 0.12);
