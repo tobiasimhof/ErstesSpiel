@@ -377,14 +377,15 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     page.evaluate(() => [...document.querySelectorAll('#build-bar .build-item')].filter((b) => b.offsetParent !== null).map((b) => b.dataset.tool));
   const tabActive = (tab) => page.locator(`.build-tab[data-tab="${tab}"]`).evaluate((b) => b.classList.contains('active'));
   const tabNames = await page.locator('.build-tab').allTextContents();
+  // v0.26.0: dazu „Werkstatt“ (ab Level 9)
   check(
-    tabNames.length === 4 && ['Holz', 'Stein', 'Eisen', 'Erde'].every((n, i) => tabNames[i].includes(n)),
-    `Bauleiste hat die Reiter Holz, Stein, Eisen, Kräuter (${tabNames.join(', ')})`,
+    tabNames.length === 5 && ['Holz', 'Stein', 'Eisen', 'Erde', 'Werkstatt'].every((n, i) => tabNames[i].includes(n)),
+    `Bauleiste hat die Reiter Holz, Stein, Eisen, Erde, Werkstatt (${tabNames.join(', ')})`,
   );
   check(await tabActive('holz'), 'Reiter „Holz“ ist zu Beginn offen');
   let shown = await shownTools();
   check(
-    shown.join(',') === 'belt,lagerhaus,versandportal,area,erase,holzfaeller,saegewerk,zimmerei',
+    shown.join(',') === 'belt,lagerhaus,versandportal,area,erase,holzfaeller,saegewerk,zimmerei,kohlenmeiler',
     `Links immer Förderband, Lagerhaus, Portal, Verschieben, Abreißen; rechts die Holz-Gebäude (${shown.join(', ')})`,
   );
   check(
@@ -1873,6 +1874,134 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const kompFit = await infoFits(page);
   check(kompFit.length === 0, `Langer Name „Kräuterkompresse“ passt in den grünen Kasten (${kompFit.join(' | ')})`);
   await shot('19d-kraeuterstube');
+  await page.tap('#info-close');
+
+  // ---------- Level 9: Kohlenmeiler, Schreibstube, Reiter „Werkstatt“ (v0.26.0) ----------
+  // Aufträge von Level 8 mit dem Test-Knopf, dann aufsteigen (1.670 Gold kommen dazu)
+  await page.tap('#btn-level');
+  await sleep(150);
+  for (let i = 0; i < 4; i++) {
+    await page.locator('#modal-content button', { hasText: '🧪 Test: Auftrag erledigen' }).tap();
+    await sleep(200);
+  }
+  const l8done = await page.textContent('#modal-content');
+  check(
+    l8done.includes('1.305 / 1.305') && l8done.includes('Nächstes Level: Level 9 · Die Schreibstube') && l8done.includes('Kohlenmeiler') &&
+      l8done.includes('Schreibstube') && l8done.includes('Holzstamm'),
+    'Level 8 erledigt; Level 9 kündigt Kohlenmeiler und Schreibstube an, 1 Holzstamm gratis',
+  );
+  const logsBefore9 = await game(page, () => window.__game.state.storage.holzstamm ?? 0);
+  await game(page, () => (window.__game.state.gold += 1670));
+  await sleep(450);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 9 · 1.670' }).tap();
+  await sleep(150);
+  const lvl9 = await game(page, () => ({ level: window.__game.state.shopLevel, logs: window.__game.state.storage.holzstamm ?? 0 }));
+  check(lvl9.level === 9 && lvl9.logs === logsBefore9 + 1, `Level 9: 1 Holzstamm gratis (${JSON.stringify(lvl9)})`);
+  const lvl9Text = await page.textContent('#modal-content');
+  check(
+    lvl9Text.includes('Die Schreibstube') && lvl9Text.includes('Schmied Konrad') && lvl9Text.includes('50 Holzkohle') && lvl9Text.includes('0 / 1.657'),
+    'Level 9: Konrad möchte 50 Holzkohle, Erfahrung 0 / 1.657',
+  );
+  await shot('19e-level-9');
+  await page.tap('#modal-close');
+  // Zwei freie 2 × 2-Plätze auf dem Grundstück suchen (rechts der Kräuter-Gebäude)
+  const spots9 = await game(page, ([x0, y0]) => {
+    const { state } = window.__game;
+    const used = new Set(Object.keys(state.belts));
+    for (const b of state.buildings) {
+      const [w0, h0] = b.type === 'lagerhaus' ? [2, 1] : b.type === 'versandportal' ? [1, 1] : [2, 2];
+      const [w, h] = b.rot % 2 ? [h0, w0] : [w0, h0];
+      for (let dx = -1; dx <= w; dx++) for (let dy = -1; dy <= h; dy++) used.add(`${b.x + dx},${b.y + dy}`);
+    }
+    const p = state.plot;
+    const found = [];
+    for (let y = Math.max(p.y, y0 - 2); y < p.y + p.height - 1 && found.length < 2; y++) {
+      for (let x = Math.max(p.x, x0 - 4); x < p.x + p.width - 1 && found.length < 2; x++) {
+        const cells = [[x, y], [x + 1, y], [x, y + 1], [x + 1, y + 1], [x + 2, y], [x + 2, y + 1]];
+        if (cells.every(([cx, cy]) => !used.has(`${cx},${cy}`))) {
+          found.push([x, y]);
+          for (let dx = -1; dx <= 3; dx++) for (let dy = -1; dy <= 2; dy++) used.add(`${x + dx},${y + dy}`);
+        }
+      }
+    }
+    return found;
+  }, [bx + 3, by + 3]);
+  check(spots9.length === 2, `Zwei freie Plätze für Level 9 gefunden (${JSON.stringify(spots9)})`);
+  const [[mx, my], [sx, sy]] = spots9;
+  await game(page, ([x, y]) => {
+    const { camera, TILE } = window.__game;
+    camera.x = (x + 1) * TILE - camera.viewWidth / camera.zoom / 2;
+    camera.y = (y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
+  }, [Math.round((mx + sx) / 2), Math.round((my + sy) / 2)]);
+  await game(page, () => {
+    const s = window.__game.state.storage;
+    s.steinplatte = (s.steinplatte ?? 0) + 20;
+    s.verstaerkteholzplatte = (s.verstaerkteholzplatte ?? 0) + 3;
+    s.zirkel = (s.zirkel ?? 0) + 1;
+  });
+  await page.tap('#btn-build');
+  await buildAt('kohlenmeiler', mx, my);
+  check(await tabActive('holz'), 'Kohlenmeiler steht im Reiter „Holz“');
+  await tapBuild(page, 'schreibstube');
+  await sleep(80);
+  check(await tabActive('werkstatt'), 'Schreibstube öffnet den neuen Reiter „Werkstatt“');
+  const barFits9 = await page.evaluate(() =>
+    [...document.querySelectorAll('.build-tab, .build-item')]
+      .filter((e) => e.offsetParent)
+      .every((e) => e.getBoundingClientRect().right <= innerWidth + 1),
+  );
+  check(barFits9, 'Fünf Reiter und ihre Gebäude passen auf den Bildschirm');
+  await shot('19f-reiter-werkstatt');
+  const g9 = await game(page, () => ({ ...window.__game.ui.ghost }));
+  await touchDragTiles(page, cdp, [
+    [g9.x, g9.y],
+    [sx, sy],
+  ]);
+  await page.tap('#tool-confirm');
+  await sleep(80);
+  await page.tap('#build-close');
+  await sleep(80);
+  const built9 = await game(page, () =>
+    window.__game.state.buildings.filter((b) => ['kohlenmeiler', 'schreibstube'].includes(b.type)).map((b) => `${b.type}@${b.x},${b.y}`),
+  );
+  check(
+    built9.includes(`kohlenmeiler@${mx},${my}`) && built9.includes(`schreibstube@${sx},${sy}`),
+    `Kohlenmeiler und Schreibstube per Touch gebaut (${built9.join(', ')})`,
+  );
+  // Kohlenmeiler: den geschenkten Holzstamm einlegen
+  await tapTile(page, mx, my);
+  check((await page.textContent('#info-title')) === 'Kohlenmeiler', 'Kohlenmeiler antippen zeigt Infofenster');
+  await sleep(450);
+  await infoButton(page, 'load:holzstamm').tap();
+  await sleep(450);
+  const meilerCard = await infoCard(page);
+  check(meilerCard?.outputs.join() === 'holzkohle 100 Holzkohle', `Kohlenmeiler: 1 Holzstamm → 100 Holzkohle (${JSON.stringify(meilerCard)})`);
+  const meiler9 = await game(page, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'kohlenmeiler');
+    return { loaded: b.prod.loaded, logs: window.__game.state.storage.holzstamm ?? 0 };
+  });
+  check(meiler9.loaded && meiler9.logs === logsBefore9, `Holzstamm liegt im Kohlenmeiler (${JSON.stringify(meiler9)})`);
+  await shot('19g-kohlenmeiler');
+  // Schreibstube: Zeichenbrett, umstellen auf Reißzeug
+  await tapTile(page, sx, sy);
+  check((await page.textContent('#info-title')) === 'Schreibstube', 'Schreibstube antippen zeigt Infofenster');
+  await sleep(450);
+  const stube9 = await infoCard(page);
+  check(
+    /^verstaerkteholzplatte \d+ \/ 1( ✓)?,flachsfaser \d+ \/ 10/.test(stube9?.inputs.join() ?? '') && stube9.outputs.join() === 'zeichenbrett Zeichenbrett',
+    `Schreibstube: Verstärkte Holzplatte + Flachsfasern → Zeichenbrett (${JSON.stringify(stube9)})`,
+  );
+  check(
+    (await recipeOption(page, 'reisszeug').getAttribute('aria-label')) === 'Umstellen auf Reißzeug: 1 Zirkel + 10 Holzkohle',
+    'Umstellen auf: Reißzeug aus 1 Zirkel + 10 Holzkohle',
+  );
+  await recipeOption(page, 'reisszeug').tap();
+  await sleep(450);
+  const reiss9 = await infoCard(page);
+  check(reiss9?.outputs.join() === 'reisszeug Reißzeug', `Umgestellt auf Reißzeug (${JSON.stringify(reiss9)})`);
+  const stubeFit9 = await infoFits(page);
+  check(stubeFit9.length === 0, `Infofenster der Schreibstube: nichts ragt heraus (${stubeFit9.join(' | ')})`);
+  await shot('19h-schreibstube');
   await page.tap('#info-close');
   await game(page, (c) => Object.assign(window.__game.camera, c), camLand);
   await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)

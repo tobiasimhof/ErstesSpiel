@@ -61,7 +61,17 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf Level 9–12 – Werkzeuge, Kräuter und Holzkohle (v0.25.1, zur Besprechung)
+### Level 9 – Die Schreibstube (fertig, v0.26.0)
+
+**Freigabe (Tobias, Chat 19):** „Das hört sich alles sehr gut an und macht auch Sinn … Wenn du willst, kannst du direkt anfangen mit Level 9.“
+
+**Umgesetzt wie im Entwurf unten**, dazu festgelegt:
+- **Bauleiste:** Kohlenmeiler als 4. Gebäude im Reiter „Holz“; die Schreibstube in einem neuen Reiter **„Werkstatt“** (ziegelrot, Warenbild Reißzeug) – je Reiter passen nur 4 Gebäude aufs Handy (gemessen: mit 5 Holz-Gebäuden ragte die Schreibstube 38 Pixel über den Rand). In „Werkstatt“ kommen auch die späteren Werkzeug-Maschinen (Level 11: Uhrmacherei). Ein gesperrter Reiter zeigt das Schloss statt des Warenbilds, damit 5 Reiter auch auf Level 1 aufs Handy passen.
+- **Level 9:** Aufstieg 1.670 Gold, 1 Holzstamm gratis (kein neuer Rohstoff). Aufträge: Schmied Konrad 50 Holzkohle („Holzkohle brennt heißer als Holz“); Baumeister Anton 3 Zeichenbretter; Anton 2 Reißzeuge; Bürgermeisterin Hilde 4 Zeichenbretter + 10 Heilverbände (für das Spital – Überleitung zu Level 10). Zusammen 1.657 Erfahrung und 5.521 Gold.
+- **Baukosten** (nur Werkzeug-Waren, höchstens 960 Gold): Kohlenmeiler 20 Steinplatten + 2 Verstärkte Holzplatten (552), Schreibstube 1 Verstärkte Holzplatte + 1 Zirkel (878).
+- **Warenbilder:** Holzkohle (zwei schwarze Brocken), Zeichenbrett (Holzrahmen, Leinen, Hausplan in Kohle), Reißzeug (offenes Lederetui mit Zirkel und Kohlestift).
+
+### Entwurf Level 9–12 – Werkzeuge, Kräuter und Holzkohle (v0.25.1; angenommen, Level 9 umgesetzt in v0.26.0)
 
 **Tobias (Chat 19):** „Ich wollte erstmal die ganzen Sachen sozusagen einführen, indem ich zuerst die Werkzeuge einführe, dann die Kräuter und danach die Tränke, dass man alles so ein bisschen versteht, wie das alles zusammenhängt. Aber ich wollte jetzt nicht, dass mit den Werkzeugen jetzt nichts mehr passiert von Level 7 bis 12. … man könnte ja beispielsweise auch Fasern und die Verstärkte Holzplatte schon mal zu irgendwas machen, worauf man zeichnen kann, und bloß den Zirkel dann irgendwie zu einem mathematischen Produkt oder für die Wissenschaft … Und das mit den 2 Eingängen will ich beibehalten. … Und du kannst mir gerne mal einen Entwurf schreiben für die Level 9 bis 12, damit wir noch 1, 2 Kräuter etablieren können, damit wir aus diesen Kräutern auch verschiedene Tränke machen können. Und ich finde es ganz gut, wenn wir vielleicht noch so was wie einen Schmelzofen oder so was einführen könnten, damit wir aus Baumstämmen auch Holzkohle machen können. Und aus Holzkohle kann man dann auch noch weitere Produkte machen. Nur so als kleine Randidee.“
 

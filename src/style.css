@@ -768,6 +768,17 @@ button.danger {
   font-size: 11px;
 }
 
+/* v0.26.0: Bei einem gesperrten Reiter ersetzt das Schloss das Warenbild –
+   so passen auch 5 Reiter auf das Handy. */
+.build-tab.locked .item-icon {
+  display: none;
+}
+
+.build-tab.locked .build-tab-lock {
+  order: -1;
+  font-size: 14px;
+}
+
 .build-item {
   flex: 0 0 auto;
   display: flex;

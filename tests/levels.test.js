@@ -27,7 +27,7 @@ import { createNewGame } from '../src/core/state.js';
 // ---------- Datentabellen ----------
 
 test('Level-Tabelle: jedes Level ein Bauabschnitt mit 2–5 Aufträgen; ab Level 2 Preis und Gratis-Rohstoff (v0.13.0)', () => {
-  assert.equal(MAX_LEVEL, 8);
+  assert.equal(MAX_LEVEL, 9);
   let lastCost = 0;
   for (let level = 1; level <= MAX_LEVEL; level++) {
     const def = LEVELS[level];
@@ -49,9 +49,10 @@ test('Level-Tabelle: jedes Level ein Bauabschnitt mit 2–5 Aufträgen; ab Level
     // Zu Beginn jedes Levels genau ein Rohstoff gratis (Tobias): bis Level 3
     // der neue Rohstoff, Level 4–6 Eisenerz (einen vierten Rohstoff gibt es
     // nicht), v0.16.0: Level 7 der erste Samen des Kräuter-Kapitels.
+    // v0.26.0: Level 9 bringt keinen neuen Rohstoff – 1 Holzstamm für den Kohlenmeiler.
     assert.deepEqual(Object.values(def.gift), [1]);
     const [raw] = Object.keys(def.gift);
-    const giftLevel = level <= 3 ? level : level <= 6 ? 3 : level;
+    const giftLevel = level <= 3 ? level : level <= 6 ? 3 : level === 9 ? 1 : level;
     assert.ok(ITEMS[raw].raw && ITEMS[raw].buyPrice > 0 && itemLevel(raw) === giftLevel, `Geschenk ${raw} passt zu Level ${level}`);
   }
 });
@@ -188,12 +189,12 @@ test('Aufstieg auf Level 2: erst genug Erfahrung, dann kostet er Gold; dafür gi
   assert.equal(levelUpBlocker(state), 'xp');
 });
 
-test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 und 8 mit Samen; danach ist Schluss', () => {
+test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 und 8 mit Samen, Level 9 mit Holzstamm; danach ist Schluss', () => {
   const state = createNewGame(3);
   state.shopLevel = 3;
   state.gold = 100000;
   const results = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 6; i++) {
     state.quest.xp = xpNeeded(state.shopLevel);
     results.push(levelUp(state));
   }
@@ -206,8 +207,10 @@ test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 
     { level: 7, gift: { leinsamen: 1 }, cost: 1000 },
     // v0.17.0: Level 8 „Der Kräutergarten“
     { level: 8, gift: { ringelblumensamen: 1 }, cost: 1330 },
+    // v0.26.0: Level 9 „Die Schreibstube“
+    { level: 9, gift: { holzstamm: 1 }, cost: 1670 },
   ]);
-  assert.equal(state.gold, 100000 - 3500);
+  assert.equal(state.gold, 100000 - 3500 - 1670);
   assert.equal(state.counters.length, 2, 'Theken gibt es nur noch für Gold');
   assert.equal(storageCount(state, 'eisenerz'), 3);
   assert.equal(storageCount(state, 'leinsamen'), 1);
@@ -216,7 +219,7 @@ test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 
   assert.equal(levelUpBlocker(state), 'max', 'höchstes Level');
   assert.equal(nextLevelCost(state), null);
   assert.equal(levelUp(state), null);
-  assert.equal(state.shopLevel, 8);
+  assert.equal(state.shopLevel, 9);
 });
 
 test('Ein neues Spiel lässt sich von Holz bis Eisen durchspielen', () => {

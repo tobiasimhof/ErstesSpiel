@@ -4,6 +4,25 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.26.0 – Level 9 „Die Schreibstube“ (14.11.2026)
+
+**Vorgenommen:**
+- Level 9 nach dem Entwurf aus v0.25.1 (Tobias, Chat 19: „Das hört sich alles sehr gut an und macht auch Sinn … Wenn du willst, kannst du direkt anfangen mit Level 9.“): Kohlenmeiler, Schreibstube, Holzkohle, Zeichenbrett, Reißzeug.
+
+**Fragen, die wir uns gestellt haben:**
+- Wo stehen die neuen Gebäude in der Bauleiste? → Ein Test hält seit v0.18.0 fest: höchstens 4 Gebäude je Reiter, sonst passen sie nicht aufs Handy (gemessen: die Schreibstube ragte 38 Pixel über den Rand). Der Kohlenmeiler kommt als 4. Gebäude in „Holz“, die Schreibstube in einen neuen Reiter **„Werkstatt“** (ziegelrot) für die Werkzeug-Maschinen ab Level 9 – später auch die Uhrmacherei.
+- Passen 5 Reiter aufs Handy? → Auf Level 1 nicht ganz (4 gesperrte Reiter mit Bild und Schloss). Seitdem ersetzt das Schloss bei gesperrten Reitern das Warenbild.
+- Welcher Rohstoff als Geschenk? → Level 9 bringt keinen neuen; 1 Holzstamm für den ersten Kohlenmeiler.
+- Wie viel Erfahrung? → 4 Aufträge mit Waren aus beiden Bereichen (Holzkohle, Zeichenbretter, Reißzeuge, Heilverbände), zusammen 1.657 – etwas mehr als Level 8 (1.305), weniger als Level 6 (1.840). Aufstieg 1.670 Gold (+340 wie die Schritte davor).
+
+**Gemacht:**
+- `data/items.js`: Holzkohle (2), Zeichenbrett (355), Reißzeug (818). `data/recipes.js`: Zeichenbrett, Reißzeug. `data/buildings.js`: Kohlenmeiler (Rohstoff-Gebäude, Vorrat 3), Schreibstube (2 Eingänge), Reiter „Werkstatt“ mit eigener Farbe. `data/levels.js`: Level 9. `data/shop.js`: Laden auf Level 9 wie Level 7 und 8.
+- `view/itemArt.js`: Bilder für Holzkohle (zwei Brocken), Zeichenbrett (Holzrahmen mit Leinen und Hausplan), Reißzeug (Lederetui mit Zirkel und Kohle). `style.css`: gesperrter Reiter zeigt das Schloss statt des Bildes.
+- Tests: neue Datei `schreibstube.test.js` (17 Tests), bestehende auf Level 9 und 5 Reiter umgestellt; Browser-Test mit Level 9. Doku: `STAND.md`, `SPIEL.md`, `TECHNIK.md`, Archiv.
+
+**Geprüft:**
+- `npm test`: 317 von 317 bestanden. Browser-Test in Tablet- und Handygröße: alle 713 Prüfungen bestanden; Screenshots angesehen (5 Reiter auf dem Handy auf Level 1, Level-9-Fenster mit Konrads Auftrag, Kohlenmeiler mit 1 Holzstamm → 100 Holzkohle, Schreibstube mit Reißzeug und „Umstellen auf Zeichenbrett“).
+
 ### v0.25.1 – Entwurf Level 9–12 (13.11.2026, nur Doku)
 
 **Vorgenommen:**

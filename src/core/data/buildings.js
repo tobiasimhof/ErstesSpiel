@@ -38,6 +38,8 @@ export const TAB_COLORS = {
   stein: '#8d8a82',
   eisen: '#4a5c7c',
   kraeuter: '#2f6b4f',
+  // v0.26.0: Reiter „Werkstatt“ (ziegelrot) für die Werkzeug-Maschinen ab Level 9
+  werkstatt: '#8a3d34',
 };
 
 export const BUILDINGS = {
@@ -235,6 +237,37 @@ export const BUILDINGS = {
     ],
     production: { kind: 'workshop', recipes: ['heilverband', 'kraeuterkompresse'] },
   },
+  // v0.26.0: Level 9 „Die Schreibstube“ (Tobias, Chat 19) – die Werkzeuge
+  // wachsen weiter. Der Kohlenmeiler macht wie das Holzfällerlager aus einem
+  // Holzstamm Ware (Tobias' Idee: Holzkohle aus Baumstämmen; im Mittelalter
+  // brannte der Köhler sie im Meiler). Baukosten aus Werkzeug-Waren bis
+  // höchstens 960 Gold (ein Eisenerz als Teile), wie ab Level 3.
+  kohlenmeiler: {
+    level: 9,
+    name: 'Kohlenmeiler',
+    cost: { steinplatte: 20, verstaerkteholzplatte: 2 },
+    icon: '♨️',
+    size: [2, 2],
+    color: TAB_COLORS.holz,
+    tip: 'Holzstämme einlegen – die Holzkohle kommt am orangen Pfeil heraus.',
+    ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
+    production: { kind: 'source', input: 'holzstamm', output: 'holzkohle', amount: 100, duration: 900, capacity: 3 },
+  },
+  schreibstube: {
+    level: 9,
+    name: 'Schreibstube',
+    cost: { verstaerkteholzplatte: 1, zirkel: 1 },
+    icon: '📐',
+    size: [2, 2],
+    color: TAB_COLORS.werkstatt,
+    tip: 'Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
+    ports: [
+      { kind: 'in', x: 0, y: 0, side: 'W' },
+      { kind: 'in', x: 0, y: 1, side: 'W' },
+      { kind: 'out', x: 1, y: 0, side: 'E' },
+    ],
+    production: { kind: 'workshop', recipes: ['zeichenbrett', 'reisszeug'] },
+  },
   lagerhaus: {
     level: 1,
     name: 'Lagerhaus',
@@ -268,12 +301,18 @@ export const BUILDINGS = {
 // Gebäuden seiner „Straße“. Kombi-Maschinen stehen bei dem Stoff, zu dem sie
 // vom Namen her passen. `item` ist das Warenbild auf dem Reiter.
 export const BUILD_TABS = [
-  { id: 'holz', name: 'Holz', item: 'holzstamm', color: TAB_COLORS.holz, buildings: ['holzfaeller', 'saegewerk', 'zimmerei'] },
+  // v0.26.0: der Kohlenmeiler (Level 9) macht aus Holzstämmen Holzkohle
+  { id: 'holz', name: 'Holz', item: 'holzstamm', color: TAB_COLORS.holz, buildings: ['holzfaeller', 'saegewerk', 'zimmerei', 'kohlenmeiler'] },
   { id: 'stein', name: 'Stein', item: 'felsbrocken', color: TAB_COLORS.stein, buildings: ['steinbruch', 'steinmetz'] },
   { id: 'eisen', name: 'Eisen', item: 'eisenerz', color: TAB_COLORS.eisen, buildings: ['schmelzhuette', 'schmiede', 'feinschmiede', 'schlosserei'] },
   // v0.19.0 (Tobias): Der Reiter heißt „Erde“ – Holz, Stein, Eisen, Erde. Die
   // id bleibt, damit der gemerkte Reiter in den Einstellungen weiter passt.
   { id: 'kraeuter', name: 'Erde', item: 'ringelblume', color: TAB_COLORS.kraeuter, buildings: ['beet', 'flachsbreche', 'webstube', 'kraeuterstube'] },
+  // v0.26.0: Die Werkzeuge wachsen ab Level 9 weiter (Tobias, Chat 19). Ihre
+  // neuen Maschinen verarbeiten Waren aus mehreren Reitern und passen zu keinem
+  // Stoff; je Reiter passen höchstens 4 Gebäude aufs Handy – deshalb ein
+  // eigener Reiter (Schreibstube, später die Uhrmacherei).
+  { id: 'werkstatt', name: 'Werkstatt', item: 'reisszeug', color: TAB_COLORS.werkstatt, buildings: ['schreibstube'] },
 ];
 
 // Gebäude, die man oft braucht: stehen immer sichtbar links in der Bauleiste,

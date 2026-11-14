@@ -75,7 +75,8 @@ test('Erfahrung je Level: steigt im Werkzeug-Kapitel, das Kräuter-Kapitel fäng
   const needs = Object.keys(LEVELS).map((level) => xpNeeded(Number(level)));
   // v0.23.0: wie vorher, nur Level 6–8 durch das Runden der Preise etwas weniger
   // (vorher 1.841, 850, 1.332)
-  assert.deepEqual(needs, [81, 90, 162, 714, 1495, 1840, 816, 1305]);
+  // v0.26.0: Level 9 (Werkzeuge) wieder etwas mehr als Level 8
+  assert.deepEqual(needs, [81, 90, 162, 714, 1495, 1840, 816, 1305, 1657]);
 });
 
 // ---------- Abgeben ----------
@@ -124,7 +125,7 @@ test('Nach dem letzten Auftrag eines Levels steht keiner mehr an', () => {
 test('Höchstes Level: Aufträge gehen, die Erfahrung sammelt sich, aufsteigen geht (noch) nicht', () => {
   const state = createNewGame(6);
   state.shopLevel = MAX_LEVEL;
-  assert.equal(currentQuest(state).from, 'Heilerin Agnes');
+  assert.equal(currentQuest(state).from, levelQuests(MAX_LEVEL)[0].from);
   for (const quest of levelQuests(MAX_LEVEL)) {
     fillFor(state, quest);
     assert.ok(deliverQuest(state));
