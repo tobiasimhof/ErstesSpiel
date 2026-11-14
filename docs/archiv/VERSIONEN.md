@@ -4,6 +4,20 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.26.1 – Rückmeldung zu Level 9, Plan für Level 10 mit mehr Fläche (14.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zu Level 9 festhalten (Chat 20: „sehr gut gelungen mit dem neuen Reiter“, Techbaum „sehr gut“) und seinen Wunsch, ab Level 10 neue Fläche kaufen zu können („Aktuell wird es mit dem Platz ein wenig eng“).
+
+**Fragen, die wir uns gestellt haben:**
+- Wie viel Fläche mehr? → Wie bisher in Streifen von 4 Reihen: ab Level 10 je Seite einer mehr, bis 46 × 38 (gut 50 % mehr). Preis 1.000 Gold je Streifen (bisher 170), Platzhalter.
+- Passt die größere Fläche aufs Tablet? → Ohne Vollbild steht die Karte schon bei 38 × 30 fast an der Zoom-Grenze; deshalb soll man weiter herauszoomen dürfen.
+- Was bringt Level 10 sonst? → Wie im Entwurf aus v0.25.1: Schafgarbe, Wundverband; dazu Aufstieg 2.000 Gold, 1 Schafgarbensamen als Geschenk, 4 Aufträge (2.116 Erfahrung).
+
+**Gemacht:**
+- `docs/archiv/PLAENE.md`: Entwurf v0.27.0 mit 4 Fragen. `docs/STAND.md`: Status, Tobias' Fabrik (Screenshot vom 14.11.2026), nächste Schritte, offene Fragen 3 und 9, neuer Arbeitsschritt oben. `docs/SPIEL.md`: Ausblick Level 10. Gespräch und Entscheidungen ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt.
+
 ### v0.26.0 – Level 9 „Die Schreibstube“ (14.11.2026)
 
 **Vorgenommen:**

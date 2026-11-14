@@ -61,6 +61,42 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.27.0 – Level 10 „Das Spital“ und mehr Fläche (v0.26.1, wartet auf Tobias' OK)
+
+**Tobias (Chat 20, nach dem Test von Level 9):** „Ich finde es ist sehr gut gelungen mit dem neuen Reiter und den Techbaum, den du entworfen hast, fande ich auch sehr gut. … Aktuell wird es mit dem Platz ein wenig eng, deswegen würde ich vorschlagen, dass man auf Level 10 zusätzlich auch noch neuen Platz kaufen kann.“
+
+**Ausgangslage:** Das Grundstück startet bei 22 × 14 Feldern; jede Seite lässt sich 2× um einen Streifen von 4 Reihen erweitern (je 170 Gold) → höchstens 38 × 30 = 1.140 Felder. Tobias hat alles gekauft; sein Screenshot vom 14.11.2026 zeigt die Fläche fast voll bebaut (Level 9, 24.140 Gold).
+
+**Teil 1 – Mehr Fläche ab Level 10** (Tobias' Wunsch):
+- Ab Level 10 lässt sich **jede Seite noch einmal erweitern** (3. Streifen, wieder 4 Reihen) → höchstens **46 × 38 = 1.748 Felder** (608 mehr, gut 50 %).
+- **Preis:** 1.000 Gold je neuem Streifen (die ersten beiden bleiben bei 170) – alle vier zusammen 4.000 Gold. Platzhalter, eine Zahl in `data/land.js`.
+- **Im Spiel:** Beim Aufstieg auf Level 10 rückt der Rand der Welt an jeder Seite 4 Felder nach außen, die Schilder „Fläche kaufen“ erscheinen wieder. Der Aufstieg meldet „Neu: Jede Seite lässt sich noch einmal erweitern“, das Level-Fenster nennt bei Level 10 „Mehr Fläche“. Vor Level 10 ändert sich nichts.
+- **Herauszoomen:** Auf dem Tablet ohne Vollbild steht die Karte bei 38 × 30 schon fast an der Zoom-Grenze. Damit auch 46 × 38 ganz aufs Bild passt, darf man weiter herauszoomen (die Bilder werden dabei kleiner). Im Vollbild passt die ganze Fläche auch so.
+- **Spielstand:** Gebäude und Bänder bleiben, wo sie sind; Tobias' Fabrik bekommt die neue Fläche beim Aufstieg auf Level 10. Braucht der Spielstand dafür ein neues Format, werden alte Spielstände umgewandelt.
+- **Später:** Die Tabelle lässt sich so anlegen, dass spätere Level (z. B. 12 oder 14) noch einmal Fläche bringen – entscheiden wir, wenn es so weit ist.
+
+**Teil 2 – Level 10 „Das Spital“** (nach dem Entwurf aus v0.25.1, von Tobias gutgeheißen):
+- **Schafgarbe** (3. Pflanze, das Wundkraut des Mittelalters): Schafgarbensamen beim Händler 660 Gold, wächst 30 Minuten im Beet, Erntebank: 1 Pflanze → 50 Schafgarbenblüten à 16 Gold (800, +21 %).
+- **Kräuterstube**, 3. Einstellung: **Wundverband** = 1 Heilverband + 5 Schafgarbenblüten (stillt Blut), 20 s, 252 Gold. Kein neues Gebäude – der Reiter „Erde“ bleibt bei 4.
+- **Rechenbeispiel:** 1 Leinsamen + 1 Ringelblumensamen + 1 Schafgarbensamen (1.480 Gold) → 10 Wundverbände (2.520).
+- **Aufstieg** 2.000 Gold (+330 wie die Schritte davor), Geschenk 1 Schafgarbensamen.
+- **Aufträge** (Waren aus beiden Bereichen):
+
+| # | Von | Text (Idee) | Waren | Gold | Erfahrung |
+|---|---|---|---|---|---|
+| 1 | Heilerin Agnes | „Das Spital ist fertig. Ich brauche Schafgarbe – sie stillt Blut wie kein anderes Kraut.“ | 50 Schafgarbenblüten | 800 | 240 |
+| 2 | Heilerin Agnes | „Heilverband und Schafgarbe zusammen ergeben einen Wundverband – für tiefe Schnitte.“ | 5 Wundverbände | 1.260 | 378 |
+| 3 | Bürgermeisterin Hilde | „Die Arzneien im Spital gehören hinter Schloss und Riegel.“ | 2 Vorhängeschlösser | 1.296 | 389 |
+| 4 | Torwächter Ulrich | „Räuber haben einen Händlerzug überfallen. Ich bringe die Verwundeten ins Spital.“ | 8 Wundverbände + 10 Kräuterkompressen | 3.696 | 1.109 |
+
+Zusammen 2.116 Erfahrung (Level 9: 1.657) und 7.052 Gold; sie sammeln sich, bis es Level 11 gibt.
+
+**Fragen an Tobias:**
+1. Fläche: ab Level 10 ein Streifen mehr je Seite (bis 46 × 38) für je 1.000 Gold – passt das, oder lieber mehr Fläche oder ein anderer Preis?
+2. Weiter herauszoomen erlauben, damit die ganze Fläche auch ohne Vollbild aufs Tablet passt?
+3. Level 10 mit Schafgarbe, Wundverband und den 4 Aufträgen so umsetzen?
+4. Beides zusammen als eine Version v0.27.0?
+
 ### Level 9 – Die Schreibstube (fertig, v0.26.0)
 
 **Freigabe (Tobias, Chat 19):** „Das hört sich alles sehr gut an und macht auch Sinn … Wenn du willst, kannst du direkt anfangen mit Level 9.“
