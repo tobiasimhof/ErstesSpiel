@@ -170,7 +170,7 @@ Intern heißt die Erntebank `flachsbreche` (alter Name, damit Spielstände passe
 | 8 | Ringelblume, Kräuterstube mit 2 Eingängen (wie Level 2) | im Spiel |
 | 9 | Die Schreibstube (Werkzeuge): Kohlenmeiler (Holzstamm → Holzkohle), Schreibstube: Zeichenbrett (Verstärkte Holzplatte + Flachsfasern), Reißzeug (Zirkel + Holzkohle) | im Spiel |
 | 10 | Das Spital (Kräuter): Schafgarbe als 3. Pflanze, Wundverband (Heilverband + Schafgarbenblüten); dazu mehr Fläche (je Seite ein 3. Streifen, bis 46 × 38) | im Spiel |
-| 11 | Die Uhrmacherei (Werkzeuge): Räderuhr (Uhrwerk + Gewichtstein), Kastenschloss (Vorhängeschloss + Schlüssel), Sternenuhr (Uhrwerk + Zirkel) | Entwurf – als Nächstes |
+| 11 | Die Uhrmacherei (Werkzeuge): Räderuhr (Uhrwerk + Gewichtstein), Kastenschloss (Vorhängeschloss + Schlüssel), Sternenuhr (Uhrwerk + Zirkel) | Entwurf v0.28.0 (`docs/archiv/PLAENE.md`) – als Nächstes, wartet auf Tobias' OK |
 | 12 | Die Apotheke (Abschluss der Kräuter): Kamille als 4. Pflanze, Kräutermischung, Kamillenkissen, Heilpäckchen (Wundverband + Kräuterkompresse); Reißbrett (Zeichenbrett + Reißzeug) | Entwurf |
 | ab 13 | Tränke: Sand + Holzkohle → Glas → Kolben, Tränke aus Kolben und Kräutermischungen; über die Kräuter-Maschinen auch Sandstaub für die Zauberei; Holzkohle + Eisen → Stahl (Idee) | später |
 | ~15 | Alchemist, Mörser (getrocknete Blüten → Staub, z. B. Ringelblumenstaub), Zaubertränke (Lebens-, Mana-, Alterstrank …); Farn als Zauberkraut (Idee) | später |

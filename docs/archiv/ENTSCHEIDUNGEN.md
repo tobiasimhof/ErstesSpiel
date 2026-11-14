@@ -280,3 +280,5 @@ Neue Entscheidungen kommen unten in die Tabelle (älteste oben). Wird eine Entsc
 | 14.11.2026 | Rechts lässt sich die Karte so weit über den Rand schieben, wie das Infofenster breit ist | Tobias: Das Infofenster rechts oben verdeckt beim Hereinzoomen Gebäude am Rand („Infofenster verdeckt“). |
 | 14.11.2026 | Level 10 „Das Spital“ wie im Entwurf und zusammen mit der Fläche in einer Version | Tobias: „Ja, darfst du.“ – „Ja, gerne beides zusammen.“ |
 | 14.11.2026 | Rezepte können ein eigenes Level haben: den Wundverband bietet die Kräuterstube erst ab Level 10 an | Claude: Ohne Schafgarbe wäre die Einstellung auf Level 8 und 9 verwirrend. |
+| 14.11.2026 | Mehr Fläche ab Level 10 für 2.000 Gold je Streifen bleibt so | Tobias nach dem Test: „Sieht sehr gut aus und fühlt sich auch gut an.“ Er hat alle vier Streifen gekauft. |
+| 14.11.2026 | Level 11 „Die Uhrmacherei“ als Nächstes, noch in derselben Session | Tobias: „damit ich meine Produktion auch noch an die neuen Teile anschließen kann, um zu sehen, wie es mit dem Platz ist.“ |
