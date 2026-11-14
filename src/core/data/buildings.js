@@ -184,6 +184,8 @@ export const BUILDINGS = {
       crops: {
         leinsamen: { plant: 'flachspflanze', time: 1800 },
         ringelblumensamen: { plant: 'ringelblume', time: 1800 },
+        // v0.27.0: Level 10 – die Schafgarbe wächst im selben Takt
+        schafgarbensamen: { plant: 'schafgarbe', time: 1800 },
       },
     },
   },
@@ -200,7 +202,7 @@ export const BUILDINGS = {
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
     production: {
       kind: 'source',
-      inputs: { flachspflanze: 'flachsfaser', ringelblume: 'ringelbluete' },
+      inputs: { flachspflanze: 'flachsfaser', ringelblume: 'ringelbluete', schafgarbe: 'schafgarbenbluete' },
       amount: 50,
       duration: 600,
       capacity: 3,
@@ -235,7 +237,8 @@ export const BUILDINGS = {
       { kind: 'in', x: 0, y: 1, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['heilverband', 'kraeuterkompresse'] },
+    // v0.27.0: Level 10 – 3. Einstellung Wundverband
+    production: { kind: 'workshop', recipes: ['heilverband', 'kraeuterkompresse', 'wundverband'] },
   },
   // v0.26.0: Level 9 „Die Schreibstube“ (Tobias, Chat 19) – die Werkzeuge
   // wachsen weiter. Der Kohlenmeiler macht wie das Holzfällerlager aus einem

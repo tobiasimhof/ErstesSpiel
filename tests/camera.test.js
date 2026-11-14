@@ -2,11 +2,14 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
+  FLOOR_ZOOM,
   MAX_ZOOM,
   MIN_ZOOM,
+  TILE,
   clampCamera,
   createCamera,
   fitRect,
+  minZoom,
   panBy,
   screenToWorld,
   setViewSize,
@@ -48,7 +51,32 @@ test('Zoom bleibt in seinen Grenzen', () => {
   zoomAt(cam, 0, 0, 1000, BIG_WORLD);
   assert.equal(cam.zoom, MAX_ZOOM);
   zoomAt(cam, 0, 0, 0.00001, BIG_WORLD);
-  assert.equal(cam.zoom, MIN_ZOOM);
+  assert.equal(cam.zoom, FLOOR_ZOOM, 'eine riesige Welt: nie weiter als FLOOR_ZOOM');
+});
+
+test('v0.27.0: Man kann so weit herauszoomen, dass die ganze Fläche ins Bild passt', () => {
+  // Tablet im Browser ohne Vollbild (Karte etwa 1280 × 540), Handy quer (844 × 340)
+  for (const [w, h] of [
+    [1280, 540],
+    [1280, 750],
+    [844, 340],
+  ]) {
+    for (const [cols, rows] of [
+      [38, 30],
+      [46, 38],
+    ]) {
+      const cam = makeCamera(w, h);
+      const world = { x: 0, y: 0, width: cols * TILE, height: rows * TILE };
+      zoomAt(cam, w / 2, h / 2, 0.00001, world);
+      const topLeft = worldToScreen(cam, world.x, world.y);
+      const bottomRight = worldToScreen(cam, world.x + world.width, world.y + world.height);
+      assert.ok(topLeft.x >= 0 && topLeft.y >= 0 && bottomRight.x <= w && bottomRight.y <= h, `${cols} × ${rows} passt nicht auf ${w} × ${h}`);
+      assert.ok(cam.zoom <= MIN_ZOOM && cam.zoom >= FLOOR_ZOOM);
+    }
+  }
+  // Eine kleine Welt braucht nicht mehr als MIN_ZOOM
+  const cam = makeCamera(1280, 750);
+  assert.equal(minZoom(cam, { x: 0, y: 0, width: 10 * TILE, height: 10 * TILE }), MIN_ZOOM);
 });
 
 test('Verschieben bewegt die Karte mit dem Finger', () => {
@@ -70,6 +98,27 @@ test('Man kann nicht über den Weltrand hinaus schieben', () => {
   panBy(cam, -100000, -100000, world);
   assert.equal(cam.x, 1000 - 400);
   assert.equal(cam.y, 1000 - 300);
+});
+
+test('v0.27.0: Rechts lässt sich die Karte unter dem Infofenster hervorschieben (padRight)', () => {
+  const cam = makeCamera(1000, 600);
+  const world = { x: 0, y: 0, width: 2000, height: 2000, padRight: 340 };
+  panBy(cam, -100000, 0, world);
+  assert.equal(cam.x, 2000 + 340 - 1000, 'große Welt: 340 Pixel über den rechten Rand');
+  const right = worldToScreen(cam, world.width, 0);
+  assert.equal(right.x, 1000 - 340, 'der rechte Rand liegt links vom Infofenster');
+  panBy(cam, 100000, 0, world);
+  assert.equal(cam.x, 0, 'links bleibt es beim Rand');
+  // Eine kleine Welt steht mittig und lässt sich so weit nach links schieben,
+  // bis ihr rechter Rand frei liegt
+  const small = { x: 0, y: 0, width: 800, height: 400, padRight: 340 };
+  cam.x = -100000;
+  clampCamera(cam, small);
+  assert.ok(close(worldToScreen(cam, 400, 0).x, 500), 'mittig');
+  panBy(cam, -100000, 0, small);
+  assert.ok(close(worldToScreen(cam, 800, 0).x, 1000 - 340), 'rechter Rand frei');
+  panBy(cam, 100000, 0, small);
+  assert.ok(close(worldToScreen(cam, 400, 0).x, 500), 'zurück nur bis zur Mitte');
 });
 
 test('Eine kleine Welt wird mittig angezeigt', () => {

@@ -61,6 +61,7 @@ import { buildingContents, createProductionState, productionOf, sourceInputTypes
 import { createCounters, createMarket, syncCustomerTimers } from './market.js';
 import { createQuestState } from './quests.js';
 import { addAllToStorage, counterSizeFor, fitCounters } from './shop.js';
+import { fitWorldToLevel } from './land.js';
 import { START_PLOT, WORLD, parseTileKey } from './state.js';
 
 export const SAVE_VERSION = 17;
@@ -116,6 +117,9 @@ export function deserializeGame(text) {
   const state = migrate(data.state, from, migrationNotes);
   if (!isValidState(state)) return null;
   for (const belt of Object.values(state.belts)) belt.outs = sortDirs(belt.outs);
+  // v0.27.0: Die Welt reicht so weit, wie das Level Fläche erlaubt (ab Level 10
+  // ein Streifen mehr je Seite) – kein neues Format, nur nachgezogen.
+  fitWorldToLevel(state);
   // v0.10.1: Was nicht mehr auf eine Theke passt, kommt ins Laden-Lager.
   const trimmed = fitCounters(state);
   // v0.24.0: Jede Theke hat ihren Kunden-Takt.

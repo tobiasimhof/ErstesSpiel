@@ -12,6 +12,7 @@ import { BUILDINGS, BUILD_MENU } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
 import { LEVELS, MAX_LEVEL } from './data/levels.js';
 import { RECIPES } from './data/recipes.js';
+import { fitWorldToLevel } from './land.js';
 import { createQuestState, levelXp, xpNeeded } from './quests.js';
 import { addAllToStorage } from './shop.js';
 
@@ -25,8 +26,20 @@ export function isBuildingUnlocked(state, type) {
   return buildingLevel(type) <= state.shopLevel;
 }
 
+// v0.27.0: Ein Rezept kann später kommen als seine Maschine (Wundverband in
+// der Kräuterstube erst ab Level 10) – dann steht level im Rezept.
+export function recipeLevel(key) {
+  const recipe = RECIPES[key];
+  if (!recipe) return Infinity;
+  return Math.max(buildingLevel(recipe.building), recipe.level ?? 1);
+}
+
+export function isRecipeUnlocked(state, key) {
+  return recipeLevel(key) <= state.shopLevel;
+}
+
 // Level einer Ware: Rohstoffe aus der Tabelle, alles andere nach dem
-// (niedrigsten) Gebäude, das sie herstellt.
+// (niedrigsten) Gebäude, das sie herstellt (seit v0.27.0: nach dem Rezept).
 export function itemLevel(type) {
   const def = ITEMS[type];
   if (!def) return Infinity;
@@ -34,10 +47,15 @@ export function itemLevel(type) {
   let level = Infinity;
   for (const b of Object.values(BUILDINGS)) {
     const p = b.production;
-    const makes =
-      (p?.kind === 'source' && Object.values(p.inputs ?? { [p.input]: p.output }).includes(type)) ||
-      (p?.kind === 'workshop' && p.recipes.some((key) => RECIPES[key]?.output === type));
-    if (makes) level = Math.min(level, b.level ?? 1);
+    if (p?.kind === 'source') {
+      // v0.27.0: Die Erntebank macht Schafgarbenblüten erst, wenn es die Schafgarbe gibt.
+      for (const [input, output] of Object.entries(p.inputs ?? { [p.input]: p.output })) {
+        if (output === type) level = Math.min(level, Math.max(b.level ?? 1, ITEMS[input]?.level ?? 1));
+      }
+    }
+    if (p?.kind === 'workshop') {
+      for (const key of p.recipes) if (RECIPES[key]?.output === type) level = Math.min(level, recipeLevel(key));
+    }
   }
   return level;
 }
@@ -46,13 +64,14 @@ export function isItemUnlocked(state, type) {
   return itemLevel(type) <= state.shopLevel;
 }
 
-// Was ein Level neu freischaltet: { buildings: [...], raws: [...] }
+// Was ein Level neu freischaltet: { buildings: [...], raws: [...], recipes: [...] }
 // raws: was es neu beim Händler gibt (v0.16.0: nicht die Flachspflanze – die
-// wächst im Beet).
+// wächst im Beet). recipes (v0.27.0): neue Einstellungen älterer Maschinen.
 export function unlocksOf(level) {
   return {
     buildings: BUILD_MENU.filter((type) => buildingLevel(type) === level),
     raws: Object.keys(ITEMS).filter((type) => ITEMS[type].raw && ITEMS[type].buyPrice > 0 && itemLevel(type) === level),
+    recipes: Object.keys(RECIPES).filter((key) => recipeLevel(key) === level && buildingLevel(RECIPES[key].building) < level),
   };
 }
 
@@ -95,8 +114,9 @@ export function canLevelUp(state) {
 
 // Steigt auf (kostet Gold) und legt das Geschenk ins Laden-Lager. Die
 // Aufträge des neuen Levels beginnen von vorn. Seit v0.24.0 bringt ein
-// Aufstieg keine Theken mehr – die kauft man mit Gold.
-// Ergebnis: { level, gift, cost } oder null.
+// Aufstieg keine Theken mehr – die kauft man mit Gold. Seit v0.27.0 rückt
+// der Rand der Welt nach außen, wenn das Level mehr Fläche bringt (Level 10).
+// Ergebnis: { level, gift, cost, moreLand } oder null.
 export function levelUp(state) {
   if (!canLevelUp(state)) return null;
   const cost = nextLevelCost(state);
@@ -106,5 +126,6 @@ export function levelUp(state) {
   state.quest = { ...createQuestState(), xp: rest };
   const gift = { ...(LEVELS[state.shopLevel].gift ?? {}) };
   addAllToStorage(state, gift);
-  return { level: state.shopLevel, gift, cost };
+  const moreLand = fitWorldToLevel(state);
+  return { level: state.shopLevel, gift, cost, moreLand };
 }

@@ -471,7 +471,8 @@ export function drawItem(ctx, type, cx, cy, size) {
         ctx.fill();
         ctx.stroke();
       }
-      ctx.fillStyle = '#a85a00';
+      // v0.27.0: Schafgarbenblüten sind weiß mit blassgelber Mitte
+      ctx.fillStyle = def.center ?? '#a85a00';
       ctx.beginPath();
       ctx.arc(cx, cy + s * 0.05, s * 0.08, 0, Math.PI * 2);
       ctx.fill();
@@ -529,6 +530,27 @@ export function drawItem(ctx, type, cx, cy, size) {
         ctx.moveTo(cx + s * 0.08, cy + s * 0.3);
         ctx.lineTo(cx + s * 0.5, cy + s * 0.41);
         ctx.stroke();
+      }
+      // v0.27.0: Wundverband – dazu ein Zweig Schafgarbe auf der Rolle
+      // (grüner Stiel, gefiederte Blätter, weiße Blütendolde)
+      if (def.sprig) {
+        ctx.translate(cx, cy);
+        thickLine(ctx, [[-0.42, 0.34], [-0.1, -0.06], [0.2, -0.42]], s, 0.07, '#5c8a35');
+        ctx.fillStyle = '#7fae4b';
+        for (const [dx, dy, a] of [[-0.3, 0.12, -0.6], [-0.06, 0.06, 0.9], [0.02, -0.22, -0.5]]) {
+          ctx.beginPath();
+          ctx.ellipse(dx * s, dy * s, s * 0.13, s * 0.05, a, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        }
+        ctx.fillStyle = def.sprig;
+        ctx.lineWidth = Math.max(1, s * 0.05);
+        for (const [dx, dy] of [[0.2, -0.46], [0.31, -0.4], [0.12, -0.38], [0.24, -0.31], [0.34, -0.5]]) {
+          ctx.beginPath();
+          ctx.arc(dx * s, dy * s, s * 0.075, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        }
       }
       break;
     }

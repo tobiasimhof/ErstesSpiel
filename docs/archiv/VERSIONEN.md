@@ -4,6 +4,26 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.27.0 – Level 10 „Das Spital“ und mehr Fläche (14.11.2026)
+
+**Vorgenommen:**
+- Entwurf v0.27.0 (Tobias, Chat 20: „Ein Streifen gerne 2000 Gold … Ja weiter rauszoomen soll gehen … Ja, darfst du … Ja, gerne beides zusammen“): Level 10 mit Schafgarbe und Wundverband, ab Level 10 ein Streifen Fläche mehr je Seite für 2.000 Gold, weiter herauszoomen. Dazu Tobias' Ärger beim Hereinzoomen: Das Infofenster verdeckt Gebäude am rechten Rand.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie wächst die Welt, ohne dass Tobias' Fabrik verrutscht? → Die Welt hat seit v0.10.2 ihre eigene Ecke; beim Aufstieg rückt sie an jeder Seite 4 Felder nach außen, Gebäude und Bänder behalten ihre Felder. Kein neues Spielstand-Format: Beim Laden wird die Welt nur nachgezogen, wenn sie für das Level zu klein ist.
+- Wie viel herauszoomen? → So weit, dass die ganze Welt mit etwas Rand ins Bild passt, höchstens bis 0,12. Gemessen: Tablet im Browser-Test (Karte 1280 × 756) reicht 0,35, Handy quer (844 × 350) braucht 0,15.
+- Was genau stört am Hereinzoomen? → Rückfrage an Tobias: „Infofenster verdeckt“. Deshalb lässt sich die Karte rechts so weit über den Rand schieben, wie das Infofenster breit ist.
+- Soll die Kräuterstube den Wundverband schon auf Level 8 und 9 anbieten? → Nein, ohne Schafgarbe wäre das verwirrend: Rezepte bekommen ein eigenes Level.
+
+**Gemacht:**
+- `data/land.js`: `LAND_MORE` (Level 10: 1 Streifen, 2.000 Gold). `land.js`: `stripsPerSide`, `worldForLevel`, `fitWorldToLevel`, `landMoreAt`, `stripPrice` (Preis nach der Nummer des Streifens an der Seite). `levels.js`: Aufstieg lässt die Welt wachsen (`moreLand`), `recipeLevel` / `isRecipeUnlocked`, `unlocksOf` mit neuen Rezepten, `itemLevel` nach Rezept- und Pflanzen-Level. `save.js`: Welt beim Laden nachziehen.
+- `data/items.js`: Schafgarbensamen (660), Schafgarbe, Schafgarbenblüte (16), Wundverband (252). `data/buildings.js`: Beet und Erntebank mit Schafgarbe, Kräuterstube mit 3. Einstellung. `data/recipes.js`: Wundverband (ab Level 10). `data/levels.js`: Level 10. `data/shop.js`: Laden auf Level 10 wie Level 7 bis 9.
+- `view/camera.js`: `minZoom`, `FLOOR_ZOOM`, `padRight`. `main.js`: Platz rechts für das Infofenster, nach dem Aufstieg mit mehr Fläche die ganze Welt zeigen, Meldung mit Hinweis auf die Schilder. `view/levels.js`: „Neu“ nennt neue Rezepte und mehr Fläche. `view/controller.js`: Infofenster „Fläche kaufen“ nennt die Preise. `view/buildingInfo.js`: gesperrte Rezepte nicht unter „Umstellen auf“. `view/itemArt.js`, `view/renderer.js`: Bilder für Schafgarbe, Blüten, Wundverband.
+- Tests: neue Datei `spital.test.js` (16 Tests), Kamera-Tests (herauszoomen bis die Welt passt, `padRight`), bestehende Tests auf Level 10 umgestellt; Browser-Test mit Level 10, neuer Fläche, Zoom und Infofenster. Doku: `STAND.md`, `SPIEL.md`, `TECHNIK.md`, Archiv.
+
+**Geprüft:**
+- `npm test`: 335 von 335 bestanden. Browser-Test in Tablet- und Handygröße: alle 755 Prüfungen bestanden; Screenshots angesehen (Level-10-Fenster mit Agnes' Auftrag, ganze Welt nach dem Aufstieg mit dem Schild „＋ 2.000“, ganz herausgezoomt auf dem Handy, 3. Streifen rechts gekauft, Beet mit drei Samen, Kräuterstube mit Wundverband, rechter Rand neben dem Infofenster).
+
 ### v0.26.1 – Rückmeldung zu Level 9, Plan für Level 10 mit mehr Fläche (14.11.2026, nur Doku)
 
 **Vorgenommen:**

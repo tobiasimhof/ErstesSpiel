@@ -61,7 +61,19 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.27.0 – Level 10 „Das Spital“ und mehr Fläche (v0.26.1, wartet auf Tobias' OK)
+### Level 10 „Das Spital“ und mehr Fläche (fertig, v0.27.0)
+
+**Freigabe (Tobias, Chat 20):** „Ein Streifen gerne 2000 Gold, weil man hier als Spieler schon sehr reich sein kann. Ich würde mir die Fläche mal anschauen und danach feinjustieren. 2. Ja weiter rauszoomen soll gehen. Manchmal stört es, wenn man hereinzoomt und dann ist das Fenster z. B. rechts oben in der Ecke und man kann nur schwer das nächste Gebäude anklicken. 3. Ja, darfst du. 4. Ja, gerne beides zusammen.“ Auf Claudes Rückfrage, was am Hereinzoomen stört: **„Infofenster verdeckt“** – das Infofenster rechts oben liegt über Gebäuden am Rand, und die Karte lässt sich nicht weiter schieben (Lösung aus der Rückfrage: die Karte dort etwas über den Rand schieben können).
+
+**Umgesetzt wie im Entwurf unten**, mit diesen Änderungen und Festlegungen:
+- **Preis** der neuen Streifen **2.000 Gold** (statt 1.000). Die ersten beiden Streifen je Seite bleiben bei 170. Datentabelle `LAND_MORE` in `data/land.js` (weitere Level lassen sich als Zeile ergänzen).
+- **Welt:** wächst beim Aufstieg auf Level 10 (und beim Laden eines Spielstands, falls sie zu klein ist) an jeder Seite um 4 Felder – kein neues Spielstand-Format. Nach dem Aufstieg zoomt die Karte so, dass die ganze Welt mit den neuen Schildern zu sehen ist; die Meldung sagt „Tippe auf die ＋-Schilder am Rand“. Das Infofenster „Fläche kaufen“ nennt die Preise („Die ersten 2 Streifen je Seite kosten je 170 Gold, ab Level 10 der 3. je 2.000 Gold“).
+- **Zoom:** Man darf so weit herauszoomen, dass die ganze Welt mit etwas Rand ins Bild passt (vorher höchstens bis 0,35), aber nie weiter als 0,12. Auf dem Tablet im Vollbild reichen 0,35 für 46 × 38 noch, ohne Vollbild und auf dem Handy geht es weiter.
+- **Infofenster:** Rechts lässt sich die Karte so weit über den Rand schieben, wie das Infofenster breit ist (wie unten für die Bauleiste). Eine kleine Welt steht weiter mittig und lässt sich nur so weit nach links schieben, bis ihr rechter Rand frei liegt.
+- **Wundverband** erst ab Level 10 wählbar: Rezepte können ein eigenes Level haben (`level` im Rezept); die Kräuterstube zeigt „Umstellen auf Wundverband“ vorher nicht. Ebenso zählen Schafgarbenblüten erst ab Level 10 (Testpaket).
+- **Warenbilder:** Schafgarbensamen (grünliches Säckchen), Schafgarbe (weiße Dolden), Schafgarbenblüten (weiß mit blassgelber Mitte), Wundverband (Heilverband mit einem Schafgarbenzweig); im Beet wächst die Schafgarbe mit weißen Blüten.
+
+### Entwurf v0.27.0 – Level 10 „Das Spital“ und mehr Fläche (v0.26.1; angenommen, umgesetzt in v0.27.0 mit 2.000 Gold je Streifen)
 
 **Tobias (Chat 20, nach dem Test von Level 9):** „Ich finde es ist sehr gut gelungen mit dem neuen Reiter und den Techbaum, den du entworfen hast, fande ich auch sehr gut. … Aktuell wird es mit dem Platz ein wenig eng, deswegen würde ich vorschlagen, dass man auf Level 10 zusätzlich auch noch neuen Platz kaufen kann.“
 

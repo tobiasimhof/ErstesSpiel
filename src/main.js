@@ -146,11 +146,15 @@ function testPack() {
 // ---------- Laden-Level (v0.9.0) ----------
 
 let levelReady = canLevelUp(state);
-function onLevelUp({ level, gift }) {
+function onLevelUp({ level, gift, moreLand }) {
   levelReady = false;
+  // v0.27.0: Bringt das Level mehr Fläche, zeigt die Karte die ganze Welt –
+  // so sieht man die neuen Schilder „＋ Fläche kaufen“ am Rand.
+  if (moreLand) fitRect(camera, worldRect(), 36, worldBounds());
   onChange();
   buildBar.updateCosts(state);
-  panels.toast(`Laden-Level ${level}! Neu: ${unlockText(level)}. Gratis im Laden-Lager: ${costText(gift)}.`, 6000);
+  const tip = moreLand ? ' Tippe auf die ＋-Schilder am Rand.' : '';
+  panels.toast(`Laden-Level ${level}! Neu: ${unlockText(level)}. Gratis im Laden-Lager: ${costText(gift)}.${tip}`, moreLand ? 9000 : 6000);
 }
 // v0.13.0: Auftrag abgegeben
 // v0.15.0: oder mit dem Test-Knopf als erledigt gewertet (skipped)
@@ -185,14 +189,22 @@ hud.setTestMode(Boolean(settings.testMode), TEST_SPEED);
 
 // v0.18.0: Unten bekommt die Karte so viel Platz, wie die Bauleiste samt
 // Reitern hoch ist – so lässt sich auch die unterste Reihe darüber schieben.
+// v0.27.0 (Tobias): rechts so viel, wie das Infofenster breit ist (wie in
+// style.css: min(320px, 42vw) plus Rand) – so verdeckt es kein Gebäude am Rand.
 function worldBounds() {
   const w = state.world;
-  return { x: w.x * TILE, y: w.y * TILE, width: w.width * TILE, height: w.height * TILE, padBottom: buildBar.bottomCover() };
+  const padRight = Math.min(320, 0.42 * canvas.clientWidth) + 24;
+  return { x: w.x * TILE, y: w.y * TILE, width: w.width * TILE, height: w.height * TILE, padBottom: buildBar.bottomCover(), padRight };
 }
 
 function plotRect() {
   const p = state.plot;
   return { x: p.x * TILE, y: p.y * TILE, width: p.width * TILE, height: p.height * TILE };
+}
+
+function worldRect() {
+  const w = state.world;
+  return { x: w.x * TILE, y: w.y * TILE, width: w.width * TILE, height: w.height * TILE };
 }
 
 // Die Knöpfe rufen den Controller erst beim Antippen auf, daher darf er

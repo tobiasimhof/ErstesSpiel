@@ -40,8 +40,8 @@ const worth = (items) => Object.entries(items).reduce((sum, [t, n]) => sum + ITE
 
 // ---------- Datentabellen ----------
 
-test('Level 9 ist das höchste Level', () => {
-  assert.equal(MAX_LEVEL, 9);
+test('Level 9 gibt es (seit v0.27.0 ist Level 10 das höchste)', () => {
+  assert.equal(MAX_LEVEL, 10);
 });
 
 test('Kohlenmeiler: wie das Holzfällerlager – 1 Holzstamm → 100 Holzkohle in 15 Minuten, Vorrat 3', () => {
@@ -106,7 +106,7 @@ test('Baukosten: nur Werkzeug-Waren, höchstens ein Eisenerz als Teile (960 Gold
 // ---------- Level 9 ----------
 
 test('Level 9 „Die Schreibstube“: Kohlenmeiler und Schreibstube, Aufstieg 1.670 Gold, 1 Holzstamm gratis', () => {
-  assert.deepEqual(unlocksOf(9), { buildings: ['kohlenmeiler', 'schreibstube'], raws: [] });
+  assert.deepEqual(unlocksOf(9), { buildings: ['kohlenmeiler', 'schreibstube'], raws: [], recipes: [] });
   assert.equal(LEVELS[9].name, 'Die Schreibstube');
   const state = createNewGame(9);
   state.shopLevel = 8;

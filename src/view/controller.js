@@ -43,6 +43,7 @@ import {
   selectArea,
   selectionBounds,
 } from '../core/area.js';
+import { LAND, LAND_MORE } from '../core/data/land.js';
 import { buyLand, landBuysLeft, landOffer, landSideAt } from '../core/land.js';
 import { buildingLevel, isBuildingUnlocked, isItemUnlocked, itemLevel } from '../core/levels.js';
 import { buyRaw, isBuyable, refillPlan, refillSource, sowPlan, sowSeed } from '../core/market.js';
@@ -510,10 +511,19 @@ export function createController({
   // ---------- Fläche kaufen (v0.9.0) ----------
 
   // v0.10.2: Jeder Streifen kostet gleich viel; jede Seite geht 2×.
+  // v0.27.0: ab Level 10 noch ein Streifen je Seite, teurer (LAND_MORE).
   function landInfoText(side) {
     const left = landBuysLeft(state, side);
     const more = left === 1 ? 'Das ist der letzte Kauf an dieser Seite.' : `An dieser Seite geht das noch ${left}×.`;
-    return `Vergrößert dein Grundstück an dieser Seite. Gebäude und Bänder bleiben, wo sie sind. Jeder Kauf kostet gleich viel. ${more}`;
+    let n = LAND.perSide;
+    const later = LAND_MORE.map((m) => {
+      const from = n + 1;
+      n += m.strips;
+      const which = m.strips === 1 ? `der ${from}.` : `der ${from}. bis ${n}.`;
+      return `ab Level ${m.level} ${which} je ${numberFormat.format(m.price)} Gold`;
+    });
+    const prices = `Die ersten ${LAND.perSide} Streifen je Seite kosten je ${numberFormat.format(LAND.price)} Gold${later.length ? `, ${later.join(', ')}` : ''}.`;
+    return `Vergrößert dein Grundstück an dieser Seite. Gebäude und Bänder bleiben, wo sie sind. ${prices} ${more}`;
   }
 
   function showLandInfo(side) {

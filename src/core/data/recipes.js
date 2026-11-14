@@ -43,6 +43,8 @@ export const RECIPES = {
   // auf Wunden, die Kompresse auf Prellungen und Schwellungen.
   heilverband: { building: 'kraeuterstube', label: 'Heilverbände', inputs: { verband: 1, ringelbluete: 5 }, output: 'heilverband', amount: 1, time: 20 },
   kraeuterkompresse: { building: 'kraeuterstube', label: 'Kompressen', inputs: { flachsfaser: 10, ringelbluete: 5 }, output: 'kraeuterkompresse', amount: 1, time: 20 },
+  // v0.27.0: Level 10 „Das Spital“ – Heilverband mit Schafgarbe, die Blut stillt
+  wundverband: { building: 'kraeuterstube', label: 'Wundverbände', inputs: { heilverband: 1, schafgarbenbluete: 5 }, output: 'wundverband', amount: 1, time: 20, level: 10 },
 
   // v0.26.0: Schreibstube (Level 9, Tobias: „Fasern und die Verstärkte
   // Holzplatte zu etwas, worauf man zeichnen kann“, den Zirkel „für die
