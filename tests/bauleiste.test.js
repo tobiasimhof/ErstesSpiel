@@ -36,7 +36,7 @@ test('Einteilung der Reiter (Tobias): Kombi-Maschinen beim Stoff, zu dem sie pas
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'stein').buildings, ['steinbruch', 'steinmetz']);
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'eisen').buildings, ['schmelzhuette', 'schmiede', 'feinschmiede', 'schlosserei']);
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'kraeuter').buildings, ['beet', 'flachsbreche', 'webstube', 'kraeuterstube']);
-  assert.deepEqual(BUILD_TABS.find((t) => t.id === 'werkstatt').buildings, ['schreibstube']);
+  assert.deepEqual(BUILD_TABS.find((t) => t.id === 'werkstatt').buildings, ['schreibstube', 'uhrmacherei']);
   assert.equal(tabOf.zimmerei, 'holz');
   assert.equal(tabOf.schlosserei, 'eisen');
 });

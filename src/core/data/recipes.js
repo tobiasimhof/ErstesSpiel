@@ -52,4 +52,13 @@ export const RECIPES = {
   // Zirkel und Zeichenkohle im Etui.
   zeichenbrett: { building: 'schreibstube', label: 'Zeichenbretter', inputs: { verstaerkteholzplatte: 1, flachsfaser: 10 }, output: 'zeichenbrett', amount: 1, time: 20 },
   reisszeug: { building: 'schreibstube', label: 'Reißzeuge', inputs: { zirkel: 1, holzkohle: 10 }, output: 'reisszeug', amount: 1, time: 30 },
+
+  // v0.28.0: Uhrmacherei (Level 11). Räderuhr: Uhrwerk mit Gewichtsantrieb;
+  // Kastenschloss: Vorhängeschloss mit passendem Schlüssel (Tobias' Idee);
+  // Sternenuhr: Uhrwerk mit Zirkel, zeigt Sonne, Mond und Sterne. Tobias:
+  // „etwas mit der Zeit skalieren, weil man mit diesen Produkten auch gutes
+  // Geld verdienen kann. Evtl. die Zeit auf 1 min. pro Stück“ – je 60 s.
+  raederuhr: { building: 'uhrmacherei', label: 'Räderuhren', inputs: { uhrwerk: 1, gewichtstein: 1 }, output: 'raederuhr', amount: 1, time: 60 },
+  kastenschloss: { building: 'uhrmacherei', label: 'Kastenschlösser', inputs: { vorhaengeschloss: 1, schluessel: 1 }, output: 'kastenschloss', amount: 1, time: 60 },
+  sternenuhr: { building: 'uhrmacherei', label: 'Sternenuhren', inputs: { uhrwerk: 1, zirkel: 1 }, output: 'sternenuhr', amount: 1, time: 60 },
 };

@@ -282,3 +282,7 @@ Neue Entscheidungen kommen unten in die Tabelle (älteste oben). Wird eine Entsc
 | 14.11.2026 | Rezepte können ein eigenes Level haben: den Wundverband bietet die Kräuterstube erst ab Level 10 an | Claude: Ohne Schafgarbe wäre die Einstellung auf Level 8 und 9 verwirrend. |
 | 14.11.2026 | Mehr Fläche ab Level 10 für 2.000 Gold je Streifen bleibt so | Tobias nach dem Test: „Sieht sehr gut aus und fühlt sich auch gut an.“ Er hat alle vier Streifen gekauft. |
 | 14.11.2026 | Level 11 „Die Uhrmacherei“ als Nächstes, noch in derselben Session | Tobias: „damit ich meine Produktion auch noch an die neuen Teile anschließen kann, um zu sehen, wie es mit dem Platz ist.“ |
+| 14.11.2026 | Geschenke beim Aufstieg enden mit Level 10 | Tobias: „Eisenerzgeschenke brauchen wir keine mehr. Das sollte mit Level 10 enden, dass wir Geschenke bekommen.“ |
+| 14.11.2026 | Uhrmacherei im Reiter „Werkstatt“, Baukosten 1 Zirkel + 1 Uhrwerk | Tobias: „Ja, mach das in den Reiter.“ – „Ja, die Baukosten passen.“ |
+| 14.11.2026 | Räderuhr, Kastenschloss und Sternenuhr brauchen je 1 Minute | Tobias: „etwas mit der Zeit skalieren, weil man mit diesen Produkten auch gutes Geld verdienen kann. Evtl. die Zeit auf 1 min. pro Stück“ |
+| 14.11.2026 | Aufstieg auf Level 11 kostet 5.000 Gold (deutlich mehr als die +330 je Level bisher) | Tobias: „Aufstieg können wir jetzt etwas anziehen und bei 5000 Gold starten, damit wir auch etwas mit dem Cash Flow arbeiten können.“ |

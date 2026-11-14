@@ -154,7 +154,9 @@ function onLevelUp({ level, gift, moreLand }) {
   onChange();
   buildBar.updateCosts(state);
   const tip = moreLand ? ' Tippe auf die ＋-Schilder am Rand.' : '';
-  panels.toast(`Laden-Level ${level}! Neu: ${unlockText(level)}. Gratis im Laden-Lager: ${costText(gift)}.${tip}`, moreLand ? 9000 : 6000);
+  // v0.28.0: Ab Level 11 gibt es kein Geschenk mehr (Tobias).
+  const giftText = costText(gift) ? ` Gratis im Laden-Lager: ${costText(gift)}.` : '';
+  panels.toast(`Laden-Level ${level}! Neu: ${unlockText(level)}.${giftText}${tip}`, moreLand ? 9000 : 6000);
 }
 // v0.13.0: Auftrag abgegeben
 // v0.15.0: oder mit dem Test-Knopf als erledigt gewertet (skipped)

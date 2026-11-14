@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.27.0). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.28.0). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
@@ -9,7 +9,7 @@
 - **Makro-Spiel:** Man muss früh planen – genug Grundrohstoffe, ein Grundvorrat an Baumaterial, eigene Straßen je Zwischenprodukt, Lagerhäuser als Zwischenlager. Werden zwei Bänder mit verschiedenen Waren zusammengeführt, ist nicht mehr steuerbar, was an der Maschine ankommt.
 - **Gold ist bewusst knapp** (Tobias): Man kann nicht alles auf einmal bauen und auffüllen; das Gleichgewicht zwischen Gold verdienen und Rohstoffe nachkaufen gehört zum Spiel. Wer mehr verdienen will, muss teurere Waren anbieten. So gibt es mehrere Spielstile – z. B. auf Masse gehen oder sich auf teure Waren konzentrieren. **Der Schwerpunkt liegt auf der Massenproduktion** (Tobias, Chat 17): Prozesse optimieren und automatisieren, immer längere Straßen bauen, um Werkzeuge herzustellen und zu verkaufen; Gold gehört zum Spiel, steht aber nicht im Mittelpunkt.
 - **Roter Faden:** Der Laden liegt in einem kleinen Ort am Fluss, der wächst. Jedes Level ist ein Bauabschnitt, die Bewohner geben Aufträge.
-- **Kapitel:** Werkzeuge (Level 1–6: Holz, Stein, Eisen) und Kräuter (ab Level 7: Flachs, Ringelblume, ab Level 10 Schafgarbe); ab Level 9 wachsen die Werkzeuge weiter (Holzkohle, Schreibstube), später kommen Tränke dazu. Die Level wechseln sich ab (Werkzeuge 9 und 11, Kräuter 10 und 12), die Aufträge verlangen Waren aus beiden Bereichen. Jedes Kapitel fängt einfach an und steigert sich; später greifen die Kapitel ineinander.
+- **Kapitel:** Werkzeuge (Level 1–6: Holz, Stein, Eisen) und Kräuter (ab Level 7: Flachs, Ringelblume, ab Level 10 Schafgarbe); ab Level 9 wachsen die Werkzeuge weiter (Holzkohle, Schreibstube, Uhrmacherei), später kommen Tränke dazu. Die Level wechseln sich ab (Werkzeuge 9 und 11, Kräuter 10 und 12), die Aufträge verlangen Waren aus beiden Bereichen. Jedes Kapitel fängt einfach an und steigert sich; später greifen die Kapitel ineinander.
 - **Kleine Waren:** Alles auf dem Band ist auch im echten Leben klein (keine Türen, Truhen, Tore). Jedes Produkt entsteht logisch aus seinen Zutaten – aus zwei Produkten das nächstmögliche, sinnvolle.
 - **Plattform:** Browser-Spiel für Tablet und Handy, **nur Querformat**, alles per Touch. Hauptgerät ist Tobias' Galaxy Tab S9, oft mit angeschlossener Tastatur. Später als App. Vorerst nur Deutsch. Draufsicht mit Platzhalter-Grafik (farbige Blöcke, Emojis, gezeichnete Warenbilder).
 - **Vorbilder nur für Mechaniken** – eigene Namen, Rezepte und Grafik: Alchemy Factory (kleine Fabrik mit Bändern), Clash of Clans (Hauptgebäude-Level, regelmäßig reinschauen, Clans), Hay Day (Handel zwischen Spielern).
@@ -74,7 +74,7 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 
 - **Level-Fenster** (oben auf „Laden-Level“ tippen) mit den Reitern „📜 Aufträge“ und „🏘️ Ort & Level“. Es gibt immer **genau einen Auftrag** eines Bewohners; „✓ Abgeben“ nimmt die Waren aus dem Laden-Lager und gibt **Erfahrung** (3 je 10 Gold Warenwert) und **Gold** (so viel, wie die Waren an der Theke bringen). 2–5 Aufträge je Level, nicht überspringbar. Die Erfahrung aller Aufträge eines Levels reicht genau für den Aufstieg; **der Aufstieg kostet Gold**. Erfahrung schaltet frei, Gold kauft das Level, Waren bauen die Maschinen. Am Knopf zeigt ❗ einen abgebbaren Auftrag, ⬆ einen möglichen Aufstieg.
 - **„🧪 Test: Auftrag erledigen“** (im Prototyp immer sichtbar, lila gestrichelt): gibt die Erfahrung, nimmt keine Waren, gibt kein Gold. Vor v1.0 entfernen (`QUEST_TEST_SKIP` in `data/levels.js`).
-- Beim Aufstieg gibt es einen Rohstoff gratis.
+- Beim Aufstieg gibt es bis Level 10 einen Rohstoff gratis; ab Level 11 keine Geschenke mehr (Tobias). Ab Level 11 wird der Aufstieg deutlich teurer (5.000 Gold), damit man mit dem Gold planen muss („damit wir auch etwas mit dem Cash Flow arbeiten können“).
 
 | Level | Bauabschnitt | Neu | Aufträge (der Reihe nach) | Erfahrung | Aufstieg kostet | Geschenk |
 |---|---|---|---|---|---|---|
@@ -87,7 +87,8 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 | 7 | Die Heilstube | Beet, Erntebank, Webstube; Leinsamen | Heilerin Agnes: 5 Verbände · Agnes: 50 Flachsfasern · Ulrich: 15 Verbände · Hilde: 20 Verbände + 50 Flachsfasern | 816 | 1.000 | 1 Leinsamen |
 | 8 | Der Kräutergarten | Kräuterstube; Ringelblumensamen | Agnes: 50 Ringelblüten · Agnes: 5 Heilverbände · Ulrich: 5 Kräuterkompressen · Hilde: 10 Heilverbände + 20 Verbände | 1.305 | 1.330 | 1 Ringelblumensamen |
 | 9 | Die Schreibstube | Kohlenmeiler, Schreibstube (Reiter „Werkstatt“) | Schmied Konrad: 50 Holzkohle · Baumeister Anton: 3 Zeichenbretter · Anton: 2 Reißzeuge · Hilde: 4 Zeichenbretter + 10 Heilverbände | 1.657 | 1.670 | 1 Holzstamm |
-| 10 | Das Spital | Kräuterstube: Wundverband; Schafgarbensamen; mehr Fläche (je Seite noch 1×, je 2.000 Gold) | Heilerin Agnes: 50 Schafgarbenblüten · Agnes: 5 Wundverbände · Hilde: 2 Vorhängeschlösser (für die Arzneien) · Ulrich: 8 Wundverbände + 10 Kräuterkompressen | 2.116 (sammelt sich, bis es Level 11 gibt) | 2.000 | 1 Schafgarbensamen |
+| 10 | Das Spital | Kräuterstube: Wundverband; Schafgarbensamen; mehr Fläche (je Seite noch 1×, je 2.000 Gold) | Heilerin Agnes: 50 Schafgarbenblüten · Agnes: 5 Wundverbände · Hilde: 2 Vorhängeschlösser (für die Arzneien) · Ulrich: 8 Wundverbände + 10 Kräuterkompressen | 2.116 | 2.000 | 1 Schafgarbensamen |
+| 11 | Die Uhrmacherei | Uhrmacherei (Reiter „Werkstatt“) | Hilde: 2 Räderuhren · Händlerin Marta: 2 Kastenschlösser · Baumeister Anton: 1 Sternenuhr · Agnes: 2 Räderuhren + 10 Wundverbände | 2.550 (sammelt sich, bis es Level 12 gibt) | 5.000 | – (keine Geschenke mehr) |
 
 „Erfahrung“ = was die Aufträge des Levels zusammen geben (genau so viel braucht der nächste Aufstieg). Ab Level 4 sind die Stückzahlen so gewählt, dass man auf Masse gehen muss; das Kräuter-Kapitel (Level 7) fängt wieder einfach an.
 
@@ -110,6 +111,7 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 | 🌿 Kräuterstube | Erde | 2 × 2, 2 Eingänge | „Heilverbände“ · „Kompressen“ · „Wundverbände“ (erst ab Level 10 wählbar) | 8 | 10 Holzplatten + 5 Eisenbleche + 2 Zahnradwellen |
 | ♨️ Kohlenmeiler | Holz | 2 × 2 | 1 Holzstamm → 100 Holzkohle (15 min), Vorrat 3 | 9 | 20 Steinplatten + 2 Verstärkte Holzplatten |
 | 📐 Schreibstube | Werkstatt | 2 × 2, 2 Eingänge | „Zeichenbretter“ · „Reißzeuge“ | 9 | 1 Verstärkte Holzplatte + 1 Zirkel |
+| 🕰️ Uhrmacherei | Werkstatt | 2 × 2, 2 Eingänge | „Räderuhren“ · „Kastenschlösser“ · „Sternenuhren“ | 11 | 1 Zirkel + 1 Uhrwerk |
 | 📦 Lagerhaus | immer sichtbar | 2 × 1 | Zwischenlager 3 × 50, von Hand befüllen | 1 | 8 Holzplatten |
 | 🌀 Versandportal | immer sichtbar | 1 × 1 | schickt Waren ins Laden-Lager | 1 | 10 Holzblöcke |
 | ➡️ Förderband | immer sichtbar | 1 × 1 | transportiert | 1 | 1 Holzblock je Feld |
@@ -155,6 +157,9 @@ Intern heißt die Erntebank `flachsbreche` (alter Name, damit Spielstände passe
 | Schafgarbe | Beet: 1 Schafgarbensamen | 30 min | – (nicht verkäuflich, wird eingelegt) |
 | Schafgarbenblüte | Erntebank: 1 Schafgarbe → 50 | 12 s je Stück | 16 |
 | Wundverband | Kräuterstube: 1 Heilverband + 5 Schafgarbenblüten (stillt Blut) | 20 s | 252 |
+| Räderuhr | Uhrmacherei: 1 Uhrwerk + 1 Gewichtstein (Uhr mit Gewichtsantrieb) | 60 s | 570 |
+| Kastenschloss | Uhrmacherei: 1 Vorhängeschloss + 1 Schlüssel (Schloss mit passendem Schlüssel) | 60 s | 1.296 |
+| Sternenuhr | Uhrmacherei: 1 Uhrwerk + 1 Zirkel (zeigt Sonne, Mond und Sterne) | 60 s | 1.105 |
 
 - Rohstoffe und Pflanzen kommen nicht aufs Band und nicht ins Lagerhaus; man legt sie direkt ins Gebäude. Pflanzen kann man nicht kaufen und nicht verkaufen.
 - **Rechenbeispiele:** 1 Holzstamm (183) → 200 Holzblöcke (200) → 40 Teile (240); im Kohlenmeiler → 100 Holzkohle (200) → mit 10 Zirkeln 10 Reißzeuge (8.180). 1 Eisenerz (732) → 200 Eisenbarren (800) → 40 Teile (960). 1 Leinsamen (320) → 50 Fasern (400) → 10 Verbände (480). 1 Holzstamm + 1 Felsbrocken ergeben etwa 5 Zahnradwellen oder Räderwerke. 1 Beet Flachs + 1 Beet Ringelblumen = genau 10 Heilverbände; 10 Kräuterkompressen brauchen 2 Flachspflanzen und 1 Ringelblume. 3 Beete versorgen eine Erntebank (3 × 10 Minuten = eine Wachszeit). 1 Leinsamen + 1 Ringelblumensamen + 1 Schafgarbensamen (1.480) → 10 Wundverbände (2.520).
@@ -170,12 +175,12 @@ Intern heißt die Erntebank `flachsbreche` (alter Name, damit Spielstände passe
 | 8 | Ringelblume, Kräuterstube mit 2 Eingängen (wie Level 2) | im Spiel |
 | 9 | Die Schreibstube (Werkzeuge): Kohlenmeiler (Holzstamm → Holzkohle), Schreibstube: Zeichenbrett (Verstärkte Holzplatte + Flachsfasern), Reißzeug (Zirkel + Holzkohle) | im Spiel |
 | 10 | Das Spital (Kräuter): Schafgarbe als 3. Pflanze, Wundverband (Heilverband + Schafgarbenblüten); dazu mehr Fläche (je Seite ein 3. Streifen, bis 46 × 38) | im Spiel |
-| 11 | Die Uhrmacherei (Werkzeuge): Räderuhr (Uhrwerk + Gewichtstein), Kastenschloss (Vorhängeschloss + Schlüssel), Sternenuhr (Uhrwerk + Zirkel) | Entwurf v0.28.0 (`docs/archiv/PLAENE.md`) – als Nächstes, wartet auf Tobias' OK |
-| 12 | Die Apotheke (Abschluss der Kräuter): Kamille als 4. Pflanze, Kräutermischung, Kamillenkissen, Heilpäckchen (Wundverband + Kräuterkompresse); Reißbrett (Zeichenbrett + Reißzeug) | Entwurf |
+| 11 | Die Uhrmacherei (Werkzeuge): Räderuhr (Uhrwerk + Gewichtstein), Kastenschloss (Vorhängeschloss + Schlüssel), Sternenuhr (Uhrwerk + Zirkel), je 1 Minute | im Spiel |
+| 12 | Die Apotheke (Abschluss der Kräuter): Kamille als 4. Pflanze, Kräutermischung, Kamillenkissen, Heilpäckchen (Wundverband + Kräuterkompresse); Reißbrett (Zeichenbrett + Reißzeug) | Entwurf – als Nächstes |
 | ab 13 | Tränke: Sand + Holzkohle → Glas → Kolben, Tränke aus Kolben und Kräutermischungen; über die Kräuter-Maschinen auch Sandstaub für die Zauberei; Holzkohle + Eisen → Stahl (Idee) | später |
 | ~15 | Alchemist, Mörser (getrocknete Blüten → Staub, z. B. Ringelblumenstaub), Zaubertränke (Lebens-, Mana-, Alterstrank …); Farn als Zauberkraut (Idee) | später |
 
-**Drei Bereiche wachsen parallel** (Tobias, Chat 19): Werkzeuge, Kräuter und Tränke. Aus Werkzeugen und Kräutern entstehen am Ende die Tränke – dafür braucht es neue Rohstoffe wie Glas (Kolben). Zirkel und Kräuter direkt zu kombinieren ergibt keinen Sinn; deshalb wächst auch das Werkzeug-Kapitel weiter. Seit Level 9 weiterverarbeitet: Zirkel (Reißzeug) und Verstärkte Holzplatte (Zeichenbrett). Noch ohne Weiterverarbeitung: Schlüssel, Vorhängeschloss, Gewichtstein, Uhrwerk – im Entwurf mit Level 11 (Uhrmacherei: Räderuhr, Kastenschloss, Sternenuhr).
+**Drei Bereiche wachsen parallel** (Tobias, Chat 19): Werkzeuge, Kräuter und Tränke. Aus Werkzeugen und Kräutern entstehen am Ende die Tränke – dafür braucht es neue Rohstoffe wie Glas (Kolben). Zirkel und Kräuter direkt zu kombinieren ergibt keinen Sinn; deshalb wächst auch das Werkzeug-Kapitel weiter. Seit Level 9 weiterverarbeitet: Zirkel (Reißzeug, Sternenuhr) und Verstärkte Holzplatte (Zeichenbrett); seit Level 11 auch Uhrwerk, Gewichtstein, Schlüssel und Vorhängeschloss (Uhrmacherei). Noch ohne Weiterverarbeitung: Reißzeug, Zeichenbrett, Räderuhr, Kastenschloss, Sternenuhr, Wundverband, Kräuterkompresse – Level 12 und die Tränke können daran anknüpfen.
 
 **Leitlinien für neue Inhalte:** Jedes Kapitel fängt einfach an; neue Pflanzen wachsen im selben Beet und laufen durch dieselbe Erntebank; Gebäude kosten Werkzeug-Waren; jede Stufe bringt rund 20 % mehr; jedes neue Level erzählt die Geschichte des Ortes weiter (neue Bewohner, neuer Bauabschnitt); nur kleine Waren; häppchenweise planen und umsetzen.
 

@@ -156,6 +156,22 @@ export const LEVELS = {
       { from: 'Torwächter Ulrich', text: 'Räuber haben einen Händlerzug überfallen. Ich bringe die Verwundeten ins Spital.', items: { wundverband: 8, kraeuterkompresse: 10 } },
     ],
   },
+  // v0.28.0: Level 11 (Entwurf v0.25.1, Tobias, Chat 20) – ein Werkzeug-Level.
+  // Tobias: „Eisenerzgeschenke brauchen wir keine mehr. Das sollte mit Level 10
+  // enden.“ – kein Geschenk. „Aufstieg können wir jetzt etwas anziehen und bei
+  // 5000 Gold starten, damit wir auch etwas mit dem Cash Flow arbeiten können.“
+  11: {
+    name: 'Die Uhrmacherei',
+    story:
+      'Das Rathaus ist fertig, und Antons Pläne zeigen eine Ratsuhr. Uhrmacher Kaspar zieht in den Ort – er hat bei Ulrichs Schlossern gelernt und baut Uhren, Schlösser und sogar eine Uhr, die Sonne, Mond und Sterne zeigt.',
+    cost: 5000,
+    quests: [
+      { from: 'Bürgermeisterin Hilde', text: 'Das Rathaus bekommt eine Ratsuhr. Uhrmacher Kaspar braucht zwei Räderuhren als Vorlage.', items: { raederuhr: 2 } },
+      { from: 'Händlerin Marta', text: 'Meine Tageskasse braucht ein Schloss mit eigenem Schlüssel.', items: { kastenschloss: 2 } },
+      { from: 'Baumeister Anton', text: 'Im Rathausturm soll eine Sternenuhr Sonne, Mond und Sterne zeigen.', items: { sternenuhr: 1 } },
+      { from: 'Heilerin Agnes', text: 'Im Spital zählt jede Stunde – ich brauche Uhren und Wundverbände.', items: { raederuhr: 2, wundverband: 10 } },
+    ],
+  },
 };
 
 export const MAX_LEVEL = Math.max(...Object.keys(LEVELS).map(Number));

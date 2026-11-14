@@ -61,7 +61,17 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.28.0 – Level 11 „Die Uhrmacherei“ (v0.27.1, wartet auf Tobias' OK)
+### Level 11 „Die Uhrmacherei“ (fertig, v0.28.0)
+
+**Freigabe (Tobias, Chat 20):** „Eisenerzgeschenke brauchen wir keine mehr. Das sollte mit Level 10 enden, dass wir Geschenke bekommen. 1. Ja, mach das in den Reiter. 2. Ja, die Baukosten passen, aber ich würde das ganze etwas mit der Zeit skalieren, weil man mit diesen Produkten auch gutes Geld verdienen kann. Evtl. die Zeit auf 1 min. pro Stück nach oben. Aufstieg können wir jetzt etwas anziehen und bei 5000 Gold starten, damit wir auch etwas mit dem Cash Flow arbeiten können.“
+
+**Umgesetzt wie im Entwurf unten**, mit diesen Änderungen:
+- **Kein Geschenk** beim Aufstieg auf Level 11 (und künftig): Level-Fenster und Meldung zeigen dann kein „Gratis“; im Reiter „Ort & Level“ heißt es „bis Level 10 auch zu Beginn einen Rohstoff gratis“.
+- **Je 60 s** für Räderuhr, Kastenschloss und Sternenuhr (statt 30 / 30 / 40).
+- **Aufstieg 5.000 Gold** (statt 2.330).
+- Aufträge, Baukosten und Reiter wie im Entwurf.
+
+### Entwurf v0.28.0 – Level 11 „Die Uhrmacherei“ (v0.27.1; angenommen, umgesetzt in v0.28.0 mit 60 s, 5.000 Gold und ohne Geschenk)
 
 **Tobias (Chat 20, nach dem Test von v0.27.0):** „Das ist das Ergebnis. Sieht sehr gut aus und fühlt sich auch gut an. Die Kräutermissionen hab ich bisher mal geskippt, weil ich die Kräuterfarm nochmal separat kleiner, praktischer bauen will. Ich würde in dieser Session gerne noch das nächste Level fertig machen, damit ich meine Produktion auch noch an die neuen Teile anschließen kann, um zu sehen, wie es mit dem Platz ist.“
 

@@ -92,4 +92,12 @@ export const ITEMS = {
   schafgarbe: { name: 'Schafgarbe', plural: 'Schafgarben', raw: true, grown: true, level: 10, color: '#5c7f3a', flower: '#f8f5ea', shape: 'plant' },
   schafgarbenbluete: { name: 'Schafgarbenblüte', plural: 'Schafgarbenblüten', price: 16, color: '#f4efdc', center: '#d8c98a', shape: 'petals' },
   wundverband: { name: 'Wundverband', plural: 'Wundverbände', price: 252, color: '#f4f1e8', herb: '#f59f00', sprig: '#f8f5ea', shape: 'bandage' },
+
+  // v0.28.0: Level 11 „Die Uhrmacherei“ (Entwurf v0.25.1, Tobias, Chat 20):
+  // Uhrwerk, Gewichtstein, Schlüssel und Vorhängeschloss werden weiter-
+  // verarbeitet, der Zirkel bekommt eine zweite Verwendung. Wert = Zutaten +
+  // 20 % (475 → 570, 1.080 → 1.296, 921 → 1.105).
+  raederuhr: { name: 'Räderuhr', plural: 'Räderuhren', price: 570, color: '#8a5a2b', shape: 'weightclock' },
+  kastenschloss: { name: 'Kastenschloss', plural: 'Kastenschlösser', price: 1296, color: '#9aa3ad', shape: 'boxlock' },
+  sternenuhr: { name: 'Sternenuhr', plural: 'Sternenuhren', price: 1105, color: '#2b3f73', shape: 'starclock' },
 };
