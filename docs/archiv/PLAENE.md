@@ -61,6 +61,42 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.28.0 – Level 11 „Die Uhrmacherei“ (v0.27.1, wartet auf Tobias' OK)
+
+**Tobias (Chat 20, nach dem Test von v0.27.0):** „Das ist das Ergebnis. Sieht sehr gut aus und fühlt sich auch gut an. Die Kräutermissionen hab ich bisher mal geskippt, weil ich die Kräuterfarm nochmal separat kleiner, praktischer bauen will. Ich würde in dieser Session gerne noch das nächste Level fertig machen, damit ich meine Produktion auch noch an die neuen Teile anschließen kann, um zu sehen, wie es mit dem Platz ist.“
+
+**Grundlage:** Entwurf Level 9–12 aus v0.25.1 (von Tobias gutgeheißen). Level 11 ist wieder ein Werkzeug-Level: Uhrwerk, Gewichtstein, Schlüssel und Vorhängeschloss werden endlich weiterverarbeitet, der Zirkel bekommt eine zweite Verwendung.
+
+**Uhrmacherei** (2 × 2, 2 Eingänge, ab Level 11; Uhrmacher kamen im Mittelalter aus der Schlosserzunft):
+- **Reiter „Werkstatt“** neben der Schreibstube – der Reiter „Eisen“ ist mit 4 Gebäuden voll (Regel: höchstens 4 je Reiter, sonst passt es nicht aufs Handy). So war es beim Anlegen des Reiters in v0.26.0 vorgesehen.
+- **Baukosten:** 1 Zirkel + 1 Uhrwerk (921 Gold, unter der Grenze von 960 wie alle Gebäude ab Level 3).
+
+| Ware | Rezept | Zeit | Wert |
+|---|---|---|---|
+| Räderuhr | 1 Uhrwerk + 1 Gewichtstein (Uhr mit Gewichtsantrieb, wie die ersten Uhren) | 30 s | 570 |
+| Kastenschloss | 1 Vorhängeschloss + 1 Schlüssel (Schloss mit passendem Schlüssel für Kassen und Kästchen – Tobias' Idee) | 30 s | 1.296 |
+| Sternenuhr | 1 Uhrwerk + 1 Zirkel (zeigt Sonne, Mond und Sterne – „für die Wissenschaft“) | 40 s | 1.105 |
+
+Werte wie immer: Zutaten + 20 % (475 → 570, 1.080 → 1.296, 921 → 1.105).
+
+**Level 11:** Aufstieg 2.330 Gold (+330 wie die Schritte davor), Geschenk 1 Eisenerz (kein neuer Rohstoff), keine neue Fläche. Geschichte: Das Rathaus ist fertig, Antons Pläne zeigen eine Ratsuhr; Uhrmacher Kaspar zieht in den Ort.
+
+| # | Von | Text (Idee) | Waren | Gold | Erfahrung |
+|---|---|---|---|---|---|
+| 1 | Bürgermeisterin Hilde | „Das Rathaus bekommt eine Ratsuhr. Uhrmacher Kaspar braucht zwei Räderuhren als Vorlage.“ | 2 Räderuhren | 1.140 | 342 |
+| 2 | Händlerin Marta | „Meine Tageskasse braucht ein Schloss mit eigenem Schlüssel.“ | 2 Kastenschlösser | 2.592 | 778 |
+| 3 | Baumeister Anton | „Im Rathausturm soll eine Sternenuhr Sonne, Mond und Sterne zeigen.“ | 1 Sternenuhr | 1.105 | 332 |
+| 4 | Heilerin Agnes | „Im Spital zählt jede Stunde – ich brauche Uhren und Wundverbände.“ | 2 Räderuhren + 10 Wundverbände | 3.660 | 1.098 |
+
+Zusammen 2.550 Erfahrung (Level 10: 2.116) und 8.497 Gold; sie sammeln sich, bis es Level 12 gibt.
+
+**Warenbilder:** Räderuhr (Zifferblatt mit zwei Gewichten an Ketten), Kastenschloss (Schlosskasten mit Schlüsselloch und Schlüssel), Sternenuhr (dunkelblaues Zifferblatt mit Sonne, Mond und Sternen).
+
+**Fragen an Tobias:**
+1. Uhrmacherei im Reiter „Werkstatt“ neben der Schreibstube?
+2. Baukosten 1 Zirkel + 1 Uhrwerk?
+3. Aufstieg, Geschenk und die 4 Aufträge so?
+
 ### Level 10 „Das Spital“ und mehr Fläche (fertig, v0.27.0)
 
 **Freigabe (Tobias, Chat 20):** „Ein Streifen gerne 2000 Gold, weil man hier als Spieler schon sehr reich sein kann. Ich würde mir die Fläche mal anschauen und danach feinjustieren. 2. Ja weiter rauszoomen soll gehen. Manchmal stört es, wenn man hereinzoomt und dann ist das Fenster z. B. rechts oben in der Ecke und man kann nur schwer das nächste Gebäude anklicken. 3. Ja, darfst du. 4. Ja, gerne beides zusammen.“ Auf Claudes Rückfrage, was am Hereinzoomen stört: **„Infofenster verdeckt“** – das Infofenster rechts oben liegt über Gebäuden am Rand, und die Karte lässt sich nicht weiter schieben (Lösung aus der Rückfrage: die Karte dort etwas über den Rand schieben können).

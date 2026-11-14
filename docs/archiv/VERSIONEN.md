@@ -4,6 +4,19 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.27.1 – Rückmeldung zu Level 10, Plan für Level 11 (14.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zu v0.27.0 festhalten („sieht sehr gut aus und fühlt sich auch gut an“, alle vier neuen Streifen gekauft) und seinen Wunsch, Level 11 noch in dieser Session zu bekommen.
+
+**Fragen, die wir uns gestellt haben:**
+- Wohin mit der Uhrmacherei? → Reiter „Werkstatt“ neben der Schreibstube; „Eisen“ hat schon 4 Gebäude.
+- Was kostet sie? → 1 Zirkel + 1 Uhrwerk (921 Gold, unter der Grenze von 960).
+
+**Gemacht:**
+- `docs/archiv/PLAENE.md`: Entwurf v0.28.0 (Level 11 „Die Uhrmacherei“) mit 3 Fragen. `docs/STAND.md`: Status, Tobias' Fabrik (Screenshot 22:49), nächste Schritte, neuer Arbeitsschritt oben (v0.26.0 fällt aus der Liste). `docs/SPIEL.md`: Ausblick Level 11. Gespräch und Entscheidungen ergänzt.
+- Spiel unverändert, nur die Versionsnummer steigt.
+
 ### v0.27.0 – Level 10 „Das Spital“ und mehr Fläche (14.11.2026)
 
 **Vorgenommen:**

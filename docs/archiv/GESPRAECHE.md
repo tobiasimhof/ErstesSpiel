@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 14.11.2026 – Chat 20 (Fortsetzung 2): Rückmeldung zu Level 10, Plan für Level 11 (v0.27.1)
+
+**Tobias** (mit Screenshot: Level 10, 18.111 Gold, 46 × 38): „Das ist das Ergebnis. Sieht sehr gut aus und fühlt sich auch gut an. Die Kräutermissionen hab ich bisher mal geskippt, weil ich die Kräuterfarm nochmal separat kleiner, praktischer bauen will. Ich würde in dieser Session gerne noch das nächste Level fertig machen, damit ich meine Produktion auch noch an die neuen Teile anschließen kann, um zu sehen, wie es mit dem Platz ist. Die Kräutersachen nehmen aktuell noch nicht so viel Platz vom Gesamtprozess ein, da kann man immer wieder eine Linie dazwischen klatschen, damit die Produktion weiterläuft.“
+
+**Claude** hat die Rückmeldung als v0.27.1 festgehalten und den Entwurf v0.28.0 geschrieben (`PLAENE.md`): Uhrmacherei im Reiter „Werkstatt“ mit Räderuhr (Uhrwerk + Gewichtstein), Kastenschloss (Vorhängeschloss + Schlüssel) und Sternenuhr (Uhrwerk + Zirkel), Baukosten 1 Zirkel + 1 Uhrwerk, Aufstieg 2.330 Gold, 1 Eisenerz, 4 Aufträge (Hilde, Marta, Anton, Agnes). 3 Fragen an Tobias.
+
+**Umgesetzt:** v0.27.1 (nur Doku).
+
 ### 14.11.2026 – Chat 20 (Fortsetzung): Level 10 und mehr Fläche (v0.27.0)
 
 **Tobias** (Antworten auf die 4 Fragen zum Entwurf v0.27.0): „Ein Streifen gerne 2000 Gold, weil man hier als Spieler schon sehr reich sein kann. Ich würde mir die Fläche mal anschauen und danach feinjustieren. 2. Ja weiter rauszoomen soll gehen. Manchmal stört es, wenn man hereinzoomt und dann ist das Fenster z. B. rechts oben in der Ecke und man kann nur schwer das nächste Gebäude anklicken. 3. Ja, darfst du. 4. Ja, gerne beides zusammen.“
