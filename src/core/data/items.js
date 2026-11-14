@@ -82,4 +82,14 @@ export const ITEMS = {
   holzkohle: { name: 'Holzkohle', plural: 'Holzkohle', price: 2, color: '#34302d', shape: 'charcoal' },
   zeichenbrett: { name: 'Zeichenbrett', plural: 'Zeichenbretter', price: 355, color: '#efe6cf', shape: 'drawingboard' },
   reisszeug: { name: 'Reißzeug', plural: 'Reißzeuge', price: 818, color: '#6b4428', shape: 'drawingset' },
+
+  // v0.27.0: Level 10 „Das Spital“ (Entwurf v0.25.1, Tobias: „Ja, darfst du“):
+  // Schafgarbe, das Wundkraut des Mittelalters – wächst im selben Beet und
+  // läuft durch dieselbe Erntebank. Teurer, bringt aber mehr: 660 → 50 × 16 =
+  // 800 (+21 %). In der Kräuterstube: Heilverband + 5 Blüten = Wundverband
+  // (130 + 80 = 210, +20 % = 252), der Blut stillt.
+  schafgarbensamen: { name: 'Schafgarbensamen', plural: 'Schafgarbensamen', raw: true, level: 10, buyPrice: 660, color: '#a9bf7a', shape: 'seeds' },
+  schafgarbe: { name: 'Schafgarbe', plural: 'Schafgarben', raw: true, grown: true, level: 10, color: '#5c7f3a', flower: '#f8f5ea', shape: 'plant' },
+  schafgarbenbluete: { name: 'Schafgarbenblüte', plural: 'Schafgarbenblüten', price: 16, color: '#f4efdc', center: '#d8c98a', shape: 'petals' },
+  wundverband: { name: 'Wundverband', plural: 'Wundverbände', price: 252, color: '#f4f1e8', herb: '#f59f00', sprig: '#f8f5ea', shape: 'bandage' },
 };

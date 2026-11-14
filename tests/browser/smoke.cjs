@@ -1871,6 +1871,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     `Umgestellt: Flachsfasern + Ringelblüten → Kräuterkompresse (${JSON.stringify(kompCard)})`,
   );
   check((await recipeOption(page, 'heilverband').count()) === 1, 'Heilverband steht jetzt unter „Umstellen auf“');
+  check((await recipeOption(page, 'wundverband').count()) === 0, 'Den Wundverband bietet die Kräuterstube erst ab Level 10 an');
   const kompFit = await infoFits(page);
   check(kompFit.length === 0, `Langer Name „Kräuterkompresse“ passt in den grünen Kasten (${kompFit.join(' | ')})`);
   await shot('19d-kraeuterstube');
@@ -2002,6 +2003,169 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const stubeFit9 = await infoFits(page);
   check(stubeFit9.length === 0, `Infofenster der Schreibstube: nichts ragt heraus (${stubeFit9.join(' | ')})`);
   await shot('19h-schreibstube');
+  await page.tap('#info-close');
+
+  // ---------- Level 10: Das Spital, mehr Fläche, weiter herauszoomen (v0.27.0) ----------
+  await page.tap('#btn-level');
+  await sleep(150);
+  for (let i = 0; i < 4; i++) {
+    await page.locator('#modal-content button', { hasText: '🧪 Test: Auftrag erledigen' }).tap();
+    await sleep(200);
+  }
+  const l9done = await page.textContent('#modal-content');
+  check(
+    l9done.includes('1.657 / 1.657') && l9done.includes('Nächstes Level: Level 10 · Das Spital') && l9done.includes('Kräuterstube: Wundverband') &&
+      l9done.includes('Schafgarbensamen beim Händler') && l9done.includes('Mehr Fläche: jede Seite noch einmal erweitern (je 2.000 Gold)'),
+    'Level 9 erledigt; Level 10 kündigt Wundverband, Schafgarbensamen und mehr Fläche an',
+  );
+  const before10 = await game(page, () => ({ world: { ...window.__game.state.world }, plot: { ...window.__game.state.plot } }));
+  await game(page, () => (window.__game.state.gold += 2000 + 2000 + 400));
+  await sleep(450);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 10 · 2.000' }).tap();
+  await sleep(150);
+  const lvl10 = await game(page, () => ({
+    level: window.__game.state.shopLevel,
+    seeds: window.__game.state.storage.schafgarbensamen ?? 0,
+    world: { ...window.__game.state.world },
+  }));
+  const w0 = before10.world;
+  const w1 = lvl10.world;
+  check(lvl10.level === 10 && lvl10.seeds === 1, `Level 10: 1 Schafgarbensamen gratis (${JSON.stringify({ level: lvl10.level, seeds: lvl10.seeds })})`);
+  check(
+    w1.x === w0.x - 4 && w1.y === w0.y - 4 && w1.width === w0.width + 8 && w1.height === w0.height + 8,
+    `Die Welt reicht an jeder Seite 4 Felder weiter (${JSON.stringify(w0)} → ${JSON.stringify(w1)})`,
+  );
+  const lvl10Text = await page.textContent('#modal-content');
+  check(lvl10Text.includes('Das Spital') && lvl10Text.includes('Heilerin Agnes') && lvl10Text.includes('50 Schafgarbenblüten') && lvl10Text.includes('0 / 2.116'), 'Level 10: Agnes möchte 50 Schafgarbenblüten, Erfahrung 0 / 2.116');
+  await shot('19i-level-10');
+  await page.tap('#modal-close');
+  await sleep(150);
+  check((await page.textContent('#toast')).includes('Tippe auf die ＋-Schilder am Rand'), 'Meldung nach dem Aufstieg: neue Fläche an den Schildern');
+  // Nach dem Aufstieg zeigt die Karte die ganze Welt
+  const fitsWorld = () =>
+    game(page, () => {
+      const { camera, state, TILE } = window.__game;
+      const w = state.world;
+      const x0 = (w.x * TILE - camera.x) * camera.zoom;
+      const y0 = (w.y * TILE - camera.y) * camera.zoom;
+      const x1 = ((w.x + w.width) * TILE - camera.x) * camera.zoom;
+      const y1 = ((w.y + w.height) * TILE - camera.y) * camera.zoom;
+      return {
+        ok: x0 >= -1 && y0 >= -1 && x1 <= camera.viewWidth + 1 && y1 <= camera.viewHeight + 1,
+        // passt die Welt der Größe nach (dann lässt sie sich ganz ins Bild schieben)?
+        size: x1 - x0 <= camera.viewWidth && y1 - y0 <= camera.viewHeight,
+        zoom: Math.round(camera.zoom * 1000) / 1000,
+        box: [x0, y0, x1, y1].map(Math.round).join(','),
+        view: `${camera.viewWidth} × ${camera.viewHeight}`,
+      };
+    });
+  const fit10 = await fitsWorld();
+  check(fit10.ok, `Nach dem Aufstieg ist die ganze Welt im Bild (Zoom ${fit10.zoom})`);
+  await shot('19j-mehr-flaeche');
+  // Ganz hineinzoomen und wieder ganz heraus (Mausrad): die ganze Welt passt aufs Bild
+  const box = await page.locator('#game').boundingBox();
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  for (let i = 0; i < 6; i++) await page.mouse.wheel(0, -400);
+  await sleep(100);
+  const zoomedIn = await game(page, () => window.__game.camera.zoom);
+  for (let i = 0; i < 20; i++) await page.mouse.wheel(0, 400);
+  await sleep(150);
+  const fitOut = await fitsWorld();
+  check(
+    zoomedIn > 2 * fitOut.zoom && fitOut.size && fitOut.zoom <= 0.35,
+    `Ganz herausgezoomt passt die ganze Welt ins Bild (Zoom ${zoomedIn.toFixed(2)} → ${fitOut.zoom}, Welt ${fitOut.box} auf ${fitOut.view})`,
+  );
+  await shot('19k-ganz-herausgezoomt');
+  // Der 3. Streifen rechts kostet 2.000 Gold
+  const plot10 = await game(page, () => ({ ...window.__game.state.plot }));
+  await tapTile(page, plot10.x + plot10.width, plot10.y + 3);
+  check((await page.textContent('#info-title')) === 'Fläche kaufen', 'Neue Fläche rechts antippen bietet Fläche an');
+  const landText10 = await page.textContent('#info-text');
+  check(
+    landText10.includes('ab Level 10 der 3. je 2.000 Gold') && landText10.includes('letzte Kauf'),
+    `Infofenster nennt die Preise (${landText10})`,
+  );
+  const gold10 = await game(page, () => window.__game.state.gold);
+  await page.locator('#info-actions button', { hasText: 'Kaufen · 2.000' }).tap();
+  await sleep(150);
+  const bought10 = await game(page, () => ({ plot: { ...window.__game.state.plot }, gold: window.__game.state.gold }));
+  check(
+    bought10.plot.width === plot10.width + 4 && bought10.gold >= gold10 - 2000 && bought10.gold <= gold10 - 2000 + 70,
+    `3. Streifen rechts für 2.000 Gold gekauft (${plot10.width} → ${bought10.plot.width} Spalten, Gold ${gold10} → ${bought10.gold})`,
+  );
+  await shot('19l-flaeche-level10');
+  // Schafgarbe säen, reif werden lassen, ernten; Erntebank; Kräuterstube: Wundverband
+  await game(page, ([x, y]) => {
+    const { camera, TILE } = window.__game;
+    camera.zoom = 1;
+    camera.x = (x + 2) * TILE - camera.viewWidth / camera.zoom / 2;
+    camera.y = (y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
+  }, [bx, by + 3]);
+  await sleep(100);
+  await tapTile(page, bx, by + 3);
+  await sleep(450);
+  const sowYarrow = infoButton(page, 'sow:schafgarbensamen');
+  check(await sowYarrow.isVisible(), 'Leeres Beet auf Level 10: Knopf „Säen: Schafgarbensamen“');
+  const beet10 = await infoCard(page);
+  check(
+    beet10?.inputs.join() === 'leinsamen 1,ringelblumensamen 1,schafgarbensamen 1' &&
+      beet10.outputs.join() === 'flachspflanze Flachspflanze,ringelblume Ringelblume,schafgarbe Schafgarbe',
+    `Leeres Beet auf Level 10: drei Pflanzen im Kasten (${JSON.stringify(beet10)})`,
+  );
+  check((await infoFits(page)).length === 0, `Beet auf Level 10: nichts ragt aus dem Fenster (${(await infoFits(page)).join(', ')})`);
+  await shot('19m-beet-drei-samen');
+  await sowYarrow.tap();
+  await sleep(450);
+  await game(page, ([x, y]) => {
+    window.__game.state.buildings.find((g) => g.type === 'beet' && g.x === x && g.y === y).prod.timer = 1799.5;
+    window.__game.simulate(1);
+  }, [bx, by + 3]);
+  await sleep(500);
+  await shot('19n-schafgarbe-reif');
+  await page.locator('#info-actions button', { hasText: 'Ernten: 1 Schafgarbe' }).tap();
+  await sleep(450);
+  check((await game(page, () => window.__game.state.storage.schafgarbe ?? 0)) === 1, 'Schafgarbe geerntet');
+  await tapTile(page, bx + 4, by);
+  await sleep(450);
+  check(await infoButton(page, 'load:schafgarbe').isVisible(), 'Erntebank: Knopf „➕ 1 Schafgarbe einlegen“');
+  await page.tap('#info-close');
+  await tapTile(page, bx, by + 6);
+  check((await page.textContent('#info-title')) === 'Kräuterstube', 'Kräuterstube antippen zeigt Infofenster');
+  await sleep(450);
+  check(
+    (await recipeOption(page, 'wundverband').getAttribute('aria-label')) === 'Umstellen auf Wundverband: 1 Heilverband + 5 Schafgarbenblüten',
+    'Ab Level 10: Umstellen auf Wundverband aus 1 Heilverband + 5 Schafgarbenblüten',
+  );
+  await recipeOption(page, 'wundverband').tap();
+  await sleep(450);
+  const wund = await infoCard(page);
+  check(
+    /^heilverband \d+ \/ 1( ✓)?,schafgarbenbluete \d+ \/ 5/.test(wund?.inputs.join() ?? '') && wund.outputs.join() === 'wundverband Wundverband',
+    `Umgestellt: Heilverband + Schafgarbenblüten → Wundverband (${JSON.stringify(wund)})`,
+  );
+  check((await infoFits(page)).length === 0, `Infofenster der Kräuterstube mit 3 Einstellungen: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+  await shot('19o-wundverband');
+  // v0.27.0 (Tobias): Die Karte lässt sich rechts unter dem Infofenster hervorschieben
+  const box2 = await page.locator('#game').boundingBox();
+  for (let i = 0; i < 4; i++) {
+    await page.mouse.move(box2.x + box2.width * 0.6, box2.y + box2.height * 0.5);
+    // rechte Maustaste verschiebt immer nur die Karte
+    await page.mouse.down({ button: 'right' });
+    await page.mouse.move(box2.x + box2.width * 0.1, box2.y + box2.height * 0.5, { steps: 6 });
+    await page.mouse.up({ button: 'right' });
+    await sleep(60);
+  }
+  const infoEdge = await game(page, () => {
+    const { camera, state, TILE } = window.__game;
+    const rect = document.getElementById('game').getBoundingClientRect();
+    const right = rect.left + ((state.world.x + state.world.width) * TILE - camera.x) * camera.zoom;
+    return { right: Math.round(right), panel: Math.round(document.getElementById('info-panel').getBoundingClientRect().left) };
+  });
+  check(
+    (await page.isVisible('#info-panel')) && infoEdge.right <= infoEdge.panel,
+    `Rechter Rand der Fläche lässt sich links neben das Infofenster schieben (Rand ${infoEdge.right}, Fenster ab ${infoEdge.panel})`,
+  );
+  await shot('19p-rand-neben-infofenster');
   await page.tap('#info-close');
   await game(page, (c) => Object.assign(window.__game.camera, c), camLand);
   await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)

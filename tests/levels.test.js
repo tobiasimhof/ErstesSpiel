@@ -27,7 +27,7 @@ import { createNewGame } from '../src/core/state.js';
 // ---------- Datentabellen ----------
 
 test('Level-Tabelle: jedes Level ein Bauabschnitt mit 2–5 Aufträgen; ab Level 2 Preis und Gratis-Rohstoff (v0.13.0)', () => {
-  assert.equal(MAX_LEVEL, 9);
+  assert.equal(MAX_LEVEL, 10);
   let lastCost = 0;
   for (let level = 1; level <= MAX_LEVEL; level++) {
     const def = LEVELS[level];
@@ -76,9 +76,9 @@ test('Jedes Gebäude und jede Ware gehört zu einem Level', () => {
 });
 
 test('Holz ab Level 1, Stein ab Level 2, Eisen ab Level 3', () => {
-  assert.deepEqual(unlocksOf(1), { buildings: ['holzfaeller', 'saegewerk', 'lagerhaus', 'versandportal'], raws: ['holzstamm'] });
-  assert.deepEqual(unlocksOf(2), { buildings: ['steinbruch', 'steinmetz'], raws: ['felsbrocken'] });
-  assert.deepEqual(unlocksOf(3), { buildings: ['schmelzhuette', 'schmiede'], raws: ['eisenerz'] });
+  assert.deepEqual(unlocksOf(1), { buildings: ['holzfaeller', 'saegewerk', 'lagerhaus', 'versandportal'], raws: ['holzstamm'], recipes: [] });
+  assert.deepEqual(unlocksOf(2), { buildings: ['steinbruch', 'steinmetz'], raws: ['felsbrocken'], recipes: [] });
+  assert.deepEqual(unlocksOf(3), { buildings: ['schmelzhuette', 'schmiede'], raws: ['eisenerz'], recipes: [] });
   assert.equal(itemLevel('holzblock'), 1);
   assert.equal(itemLevel('holzstab'), 1);
   assert.equal(itemLevel('steinblock'), 2);
@@ -89,9 +89,9 @@ test('Holz ab Level 1, Stein ab Level 2, Eisen ab Level 3', () => {
 });
 
 test('Level 4 bis 6 schalten je eine Kombi-Maschine frei (v0.10.0)', () => {
-  assert.deepEqual(unlocksOf(4), { buildings: ['zimmerei'], raws: [] });
-  assert.deepEqual(unlocksOf(5), { buildings: ['feinschmiede'], raws: [] });
-  assert.deepEqual(unlocksOf(6), { buildings: ['schlosserei'], raws: [] });
+  assert.deepEqual(unlocksOf(4), { buildings: ['zimmerei'], raws: [], recipes: [] });
+  assert.deepEqual(unlocksOf(5), { buildings: ['feinschmiede'], raws: [], recipes: [] });
+  assert.deepEqual(unlocksOf(6), { buildings: ['schlosserei'], raws: [], recipes: [] });
   for (const type of ['zahnradwelle', 'raederwerk', 'verstaerkteholzplatte']) assert.equal(itemLevel(type), 4, type);
   for (const type of ['scharnier', 'schluessel', 'zirkel']) assert.equal(itemLevel(type), 5, type);
   for (const type of ['gewichtstein', 'uhrwerk', 'vorhaengeschloss']) assert.equal(itemLevel(type), 6, type);
@@ -181,7 +181,7 @@ test('Aufstieg auf Level 2: erst genug Erfahrung, dann kostet er Gold; dafür gi
   assert.equal(levelUp(state), null);
   state.gold = 450;
   assert.equal(canLevelUp(state), true);
-  assert.deepEqual(levelUp(state), { level: 2, gift: { felsbrocken: 1 }, cost: 30 });
+  assert.deepEqual(levelUp(state), { level: 2, gift: { felsbrocken: 1 }, cost: 30, moreLand: false });
   assert.equal(state.gold, 420, '30 Gold bezahlt');
   assert.equal(storageCount(state, 'felsbrocken'), 1, 'Gratis-Felsbrocken im Laden-Lager');
   assert.deepEqual(state.quest, { index: 0, xp: 0 }, 'Aufträge von Level 2 beginnen');
@@ -189,28 +189,30 @@ test('Aufstieg auf Level 2: erst genug Erfahrung, dann kostet er Gold; dafür gi
   assert.equal(levelUpBlocker(state), 'xp');
 });
 
-test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 und 8 mit Samen, Level 9 mit Holzstamm; danach ist Schluss', () => {
+test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 und 8 mit Samen, Level 9 mit Holzstamm, Level 10 mit Schafgarbensamen und mehr Fläche; danach ist Schluss', () => {
   const state = createNewGame(3);
   state.shopLevel = 3;
   state.gold = 100000;
   const results = [];
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 7; i++) {
     state.quest.xp = xpNeeded(state.shopLevel);
     results.push(levelUp(state));
   }
   assert.deepEqual(results, [
     // v0.23.0: Aufstiege durch 3 (vorher 500, 1.000, 2.000, 3.000, 4.000)
-    { level: 4, gift: { eisenerz: 1 }, cost: 170 },
-    { level: 5, gift: { eisenerz: 1 }, cost: 330 },
-    { level: 6, gift: { eisenerz: 1 }, cost: 670 },
+    { level: 4, gift: { eisenerz: 1 }, cost: 170, moreLand: false },
+    { level: 5, gift: { eisenerz: 1 }, cost: 330, moreLand: false },
+    { level: 6, gift: { eisenerz: 1 }, cost: 670, moreLand: false },
     // v0.16.0: Kräuter-Kapitel – der Laden bleibt wie auf Level 6
-    { level: 7, gift: { leinsamen: 1 }, cost: 1000 },
+    { level: 7, gift: { leinsamen: 1 }, cost: 1000, moreLand: false },
     // v0.17.0: Level 8 „Der Kräutergarten“
-    { level: 8, gift: { ringelblumensamen: 1 }, cost: 1330 },
+    { level: 8, gift: { ringelblumensamen: 1 }, cost: 1330, moreLand: false },
     // v0.26.0: Level 9 „Die Schreibstube“
-    { level: 9, gift: { holzstamm: 1 }, cost: 1670 },
+    { level: 9, gift: { holzstamm: 1 }, cost: 1670, moreLand: false },
+    // v0.27.0: Level 10 „Das Spital“ – mit mehr Fläche
+    { level: 10, gift: { schafgarbensamen: 1 }, cost: 2000, moreLand: true },
   ]);
-  assert.equal(state.gold, 100000 - 3500 - 1670);
+  assert.equal(state.gold, 100000 - 3500 - 1670 - 2000);
   assert.equal(state.counters.length, 2, 'Theken gibt es nur noch für Gold');
   assert.equal(storageCount(state, 'eisenerz'), 3);
   assert.equal(storageCount(state, 'leinsamen'), 1);
@@ -219,7 +221,7 @@ test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 
   assert.equal(levelUpBlocker(state), 'max', 'höchstes Level');
   assert.equal(nextLevelCost(state), null);
   assert.equal(levelUp(state), null);
-  assert.equal(state.shopLevel, 9);
+  assert.equal(state.shopLevel, 10);
 });
 
 test('Ein neues Spiel lässt sich von Holz bis Eisen durchspielen', () => {
@@ -249,7 +251,7 @@ test('Ein neues Spiel lässt sich von Holz bis Eisen durchspielen', () => {
   simulate(state, 300);
   assert.ok(deliverQuest(state), 'Zahnräder für die Brunnenwinde abgegeben');
   deliverWithGoods(state);
-  assert.deepEqual(levelUp(state), { level: 3, gift: { eisenerz: 1 }, cost: 80 });
+  assert.deepEqual(levelUp(state), { level: 3, gift: { eisenerz: 1 }, cost: 80, moreLand: false });
   Object.assign(state.storage, { steinplatte: 30, holzplatte: 10, eisenbarren: 30 });
   assert.equal(typeof buyBuilding(state, 'schmelzhuette', 18, 12, 0), 'object');
   assert.equal(typeof buyBuilding(state, 'schmiede', 20, 12, 0), 'object');

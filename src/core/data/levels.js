@@ -140,6 +140,22 @@ export const LEVELS = {
       { from: 'Bürgermeisterin Hilde', text: 'Anton zeichnet das Spital. Bis es steht, braucht Agnes Heilverbände – und Anton noch mehr Zeichenbretter.', items: { zeichenbrett: 4, heilverband: 10 } },
     ],
   },
+  // v0.27.0: Level 10 (Entwurf v0.25.1, Tobias, Chat 20: „Ja, darfst du.“) –
+  // ein Kräuter-Level: Schafgarbe und Wundverband; die Aufträge verlangen auch
+  // Werkzeug-Waren. Dazu mehr Fläche (LAND_MORE in data/land.js).
+  10: {
+    name: 'Das Spital',
+    story:
+      'Antons Pläne sind gebaut: Am Stadttor steht jetzt ein Spital. Agnes pflegt dort Kranke und Verwundete und braucht ein Kraut, das Blut stillt – die Schafgarbe. Der Ort wächst über seine alten Grenzen hinaus.',
+    cost: 2000,
+    gift: { schafgarbensamen: 1 },
+    quests: [
+      { from: 'Heilerin Agnes', text: 'Das Spital ist fertig. Ich brauche Schafgarbe – sie stillt Blut wie kein anderes Kraut.', items: { schafgarbenbluete: 50 } },
+      { from: 'Heilerin Agnes', text: 'Heilverband und Schafgarbe zusammen ergeben einen Wundverband – für tiefe Schnitte.', items: { wundverband: 5 } },
+      { from: 'Bürgermeisterin Hilde', text: 'Die Arzneien im Spital gehören hinter Schloss und Riegel.', items: { vorhaengeschloss: 2 } },
+      { from: 'Torwächter Ulrich', text: 'Räuber haben einen Händlerzug überfallen. Ich bringe die Verwundeten ins Spital.', items: { wundverband: 8, kraeuterkompresse: 10 } },
+    ],
+  },
 };
 
 export const MAX_LEVEL = Math.max(...Object.keys(LEVELS).map(Number));

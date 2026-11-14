@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.26.0). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.27.0). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
@@ -9,7 +9,7 @@
 - **Makro-Spiel:** Man muss früh planen – genug Grundrohstoffe, ein Grundvorrat an Baumaterial, eigene Straßen je Zwischenprodukt, Lagerhäuser als Zwischenlager. Werden zwei Bänder mit verschiedenen Waren zusammengeführt, ist nicht mehr steuerbar, was an der Maschine ankommt.
 - **Gold ist bewusst knapp** (Tobias): Man kann nicht alles auf einmal bauen und auffüllen; das Gleichgewicht zwischen Gold verdienen und Rohstoffe nachkaufen gehört zum Spiel. Wer mehr verdienen will, muss teurere Waren anbieten. So gibt es mehrere Spielstile – z. B. auf Masse gehen oder sich auf teure Waren konzentrieren. **Der Schwerpunkt liegt auf der Massenproduktion** (Tobias, Chat 17): Prozesse optimieren und automatisieren, immer längere Straßen bauen, um Werkzeuge herzustellen und zu verkaufen; Gold gehört zum Spiel, steht aber nicht im Mittelpunkt.
 - **Roter Faden:** Der Laden liegt in einem kleinen Ort am Fluss, der wächst. Jedes Level ist ein Bauabschnitt, die Bewohner geben Aufträge.
-- **Kapitel:** Werkzeuge (Level 1–6: Holz, Stein, Eisen) und Kräuter (ab Level 7: Flachs, Ringelblume); ab Level 9 wachsen die Werkzeuge weiter (Holzkohle, Schreibstube), später kommen Tränke dazu. Die Level wechseln sich ab (Werkzeuge 9 und 11, Kräuter 10 und 12), die Aufträge verlangen Waren aus beiden Bereichen. Jedes Kapitel fängt einfach an und steigert sich; später greifen die Kapitel ineinander.
+- **Kapitel:** Werkzeuge (Level 1–6: Holz, Stein, Eisen) und Kräuter (ab Level 7: Flachs, Ringelblume, ab Level 10 Schafgarbe); ab Level 9 wachsen die Werkzeuge weiter (Holzkohle, Schreibstube), später kommen Tränke dazu. Die Level wechseln sich ab (Werkzeuge 9 und 11, Kräuter 10 und 12), die Aufträge verlangen Waren aus beiden Bereichen. Jedes Kapitel fängt einfach an und steigert sich; später greifen die Kapitel ineinander.
 - **Kleine Waren:** Alles auf dem Band ist auch im echten Leben klein (keine Türen, Truhen, Tore). Jedes Produkt entsteht logisch aus seinen Zutaten – aus zwei Produkten das nächstmögliche, sinnvolle.
 - **Plattform:** Browser-Spiel für Tablet und Handy, **nur Querformat**, alles per Touch. Hauptgerät ist Tobias' Galaxy Tab S9, oft mit angeschlossener Tastatur. Später als App. Vorerst nur Deutsch. Draufsicht mit Platzhalter-Grafik (farbige Blöcke, Emojis, gezeichnete Warenbilder).
 - **Vorbilder nur für Mechaniken** – eigene Namen, Rezepte und Grafik: Alchemy Factory (kleine Fabrik mit Bändern), Clash of Clans (Hauptgebäude-Level, regelmäßig reinschauen, Clans), Hay Day (Handel zwischen Spielern).
@@ -26,7 +26,9 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 
 ## 3. Die Fabrik
 
-**Grundstück:** Raster aus Feldern, Start 22 × 14. An jeder Seite steht ein Schild: Ein Streifen Fläche (4 Reihen über die ganze Seite) kostet 170 Gold, jede Seite lässt sich 2× erweitern → höchstens 38 × 30 Felder (zusammen 1.360 Gold). Zum Start stehen ein Holzfällerlager und ein Versandportal darauf.
+**Grundstück:** Raster aus Feldern, Start 22 × 14. An jeder Seite steht ein Schild: Ein Streifen Fläche (4 Reihen über die ganze Seite) kostet 170 Gold, jede Seite lässt sich 2× erweitern → 38 × 30 Felder (zusammen 1.360 Gold). **Ab Level 10** lässt sich jede Seite noch einmal erweitern, dieser Streifen kostet **2.000 Gold** → höchstens **46 × 38 Felder** (Tobias: „weil man hier als Spieler schon sehr reich sein kann“). Beim Aufstieg auf Level 10 rückt der Rand an jeder Seite 4 Felder nach außen, die Karte zeigt die ganze Welt und die Schilder erscheinen wieder. Zum Start stehen ein Holzfällerlager und ein Versandportal darauf.
+
+**Karte:** Mit zwei Fingern (oder dem Mausrad) zoomen und verschieben. Man kann so weit herauszoomen, dass die ganze Welt ins Bild passt (auch auf dem Tablet ohne Vollbild). Rechts lässt sich die Karte etwas über den Rand schieben, damit das Infofenster (rechts oben) kein Gebäude am Rand verdeckt; unten so weit, dass die unterste Reihe über der Bauleiste liegt.
 
 **Förderbänder** (1 × 1, 1 Holzblock je Feld) transportieren Waren Stück für Stück.
 - **Aufteilen:** von einem bestehenden Band aus ziehen (bis zu 3 Richtungen je Feld; Abzweige verteilen abwechselnd). **Zusammenführen:** auf ein bestehendes Band ziehen.
@@ -84,7 +86,8 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 | 6 | Das Stadttor | Schlosserei | Torwächter Ulrich: 4 Gewichtsteine · Ulrich: 2 Vorhängeschlösser · Hilde: 2 Uhrwerke · Ulrich: 4 Vorhängeschlösser + 4 Gewichtsteine | 1.840 | 670 | 1 Eisenerz |
 | 7 | Die Heilstube | Beet, Erntebank, Webstube; Leinsamen | Heilerin Agnes: 5 Verbände · Agnes: 50 Flachsfasern · Ulrich: 15 Verbände · Hilde: 20 Verbände + 50 Flachsfasern | 816 | 1.000 | 1 Leinsamen |
 | 8 | Der Kräutergarten | Kräuterstube; Ringelblumensamen | Agnes: 50 Ringelblüten · Agnes: 5 Heilverbände · Ulrich: 5 Kräuterkompressen · Hilde: 10 Heilverbände + 20 Verbände | 1.305 | 1.330 | 1 Ringelblumensamen |
-| 9 | Die Schreibstube | Kohlenmeiler, Schreibstube (Reiter „Werkstatt“) | Schmied Konrad: 50 Holzkohle · Baumeister Anton: 3 Zeichenbretter · Anton: 2 Reißzeuge · Hilde: 4 Zeichenbretter + 10 Heilverbände | 1.657 (sammelt sich, bis es Level 10 gibt) | 1.670 | 1 Holzstamm |
+| 9 | Die Schreibstube | Kohlenmeiler, Schreibstube (Reiter „Werkstatt“) | Schmied Konrad: 50 Holzkohle · Baumeister Anton: 3 Zeichenbretter · Anton: 2 Reißzeuge · Hilde: 4 Zeichenbretter + 10 Heilverbände | 1.657 | 1.670 | 1 Holzstamm |
+| 10 | Das Spital | Kräuterstube: Wundverband; Schafgarbensamen; mehr Fläche (je Seite noch 1×, je 2.000 Gold) | Heilerin Agnes: 50 Schafgarbenblüten · Agnes: 5 Wundverbände · Hilde: 2 Vorhängeschlösser (für die Arzneien) · Ulrich: 8 Wundverbände + 10 Kräuterkompressen | 2.116 (sammelt sich, bis es Level 11 gibt) | 2.000 | 1 Schafgarbensamen |
 
 „Erfahrung“ = was die Aufträge des Levels zusammen geben (genau so viel braucht der nächste Aufstieg). Ab Level 4 sind die Stückzahlen so gewählt, dass man auf Masse gehen muss; das Kräuter-Kapitel (Level 7) fängt wieder einfach an.
 
@@ -102,9 +105,9 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 | ⚙️ Feinschmiede | Eisen | 2 × 2, 2 Eingänge | Scharnier · Schlüssel · Zirkel | 5 | 10 Eisenbleche + 2 Räderwerke |
 | 🔐 Schlosserei | Eisen | 2 × 2, 2 Eingänge | Gewichtstein · Uhrwerk · Vorhängeschloss | 6 | 1 Scharnier + 2 Verstärkte Holzplatten |
 | 🌱 Beet | Erde | 2 × 2, kein Band | 1 Samen → 1 Pflanze (30 min), säen und ernten von Hand | 7 | 10 Holzplatten + 10 Steinplatten |
-| 🪢 Erntebank | Erde | 2 × 2 | 1 Pflanze → 50 Flachsfasern bzw. Ringelblüten (10 min), Vorrat 3, auch gemischt | 7 | 10 Holzplatten + 2 Zahnradwellen |
+| 🪢 Erntebank | Erde | 2 × 2 | 1 Pflanze → 50 Flachsfasern, Ringelblüten bzw. Schafgarbenblüten (10 min), Vorrat 3, auch gemischt | 7 | 10 Holzplatten + 2 Zahnradwellen |
 | 🧵 Webstube | Erde | 2 × 2 | 5 Flachsfasern → 1 Verband | 7 | 20 Holzstäbe + 2 Räderwerke |
-| 🌿 Kräuterstube | Erde | 2 × 2, 2 Eingänge | „Heilverbände“ · „Kompressen“ | 8 | 10 Holzplatten + 5 Eisenbleche + 2 Zahnradwellen |
+| 🌿 Kräuterstube | Erde | 2 × 2, 2 Eingänge | „Heilverbände“ · „Kompressen“ · „Wundverbände“ (erst ab Level 10 wählbar) | 8 | 10 Holzplatten + 5 Eisenbleche + 2 Zahnradwellen |
 | ♨️ Kohlenmeiler | Holz | 2 × 2 | 1 Holzstamm → 100 Holzkohle (15 min), Vorrat 3 | 9 | 20 Steinplatten + 2 Verstärkte Holzplatten |
 | 📐 Schreibstube | Werkstatt | 2 × 2, 2 Eingänge | „Zeichenbretter“ · „Reißzeuge“ | 9 | 1 Verstärkte Holzplatte + 1 Zirkel |
 | 📦 Lagerhaus | immer sichtbar | 2 × 1 | Zwischenlager 3 × 50, von Hand befüllen | 1 | 8 Holzplatten |
@@ -148,10 +151,14 @@ Intern heißt die Erntebank `flachsbreche` (alter Name, damit Spielstände passe
 | Holzkohle | Kohlenmeiler: 1 Holzstamm → 100 | 9 s je Stück | 2 |
 | Zeichenbrett | Schreibstube: 1 Verstärkte Holzplatte + 10 Flachsfasern (mit Leinen bespannt) | 20 s | 355 |
 | Reißzeug | Schreibstube: 1 Zirkel + 10 Holzkohle (Zirkel und Zeichenkohle im Etui) | 30 s | 818 |
+| Schafgarbensamen | Händler (ab Level 10) | – | 660 (Kauf) |
+| Schafgarbe | Beet: 1 Schafgarbensamen | 30 min | – (nicht verkäuflich, wird eingelegt) |
+| Schafgarbenblüte | Erntebank: 1 Schafgarbe → 50 | 12 s je Stück | 16 |
+| Wundverband | Kräuterstube: 1 Heilverband + 5 Schafgarbenblüten (stillt Blut) | 20 s | 252 |
 
 - Rohstoffe und Pflanzen kommen nicht aufs Band und nicht ins Lagerhaus; man legt sie direkt ins Gebäude. Pflanzen kann man nicht kaufen und nicht verkaufen.
-- **Rechenbeispiele:** 1 Holzstamm (183) → 200 Holzblöcke (200) → 40 Teile (240); im Kohlenmeiler → 100 Holzkohle (200) → mit 10 Zirkeln 10 Reißzeuge (8.180). 1 Eisenerz (732) → 200 Eisenbarren (800) → 40 Teile (960). 1 Leinsamen (320) → 50 Fasern (400) → 10 Verbände (480). 1 Holzstamm + 1 Felsbrocken ergeben etwa 5 Zahnradwellen oder Räderwerke. 1 Beet Flachs + 1 Beet Ringelblumen = genau 10 Heilverbände; 10 Kräuterkompressen brauchen 2 Flachspflanzen und 1 Ringelblume. 3 Beete versorgen eine Erntebank (3 × 10 Minuten = eine Wachszeit).
-- Verwendung: Jedes Grundteil wird von mindestens einem Kombi-Rezept gebraucht (die Steinplatte vom Gewichtstein); Eisen etwas mehr als Holz und Stein, weil es mehr bringt. Der Verband ist für Wunden, die Kräuterkompresse für Prellungen und Schwellungen.
+- **Rechenbeispiele:** 1 Holzstamm (183) → 200 Holzblöcke (200) → 40 Teile (240); im Kohlenmeiler → 100 Holzkohle (200) → mit 10 Zirkeln 10 Reißzeuge (8.180). 1 Eisenerz (732) → 200 Eisenbarren (800) → 40 Teile (960). 1 Leinsamen (320) → 50 Fasern (400) → 10 Verbände (480). 1 Holzstamm + 1 Felsbrocken ergeben etwa 5 Zahnradwellen oder Räderwerke. 1 Beet Flachs + 1 Beet Ringelblumen = genau 10 Heilverbände; 10 Kräuterkompressen brauchen 2 Flachspflanzen und 1 Ringelblume. 3 Beete versorgen eine Erntebank (3 × 10 Minuten = eine Wachszeit). 1 Leinsamen + 1 Ringelblumensamen + 1 Schafgarbensamen (1.480) → 10 Wundverbände (2.520).
+- Verwendung: Jedes Grundteil wird von mindestens einem Kombi-Rezept gebraucht (die Steinplatte vom Gewichtstein); Eisen etwas mehr als Holz und Stein, weil es mehr bringt. Der Verband ist für Wunden, die Kräuterkompresse für Prellungen und Schwellungen, der Wundverband (mit Schafgarbe) stillt Blut.
 
 ## 8. Ausblick
 
@@ -162,8 +169,8 @@ Intern heißt die Erntebank `flachsbreche` (alter Name, damit Spielstände passe
 | 7 | Flachs → Fasern → Verbände (wie Level 1) | im Spiel |
 | 8 | Ringelblume, Kräuterstube mit 2 Eingängen (wie Level 2) | im Spiel |
 | 9 | Die Schreibstube (Werkzeuge): Kohlenmeiler (Holzstamm → Holzkohle), Schreibstube: Zeichenbrett (Verstärkte Holzplatte + Flachsfasern), Reißzeug (Zirkel + Holzkohle) | im Spiel |
-| 10 | Das Spital (Kräuter): Schafgarbe als 3. Pflanze, Wundverband (Heilverband + Schafgarbenblüten); dazu mehr Fläche (Tobias' Wunsch: je Seite ein 3. Streifen, bis 46 × 38) | Entwurf v0.27.0 (`docs/archiv/PLAENE.md`) – als Nächstes, wartet auf Tobias' OK |
-| 11 | Die Uhrmacherei (Werkzeuge): Räderuhr (Uhrwerk + Gewichtstein), Kastenschloss (Vorhängeschloss + Schlüssel), Sternenuhr (Uhrwerk + Zirkel) | Entwurf |
+| 10 | Das Spital (Kräuter): Schafgarbe als 3. Pflanze, Wundverband (Heilverband + Schafgarbenblüten); dazu mehr Fläche (je Seite ein 3. Streifen, bis 46 × 38) | im Spiel |
+| 11 | Die Uhrmacherei (Werkzeuge): Räderuhr (Uhrwerk + Gewichtstein), Kastenschloss (Vorhängeschloss + Schlüssel), Sternenuhr (Uhrwerk + Zirkel) | Entwurf – als Nächstes |
 | 12 | Die Apotheke (Abschluss der Kräuter): Kamille als 4. Pflanze, Kräutermischung, Kamillenkissen, Heilpäckchen (Wundverband + Kräuterkompresse); Reißbrett (Zeichenbrett + Reißzeug) | Entwurf |
 | ab 13 | Tränke: Sand + Holzkohle → Glas → Kolben, Tränke aus Kolben und Kräutermischungen; über die Kräuter-Maschinen auch Sandstaub für die Zauberei; Holzkohle + Eisen → Stahl (Idee) | später |
 | ~15 | Alchemist, Mörser (getrocknete Blüten → Staub, z. B. Ringelblumenstaub), Zaubertränke (Lebens-, Mana-, Alterstrank …); Farn als Zauberkraut (Idee) | später |

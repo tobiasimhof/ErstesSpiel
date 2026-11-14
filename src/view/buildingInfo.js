@@ -17,7 +17,7 @@
 
 import { ITEMS } from '../core/data/items.js';
 import { RECIPES } from '../core/data/recipes.js';
-import { isItemUnlocked } from '../core/levels.js';
+import { isItemUnlocked, isRecipeUnlocked } from '../core/levels.js';
 import {
   gardenCrop,
   gardenSeeds,
@@ -127,7 +127,8 @@ function workshopBody(state, building, { onRecipe }) {
     main.node.append(flow, sub);
     root.replaceChildren(main.node);
     // Die anderen Einstellungen, je ein Knopf: Antippen stellt um.
-    const others = p.recipes.filter((key) => key !== b.prod.recipe);
+    // v0.27.0: Einstellungen späterer Level (Wundverband ab Level 10) noch nicht.
+    const others = p.recipes.filter((key) => key !== b.prod.recipe && isRecipeUnlocked(state, key));
     if (others.length > 0) {
       root.append(el('div', 'info-cap', 'Umstellen auf'));
       for (const key of others) {

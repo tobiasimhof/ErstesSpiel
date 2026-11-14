@@ -54,13 +54,15 @@ test('Datentabellen: Ringelblume im selben Beet, im gleichen Takt wie Flachs (30
   assert.deepEqual(BUILDINGS.beet.production.crops, {
     leinsamen: { plant: 'flachspflanze', time: GROW },
     ringelblumensamen: { plant: 'ringelblume', time: GROW },
+    // v0.27.0: Level 10
+    schafgarbensamen: { plant: 'schafgarbe', time: GROW },
   });
 });
 
 test('Erntebank (bisher Flachsbreche): ein Gerät für alle Pflanzen, je 1 Pflanze → 50 Waren', () => {
   const def = BUILDINGS.flachsbreche;
   assert.equal(def.name, 'Erntebank');
-  assert.deepEqual(def.production.inputs, { flachspflanze: 'flachsfaser', ringelblume: 'ringelbluete' });
+  assert.deepEqual(def.production.inputs, { flachspflanze: 'flachsfaser', ringelblume: 'ringelbluete', schafgarbe: 'schafgarbenbluete' });
   assert.deepEqual([def.production.amount, def.production.duration, def.production.capacity], [50, 600, 3]);
 });
 
@@ -68,7 +70,8 @@ test('Kräuterstube: 2 × 2, zwei Eingänge, Heilverband und Kräuterkompresse',
   const def = BUILDINGS.kraeuterstube;
   assert.deepEqual([def.level, def.size], [8, [2, 2]]);
   assert.equal(def.ports.filter((p) => p.kind === 'in').length, 2);
-  assert.deepEqual(def.production.recipes, ['heilverband', 'kraeuterkompresse']);
+  // v0.27.0: dazu der Wundverband (ab Level 10)
+  assert.deepEqual(def.production.recipes, ['heilverband', 'kraeuterkompresse', 'wundverband']);
   assert.deepEqual(RECIPES.heilverband.inputs, { verband: 1, ringelbluete: 5 });
   assert.deepEqual(RECIPES.kraeuterkompresse.inputs, { flachsfaser: 10, ringelbluete: 5 });
   assert.deepEqual([RECIPES.heilverband.time, RECIPES.kraeuterkompresse.time], [20, 20]);
@@ -108,7 +111,7 @@ test('Ringelblume ist ein Rohstoff zum Einlegen: nicht kaufen, nicht verkaufen',
 // ---------- Level 8 ----------
 
 test('Level 8 „Der Kräutergarten“: Kräuterstube und Ringelblumensamen, Aufstieg 1.330 Gold, 4 Aufträge', () => {
-  assert.deepEqual(unlocksOf(8), { buildings: ['kraeuterstube'], raws: ['ringelblumensamen'] });
+  assert.deepEqual(unlocksOf(8), { buildings: ['kraeuterstube'], raws: ['ringelblumensamen'], recipes: [] });
   assert.equal(LEVELS[8].name, 'Der Kräutergarten');
   assert.equal(LEVELS[8].quests.length, 4);
   assert.equal(xpNeeded(8), 1305, 'v0.23.0: 1.305 statt 1.332 (Kräuter-Preise gerundet)');

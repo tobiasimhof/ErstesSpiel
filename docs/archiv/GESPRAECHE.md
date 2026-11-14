@@ -4,6 +4,16 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 14.11.2026 – Chat 20 (Fortsetzung): Level 10 und mehr Fläche (v0.27.0)
+
+**Tobias** (Antworten auf die 4 Fragen zum Entwurf v0.27.0): „Ein Streifen gerne 2000 Gold, weil man hier als Spieler schon sehr reich sein kann. Ich würde mir die Fläche mal anschauen und danach feinjustieren. 2. Ja weiter rauszoomen soll gehen. Manchmal stört es, wenn man hereinzoomt und dann ist das Fenster z. B. rechts oben in der Ecke und man kann nur schwer das nächste Gebäude anklicken. 3. Ja, darfst du. 4. Ja, gerne beides zusammen.“
+
+**Claude** hat nachgefragt, was am Hereinzoomen stört (Infofenster verdeckt Gebäude am Rand – oder nur ein zu kleiner Ausschnitt – oder beides). **Tobias:** „Infofenster verdeckt“ (mit der vorgeschlagenen Lösung: die Karte dort etwas über den Rand schieben können).
+
+**Claude** hat v0.27.0 gebaut: Level 10 wie im Entwurf, neue Streifen für 2.000 Gold (die ersten beiden bleiben bei 170), herauszoomen, bis die ganze Welt ins Bild passt, Karte rechts unter dem Infofenster hervorschieben. Selbst festgelegt (vor dem Merge genannt, jederzeit änderbar): Wundverband erst ab Level 10 wählbar, nach dem Aufstieg zeigt die Karte die ganze Welt, Zoom höchstens bis 0,12.
+
+**Umgesetzt:** v0.27.0 (siehe Versionshistorie).
+
 ### 14.11.2026 – Chat 20: Rückmeldung zu Level 9, mehr Fläche ab Level 10 (v0.26.1)
 
 **Tobias** (mit Screenshot seiner Fabrik: Level 9, 24.140 Gold, Fläche fast voll): „Hey, informiere dich über den aktuellen Stand der Dinge. Du hast gerade Level 9 fertig gemacht und ich sollte dir mein Feedback dazu geben. Ich finde es ist sehr gut gelungen mit dem neuen Reiter und den Techbaum, den du entworfen hast, fande ich auch sehr gut. Ich hab dir ein Screenshot gemacht von der aktuellen Produktion. Ich hab bei Level 9 die erste Mission fertig und mache gerade die 3 Bretter fertig. Aktuell wird es mit dem Platz ein wenig eng, deswegen würde ich vorschlagen, dass man auf Level 10 zusätzlich auch noch neuen Platz kaufen kann.“

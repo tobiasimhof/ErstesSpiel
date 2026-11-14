@@ -10,6 +10,8 @@
 
 import { BUILDINGS } from '../core/data/buildings.js';
 import { ITEMS } from '../core/data/items.js';
+import { RECIPES } from '../core/data/recipes.js';
+import { landMoreAt } from '../core/land.js';
 import { LEVELS, MAX_LEVEL, levelUp, levelUpBlocker, nextLevelCost, unlocksOf } from '../core/levels.js';
 import { COUNTER_SIZE_NAMES, SHOP_LEVELS } from '../core/data/shop.js';
 import {
@@ -39,9 +41,19 @@ function el(tag, className, text) {
 // „mittlere Theken (25 Plätze) · 📦 Laden-Lager 1.000 Plätze“ (Theken gibt es
 // seit v0.24.0 nicht mehr mit dem Level, man kauft sie im Laden)
 export function unlockText(level) {
-  const { buildings, raws } = unlocksOf(level);
+  const { buildings, raws, recipes } = unlocksOf(level);
   const parts = buildings.map((type) => `${BUILDINGS[type].icon} ${BUILDINGS[type].name}`);
   const rawText = raws.map((type) => `${ITEMS[type].name} beim Händler`);
+  // v0.27.0: neue Einstellung einer älteren Maschine, z. B. „🌿 Kräuterstube: Wundverband“
+  const recipeText = recipes.map((key) => {
+    const b = BUILDINGS[RECIPES[key].building];
+    return `${b.icon} ${b.name}: ${ITEMS[RECIPES[key].output].name}`;
+  });
+  // v0.27.0 (Tobias): ab Level 10 mehr Fläche
+  const more = landMoreAt(level);
+  const landText = more
+    ? [`🗺️ Mehr Fläche: jede Seite noch ${more.strips === 1 ? 'einmal' : `${more.strips}×`} erweitern (je ${numberFormat.format(more.price)} Gold)`]
+    : [];
   const shop = [];
   const now = SHOP_LEVELS[level];
   const before = SHOP_LEVELS[level - 1];
@@ -52,7 +64,7 @@ export function unlockText(level) {
     }
     if (now.storage > before.storage) shop.push(`📦 Laden-Lager ${numberFormat.format(now.storage)} Plätze`);
   }
-  return [parts.join(', '), ...rawText, ...shop].filter(Boolean).join(' · ');
+  return [parts.join(', '), ...recipeText, ...rawText, ...landText, ...shop].filter(Boolean).join(' · ');
 }
 
 // „Level 4 · Die Mühle am Fluss“

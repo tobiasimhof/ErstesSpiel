@@ -76,7 +76,8 @@ test('Erfahrung je Level: steigt im Werkzeug-Kapitel, das Kräuter-Kapitel fäng
   // v0.23.0: wie vorher, nur Level 6–8 durch das Runden der Preise etwas weniger
   // (vorher 1.841, 850, 1.332)
   // v0.26.0: Level 9 (Werkzeuge) wieder etwas mehr als Level 8
-  assert.deepEqual(needs, [81, 90, 162, 714, 1495, 1840, 816, 1305, 1657]);
+  // v0.27.0: Level 10 „Das Spital“ noch etwas mehr
+  assert.deepEqual(needs, [81, 90, 162, 714, 1495, 1840, 816, 1305, 1657, 2116]);
 });
 
 // ---------- Abgeben ----------

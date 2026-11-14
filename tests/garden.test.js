@@ -125,7 +125,7 @@ test('Die Flachspflanze ist ein Rohstoff zum Einlegen: nicht kaufen, nicht verka
 // ---------- Level 7 ----------
 
 test('Level 7 „Die Heilstube“: Beet, Flachsbreche, Webstube, Leinsamen beim Händler; Aufstieg 1.000 Gold', () => {
-  assert.deepEqual(unlocksOf(7), { buildings: ['beet', 'flachsbreche', 'webstube'], raws: ['leinsamen'] });
+  assert.deepEqual(unlocksOf(7), { buildings: ['beet', 'flachsbreche', 'webstube'], raws: ['leinsamen'], recipes: [] });
   const state = createNewGame(7);
   state.shopLevel = 6;
   assert.equal(isItemUnlocked(state, 'leinsamen'), false);
