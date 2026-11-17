@@ -61,6 +61,49 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.29.0 – Level 12 „Die Apotheke“ (v0.28.1; wartet auf Tobias' Antworten)
+
+**Tobias (Chat 21, nach dem Test von v0.28.0):** „Level 11 hat funktioniert und ich konnte alle Gebäude bauen. Die Aufträge laufen auch. Ich konnte noch keinen Sternenuhr herstellen, weil ich den Zirkel mit dem anderen Gebäude noch nicht verbunden habe, damit diese Produktion läuft. Der Platz ist zu ca. 60 aufgebraucht und Kräuter habe ich bisher noch nicht gebaut. Die Kräuterstraße wollte ich mir in den nächsten Tagen anschauen. Gold habe ich auch wieder ca. 60.000 verdient, wodurch ich bald die nächste Theke kaufen könnte.“
+
+**Grundlage:** Entwurf Level 9–12 aus v0.25.1 (von Tobias gutgeheißen). Level 12 schließt das Kräuter-Kapitel ab und bringt für die Werkzeuge das Reißbrett. Tobias' Vorgaben seit Level 11 gelten weiter: keine Geschenke mehr, teure Waren brauchen mehr Zeit, der Aufstieg wird teurer („damit wir auch etwas mit dem Cash Flow arbeiten können“). Mehr Fläche ist nicht nötig (etwa 60 % belegt).
+
+**Kamille** (4. Pflanze; beruhigt, hilft beim Schlafen): Kamillensamen beim Händler ab Level 12 für 830 Gold, Beet 30 Minuten, Erntebank: 1 Kamille → 50 Kamillenblüten à 20 Gold (1.000, wie immer gut 20 % über dem Samen).
+
+**Apotheke** (2 × 2, 2 Eingänge, ab Level 12; eine Apothekerin zieht in den Ort):
+- **Reiter:** „Erde“ ist mit 4 Gebäuden voll (Beet, Erntebank, Webstube, Kräuterstube). Ein 6. Reiter passt auf dem Handy nicht mehr: Die 5 Reiter reichen heute schon bis 812 von 844 Bildpunkten. Vorschlag: **Reiter „Werkstatt“** (hat Platz für 2 weitere Gebäude). Alternative: ein eigener Reiter „Heilkunde“ (später auch für die Tränke) – dafür müssten die Reiter auf dem Handy schmaler werden (z. B. nur das Warenbild ohne Namen).
+- **Baukosten:** 1 Verstärkte Holzplatte + 1 Gewichtstein (Regal und Apothekerwaage; 432 Gold, unter der Grenze von 480 für Kräuter-Gebäude, nur Werkzeug-Waren).
+
+| Ware | Rezept | Zeit | Wert |
+|---|---|---|---|
+| Kräutermischung | 5 Schafgarbenblüten + 5 Kamillenblüten (Grundlage für die Tränke ab Level 13) | 20 s | 216 |
+| Kamillenkissen | 10 Flachsfasern + 5 Kamillenblüten (Schlafkissen fürs Spital) | 20 s | 216 |
+| Heilpäckchen | 1 Wundverband + 1 Kräuterkompresse | 30 s | 504 |
+
+**Schreibstube**, 3. Einstellung: **Reißbrett** = 1 Zeichenbrett + 1 Reißzeug (das fertige Arbeitsbrett des Baumeisters), **60 s** (Entwurf v0.25.1: 40 s – nach Tobias' Regel für teure Waren jetzt wie die Uhrmacherei), 1.408 Gold.
+
+Werte wie immer: Zutaten + 20 % (180 → 216, 180 → 216, 420 → 504, 1.173 → 1.408).
+
+**Level 12:** Aufstieg **7.500 Gold** (Vorschlag: +50 % auf die 5.000 von Level 11), kein Geschenk, keine neue Fläche. Geschichte: Neben dem Spital eröffnet Apothekerin Klara ihre Apotheke; Baumeister Anton plant schon eine Glashütte für ihre Fläschchen (Ausblick auf die Tränke).
+
+| # | Von | Text (Idee) | Waren | Gold | Erfahrung |
+|---|---|---|---|---|---|
+| 1 | Apothekerin Klara | „Meine Apotheke braucht als Erstes getrocknete Kamille für Tee.“ | 50 Kamillenblüten | 1.000 | 300 |
+| 2 | Klara | „Aus Schafgarbe und Kamille mische ich meine Grundrezepte.“ | 10 Kräutermischungen | 2.160 | 648 |
+| 3 | Heilerin Agnes | „Im Spital schlafen die Kranken schlecht – und für Wege übers Land brauche ich Heilpäckchen.“ | 5 Kamillenkissen + 4 Heilpäckchen | 3.096 | 929 |
+| 4 | Baumeister Anton | „Für Klaras Fläschchen plane ich eine Glashütte – dafür brauche ich richtige Reißbretter.“ | 2 Reißbretter | 2.816 | 845 |
+
+Zusammen 2.722 Erfahrung (Level 11: 2.550) und 9.072 Gold; sie sammeln sich, bis es Level 13 gibt. Rechenhilfe: 1 Kamille = genau Auftrag 1; 1 Schafgarbe + 1 Kamille = genau 10 Kräutermischungen.
+
+**Warenbilder:** Kamillensamen, Kamille, Kamillenblüte (weiß mit gelber Mitte), Kräutermischung (Tütchen mit Blüten), Kamillenkissen (kleines Leinenkissen mit Blüte), Heilpäckchen (verschnürtes Päckchen mit grünem Kreuz), Reißbrett (Brett mit Zeichnung, Zirkel und Lineal).
+
+**Kleinigkeit dazu:** Auf schmalen Handys (unter etwa 812 Bildpunkten Breite, z. B. 740) ragt der Reiter „Werkstatt“ schon heute über den Bildschirmrand. Die Reiter dort etwas schmaler machen; der Browser-Test prüft dann auch ein schmales Handy.
+
+**Fragen an Tobias:**
+1. Apotheke in den Reiter „Werkstatt“ – oder ein eigener Reiter „Heilkunde“ (dann werden die Reiter auf dem Handy schmaler)?
+2. Aufstieg 7.500 Gold – oder mehr? Wie fühlt sich das Gold-Tempo an (etwa 60.000 seit Level 10)?
+3. 6. Theke: Theke 5 (70.000) ist bald gekauft. Soll die 6. ab Level 12 kaufbar sein (Vorschlag 140.000 Gold, das Doppelte) – oder erst später?
+4. Kamille, Apotheke, die drei Rezepte, Reißbrett mit 60 s und die 4 Aufträge so?
+
 ### Level 11 „Die Uhrmacherei“ (fertig, v0.28.0)
 
 **Freigabe (Tobias, Chat 20):** „Eisenerzgeschenke brauchen wir keine mehr. Das sollte mit Level 10 enden, dass wir Geschenke bekommen. 1. Ja, mach das in den Reiter. 2. Ja, die Baukosten passen, aber ich würde das ganze etwas mit der Zeit skalieren, weil man mit diesen Produkten auch gutes Geld verdienen kann. Evtl. die Zeit auf 1 min. pro Stück nach oben. Aufstieg können wir jetzt etwas anziehen und bei 5000 Gold starten, damit wir auch etwas mit dem Cash Flow arbeiten können.“
