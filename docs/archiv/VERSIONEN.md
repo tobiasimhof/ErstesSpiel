@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.28.1 – Rückmeldung zu Level 11, Plan für Level 12 (17.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zu v0.28.0 festhalten (Level 11 läuft, alle Gebäude gebaut, Platz zu etwa 60 % belegt, etwa 60.000 Gold, Kräuterstraße noch nicht gebaut) und die nächsten Schritte nennen.
+
+**Fragen, die wir uns gestellt haben:**
+- Wohin mit der Apotheke? → „Erde“ ist voll, ein 6. Reiter passt auf dem Handy nicht (gemessen: die 5 Reiter reichen bis 812 von 844 Bildpunkten). Vorschlag „Werkstatt“, Alternative eigener Reiter mit schmaleren Reitern – Frage an Tobias.
+- Nebenbei gemessen: Auf einem 740 Bildpunkte breiten Handy ragt der Reiter „Werkstatt“ über den Rand → im Entwurf v0.29.0 vorgemerkt.
+
+**Gemacht:**
+- Entwurf v0.29.0 – Level 12 „Die Apotheke“ in `PLAENE.md` (Kamille, Apotheke, Reißbrett, Aufstieg 7.500 Gold, 4 Aufträge, 4 Fragen). `STAND.md`, Archiv. Versionsnummer 0.28.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 348 von 348 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.28.0 – Level 11 „Die Uhrmacherei“ (14.11.2026)
 
 **Vorgenommen:**

@@ -4,12 +4,14 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.28.0 – Level 11 „Die Uhrmacherei“ |
+| **Aktuelle Version** | v0.28.1 – Rückmeldung zu Level 11, Plan für Level 12 (nur Doku; im Spiel: Level 11 „Die Uhrmacherei“) |
 | **Phase** | M2 – Produktionsketten (Kräuter ab Level 7, Werkzeuge wachsen ab Level 9 weiter) |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | **Tobias testet Level 11** (Uhrmacherei im Reiter „Werkstatt“, Räderuhr, Kastenschloss, Sternenuhr je 1 Minute, Aufstieg 5.000 Gold ohne Geschenk), schließt seine Produktion an und schaut, wie es mit dem Platz ist. Danach **Level 12 „Die Apotheke“** nach dem Entwurf – Plan vorstellen, OK abwarten. |
+| **Nächster Schritt** | Tobias spielt Level 11 fertig (Sternenuhr: Zirkel anschließen; Agnes' letzter Auftrag braucht 10 Wundverbände) und baut in den nächsten Tagen die Kräuterstraße. **Level 12 „Die Apotheke“:** Entwurf v0.29.0 in `docs/archiv/PLAENE.md` – Tobias' Antworten auf 4 Fragen abwarten (Reiter der Apotheke, Aufstieg 7.500 Gold und Gold-Tempo, 6. Theke, Inhalt). |
 
-**Tobias' Fabrik – neu** (Screenshot vom 14.11.2026, 22:49, v0.27.0): **Level 10, 18.111 Gold**, alle vier neuen Streifen gekauft (**46 × 38**). Die Fabrik ist neu geordnet: Werkzeug-Straßen oben und links, die Mitte und unten viel Platz frei, unten rechts eine kleine Kräuterecke (5 Beete, Erntebank, Webstube, Kräuterstube). „Sieht sehr gut aus und fühlt sich auch gut an.“ Die Kräuter-Aufträge hat er mit dem Test-Knopf übersprungen, weil er die Kräuterfarm „nochmal separat kleiner, praktischer bauen“ will; die Kräuter nehmen noch wenig Platz ein, „da kann man immer wieder eine Linie dazwischen klatschen“.
+**Tobias' Fabrik – Level 11** (Chat 21, 17.11.2026, v0.28.0, ohne Screenshot): Level 11 läuft, alle Gebäude gebaut, die Aufträge laufen. Noch keine Sternenuhr – der Zirkel ist noch nicht mit der Uhrmacherei verbunden. **Platz zu etwa 60 % belegt.** Kräuter noch nicht gebaut, die Kräuterstraße will er sich „in den nächsten Tagen anschauen“. **Etwa 60.000 Gold** – bald reicht es für Theke 5 (70.000).
+
+**Tobias' Fabrik – Level 10** (Screenshot vom 14.11.2026, 22:49, v0.27.0): **Level 10, 18.111 Gold**, alle vier neuen Streifen gekauft (**46 × 38**). Die Fabrik ist neu geordnet: Werkzeug-Straßen oben und links, die Mitte und unten viel Platz frei, unten rechts eine kleine Kräuterecke (5 Beete, Erntebank, Webstube, Kräuterstube). „Sieht sehr gut aus und fühlt sich auch gut an.“ Die Kräuter-Aufträge hat er mit dem Test-Knopf übersprungen, weil er die Kräuterfarm „nochmal separat kleiner, praktischer bauen“ will; die Kräuter nehmen noch wenig Platz ein, „da kann man immer wieder eine Linie dazwischen klatschen“.
 
 **Tobias' Fabrik – Level 9** (Screenshot vom 14.11.2026, 21:53, v0.26.0): 24.140 Gold, ganze Fläche (38 × 30) fast voll bebaut – „Aktuell wird es mit dem Platz ein wenig eng.“ 2 Schreibstuben und ein Kohlenmeiler.
 
@@ -30,7 +32,7 @@
 
 **Nächste Schritte** (der Reihe nach; neu geordnet von Tobias in Chat 19; jeder Schritt erst nach Tobias' OK):
 
-1. **Techbaum ab Level 9** (Tobias, Chat 19): „Die Kräutersachen laufen eigentlich relativ gut und schnell, wodurch ich nicht glaube, dass man lange auf den Kräuterleveln bleiben wird, daher sollten wir uns dann auch weiter mit dem Techbaum beschäftigen für Level 9, 10 etc.“ **Entwurf Level 9–12** (v0.25.1, `docs/archiv/PLAENE.md`) von Tobias gutgeheißen („hört sich alles sehr gut an und macht auch Sinn“); ein Level je Version: **Level 9 ist im Spiel (v0.26.0)** – Tobias (Chat 20): „sehr gut gelungen mit dem neuen Reiter“, den Techbaum „fande ich auch sehr gut“. **Level 10 „Das Spital“ mit mehr Fläche ist im Spiel (v0.27.0)** – Tobias: „Sieht sehr gut aus und fühlt sich auch gut an.“ **Level 11 „Die Uhrmacherei“ ist im Spiel (v0.28.0)**; als Nächstes 12 „Die Apotheke“ (Abschluss der Kräuter).
+1. **Techbaum ab Level 9** (Tobias, Chat 19): „Die Kräutersachen laufen eigentlich relativ gut und schnell, wodurch ich nicht glaube, dass man lange auf den Kräuterleveln bleiben wird, daher sollten wir uns dann auch weiter mit dem Techbaum beschäftigen für Level 9, 10 etc.“ **Entwurf Level 9–12** (v0.25.1, `docs/archiv/PLAENE.md`) von Tobias gutgeheißen („hört sich alles sehr gut an und macht auch Sinn“); ein Level je Version: **Level 9 ist im Spiel (v0.26.0)** – Tobias (Chat 20): „sehr gut gelungen mit dem neuen Reiter“, den Techbaum „fande ich auch sehr gut“. **Level 10 „Das Spital“ mit mehr Fläche ist im Spiel (v0.27.0)** – Tobias: „Sieht sehr gut aus und fühlt sich auch gut an.“ **Level 11 „Die Uhrmacherei“ ist im Spiel (v0.28.0)** – Tobias (Chat 21): „hat funktioniert und ich konnte alle Gebäude bauen“. Als Nächstes 12 „Die Apotheke“ (Abschluss der Kräuter), Entwurf v0.29.0 in `PLAENE.md`. Danach das Tränke-Kapitel (ab Level 13) gemeinsam planen.
 2. **Nach hinten verschoben** (Tobias, Chat 19): die drei folgenden Schritte.
 3. **Was Tester brauchen** – mit v0.22.0 können Tester auch auf Tobias' Tablet spielen (sichern → neues Spiel → Tester spielt → laden); Testmodus und Test-Knopf bleiben sichtbar. Eine kurze Einführung bleibt im Hinterkopf (M4) (offene Frage 13).
 4. **Bereich kopieren** (Tobias: „sehr wichtig“) – einen markierten Bereich als Ganzes noch einmal bauen, wenn die Waren reichen (Tobias baut gleiche Straßen mehrfach). Plan noch zu machen.
@@ -42,9 +44,9 @@ Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute, 
 ## Offene Fragen
 
 1. **Gold-Gleichgewicht testen** (Tobias, Chat 18): Er möchte verhindern, dass es Produkte gibt, „mit denen man zu schnell zu viel Gold macht“, hat aber „ein wenig die Angst, dass wir zu viel regulieren“ – deshalb: umsetzen und testen. Beobachtung: Scharniere direkt verkaufen brachte ihm viel Gold; seit seine Straßen Zirkel und Vorhängeschlösser machen, fällt dieser Gewinn weg. Claudes Rechnung: Je Rohstoff bringt die längere Straße mehr (1 Eisenerz = 2⅔ Scharniere für 1.152 Gold oder 2 Zirkel für 1.324); je Minute kann es weniger sein, weil Zirkel und Vorhängeschloss je 30 s brauchen und die Räderwerke jetzt ins Schloss gehen statt auf die Theke. Tobias zu v0.25.0 (Chat 19): „So macht man nicht zu schnell zu viel Geld, sondern das Ganze wird eher etwas gedrosselter.“ Seit v0.24.0 zählen die Theken Stück (ab Level 7 je Theke 0,75 pro Minute) – teure Waren aus langen Straßen bringen damit deutlich mehr als viele billige. Stellschrauben sind das Tempo je Level und die Theken-Preise (je eine Zahl in `data/shop.js`). Der kleinere Aufschlag bleibt in der Hinterhand. **Test von v0.24.0 (Chat 19):** Mit seinem Gold konnte Tobias Theke 3 und 4 kaufen und alles auffüllen (6.000 Gold blieben). Aber: „Man stellt jetzt deutlich mehr Ware her, als man verkauft, deswegen sollten wir dieses Verhältnis auch ein wenig anpassen.“ Er möchte Waren, die er gerade nicht weiterverarbeiten kann, schneller verkaufen, „damit das Lager nicht zu voll wird“ → v0.25.0: je Theke ab Level 7 alle 45–60 Sekunden ein Kunde (etwa 1,1 statt 0,75 Stück pro Minute; seine 4 Theken etwa 274 statt 180 Stück pro Stunde). Nach seinem Test wieder prüfen.
-2. **Kräuterstube mit 2 Eingängen** ist gebaut und angeschlossen (v0.18.2), Tobias' Urteil steht noch aus.
+2. **Kräuterstube mit 2 Eingängen** ist gebaut und angeschlossen (v0.18.2), Tobias' Urteil steht noch aus – er baut seine Kräuterstraße in den nächsten Tagen neu (Chat 21).
 3. **Platzhalter-Zahlen:** Aufstiegspreise, Auftragsmengen, Baukosten. Kostet der Laden-Ausbau später zusätzlich Waren? **Mehr Fläche ab Level 10** (v0.27.0): je Seite ein 3. Streifen (bis 46 × 38) für je **2.000 Gold** – Tobias: „weil man hier als Spieler schon sehr reich sein kann. Ich würde mir die Fläche mal anschauen und danach feinjustieren.“ Ob spätere Level noch mehr Fläche bringen, entscheiden wir später (eine Zeile in `LAND_MORE`, `data/land.js`).
-4. **6. Theke** (Tobias, Chat 19): „Wir brauchen im späteren Spielverlauf noch eine sechste, damit die Thekenansicht auch voll ist, aber da können wir den Preis noch offen lassen.“ Bis dahin steht sie als „🔒 Kommt später im Spiel“ im Laden (ein Preis in `COUNTERS.prices` in `data/shop.js` macht sie kaufbar).
+4. **6. Theke** (Tobias, Chat 19): „Wir brauchen im späteren Spielverlauf noch eine sechste, damit die Thekenansicht auch voll ist, aber da können wir den Preis noch offen lassen.“ Bis dahin steht sie als „🔒 Kommt später im Spiel“ im Laden (ein Preis in `COUNTERS.prices` in `data/shop.js` macht sie kaufbar). Chat 21: Mit etwa 60.000 Gold ist Theke 5 bald gekauft – Claudes Vorschlag: die 6. ab Level 12 für 140.000 Gold (Frage im Entwurf v0.29.0).
 5. **Weiche** (von Tobias gewünscht, Chat 15): trennt eine Spur in zwei, „sodass man sagen kann, hier laufen nur Stäbe und hier nur Bleche“ – damit die Produktionsstraßen länger werden. Noch zu planen: eigenes Gebäude oder Band-Feld, wie man die Ware je Ausgang einstellt, was mit Waren passiert, die zu keinem Ausgang passen.
 6. **Eiserner Bestand:** Ein Mindestbestand im Laden-Lager, den die Theken nicht anrühren? Nur, wenn Tobias das möchte.
 7. **Verbesserungen mit Erfahrung** (Tobias' Idee; er will sie erst später einführen): z. B. schneller verarbeiten, schnellere Bänder, größerer Rohstoff-Vorrat; die Theke verbessern, „damit man 10 % mehr Kundschaft oder so was bekommt“ (Chat 17). Das Spiel zählt alle Erfahrung mit (`xpTotal`, auch die vom Test-Knopf).
@@ -59,20 +61,20 @@ Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute, 
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.28.1 – Rückmeldung zu Level 11, Plan für Level 12 (17.11.2026, nur Doku)
+
+- **Tobias (Chat 21):** Level 11 „hat funktioniert und ich konnte alle Gebäude bauen. Die Aufträge laufen auch.“ Noch keine Sternenuhr (Zirkel nicht angeschlossen), Platz zu etwa 60 % belegt, Kräuterstraße in den nächsten Tagen, etwa 60.000 Gold – bald Theke 5.
+- **Claude:** Entwurf v0.29.0 in `docs/archiv/PLAENE.md` – Kamille (4. Pflanze), Apotheke (Kräutermischung, Kamillenkissen, Heilpäckchen), Reißbrett in der Schreibstube (60 s), Aufstieg 7.500 Gold, 4 Aufträge (2.722 Erfahrung). Gemessen: Ein 6. Reiter passt auf dem Handy nicht, auf schmalen Handys ragt „Werkstatt“ schon heute über den Rand. 4 Fragen an Tobias.
+- Spiel unverändert, nur die Versionsnummer steigt.
+
 ### v0.28.0 – Level 11 „Die Uhrmacherei“ (14.11.2026)
 
 - **Warum (Tobias, Chat 20):** Er möchte Level 11 noch in dieser Session, „damit ich meine Produktion auch noch an die neuen Teile anschließen kann, um zu sehen, wie es mit dem Platz ist“. Zum Entwurf: „Eisenerzgeschenke brauchen wir keine mehr. Das sollte mit Level 10 enden“; Uhrmacherei im Reiter „Werkstatt“ und Baukosten ja; „die Zeit auf 1 min. pro Stück“; „Aufstieg … bei 5000 Gold starten, damit wir auch etwas mit dem Cash Flow arbeiten können“.
 - **Umgesetzt:** Level 11 „Die Uhrmacherei“ (Aufstieg 5.000 Gold, kein Geschenk, 4 Aufträge mit 2.550 Erfahrung). **Uhrmacherei** (Reiter „Werkstatt“, 2 Eingänge, Baukosten 1 Zirkel + 1 Uhrwerk): Räderuhr (Uhrwerk + Gewichtstein, 570), Kastenschloss (Vorhängeschloss + Schlüssel, 1.296), Sternenuhr (Uhrwerk + Zirkel, 1.105), je 60 s. Ab Level 11 keine Geschenke mehr; Meldung und Level-Fenster ohne „Gratis“. Neue Warenbilder.
-- **Offen:** Tobias testet, schließt seine Produktion an und schaut, wie es mit dem Platz ist; danach Level 12.
+- **Tobias' Rückmeldung (Chat 21):** läuft, alle Gebäude gebaut, Platz zu etwa 60 % belegt (siehe v0.28.1).
 
 ### v0.27.1 – Rückmeldung zu Level 10, Plan für Level 11 (14.11.2026, nur Doku)
 
 - **Tobias (Chat 20):** v0.27.0 „sieht sehr gut aus und fühlt sich auch gut an“; alle vier neuen Streifen gekauft (46 × 38). Kräuter-Aufträge übersprungen, die Kräuterfarm baut er kleiner neu. „Ich würde in dieser Session gerne noch das nächste Level fertig machen, damit ich meine Produktion auch noch an die neuen Teile anschließen kann, um zu sehen, wie es mit dem Platz ist.“
 - **Claude:** Entwurf v0.28.0 in `docs/archiv/PLAENE.md` – Uhrmacherei im Reiter „Werkstatt“ (Räderuhr, Kastenschloss, Sternenuhr), Aufstieg 2.330 Gold, 1 Eisenerz, 4 Aufträge (2.550 Erfahrung); 3 Fragen an Tobias.
 - Spiel unverändert, nur die Versionsnummer steigt.
-
-### v0.27.0 – Level 10 „Das Spital“ und mehr Fläche (14.11.2026)
-
-- **Warum (Tobias, Chat 20):** Level 9 gefällt ihm, aber „aktuell wird es mit dem Platz ein wenig eng“. Zum Entwurf: „Ein Streifen gerne 2000 Gold, weil man hier als Spieler schon sehr reich sein kann.“ Weiter herauszoomen „soll gehen“; das Infofenster rechts oben verdeckt beim Hereinzoomen Gebäude am Rand. Level 10 und beides zusammen in einer Version: „Ja, darfst du.“
-- **Umgesetzt:** Level 10 „Das Spital“ (Aufstieg 2.000 Gold, 1 Schafgarbensamen gratis, 4 Aufträge mit 2.116 Erfahrung). **Schafgarbe** als 3. Pflanze (Samen 660, 50 Blüten à 16), **Wundverband** in der Kräuterstube (Heilverband + 5 Schafgarbenblüten, 252 Gold; erst ab Level 10 wählbar). **Mehr Fläche:** Beim Aufstieg rückt der Rand an jeder Seite 4 Felder nach außen, ein Streifen dort kostet 2.000 Gold (bis 46 × 38). **Zoom:** Man kann so weit herauszoomen, dass die ganze Fläche ins Bild passt; rechts lässt sich die Karte unter dem Infofenster hervorschieben. Neue Warenbilder.
-- **Tobias' Rückmeldung (Chat 20):** „Sieht sehr gut aus und fühlt sich auch gut an“ (siehe v0.27.1).

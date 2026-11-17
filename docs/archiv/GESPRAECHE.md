@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 17.11.2026 – Chat 21: Rückmeldung zu Level 11, Plan für Level 12 (v0.28.1)
+
+**Tobias:** „Lies dir den aktuellen Stand der Dinge durch und sage mir was die nächsten Schritte sind. Level 11 hat funktioniert und ich konnte alle Gebäude bauen. Die Aufträge laufen auch. Ich konnte noch keinen Sternenuhr herstellen, weil ich den Zirkel mit dem anderen Gebäude noch nicht verbunden habe, damit diese Produktion läuft. Der Platz ist zu ca. 60 aufgebraucht und Kräuter habe ich bisher noch nicht gebaut. Die Kräuterstraße wollte ich mir in den nächsten Tagen anschauen. Gold habe ich auch wieder ca. 60.000 verdient, wodurch ich bald die nächste Theke kaufen könnte.“
+
+**Claude** hat die Rückmeldung als v0.28.1 festgehalten und die nächsten Schritte genannt: Level 11 fertig spielen (für die eine Sternenuhr reicht ein Lagerhaus mit Zirkeln am zweiten Eingang der Uhrmacherei; Agnes' letzter Auftrag braucht 10 Wundverbände, also die Kräuterstraße), die Kräuterstraße bauen, Theke 5 kaufen, danach Level 12. Entwurf v0.29.0 in `PLAENE.md`: Kamille, Apotheke (Kräutermischung, Kamillenkissen, Heilpäckchen), Reißbrett in der Schreibstube (60 s), Aufstieg 7.500 Gold, 4 Aufträge (Apothekerin Klara, Agnes, Anton). Beim Nachmessen aufgefallen: Ein 6. Reiter passt auf dem Handy nicht mehr, und auf schmalen Handys ragt „Werkstatt“ schon heute über den Rand. 4 Fragen an Tobias (Reiter der Apotheke, Aufstiegspreis und Gold-Tempo, 6. Theke, Inhalt).
+
+**Umgesetzt:** v0.28.1 (nur Doku).
+
 ### 14.11.2026 – Chat 20 (Fortsetzung 3): Level 11 „Die Uhrmacherei“ (v0.28.0)
 
 **Tobias** (Antworten auf den Entwurf v0.28.0): „Eisenerzgeschenke brauchen wir keine mehr. Das sollte mit Level 10 enden, dass wir Geschenke bekommen. 1. Ja, mach das in den Reiter. 2. Ja, die Baukosten passen, aber ich würde das ganze etwas mit der Zeit skalieren, weil man mit diesen Produkten auch gutes Geld verdienen kann. Evtl. die Zeit auf 1 min. pro Stück nach oben. Aufstieg können wir jetzt etwas anziehen und bei 5000 Gold starten, damit wir auch etwas mit dem Cash Flow arbeiten können.“
