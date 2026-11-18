@@ -186,6 +186,8 @@ export const BUILDINGS = {
         ringelblumensamen: { plant: 'ringelblume', time: 1800 },
         // v0.27.0: Level 10 – die Schafgarbe wächst im selben Takt
         schafgarbensamen: { plant: 'schafgarbe', time: 1800 },
+        // v0.29.0: Level 12 – die Kamille auch
+        kamillensamen: { plant: 'kamille', time: 1800 },
       },
     },
   },
@@ -202,7 +204,7 @@ export const BUILDINGS = {
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
     production: {
       kind: 'source',
-      inputs: { flachspflanze: 'flachsfaser', ringelblume: 'ringelbluete', schafgarbe: 'schafgarbenbluete' },
+      inputs: { flachspflanze: 'flachsfaser', ringelblume: 'ringelbluete', schafgarbe: 'schafgarbenbluete', kamille: 'kamillenbluete' },
       amount: 50,
       duration: 600,
       capacity: 3,
@@ -269,7 +271,8 @@ export const BUILDINGS = {
       { kind: 'in', x: 0, y: 1, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['zeichenbrett', 'reisszeug'] },
+    // v0.29.0: Level 12 – 3. Einstellung Reißbrett (erst ab Level 12 wählbar)
+    production: { kind: 'workshop', recipes: ['zeichenbrett', 'reisszeug', 'reissbrett'] },
   },
   // v0.28.0: Level 11 „Die Uhrmacherei“ – im Reiter „Werkstatt“ neben der
   // Schreibstube (Tobias: „Ja, mach das in den Reiter.“; „Eisen“ hat schon 4
@@ -288,6 +291,27 @@ export const BUILDINGS = {
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
     production: { kind: 'workshop', recipes: ['raederuhr', 'kastenschloss', 'sternenuhr'] },
+  },
+  // v0.29.0: Level 12 „Die Apotheke“ – Abschluss des Kräuter-Kapitels. Im
+  // Reiter „Werkstatt“ (Tobias, Chat 21: „Ja, wir können das gerne unter den
+  // Reiter Werkstatt machen, weil die Tränke einen eigenen Reiter bekommen.“;
+  // „Erde“ hat schon 4 Gebäude). Baukosten 1 Verstärkte Holzplatte + 1
+  // Gewichtstein – Regal und Apothekerwaage (432 Gold, unter den 480 für
+  // Kräuter-Gebäude, nur Werkzeug-Waren).
+  apotheke: {
+    level: 12,
+    name: 'Apotheke',
+    cost: { verstaerkteholzplatte: 1, gewichtstein: 1 },
+    icon: '⚗️',
+    size: [2, 2],
+    color: TAB_COLORS.werkstatt,
+    tip: 'Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
+    ports: [
+      { kind: 'in', x: 0, y: 0, side: 'W' },
+      { kind: 'in', x: 0, y: 1, side: 'W' },
+      { kind: 'out', x: 1, y: 0, side: 'E' },
+    ],
+    production: { kind: 'workshop', recipes: ['kraeutermischung', 'kamillenkissen', 'heilpaeckchen'] },
   },
   lagerhaus: {
     level: 1,
@@ -332,8 +356,9 @@ export const BUILD_TABS = [
   // v0.26.0: Die Werkzeuge wachsen ab Level 9 weiter (Tobias, Chat 19). Ihre
   // neuen Maschinen verarbeiten Waren aus mehreren Reitern und passen zu keinem
   // Stoff; je Reiter passen höchstens 4 Gebäude aufs Handy – deshalb ein
-  // eigener Reiter (Schreibstube, später die Uhrmacherei).
-  { id: 'werkstatt', name: 'Werkstatt', item: 'reisszeug', color: TAB_COLORS.werkstatt, buildings: ['schreibstube', 'uhrmacherei'] },
+  // eigener Reiter (Schreibstube, Uhrmacherei). v0.29.0: dazu die Apotheke
+  // (Tobias, Chat 21) – die Tränke bekommen später einen eigenen Reiter.
+  { id: 'werkstatt', name: 'Werkstatt', item: 'reisszeug', color: TAB_COLORS.werkstatt, buildings: ['schreibstube', 'uhrmacherei', 'apotheke'] },
 ];
 
 // Gebäude, die man oft braucht: stehen immer sichtbar links in der Bauleiste,

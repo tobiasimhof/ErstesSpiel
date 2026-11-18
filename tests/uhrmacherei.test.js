@@ -35,8 +35,8 @@ const worth = (items) => Object.entries(items).reduce((sum, [t, n]) => sum + ITE
 
 // ---------- Datentabellen ----------
 
-test('Level 11 ist das höchste Level, der Laden bleibt wie auf Level 7 bis 10', () => {
-  assert.equal(MAX_LEVEL, 11);
+test('Level 11 gibt es (seit v0.29.0 ist Level 12 das höchste), der Laden bleibt wie auf Level 7 bis 10', () => {
+  assert.equal(MAX_LEVEL, 12);
   assert.deepEqual(SHOP_LEVELS[11], SHOP_LEVELS[10]);
 });
 
@@ -68,7 +68,8 @@ test('Uhrwerk, Gewichtstein, Schlüssel und Vorhängeschloss werden jetzt weiter
 
 test('Bauleiste: Uhrmacherei im Reiter „Werkstatt“ neben der Schreibstube (Tobias: „Ja, mach das in den Reiter.“)', () => {
   const werkstatt = BUILD_TABS.find((t) => t.id === 'werkstatt');
-  assert.deepEqual(werkstatt.buildings, ['schreibstube', 'uhrmacherei']);
+  // v0.29.0: dazu die Apotheke (Level 12)
+  assert.deepEqual(werkstatt.buildings, ['schreibstube', 'uhrmacherei', 'apotheke']);
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'eisen').buildings.length, 4, '„Eisen“ ist voll');
 });
 
