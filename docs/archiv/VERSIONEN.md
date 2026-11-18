@@ -20,7 +20,7 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 - Tests: neue Datei `apotheke.test.js` (17 Tests), bestehende auf Level 12 umgestellt; Browser-Test mit Level 12 und einem schmalen Handy (740 × 360). Doku: `STAND.md`, `SPIEL.md`, `TECHNIK.md`, Archiv (dazu Entwurf v0.30.0 „Laden-Lager vergrößern“).
 
 **Geprüft:**
-- PRUEFUNG_PLATZHALTER
+- `npm test`: 365 von 365 bestanden. Browser-Test in Tablet- und Handygröße und auf einem schmalen Handy (740 × 360): alle 846 Prüfungen bestanden (im ersten Lauf fiel nur die alte Level-11-Prüfung des Reiters „Werkstatt“ durch, weil dort jetzt die gesperrte Apotheke steht – Prüfung angepasst). Screenshots angesehen: Level-12-Fenster mit Klara, Reiter „Werkstatt“ mit drei Gebäuden (Tablet, Handy, schmales Handy nur mit dem Namen des offenen Reiters), Apotheke mit Heilpäckchen, Schreibstube mit Reißbrett, Beet mit vier Samen; die neuen Warenbilder groß und in Bandgröße.
 
 ### v0.28.1 – Rückmeldung zu Level 11, Plan für Level 12 (17.11.2026, nur Doku)
 
