@@ -1878,3 +1878,29 @@ button.quest-skip:active {
 .level-row.future {
   opacity: 0.65;
 }
+
+/* ---------- Schmale Handys (quer) ---------- */
+
+/* v0.29.0: Unter 820 px Breite (z. B. 740) ragten die 5 Reiter über den Rand.
+   Hier zeigt nur der geöffnete Reiter seinen Namen, die anderen nur ihr
+   Warenbild (gesperrte blass, das Schloss erscheint beim Öffnen). Steht am
+   Ende, damit es die Regeln für niedrige Bildschirme überschreibt. */
+@media (max-width: 820px) {
+  .build-tabs {
+    gap: 3px;
+  }
+
+  .build-tab {
+    gap: 5px;
+    padding: 0 7px;
+  }
+
+  .build-tab:not(.active) .build-tab-name,
+  .build-tab.locked:not(.active) .build-tab-lock {
+    display: none;
+  }
+
+  .build-tab.locked:not(.active) .item-icon {
+    display: block;
+  }
+}

@@ -420,10 +420,11 @@ export function drawItem(ctx, type, cx, cy, size) {
           ctx.stroke();
         }
       }
-      ctx.fillStyle = '#f6e7a1';
+      // v0.29.0: Kamille – weiße Blüten mit kräftig gelber Mitte
+      ctx.fillStyle = def.center ?? '#f6e7a1';
       for (const [dx, dy] of stems) {
         ctx.beginPath();
-        ctx.arc(dx * s, dy * s, s * 0.06, 0, Math.PI * 2);
+        ctx.arc(dx * s, dy * s, s * (def.center ? 0.075 : 0.06), 0, Math.PI * 2);
         ctx.fill();
       }
       break;
@@ -758,6 +759,218 @@ export function drawItem(ctx, type, cx, cy, size) {
       ctx.fill();
       ctx.stroke();
       thickLine(ctx, [[0.3, -0.18], [0.36, 0.2]], s, 0.08, '#34302d');
+      break;
+    }
+    // v0.29.0: Level 12 „Die Apotheke“
+    case 'daisies': {
+      // Kamillenblüten: drei getrocknete Köpfchen – weiße Blütenblätter um
+      // eine gewölbte gelbe Mitte (anders als die Schafgarbe: ein Häufchen Blätter)
+      for (const [dx, dy, k] of [[-0.24, 0.16, 1], [0.24, 0.12, 0.9], [0, -0.22, 0.95]]) {
+        const x = cx + dx * s;
+        const y = cy + dy * s;
+        ctx.fillStyle = def.color;
+        ctx.lineWidth = Math.max(1, s * 0.05);
+        for (let i = 0; i < 8; i++) {
+          const a = (i / 8) * Math.PI * 2;
+          ctx.beginPath();
+          ctx.ellipse(x + Math.cos(a) * s * 0.15 * k, y + Math.sin(a) * s * 0.15 * k, s * 0.1 * k, s * 0.05 * k, a, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        }
+        ctx.fillStyle = def.center ?? '#f2b705';
+        ctx.beginPath();
+        ctx.arc(x, y, s * 0.1 * k, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      }
+      break;
+    }
+    case 'herbmix': {
+      // Kräutermischung: Holzschale mit einem Häufchen weißer Schafgarben-
+      // und gelb-weißer Kamillenblüten
+      const pile = [
+        [-0.22, -0.06, '#f4efdc'],
+        [0.2, -0.04, '#ffffff'],
+        [0, -0.18, '#f4efdc'],
+        [-0.08, -0.02, '#ffffff'],
+        [0.12, -0.2, '#f4efdc'],
+        [-0.18, -0.24, '#ffffff'],
+      ];
+      ctx.lineWidth = Math.max(1, s * 0.05);
+      for (const [dx, dy, color] of pile) {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(cx + dx * s, cy + dy * s, s * 0.12, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      }
+      ctx.fillStyle = '#f2b705';
+      for (const [dx, dy] of [[0.2, -0.04], [-0.08, -0.02], [-0.18, -0.24]]) {
+        ctx.beginPath();
+        ctx.arc(cx + dx * s, cy + dy * s, s * 0.05, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = '#7fae4b';
+      ctx.beginPath();
+      ctx.ellipse(cx + s * 0.3, cy - s * 0.2, s * 0.12, s * 0.045, -0.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      // Schale
+      ctx.lineWidth = Math.max(1, s * 0.09);
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.52, cy);
+      ctx.quadraticCurveTo(cx - s * 0.46, cy + s * 0.46, cx, cy + s * 0.46);
+      ctx.quadraticCurveTo(cx + s * 0.46, cy + s * 0.46, cx + s * 0.52, cy);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(60, 36, 16, 0.45)';
+      ctx.lineWidth = Math.max(1, s * 0.04);
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.36, cy + s * 0.14);
+      ctx.quadraticCurveTo(cx, cy + s * 0.24, cx + s * 0.36, cy + s * 0.14);
+      ctx.stroke();
+      break;
+    }
+    case 'pillow': {
+      // Kamillenkissen: kleines Leinenkissen mit eingezogenen Seiten, darauf
+      // eine aufgestickte Kamillenblüte
+      const w = s * 0.56;
+      const h = s * 0.4;
+      ctx.beginPath();
+      ctx.moveTo(cx - w, cy - h);
+      ctx.quadraticCurveTo(cx, cy - h * 0.7, cx + w, cy - h);
+      ctx.quadraticCurveTo(cx + w * 0.86, cy, cx + w, cy + h);
+      ctx.quadraticCurveTo(cx, cy + h * 0.7, cx - w, cy + h);
+      ctx.quadraticCurveTo(cx - w * 0.86, cy, cx - w, cy - h);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(120, 95, 50, 0.5)';
+      ctx.lineWidth = Math.max(1, s * 0.04);
+      ctx.setLineDash([s * 0.07, s * 0.05]);
+      ctx.beginPath();
+      ctx.moveTo(cx - w * 0.78, cy - h * 0.72);
+      ctx.quadraticCurveTo(cx, cy - h * 0.48, cx + w * 0.78, cy - h * 0.72);
+      ctx.moveTo(cx - w * 0.78, cy + h * 0.72);
+      ctx.quadraticCurveTo(cx, cy + h * 0.48, cx + w * 0.78, cy + h * 0.72);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.strokeStyle = OUTLINE;
+      ctx.fillStyle = '#ffffff';
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.ellipse(cx + Math.cos(a) * s * 0.11, cy + Math.sin(a) * s * 0.11, s * 0.07, s * 0.035, a, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = '#f2b705';
+      ctx.beginPath();
+      ctx.arc(cx, cy, s * 0.065, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    }
+    case 'kit': {
+      // Heilpäckchen: verschnürtes Leinenpäckchen mit grünem Apothekerkreuz
+      // und einem Zweig Schafgarbe unter der Schnur
+      roundRect(ctx, cx - s * 0.52, cy - s * 0.4, s * 1.04, s * 0.8, s * 0.1);
+      ctx.fill();
+      ctx.stroke();
+      ctx.strokeStyle = '#7a4f2a';
+      ctx.lineWidth = Math.max(1.5, s * 0.06);
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.52, cy + s * 0.04);
+      ctx.lineTo(cx + s * 0.52, cy + s * 0.04);
+      ctx.moveTo(cx + s * 0.2, cy - s * 0.4);
+      ctx.lineTo(cx + s * 0.2, cy + s * 0.4);
+      ctx.stroke();
+      ctx.fillStyle = '#2f8f4e';
+      ctx.strokeStyle = OUTLINE;
+      ctx.lineWidth = Math.max(1, s * 0.05);
+      const k = s * 0.07;
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.2 - k, cy - s * 0.18 - 3 * k);
+      ctx.lineTo(cx - s * 0.2 + k, cy - s * 0.18 - 3 * k);
+      ctx.lineTo(cx - s * 0.2 + k, cy - s * 0.18 - k);
+      ctx.lineTo(cx - s * 0.2 + 3 * k, cy - s * 0.18 - k);
+      ctx.lineTo(cx - s * 0.2 + 3 * k, cy - s * 0.18 + k);
+      ctx.lineTo(cx - s * 0.2 + k, cy - s * 0.18 + k);
+      ctx.lineTo(cx - s * 0.2 + k, cy - s * 0.18 + 3 * k);
+      ctx.lineTo(cx - s * 0.2 - k, cy - s * 0.18 + 3 * k);
+      ctx.lineTo(cx - s * 0.2 - k, cy - s * 0.18 + k);
+      ctx.lineTo(cx - s * 0.2 - 3 * k, cy - s * 0.18 + k);
+      ctx.lineTo(cx - s * 0.2 - 3 * k, cy - s * 0.18 - k);
+      ctx.lineTo(cx - s * 0.2 - k, cy - s * 0.18 - k);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      // Knoten und Zweig
+      ctx.fillStyle = '#7a4f2a';
+      ctx.beginPath();
+      ctx.arc(cx + s * 0.2, cy + s * 0.04, s * 0.07, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.translate(cx, cy);
+      thickLine(ctx, [[0.24, 0.02], [0.42, -0.3]], s, 0.05, '#5c8a35');
+      ctx.fillStyle = '#f8f5ea';
+      for (const [dx, dy] of [[0.42, -0.34], [0.5, -0.28], [0.36, -0.28]]) {
+        ctx.beginPath();
+        ctx.arc(dx * s, dy * s, s * 0.06, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      }
+      break;
+    }
+    case 'draftingboard': {
+      // Reißbrett: großes Zeichenbrett mit fertigem Plan (Ofen mit Schornstein
+      // für die Glashütte), oben die Reißschiene, rechts unten ein Zirkel
+      ctx.fillStyle = '#a06c3a';
+      roundRect(ctx, cx - s * 0.6, cy - s * 0.46, s * 1.2, s * 0.92, s * 0.08);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = def.color;
+      roundRect(ctx, cx - s * 0.5, cy - s * 0.3, s, s * 0.68, s * 0.04);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(40, 26, 12, 0.45)';
+      ctx.lineWidth = Math.max(1, s * 0.05);
+      ctx.stroke();
+      // Plan: Ofen mit Kuppel und Schornstein
+      ctx.strokeStyle = '#2b4a7a';
+      ctx.lineWidth = Math.max(1, s * 0.05);
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.34, cy + s * 0.26);
+      ctx.lineTo(cx - s * 0.34, cy + s * 0.02);
+      ctx.quadraticCurveTo(cx - s * 0.14, cy - s * 0.2, cx + s * 0.06, cy + s * 0.02);
+      ctx.lineTo(cx + s * 0.06, cy + s * 0.26);
+      ctx.closePath();
+      ctx.moveTo(cx - s * 0.04, cy - s * 0.06);
+      ctx.lineTo(cx - s * 0.04, cy - s * 0.2);
+      ctx.lineTo(cx + s * 0.04, cy - s * 0.2);
+      ctx.lineTo(cx + s * 0.04, cy - s * 0.02);
+      ctx.moveTo(cx - s * 0.2, cy + s * 0.26);
+      ctx.lineTo(cx - s * 0.2, cy + s * 0.14);
+      ctx.lineTo(cx - s * 0.08, cy + s * 0.14);
+      ctx.lineTo(cx - s * 0.08, cy + s * 0.26);
+      ctx.stroke();
+      // Reißschiene oben
+      ctx.fillStyle = '#d9a86c';
+      ctx.strokeStyle = OUTLINE;
+      ctx.lineWidth = Math.max(1, s * 0.06);
+      roundRect(ctx, cx - s * 0.66, cy - s * 0.42, s * 0.18, s * 0.16, s * 0.03);
+      ctx.fill();
+      ctx.stroke();
+      roundRect(ctx, cx - s * 0.5, cy - s * 0.38, s * 1.02, s * 0.08, s * 0.02);
+      ctx.fill();
+      ctx.stroke();
+      // Zirkel rechts unten
+      ctx.translate(cx + s * 0.3, cy + s * 0.06);
+      thickLine(ctx, [[0, -0.12], [-0.12, 0.22]], s, 0.05, '#d4dbe4');
+      thickLine(ctx, [[0, -0.12], [0.12, 0.22]], s, 0.05, '#d4dbe4');
+      ctx.fillStyle = '#9aa3ae';
+      ctx.beginPath();
+      ctx.arc(0, -0.12 * s, 0.05 * s, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
       break;
     }
     case 'log': {

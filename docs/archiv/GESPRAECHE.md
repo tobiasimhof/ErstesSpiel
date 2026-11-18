@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 18.11.2026 – Chat 21 (Fortsetzung): Level 12 „Die Apotheke“ (v0.29.0)
+
+**Tobias** (Antworten auf den Entwurf v0.29.0): „Ja, wir können das gerne unter den Reiter Werkstatt machen, weil die Tränke einen eigenen Reiter bekommen. Das Tempo des Geld verdienens fühlt sich eigentlich gut an. Wir müssen nur das Gleichgewicht finden zwischen Gold verdienen und Gold ausgeben für bestimmte Dinge. Aktuell kämpfe ich auch sehr mit meinem Lager, weil das immer auf 950+ Artikel ist. Ich denke, da könnte man auch einbauen, dass man sein Lager z.b. um 100 vergrößert für einen bestimmten Preis, sodass man sein Gold auch für das Lager ausgeben kann. Ich bin gerade dabei die neuen Verbände herzustellen, damit ich den letzten Auftrag abschließen kann. Aufstieg zu Level 12 können wir gerne mit 7500 Gold bemessen, weil man sehr viel Gold verdient. Ich würde die sechste Theke erst mit Beginn der Tränke freischalten lassen, also dass wir auf Level 13 dann auch die 6. Theke freischalten können für einen Preis von 150.000 Gold. Das mit dem Reißbrett können wir gerne erstmal versuchen um zu sehen, wie es wirkt. Ich möchte, dass wir im späteren Spielverlauf mit diesen Sachen quasi eine Grundlage schaffen und dann später können wir verschiedene Dinge kombinieren, um daraus viele Dinge herzustellen. Wie gesagt, der Fokus soll auf dem optimieren dieser Produktionsstraßen liegen. Man soll immer gucken wie man was jetzt mit dem verbindet, damit man maximal effizient arbeitet. Von mir aus kannst du nach meinem Feedback alles so umsetzen“
+
+**Claude** hat v0.29.0 gebaut: Level 12 wie im Entwurf, Apotheke im Reiter „Werkstatt“, Aufstieg 7.500 Gold, Reißbrett mit 60 s; dazu schmalere Reiter auf schmalen Handys (aus dem Entwurf). Die 6. Theke (Level 13, 150.000 Gold) kommt mit Level 13. Das größere Laden-Lager ist ein eigener Schritt: Entwurf v0.30.0 in `PLAENE.md` (+100 Plätze ab 5.000 Gold, jeder weitere Ausbau 2.500 mehr, 10-mal bis 2.000 Plätze, ab Level 4) mit 3 Fragen an Tobias.
+
+**Umgesetzt:** v0.29.0 (siehe Versionshistorie).
+
 ### 17.11.2026 – Chat 21: Rückmeldung zu Level 11, Plan für Level 12 (v0.28.1)
 
 **Tobias:** „Lies dir den aktuellen Stand der Dinge durch und sage mir was die nächsten Schritte sind. Level 11 hat funktioniert und ich konnte alle Gebäude bauen. Die Aufträge laufen auch. Ich konnte noch keinen Sternenuhr herstellen, weil ich den Zirkel mit dem anderen Gebäude noch nicht verbunden habe, damit diese Produktion läuft. Der Platz ist zu ca. 60 aufgebraucht und Kräuter habe ich bisher noch nicht gebaut. Die Kräuterstraße wollte ich mir in den nächsten Tagen anschauen. Gold habe ich auch wieder ca. 60.000 verdient, wodurch ich bald die nächste Theke kaufen könnte.“

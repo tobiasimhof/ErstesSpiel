@@ -286,3 +286,10 @@ Neue Entscheidungen kommen unten in die Tabelle (älteste oben). Wird eine Entsc
 | 14.11.2026 | Uhrmacherei im Reiter „Werkstatt“, Baukosten 1 Zirkel + 1 Uhrwerk | Tobias: „Ja, mach das in den Reiter.“ – „Ja, die Baukosten passen.“ |
 | 14.11.2026 | Räderuhr, Kastenschloss und Sternenuhr brauchen je 1 Minute | Tobias: „etwas mit der Zeit skalieren, weil man mit diesen Produkten auch gutes Geld verdienen kann. Evtl. die Zeit auf 1 min. pro Stück“ |
 | 14.11.2026 | Aufstieg auf Level 11 kostet 5.000 Gold (deutlich mehr als die +330 je Level bisher) | Tobias: „Aufstieg können wir jetzt etwas anziehen und bei 5000 Gold starten, damit wir auch etwas mit dem Cash Flow arbeiten können.“ |
+| 18.11.2026 | Apotheke im Reiter „Werkstatt“; die Tränke bekommen später einen eigenen Reiter | Tobias: „Ja, wir können das gerne unter den Reiter Werkstatt machen, weil die Tränke einen eigenen Reiter bekommen.“ |
+| 18.11.2026 | Aufstieg auf Level 12 kostet 7.500 Gold | Tobias: „weil man sehr viel Gold verdient.“ |
+| 18.11.2026 | Die 6. Theke kommt mit Level 13 (Beginn der Tränke) für 150.000 Gold | Tobias: „Ich würde die sechste Theke erst mit Beginn der Tränke freischalten lassen … für einen Preis von 150.000 Gold.“ |
+| 18.11.2026 | Reißbrett mit 60 s je Stück ausprobieren | Tobias: „Das mit dem Reißbrett können wir gerne erstmal versuchen um zu sehen, wie es wirkt.“ |
+| 18.11.2026 | Das Gold-Tempo bleibt; es braucht mehr Wege, Gold auszugeben (z. B. Laden-Lager vergrößern, Plan v0.30.0) | Tobias: „Das Tempo des Geld verdienens fühlt sich eigentlich gut an. Wir müssen nur das Gleichgewicht finden zwischen Gold verdienen und Gold ausgeben für bestimmte Dinge.“ |
+| 18.11.2026 | Leitlinie: Die Waren schaffen eine Grundlage, die später vielfach kombiniert wird; Schwerpunkt bleibt das Optimieren der Produktionsstraßen | Tobias: „Man soll immer gucken wie man was jetzt mit dem verbindet, damit man maximal effizient arbeitet.“ |
+| 18.11.2026 | Auf schmalen Handys (unter 820 Bildpunkten Breite) zeigt nur der geöffnete Reiter seinen Namen | Claude (Entwurf v0.29.0), Tobias: „Von mir aus kannst du nach meinem Feedback alles so umsetzen“ |

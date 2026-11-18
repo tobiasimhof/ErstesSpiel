@@ -2243,7 +2243,12 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.tap('.build-tab[data-tab="werkstatt"]');
   await sleep(80);
   const werkstatt11 = await shownTools();
-  check(werkstatt11.slice(-2).join() === 'schreibstube,uhrmacherei', `Reiter „Werkstatt“: Schreibstube und Uhrmacherei (${werkstatt11.join(', ')})`);
+  // v0.29.0: dahinter die Apotheke, auf Level 11 noch mit Schloss
+  const apoLocked11 = await page.locator('.build-item[data-tool="apotheke"]').evaluate((b) => b.classList.contains('locked') && b.textContent.includes('Level 12'));
+  check(
+    werkstatt11.slice(-3).join() === 'schreibstube,uhrmacherei,apotheke' && apoLocked11,
+    `Reiter „Werkstatt“: Schreibstube und Uhrmacherei, dahinter die Apotheke mit „🔒 Level 12“ (${werkstatt11.join(', ')})`,
+  );
   const barFits11 = await page.evaluate(() =>
     [...document.querySelectorAll('.build-tab, .build-item')]
       .filter((e) => e.offsetParent)
@@ -2285,6 +2290,187 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(stern11?.outputs.join() === 'sternenuhr Sternenuhr', `Umgestellt auf Sternenuhr (${JSON.stringify(stern11)})`);
   check((await infoFits(page)).length === 0, `Infofenster der Uhrmacherei: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
   await shot('19s-uhrmacherei');
+  await page.tap('#info-close');
+
+  // ---------- Level 12: Die Apotheke (v0.29.0) ----------
+  await page.tap('#btn-level');
+  await sleep(150);
+  for (let i = 0; i < 4; i++) {
+    await page.locator('#modal-content button', { hasText: '🧪 Test: Auftrag erledigen' }).tap();
+    await sleep(200);
+  }
+  const l11done = await page.textContent('#modal-content');
+  check(
+    l11done.includes('2.550 / 2.550') && l11done.includes('Nächstes Level: Level 12 · Die Apotheke') && l11done.includes('Apotheke') && !l11done.includes('🎁'),
+    'Level 11 erledigt; Level 12 kündigt die Apotheke an, ohne Geschenk',
+  );
+  const storageBefore12 = await raws11();
+  await game(page, () => (window.__game.state.gold += 7500));
+  await sleep(450);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 12 · 7.500' }).tap();
+  await sleep(150);
+  const lvl12 = { level: await game(page, () => window.__game.state.shopLevel), storage: await raws11() };
+  check(lvl12.level === 12, `Aufstieg auf Level 12 für 7.500 Gold (${lvl12.level})`);
+  check(lvl12.storage === storageBefore12, `Kein Geschenk: kein Rohstoff dazu (${lvl12.storage})`);
+  const lvl12Text = await page.textContent('#modal-content');
+  check(
+    lvl12Text.includes('Level 12 erreicht!') && !lvl12Text.includes('Gratis im Laden-Lager') && lvl12Text.includes('Die Apotheke') && lvl12Text.includes('50 Kamillenblüten') && lvl12Text.includes('0 / 2.722'),
+    'Level 12: Klara möchte 50 Kamillenblüten, Erfahrung 0 / 2.722, kein „Gratis“',
+  );
+  await shot('19t-level-12');
+  await page.tap('#modal-close');
+  await sleep(120);
+  const toast12 = await page.textContent('#toast');
+  check(
+    toast12.includes('Laden-Level 12!') && toast12.includes('Apotheke') && toast12.includes('Kamillensamen') && toast12.includes('Reißbrett') && !toast12.includes('Gratis'),
+    `Meldung nach dem Aufstieg: Apotheke, Kamillensamen, Reißbrett (${toast12})`,
+  );
+  // Apotheke auf einem freien Platz bauen (Reiter „Werkstatt“)
+  const spot12 = await game(page, ([x0, y0]) => {
+    const { state } = window.__game;
+    const used = new Set(Object.keys(state.belts));
+    for (const b of state.buildings) {
+      const [w0, h0] = b.type === 'lagerhaus' ? [2, 1] : b.type === 'versandportal' ? [1, 1] : [2, 2];
+      const [w, h] = b.rot % 2 ? [h0, w0] : [w0, h0];
+      for (let dx = -1; dx <= w; dx++) for (let dy = -1; dy <= h; dy++) used.add(`${b.x + dx},${b.y + dy}`);
+    }
+    const p = state.plot;
+    let best = null;
+    for (let y = p.y; y < p.y + p.height - 1; y++) {
+      for (let x = p.x; x < p.x + p.width - 2; x++) {
+        const cells = [[x, y], [x + 1, y], [x, y + 1], [x + 1, y + 1], [x + 2, y], [x + 2, y + 1]];
+        if (!cells.every(([cx, cy]) => !used.has(`${cx},${cy}`))) continue;
+        const d = Math.abs(x - x0) + Math.abs(y - y0);
+        if (!best || d < best.d) best = { x, y, d };
+      }
+    }
+    return best && [best.x, best.y];
+  }, [ux + 3, uy]);
+  check(Boolean(spot12), `Freier Platz für die Apotheke (${JSON.stringify(spot12)})`);
+  const [ax, ay] = spot12;
+  await game(page, ([x, y]) => {
+    const { camera, TILE } = window.__game;
+    camera.zoom = 1;
+    camera.x = (x + 1) * TILE - camera.viewWidth / camera.zoom / 2;
+    camera.y = (y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
+  }, [ax, ay]);
+  await game(page, () => {
+    const s = window.__game.state.storage;
+    s.verstaerkteholzplatte = (s.verstaerkteholzplatte ?? 0) + 1;
+    s.gewichtstein = (s.gewichtstein ?? 0) + 1;
+  });
+  await page.tap('#btn-build');
+  await sleep(80);
+  await page.tap('.build-tab[data-tab="werkstatt"]');
+  await sleep(80);
+  const werkstatt12 = await shownTools();
+  check(werkstatt12.slice(-3).join() === 'schreibstube,uhrmacherei,apotheke', `Reiter „Werkstatt“: Schreibstube, Uhrmacherei, Apotheke (${werkstatt12.join(', ')})`);
+  const barFits12 = await page.evaluate(() =>
+    [...document.querySelectorAll('.build-tab, .build-item')]
+      .filter((e) => e.offsetParent)
+      .every((e) => e.getBoundingClientRect().right <= innerWidth + 1),
+  );
+  check(barFits12, 'Reiter „Werkstatt“ mit drei Gebäuden passt auf den Bildschirm');
+  await shot('19u-werkstatt-apotheke');
+  await tapBuild(page, 'apotheke');
+  await sleep(80);
+  check(await tabActive('werkstatt'), 'Apotheke steht im Reiter „Werkstatt“');
+  const g12 = await game(page, () => ({ ...window.__game.ui.ghost }));
+  await touchDragTiles(page, cdp, [
+    [g12.x, g12.y],
+    [ax, ay],
+  ]);
+  await page.tap('#tool-confirm');
+  await sleep(80);
+  await page.tap('#build-close');
+  await sleep(80);
+  const built12 = await game(page, () => window.__game.state.buildings.filter((b) => b.type === 'apotheke').map((b) => `${b.x},${b.y}`));
+  check(built12.includes(`${ax},${ay}`), `Apotheke per Touch gebaut (${built12.join(' | ')})`);
+  await tapTile(page, ax, ay);
+  check((await page.textContent('#info-title')) === 'Apotheke', 'Apotheke antippen zeigt Infofenster');
+  await sleep(450);
+  const apo12 = await infoCard(page);
+  check(
+    /^schafgarbenbluete \d+ \/ 5( ✓)?,kamillenbluete \d+ \/ 5/.test(apo12?.inputs.join() ?? '') && apo12.outputs.join() === 'kraeutermischung Kräutermischung',
+    `Apotheke: Schafgarbenblüten + Kamillenblüten → Kräutermischung (${JSON.stringify(apo12)})`,
+  );
+  check((await infoText(page)).includes('20 s je Stück'), 'Kräutermischung: 20 s je Stück');
+  check(
+    (await recipeOption(page, 'kamillenkissen').getAttribute('aria-label')) === 'Umstellen auf Kamillenkissen: 10 Flachsfasern + 5 Kamillenblüten' &&
+      (await recipeOption(page, 'heilpaeckchen').getAttribute('aria-label')) === 'Umstellen auf Heilpäckchen: 1 Wundverband + 1 Kräuterkompresse',
+    'Umstellen auf: Kamillenkissen (Flachsfasern + Kamillenblüten), Heilpäckchen (Wundverband + Kräuterkompresse)',
+  );
+  await recipeOption(page, 'heilpaeckchen').tap();
+  await sleep(450);
+  const paeck12 = await infoCard(page);
+  check(paeck12?.outputs.join() === 'heilpaeckchen Heilpäckchen', `Umgestellt auf Heilpäckchen (${JSON.stringify(paeck12)})`);
+  check((await infoText(page)).includes('30 s je Stück'), 'Heilpäckchen: 30 s je Stück');
+  check((await infoFits(page)).length === 0, `Infofenster der Apotheke: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+  await shot('19v-apotheke');
+  await page.tap('#info-close');
+  // Schreibstube: ab Level 12 die 3. Einstellung Reißbrett (60 s)
+  const stube12 = await game(page, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'schreibstube');
+    return [b.x, b.y];
+  });
+  await game(page, ([x, y]) => {
+    const { camera, TILE } = window.__game;
+    camera.x = (x + 1) * TILE - camera.viewWidth / camera.zoom / 2;
+    camera.y = (y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
+  }, stube12);
+  await sleep(100);
+  await tapTile(page, stube12[0], stube12[1]);
+  check((await page.textContent('#info-title')) === 'Schreibstube', 'Schreibstube antippen zeigt Infofenster');
+  await sleep(450);
+  check(
+    (await recipeOption(page, 'reissbrett').getAttribute('aria-label')) === 'Umstellen auf Reißbrett: 1 Zeichenbrett + 1 Reißzeug',
+    'Ab Level 12: Umstellen auf Reißbrett aus 1 Zeichenbrett + 1 Reißzeug',
+  );
+  await recipeOption(page, 'reissbrett').tap();
+  await sleep(450);
+  const brett12 = await infoCard(page);
+  check(
+    /^zeichenbrett \d+ \/ 1( ✓)?,reisszeug \d+ \/ 1/.test(brett12?.inputs.join() ?? '') && brett12.outputs.join() === 'reissbrett Reißbrett',
+    `Umgestellt: Zeichenbrett + Reißzeug → Reißbrett (${JSON.stringify(brett12)})`,
+  );
+  check((await infoText(page)).includes('60 s je Stück'), 'Reißbrett: 60 s je Stück');
+  check((await infoFits(page)).length === 0, `Infofenster der Schreibstube mit 3 Einstellungen: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+  await shot('19w-reissbrett');
+  await page.tap('#info-close');
+  // Beet: vier Samen, Kamille säen; Erntebank nimmt Kamille
+  await game(page, ([x, y]) => {
+    const { camera, TILE } = window.__game;
+    camera.x = (x + 2) * TILE - camera.viewWidth / camera.zoom / 2;
+    camera.y = (y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
+  }, [bx, by + 3]);
+  await sleep(100);
+  await game(page, () => {
+    const s = window.__game.state.storage;
+    s.kamillensamen = (s.kamillensamen ?? 0) + 1;
+  });
+  await tapTile(page, bx, by + 3);
+  await sleep(450);
+  const beet12 = await infoCard(page);
+  check(
+    beet12?.inputs.join() === 'leinsamen 1,ringelblumensamen 1,schafgarbensamen 1,kamillensamen 1' &&
+      beet12.outputs.join() === 'flachspflanze Flachspflanze,ringelblume Ringelblume,schafgarbe Schafgarbe,kamille Kamille',
+    `Leeres Beet auf Level 12: vier Pflanzen im Kasten (${JSON.stringify(beet12)})`,
+  );
+  check((await infoFits(page)).length === 0, `Beet auf Level 12: nichts ragt aus dem Fenster (${(await infoFits(page)).join(', ')})`);
+  await shot('19x-beet-vier-samen');
+  await infoButton(page, 'sow:kamillensamen').tap();
+  await sleep(450);
+  await game(page, ([x, y]) => {
+    window.__game.state.buildings.find((g) => g.type === 'beet' && g.x === x && g.y === y).prod.timer = 1799.5;
+    window.__game.simulate(1);
+  }, [bx, by + 3]);
+  await sleep(500);
+  await page.locator('#info-actions button', { hasText: 'Ernten: 1 Kamille' }).tap();
+  await sleep(450);
+  check((await game(page, () => window.__game.state.storage.kamille ?? 0)) === 1, 'Kamille geerntet');
+  await tapTile(page, bx + 4, by);
+  await sleep(450);
+  check(await infoButton(page, 'load:kamille').isVisible(), 'Erntebank: Knopf „➕ 1 Kamille einlegen“');
   await page.tap('#info-close');
   await game(page, (c) => Object.assign(window.__game.camera, c), camLand);
   await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)
@@ -2628,6 +2814,55 @@ async function runPortrait(browser, baseUrl) {
   await context.close();
 }
 
+// v0.29.0: Schmales Handy quer (740 × 360): Auf so einem Bildschirm ragte der
+// Reiter „Werkstatt“ über den Rand. Geprüft werden nur die Reiter – auf
+// Level 1 (vier gesperrt) und Level 12 (alle offen, jeder einmal geöffnet).
+async function runNarrowPhone(browser, baseUrl) {
+  currentDevice = 'handy-schmal';
+  console.log('\nhandy-schmal (740×360)');
+  const context = await browser.newContext({
+    viewport: { width: 740, height: 360 },
+    deviceScaleFactor: 3,
+    hasTouch: true,
+    isMobile: true,
+  });
+  const page = await context.newPage();
+  await page.goto(baseUrl);
+  await page.waitForFunction(() => window.__game);
+  const tabsFit = () =>
+    page.evaluate(() =>
+      [...document.querySelectorAll('.build-tab')]
+        .filter((b) => {
+          const r = b.getBoundingClientRect();
+          return r.left < 0 || r.right > innerWidth + 0.5 || b.scrollWidth > b.clientWidth + 1;
+        })
+        .map((b) => b.dataset.tab),
+    );
+  await page.tap('#btn-build');
+  await sleep(150);
+  let outside = await tabsFit();
+  check(outside.length === 0, `Level 1: alle 5 Reiter passen auf den Bildschirm${outside.length ? ' – ragt heraus: ' + outside.join(', ') : ''}`);
+  const names1 = await page.evaluate(() => [...document.querySelectorAll('.build-tab-name')].filter((n) => n.offsetParent).map((n) => n.textContent));
+  check(names1.join() === 'Holz', `Nur der geöffnete Reiter zeigt seinen Namen (${names1.join(', ')})`);
+  await page.screenshot({ path: path.join(OUT, 'handy-schmal-level1.png') });
+  await page.evaluate(() => {
+    window.__game.state.shopLevel = 12;
+    window.__game.saveNow();
+  });
+  await page.reload();
+  await page.waitForFunction(() => window.__game);
+  await page.tap('#btn-build');
+  await sleep(150);
+  for (const tab of ['holz', 'stein', 'eisen', 'kraeuter', 'werkstatt']) {
+    await page.tap(`.build-tab[data-tab="${tab}"]`);
+    await sleep(80);
+    outside = await tabsFit();
+    check(outside.length === 0, `Level 12, Reiter „${tab}“ offen: alle Reiter passen${outside.length ? ' – ragt heraus: ' + outside.join(', ') : ''}`);
+  }
+  await page.screenshot({ path: path.join(OUT, 'handy-schmal-level12-werkstatt.png') });
+  await context.close();
+}
+
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
   const versionSource = fs.readFileSync(path.join(ROOT, 'src', 'version.js'), 'utf8');
@@ -2639,6 +2874,7 @@ async function runPortrait(browser, baseUrl) {
   try {
     for (const device of DEVICES) await runDevice(browser, baseUrl, device, expectedVersion);
     await runPortrait(browser, baseUrl);
+    await runNarrowPhone(browser, baseUrl);
   } finally {
     await browser.close();
     server.close();

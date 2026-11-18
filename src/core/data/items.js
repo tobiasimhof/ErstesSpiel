@@ -100,4 +100,19 @@ export const ITEMS = {
   raederuhr: { name: 'Räderuhr', plural: 'Räderuhren', price: 570, color: '#8a5a2b', shape: 'weightclock' },
   kastenschloss: { name: 'Kastenschloss', plural: 'Kastenschlösser', price: 1296, color: '#9aa3ad', shape: 'boxlock' },
   sternenuhr: { name: 'Sternenuhr', plural: 'Sternenuhren', price: 1105, color: '#2b3f73', shape: 'starclock' },
+
+  // v0.29.0: Level 12 „Die Apotheke“ (Entwurf v0.29.0, Tobias, Chat 21: „Von
+  // mir aus kannst du nach meinem Feedback alles so umsetzen“) – Abschluss des
+  // Kräuter-Kapitels. Kamille (beruhigt, hilft beim Schlafen) wächst im selben
+  // Beet und läuft durch dieselbe Erntebank: 830 → 50 × 20 = 1.000 (+20 %).
+  // Apotheke: Kräutermischung (80 + 100 = 180 → 216), Kamillenkissen
+  // (80 + 100 = 180 → 216), Heilpäckchen (252 + 168 = 420 → 504).
+  // Schreibstube: Reißbrett = Zeichenbrett + Reißzeug (355 + 818 = 1.173 → 1.408).
+  kamillensamen: { name: 'Kamillensamen', plural: 'Kamillensamen', raw: true, level: 12, buyPrice: 830, color: '#e6cf6a', shape: 'seeds' },
+  kamille: { name: 'Kamille', plural: 'Kamillen', raw: true, grown: true, level: 12, color: '#6a9a3c', flower: '#ffffff', center: '#f2b705', shape: 'plant' },
+  kamillenbluete: { name: 'Kamillenblüte', plural: 'Kamillenblüten', price: 20, color: '#ffffff', center: '#f2b705', shape: 'daisies' },
+  kraeutermischung: { name: 'Kräutermischung', plural: 'Kräutermischungen', price: 216, color: '#9a6a3c', shape: 'herbmix' },
+  kamillenkissen: { name: 'Kamillenkissen', plural: 'Kamillenkissen', price: 216, color: '#e9dcc0', shape: 'pillow' },
+  heilpaeckchen: { name: 'Heilpäckchen', plural: 'Heilpäckchen', price: 504, color: '#d6bd8e', shape: 'kit' },
+  reissbrett: { name: 'Reißbrett', plural: 'Reißbretter', price: 1408, color: '#efe6cf', shape: 'draftingboard' },
 };

@@ -40,8 +40,8 @@ const worth = (items) => Object.entries(items).reduce((sum, [t, n]) => sum + ITE
 
 // ---------- Datentabellen ----------
 
-test('Level 9 gibt es (seit v0.28.0 ist Level 11 das höchste)', () => {
-  assert.equal(MAX_LEVEL, 11);
+test('Level 9 gibt es (seit v0.29.0 ist Level 12 das höchste)', () => {
+  assert.equal(MAX_LEVEL, 12);
 });
 
 test('Kohlenmeiler: wie das Holzfällerlager – 1 Holzstamm → 100 Holzkohle in 15 Minuten, Vorrat 3', () => {
@@ -55,7 +55,8 @@ test('Schreibstube: 2 × 2, zwei Eingänge (Tobias: es bleibt bei 2), Zeichenbre
   const def = BUILDINGS.schreibstube;
   assert.deepEqual([def.level, def.size, def.color], [9, [2, 2], TAB_COLORS.werkstatt]);
   assert.equal(def.ports.filter((p) => p.kind === 'in').length, 2);
-  assert.deepEqual(def.production.recipes, ['zeichenbrett', 'reisszeug']);
+  // v0.29.0: dazu das Reißbrett (erst ab Level 12)
+  assert.deepEqual(def.production.recipes, ['zeichenbrett', 'reisszeug', 'reissbrett']);
   assert.deepEqual(RECIPES.zeichenbrett.inputs, { verstaerkteholzplatte: 1, flachsfaser: 10 });
   assert.deepEqual(RECIPES.reisszeug.inputs, { zirkel: 1, holzkohle: 10 });
   assert.deepEqual([RECIPES.zeichenbrett.time, RECIPES.reisszeug.time], [20, 30]);
@@ -91,8 +92,8 @@ test('Bauleiste: Kohlenmeiler im Reiter „Holz“, Schreibstube im neuen Reiter
     BUILD_TABS.map((t) => t.name),
     ['Holz', 'Stein', 'Eisen', 'Erde', 'Werkstatt'],
   );
-  // v0.28.0: dazu die Uhrmacherei (Level 11)
-  assert.deepEqual(tab('werkstatt').buildings, ['schreibstube', 'uhrmacherei']);
+  // v0.28.0: dazu die Uhrmacherei (Level 11), v0.29.0 die Apotheke (Level 12)
+  assert.deepEqual(tab('werkstatt').buildings, ['schreibstube', 'uhrmacherei', 'apotheke']);
   assert.equal(tab('werkstatt').item, 'reisszeug');
 });
 

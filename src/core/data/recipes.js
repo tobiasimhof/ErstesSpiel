@@ -61,4 +61,17 @@ export const RECIPES = {
   raederuhr: { building: 'uhrmacherei', label: 'Räderuhren', inputs: { uhrwerk: 1, gewichtstein: 1 }, output: 'raederuhr', amount: 1, time: 60 },
   kastenschloss: { building: 'uhrmacherei', label: 'Kastenschlösser', inputs: { vorhaengeschloss: 1, schluessel: 1 }, output: 'kastenschloss', amount: 1, time: 60 },
   sternenuhr: { building: 'uhrmacherei', label: 'Sternenuhren', inputs: { uhrwerk: 1, zirkel: 1 }, output: 'sternenuhr', amount: 1, time: 60 },
+
+  // v0.29.0: Level 12 „Die Apotheke“ (Tobias, Chat 21). Kräutermischung aus
+  // Schafgarbe und Kamille – die Grundlage für die Tränke (ab Level 13);
+  // Kamillenkissen zum Schlafen fürs Spital; Heilpäckchen aus Wundverband und
+  // Kompresse für Wege übers Land.
+  kraeutermischung: { building: 'apotheke', label: 'Kräutermischungen', inputs: { schafgarbenbluete: 5, kamillenbluete: 5 }, output: 'kraeutermischung', amount: 1, time: 20 },
+  kamillenkissen: { building: 'apotheke', label: 'Kamillenkissen', inputs: { flachsfaser: 10, kamillenbluete: 5 }, output: 'kamillenkissen', amount: 1, time: 20 },
+  heilpaeckchen: { building: 'apotheke', label: 'Heilpäckchen', inputs: { wundverband: 1, kraeuterkompresse: 1 }, output: 'heilpaeckchen', amount: 1, time: 30 },
+  // Schreibstube, 3. Einstellung ab Level 12: das fertige Arbeitsbrett des
+  // Baumeisters. Tobias' Regel für teure Waren (Chat 20: „etwas mit der Zeit
+  // skalieren“) – 60 s wie die Uhrmacherei; Tobias (Chat 21): „Das mit dem
+  // Reißbrett können wir gerne erstmal versuchen um zu sehen, wie es wirkt.“
+  reissbrett: { building: 'schreibstube', label: 'Reißbretter', inputs: { zeichenbrett: 1, reisszeug: 1 }, output: 'reissbrett', amount: 1, time: 60, level: 12 },
 };

@@ -61,7 +61,35 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.29.0 – Level 12 „Die Apotheke“ (v0.28.1; wartet auf Tobias' Antworten)
+### Entwurf v0.30.0 – Laden-Lager vergrößern (v0.29.0; wartet auf Tobias' OK)
+
+**Tobias (Chat 21, 18.11.2026):** „Aktuell kämpfe ich auch sehr mit meinem Lager, weil das immer auf 950+ Artikel ist. Ich denke, da könnte man auch einbauen, dass man sein Lager z.b. um 100 vergrößert für einen bestimmten Preis, sodass man sein Gold auch für das Lager ausgeben kann.“ Dazu: „Wir müssen nur das Gleichgewicht finden zwischen Gold verdienen und Gold ausgeben für bestimmte Dinge.“
+
+**Ziel:** Das Laden-Lager (heute 1.000 Plätze ab Level 4) lässt sich in Schritten zu **+100 Plätzen** für Gold vergrößern – ein neuer, dauerhafter Weg, Gold auszugeben.
+
+**Vorschlag:**
+- Im Laden, Reiter „Lager“, unter dem Füllstand ein Knopf **„📦 Lager vergrößern: +100 Plätze · 5.000 🪙“**, mit Rückfrage wie beim Theken-Kauf. Reicht das Gold nicht: „Dir fehlen noch …“.
+- **Preis:** der 1. Ausbau 5.000 Gold, jeder weitere 2.500 mehr (5.000, 7.500, 10.000 …).
+- **Wie oft:** 10-mal, also bis **2.000 Plätze** (alle zusammen 162.500 Gold).
+- **Ab wann:** ab Level 4 (seit dort fasst das Lager 1.000).
+- Was gilt weiter: Lagerhäuser bleiben ein Zusatzlager; das Versandportal nimmt an, bis das größere Lager voll ist; Abreißen und Ausräumen dürfen es weiter überfüllen.
+- **Spielstand:** neues Feld (Anzahl der Ausbauten), `SAVE_VERSION` 17 → 18; alte Spielstände beginnen mit 0 Ausbauten, nichts geht verloren.
+- Alle Zahlen in einer Datentabelle (`data/shop.js`), jederzeit änderbar.
+
+**Fragen an Tobias:**
+1. Preis 5.000 Gold, jeder weitere Ausbau 2.500 mehr – passt das?
+2. 10 Ausbauten bis 2.000 Plätze – oder mehr bzw. weniger?
+3. Ab Level 4 – oder erst später?
+
+### Level 12 „Die Apotheke“ (fertig, v0.29.0)
+
+**Freigabe (Tobias, Chat 21, 18.11.2026):** „Ja, wir können das gerne unter den Reiter Werkstatt machen, weil die Tränke einen eigenen Reiter bekommen. Das Tempo des Geld verdienens fühlt sich eigentlich gut an. … Aufstieg zu Level 12 können wir gerne mit 7500 Gold bemessen, weil man sehr viel Gold verdient. Ich würde die sechste Theke erst mit Beginn der Tränke freischalten lassen, also dass wir auf Level 13 dann auch die 6. Theke freischalten können für einen Preis von 150.000 Gold. Das mit dem Reißbrett können wir gerne erstmal versuchen um zu sehen, wie es wirkt. … Von mir aus kannst du nach meinem Feedback alles so umsetzen.“
+
+**Umgesetzt wie im Entwurf unten:** Kamille, Apotheke im Reiter „Werkstatt“ (Baukosten 1 Verstärkte Holzplatte + 1 Gewichtstein), Kräutermischung, Kamillenkissen, Heilpäckchen, Reißbrett (60 s, erst ab Level 12 wählbar), Aufstieg 7.500 Gold ohne Geschenk, 4 Aufträge (2.722 Erfahrung, 9.072 Gold). Dazu die Kleinigkeit: Auf Handys unter 820 Bildpunkten Breite zeigt nur der geöffnete Reiter seinen Namen, die anderen nur ihr Warenbild – so passen die 5 Reiter auch auf 740 (und 667) Bildpunkte.
+
+**Nicht in dieser Version:** die 6. Theke (kommt mit Level 13 für 150.000 Gold, Tobias) und das größere Laden-Lager (eigener Schritt, Entwurf v0.30.0 oben).
+
+### Entwurf v0.29.0 – Level 12 „Die Apotheke“ (v0.28.1; angenommen, umgesetzt in v0.29.0)
 
 **Tobias (Chat 21, nach dem Test von v0.28.0):** „Level 11 hat funktioniert und ich konnte alle Gebäude bauen. Die Aufträge laufen auch. Ich konnte noch keinen Sternenuhr herstellen, weil ich den Zirkel mit dem anderen Gebäude noch nicht verbunden habe, damit diese Produktion läuft. Der Platz ist zu ca. 60 aufgebraucht und Kräuter habe ich bisher noch nicht gebaut. Die Kräuterstraße wollte ich mir in den nächsten Tagen anschauen. Gold habe ich auch wieder ca. 60.000 verdient, wodurch ich bald die nächste Theke kaufen könnte.“
 

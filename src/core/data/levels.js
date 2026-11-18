@@ -172,6 +172,22 @@ export const LEVELS = {
       { from: 'Heilerin Agnes', text: 'Im Spital zählt jede Stunde – ich brauche Uhren und Wundverbände.', items: { raederuhr: 2, wundverband: 10 } },
     ],
   },
+  // v0.29.0: Level 12 (Entwurf v0.29.0, Tobias, Chat 21) – Abschluss des
+  // Kräuter-Kapitels, dazu das Reißbrett für die Werkzeuge. Tobias:
+  // „Aufstieg zu Level 12 können wir gerne mit 7500 Gold bemessen, weil man
+  // sehr viel Gold verdient.“ Kein Geschenk (seit Level 11).
+  12: {
+    name: 'Die Apotheke',
+    story:
+      'Neben dem Spital eröffnet Apothekerin Klara ihre Apotheke. Sie mischt Kräuter, näht Kamillenkissen für die Kranken und packt Heilpäckchen für Reisende. Baumeister Anton plant schon eine Glashütte – Klara braucht Fläschchen.',
+    cost: 7500,
+    quests: [
+      { from: 'Apothekerin Klara', text: 'Meine Apotheke braucht als Erstes getrocknete Kamille – für Tee, der beruhigt.', items: { kamillenbluete: 50 } },
+      { from: 'Apothekerin Klara', text: 'Aus Schafgarbe und Kamille mische ich meine Grundrezepte.', items: { kraeutermischung: 10 } },
+      { from: 'Heilerin Agnes', text: 'Im Spital schlafen die Kranken schlecht – und für Wege übers Land brauche ich Heilpäckchen.', items: { kamillenkissen: 5, heilpaeckchen: 4 } },
+      { from: 'Baumeister Anton', text: 'Für Klaras Fläschchen plane ich eine Glashütte – dafür brauche ich richtige Reißbretter.', items: { reissbrett: 2 } },
+    ],
+  },
 };
 
 export const MAX_LEVEL = Math.max(...Object.keys(LEVELS).map(Number));

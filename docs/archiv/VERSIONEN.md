@@ -4,6 +4,24 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.29.0 – Level 12 „Die Apotheke“ (18.11.2026)
+
+**Vorgenommen:**
+- Entwurf v0.29.0 mit Tobias' Antworten (Chat 21): Apotheke im Reiter „Werkstatt“ (die Tränke bekommen später einen eigenen Reiter), Aufstieg 7.500 Gold, Reißbrett mit 60 s „erstmal versuchen“, die Kleinigkeit mit den Reitern auf schmalen Handys.
+
+**Fragen, die wir uns gestellt haben:**
+- Die 6. Theke? → Tobias: erst mit Level 13 für 150.000 Gold – kommt mit Level 13, nicht in dieser Version.
+- Das größere Laden-Lager (Tobias' neue Idee)? → Eigener Schritt mit Plan (Entwurf v0.30.0), weil Preis, Anzahl und Spielstand-Format zu klären sind.
+- Wie passen 5 Reiter auf ein 740 breites Handy? → Unter 820 Bildpunkten Breite zeigt nur der geöffnete Reiter seinen Namen, die anderen ihr Warenbild (gesperrte blass, ohne Schloss). Die Regel steht am Ende von `style.css`, damit sie die Regeln für niedrige Bildschirme überschreibt (sonst wirkte der kleinere Abstand nicht).
+
+**Gemacht:**
+- `data/items.js`: Kamillensamen (830, ab Level 12), Kamille, Kamillenblüte (20), Kräutermischung (216), Kamillenkissen (216), Heilpäckchen (504), Reißbrett (1.408). `data/recipes.js`: drei Rezepte der Apotheke (20 / 20 / 30 s), Reißbrett in der Schreibstube (60 s, `level: 12`). `data/buildings.js`: Kamille im Beet und in der Erntebank, Schreibstube mit 3 Einstellungen, Apotheke (Level 12, Reiter „Werkstatt“, 1 Verstärkte Holzplatte + 1 Gewichtstein). `data/levels.js`: Level 12 (7.500 Gold, ohne Geschenk, Apothekerin Klara). `data/shop.js`: Laden auf Level 12 wie Level 7 bis 11.
+- `view/itemArt.js`: Bilder für Kamillenblüte (drei Köpfchen mit gelber Mitte), Kräutermischung (Holzschale mit Blüten), Kamillenkissen (Leinenkissen mit Blüte), Heilpäckchen (verschnürtes Päckchen mit grünem Kreuz und Schafgarbenzweig), Reißbrett (Brett mit Ofenplan, Reißschiene und Zirkel); die Kamille im Beet hat eine kräftig gelbe Mitte. `style.css`: Reiter auf schmalen Handys.
+- Tests: neue Datei `apotheke.test.js` (17 Tests), bestehende auf Level 12 umgestellt; Browser-Test mit Level 12 und einem schmalen Handy (740 × 360). Doku: `STAND.md`, `SPIEL.md`, `TECHNIK.md`, Archiv (dazu Entwurf v0.30.0 „Laden-Lager vergrößern“).
+
+**Geprüft:**
+- `npm test`: 365 von 365 bestanden. Browser-Test in Tablet- und Handygröße und auf einem schmalen Handy (740 × 360): alle 846 Prüfungen bestanden (im ersten Lauf fiel nur die alte Level-11-Prüfung des Reiters „Werkstatt“ durch, weil dort jetzt die gesperrte Apotheke steht – Prüfung angepasst). Screenshots angesehen: Level-12-Fenster mit Klara, Reiter „Werkstatt“ mit drei Gebäuden (Tablet, Handy, schmales Handy nur mit dem Namen des offenen Reiters), Apotheke mit Heilpäckchen, Schreibstube mit Reißbrett, Beet mit vier Samen; die neuen Warenbilder groß und in Bandgröße.
+
 ### v0.28.1 – Rückmeldung zu Level 11, Plan für Level 12 (17.11.2026, nur Doku)
 
 **Vorgenommen:**
