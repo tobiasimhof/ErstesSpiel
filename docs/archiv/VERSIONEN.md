@@ -21,7 +21,7 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 - Tests: neue Datei `lager.test.js` (13 Tests), `theken.test.js` auf Format 18; Browser-Test: Lager auf Level 1 gesperrt, auf Level 12 ein Ausbau per Touch mit Rückfrage. Doku: `STAND.md`, `SPIEL.md`, `TECHNIK.md`, Archiv. Der älteste Absatz zu Tobias' Fabrik (11.11.2026) ist aus `STAND.md` wörtlich nach `GESPRAECHE.md` gewandert, damit `STAND.md` unter der Größengrenze bleibt.
 
 **Geprüft:**
-- PRUEFUNG_PLATZHALTER
+- `npm test`: 378 von 378 bestanden. Browser-Test in Tablet- und Handygröße und auf dem schmalen Handy: alle 862 Prüfungen bestanden (im ersten Lauf fielen nur die zwei alten Prüfungen durch, die die Spielstand-Formatnummer 17 erwarteten – auf 18 angepasst). Screenshots angesehen: Lager auf Level 1 mit „🔒 Ab Level 7“, Ausbau-Kasten mit Knopf, Rückfrage, danach 1.100 Plätze und „Dir fehlen noch …“ für den nächsten Ausbau (7.500), auf Tablet und Handy.
 
 ### v0.29.0 – Level 12 „Die Apotheke“ (18.11.2026)
 
