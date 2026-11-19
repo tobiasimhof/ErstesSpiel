@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.29.0). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt, wie das Spiel **jetzt** ist (Stand v0.30.0). Bei jeder Änderung wird der Text hier **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
@@ -17,7 +17,7 @@
 
 ## 2. Kernschleife und Zeit
 
-Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeiten → Versandportal → Laden-Lager → Theken → Kunden zahlen Gold → neue Rohstoffe, Fläche, Aufstieg. Waren sind zugleich Baumaterial: verkaufen oder damit bauen?
+Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeiten → Versandportal → Laden-Lager → Theken → Kunden zahlen Gold → neue Rohstoffe, Fläche, Theken, größeres Lager, Aufstieg. Waren sind zugleich Baumaterial: verkaufen oder damit bauen?
 
 - **Echtzeit.** Die Fabrik läuft auch bei geschlossenem Spiel weiter, **bis etwas leer ist**: Rohstoff-Gebäude, bis ihr Vorrat verarbeitet ist; Maschinen, bis Zutaten fehlen; Lagerhäuser, bis sie leer sind; das Versandportal, bis das Laden-Lager voll ist; Kunden, bis die Theken leer sind; Beete wachsen, bis sie reif sind. Nachlegen ist immer Handarbeit („wie Clash of Clans, nur umgekehrt“, Tobias).
 - **Zurückkommen:** Die verpasste Zeit wird nachgerechnet. Nach mehr als 1 Minute kurze Meldung, nach mehr als 10 Minuten das Fenster „👋 Willkommen zurück!“ (wie lange weg, Verkäufe, was ins Laden-Lager kam, was leer gelaufen ist, reife Beete, Laden-Lager voll, Theken leer).
@@ -62,7 +62,7 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 
 - **Feste Preise** in einem Maßstab, der zum Mittelalter passt (Tobias): Ein Holzblock kostet 1 Gold, ein Zirkel 662. Regel: Blöcke bringen etwa 9 % mehr, als der Rohstoff kostet; jede weitere Stufe rund 20 % mehr als ihre Zutaten – so macht man beim Verkaufen nie Minus. Holz und Stein kosten und bringen gleich viel, Eisen viermal so viel. Ein Test prüft die Stufen.
 - **Laden** (Knopf „⚖️ Laden“ unten links) mit den Reitern **Lager, Theken, Händler**:
-  - **Laden-Lager:** 500 Plätze bis Level 3, 1.000 ab Level 4. Gefüllt über Versandportale, Ernten und Abreißen.
+  - **Laden-Lager:** 500 Plätze bis Level 3, 1.000 ab Level 4. Gefüllt über Versandportale, Ernten und Abreißen. **Ab Level 7 lässt es sich vergrößern** (Tobias: „sodass man sein Gold auch für das Lager ausgeben kann“): Oben im Reiter „Lager“ steht, wie groß es ist, und ein Knopf „📦 Vergrößern“ – je Ausbau +100 Plätze; der erste kostet 5.000 Gold, jeder weitere 2.500 mehr (7.500, 10.000 … 27.500); höchstens 10-mal, dann fasst es 2.000 (zusammen 162.500 Gold). Vor dem Kauf kommt eine Rückfrage; reicht das Gold nicht: „Dir fehlen noch …“. Unter Level 7 steht dort „🔒 Ab Level 7 …“.
   - **Theken** bestückt man von Hand mit genau eingestellter Menge (0, −5, −1, +1, +5, Alle). Jede Theke fasst Level 1–3 20 Stück, Level 4 25, ab Level 5 30.
   - **Theken kaufen:** Jeder Laden hat 2 Theken; Aufstiege bringen keine dazu. Weitere kauft man im Reiter „Theken“ nur mit Gold, ohne Mindest-Level und nach einer Rückfrage: Theke 3 15.000, Theke 4 35.000, Theke 5 70.000 Gold. Die 6. Theke kommt mit Level 13, dem Beginn der Tränke, für 150.000 Gold (Tobias). Die Ansicht zeigt immer 6 Plätze: die gekauften Theken, die nächste zum Kaufen (reicht das Gold nicht: „Dir fehlen noch …“), die späteren ausgegraut, die 6. mit „🔒 Kommt später im Spiel“.
   - **Kunden:** Jede Theke hat ihre eigenen Kunden. Jeder kauft 1 Stück zum festen Wert (teure Teile genauso oft wie einfache). Je Theke kommt auf Level 1–3 alle 15–25 Sekunden einer (3 Stück pro Minute), auf Level 4–6 alle 25–45 Sekunden (etwa 1,7), ab Level 7 alle 45–60 Sekunden (etwa 1,1) – so verkauft der Laden am Anfang schnell, später langsamer. Eine leere Theke verkauft nichts; jede gekaufte Theke legt ihren Anteil drauf (Level 8 mit 4 Theken: etwa 274 Stück pro Stunde). Mehr Gold bringen also mehr Theken oder teurere Waren. Jede Theke zeigt, wann ihr nächster Kunde kommt; „Letzte Verkäufe“ zeigt die letzten 5 mit ihrer Theke.

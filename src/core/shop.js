@@ -1,9 +1,51 @@
 // Laden-Lager: hier landen Waren aus dem Versandportal und gekaufte Rohstoffe.
 
-import { SHOP_LEVELS } from './data/shop.js';
+import { SHOP_LEVELS, STORAGE_UPGRADE } from './data/shop.js';
 
+// Plätze im Laden-Lager: je Level (SHOP_LEVELS) plus die gekauften Ausbauten.
 export function storageCapacity(state) {
-  return SHOP_LEVELS[state.shopLevel]?.storage ?? SHOP_LEVELS[1].storage;
+  const base = SHOP_LEVELS[state.shopLevel]?.storage ?? SHOP_LEVELS[1].storage;
+  return base + storageUpgrades(state) * STORAGE_UPGRADE.size;
+}
+
+// ---------- Laden-Lager vergrößern (v0.30.0, Tobias) ----------
+
+// So oft wurde das Laden-Lager schon vergrößert.
+export function storageUpgrades(state) {
+  return state.storageUpgrades ?? 0;
+}
+
+// Preis des Ausbaus Nummer index (0 = der erste): 5.000, 7.500, 10.000 …
+export function storageUpgradePrice(index) {
+  return STORAGE_UPGRADE.firstPrice + index * STORAGE_UPGRADE.priceStep;
+}
+
+// Der nächste Ausbau: { number (1–max), price, size, from, to } oder null,
+// wenn das Lager schon ganz ausgebaut ist.
+export function nextStorageUpgrade(state) {
+  const done = storageUpgrades(state);
+  if (done >= STORAGE_UPGRADE.max) return null;
+  const from = storageCapacity(state);
+  return { number: done + 1, price: storageUpgradePrice(done), size: STORAGE_UPGRADE.size, from, to: from + STORAGE_UPGRADE.size };
+}
+
+// Was hindert am nächsten Ausbau? 'max' (ganz ausgebaut), 'level' (erst ab
+// STORAGE_UPGRADE.level), 'gold' (zu wenig Gold) oder null (es geht).
+export function storageUpgradeBlocker(state) {
+  const next = nextStorageUpgrade(state);
+  if (!next) return 'max';
+  if (state.shopLevel < STORAGE_UPGRADE.level) return 'level';
+  if (state.gold < next.price) return 'gold';
+  return null;
+}
+
+// Kauft den nächsten Ausbau. Ergebnis: 'ok' | 'max' | 'level' | 'gold'
+export function buyStorageUpgrade(state) {
+  const blocker = storageUpgradeBlocker(state);
+  if (blocker) return blocker;
+  state.gold -= nextStorageUpgrade(state).price;
+  state.storageUpgrades = storageUpgrades(state) + 1;
+  return 'ok';
 }
 
 // ---------- Größe und Tempo der Theken ----------

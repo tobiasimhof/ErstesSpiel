@@ -60,6 +60,8 @@ export function createNewGame(seed) {
     // diesem Level; xpTotal zählt alle Erfahrung
     quest: createQuestState(),
     xpTotal: 0,
+    // v0.30.0: So oft wurde das Laden-Lager vergrößert (je +100 Plätze)
+    storageUpgrades: 0,
   };
   for (const start of START_BUILDINGS) {
     state.buildings.push({

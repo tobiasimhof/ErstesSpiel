@@ -1089,6 +1089,33 @@ button.danger {
   color: #9a3b1f;
 }
 
+/* v0.30.0: Laden-Lager vergrößern (oben im Reiter „Lager“) */
+.storage-upgrade {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 10px 0 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.45);
+  border: 2px solid rgba(138, 106, 63, 0.45);
+  border-radius: 10px;
+}
+
+.storage-upgrade-head {
+  font-weight: 700;
+}
+
+.storage-upgrade button {
+  min-height: 40px;
+  padding: 0 14px;
+  font-weight: 700;
+}
+
+.storage-upgrade-locked {
+  opacity: 0.75;
+}
+
 .counter-slot {
   border-style: dashed;
   background: rgba(255, 255, 255, 0.25);

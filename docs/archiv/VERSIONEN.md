@@ -4,6 +4,25 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.30.0 – Laden-Lager vergrößern (19.11.2026)
+
+**Vorgenommen:**
+- Entwurf v0.30.0 mit Tobias' Antworten (Chat 21): +100 Plätze je Ausbau, der erste 5.000 Gold, jeder weitere 2.500 mehr, 10 Ausbauten (das Lager verdoppelt sich auf 2.000), ab Level 7.
+
+**Fragen, die wir uns gestellt haben:**
+- Wo steht der Knopf? → Oben im Reiter „Lager“ des Ladens, in einem Kasten mit der Größe des Lagers; darunter wie bisher die Waren.
+- Was sieht man unter Level 7 bzw. ganz ausgebaut? → „🔒 Ab Level 7 kannst du es vergrößern: je +100 Plätze, der erste Ausbau kostet 5.000 🪙.“ bzw. „Ganz ausgebaut (10 von 10 Ausbauten).“ – ohne Knopf.
+- Zählt der Ausbau auch für das Versandportal, das Ernten und den Händler? → Ja, alles fragt `storageCapacity`, das die Ausbauten mitzählt.
+- Spielstand? → Format 18 mit `storageUpgrades`; ältere Spielstände beginnen mit 0, sonst bleibt alles gleich.
+
+**Gemacht:**
+- `data/shop.js`: `STORAGE_UPGRADE` (100, 5.000, 2.500, 10, Level 7). `core/shop.js`: `storageCapacity` zählt die Ausbauten mit; `storageUpgrades`, `storageUpgradePrice`, `nextStorageUpgrade`, `storageUpgradeBlocker`, `buyStorageUpgrade`. `core/state.js`: neues Spiel mit 0 Ausbauten. `core/save.js`: Format 18, Umwandlung und Prüfung (0 bis 10).
+- `view/shop.js`: Kasten „📦 Laden-Lager: … Plätze“ mit „Ausbau 1 von 10: +100 Plätze (1.000 → 1.100)“, Knopf „📦 Vergrößern · 5.000 🪙“, „Dir fehlen noch …“, Rückfrage („Danach hast du noch … Gold“) und Meldung „Laden-Lager vergrößert – jetzt 1.100 Plätze“. `style.css`: Kasten.
+- Tests: neue Datei `lager.test.js` (13 Tests), `theken.test.js` auf Format 18; Browser-Test: Lager auf Level 1 gesperrt, auf Level 12 ein Ausbau per Touch mit Rückfrage. Doku: `STAND.md`, `SPIEL.md`, `TECHNIK.md`, Archiv. Der älteste Absatz zu Tobias' Fabrik (11.11.2026) ist aus `STAND.md` wörtlich nach `GESPRAECHE.md` gewandert, damit `STAND.md` unter der Größengrenze bleibt.
+
+**Geprüft:**
+- PRUEFUNG_PLATZHALTER
+
 ### v0.29.0 – Level 12 „Die Apotheke“ (18.11.2026)
 
 **Vorgenommen:**

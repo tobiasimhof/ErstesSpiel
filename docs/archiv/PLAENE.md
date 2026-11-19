@@ -61,7 +61,13 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.30.0 – Laden-Lager vergrößern (v0.29.0; wartet auf Tobias' OK)
+### Laden-Lager vergrößern (fertig, v0.30.0)
+
+**Freigabe (Tobias, Chat 21, 19.11.2026):** „Der Preis von 5000 Gold passt und die weitere Entwicklung von 2500 sind auch passend. Ich denke 10 Ausbauten, sodass das Lager sich verdoppelt reicht erstmal im ersten Schritt. Ich denke, wir könnten das ab Level 7 beginnen, wenn wir auch mit Kräutern anfangen.“
+
+**Umgesetzt wie im Entwurf unten**, mit einer Änderung: **ab Level 7** (statt Level 4). Darunter zeigt der Kasten im Reiter „Lager“ „🔒 Ab Level 7 kannst du es vergrößern …“. Zahlen in `STORAGE_UPGRADE` (`data/shop.js`), Regeln in `core/shop.js` (`storageCapacity` zählt die Ausbauten mit, `nextStorageUpgrade`, `storageUpgradeBlocker`, `buyStorageUpgrade`), Spielstand-Format 18 (`storageUpgrades`, alte Stände 0).
+
+### Entwurf v0.30.0 – Laden-Lager vergrößern (v0.29.0; angenommen, umgesetzt in v0.30.0 ab Level 7)
 
 **Tobias (Chat 21, 18.11.2026):** „Aktuell kämpfe ich auch sehr mit meinem Lager, weil das immer auf 950+ Artikel ist. Ich denke, da könnte man auch einbauen, dass man sein Lager z.b. um 100 vergrößert für einen bestimmten Preis, sodass man sein Gold auch für das Lager ausgeben kann.“ Dazu: „Wir müssen nur das Gleichgewicht finden zwischen Gold verdienen und Gold ausgeben für bestimmte Dinge.“
 
