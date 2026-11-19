@@ -305,6 +305,12 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const shopText = await page.textContent('#modal-content');
   check(shopText.includes('Dein Laden') && shopText.includes('Holzstamm') && shopText.includes('Holzblock'), 'Laden-Fenster zeigt Laden-Lager mit Startvorrat');
   check((await page.locator('#modal-content .tab').count()) === 3, 'Laden-Fenster hat drei Reiter');
+  // v0.30.0: Laden-Lager vergrößern erst ab Level 7
+  const upgrade1 = await page.textContent('#modal-content .storage-upgrade');
+  check(
+    upgrade1.includes('Laden-Lager: 500 Plätze') && upgrade1.includes('Ab Level 7') && (await page.locator('[data-storage-action="vergroessern"]').count()) === 0,
+    `Lager auf Level 1: 500 Plätze, vergrößern erst ab Level 7, kein Knopf („${upgrade1}“)`,
+  );
   await shot('3-laden');
   await page.tap('#modal-content .tab[data-tab="haendler"]');
   await sleep(80);
@@ -2472,6 +2478,48 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(450);
   check(await infoButton(page, 'load:kamille').isVisible(), 'Erntebank: Knopf „➕ 1 Kamille einlegen“');
   await page.tap('#info-close');
+
+  // ---------- v0.30.0: Laden-Lager vergrößern ----------
+  await game(page, () => (window.__game.state.gold = 1000));
+  await page.tap('#btn-shop');
+  await sleep(150);
+  await page.tap('#modal-content .tab[data-tab="lager"]');
+  await sleep(150);
+  const upgradeButton = page.locator('[data-storage-action="vergroessern"]');
+  const upgradePoor = await page.textContent('#modal-content .storage-upgrade');
+  check(
+    upgradePoor.includes('Laden-Lager: 1.000 Plätze') &&
+      upgradePoor.includes('Ausbau 1 von 10: +100 Plätze (1.000 → 1.100)') &&
+      upgradePoor.includes('Dir fehlen noch 4.000') &&
+      (await upgradeButton.isDisabled()),
+    `Lager auf Level 12: Ausbau 1 von 10 für 5.000, mit 1.000 Gold gesperrt („${upgradePoor}“)`,
+  );
+  await game(page, () => (window.__game.state.gold = 8000));
+  await sleep(1200); // das Laden-Fenster aktualisiert sich von selbst
+  check(!(await upgradeButton.isDisabled()), 'Mit 8.000 Gold lässt sich das Lager vergrößern');
+  check((await upgradeButton.textContent()).includes('Vergrößern · 5.000'), `Knopf nennt den Preis („${await upgradeButton.textContent()}“)`);
+  await shot('23a-lager-vergroessern');
+  await upgradeButton.tap();
+  await sleep(150);
+  const upgradeAsk = await page.textContent('#dialog');
+  check(
+    upgradeAsk.includes('Laden-Lager vergrößern?') && upgradeAsk.includes('1.000 → 1.100') && upgradeAsk.includes('Danach hast du noch 3.000 Gold'),
+    `Rückfrage vor dem Ausbau („${upgradeAsk}“)`,
+  );
+  await shot('23b-lager-frage');
+  await page.tap('#dialog-ok');
+  await sleep(200);
+  const upgraded = await game(page, () => ({ gold: window.__game.state.gold, up: window.__game.state.storageUpgrades, cap: window.__game.storageCapacity() }));
+  check(upgraded.up === 1 && upgraded.cap === 1100 && upgraded.gold <= 3000 + 2000, `Ausbau gekauft: 1.100 Plätze (${JSON.stringify(upgraded)})`);
+  const upgradeAfter = await page.textContent('#modal-content');
+  check(
+    upgradeAfter.includes('Laden-Lager: 1.100 Plätze') && upgradeAfter.includes('Ausbau 2 von 10') && upgradeAfter.includes('Vergrößern · 7.500') && /Lager [\d.]+ \/ 1\.100/.test(upgradeAfter),
+    'Danach: 1.100 Plätze, der nächste Ausbau kostet 7.500, oben „Lager … / 1.100“',
+  );
+  check((await page.textContent('#toast')).includes('jetzt 1.100 Plätze'), 'Meldung: Laden-Lager vergrößert');
+  await shot('23c-lager-1100');
+  await page.tap('#modal-close');
+  await sleep(100);
   await game(page, (c) => Object.assign(window.__game.camera, c), camLand);
   await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)
   await page.tap('#info-close').catch(() => {});
@@ -2627,7 +2675,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     localStorage.setItem(key, JSON.stringify(data));
     return data.saveVersion;
   });
-  check(backdated === 17, `Spielstand-Version 17 (${backdated})`);
+  check(backdated === 18, `Spielstand-Version 18 (${backdated})`);
   await page2.goto(baseUrl);
   await waitForGame(page2);
   await page2.waitForFunction(() => !window.__game.isCatchingUp(), null, { timeout: 20000 });
@@ -2692,7 +2740,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await download.saveAs(backupPath);
   const backupData = JSON.parse(fs.readFileSync(backupPath, 'utf8'));
   check(
-    backupData.saveVersion === 17 && backupData.state.buildings.length === saved.buildings && Math.abs(Date.now() - backupData.savedAt) < 60000,
+    backupData.saveVersion === 18 && backupData.state.buildings.length === saved.buildings && Math.abs(Date.now() - backupData.savedAt) < 60000,
     `Datei enthält den Spielstand (Format ${backupData.saveVersion}, ${backupData.state.buildings.length} Gebäude)`,
   );
   await sleep(100);

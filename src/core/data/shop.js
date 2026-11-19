@@ -46,6 +46,15 @@ export const COUNTER_SIZE_NAMES = { 20: 'kleine', 25: 'mittlere', 30: 'große' }
 // zeigt immer `max` Plätze, damit die Theken-Ansicht voll ist.
 export const COUNTERS = { start: 2, prices: [15000, 35000, 70000, null], max: 6 };
 
+// v0.30.0: Laden-Lager vergrößern (Tobias, Chat 21: „dass man sein Lager z.b.
+// um 100 vergrößert für einen bestimmten Preis, sodass man sein Gold auch für
+// das Lager ausgeben kann.“). Jeder Ausbau bringt `size` Plätze mehr; der erste
+// kostet firstPrice, jeder weitere priceStep mehr (5.000, 7.500, 10.000 …);
+// höchstens `max` Ausbauten – Tobias: „10 Ausbauten, sodass das Lager sich
+// verdoppelt reicht erstmal im ersten Schritt“ (1.000 → 2.000); ab Level
+// `level` – „ab Level 7 beginnen, wenn wir auch mit Kräutern anfangen“.
+export const STORAGE_UPGRADE = { size: 100, firstPrice: 5000, priceStep: 2500, max: 10, level: 7 };
+
 // Kunden (v0.24.0): Jede Theke hat ihre eigenen Kunden (wie oft: oben,
 // customerSeconds). Jeder kauft minItems–maxItems Stück.
 export const CUSTOMERS = { minItems: 1, maxItems: 1 };

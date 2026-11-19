@@ -1,6 +1,8 @@
 // Laden-Fenster mit drei Reitern: Lager, Theken, Händler (v0.7.0).
 // v0.24.0: Der Reiter „Theken“ zeigt immer 6 Plätze – die gekauften Theken,
 // dann die nächste zum Kaufen, die späteren ausgegraut.
+// v0.30.0: Der Reiter „Lager“ zeigt oben, wie groß das Laden-Lager ist, und
+// ab Level 7 einen Knopf, um es zu vergrößern (Tobias).
 //
 // Das Fenster wird regelmäßig aktualisiert, weil die Fabrik weiterläuft und
 // Kunden kaufen. Knöpfe werden dabei nicht neu erzeugt, sondern nur ihre
@@ -9,7 +11,7 @@
 // (z. B. eine andere Ware auf der Theke).
 
 import { ITEMS } from '../core/data/items.js';
-import { CUSTOMERS } from '../core/data/shop.js';
+import { CUSTOMERS, STORAGE_UPGRADE } from '../core/data/shop.js';
 import {
   buyCounter,
   buyRaw,
@@ -26,7 +28,16 @@ import {
   setCounterItem,
 } from '../core/market.js';
 import { isItemUnlocked, itemLevel } from '../core/levels.js';
-import { storageCapacity, storageCount, storageFree, storageTotal } from '../core/shop.js';
+import {
+  buyStorageUpgrade,
+  nextStorageUpgrade,
+  storageCapacity,
+  storageCount,
+  storageFree,
+  storageTotal,
+  storageUpgradeBlocker,
+  storageUpgrades,
+} from '../core/shop.js';
 import { createItemIcon } from './itemArt.js';
 import { itemCount, numberFormat } from './format.js';
 
@@ -63,17 +74,71 @@ export function createShopView({ state, panels, onChange }) {
   // ---------- Lager ----------
 
   function lagerSig() {
-    return `lager|${JSON.stringify(state.storage)}`;
+    return `lager|${state.shopLevel}|${storageUpgrades(state)}|${JSON.stringify(state.storage)}`;
   }
 
-  function buildLager(body) {
+  // v0.30.0: Laden-Lager vergrößern – mit Rückfrage, weil es viel Gold kostet.
+  async function askStorageUpgrade() {
+    const next = nextStorageUpgrade(state);
+    if (!next) return;
+    if (storageUpgradeBlocker(state) === 'gold') {
+      panels.toast('Dafür reicht dein Gold nicht.');
+      return;
+    }
+    const f = (n) => numberFormat.format(n);
+    const ok = await panels.confirm({
+      title: 'Laden-Lager vergrößern?',
+      text: `Für ${f(next.price)} Gold bekommt dein Laden-Lager ${f(next.size)} Plätze mehr: ${f(next.from)} → ${f(next.to)} (Ausbau ${next.number} von ${STORAGE_UPGRADE.max}).\nDanach hast du noch ${f(Math.max(0, state.gold - next.price))} Gold.`,
+      okLabel: `📦 Vergrößern · ${f(next.price)} 🪙`,
+    });
+    if (!ok) return;
+    const result = buyStorageUpgrade(state);
+    if (result === 'ok') {
+      changed();
+      panels.toast(`Laden-Lager vergrößert – jetzt ${f(storageCapacity(state))} Plätze.`);
+    } else if (result === 'gold') panels.toast('Dafür reicht dein Gold nicht.');
+    refresh();
+  }
+
+  // v0.30.0: Kasten oben im Reiter „Lager“: Größe, nächster Ausbau, Knopf.
+  function upgradeBox(body, makeButton) {
+    const f = (n) => numberFormat.format(n);
+    const box = el('div', 'storage-upgrade');
+    const text = el('div', 'counter-next');
+    box.append(el('div', 'storage-upgrade-head', `📦 Laden-Lager: ${f(storageCapacity(state))} Plätze`), text);
+    body.append(box);
+    const next = nextStorageUpgrade(state);
+    if (!next) {
+      text.textContent = `Ganz ausgebaut (${STORAGE_UPGRADE.max} von ${STORAGE_UPGRADE.max} Ausbauten).`;
+      return () => {};
+    }
+    if (state.shopLevel < STORAGE_UPGRADE.level) {
+      box.classList.add('storage-upgrade-locked');
+      text.textContent = `🔒 Ab Level ${STORAGE_UPGRADE.level} kannst du es vergrößern: je +${f(next.size)} Plätze, der erste Ausbau kostet ${f(next.price)} 🪙.`;
+      return () => {};
+    }
+    text.textContent = `Ausbau ${next.number} von ${STORAGE_UPGRADE.max}: +${f(next.size)} Plätze (${f(next.from)} → ${f(next.to)})`;
+    const missing = el('div', 'counter-missing');
+    const button = makeButton({ label: `📦 Vergrößern · ${f(next.price)} 🪙`, primary: true, onClick: askStorageUpgrade });
+    button.dataset.storageAction = 'vergroessern';
+    box.append(missing, button);
+    return () => {
+      const lack = next.price - state.gold;
+      button.disabled = lack > 0;
+      missing.textContent = lack > 0 ? `Dir fehlen noch ${f(Math.ceil(lack))} 🪙` : '';
+      missing.hidden = lack <= 0;
+    };
+  }
+
+  function buildLager(body, { makeButton }) {
     body.append(
       el('p', null, 'Hier landet alles aus deinen Versandportalen. Daraus baust du neue Gebäude oder stellst es auf die Theken.'),
     );
+    const updateUpgrade = upgradeBox(body, makeButton);
     const entries = Object.keys(ITEMS).filter((type) => storageCount(state, type) > 0);
     if (entries.length === 0) {
       body.append(el('p', 'empty-note', 'Leer. Lass Waren in ein Versandportal laufen.'));
-      return () => {};
+      return updateUpgrade;
     }
     const list = el('div', 'item-list');
     let total = 0;
@@ -92,7 +157,7 @@ export function createShopView({ state, panels, onChange }) {
     }
     body.append(list);
     if (total > 0) body.append(el('p', 'modal-meta', `Wert aller Waren (ohne Rohstoffe): ${numberFormat.format(total)} 🪙`));
-    return () => {};
+    return updateUpgrade;
   }
 
   // ---------- Theken ----------

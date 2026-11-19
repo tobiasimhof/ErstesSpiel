@@ -235,7 +235,7 @@ function v16WithFiveCounters() {
 }
 
 test('Spielstand aus v0.23.0: zurück auf 2 Theken, die Waren der übrigen liegen im Laden-Lager', () => {
-  assert.equal(SAVE_VERSION, 17);
+  assert.equal(SAVE_VERSION, 18); // v0.30.0: Format 18 (Ausbauten des Laden-Lagers)
   const loaded = deserializeGame(v16WithFiveCounters());
   assert.ok(loaded);
   assert.equal(loaded.migratedFrom, 16);

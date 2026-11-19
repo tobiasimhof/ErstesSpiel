@@ -48,12 +48,15 @@
 //               (market.timers statt market.timer; Verkäufe merken sich ihre
 //               Theke). Alle Läden beginnen mit 2 Theken: Was auf den übrigen
 //               stand, kommt ins Laden-Lager (auch über die Grenze).
+//  18 (v0.30.0): Laden-Lager vergrößern – der Spielstand zählt die gekauften
+//               Ausbauten (storageUpgrades, je +100 Plätze). Bestehende
+//               Spielstände beginnen mit 0; sonst bleibt alles gleich.
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
 import { RECIPES } from './data/recipes.js';
 import { MAX_LEVEL } from './data/levels.js';
-import { COUNTERS, SALES_LOG_SIZE, START_STORAGE } from './data/shop.js';
+import { COUNTERS, SALES_LOG_SIZE, START_STORAGE, STORAGE_UPGRADE } from './data/shop.js';
 import { canPlaceBuilding, findFreeSpot } from './buildings.js';
 import { isDir, sortDirs } from './dirs.js';
 import { footprintSize, rotateLocal } from './geometry.js';
@@ -64,7 +67,7 @@ import { addAllToStorage, counterSizeFor, fitCounters } from './shop.js';
 import { fitWorldToLevel } from './land.js';
 import { START_PLOT, WORLD, parseTileKey } from './state.js';
 
-export const SAVE_VERSION = 17;
+export const SAVE_VERSION = 18;
 
 // v0.13.0 (Tobias): Namen, die zu den Zutaten passen. Rezepte und Werte bleiben.
 const RENAMED_V11 = {
@@ -236,6 +239,8 @@ function migrate(state, from, notes = []) {
     }
   }
   if (from < 17) shrinkCounters(state, notes);
+  // v0.29 → v0.30: noch kein Ausbau des Laden-Lagers
+  if (from < 18 && isObj(state)) state.storageUpgrades = 0;
   return state;
 }
 
@@ -541,6 +546,8 @@ export function isValidState(s) {
   if (!isInt(s.shopLevel) || s.shopLevel < 1 || s.shopLevel > MAX_LEVEL) return false;
   if (!isObj(s.produced) || !Object.entries(s.produced).every(([t, n]) => isItem(t) && isCount(n))) return false;
   if (!isCount(s.landBought)) return false;
+  // v0.30.0: Ausbauten des Laden-Lagers
+  if (!isCount(s.storageUpgrades) || s.storageUpgrades > STORAGE_UPGRADE.max) return false;
   // v0.13.0: Aufträge
   if (!isObj(s.quest) || !isCount(s.quest.index) || !isCount(s.quest.xp) || !isCount(s.xpTotal)) return false;
 
