@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.30.2 – Tränke-Kapitel: alte Maschinen statt neuer (19.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zum Entwurf v0.30.1 festhalten: keine neue Maschine je Level, alte Maschinen bekommen neue Funktionen; Kohlenmeiler → „Ofen“ mit Sand → Glas ab Level 13; Fläschchen in einer alten Maschine; Level 14 der Mörser als Ware, Level 15 als Maschine (Kräuter, Kohle, Sand → Staub); Grundzutat aus Fläschchen + Kräutermischung, dann der erste Zaubertrank; Linse → Lupe/Fernrohr gut. Weiter im nächsten Chat.
+
+**Fragen, die wir uns gestellt haben:**
+- Lässt sich das so bauen? → Ja: Einstellungen ab einem Level gibt es schon (Wundverband, Reißbrett), Rohstoff-Gebäude mit mehreren Rohstoffen auch (Erntebank).
+- Eisenblech und Eisenstangen „in der Feinschmiede“? → Die macht die Schmiede; im Plan als Frage an Tobias.
+
+**Gemacht:**
+- `PLAENE.md`: überarbeiteter Plan mit Tobias' Worten, Claudes Einschätzung und 6 Fragen; der Entwurf v0.30.1 ist als überholt markiert. `SPIEL.md`: neue Leitlinie. `ENTSCHEIDUNGEN.md`, `STAND.md` (zeigt wieder 3 Arbeitsschritte – seit v0.30.0 standen dort versehentlich nur 2), Archiv. Versionsnummer 0.30.2, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 378 von 378 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.30.1 – Lager getestet, Entwurf Tränke-Kapitel (19.11.2026, nur Doku)
 
 **Vorgenommen:**
