@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 19.11.2026 – Chat 21 (Fortsetzung 3): Lager getestet, Entwurf Tränke-Kapitel (v0.30.1)
+
+**Tobias:** „Schreib mir den Entwurf für das Tränke-Kapitel ab Level 13. Das größere Lager ist getestet und funktioniert.“
+
+**Claude** hat die Rückmeldung als v0.30.1 festgehalten und den Entwurf geschrieben (`PLAENE.md`): Gesamtbild Level 13–18 (13 Die Glashütte, 14 Die Trankküche, 15 Der Alchemist, 16 Die Sternwarte, 17 Der Zaubergarten, 18 Die Zauberei) aus Tobias' früheren Ideen (Sand → Glas → Kolben, Tränke aus Kolben und Kräutern, Alchemist mit Mörser um Level 15, Lebens-, Mana-, Alterstrank). Level 13 im Detail: Flusssand → Sandwäsche → Quarzsand, Glashütte (Quarzsand + Holzkohle → Glas), Glasbläserei (Glas → Fläschchen), Aufstieg 10.000 Gold, 6. Theke ab Level 13 für 150.000, 4 Aufträge (Glasmacherin Frieda, Klara, Anton; 3.093 Erfahrung). Sandwäsche und Glashütte im Reiter „Stein“, die Tränke-Maschinen im neuen Reiter „Tränke“; auf dem Handy bei 6 Reitern nur der Name des geöffneten. 5 Fragen an Tobias.
+
+**Umgesetzt:** v0.30.1 (nur Doku).
+
 ### 19.11.2026 – Chat 21 (Fortsetzung 2): Laden-Lager vergrößern (v0.30.0)
 
 **Tobias** (Antworten auf den Entwurf v0.30.0): „Der Preis von 5000 Gold passt und die weitere Entwicklung von 2500 sind auch passend. Ich denke 10 Ausbauten, sodass das Lager sich verdoppelt reicht erstmal im ersten Schritt. Ich denke, wir könnten das ab Level 7 beginnen, wenn wir auch mit Kräutern anfangen.“

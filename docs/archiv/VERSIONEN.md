@@ -4,6 +4,22 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.30.1 – Lager getestet, Entwurf Tränke-Kapitel (19.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zu v0.30.0 festhalten („Das größere Lager ist getestet und funktioniert“) und den Entwurf für das Tränke-Kapitel ab Level 13 schreiben.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie fängt das Kapitel an? → Wieder einfach wie Level 1 und 7: Level 13 nur Sand, Glas und Fläschchen; die ersten Tränke mit Level 14, der Alchemist mit Level 15 (Tobias: „erst um Level 15“).
+- Wohin mit den neuen Gebäuden (höchstens 4 je Reiter)? → Sandwäsche und Glashütte in „Stein“ (2 Plätze frei), Glasbläserei, Trankküche, Mörser und Alchemistenlabor in den neuen Reiter „Tränke“ – reicht bis Level 15.
+- Passen 6 Reiter auf das Handy? → Mit Namen nicht (5 Reiter reichen auf 844 Bildpunkten schon bis 822). Vorschlag: auf allen Handys nur der Name des geöffneten Reiters.
+
+**Gemacht:**
+- Entwurf in `PLAENE.md` (Gesamtbild 13–18, Level 13 im Detail, 5 Fragen). `STAND.md`, Archiv. Versionsnummer 0.30.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test` (nur Doku und Versionsnummer geändert).
+
 ### v0.30.0 – Laden-Lager vergrößern (19.11.2026)
 
 **Vorgenommen:**
