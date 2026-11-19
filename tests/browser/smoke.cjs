@@ -2675,7 +2675,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     localStorage.setItem(key, JSON.stringify(data));
     return data.saveVersion;
   });
-  check(backdated === 17, `Spielstand-Version 17 (${backdated})`);
+  check(backdated === 18, `Spielstand-Version 18 (${backdated})`);
   await page2.goto(baseUrl);
   await waitForGame(page2);
   await page2.waitForFunction(() => !window.__game.isCatchingUp(), null, { timeout: 20000 });
@@ -2740,7 +2740,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await download.saveAs(backupPath);
   const backupData = JSON.parse(fs.readFileSync(backupPath, 'utf8'));
   check(
-    backupData.saveVersion === 17 && backupData.state.buildings.length === saved.buildings && Math.abs(Date.now() - backupData.savedAt) < 60000,
+    backupData.saveVersion === 18 && backupData.state.buildings.length === saved.buildings && Math.abs(Date.now() - backupData.savedAt) < 60000,
     `Datei enthält den Spielstand (Format ${backupData.saveVersion}, ${backupData.state.buildings.length} Gebäude)`,
   );
   await sleep(100);
