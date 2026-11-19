@@ -4,6 +4,22 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.30.3 – Antworten zum Tränke-Kapitel, Entwurf Level 13 (19.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Antworten auf die 6 Fragen aus v0.30.2 festhalten (Ofen, Fläschchen in der Schmiede, Mörser auf Level 14 nicht 1 : 1 und auf Level 15 eine Maschine zum Zerkleinern, Tinktur später, kein Reiter „Tränke“, 10.000 Gold) und den Entwurf für Level 13 schreiben.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie viel Glas bringt ein Sack Sand? → Wie der Holzstamm im Ofen 100 Stück in 15 Minuten – dann gelten für beide Rohstoffe dieselbe Menge und Zeit, wie bei der Erntebank.
+- Was kostet Sand? → 1.100 Gold (teurer als Kamillensamen mit 830), Glas 12, Fläschchen 72 – die Regeln +9 % und +20 % bleiben.
+- „eine Holzplatte und 3 Holzstäbe“ für den Mörser, aber davor „Steinplatte und Holzstab“? → als Frage für Level 14 an Tobias.
+
+**Gemacht:**
+- `PLAENE.md`: Tobias' Antworten wörtlich, Entwurf Level 13 „Die Glashütte“ mit 4 Fragen; Plan v0.30.2 als beantwortet markiert. `SPIEL.md`: Ausblick und Leitlinie. `ENTSCHEIDUNGEN.md`, `STAND.md`, Archiv. Versionsnummer 0.30.3, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 378 von 378 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.30.2 – Tränke-Kapitel: alte Maschinen statt neuer (19.11.2026, nur Doku)
 
 **Vorgenommen:**

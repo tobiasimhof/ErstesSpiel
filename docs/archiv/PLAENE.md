@@ -61,7 +61,59 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Tränke-Kapitel, überarbeitet: alte Maschinen bekommen neue Funktionen (v0.30.2; Fragen für den nächsten Chat)
+### Entwurf v0.31.0 – Level 13 „Die Glashütte“ (v0.30.3; Fragen an Tobias)
+
+**Tobias' Antworten auf die 6 Fragen aus v0.30.2 (Chat 22, 19.11.2026):** „Bisher dient der Kohlenmeier nur der Verbrennung. Ich würde ihn gerne in Ofen unbennenen und Glas gibt es nur dort, also aus Sand wird dort Glas. 2. Gerne in der Schmiede, dann machen wir aus 5x Glas ein Fläschen. 3. So ähnlich habe ich mir das auch vorgestellt. Aus einer Steinplatte und einem Holzstab machen wir den Mörser. Ich würde den Möser aber gerne etwas mehr regulieren, indem wir kein Verhältnis von 1:1 nehmen, sondern evtl. eine Holzplatte und 3 Holzstäbe. Auf Level 15 kann man dann mit 10 Mörsern und 10 Räderwerke ( oder was am meisten sinn macht ) eine Maschine bauen mit der man dann alles zerkleinern kann zu Staub. So erschaffen wir nur neue Maschinen bei denen es Sinn macht, weil man in einer Zimmerei z.b. nicht wirklich aus Blüten, Blütenstaub macht. Ich finde es sehr wichtig, dass das Ganze auch Sinn ergibt. 4. Ja, die Logik dahinter finde ich passend, aber wie genau wir das machen schauen wir nochmal, wenn wir bei diesem level angekommen sind, weil ich dann auch schauen muss, wie sieht es mit den Produktionsstraßen aus, wie viel Platz brauchen wir und was macht am meisten Sinn, das ganze anzubinden, bzw. wie. 5. Tränke braucht noch kein eigener Reiter, weil ich das Spiel erstmal selbst bis dahin spielen will, umzusehen wie alles läuft. 6. Ja, das passt alles so. Mittlerweile macht man auch nicht mehr das große Geld, weil es länger dauert bis ein gewissen Produkt fertig ist, von daher können wir erstmal so im Flow bleiben.“
+
+**Festgehalten:**
+1. **Ofen:** Der Kohlenmeiler heißt „Ofen“. Glas gibt es nur dort, aus Sand.
+2. **Fläschchen** in der **Schmiede**: 5 Glas → 1 Fläschchen.
+3. **Mörser (Level 14)** als Ware, in der Zimmerei (Claudes Vorschlag; Tobias: „So ähnlich habe ich mir das auch vorgestellt“), **nicht 1 : 1** – „evtl. eine Holzplatte und 3 Holzstäbe“ (offen: Holz- oder Steinplatte, siehe Frage 4). **Level 15:** eine neue Maschine, die alles zu Staub zerkleinert; Baukosten z. B. 10 Mörser + 10 Räderwerke („oder was am meisten Sinn macht“). **Neue Maschinen nur, wo es Sinn ergibt** – eine Zimmerei macht keinen Blütenstaub.
+4. **Tinktur und erster Zaubertrank** in der Apotheke: Die Logik passt; wie genau, entscheiden wir, wenn wir bei dem Level sind (Tobias schaut sich dann Straßen, Platz und Anbindung an).
+5. **Vorerst kein Reiter „Tränke“** – Tobias spielt erst selbst bis dahin.
+6. **Aufstieg auf Level 13: 10.000 Gold.** „Mittlerweile macht man auch nicht mehr das große Geld … von daher können wir erstmal so im Flow bleiben.“
+
+**Leitidee für Level 13:** Wie Level 7 fängt das Kapitel klein an – **ein neuer Rohstoff (Sand), neue Funktionen für zwei alte Maschinen (Ofen, Schmiede), keine neue Maschine.** Dazu die 6. Theke.
+
+| Ware / Gebäude | Was | Zeit | Wert |
+|---|---|---|---|
+| ♨️ **Ofen** (bisher Kohlenmeiler, bleibt im Reiter „Holz“) | heißt in allen Leveln „Ofen“ (auch ab Level 9); ab Level 13 nimmt er neben Holzstämmen auch **Sand**: 1 Sand → 100 Glas, Vorrat 3, auch gemischt (wie die Erntebank) | 15 min (9 s je Stück) | Baukosten wie bisher (20 Steinplatten + 2 Verstärkte Holzplatten) |
+| **Sand** | Rohstoff beim Händler ab Level 13 (ein Sack feiner Flusssand) | – | 1.100 (Kauf) |
+| **Glas** | Glasklumpen aus dem Ofen | – | 12 (100 × 12 = 1.200, +9 %) |
+| 🔨 **Schmiede**, neue Einstellung „Fläschchen“ (erst ab Level 13 wählbar) | 5 Glas → 1 Fläschchen – das Gefäß für alle späteren Tränke | 10 s | 72 (60, +20 %) |
+
+- **Warum diese Preise:** Jeder neue Rohstoff kostet etwas mehr als der vorige (Kamillensamen 830); Glas war im Mittelalter kostbar – ein Glas bringt 12 Gold (Holzkohle 2, Eisenbarren 4). Die Regeln bleiben: Rohstoff → Grundware +9 %, nächste Stufe +20 %.
+- **Warum 10 s:** Glasblasen braucht Zeit (wie der Verband, 10 s). Eine Schmiede schafft trotzdem das Glas von 4–5 Öfen; der Ofen bleibt der Engpass wie alle Rohstoff-Gebäude.
+- **Rechenbeispiel:** 1 Sand (1.100) → 100 Glas (1.200) → 20 Fläschchen (1.440). Ein Ofen mit Sand reicht für 80 Fläschchen pro Stunde – auf Masse geht man mit mehreren Öfen.
+- **Infofenster des Ofens:** „➕ Holzstamm einlegen“ und ab Level 13 „➕ Sand einlegen“; „⏫ Auffüllen“ nimmt, was gerade läuft, und kauft beim Händler nach (beides gibt es dort). Gemischt eingelegt laufen Holzkohle und Glas über dasselbe Band – wie bei der Erntebank besser zwei Öfen.
+
+**Aufstieg** auf Level 13: **10.000 Gold** (Tobias), kein Geschenk, keine neue Fläche; der Laden bleibt wie auf Level 12. **6. Theke** ab Level 13 für **150.000 Gold**; vorher steht dort „🔒 Ab Level 13 · 150.000 🪙“.
+
+**Geschichte:** „Antons Glashütte am Fluss ist fertig. Schmied Konrad heizt seinen Ofen jetzt so stark, dass Sand zu Glas schmilzt, und bläst in der Schmiede daraus Fläschchen. Endlich kann Apothekerin Klara ihre Kräuter abfüllen – und sie träumt schon von ihrem ersten Trank.“ (Level 12 kündigt die Glashütte schon an.)
+
+| # | Von | Text (Idee) | Waren | Gold | Erfahrung |
+|---|---|---|---|---|---|
+| 1 | Schmied Konrad | „Mein Ofen ist heiß genug für Sand! Bring mir Glas, damit ich sehe, ob es klar wird.“ | 50 Glas | 600 | 180 |
+| 2 | Apothekerin Klara | „Endlich Fläschchen! Jetzt kann ich Tee und Säfte abfüllen.“ | 25 Fläschchen | 1.800 | 540 |
+| 3 | Baumeister Anton | „Die Sternenuhren im Rathausturm bekommen Glas vor das Zifferblatt.“ | 100 Glas + 2 Sternenuhren | 3.410 | 1.023 |
+| 4 | Apothekerin Klara | „Für meinen ersten Trank brauche ich viele Fläschchen und Kräutermischungen.“ | 20 Fläschchen + 15 Kräutermischungen | 4.680 | 1.404 |
+
+Zusammen **3.147 Erfahrung** (Level 12: 2.722) und 10.490 Gold; dafür braucht man 375 Glas, also knapp 4 Sand. Die Erfahrung sammelt sich, bis es Level 14 gibt.
+
+**Technik dazu:**
+- Ofen: intern heißt er weiter `kohlenmeiler` (wie die Erntebank `flachsbreche`), damit Tobias' Fabrik passt; er bekommt wie die Erntebank mehrere Rohstoffe (`inputs`). Den Sand-Knopf gibt es erst, wenn Sand freigeschaltet ist. Ob sich das Spielstand-Format ändern muss, prüfe ich beim Umsetzen (wahrscheinlich nicht).
+- Schmiede: Rezept „Fläschchen“ mit `level: 13` (wie der Wundverband); der Tipp im Infofenster nennt Eisenbarren und Glas.
+- 6. Theke: Theken bekommen eine Level-Grenze (`COUNTERS` in `data/shop.js`).
+- Neue Warenbilder: Sand (Sack), Glas, Fläschchen.
+- Tests: Ofen mit Sand, Fläschchen erst ab Level 13, Theke 6 erst ab Level 13, Level 13 mit Aufträgen und Erfahrung; Browser-Durchlauf Level 13 in Tablet- und Handygröße.
+
+**Fragen an Tobias:**
+1. **„Ofen“ in allen Leveln** (also schon ab Level 9) und er **bleibt im Reiter „Holz“**?
+2. **Preise:** Sand 1.100, Glas 12, Fläschchen 72 (10 s) – passt das?
+3. **Die 4 Aufträge** und der Name **„Die Glashütte“** für den Bauabschnitt (das Gebäude selbst heißt Ofen)?
+4. *(kann bis Level 14 warten)* **Mörser:** erst „Steinplatte und Holzstab“, dann „eine Holzplatte und 3 Holzstäbe“ – ein Mörser aus Holz, oder war die Steinplatte gemeint (Schale aus Stein, Stößel aus Holz)?
+
+### Tränke-Kapitel, überarbeitet: alte Maschinen bekommen neue Funktionen (v0.30.2; beantwortet in Chat 22 – siehe Entwurf Level 13 oben)
 
 **Tobias (Chat 21, 19.11.2026, zum Entwurf v0.30.1 unten):** „Das Grundkonzept spricht mich schon an, aber ich möchte auch nicht, dass wir bei jedem Level eine neue Maschine entwickeln. Wir haben z.b. den Kohlenmeiler, den wir in Ofen unbennen könnten und dann können wir damit auch Sand zu Glas brennen. Ich möchte eher, dass man bei höheren Level neue Funktionen der Maschinen freischalten kann, sodass man eine lange Zeit bei dem Kohlenmeiler nur Holz zu Kohle machen kann, aber mit level 13 dann auch Sand zu Glas. So sparen wir auch im Reiter Platz für neue Maschinen. Man könnte dann in der Feinschmiede neben Eisenblech und Stangen auch Glas herstellen aus Sand, so bekommen alte Maschinen auch einen neuen Nutzen für fortgeschrittene Level. In der Schmiede dann beispielsweise aus Glas dann Fläschen. Das ist eher die Vorgehensweise, die ich mir vorstelle. Dann könnte man auf Level 14 versuchen dass wir den Mörser herstellen als Produkt, sodass wir auf Level 15 mit dem Mörser dann eine neue Maschine bauen können, damit wir die Kräuter, Kohle und Sand zu Staub verarbeiten können, um mit dem Staub dann widerrum neue Produkte zu haben und daraus dann auch neue Dinge herzustellen. Aus Fläschen + Kräutermischung kann man dann irgendwie die erste ‚Grundzutat‘ herstellen mit der man dann im nächsten Schritt diese Grundzutat + Kamilienblüten oder so den ersten Zaubertrank herstellen kann, aber ich möchte nicht, dass wir nach level 20 dann plötzlich 500 verschiedene Maschinen haben. Ich würde die alten Maschinen eher mit neuen Funktionen austatten, dann können wir den Namen der Maschinen auch viel allgemeiner halten. Die Idee, dass wir aus dem Glas noch eine Linse herstellen und daraus eine Lupe und/oder Fernrohr finde ich gut. Ich würde nach deiner Antwort gerne im neuen Chat weitermachen, deswegen halte alles wichtige fest, gib mir eine kurze einschätzung, damit ich dir im neuen Chat darauf antworten kann“
 
