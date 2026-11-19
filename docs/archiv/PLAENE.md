@@ -61,6 +61,71 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf Tränke-Kapitel ab Level 13 – Level 13 „Die Glashütte“ im Detail (v0.30.1; wartet auf Tobias' Antworten)
+
+**Tobias (Chat 21, 19.11.2026):** „Schreib mir den Entwurf für das Tränke-Kapitel ab Level 13. Das größere Lager ist getestet und funktioniert.“
+
+**Grundlage – was Tobias bisher gesagt hat:**
+- „Kräuter mit Kohle und anderen Dingen mischen – erste Produkte in Richtung Lebenstrank, Manatrank, Alterstrank“ (Chat 9).
+- Ab Level 13 neue Rohstoffe, „z. B. Sand: daraus Glas, aber über die Kräuter-Maschinen auch Sandstaub für die Zauberei“; der Alchemist mit Mörser und Zaubertränken „erst um Level 15“; die getrockneten Blüten sind die Grundlage für den Mörser, „z. B. Ringelblumenstaub“ (Chat 10/11).
+- „Neue Rohstoffe einführen, wie Glas etc., damit wir Kolben herstellen können, um mit Kräutern und den Werkzeugen dann Tränke herzustellen“; Werkzeuge, Kräuter und Tränke wachsen parallel (Chat 19).
+- Höchstens 2 Eingänge je Maschine; jedes Produkt entsteht logisch aus seinen Zutaten; nur kleine Waren; Holzkohle „später für Glas“ (Entwurf Level 9–12, gutgeheißen).
+- Die Tränke bekommen einen eigenen Reiter; mit Level 13 die 6. Theke für 150.000 Gold (Chat 21).
+- „Mit diesen Sachen quasi eine Grundlage schaffen und dann später … verschiedene Dinge kombinieren“; Schwerpunkt: Produktionsstraßen optimieren (Chat 21).
+
+**Leitidee:**
+- Das dritte Kapitel fängt wieder **einfach** an, wie Level 1 (Holz) und Level 7 (Flachs): Level 13 bringt nur den neuen Rohstoff, Glas und Fläschchen. Die ersten Tränke kommen mit Level 14, der Alchemist mit Level 15.
+- **Glas braucht Holzkohle** (Holzkohle brennt heißer als Holz – Konrads Auftrag auf Level 9): So bekommt der Kohlenmeiler eine zweite Aufgabe, und die Kapitel greifen ineinander.
+- Die Tränke verbinden **Glas + Kräuter**, später auch **Werkzeuge** (z. B. Linse aus Glas fürs Fernrohr, Apothekerwaage aus Gewichtsteinen) – wie genau, planen wir je Level.
+- Werte wie bisher: Rohstoff → Grundware +9 %, jede weitere Stufe +20 %; teure Waren brauchen mehr Zeit; keine Geschenke; der Aufstieg wird weiter teurer.
+
+**Übersicht (Level 13 im Detail unten, ab 14 Ideen):**
+
+| Level | Bauabschnitt | Bereich | Neu (Idee) |
+|---|---|---|---|
+| 13 | Die Glashütte | Tränke (Anfang) | Flusssand (neuer Rohstoff), Sandwäsche, Glashütte (Quarzsand + Holzkohle → Glas), Glasbläserei (Glas → Fläschchen); neuer Reiter „Tränke“; 6. Theke |
+| 14 | Die Trankküche | Tränke | Trankküche (2 Eingänge): Heiltrank (Fläschchen + Kräutermischung), Schlaftrank (Fläschchen + Kamillenblüten), ein dritter Trank |
+| 15 | Der Alchemist | Tränke | Mörser (Blüten → Pulver, z. B. Ringelblumenpulver; Quarzsand → Sandstaub), Alchemistenlabor (2 Eingänge): erste Zaubertränke, z. B. Lebenstrank |
+| 16 | Die Sternwarte | Werkzeuge | Glasbläserei: Linse; in der Werkstatt Lupe und Fernrohr (Linse + Werkzeug-Waren) |
+| 17 | Der Zaubergarten | Kräuter | eine Zauberpflanze (Idee: Farn – nach altem Glauben macht Farnsamen unsichtbar) |
+| 18 | Die Zauberei | Tränke (Abschluss) | Manatrank, Alterstrank; vielleicht Stahl (Holzkohle + Eisen) als neue Werkzeug-Stufe |
+
+**Platz in der Bauleiste** (höchstens 4 Gebäude je Reiter): Holz, Eisen und Erde sind voll, „Stein“ hat 2 Plätze frei, „Werkstatt“ 1. Vorschlag: **Sandwäsche und Glashütte in den Reiter „Stein“** (Sand und Glas sind Stein-Handwerk), **im neuen Reiter „Tränke“** die Glasbläserei (Level 13), die Trankküche (14), den Mörser und das Alchemistenlabor (15). So reichen die Plätze bis Level 15; danach bekommen bestehende Maschinen weitere Einstellungen (wie Kräuterstube und Schreibstube). Reiter-Farbe „Tränke“: türkis (Glas).
+
+**Level 13 – Die Glashütte** (Antons Glashütte steht am Fluss; Glasmacherin Frieda zieht in den Ort und bläst endlich Fläschchen für Klaras Apotheke)
+
+| Ware / Gebäude | Was | Zeit | Wert |
+|---|---|---|---|
+| Flusssand | Rohstoff beim Händler ab Level 13 (Sack Sand vom Flussufer) | – | 367 (Kauf) |
+| Sandwäsche (Reiter Stein, Rohstoff-Gebäude wie der Steinbruch) | 1 Flusssand → 200 Quarzsand, Vorrat 3 | 15 min (4,5 s je Stück) | Baukosten 20 Steinplatten + 2 Räderwerke (336) |
+| Quarzsand | gewaschener Sand | – | 2 (200 × 2 = 400, +9 %) |
+| Glashütte (Reiter Stein, 2 Eingänge) | 10 Quarzsand + 5 Holzkohle → 1 Glas | 10 s | Baukosten 40 Steinplatten + 5 Eisenstangen (360) |
+| Glas | ein Klumpen Rohglas | – | 36 (20 + 10 = 30, +20 %) |
+| Glasbläserei (Reiter Tränke, 1 Eingang) | 5 Glas → 1 Fläschchen | 20 s | Baukosten 10 Eisenstangen (Glasmacherpfeifen) + 1 Zahnradwelle (348) |
+| Fläschchen | kleiner Glaskolben mit Stopfen – das Gefäß für alle Tränke | – | 216 (180, +20 %) |
+
+Rechenbeispiel: 1 Flusssand + 1 Holzstamm (im Kohlenmeiler) = 200 Quarzsand + 100 Holzkohle → 20 Glas (720) → 4 Fläschchen (864). Eine Sandwäsche reicht für 4 Fläschchen in 15 Minuten – auf Masse geht man mit mehreren Sandwäschen und Kohlenmeilern.
+
+**Aufstieg** auf Level 13: **10.000 Gold** (Level 11 5.000, Level 12 7.500), kein Geschenk, keine neue Fläche (Tobias' Fabrik ist zu etwa 60 % belegt; mehr Fläche planen wir, wenn es eng wird). **6. Theke** ab Level 13 für **150.000 Gold** (Tobias); vorher steht dort „🔒 Ab Level 13 · 150.000 🪙“.
+
+| # | Von | Text (Idee) | Waren | Gold | Erfahrung |
+|---|---|---|---|---|---|
+| 1 | Glasmacherin Frieda | „Mein Ofen brennt! Bring mir Glas, damit ich prüfen kann, ob Sand und Kohle stimmen.“ | 25 Glas | 900 | 270 |
+| 2 | Apothekerin Klara | „Endlich Fläschchen! Jetzt kann ich meine Kräuter abfüllen.“ | 10 Fläschchen | 2.160 | 648 |
+| 3 | Baumeister Anton | „Über das Zifferblatt der Sternenuhren im Rathaus kommt Glas.“ | 50 Glas + 2 Sternenuhren | 4.010 | 1.203 |
+| 4 | Apothekerin Klara | „Für meinen ersten Trank brauche ich Fläschchen und Kräutermischungen.“ | 10 Fläschchen + 5 Kräutermischungen | 3.240 | 972 |
+
+Zusammen 3.093 Erfahrung (Level 12: 2.722) und 10.310 Gold.
+
+**Technik dazu:** Mit 6 Reitern passen die Namen auf dem Handy (844 breit) nicht mehr nebeneinander. Vorschlag: Auf allen Handys (unter etwa 1.000 Bildpunkten Breite) zeigt – wie heute schon auf schmalen Handys – nur der geöffnete Reiter seinen Namen; auf dem Tablet bleiben alle Namen. Die 6. Theke braucht eine Level-Grenze (bisher kaufen sich Theken ohne Mindest-Level). Neue Warenbilder: Flusssand (Sack), Quarzsand, Glas, Fläschchen.
+
+**Fragen an Tobias:**
+1. Das Gesamtbild 13–18 (Glas → Fläschchen → Tränke, Alchemist ab 15, dazwischen Werkzeuge und eine Zauberpflanze) – passt die Richtung?
+2. Level 13 so: Flusssand → Sandwäsche → Quarzsand; Glas aus Quarzsand **und Holzkohle**; Glasbläserei → Fläschchen – und die ersten Tränke erst mit Level 14?
+3. Sandwäsche und Glashütte in den Reiter „Stein“, Glasbläserei (und später Trankküche, Mörser, Alchemistenlabor) in den neuen Reiter „Tränke“?
+4. Aufstieg 10.000 Gold, die 4 Aufträge und die Baukosten so?
+5. Auf dem Handy bei 6 Reitern nur der Name des geöffneten Reiters?
+
 ### Laden-Lager vergrößern (fertig, v0.30.0)
 
 **Freigabe (Tobias, Chat 21, 19.11.2026):** „Der Preis von 5000 Gold passt und die weitere Entwicklung von 2500 sind auch passend. Ich denke 10 Ausbauten, sodass das Lager sich verdoppelt reicht erstmal im ersten Schritt. Ich denke, wir könnten das ab Level 7 beginnen, wenn wir auch mit Kräutern anfangen.“

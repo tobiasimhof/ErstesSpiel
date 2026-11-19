@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.30.0 – Laden-Lager vergrößern |
+| **Aktuelle Version** | v0.30.1 – Lager getestet, Entwurf Tränke-Kapitel (nur Doku; im Spiel: Laden-Lager vergrößern) |
 | **Phase** | M2 – Produktionsketten (Kräuter Level 7–12 abgeschlossen, Werkzeuge wachsen weiter; ab Level 13 die Tränke) |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | **Tobias testet Level 12** (Kamille, Apotheke im Reiter „Werkstatt“, Reißbrett mit 60 s, Aufstieg 7.500 Gold) und **das größere Laden-Lager** (Laden → Reiter „Lager“: +100 Plätze ab 5.000 Gold, jeder weitere Ausbau 2.500 mehr, 10-mal bis 2.000, ab Level 7). Danach das **Tränke-Kapitel ab Level 13** gemeinsam planen (eigener Reiter, 6. Theke für 150.000 Gold) – Plan vorstellen, OK abwarten. |
+| **Nächster Schritt** | **Entwurf Tränke-Kapitel ab Level 13** in `docs/archiv/PLAENE.md` (Gesamtbild 13–18, Level 13 „Die Glashütte“ im Detail) – Tobias' Antworten auf 5 Fragen abwarten, dann Level 13 umsetzen (mit 6. Theke für 150.000 Gold und neuem Reiter „Tränke“). Tobias testet weiter Level 12. |
 
 **Tobias' Fabrik – Level 11** (Chat 21, 17./18.11.2026, v0.28.0, ohne Screenshot): Level 11 läuft, alle Gebäude gebaut, die Aufträge laufen. **Platz zu etwa 60 % belegt.** Die Kräuterstraße baut er gerade: Er stellt die Wundverbände für Agnes' letzten Auftrag her. **Etwa 60.000 Gold** – bald reicht es für Theke 5 (70.000); „Das Tempo des Geld verdienens fühlt sich eigentlich gut an.“ **Das Laden-Lager steht immer bei 950+ von 1.000** – „Aktuell kämpfe ich auch sehr mit meinem Lager“.
 
@@ -30,8 +30,8 @@
 
 **Nächste Schritte** (der Reihe nach; neu geordnet von Tobias in Chat 19; jeder Schritt erst nach Tobias' OK):
 
-1. **Laden-Lager vergrößern** (Tobias, Chat 21) – **im Spiel (v0.30.0):** +100 Plätze je Ausbau, der erste 5.000 Gold, jeder weitere 2.500 mehr, 10-mal bis 2.000 Plätze, ab Level 7 (Tobias: „wenn wir auch mit Kräutern anfangen“). Tobias testet.
-2. **Techbaum ab Level 9** (Tobias, Chat 19): „Die Kräutersachen laufen eigentlich relativ gut und schnell, wodurch ich nicht glaube, dass man lange auf den Kräuterleveln bleiben wird, daher sollten wir uns dann auch weiter mit dem Techbaum beschäftigen für Level 9, 10 etc.“ **Entwurf Level 9–12** (v0.25.1, `docs/archiv/PLAENE.md`) von Tobias gutgeheißen („hört sich alles sehr gut an und macht auch Sinn“); ein Level je Version: **Level 9 ist im Spiel (v0.26.0)** – Tobias (Chat 20): „sehr gut gelungen mit dem neuen Reiter“, den Techbaum „fande ich auch sehr gut“. **Level 10 „Das Spital“ mit mehr Fläche ist im Spiel (v0.27.0)** – Tobias: „Sieht sehr gut aus und fühlt sich auch gut an.“ **Level 11 „Die Uhrmacherei“ ist im Spiel (v0.28.0)** – Tobias (Chat 21): „hat funktioniert und ich konnte alle Gebäude bauen“. **Level 12 „Die Apotheke“ ist im Spiel (v0.29.0)** – damit ist der Entwurf Level 9–12 umgesetzt. Danach das **Tränke-Kapitel ab Level 13** gemeinsam planen: eigener Reiter, mit Level 13 die 6. Theke für 150.000 Gold (Tobias, Chat 21). Leitlinie (Tobias, Chat 21): „mit diesen Sachen quasi eine Grundlage schaffen und dann später können wir verschiedene Dinge kombinieren, um daraus viele Dinge herzustellen. … der Fokus soll auf dem optimieren dieser Produktionsstraßen liegen.“
+1. **Laden-Lager vergrößern** (Tobias, Chat 21) – **im Spiel (v0.30.0)**, +100 Plätze je Ausbau ab 5.000 Gold, 10-mal bis 2.000, ab Level 7. Tobias: „Das größere Lager ist getestet und funktioniert.“
+2. **Techbaum ab Level 9** (Tobias, Chat 19): „Die Kräutersachen laufen eigentlich relativ gut und schnell, wodurch ich nicht glaube, dass man lange auf den Kräuterleveln bleiben wird, daher sollten wir uns dann auch weiter mit dem Techbaum beschäftigen für Level 9, 10 etc.“ **Entwurf Level 9–12** (v0.25.1, `docs/archiv/PLAENE.md`) von Tobias gutgeheißen („hört sich alles sehr gut an und macht auch Sinn“); ein Level je Version: **Level 9 ist im Spiel (v0.26.0)** – Tobias (Chat 20): „sehr gut gelungen mit dem neuen Reiter“, den Techbaum „fande ich auch sehr gut“. **Level 10 „Das Spital“ mit mehr Fläche ist im Spiel (v0.27.0)** – Tobias: „Sieht sehr gut aus und fühlt sich auch gut an.“ **Level 11 „Die Uhrmacherei“ ist im Spiel (v0.28.0)** – Tobias (Chat 21): „hat funktioniert und ich konnte alle Gebäude bauen“. **Level 12 „Die Apotheke“ ist im Spiel (v0.29.0)** – damit ist der Entwurf Level 9–12 umgesetzt. Als Nächstes das **Tränke-Kapitel ab Level 13**: Entwurf v0.30.1 in `PLAENE.md` (13 Die Glashütte, 14 Die Trankküche, 15 Der Alchemist, 16 Die Sternwarte, 17 Der Zaubergarten, 18 Die Zauberei) wartet auf Tobias' Antworten; mit Level 13 der Reiter „Tränke“ und die 6. Theke für 150.000 Gold (Tobias, Chat 21). Leitlinie (Tobias, Chat 21): „mit diesen Sachen quasi eine Grundlage schaffen und dann später können wir verschiedene Dinge kombinieren, um daraus viele Dinge herzustellen. … der Fokus soll auf dem optimieren dieser Produktionsstraßen liegen.“
 3. **Nach hinten verschoben** (Tobias, Chat 19): die drei folgenden Schritte.
 4. **Was Tester brauchen** – mit v0.22.0 können Tester auch auf Tobias' Tablet spielen (sichern → neues Spiel → Tester spielt → laden); Testmodus und Test-Knopf bleiben sichtbar. Eine kurze Einführung bleibt im Hinterkopf (M4) (offene Frage 13).
 5. **Bereich kopieren** (Tobias: „sehr wichtig“) – einen markierten Bereich als Ganzes noch einmal bauen, wenn die Waren reichen (Tobias baut gleiche Straßen mehrfach). Plan noch zu machen.
@@ -60,14 +60,14 @@ Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute, 
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.30.1 – Lager getestet, Entwurf Tränke-Kapitel (19.11.2026, nur Doku)
+
+- **Tobias (Chat 21):** „Schreib mir den Entwurf für das Tränke-Kapitel ab Level 13. Das größere Lager ist getestet und funktioniert.“
+- **Claude:** Entwurf in `docs/archiv/PLAENE.md` – Gesamtbild Level 13–18; Level 13 „Die Glashütte“: Flusssand (367) → Sandwäsche → 200 Quarzsand, Glashütte (10 Quarzsand + 5 Holzkohle → Glas, 36), Glasbläserei (5 Glas → Fläschchen, 216), Aufstieg 10.000 Gold, 6. Theke ab Level 13 für 150.000, 4 Aufträge (3.093 Erfahrung); Sandwäsche und Glashütte in „Stein“, Glasbläserei im neuen Reiter „Tränke“; auf dem Handy bei 6 Reitern nur der Name des geöffneten. 5 Fragen an Tobias.
+- Spiel unverändert, nur die Versionsnummer steigt.
+
 ### v0.30.0 – Laden-Lager vergrößern (19.11.2026)
 
 - **Warum (Tobias, Chat 21):** „Aktuell kämpfe ich auch sehr mit meinem Lager, weil das immer auf 950+ Artikel ist“ – das Lager soll sich „um 100 vergrößern“ lassen, „sodass man sein Gold auch für das Lager ausgeben kann“. Zum Entwurf: „Der Preis von 5000 Gold passt und die weitere Entwicklung von 2500 sind auch passend“; „10 Ausbauten, sodass das Lager sich verdoppelt“; „ab Level 7 …, wenn wir auch mit Kräutern anfangen“.
 - **Umgesetzt:** Im Laden, Reiter „Lager“, oben ein Kasten mit der Größe des Laden-Lagers und ab Level 7 dem Knopf „📦 Vergrößern · 5.000 🪙“ (+100 Plätze; dann 7.500, 10.000 … bis 27.500; 10-mal bis 2.000 Plätze, zusammen 162.500 Gold), mit Rückfrage und „Dir fehlen noch …“. Gilt für Versandportal, Ernten und Händler. Spielstand-Format 18 – Tobias' Fabrik beginnt mit 0 Ausbauten, nichts geht verloren.
-- **Offen:** Tobias testet.
-
-### v0.29.0 – Level 12 „Die Apotheke“ (18.11.2026)
-
-- **Warum (Tobias, Chat 21):** Antworten auf den Entwurf v0.29.0: Apotheke „unter den Reiter Werkstatt …, weil die Tränke einen eigenen Reiter bekommen“; „Aufstieg zu Level 12 … mit 7500 Gold, weil man sehr viel Gold verdient“; Reißbrett „erstmal versuchen“; „Von mir aus kannst du nach meinem Feedback alles so umsetzen“. 6. Theke erst mit Level 13 für 150.000 Gold.
-- **Umgesetzt:** Level 12 „Die Apotheke“ (Aufstieg 7.500 Gold, kein Geschenk, 4 Aufträge mit 2.722 Erfahrung). **Kamille** als 4. Pflanze (Samen 830, 50 Blüten à 20). **Apotheke** (Reiter „Werkstatt“, 2 Eingänge, Baukosten 1 Verstärkte Holzplatte + 1 Gewichtstein): Kräutermischung (Schafgarbe + Kamille, 216), Kamillenkissen (Flachsfasern + Kamille, 216), Heilpäckchen (Wundverband + Kräuterkompresse, 504). **Reißbrett** in der Schreibstube (Zeichenbrett + Reißzeug, 1.408, 60 s, ab Level 12). Neue Warenbilder. Auf schmalen Handys zeigt nur der geöffnete Reiter seinen Namen.
-- **Offen:** Tobias testet. Seine Idee „Laden-Lager vergrößern“ kam als eigener Schritt (v0.30.0).
+- **Tobias' Rückmeldung (Chat 21):** „Das größere Lager ist getestet und funktioniert.“
