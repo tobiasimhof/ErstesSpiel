@@ -1514,7 +1514,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   );
   check(
     JSON.stringify(slots) === JSON.stringify(['owned', 'owned', 'next', 'later', 'later', 'locked']),
-    `Theken-Ansicht zeigt 6 Plätze: 2 Theken, Theke 3 zum Kaufen, 4 und 5 später, 6 kommt später (${slots})`,
+    `Theken-Ansicht zeigt 6 Plätze: 2 Theken, Theke 3 zum Kaufen, 4 und 5 später, 6 erst ab Level 13 (${slots})`,
   );
   const thekenText = await page.textContent('#modal-content');
   check(
@@ -1523,8 +1523,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     'Theken-Reiter erklärt das Tempo auf Level 7',
   );
   check(
-    thekenText.includes('Kaufen · 15.000') && thekenText.includes('35.000') && thekenText.includes('70.000') && thekenText.includes('Kommt später im Spiel'),
-    'Preise der Theken: 15.000, 35.000, 70.000, die 6. kommt später',
+    thekenText.includes('Kaufen · 15.000') && thekenText.includes('35.000') && thekenText.includes('70.000') && thekenText.includes('🔒 Ab Level 13 · 150.000'),
+    'Preise der Theken: 15.000, 35.000, 70.000, die 6. ab Level 13 für 150.000 (v0.31.0)',
   );
   // Zu wenig Gold: Knopf gesperrt, es steht da, wie viel fehlt
   await game(page, () => (window.__game.state.gold = 14000));
@@ -1883,7 +1883,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await shot('19d-kraeuterstube');
   await page.tap('#info-close');
 
-  // ---------- Level 9: Kohlenmeiler, Schreibstube, Reiter „Werkstatt“ (v0.26.0) ----------
+  // ---------- Level 9: Ofen (bis v0.30 Kohlenmeiler), Schreibstube, Reiter „Werkstatt“ (v0.26.0) ----------
   // Aufträge von Level 8 mit dem Test-Knopf, dann aufsteigen (1.670 Gold kommen dazu)
   await page.tap('#btn-level');
   await sleep(150);
@@ -1893,9 +1893,9 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }
   const l8done = await page.textContent('#modal-content');
   check(
-    l8done.includes('1.305 / 1.305') && l8done.includes('Nächstes Level: Level 9 · Die Schreibstube') && l8done.includes('Kohlenmeiler') &&
-      l8done.includes('Schreibstube') && l8done.includes('Holzstamm'),
-    'Level 8 erledigt; Level 9 kündigt Kohlenmeiler und Schreibstube an, 1 Holzstamm gratis',
+    l8done.includes('1.305 / 1.305') && l8done.includes('Nächstes Level: Level 9 · Die Schreibstube') && l8done.includes('♨️ Ofen') &&
+      l8done.includes('Schreibstube') && l8done.includes('Holzstamm') && !l8done.includes('Kohlenmeiler'),
+    'Level 8 erledigt; Level 9 kündigt Ofen und Schreibstube an, 1 Holzstamm gratis',
   );
   const logsBefore9 = await game(page, () => window.__game.state.storage.holzstamm ?? 0);
   await game(page, () => (window.__game.state.gold += 1670));
@@ -1948,7 +1948,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   });
   await page.tap('#btn-build');
   await buildAt('kohlenmeiler', mx, my);
-  check(await tabActive('holz'), 'Kohlenmeiler steht im Reiter „Holz“');
+  check(await tabActive('holz'), 'Ofen steht im Reiter „Holz“');
   await tapBuild(page, 'schreibstube');
   await sleep(80);
   check(await tabActive('werkstatt'), 'Schreibstube öffnet den neuen Reiter „Werkstatt“');
@@ -1973,22 +1973,26 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   );
   check(
     built9.includes(`kohlenmeiler@${mx},${my}`) && built9.includes(`schreibstube@${sx},${sy}`),
-    `Kohlenmeiler und Schreibstube per Touch gebaut (${built9.join(', ')})`,
+    `Ofen und Schreibstube per Touch gebaut (${built9.join(', ')})`,
   );
-  // Kohlenmeiler: den geschenkten Holzstamm einlegen
+  // Ofen (v0.31.0, bisher Kohlenmeiler): den geschenkten Holzstamm einlegen
   await tapTile(page, mx, my);
-  check((await page.textContent('#info-title')) === 'Kohlenmeiler', 'Kohlenmeiler antippen zeigt Infofenster');
+  check((await page.textContent('#info-title')) === 'Ofen', 'Ofen antippen zeigt Infofenster');
+  check(
+    !(await infoButton(page, 'load:sand').isVisible()) && (await infoButton(page, 'buy:sand').count()) === 0,
+    'Auf Level 9 noch kein Sand im Ofen (kein Knopf zum Einlegen oder Kaufen)',
+  );
   await sleep(450);
   await infoButton(page, 'load:holzstamm').tap();
   await sleep(450);
   const meilerCard = await infoCard(page);
-  check(meilerCard?.outputs.join() === 'holzkohle 100 Holzkohle', `Kohlenmeiler: 1 Holzstamm → 100 Holzkohle (${JSON.stringify(meilerCard)})`);
+  check(meilerCard?.outputs.join() === 'holzkohle 100 Holzkohle', `Ofen: 1 Holzstamm → 100 Holzkohle (${JSON.stringify(meilerCard)})`);
   const meiler9 = await game(page, () => {
     const b = window.__game.state.buildings.find((x) => x.type === 'kohlenmeiler');
     return { loaded: b.prod.loaded, logs: window.__game.state.storage.holzstamm ?? 0 };
   });
-  check(meiler9.loaded && meiler9.logs === logsBefore9, `Holzstamm liegt im Kohlenmeiler (${JSON.stringify(meiler9)})`);
-  await shot('19g-kohlenmeiler');
+  check(meiler9.loaded && meiler9.logs === logsBefore9, `Holzstamm liegt im Ofen (${JSON.stringify(meiler9)})`);
+  await shot('19g-ofen');
   // Schreibstube: Zeichenbrett, umstellen auf Reißzeug
   await tapTile(page, sx, sy);
   check((await page.textContent('#info-title')) === 'Schreibstube', 'Schreibstube antippen zeigt Infofenster');
@@ -2518,6 +2522,136 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   );
   check((await page.textContent('#toast')).includes('jetzt 1.100 Plätze'), 'Meldung: Laden-Lager vergrößert');
   await shot('23c-lager-1100');
+  await page.tap('#modal-close');
+  await sleep(100);
+
+  // ---------- Level 13: Die Glashütte (v0.31.0) ----------
+  // Vor dem Aufstieg: die 6. Theke ist gesperrt („🔒 Ab Level 13 · 150.000“)
+  await page.tap('#btn-shop');
+  await sleep(150);
+  await page.tap('#modal-content .tab[data-tab="theken"]');
+  await sleep(150);
+  check(
+    (await page.textContent('#modal-content [data-counter="5"]')).includes('🔒 Ab Level 13 · 150.000'),
+    `Level 12: Theke 6 „🔒 Ab Level 13 · 150.000 🪙“ (${await page.textContent('#modal-content [data-counter="5"]')})`,
+  );
+  await page.tap('#modal-close');
+  await sleep(100);
+  await page.tap('#btn-level');
+  await sleep(150);
+  for (let i = 0; i < 4; i++) {
+    await page.locator('#modal-content button', { hasText: '🧪 Test: Auftrag erledigen' }).tap();
+    await sleep(200);
+  }
+  const l12done = await page.textContent('#modal-content');
+  check(
+    l12done.includes('2.722 / 2.722') &&
+      l12done.includes('Nächstes Level: Level 13 · Die Glashütte') &&
+      l12done.includes('Schmiede: Fläschchen') &&
+      l12done.includes('Ofen: Glas aus Sand') &&
+      l12done.includes('Sand beim Händler') &&
+      l12done.includes('Theke 6 kaufen (150.000 Gold)') &&
+      !l12done.includes('🎁'),
+    'Level 12 erledigt; Level 13 kündigt Fläschchen, Glas aus Sand, Sand und Theke 6 an, ohne Geschenk',
+  );
+  await game(page, () => (window.__game.state.gold += 10000));
+  await sleep(450);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 13 · 10.000' }).tap();
+  await sleep(150);
+  check((await game(page, () => window.__game.state.shopLevel)) === 13, 'Aufstieg auf Level 13 für 10.000 Gold');
+  const lvl13Text = await page.textContent('#modal-content');
+  check(
+    lvl13Text.includes('Level 13 erreicht!') && lvl13Text.includes('Die Glashütte') && lvl13Text.includes('50 Glas') && lvl13Text.includes('0 / 3.147') && !lvl13Text.includes('Gratis im Laden-Lager'),
+    'Level 13: Konrad möchte 50 Glas, Erfahrung 0 / 3.147, kein „Gratis“',
+  );
+  await shot('24a-level-13');
+  await page.tap('#modal-close');
+  await sleep(120);
+  const toast13 = await page.textContent('#toast');
+  check(
+    toast13.includes('Laden-Level 13!') && toast13.includes('Ofen: Glas aus Sand') && toast13.includes('Fläschchen') && toast13.includes('Theke 6'),
+    `Meldung nach dem Aufstieg: Glas aus Sand, Fläschchen, Theke 6 (${toast13})`,
+  );
+  // Ofen: jetzt mit Sand – leer zeigt er beide Rohstoffe
+  const ofen13 = await game(page, () => {
+    const { state, camera, TILE } = window.__game;
+    const b = state.buildings.find((x) => x.type === 'kohlenmeiler');
+    Object.assign(b.prod, { loaded: false, input: null, remaining: 0, queued: 0, queue: [], timer: 0, out: null, blocked: false });
+    state.storage.sand = 1;
+    camera.zoom = 1;
+    camera.x = (b.x + 1) * TILE - camera.viewWidth / camera.zoom / 2;
+    camera.y = (b.y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
+    return [b.x, b.y];
+  });
+  await sleep(150);
+  await tapTile(page, ofen13[0], ofen13[1]);
+  check((await page.textContent('#info-title')) === 'Ofen', 'Ofen antippen zeigt Infofenster');
+  await sleep(450);
+  const ofenEmpty = await infoCard(page);
+  check(
+    ofenEmpty?.inputs.join() === 'holzstamm 1,sand 1' && ofenEmpty.outputs.join() === 'holzkohle 100 Holzkohle,glas 100 Glas',
+    `Leerer Ofen auf Level 13: Holzstamm → 100 Holzkohle, Sand → 100 Glas (${JSON.stringify(ofenEmpty)})`,
+  );
+  check(!ofenEmpty.sub.includes('je Pflanze'), `Ofen: kein „je Pflanze“ (${ofenEmpty.sub})`);
+  check(
+    (await infoButton(page, 'load:sand').isVisible()) && (await infoButton(page, 'buy:sand').isVisible()) && (await infoButton(page, 'buy:sand').textContent()).includes('1.100'),
+    'Ofen: Knöpfe „➕ 1 Sand einlegen“ und „🧺 Sand kaufen · 1.100“',
+  );
+  check((await infoFits(page)).length === 0, `Infofenster des Ofens mit zwei Rohstoffen: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+  await shot('24b-ofen-leer');
+  await infoButton(page, 'load:sand').tap();
+  await sleep(450);
+  const ofenSand = await infoCard(page);
+  check(ofenSand?.outputs.join() === 'glas 100 Glas', `Ofen mit Sand: → 100 Glas (${JSON.stringify(ofenSand)})`);
+  check((await page.textContent('#info-meta')).includes('Arbeitet Sand'), `Status: „Arbeitet Sand …“ (${await page.textContent('#info-meta')})`);
+  await game(page, () => window.__game.simulate(120));
+  await sleep(450);
+  await shot('24c-ofen-sand');
+  await page.tap('#info-close');
+  // Schmiede: 3. Einstellung Fläschchen (30 s)
+  const schmiede13 = await game(page, () => {
+    const { state, camera, TILE } = window.__game;
+    const b = state.buildings.find((x) => x.type === 'schmiede');
+    camera.x = (b.x + 1) * TILE - camera.viewWidth / camera.zoom / 2;
+    camera.y = (b.y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
+    return { x: b.x, y: b.y, recipe: b.prod.recipe };
+  });
+  await sleep(150);
+  await tapTile(page, schmiede13.x, schmiede13.y);
+  check((await page.textContent('#info-title')) === 'Schmiede', 'Schmiede antippen zeigt Infofenster');
+  await sleep(450);
+  check(
+    (await recipeOption(page, 'flaeschchen').getAttribute('aria-label')) === 'Umstellen auf Fläschchen: 5 Glas',
+    'Ab Level 13: Umstellen auf Fläschchen aus 5 Glas',
+  );
+  await recipeOption(page, 'flaeschchen').tap();
+  await sleep(450);
+  const flask13 = await infoCard(page);
+  check(
+    /^glas \d+ \/ 5( ✓)?$/.test(flask13?.inputs.join() ?? '') && flask13.outputs.join() === 'flaeschchen Fläschchen',
+    `Umgestellt: 5 Glas → Fläschchen (${JSON.stringify(flask13)})`,
+  );
+  check((await infoText(page)).includes('30 s je Stück'), 'Fläschchen: 30 s je Stück');
+  check((await infoFits(page)).length === 0, `Infofenster der Schmiede mit 3 Einstellungen: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+  await shot('24d-schmiede-flaeschchen');
+  await recipeOption(page, schmiede13.recipe).tap();
+  await sleep(300);
+  check((await game(page, () => window.__game.state.buildings.find((x) => x.type === 'schmiede').prod.recipe)) === schmiede13.recipe, 'Schmiede wieder zurückgestellt');
+  await page.tap('#info-close');
+  // Händler: Sand für 1.100; Theken: die 6. lässt sich jetzt kaufen (nach der 5.)
+  await page.tap('#btn-shop');
+  await sleep(150);
+  await page.tap('#modal-content .tab[data-tab="haendler"]');
+  await sleep(150);
+  const haendler13 = await page.textContent('#modal-content');
+  check(haendler13.includes('Sand') && haendler13.includes('1.100'), 'Händler: Sand für 1.100 Gold');
+  await page.tap('#modal-content .tab[data-tab="theken"]');
+  await sleep(150);
+  const theke6 = await page.textContent('#modal-content [data-counter="5"]');
+  check(!theke6.includes('🔒') && theke6.includes('150.000'), `Level 13: Theke 6 nicht mehr gesperrt (${theke6})`);
+  await page.locator('#modal-content [data-counter="5"]').scrollIntoViewIfNeeded();
+  await sleep(100);
+  await shot('24e-theken-level-13');
   await page.tap('#modal-close');
   await sleep(100);
   await game(page, (c) => Object.assign(window.__game.camera, c), camLand);

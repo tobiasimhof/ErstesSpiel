@@ -34,17 +34,21 @@ export const SHOP_LEVELS = {
   11: { storage: 1000, counterSize: 30, customerSeconds: [45, 60] },
   // v0.29.0: Level 12 – der Laden bleibt wie auf Level 7 bis 11.
   12: { storage: 1000, counterSize: 30, customerSeconds: [45, 60] },
+  // v0.31.0: Level 13 – der Laden bleibt wie auf Level 7 bis 12.
+  13: { storage: 1000, counterSize: 30, customerSeconds: [45, 60] },
 };
 
 // Namen der Theken-Größen für Texte (v0.10.1)
 export const COUNTER_SIZE_NAMES = { 20: 'kleine', 25: 'mittlere', 30: 'große' };
 
 // v0.24.0: Theken kaufen (Tobias, Chat 17 und 19). Jeder beginnt mit `start`
-// Theken; weitere gibt es nur für Gold, ohne Mindest-Level. prices: Preis der
-// 3., 4., 5. … Theke. null = gibt es noch nicht zu kaufen (die 6. Theke kommt
-// „erst viel später im Spielverlauf“, der Preis ist noch offen). Der Laden
-// zeigt immer `max` Plätze, damit die Theken-Ansicht voll ist.
-export const COUNTERS = { start: 2, prices: [15000, 35000, 70000, null], max: 6 };
+// Theken; weitere gibt es nur für Gold. prices: Preis der 3., 4., 5. …
+// Theke (null = gibt es noch nicht zu kaufen). levels: ab welchem Laden-Level
+// sie sich kaufen lässt (fehlt = ab Level 1). v0.31.0 (Tobias, Chat 21): „erst
+// mit Beginn der Tränke freischalten …, also dass wir auf Level 13 dann auch
+// die 6. Theke freischalten können für einen Preis von 150.000 Gold.“ Der
+// Laden zeigt immer `max` Plätze, damit die Theken-Ansicht voll ist.
+export const COUNTERS = { start: 2, prices: [15000, 35000, 70000, 150000], levels: [1, 1, 1, 13], max: 6 };
 
 // v0.30.0: Laden-Lager vergrößern (Tobias, Chat 21: „dass man sein Lager z.b.
 // um 100 vergrößert für einen bestimmten Preis, sodass man sein Gold auch für

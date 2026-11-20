@@ -38,8 +38,8 @@ const APOTHEKE = ['kraeutermischung', 'kamillenkissen', 'heilpaeckchen'];
 
 // ---------- Datentabellen ----------
 
-test('Level 12 ist das höchste Level, der Laden bleibt wie auf Level 7 bis 11', () => {
-  assert.equal(MAX_LEVEL, 12);
+test('Level 12 gibt es (seit v0.31.0 ist Level 13 das höchste), der Laden bleibt wie auf Level 7 bis 11', () => {
+  assert.equal(MAX_LEVEL, 13);
   assert.deepEqual(SHOP_LEVELS[12], SHOP_LEVELS[11]);
 });
 

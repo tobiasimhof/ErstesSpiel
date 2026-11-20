@@ -74,4 +74,9 @@ export const RECIPES = {
   // skalieren“) – 60 s wie die Uhrmacherei; Tobias (Chat 21): „Das mit dem
   // Reißbrett können wir gerne erstmal versuchen um zu sehen, wie es wirkt.“
   reissbrett: { building: 'schreibstube', label: 'Reißbretter', inputs: { zeichenbrett: 1, reisszeug: 1 }, output: 'reissbrett', amount: 1, time: 60, level: 12 },
+
+  // v0.31.0: Level 13 „Die Glashütte“ – die Schmiede bläst aus 5 Glas ein
+  // Fläschchen, das Gefäß für alle späteren Tränke (Tobias, Chat 22). Zeit
+  // 30 s: „ich würde gerne die Zeit für die Fläschen von 10s auf 30s erhöhen“.
+  flaeschchen: { building: 'schmiede', label: 'Fläschchen', inputs: { glas: 5 }, output: 'flaeschchen', amount: 1, time: 30, level: 13 },
 };

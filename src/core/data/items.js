@@ -115,4 +115,13 @@ export const ITEMS = {
   kamillenkissen: { name: 'Kamillenkissen', plural: 'Kamillenkissen', price: 216, color: '#e9dcc0', shape: 'pillow' },
   heilpaeckchen: { name: 'Heilpäckchen', plural: 'Heilpäckchen', price: 504, color: '#d6bd8e', shape: 'kit' },
   reissbrett: { name: 'Reißbrett', plural: 'Reißbretter', price: 1408, color: '#efe6cf', shape: 'draftingboard' },
+
+  // v0.31.0: Level 13 „Die Glashütte“ (Entwurf v0.30.3, Tobias, Chat 22: „Ich
+  // denke die Preise passen so“) – der Anfang der Tränke. Sand vom Händler
+  // brennt im Ofen zu Glas: 1.100 → 100 × 12 = 1.200 (+9 %, wie ein Rohstoff
+  // zu Blöcken); teurer als Kamillensamen (830), Glas war im Mittelalter
+  // kostbar. In der Schmiede 5 Glas → 1 Fläschchen (60 → 72, +20 %).
+  sand: { name: 'Sand', plural: 'Sand', raw: true, level: 13, buyPrice: 1100, color: '#d9c08a', shape: 'sandsack' },
+  glas: { name: 'Glas', plural: 'Glas', price: 12, color: '#a8dcd9', shape: 'glass' },
+  flaeschchen: { name: 'Fläschchen', plural: 'Fläschchen', price: 72, color: '#bfe6e2', shape: 'vial' },
 };

@@ -4,6 +4,27 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.31.0 – Level 13 „Die Glashütte“ (20.11.2026)
+
+**Vorgenommen:**
+- Level 13 nach dem Entwurf v0.30.3 mit Tobias' Änderungen: Fläschchen 30 s, der Ofen heißt schon ab Spielbeginn „Ofen“. Mörser (Steinplatte + 3 Holzstäbe) für Level 14 festhalten. Danach Tobias' Frage zur 3D-Grafik beantworten.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie nimmt der Ofen Sand? → Wie die Erntebank mehrere Pflanzen: `inputs` mit Holzstamm und Sand, je 100 Stück in 15 Minuten. Sand-Knöpfe gibt es erst, wenn Sand freigeschaltet ist; bis Level 12 sieht der Ofen aus wie bisher (auch der Status ohne Rohstoff-Namen).
+- Muss das Spielstand-Format steigen? → Nein: Rohstoff-Gebäude speichern ihren Rohstoff schon (seit v0.17.0); ein alter Kohlenmeiler lädt als Ofen.
+- Wie kommt die 6. Theke auf Level 13? → `COUNTERS.levels` (ab welchem Level), `buyCounter` antwortet 'level'; die Ansicht zeigt „🔒 Ab Level 13 · 150.000 🪙“.
+- Wie erfährt man, dass der Ofen jetzt Glas macht? → Das Level-Fenster und die Aufstiegsmeldung nennen „♨️ Ofen: Glas aus Sand“ und „⚖️ Theke 6 kaufen (150.000 Gold)“.
+- Der Browser-Test fand abgeschnittene Knöpfe im Ofen-Fenster („🧺 [Bild] kaufen · 1.100 🪙“) → bei zwei kaufbaren Rohstoffen steht vorne nur das Warenbild.
+
+**Gemacht:**
+- Datentabellen: Ofen (`kohlenmeiler`, Name „Ofen“, Tipp), Sand, Glas, Fläschchen (Rezept der Schmiede, `level: 13`, 30 s), Level 13 mit Geschichte und 4 Aufträgen, Laden für Level 13, 6. Theke 150.000 ab Level 13; Level-9-Geschichte „Holzkohle aus dem neuen Ofen“.
+- `market.js` (`counterLevel`, Theken-Plätze mit Level), `shop.js` (Ansicht), `controller.js` (Kaufen-Knöpfe), `buildingInfo.js` („je Pflanze“ nur bei Pflanzen), `production.js` (Status), `levels.js` (Ankündigung), `itemArt.js` (Sandsack, Glasklumpen, Fläschchen mit Korken).
+- Tests: neue Datei `tests/glashuette.test.js` (20 Tests), angepasst: höchstes Level 13, Theken (6. ab Level 13), Erfahrung je Level, Ofen-Daten; Browser-Test mit Level 13 (Screenshots `24a` bis `24e`).
+- Doku: `SPIEL.md`, `STAND.md`, `TECHNIK.md`, Archiv; Überlegung zur Grafik in `PLAENE.md`.
+
+**Geprüft:**
+- `npm test`: alle bestanden. Browser-Test in Tablet- und Handygröße: alle Prüfungen bestanden, Screenshots angesehen (Ofen leer mit zwei Rohstoffen, Ofen mit Sand, Schmiede auf Fläschchen, Theken auf Level 13).
+
 ### v0.30.3 – Antworten zum Tränke-Kapitel, Entwurf Level 13 (19.11.2026, nur Doku)
 
 **Vorgenommen:**

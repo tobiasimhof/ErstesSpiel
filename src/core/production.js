@@ -6,7 +6,7 @@ import { ITEMS } from './data/items.js';
 import { RECIPES } from './data/recipes.js';
 import { step } from './dirs.js';
 import { buildingPorts } from './geometry.js';
-import { countProduced } from './levels.js';
+import { countProduced, isItemUnlocked } from './levels.js';
 import { addToStorage, storageCount, storageFree, takeFromStorage } from './shop.js';
 
 export function productionOf(type) {
@@ -454,7 +454,10 @@ export function buildingStatus(state, building) {
       const parts = Object.entries(queue).map(([type, n]) => itemCountText(type, n));
       const waiting = parts.length > 0 ? ` Danach noch ${parts.join(' und ')}.` : '';
       // v0.17.0: Bei mehreren Rohstoffen steht dabei, welcher gerade läuft
-      const what = Object.keys(sourceInputs(p)).length > 1 ? ` ${ITEMS[prod.input].name}` : '';
+      // (v0.31.0: nur, wenn es auf diesem Level schon mehrere gibt – der Ofen
+      // nimmt Sand erst ab Level 13)
+      const open = Object.keys(sourceInputs(p)).filter((t) => isItemUnlocked(state, t));
+      const what = open.length > 1 ? ` ${ITEMS[prod.input].name}` : '';
       return { level: 'work', text: `Arbeitet${what}: noch ${prod.remaining} von ${p.amount}.${waiting}` };
     }
     return { level: 'idle', text: 'Leer – Rohstoff nachlegen.' };

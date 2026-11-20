@@ -111,12 +111,14 @@ export const BUILDINGS = {
     icon: '🔨',
     size: [2, 2],
     color: TAB_COLORS.eisen,
-    tip: 'Eisenbarren kommen am blauen Pfeil hinein, die Teile am orangen heraus.',
+    tip: 'Eisenbarren (ab Level 13 auch Glas) kommen am blauen Pfeil hinein, die Teile am orangen heraus.',
     ports: [
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['eisenblech', 'eisenstange'] },
+    // v0.31.0: Level 13 (Tobias, Chat 22: „Gerne in der Schmiede, dann machen
+    // wir aus 5x Glas ein Fläschen“) – 3. Einstellung „Fläschchen“ ab Level 13
+    production: { kind: 'workshop', recipes: ['eisenblech', 'eisenstange', 'flaeschchen'] },
   },
   // v0.10.0: Kombi-Maschinen (Techbaum, Teil 2) – zwei Eingänge links oben und
   // links unten (jeder nimmt jede passende Zutat), Ausgang rechts oben.
@@ -247,16 +249,23 @@ export const BUILDINGS = {
   // Holzstamm Ware (Tobias' Idee: Holzkohle aus Baumstämmen; im Mittelalter
   // brannte der Köhler sie im Meiler). Baukosten aus Werkzeug-Waren bis
   // höchstens 960 Gold (ein Eisenerz als Teile), wie ab Level 3.
+  // v0.31.0: Level 13 „Die Glashütte“ (Tobias, Chat 22): „Bisher dient der
+  // Kohlenmeiler nur der Verbrennung. Ich würde ihn gerne in Ofen
+  // umbenennen und Glas gibt es nur dort, also aus Sand wird dort Glas.“ Er
+  // heißt in allen Leveln „Ofen“ („bereits ab Spielbeginn“, gebaut ab Level
+  // 9) und nimmt ab Level 13 auch Sand – wie die Erntebank mehrere Rohstoffe,
+  // auch gemischt, je 100 Stück in 15 Minuten. Der Schlüssel bleibt, damit
+  // Spielstände passen.
   kohlenmeiler: {
     level: 9,
-    name: 'Kohlenmeiler',
+    name: 'Ofen',
     cost: { steinplatte: 20, verstaerkteholzplatte: 2 },
     icon: '♨️',
     size: [2, 2],
     color: TAB_COLORS.holz,
-    tip: 'Holzstämme einlegen – die Holzkohle kommt am orangen Pfeil heraus.',
+    tip: 'Holzstämme werden zu Holzkohle, ab Level 13 Sand zu Glas. Beides kommt am orangen Pfeil heraus – besser nicht mischen.',
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
-    production: { kind: 'source', input: 'holzstamm', output: 'holzkohle', amount: 100, duration: 900, capacity: 3 },
+    production: { kind: 'source', inputs: { holzstamm: 'holzkohle', sand: 'glas' }, amount: 100, duration: 900, capacity: 3 },
   },
   schreibstube: {
     level: 9,
@@ -346,7 +355,8 @@ export const BUILDINGS = {
 // Gebäuden seiner „Straße“. Kombi-Maschinen stehen bei dem Stoff, zu dem sie
 // vom Namen her passen. `item` ist das Warenbild auf dem Reiter.
 export const BUILD_TABS = [
-  // v0.26.0: der Kohlenmeiler (Level 9) macht aus Holzstämmen Holzkohle
+  // v0.26.0: der Kohlenmeiler (Level 9) macht aus Holzstämmen Holzkohle;
+  // v0.31.0 heißt er „Ofen“ und bleibt hier (Tobias, Chat 22)
   { id: 'holz', name: 'Holz', item: 'holzstamm', color: TAB_COLORS.holz, buildings: ['holzfaeller', 'saegewerk', 'zimmerei', 'kohlenmeiler'] },
   { id: 'stein', name: 'Stein', item: 'felsbrocken', color: TAB_COLORS.stein, buildings: ['steinbruch', 'steinmetz'] },
   { id: 'eisen', name: 'Eisen', item: 'eisenerz', color: TAB_COLORS.eisen, buildings: ['schmelzhuette', 'schmiede', 'feinschmiede', 'schlosserei'] },

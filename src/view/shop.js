@@ -18,6 +18,7 @@ import {
   clearCounter,
   counterMaxFor,
   counterSize,
+  counterLevel,
   counterSlots,
   customerRange,
   fillCounter,
@@ -212,6 +213,7 @@ export function createShopView({ state, panels, onChange }) {
       changed();
       panels.toast(`Theke ${number} gekauft – stell eine Ware darauf.`);
     } else if (result === 'gold') panels.toast('Dafür reicht dein Gold nicht.');
+    else if (result === 'level') panels.toast(`Theke ${number} gibt es erst ab Level ${counterLevel(number - 1)}.`);
     refresh();
   }
 
@@ -439,7 +441,9 @@ export function createShopView({ state, panels, onChange }) {
     card.append(el('div', 'counter-head', `Theke ${slot.index + 1}`));
     grid.append(card);
     if (slot.status === 'locked') {
-      card.append(el('div', 'counter-empty', '🔒 Kommt später im Spiel'));
+      // v0.31.0: Die 6. Theke gibt es ab Level 13 (Tobias, Chat 21)
+      const text = slot.price === null ? '🔒 Kommt später im Spiel' : `🔒 Ab Level ${slot.level} · ${numberFormat.format(slot.price)} 🪙`;
+      card.append(el('div', 'counter-empty', text));
       return () => {};
     }
     const price = `${numberFormat.format(slot.price)} 🪙`;

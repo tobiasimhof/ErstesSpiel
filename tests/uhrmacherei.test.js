@@ -35,8 +35,8 @@ const worth = (items) => Object.entries(items).reduce((sum, [t, n]) => sum + ITE
 
 // ---------- Datentabellen ----------
 
-test('Level 11 gibt es (seit v0.29.0 ist Level 12 das höchste), der Laden bleibt wie auf Level 7 bis 10', () => {
-  assert.equal(MAX_LEVEL, 12);
+test('Level 11 gibt es (seit v0.31.0 ist Level 13 das höchste), der Laden bleibt wie auf Level 7 bis 10', () => {
+  assert.equal(MAX_LEVEL, 13);
   assert.deepEqual(SHOP_LEVELS[11], SHOP_LEVELS[10]);
 });
 

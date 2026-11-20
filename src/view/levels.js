@@ -13,7 +13,7 @@ import { ITEMS } from '../core/data/items.js';
 import { RECIPES } from '../core/data/recipes.js';
 import { landMoreAt } from '../core/land.js';
 import { LEVELS, MAX_LEVEL, levelUp, levelUpBlocker, nextLevelCost, unlocksOf } from '../core/levels.js';
-import { COUNTER_SIZE_NAMES, SHOP_LEVELS } from '../core/data/shop.js';
+import { COUNTERS, COUNTER_SIZE_NAMES, SHOP_LEVELS } from '../core/data/shop.js';
 import {
   canDeliver,
   canSkipQuest,
@@ -49,6 +49,16 @@ export function unlockText(level) {
     const b = BUILDINGS[RECIPES[key].building];
     return `${b.icon} ${b.name}: ${ITEMS[RECIPES[key].output].name}`;
   });
+  // v0.31.0: ein älteres Rohstoff-Gebäude nimmt einen neuen Rohstoff, z. B.
+  // „♨️ Ofen: Glas aus Sand“ (neue Pflanzen der Erntebank stehen schon als Samen da)
+  const sourceText = [];
+  for (const [type, def] of Object.entries(BUILDINGS)) {
+    const p = def.production;
+    if (p?.kind !== 'source' || !p.inputs || (def.level ?? 1) >= level) continue;
+    for (const [input, output] of Object.entries(p.inputs)) {
+      if (!ITEMS[input].grown && (ITEMS[input].level ?? 1) === level) sourceText.push(`${def.icon} ${def.name}: ${ITEMS[output].name} aus ${ITEMS[input].name}`);
+    }
+  }
   // v0.27.0 (Tobias): ab Level 10 mehr Fläche
   const more = landMoreAt(level);
   const landText = more
@@ -64,7 +74,13 @@ export function unlockText(level) {
     }
     if (now.storage > before.storage) shop.push(`📦 Laden-Lager ${numberFormat.format(now.storage)} Plätze`);
   }
-  return [parts.join(', '), ...recipeText, ...rawText, ...landText, ...shop].filter(Boolean).join(' · ');
+  // v0.31.0: Theken, die es erst ab diesem Level zu kaufen gibt (die 6. ab Level 13)
+  COUNTERS.prices.forEach((price, i) => {
+    if (price !== null && COUNTERS.levels?.[i] === level && level > 1) {
+      shop.push(`⚖️ Theke ${COUNTERS.start + i + 1} kaufen (${numberFormat.format(price)} Gold)`);
+    }
+  });
+  return [parts.join(', '), ...recipeText, ...sourceText, ...rawText, ...landText, ...shop].filter(Boolean).join(' · ');
 }
 
 // „Level 4 · Die Mühle am Fluss“

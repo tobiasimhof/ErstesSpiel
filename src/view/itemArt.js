@@ -973,6 +973,119 @@ export function drawItem(ctx, type, cx, cy, size) {
       ctx.stroke();
       break;
     }
+    // v0.31.0: Level 13 „Die Glashütte“
+    case 'sandsack': {
+      // Sand: ein zugebundener Jutesack, davor ein Häufchen Sand
+      ctx.fillStyle = '#a9824f';
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.2, cy - s * 0.32);
+      ctx.quadraticCurveTo(cx - s * 0.56, cy - s * 0.02, cx - s * 0.44, cy + s * 0.44);
+      ctx.lineTo(cx + s * 0.3, cy + s * 0.44);
+      ctx.quadraticCurveTo(cx + s * 0.44, cy - s * 0.02, cx + s * 0.12, cy - s * 0.32);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      // Zipfel über dem Band
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.18, cy - s * 0.32);
+      ctx.lineTo(cx - s * 0.28, cy - s * 0.52);
+      ctx.lineTo(cx + s * 0.2, cy - s * 0.52);
+      ctx.lineTo(cx + s * 0.1, cy - s * 0.32);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.strokeStyle = '#5c3d1e';
+      ctx.lineWidth = Math.max(1.5, s * 0.08);
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.22, cy - s * 0.32);
+      ctx.lineTo(cx + s * 0.14, cy - s * 0.32);
+      ctx.stroke();
+      // Jute-Streifen
+      ctx.strokeStyle = 'rgba(70, 45, 20, 0.35)';
+      ctx.lineWidth = Math.max(1, s * 0.04);
+      for (const dx of [-0.2, 0, 0.18]) {
+        ctx.beginPath();
+        ctx.moveTo(cx + (dx - 0.04) * s, cy - s * 0.16);
+        ctx.lineTo(cx + (dx - 0.06) * s, cy + s * 0.38);
+        ctx.stroke();
+      }
+      // Häufchen Sand vorne rechts
+      ctx.strokeStyle = OUTLINE;
+      ctx.lineWidth = Math.max(1, s * 0.07);
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      ctx.moveTo(cx + s * 0.06, cy + s * 0.5);
+      ctx.quadraticCurveTo(cx + s * 0.32, cy + s * 0.04, cx + s * 0.58, cy + s * 0.5);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#b8995e';
+      for (const [dx, dy] of [[0.24, 0.38], [0.36, 0.3], [0.44, 0.42], [0.3, 0.46]]) {
+        ctx.beginPath();
+        ctx.arc(cx + dx * s, cy + dy * s, s * 0.025, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      break;
+    }
+    case 'glass': {
+      // Glas: ein durchscheinender, grünlich-blauer Klumpen Rohglas mit Glanz
+      const pts = [[-0.46, 0.08], [-0.3, -0.3], [0.06, -0.42], [0.42, -0.2], [0.46, 0.2], [0.14, 0.42], [-0.3, 0.36]];
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      pts.forEach(([px, py], i) => (i ? ctx.lineTo(cx + px * s, cy + py * s) : ctx.moveTo(cx + px * s, cy + py * s)));
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      // Kanten im Inneren
+      ctx.strokeStyle = 'rgba(40, 110, 110, 0.45)';
+      ctx.lineWidth = Math.max(1, s * 0.04);
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.3, cy - s * 0.3);
+      ctx.lineTo(cx - s * 0.02, cy + s * 0.02);
+      ctx.lineTo(cx + s * 0.46, cy + s * 0.2);
+      ctx.moveTo(cx - s * 0.02, cy + s * 0.02);
+      ctx.lineTo(cx + s * 0.14, cy + s * 0.42);
+      ctx.stroke();
+      // Glanz
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.lineWidth = Math.max(1.5, s * 0.08);
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.26, cy - s * 0.12);
+      ctx.lineTo(cx - s * 0.12, cy - s * 0.28);
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+      ctx.beginPath();
+      ctx.arc(cx + s * 0.2, cy - s * 0.16, s * 0.05, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    }
+    case 'vial': {
+      // Fläschchen: runder Glaskolben mit schmalem Hals und Korken
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.1, cy - s * 0.3);
+      ctx.arc(cx, cy + s * 0.18, s * 0.32, -Math.PI / 2 - 0.32, Math.PI * 1.5 + 0.32, true);
+      ctx.lineTo(cx + s * 0.1, cy - s * 0.3);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      // Rand am Hals
+      roundRect(ctx, cx - s * 0.15, cy - s * 0.34, s * 0.3, s * 0.08, s * 0.03);
+      ctx.fill();
+      ctx.stroke();
+      // Korken
+      ctx.fillStyle = '#b07a45';
+      roundRect(ctx, cx - s * 0.11, cy - s * 0.52, s * 0.22, s * 0.2, s * 0.04);
+      ctx.fill();
+      ctx.stroke();
+      // Glanz
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.lineWidth = Math.max(1.5, s * 0.07);
+      ctx.beginPath();
+      ctx.arc(cx, cy + s * 0.18, s * 0.2, Math.PI * 1.1, Math.PI * 1.45);
+      ctx.stroke();
+      break;
+    }
     case 'log': {
       roundRect(ctx, cx - s * 0.6, cy - s * 0.3, s * 1.1, s * 0.6, s * 0.3);
       ctx.fill();
