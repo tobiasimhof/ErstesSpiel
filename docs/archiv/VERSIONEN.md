@@ -4,6 +4,20 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.32.1 – Grafik-Probe getestet, Kenney im nächsten Chat (20.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Test der Grafik-Probe festhalten (60–90 Bilder pro Sekunde auf dem Tablet) und den Ablauf für den nächsten Chat: auf „Bringe dich auf den aktuellen Stand“ nach den Kenney-Sachen fragen, Tobias gibt am PC die Freigabe, sonst lädt er die Pakete hoch.
+
+**Fragen, die wir uns gestellt haben:**
+- Warum ging die Freigabe nicht? → Auf dem Tablet zeigte die App, dass die Freigabe nur am PC geht.
+
+**Gemacht:**
+- `STAND.md` (Nächster Schritt mit genauem Ablauf), `PLAENE.md` („Grafik-Probe, Teil 2“), Archiv. Versionsnummer 0.32.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 405 von 405 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.32.0 – Grafik-Probe, Teil 1 (20.11.2026)
 
 **Vorgenommen:**

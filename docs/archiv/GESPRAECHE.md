@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 20.11.2026 – Chat 22 (Fortsetzung 4): Grafik-Probe getestet (v0.32.1)
+
+**Tobias:** „Ich war eben noch am Tablet und da stand, dass ich die Freigabe nur am PC machen kann, deswegen sitze ich jetzt am PC, aber ich habs gerade auf dem Tablet getestet und dort habe ich 60-90 fps. Speicher gerne alles im repo und dann würde ich danach einen neuen Chat anfangen. Ich würde gerne, dass ich dir schreibe "Bringe dich auf den aktuellen stand" und dann fragst du mich, ob wir mit den Kennysachen nochmal starten wollen, dann würde ich dir die Freigabe geben, weil ich am PC bin. Falls das immer noch nicht funktionieren sollte, dann würde ich dir die Dateien einfach auf github hochladen“
+
+**Claude** hat alles als v0.32.1 festgehalten: das Ergebnis (60–90 Bilder/s auf dem Tablet) und genau den gewünschten Ablauf für den nächsten Chat (in `STAND.md` unter „Nächster Schritt“ und in `PLAENE.md`, „Grafik-Probe, Teil 2“).
+
+**Umgesetzt:** v0.32.1 (nur Doku). Weiter im neuen Chat.
+
 ### 20.11.2026 – Chat 22 (Fortsetzung 3): Grafik-Probe, Teil 1 (v0.32.0)
 
 **Tobias:** „Passt alles so, du darfst loslegen.“
