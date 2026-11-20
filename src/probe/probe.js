@@ -283,7 +283,8 @@ let fpsTime = 0;
 let fps = 0;
 
 function frame(now) {
-  const dt = Math.min(0.25, (now - last) / 1000);
+  const real = (now - last) / 1000;
+  const dt = Math.min(0.25, real);
   last = now;
   acc += dt;
   while (acc >= TICK) {
@@ -305,7 +306,7 @@ function frame(now) {
   }
   renderer.render(world.scene, camera);
   frames++;
-  fpsTime += dt;
+  fpsTime += real; // echte Zeit – auch langsame Bilder zählen voll
   if (fpsTime >= 1) {
     fps = Math.round(frames / fpsTime);
     fpsBox.textContent = `🎞️ ${fps} Bilder/s`;

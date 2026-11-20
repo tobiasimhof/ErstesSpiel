@@ -22,7 +22,7 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
 **Geprüft:**
 - `npm test`: 414 von 414 bestanden.
-- GEPRUEFT_BROWSER
+- Browser-Test (Tablet und Handy quer): 956 von 957 Prüfungen bestanden – rot war „Die Probe zeichnet laufend“ auf dem Tablet (0 Bilder/s): ohne Grafikchip braucht ein Bild mit den Modellen über eine Sekunde, und die Anzeige zählte langsame Bilder nur mit höchstens ¼ Sekunde. Behoben: Die Bilder pro Sekunde zählen jetzt nach der echten Zeit, der Test wartet bis zu 15 Sekunden auf die erste Zählung. Danach den Probe-Teil in Tablet- und Handygröße noch einmal laufen lassen: alle Prüfungen bestanden. Screenshots angesehen (Mittelalter und Modern, beide Farben, Abend, frei drehbar, Handy mit kurzem Kamera-Knopf).
 
 ### v0.32.1 – Grafik-Probe getestet, Kenney im nächsten Chat (20.11.2026, nur Doku)
 

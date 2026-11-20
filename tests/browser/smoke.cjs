@@ -3079,6 +3079,8 @@ async function runProbe(browser, baseUrl, device) {
   await page.waitForURL(/grafik-probe\.html$/);
   await page.waitForFunction(() => window.__probe?.ready, null, { timeout: 20000 });
   await sleep(3000);
+  // ohne Grafikchip braucht ein Bild mit Kenneys Modellen lange – auf die erste Zählung warten
+  await page.waitForFunction(() => window.__probe.fps() > 0, null, { timeout: 15000 }).catch(() => {});
   const info = await probe(() => ({
     fps: window.__probe.fps(),
     items: window.__probe.items(),
