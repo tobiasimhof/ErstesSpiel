@@ -61,7 +61,36 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Überlegung: Weg vom 2D-Design, Richtung Clash of Clans (Chat 22, nach v0.31.0; noch nichts entschieden)
+### Entwurf v0.32.0 – Grafik-Probe (v0.31.1; Fragen an Tobias)
+
+**Tobias' Antworten auf die 4 Grafik-Fragen (Chat 22, 20.11.2026):** „Ich würde gerne eine kleine Grafik-Probe jetzt machen, damit ich weiß in welche Richtung das Spiel gehen kann und welche Richtung mir am besten gefällt. 2. Da weiß ich ehrlich gesagt nicht, was einfacher ist und leichter umzusetzen. In erster linie geht es mir darum, dass ich einfach mal sehen kann, was alles möglich ist. Immerhin "entwickle" ich das Spiel alleine mit dir und hab kein Team hinter mir. Ich sehe bei Youtube wie Gamer neue Spiele ausprobieren und alles so im "schäle die kartoffel", "Finde die Nadel im Heuhaufen", "Säubere den Mond vom Staub" extrem gut ankommt und ehrlich gesagt auch nicht so aussieht, als hätte das ein Entwickler team entworfen sondern wäre überwiegend AI codet. Trotzdem haben diese Spiele eine gute Gamemechanik und alles fühlt sich flüssig an, deswegen würde ich gerne sehe, was möglich ist und in welche Richtung wir gehen. ICh weiß ehrlich gesagt nicht, wie der Markt ist, aber gefühlt entwickeln alle aktuell Games für Steam etc und Mobile Games kommen kaum noch gute nach. Es gibt seit jahren die gleichen Mobile games. 3. Stil sollte im Mittelalter spielen, aber wenn es nur Assets gibt, die moderner sind, dann können wir das auch gerne erstmal modern halten. Jenachdem was die Assets bieten. 4. Das können wir erstmal nach hinten stellen, aber ich wollte so langsam alle "Punkte" mal anfassen“
+
+**Festgehalten:** Grafik-Probe **jetzt** (vor Level 14); Tobias möchte sehen, „was alles möglich ist“ – A oder B soll die Probe zeigen; Stil **Mittelalter**, notfalls erst modern, „jenachdem was die Assets bieten“; Geräusche und Musik **später**.
+
+**Claudes Antwort zu „was ist einfacher?“:** Für uns ist 3D mit fertigen Modellen einfacher als Bilder in Schrägansicht: Kenney liefert die Modelle fertig, Bilder aus allen Richtungen müssten wir erst daraus herstellen. Mit three.js ist der Clash-of-Clans-Look nur eine Kamera-Einstellung (feste Schräg-Ansicht ohne Fluchtpunkt, entspricht Weg A) – dieselben Modelle gehen auch mit Perspektive und Drehen (Weg B). **Die Probe zeigt deshalb beides zum Umschalten.** Zu den YouTube-Spielen: Was dort „flüssig“ wirkt, ist vor allem Rückmeldung – weiche Bewegungen, kleine Effekte, später Geräusche („Juice“). Genau das soll die Probe ausprobieren. Den Markt kann Claude aus dem Gedächtnis nicht verlässlich einschätzen – auf Wunsch später eine eigene Recherche.
+
+**Was die Probe ist:**
+- **Eine eigene Seite** `grafik-probe.html` (live: https://tobiasimhof.github.io/ErstesSpiel/grafik-probe.html), dazu ein Eintrag „🎨 Grafik-Probe“ im Menü ☰ (Frage 1). Das Spiel selbst bleibt unverändert, Tobias' Fabrik wird nicht berührt.
+- **Szene:** ein kleines Grundstück (etwa 14 × 10 Felder) mit zwei kurzen Straßen, die nach den **echten Spielregeln** laufen (`src/core`, die Waren fahren wirklich): Holzfällerlager → Band → Sägewerk → Band → Versandportal und Ofen (Sand) → Band → Schmiede (Fläschchen) → Band → Versandportal.
+- **Bedienung wie im Spiel:** ein Finger verschiebt, zwei Finger zoomen; ein Gebäude antippen zeigt seinen Namen und lässt es kurz hüpfen.
+- **Schalter oben:** (1) **Kamera** „Schräg wie Clash of Clans“ ↔ „Frei“ (Perspektive, mit zwei Fingern drehen); (2) **Stil** „Mittelalter“ ↔ „Fabrik (modern)“, je nachdem, was Kenneys Pakete hergeben; (3) **Effekte** an/aus: Schatten, Rauch am Ofen, sich drehendes Sägeblatt, Waren „ploppen“ ins Portal, weiches Zoomen; (4) **Tag** ↔ **Abend**. Dazu die Anzeige „Bilder pro Sekunde“, damit man sieht, wie flüssig es auf dem Tablet läuft.
+- **Nicht drin:** Bauen, Speichern, Level, Laden – die Probe zeigt nur Aussehen und Gefühl.
+
+**Technik:**
+- three.js (frei, MIT-Lizenz) aus npm in einen Ordner `vendor/three/` – kein Build-Schritt nötig. Ausgewählte Kenney-Modelle (CC0) in `assets/models/` mit Lizenz-Datei. Zusammen voraussichtlich einige MB, geladen nur auf der Probe-Seite.
+- **kenney.nl ist in Claudes Arbeitsumgebung gesperrt.** Mit Tobias' OK fragt Claude die Freigabe an (Tobias bestätigt sie in einem Fenster). Klappt das nicht, besprechen wir einen anderen Weg (z. B. dass Tobias die Pakete herunterlädt).
+- Ein eigener 3D-Zeichner nur für die Probe; die Spielregeln bleiben, wie sie sind.
+- Prüfen: `npm test` und ein Browser-Test, der die Probe in Tablet- und Handygröße öffnet, alle Schalter umschaltet und Screenshots macht.
+
+**Danach** entscheidet Tobias: Richtung (Schräg-Ansicht oder frei), Stil, und ob als Nächstes die neue Ansicht ins echte Spiel kommt (zuschaltbar im Menü) oder erst Level 14.
+
+**Fragen an Tobias:**
+1. Probe als **eigene Seite** plus Eintrag „🎨 Grafik-Probe“ im Menü ☰ – passt das?
+2. **Inhalt:** Holz-Straße und Glas-Straße mit echten, laufenden Waren – oder lieber andere Gebäude?
+3. **Schalter:** Kamera, Stil, Effekte, Tag/Abend – passt das, fehlt dir etwas?
+4. Darf Claude **three.js und Kenney-Modelle** ins Projekt holen (einige MB) und dafür die **Freigabe für kenney.nl** anfragen?
+
+### Überlegung: Weg vom 2D-Design, Richtung Clash of Clans (Chat 22, nach v0.31.0; beantwortet – siehe Entwurf Grafik-Probe oben)
 
 **Tobias (Chat 22, 20.11.2026):** „Mittlerweile nimmt das Spiel schon etwas Form an und wir haben bald unsere Level und unsere "Grundstruktur". Darauf können wir natürlich aufbauen und das Spiel beliebig erweitern bzw. die Aufträge "schwieriger" machen, sodass es länger dauert ein Level zu erreichen. Aktuell spiele ich im Browser ohne Musik und alles noch 2D gehalten. Natürlich verstehe ich, dass das Ganze fürs entwickeln so viel einfacher ist, weil wir nur die Logik testen. Ich würde aber gerne mich so langsam von diesem 2D Design trennen und das ganze mehr in die "Clash of Clans"-Richtung bringen. Wir hatten schon mal über kostenlose Assets und alles weitere gesprochen. Können wir nachdem wir das codiert haben uns darüber unterhalten wie wir rein theoretisch dieses 2D-Browser-Game in eine 2D/3D Spielewelt übersetzen können ? Ich habe bei Kenny beispielsweise schon ein kostenloses Factory Asset gesehen“
 
