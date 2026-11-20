@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.31.1 – Grafik-Probe geplant (nur Doku; im Spiel: Level 13 „Die Glashütte“) |
+| **Aktuelle Version** | v0.32.0 – Grafik-Probe, Teil 1 (3D-Seite im Menü ☰, Gebäude noch Platzhalter; im Spiel: Level 13 „Die Glashütte“) |
 | **Phase** | M2 – Produktionsketten (Werkzeuge 1–6, Kräuter 7–12 fertig; die Tränke haben mit Level 13 begonnen) |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias beantwortet die **4 Fragen zur Grafik-Probe** (`docs/archiv/PLAENE.md`, „Entwurf v0.32.0“: eigene Seite, Holz- und Glas-Straße in 3D mit Kenney-Modellen, Schalter für Kamera, Stil, Effekte, Tag/Abend). Mit seinem OK die Freigabe für kenney.nl anfragen und v0.32.0 bauen. Nebenher testet Tobias Level 13 (Preise feinjustieren?). |
+| **Nächster Schritt** | Tobias probiert die **Grafik-Probe** auf dem Tablet (Menü ☰ → „🎨 Grafik-Probe“: Kamera, Stil, Effekte, Tag/Abend, wie flüssig?) und entscheidet, **wie Kenneys Modelle ins Projekt kommen** (kenney.nl ist in Claudes Arbeitsumgebung gesperrt): selbst freigeben, Pakete auf github.com hochladen oder erst mit Platzhaltern weiter – und welche Pakete. Nebenher testet er Level 13. |
 
 **Tobias' Fabrik – Level 11** (Chat 21, 17./18.11.2026, v0.28.0, ohne Screenshot): Level 11 läuft, alle Gebäude gebaut, die Aufträge laufen. **Platz zu etwa 60 % belegt.** Die Kräuterstraße baut er gerade: Er stellt die Wundverbände für Agnes' letzten Auftrag her. **Etwa 60.000 Gold** – bald reicht es für Theke 5 (70.000); „Das Tempo des Geld verdienens fühlt sich eigentlich gut an.“ **Das Laden-Lager steht immer bei 950+ von 1.000** – „Aktuell kämpfe ich auch sehr mit meinem Lager“.
 
@@ -31,7 +31,7 @@
 **Nächste Schritte** (der Reihe nach; neu geordnet von Tobias in Chat 19; jeder Schritt erst nach Tobias' OK):
 
 1. **Tränke-Kapitel ab Level 13** (Tobias, Chat 21/22): alte Maschinen bekommen neue Funktionen statt einer neuen Maschine je Level; neue Maschinen nur, wo es Sinn ergibt – „Ich finde es sehr wichtig, dass das Ganze auch Sinn ergibt.“ **Level 13 „Die Glashütte“ ist im Spiel (v0.31.0).** Nach der Grafik-Probe **Level 14:** der Mörser als Ware in der Zimmerei aus **1 Steinplatte + 3 Holzstäben** (Schale aus Stein, Stößel aus Holz); **Level 15:** eine neue Maschine, die Kräuter, Kohle und Sand zu Staub zerkleinert (Baukosten z. B. 10 Mörser + 10 Räderwerke); Tinktur (Fläschchen + Kräutermischung) und erster Zaubertrank in der Apotheke – Einzelheiten, wenn wir dort sind; vorerst kein Reiter „Tränke“. Leitlinie (Chat 21): „der Fokus soll auf dem optimieren dieser Produktionsstraßen liegen.“ (Erledigt: Level 9–12 nach dem Entwurf v0.25.1, Laden-Lager vergrößern – Einzelheiten im Archiv.)
-2. **Grafik Richtung Clash of Clans** (Tobias, Chat 22): „Ich würde aber gerne mich so langsam von diesem 2D Design trennen“. **Grafik-Probe jetzt** (vor Level 14) – „damit ich weiß in welche Richtung das Spiel gehen kann“; Tobias möchte sehen, „was alles möglich ist“; Stil Mittelalter, notfalls erst modern; Sound später. Entwurf v0.32.0 mit 4 Fragen in `PLAENE.md` (three.js, Kenney-Modelle CC0; die Probe zeigt Schräg-Ansicht wie Clash of Clans und freie 3D-Kamera zum Umschalten).
+2. **Grafik Richtung Clash of Clans** (Tobias, Chat 22): „Ich würde aber gerne mich so langsam von diesem 2D Design trennen“. **Grafik-Probe jetzt** (vor Level 14) – „damit ich weiß in welche Richtung das Spiel gehen kann“; Tobias möchte sehen, „was alles möglich ist“; Stil Mittelalter, notfalls erst modern; Sound später. **Teil 1 ist im Spiel (v0.32.0):** Menü ☰ → „🎨 Grafik-Probe“ – Holz- und Glas-Straße in 3D nach den echten Spielregeln, Kamera schräg wie Clash of Clans ↔ frei, Mittelalter ↔ Modern, Effekte, Tag ↔ Abend. Die Gebäude sind noch Platzhalter: Die Freigabe für kenney.nl wurde abgelehnt; wie die Modelle kommen, entscheidet Tobias (`PLAENE.md`, „Grafik-Probe, Teil 1“).
 3. **Nach hinten verschoben** (Tobias, Chat 19): die drei folgenden Schritte.
 4. **Was Tester brauchen** – mit v0.22.0 können Tester auch auf Tobias' Tablet spielen (sichern → neues Spiel → Tester spielt → laden); Testmodus und Test-Knopf bleiben sichtbar. Eine kurze Einführung bleibt im Hinterkopf (M4) (offene Frage 13).
 5. **Bereich kopieren** (Tobias: „sehr wichtig“) – einen markierten Bereich als Ganzes noch einmal bauen, wenn die Waren reichen (Tobias baut gleiche Straßen mehrfach). Plan noch zu machen.
@@ -60,6 +60,12 @@ Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute, 
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.32.0 – Grafik-Probe, Teil 1 (20.11.2026)
+
+- **Warum (Tobias, Chat 22):** „Ich würde gerne eine kleine Grafik-Probe jetzt machen, damit ich weiß in welche Richtung das Spiel gehen kann“ – zum Entwurf: „Passt alles so, du darfst loslegen.“
+- **Umgesetzt:** eigene Seite `grafik-probe.html` (Menü ☰ → „🎨 Grafik-Probe“, speichert vorher) mit three.js: Holzfällerlager und Lagerhaus → Sägewerk → Portal, Ofen (Sand) → Schmiede (Fläschchen) → Portal, nach den echten Spielregeln. Schalter: Kamera schräg wie Clash of Clans ↔ frei drehbar (⟲ ⟳), Mittelalter ↔ Modern, Effekte (Schatten, Rauch, Säge, laufende Bänder, Hüpfen, Portal ploppt), Tag ↔ Abend; Bilder pro Sekunde; Gebäude antippen zeigt Name und Ware. Das Spiel selbst ist unverändert.
+- **Offen:** Kenneys Modelle – kenney.nl ist gesperrt, die vorgeschlagene Freigabe wurde abgelehnt. Bis dahin sind die Gebäude Platzhalter aus einfachen Formen.
+
 ### v0.31.1 – Grafik-Probe geplant (20.11.2026, nur Doku)
 
 - **Tobias (Chat 22):** „Ich würde gerne eine kleine Grafik-Probe jetzt machen, damit ich weiß in welche Richtung das Spiel gehen kann“; ob Schräg-Ansicht oder 3D einfacher ist, weiß er nicht – „In erster linie geht es mir darum, dass ich einfach mal sehen kann, was alles möglich ist.“ Stil Mittelalter, notfalls modern; Sound später.
@@ -72,9 +78,3 @@ Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute, 
 - **Umgesetzt:** Der Kohlenmeiler heißt überall „Ofen“ und nimmt ab Level 13 auch Sand (Händler, 1.100) → 100 Glas (je 12) in 15 Minuten; die Schmiede hat ab Level 13 die Einstellung „Fläschchen“ (5 Glas → 1, 30 s, 72); Aufstieg 10.000 Gold, 4 Aufträge (3.147 Erfahrung); die 6. Theke für 150.000 Gold ab Level 13. Spielstand bleibt Format 18.
 - **Danach:** Tobias' Frage, wie das Spiel in eine 2D/3D-Welt wie Clash of Clans kommt – Einschätzung und 4 Fragen in `PLAENE.md`.
 - **Offen:** Tobias testet Level 13.
-
-### v0.30.3 – Antworten zum Tränke-Kapitel, Entwurf Level 13 (19.11.2026, nur Doku)
-
-- **Tobias (Chat 22)** zu den 6 Fragen: Kohlenmeiler → „Ofen“, „Glas gibt es nur dort, also aus Sand wird dort Glas“; Fläschchen in der Schmiede aus 5 Glas; Mörser auf Level 14 „kein Verhältnis von 1:1 …, sondern evtl. eine Holzplatte und 3 Holzstäbe“, auf Level 15 eine Maschine „mit 10 Mörsern und 10 Räderwerke ( oder was am meisten sinn macht )“, die alles zu Staub zerkleinert; Tinktur später im Detail; kein Reiter „Tränke“, „weil ich das Spiel erstmal selbst bis dahin spielen will“; 10.000 Gold passt.
-- **Claude:** Entwurf Level 13 „Die Glashütte“ in `PLAENE.md` – Ofen: 1 Sand (1.100) → 100 Glas (je 12) in 15 Minuten; Schmiede ab Level 13 „Fläschchen“ (5 Glas → 1, 10 s, 72); 4 Aufträge (Konrad, Klara, Anton, Klara; 3.147 Erfahrung); 6. Theke ab Level 13. 4 Fragen an Tobias.
-- Spiel unverändert, nur die Versionsnummer steigt.

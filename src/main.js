@@ -186,6 +186,11 @@ const hud = createHud({
     backup.save();
   },
   onLoadFile: () => backup.pickFile(),
+  // v0.32.0: Grafik-Probe – erst speichern, dann die eigene Seite öffnen
+  onProbe: () => {
+    saveNow();
+    location.href = 'grafik-probe.html';
+  },
 });
 hud.setTestMode(Boolean(settings.testMode), TEST_SPEED);
 

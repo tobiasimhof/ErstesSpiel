@@ -4,6 +4,26 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.32.0 – Grafik-Probe, Teil 1 (20.11.2026)
+
+**Vorgenommen:**
+- Die Grafik-Probe nach dem Entwurf v0.32.0 (Tobias: „Passt alles so, du darfst loslegen.“).
+
+**Fragen, die wir uns gestellt haben:**
+- Wie kommen Kenneys Modelle ins Projekt? → kenney.nl ist in der Arbeitsumgebung gesperrt; die vorgeschlagene Freigabe wurde abgelehnt, npm hat nur inoffizielle Kopien. Teil 1 deshalb mit Platzhalter-Gebäuden; Tobias entscheidet den Weg.
+- Wie kommt three.js ohne Build-Schritt ins Spiel? → unverändert in `vendor/three-0.187.0/` (Version im Ordnernamen), Import-Map nur in `grafik-probe.html`.
+- Wie bleiben Spiel und Probe beim Laden zusammen? → `tools/set-version.mjs` schreibt die Import-Map auch in `grafik-probe.html`.
+- Läuft die Probe nach den echten Regeln? → Ja: `src/probe/factory.js` baut die Fabrik mit `src/core` und rechnet in festen Takten; die Waren stehen dort, wo sie auch im 2D-Spiel stehen.
+- Auf dem Handy verdeckten Leiste und Hinweis die Fabrik → mehr Welt in der Schräg-Ansicht auf niedrigen Bildschirmen, Hinweis mit ✕.
+
+**Gemacht:**
+- `grafik-probe.html`, `src/probe/factory.js`, `src/probe/world3d.js`, `src/probe/probe.js`, `vendor/` mit three.js r187 und Lizenz; Menü-Eintrag „🎨 Grafik-Probe“ (`index.html`, `hud.js`, `main.js`); `tools/set-version.mjs`.
+- Tests: neue Datei `tests/grafikprobe.test.js` (7 Tests); Browser-Test `runProbe` in Tablet- und Handygröße.
+- Doku: `SPIEL.md`, `STAND.md`, `TECHNIK.md`, Archiv.
+
+**Geprüft:**
+- `npm test`: alle bestanden. Browser-Test: alle Prüfungen bestanden (auch die Probe in Tablet- und Handygröße), Screenshots angesehen. Im Test ohne Grafikchip zeichnet die Probe nur etwa 5 Bilder pro Sekunde – wie flüssig sie wirklich ist, zeigt erst Tobias' Tablet.
+
 ### v0.31.1 – Grafik-Probe geplant (20.11.2026, nur Doku)
 
 **Vorgenommen:**
