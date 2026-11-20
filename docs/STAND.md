@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.31.0 – Level 13 „Die Glashütte“ (Ofen brennt Sand zu Glas, Schmiede bläst Fläschchen, 6. Theke ab Level 13) |
+| **Aktuelle Version** | v0.31.1 – Grafik-Probe geplant (nur Doku; im Spiel: Level 13 „Die Glashütte“) |
 | **Phase** | M2 – Produktionsketten (Werkzeuge 1–6, Kräuter 7–12 fertig; die Tränke haben mit Level 13 begonnen) |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | Tobias spielt Level 13 und sagt, ob die Preise passen („dann werde ich sehen inwiefern wi noch feintunen müssen“). Er beantwortet die **4 Fragen zur Grafik** (`docs/archiv/PLAENE.md`, „Überlegung: Weg vom 2D-Design“ – u. a. Grafik-Probe jetzt oder erst nach Level 14/15?). Danach Level 14 (Mörser) bzw. die Grafik-Probe planen, vorstellen, OK abwarten. |
+| **Nächster Schritt** | Tobias beantwortet die **4 Fragen zur Grafik-Probe** (`docs/archiv/PLAENE.md`, „Entwurf v0.32.0“: eigene Seite, Holz- und Glas-Straße in 3D mit Kenney-Modellen, Schalter für Kamera, Stil, Effekte, Tag/Abend). Mit seinem OK die Freigabe für kenney.nl anfragen und v0.32.0 bauen. Nebenher testet Tobias Level 13 (Preise feinjustieren?). |
 
 **Tobias' Fabrik – Level 11** (Chat 21, 17./18.11.2026, v0.28.0, ohne Screenshot): Level 11 läuft, alle Gebäude gebaut, die Aufträge laufen. **Platz zu etwa 60 % belegt.** Die Kräuterstraße baut er gerade: Er stellt die Wundverbände für Agnes' letzten Auftrag her. **Etwa 60.000 Gold** – bald reicht es für Theke 5 (70.000); „Das Tempo des Geld verdienens fühlt sich eigentlich gut an.“ **Das Laden-Lager steht immer bei 950+ von 1.000** – „Aktuell kämpfe ich auch sehr mit meinem Lager“.
 
@@ -23,15 +23,15 @@
 | M1 | Fabrik-Grundgerüst | Spielfeld, Bauen, Bänder, erste Kette, Speichern, Offline-Produktion – erledigt |
 | **M2** | **Produktionsketten** | **jetzt:** Werkzeuge (Level 1–6) und Kräuter (7–12) fertig, Tränke ab Level 13 |
 | M3 | Wirtschaft & Fortschritt | Nachfrage und Trends, Laden-Ausbau mit Waren, evtl. Freischaltpunkte (Laden-Level, Aufträge und Fläche kaufen gibt es schon) |
-| M4 | Optik & Gefühl | Grafik (Tobias, Chat 22: „mehr in die "Clash of Clans"-Richtung“), Animationen, Sound, Einführung für neue Spieler |
+| M4 | Optik & Gefühl | Grafik (Tobias, Chat 22: „mehr in die "Clash of Clans"-Richtung“ – eine Grafik-Probe kommt jetzt vorgezogen), Animationen, Sound (später), Einführung für neue Spieler |
 | M5 | Online | Spielerkonto, Spielstand auf dem Server, globaler Schwarzmarkt |
 | M6 | Clans & Handel | Clans, Handel zwischen Spielern |
 | M7 | App | Android und iOS |
 
 **Nächste Schritte** (der Reihe nach; neu geordnet von Tobias in Chat 19; jeder Schritt erst nach Tobias' OK):
 
-1. **Tränke-Kapitel ab Level 13** (Tobias, Chat 21/22): alte Maschinen bekommen neue Funktionen statt einer neuen Maschine je Level; neue Maschinen nur, wo es Sinn ergibt – „Ich finde es sehr wichtig, dass das Ganze auch Sinn ergibt.“ **Level 13 „Die Glashütte“ ist im Spiel (v0.31.0).** Als Nächstes **Level 14:** der Mörser als Ware in der Zimmerei aus **1 Steinplatte + 3 Holzstäben** (Schale aus Stein, Stößel aus Holz); **Level 15:** eine neue Maschine, die Kräuter, Kohle und Sand zu Staub zerkleinert (Baukosten z. B. 10 Mörser + 10 Räderwerke); Tinktur (Fläschchen + Kräutermischung) und erster Zaubertrank in der Apotheke – Einzelheiten, wenn wir dort sind; vorerst kein Reiter „Tränke“. Leitlinie (Chat 21): „der Fokus soll auf dem optimieren dieser Produktionsstraßen liegen.“ (Erledigt: Level 9–12 nach dem Entwurf v0.25.1, Laden-Lager vergrößern – Einzelheiten im Archiv.)
-2. **Grafik Richtung Clash of Clans** (Tobias, Chat 22): „Ich würde aber gerne mich so langsam von diesem 2D Design trennen“. Claudes Einschätzung mit 4 Fragen in `PLAENE.md`: Spielregeln und Darstellung sind getrennt, nur der Zeichner wird getauscht; Empfehlung echtes 3D im Browser (three.js) mit fester Schräg-Kamera und Kenney-Modellen (CC0), zuerst eine Grafik-Probe als eigene Seite. Gehört zu M4.
+1. **Tränke-Kapitel ab Level 13** (Tobias, Chat 21/22): alte Maschinen bekommen neue Funktionen statt einer neuen Maschine je Level; neue Maschinen nur, wo es Sinn ergibt – „Ich finde es sehr wichtig, dass das Ganze auch Sinn ergibt.“ **Level 13 „Die Glashütte“ ist im Spiel (v0.31.0).** Nach der Grafik-Probe **Level 14:** der Mörser als Ware in der Zimmerei aus **1 Steinplatte + 3 Holzstäben** (Schale aus Stein, Stößel aus Holz); **Level 15:** eine neue Maschine, die Kräuter, Kohle und Sand zu Staub zerkleinert (Baukosten z. B. 10 Mörser + 10 Räderwerke); Tinktur (Fläschchen + Kräutermischung) und erster Zaubertrank in der Apotheke – Einzelheiten, wenn wir dort sind; vorerst kein Reiter „Tränke“. Leitlinie (Chat 21): „der Fokus soll auf dem optimieren dieser Produktionsstraßen liegen.“ (Erledigt: Level 9–12 nach dem Entwurf v0.25.1, Laden-Lager vergrößern – Einzelheiten im Archiv.)
+2. **Grafik Richtung Clash of Clans** (Tobias, Chat 22): „Ich würde aber gerne mich so langsam von diesem 2D Design trennen“. **Grafik-Probe jetzt** (vor Level 14) – „damit ich weiß in welche Richtung das Spiel gehen kann“; Tobias möchte sehen, „was alles möglich ist“; Stil Mittelalter, notfalls erst modern; Sound später. Entwurf v0.32.0 mit 4 Fragen in `PLAENE.md` (three.js, Kenney-Modelle CC0; die Probe zeigt Schräg-Ansicht wie Clash of Clans und freie 3D-Kamera zum Umschalten).
 3. **Nach hinten verschoben** (Tobias, Chat 19): die drei folgenden Schritte.
 4. **Was Tester brauchen** – mit v0.22.0 können Tester auch auf Tobias' Tablet spielen (sichern → neues Spiel → Tester spielt → laden); Testmodus und Test-Knopf bleiben sichtbar. Eine kurze Einführung bleibt im Hinterkopf (M4) (offene Frage 13).
 5. **Bereich kopieren** (Tobias: „sehr wichtig“) – einen markierten Bereich als Ganzes noch einmal bauen, wenn die Waren reichen (Tobias baut gleiche Straßen mehrfach). Plan noch zu machen.
@@ -60,6 +60,12 @@ Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute, 
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.31.1 – Grafik-Probe geplant (20.11.2026, nur Doku)
+
+- **Tobias (Chat 22):** „Ich würde gerne eine kleine Grafik-Probe jetzt machen, damit ich weiß in welche Richtung das Spiel gehen kann“; ob Schräg-Ansicht oder 3D einfacher ist, weiß er nicht – „In erster linie geht es mir darum, dass ich einfach mal sehen kann, was alles möglich ist.“ Stil Mittelalter, notfalls modern; Sound später.
+- **Claude:** Entwurf v0.32.0 in `PLAENE.md` – eigene Seite mit Menü-Eintrag, Holz- und Glas-Straße nach den echten Spielregeln in 3D (three.js, Kenney-Modelle), Schalter Kamera (schräg wie Clash of Clans ↔ frei), Stil, Effekte, Tag/Abend, Bilder pro Sekunde. kenney.nl ist in der Arbeitsumgebung gesperrt – Freigabe nach Tobias' OK. 4 Fragen.
+- Spiel unverändert, nur die Versionsnummer steigt.
+
 ### v0.31.0 – Level 13 „Die Glashütte“ (20.11.2026)
 
 - **Warum (Tobias, Chat 22):** „Klingt alles sehr gut nur ich würde gerne die Zeit für die Fläschen von 10s auf 30s erhöhen. Ich finde der Ofen könnte bereits ab Spielbeginn Ofen heißen.“ Preise und Aufträge „passen so“; Mörser: „Ich meinte Steinplatte + 3 holzstäbe“. „Von mir aus, kannst du das gerne so umsetzen.“
@@ -71,10 +77,4 @@ Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute, 
 
 - **Tobias (Chat 22)** zu den 6 Fragen: Kohlenmeiler → „Ofen“, „Glas gibt es nur dort, also aus Sand wird dort Glas“; Fläschchen in der Schmiede aus 5 Glas; Mörser auf Level 14 „kein Verhältnis von 1:1 …, sondern evtl. eine Holzplatte und 3 Holzstäbe“, auf Level 15 eine Maschine „mit 10 Mörsern und 10 Räderwerke ( oder was am meisten sinn macht )“, die alles zu Staub zerkleinert; Tinktur später im Detail; kein Reiter „Tränke“, „weil ich das Spiel erstmal selbst bis dahin spielen will“; 10.000 Gold passt.
 - **Claude:** Entwurf Level 13 „Die Glashütte“ in `PLAENE.md` – Ofen: 1 Sand (1.100) → 100 Glas (je 12) in 15 Minuten; Schmiede ab Level 13 „Fläschchen“ (5 Glas → 1, 10 s, 72); 4 Aufträge (Konrad, Klara, Anton, Klara; 3.147 Erfahrung); 6. Theke ab Level 13. 4 Fragen an Tobias.
-- Spiel unverändert, nur die Versionsnummer steigt.
-
-### v0.30.2 – Tränke-Kapitel: alte Maschinen statt neuer (19.11.2026, nur Doku)
-
-- **Tobias (Chat 21):** „Das Grundkonzept spricht mich schon an, aber ich möchte auch nicht, dass wir bei jedem Level eine neue Maschine entwickeln.“ Kohlenmeiler → „Ofen“, der ab Level 13 auch Sand zu Glas brennt; Fläschchen aus Glas in einer alten Maschine; Level 14 der Mörser als Ware, Level 15 als Maschine (Kräuter, Kohle, Sand → Staub); Fläschchen + Kräutermischung → „Grundzutat“, dann mit Kamillenblüten der erste Zaubertrank; Linse → Lupe/Fernrohr „finde ich gut“. „Nicht … nach level 20 … 500 verschiedene Maschinen.“ Weiter im neuen Chat.
-- **Claude:** neue Leitlinie in `SPIEL.md`; Plan v0.30.2 mit Einschätzung und 6 Fragen in `PLAENE.md` (u. a. Hinweis: Bleche und Stangen macht die Schmiede, nicht die Feinschmiede).
 - Spiel unverändert, nur die Versionsnummer steigt.

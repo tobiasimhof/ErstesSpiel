@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.31.1 – Grafik-Probe geplant (20.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Antworten auf die Grafik-Fragen festhalten (Probe jetzt, sehen „was alles möglich ist“, Mittelalter – notfalls modern, Sound später) und den Plan für die Grafik-Probe schreiben.
+
+**Fragen, die wir uns gestellt haben:**
+- A (Bilder in Schrägansicht) oder B (echtes 3D)? → Mit three.js ist der Clash-of-Clans-Look eine Kamera-Einstellung; die Probe zeigt beides zum Umschalten.
+- Kommen wir an die Bausteine? → three.js über npm: ja. kenney.nl: in der Arbeitsumgebung gesperrt – Freigabe erst nach Tobias' OK anfragen.
+
+**Gemacht:**
+- `PLAENE.md`: Entwurf v0.32.0 „Grafik-Probe“ mit 4 Fragen. `STAND.md`, Archiv. Versionsnummer 0.31.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 398 von 398 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.31.0 – Level 13 „Die Glashütte“ (20.11.2026)
 
 **Vorgenommen:**
