@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <title>Grafik-Probe – ErstesSpiel</title>
+    <meta name="theme-color" content="#3b2a1a" />
+    <link rel="icon" type="image/png" href="assets/icons/icon-192.png" />
+    <!-- v0.32.0: Grafik-Probe (Tobias, Chat 22) – eine eigene Seite, die das
+         Spiel nicht berührt. Die Import-Map schreibt tools/set-version.mjs
+         (Spieldateien mit ?v=, dazu three.js) – nicht von Hand ändern. -->
+    <script type="importmap">
+    {
+      "imports": {
+        "./src/core/area.js": "./src/core/area.js?v=0.32.0",
+        "./src/core/belts.js": "./src/core/belts.js?v=0.32.0",
+        "./src/core/buildings.js": "./src/core/buildings.js?v=0.32.0",
+        "./src/core/data/buildings.js": "./src/core/data/buildings.js?v=0.32.0",
+        "./src/core/data/items.js": "./src/core/data/items.js?v=0.32.0",
+        "./src/core/data/land.js": "./src/core/data/land.js?v=0.32.0",
+        "./src/core/data/levels.js": "./src/core/data/levels.js?v=0.32.0",
+        "./src/core/data/offline.js": "./src/core/data/offline.js?v=0.32.0",
+        "./src/core/data/recipes.js": "./src/core/data/recipes.js?v=0.32.0",
+        "./src/core/data/shop.js": "./src/core/data/shop.js?v=0.32.0",
+        "./src/core/dirs.js": "./src/core/dirs.js?v=0.32.0",
+        "./src/core/geometry.js": "./src/core/geometry.js?v=0.32.0",
+        "./src/core/land.js": "./src/core/land.js?v=0.32.0",
+        "./src/core/levels.js": "./src/core/levels.js?v=0.32.0",
+        "./src/core/market.js": "./src/core/market.js?v=0.32.0",
+        "./src/core/offline.js": "./src/core/offline.js?v=0.32.0",
+        "./src/core/production.js": "./src/core/production.js?v=0.32.0",
+        "./src/core/quests.js": "./src/core/quests.js?v=0.32.0",
+        "./src/core/save.js": "./src/core/save.js?v=0.32.0",
+        "./src/core/shop.js": "./src/core/shop.js?v=0.32.0",
+        "./src/core/sim.js": "./src/core/sim.js?v=0.32.0",
+        "./src/core/state.js": "./src/core/state.js?v=0.32.0",
+        "./src/core/warehouse.js": "./src/core/warehouse.js?v=0.32.0",
+        "./src/main.js": "./src/main.js?v=0.32.0",
+        "./src/probe/factory.js": "./src/probe/factory.js?v=0.32.0",
+        "./src/probe/probe.js": "./src/probe/probe.js?v=0.32.0",
+        "./src/probe/world3d.js": "./src/probe/world3d.js?v=0.32.0",
+        "./src/version.js": "./src/version.js?v=0.32.0",
+        "./src/view/backup.js": "./src/view/backup.js?v=0.32.0",
+        "./src/view/buildbar.js": "./src/view/buildbar.js?v=0.32.0",
+        "./src/view/buildingFace.js": "./src/view/buildingFace.js?v=0.32.0",
+        "./src/view/buildingInfo.js": "./src/view/buildingInfo.js?v=0.32.0",
+        "./src/view/camera.js": "./src/view/camera.js?v=0.32.0",
+        "./src/view/controller.js": "./src/view/controller.js?v=0.32.0",
+        "./src/view/format.js": "./src/view/format.js?v=0.32.0",
+        "./src/view/hud.js": "./src/view/hud.js?v=0.32.0",
+        "./src/view/input.js": "./src/view/input.js?v=0.32.0",
+        "./src/view/itemArt.js": "./src/view/itemArt.js?v=0.32.0",
+        "./src/view/levels.js": "./src/view/levels.js?v=0.32.0",
+        "./src/view/offline.js": "./src/view/offline.js?v=0.32.0",
+        "./src/view/panels.js": "./src/view/panels.js?v=0.32.0",
+        "./src/view/press.js": "./src/view/press.js?v=0.32.0",
+        "./src/view/renderer.js": "./src/view/renderer.js?v=0.32.0",
+        "./src/view/shop.js": "./src/view/shop.js?v=0.32.0",
+        "./src/view/storage.js": "./src/view/storage.js?v=0.32.0",
+        "./src/view/warehouse.js": "./src/view/warehouse.js?v=0.32.0",
+        "three": "./vendor/three-0.187.0/build/three.module.js",
+        "three/addons/": "./vendor/three-0.187.0/examples/jsm/"
+      }
+    }
+    </script>
+    <style>
+      :root {
+        --wood-dark: #2a1d12;
+        --wood: #3b2a1a;
+        --wood-light: #4a3423;
+        --parchment: #f3e6c4;
+        --border: #8a6a3f;
+        --ink: #3b2a1a;
+        --safe-left: env(safe-area-inset-left, 0px);
+        --safe-right: env(safe-area-inset-right, 0px);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        background: var(--wood-dark);
+        color: var(--parchment);
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      #probe-canvas {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        touch-action: none;
+      }
+      .probe-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        padding: 6px max(10px, var(--safe-right)) 6px max(10px, var(--safe-left));
+        background: linear-gradient(rgba(59, 42, 26, 0.95), rgba(59, 42, 26, 0.8));
+        border-bottom: 2px solid var(--wood-dark);
+        z-index: 2;
+      }
+      .probe-bar a,
+      .probe-bar button {
+        font: inherit;
+        font-size: 14px;
+        font-weight: 600;
+        min-height: 36px;
+        padding: 0 10px;
+        color: var(--ink);
+        background: var(--parchment);
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+      }
+      .probe-bar button:active,
+      .probe-bar a:active {
+        transform: translateY(1px);
+      }
+      .probe-title {
+        font-weight: 700;
+        font-size: 15px;
+        margin: 0 4px;
+        white-space: nowrap;
+      }
+      .probe-spacer {
+        flex: 1;
+      }
+      .probe-badge {
+        font-size: 12px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.45);
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+      .probe-hint {
+        position: fixed;
+        left: max(10px, var(--safe-left));
+        bottom: 10px;
+        max-width: min(520px, calc(100% - 20px));
+        padding: 6px 10px;
+        font-size: 12.5px;
+        line-height: 1.35;
+        color: var(--ink);
+        background: rgba(243, 230, 196, 0.92);
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        z-index: 2;
+      }
+      .probe-hint button {
+        float: right;
+        margin: -2px -4px 2px 8px;
+        min-width: 30px;
+        min-height: 30px;
+        font: inherit;
+        font-weight: 700;
+        color: var(--ink);
+        background: var(--parchment);
+        border: 2px solid var(--border);
+        border-radius: 8px;
+      }
+      .probe-hint[hidden] {
+        display: none;
+      }
+      #probe-label {
+        position: fixed;
+        transform: translate(-50%, -100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        padding: 6px 12px;
+        color: var(--ink);
+        background: var(--parchment);
+        border: 2px solid var(--border);
+        border-radius: 10px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+        font-size: 14px;
+        pointer-events: none;
+        white-space: nowrap;
+        z-index: 3;
+      }
+      #probe-label span {
+        font-size: 12px;
+        opacity: 0.8;
+      }
+      #probe-label[hidden],
+      .probe-bar [hidden] {
+        display: none;
+      }
+      /* Handy quer: kleinere Knöpfe, damit alles in eine Zeile passt */
+      @media (max-height: 480px) {
+        .probe-bar a,
+        .probe-bar button {
+          font-size: 12.5px;
+          min-height: 32px;
+          padding: 0 8px;
+        }
+        .probe-title {
+          display: none;
+        }
+        .probe-hint {
+          font-size: 11.5px;
+          max-width: min(420px, calc(100% - 20px));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="probe-canvas" aria-label="Grafik-Probe in 3D"></canvas>
+    <div class="probe-bar">
+      <a href="index.html" data-probe="zurueck">← Spiel</a>
+      <span class="probe-title">🎨 Grafik-Probe</span>
+      <button type="button" data-probe="kamera">📐 Schräg</button>
+      <button type="button" data-probe="links" aria-label="Nach links drehen" hidden>⟲</button>
+      <button type="button" data-probe="rechts" aria-label="Nach rechts drehen" hidden>⟳</button>
+      <button type="button" data-probe="stil">🏰 Mittelalter</button>
+      <button type="button" data-probe="effekte">✨ Effekte an</button>
+      <button type="button" data-probe="licht">☀️ Tag</button>
+      <span class="probe-spacer"></span>
+      <span id="probe-fps" class="probe-badge">🎞️ – Bilder/s</span>
+      <span id="probe-version" class="probe-badge">v</span>
+    </div>
+    <div id="probe-label" hidden></div>
+    <div class="probe-hint">
+      <button type="button" data-probe="hinweis" aria-label="Hinweis schließen">✕</button>
+      Ein Finger verschiebt, zwei Finger zoomen (frei drehbar: zwei Finger bewegen dreht). Gebäude antippen.
+      <b>Die Gebäude sind Platzhalter aus einfachen Formen</b> – Kenneys Modelle kommen noch dazu.
+    </div>
+    <script type="module" src="src/probe/probe.js?v=0.32.0"></script>
+  </body>
+</html>

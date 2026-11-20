@@ -6,7 +6,7 @@ import { onPress } from './press.js';
 
 const numberFormat = new Intl.NumberFormat('de-DE');
 
-export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, onLevel, onSaveFile, onLoadFile }) {
+export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, onLevel, onSaveFile, onLoadFile, onProbe }) {
   const gold = document.getElementById('hud-gold');
   const goldGain = document.getElementById('hud-gold-gain');
   const testPackButton = document.getElementById('menu-test-pack');
@@ -59,6 +59,11 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
   onPress(document.getElementById('menu-new-game'), () => {
     closeMenu();
     onNewGame();
+  });
+  // v0.32.0: Grafik-Probe (eigene Seite, Tobias, Chat 22)
+  onPress(document.getElementById('menu-probe'), () => {
+    closeMenu();
+    onProbe();
   });
 
   // Vollbild (Android/PC). Ohne Vollbild-Funktion wird der Knopf ausgeblendet.

@@ -34,10 +34,35 @@ export function sourceFiles(dir = join(ROOT, 'src')) {
   return files.sort();
 }
 
-export function importMapJson(version) {
+export function importMapJson(version, extra = {}) {
   const imports = {};
   for (const file of sourceFiles()) imports[file] = `${file}?v=${version}`;
-  return JSON.stringify({ imports }, null, 2);
+  return JSON.stringify({ imports: { ...imports, ...extra } }, null, 2);
+}
+
+// v0.32.0: Die Grafik-Probe (grafik-probe.html) lädt dazu three.js. Die
+// Versionsnummer von three.js steht im Ordnernamen, deshalb ohne ?v=.
+export const PROBE_IMPORTS = {
+  three: './vendor/three-0.187.0/build/three.module.js',
+  'three/addons/': './vendor/three-0.187.0/examples/jsm/',
+};
+
+// Schreibt ?v= und die Import-Map in eine HTML-Seite.
+function updatePage(path, version, extra = {}) {
+  let html = read(path);
+  html = html.replace(/\?v=[\d.]+/g, `?v=${version}`);
+  const indent = '    ';
+  const map = importMapJson(version, extra)
+    .split('\n')
+    .map((line) => `${indent}${line}`)
+    .join('\n');
+  html = replaceOnce(
+    html,
+    /<script type="importmap">[\s\S]*?<\/script>/,
+    `<script type="importmap">\n${map}\n${indent}</script>`,
+    `Import-Map in ${path}`,
+  );
+  write(path, html);
 }
 
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
@@ -49,19 +74,7 @@ if (isMain) {
   } else {
     version = read('src/version.js').match(/VERSION = '([^']+)'/)[1];
   }
-  let html = read('index.html');
-  html = html.replace(/\?v=[\d.]+/g, `?v=${version}`);
-  const indent = '    ';
-  const map = importMapJson(version)
-    .split('\n')
-    .map((line) => `${indent}${line}`)
-    .join('\n');
-  html = replaceOnce(
-    html,
-    /<script type="importmap">[\s\S]*?<\/script>/,
-    `<script type="importmap">\n${map}\n${indent}</script>`,
-    'Import-Map in index.html',
-  );
-  write('index.html', html);
-  console.log(`Version ${version}: src/version.js und index.html (${sourceFiles().length} Dateien in der Import-Map) aktualisiert.`);
+  updatePage('index.html', version);
+  updatePage('grafik-probe.html', version, PROBE_IMPORTS);
+  console.log(`Version ${version}: src/version.js, index.html und grafik-probe.html (${sourceFiles().length} Dateien in der Import-Map) aktualisiert.`);
 }

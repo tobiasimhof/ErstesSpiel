@@ -3045,6 +3045,115 @@ async function runNarrowPhone(browser, baseUrl) {
   await context.close();
 }
 
+// v0.32.0: Grafik-Probe (eigene Seite, Tobias, Chat 22) in Tablet- und
+// Handygröße: aus dem Menü öffnen, die Fabrik läuft (Waren auf den Bändern),
+// verschieben mit einem Finger, Gebäude antippen, alle Schalter umschalten,
+// Hinweis schließen, zurück ins Spiel.
+async function runProbe(browser, baseUrl, device) {
+  currentDevice = `${device.name}-probe`;
+  console.log(`\n${device.name} – Grafik-Probe`);
+  const context = await browser.newContext({
+    viewport: device.viewport,
+    deviceScaleFactor: device.deviceScaleFactor,
+    hasTouch: true,
+    isMobile: true,
+  });
+  const page = await context.newPage();
+  const cdp = await context.newCDPSession(page);
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  const shot = (name) => page.screenshot({ path: path.join(OUT, `${device.name}-${name}.png`) });
+  const probe = (fn, arg) => page.evaluate(fn, arg);
+
+  await page.goto(baseUrl);
+  await waitForGame(page);
+  await page.tap('#btn-menu');
+  await sleep(100);
+  const menuBox = await page.locator('#menu').boundingBox();
+  check(
+    (await page.isVisible('#menu-probe')) && menuBox.y + menuBox.height <= device.viewport.height,
+    `Menü ☰ zeigt „🎨 Grafik-Probe“ und passt auf den Bildschirm (${Math.round(menuBox.y + menuBox.height)} ≤ ${device.viewport.height})`,
+  );
+  await page.tap('#menu-probe');
+  await page.waitForURL(/grafik-probe\.html$/);
+  await page.waitForFunction(() => window.__probe?.ready, null, { timeout: 20000 });
+  await sleep(3000);
+  const info = await probe(() => ({ fps: window.__probe.fps(), items: window.__probe.items(), settings: { ...window.__probe.settings } }));
+  check(info.fps > 0, `Die Probe zeichnet laufend (${info.fps} Bilder/s im Test ohne Grafikchip)`);
+  check(info.items > 0, `Waren fahren auf den Bändern (${info.items})`);
+  check(
+    JSON.stringify(info.settings) === JSON.stringify({ style: 'mittelalter', effects: true, light: 'tag', camera: 'schraeg' }),
+    `Start: Schräg wie Clash of Clans, Mittelalter, Effekte an, Tag (${JSON.stringify(info.settings)})`,
+  );
+  const barFits = await probe(() =>
+    [...document.querySelectorAll('.probe-bar > *')]
+      .filter((e) => !e.hidden)
+      .every((e) => {
+        const r = e.getBoundingClientRect();
+        return r.left >= -0.5 && r.right <= innerWidth + 0.5 && e.scrollWidth <= e.clientWidth + 1;
+      }),
+  );
+  check(barFits, 'Obere Leiste der Probe passt auf den Bildschirm');
+  await shot('probe-1-schraeg');
+
+  // Ein Finger verschiebt die Kamera
+  const before = await probe(() => window.__probe.target());
+  const vp = device.viewport;
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: vp.width * 0.6, y: vp.height * 0.6, id: 3 }] });
+  for (let s = 1; s <= 8; s++) {
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: vp.width * 0.6 - s * 15, y: vp.height * 0.6 - s * 6, id: 3 }] });
+  }
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await sleep(600);
+  const after = await probe(() => window.__probe.target());
+  check(JSON.stringify(before) !== JSON.stringify(after) && after[1] === 0, `Wischen verschiebt die Kamera über den Boden (${before} → ${after})`);
+
+  // Gebäude antippen
+  const saw = await probe(() => window.__probe.screenOf('saegewerk'));
+  await page.touchscreen.tap(saw.x, saw.y);
+  await sleep(300);
+  const label = await probe(() => window.__probe.label());
+  check(Boolean(label) && label.includes('Sägewerk') && label.includes('Holzplatte'), `Sägewerk antippen zeigt Namen und Ware („${label}“)`);
+  await shot('probe-2-antippen');
+
+  // Schalter
+  const toggle = async (key, field, value, name) => {
+    await page.tap(`[data-probe="${key}"]`);
+    await sleep(700);
+    const now = await probe((f) => window.__probe.settings[f], field);
+    check(now === value, `${name} (${now})`);
+  };
+  await toggle('licht', 'light', 'abend', 'Tag → Abend');
+  await shot('probe-3-abend');
+  await toggle('licht', 'light', 'tag', 'Abend → Tag');
+  await toggle('stil', 'style', 'modern', 'Stil Mittelalter → Modern');
+  await shot('probe-4-modern');
+  await toggle('stil', 'style', 'mittelalter', 'Stil Modern → Mittelalter');
+  check(!(await page.isVisible('[data-probe="rechts"]')), 'Schräg-Ansicht: keine Dreh-Knöpfe');
+  await toggle('kamera', 'camera', 'frei', 'Kamera Schräg → Frei drehbar');
+  check((await page.isVisible('[data-probe="links"]')) && (await page.isVisible('[data-probe="rechts"]')), 'Frei drehbar: Dreh-Knöpfe ⟲ ⟳');
+  const camBefore = await probe(() => window.__probe.target());
+  await page.tap('[data-probe="rechts"]');
+  await sleep(500);
+  check(JSON.stringify(await probe(() => window.__probe.target())) === JSON.stringify(camBefore), 'Drehen behält den Blickpunkt');
+  await shot('probe-5-frei');
+  await toggle('effekte', 'effects', false, 'Effekte aus');
+  await shot('probe-6-ohne-effekte');
+  await toggle('effekte', 'effects', true, 'Effekte wieder an');
+  await toggle('kamera', 'camera', 'schraeg', 'Kamera zurück auf Schräg');
+
+  // Hinweis schließen, zurück ins Spiel
+  await page.tap('[data-probe="hinweis"]');
+  await sleep(150);
+  check(!(await page.isVisible('.probe-hint')), 'Hinweis lässt sich schließen');
+  check(errors.length === 0, `Keine Fehler in der Konsole der Probe${errors.length ? ': ' + errors.join(' | ') : ''}`);
+  await page.tap('[data-probe="zurueck"]');
+  await waitForGame(page);
+  check(page.url().endsWith('/') || page.url().endsWith('index.html'), `„← Spiel“ führt zurück ins Spiel (${page.url()})`);
+  await context.close();
+}
+
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
   const versionSource = fs.readFileSync(path.join(ROOT, 'src', 'version.js'), 'utf8');
@@ -3057,6 +3166,7 @@ async function runNarrowPhone(browser, baseUrl) {
     for (const device of DEVICES) await runDevice(browser, baseUrl, device, expectedVersion);
     await runPortrait(browser, baseUrl);
     await runNarrowPhone(browser, baseUrl);
+    for (const device of DEVICES) await runProbe(browser, baseUrl, device);
   } finally {
     await browser.close();
     server.close();

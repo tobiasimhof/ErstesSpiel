@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 20.11.2026 – Chat 22 (Fortsetzung 3): Grafik-Probe, Teil 1 (v0.32.0)
+
+**Tobias:** „Passt alles so, du darfst loslegen.“
+
+**Claude** hat für kenney.nl eine eigene Umgebung „ErstesSpiel“ vorgeschlagen (Bestätigungsfenster) – das wurde abgelehnt. Auf npm gab es keine offiziellen Kenney-Pakete. Deshalb hat Claude die Grafik-Probe ohne Kenney-Modelle gebaut (Gebäude als Platzhalter aus einfachen Formen), sonst wie geplant: three.js im Projekt, eigene Seite mit Menü-Eintrag, Holz- und Glas-Straße nach den echten Spielregeln, Schalter für Kamera, Stil, Effekte, Tag/Abend, Bilder pro Sekunde. Fragen an Tobias: wie die Kenney-Modelle ins Projekt kommen sollen (selbst freigeben, hochladen oder erst mit Platzhaltern weiter) und welche Pakete.
+
+**Umgesetzt:** v0.32.0.
+
 ### 20.11.2026 – Chat 22 (Fortsetzung 2): Grafik-Probe geplant (v0.31.1)
 
 **Tobias** (zu Claudes 4 Grafik-Fragen): „Ich würde gerne eine kleine Grafik-Probe jetzt machen, damit ich weiß in welche Richtung das Spiel gehen kann und welche Richtung mir am besten gefällt. 2. Da weiß ich ehrlich gesagt nicht, was einfacher ist und leichter umzusetzen. In erster linie geht es mir darum, dass ich einfach mal sehen kann, was alles möglich ist. Immerhin "entwickle" ich das Spiel alleine mit dir und hab kein Team hinter mir. Ich sehe bei Youtube wie Gamer neue Spiele ausprobieren und alles so im "schäle die kartoffel", "Finde die Nadel im Heuhaufen", "Säubere den Mond vom Staub" extrem gut ankommt und ehrlich gesagt auch nicht so aussieht, als hätte das ein Entwickler team entworfen sondern wäre überwiegend AI codet. Trotzdem haben diese Spiele eine gute Gamemechanik und alles fühlt sich flüssig an, deswegen würde ich gerne sehe, was möglich ist und in welche Richtung wir gehen. ICh weiß ehrlich gesagt nicht, wie der Markt ist, aber gefühlt entwickeln alle aktuell Games für Steam etc und Mobile Games kommen kaum noch gute nach. Es gibt seit jahren die gleichen Mobile games. 3. Stil sollte im Mittelalter spielen, aber wenn es nur Assets gibt, die moderner sind, dann können wir das auch gerne erstmal modern halten. Jenachdem was die Assets bieten. 4. Das können wir erstmal nach hinten stellen, aber ich wollte so langsam alle "Punkte" mal anfassen“
