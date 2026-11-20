@@ -61,6 +61,14 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Grafik-Probe, Teil 2 – Kenney-Modelle (vorgemerkt in v0.32.1, nächster Chat)
+
+**Tobias (Chat 22, 20.11.2026):** „Ich war eben noch am Tablet und da stand, dass ich die Freigabe nur am PC machen kann, deswegen sitze ich jetzt am PC, aber ich habs gerade auf dem Tablet getestet und dort habe ich 60-90 fps. Speicher gerne alles im repo und dann würde ich danach einen neuen Chat anfangen. Ich würde gerne, dass ich dir schreibe "Bringe dich auf den aktuellen stand" und dann fragst du mich, ob wir mit den Kennysachen nochmal starten wollen, dann würde ich dir die Freigabe geben, weil ich am PC bin. Falls das immer noch nicht funktionieren sollte, dann würde ich dir die Dateien einfach auf github hochladen“
+
+**Ergebnis Teil 1:** Auf Tobias' Galaxy Tab S9 läuft die Probe mit **60–90 Bildern pro Sekunde** – three.js mit Schatten, Rauch und Licht ist für das Tablet kein Problem.
+
+**Ablauf im nächsten Chat:** Auf „Bringe dich auf den aktuellen Stand“ fragt Claude, ob wir mit den Kenney-Sachen weitermachen. Tobias ist am PC; Claude ruft `get_environment` auf und schlägt eine eigene Umgebung „ErstesSpiel“ mit kenney.nl und www.kenney.nl vor (die Default-Umgebung aller Projekte bleibt unverändert; `switch_session` „network_only“). Tobias bestätigt im Fenster. Klappt das nicht, lädt Tobias die Pakete auf github.com ins Projekt hoch („Add file → Upload files“, je Datei bis 25 MB). Danach plant Claude Teil 2: welche Pakete (Vorschlag: Castle Kit oder Fantasy Town Kit für Mittelalter, Conveyor Kit für die Bänder, Factory Kit zum Vergleich für Modern), welche Modelle für welches Gebäude, wie groß die Dateien werden – vorstellen, OK abwarten.
+
 ### Grafik-Probe, Teil 1 (fertig, v0.32.0 – noch ohne Kenney-Modelle)
 
 **Freigabe (Tobias, Chat 22, 20.11.2026):** „Passt alles so, du darfst loslegen.“
