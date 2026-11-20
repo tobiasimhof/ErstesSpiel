@@ -4,6 +4,28 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 20.11.2026 – Chat 23: Kenney-Modelle in der Grafik-Probe (v0.33.0)
+
+**Tobias:** „Bringe dich auf den aktuellen Stand der Dinge.“
+
+**Claude** hat `STAND.md` und `SPIEL.md` gelesen und wie verabredet gefragt, ob wir mit den Kenney-Sachen weitermachen.
+
+**Tobias:** „Ja, lass uns loslegen. Ich werde dir die Freigabe am PC geben“
+
+**Claude** hat eine eigene Arbeitsumgebung „ErstesSpiel“ vorgeschlagen, die kenney.nl und www.kenney.nl erreicht – Tobias hat sie bestätigt, die Verbindung stand. kenney.nl selbst lässt aber keine automatischen Programme zu (Fehler 403); den Download über den Download-Knopf der Seite hat Claudes Arbeitsumgebung als Umgehen einer Sperre gestoppt. Claude hat das nicht weiter versucht und den verabredeten Ausweg vorgeschlagen: Tobias lädt die Pakete (Fantasy Town Kit, Castle Kit, Factory Kit – das frühere Conveyor Kit steckt im Factory Kit) selbst herunter und auf GitHub in den Arbeitsstand hoch.
+
+**Tobias:** „Ich kann auf den Ordner Sleepy Pascal leider nicht zugreifen, weil Github sagt, 404 die Seite exisitiert nicht. Ich habe alle 3 Pakete heruntergeladen.“
+
+**Claude:** Der Arbeitsstand war noch nicht auf GitHub – Claude hat ihn hochgeladen, danach ging der Link.
+
+**Tobias:** „Hat funktioniert. Ich hab jetzt einen gelben Text mit "Claude/sleepy-pascal...." had recent pushes 5 seconds ago und dann kann ich in grün auswählen "Compare & Pull request". Soll ich das auswählen ?“ – **Claude:** Nein, den Pull Request macht Claude selbst, wenn eine Version fertig ist.
+
+**Claude** hat die Pakete ausgepackt (alle CC0, Modelle meist 5–50 KB), zwei Übersichtsbilder mit der Auswahl je Gebäude geschickt und den Plan v0.33.0 vorgestellt (`PLAENE.md`) mit drei Fragen: 1. Farben – Kenneys eigene oder die des Spiels (Vorschlag: ein Schalter für beides)? 2. Bänder im Mittelalter aus dem Factory Kit in Holz umfärben? 3. Leuchtring als Versandportal behalten (über Steinbecken bzw. Metallsockel)?
+
+**Tobias:** „1. Ja lass uns beides probieren, damit ich alles sehen kann. Wir sind aktuell ja in der Testphase. 2. Ja bin ich mit einverstanden. 3. Ja, bin ich auch mit einverstanden. Lass uns direkt damit anfangen“
+
+**Umgesetzt:** v0.33.0 – Grafik-Probe, Teil 2 mit Kenneys Modellen und dem Schalter „Farben: Kenney ↔ Spiel“.
+
 ### 20.11.2026 – Chat 22 (Fortsetzung 4): Grafik-Probe getestet (v0.32.1)
 
 **Tobias:** „Ich war eben noch am Tablet und da stand, dass ich die Freigabe nur am PC machen kann, deswegen sitze ich jetzt am PC, aber ich habs gerade auf dem Tablet getestet und dort habe ich 60-90 fps. Speicher gerne alles im repo und dann würde ich danach einen neuen Chat anfangen. Ich würde gerne, dass ich dir schreibe "Bringe dich auf den aktuellen stand" und dann fragst du mich, ob wir mit den Kennysachen nochmal starten wollen, dann würde ich dir die Freigabe geben, weil ich am PC bin. Falls das immer noch nicht funktionieren sollte, dann würde ich dir die Dateien einfach auf github hochladen“

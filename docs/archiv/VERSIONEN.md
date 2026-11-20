@@ -4,6 +4,26 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.33.0 – Grafik-Probe, Teil 2: Kenneys Modelle (20.11.2026)
+
+**Vorgenommen:**
+- Die Platzhalter der Grafik-Probe durch Kenneys 3D-Modelle ersetzen (Mittelalter: Fantasy Town Kit und Castle Kit, Modern: Factory Kit) und einen Schalter „Farben: Kenney ↔ Spiel“ einbauen (Tobias: „Ja lass uns beides probieren, damit ich alles sehen kann“).
+
+**Fragen, die wir uns gestellt haben:**
+- Wie kommen die Pakete ins Projekt? → Die eigene Umgebung mit kenney.nl hat Tobias bestätigt, aber kenney.nl lässt keine automatischen Programme zu; Tobias hat die drei Pakete selbst heruntergeladen und auf GitHub hochgeladen. Ins Projekt kommen nur die 51 gebrauchten Modelle (1,1 MB), die ZIP-Dateien nicht.
+- Wie bekommen die Modelle andere Farben? → Alle Modelle eines Pakets nutzen eine gemeinsame Farbtafel; für „Farben: Spiel“ und die Holz-Bänder malt die Probe einzelne Felder einer Kopie nach (Helligkeit bleibt).
+- Kenneys Kurven- und Abzweigteile passen in Farbe und Breite nicht zu den geraden Bändern → Kurven, Abzweige und Kreuzungen setzen sich aus „Armen“ zusammen.
+- Wie bleiben die reinen Daten testbar? → Modell-Liste, Farbtafeln und Band-Stücke stehen in `src/probe/kenneyParts.js` ohne three.js.
+
+**Gemacht:**
+- `assets/kenney/` (je Paket Modelle, Farbtafel, Lizenz), `GLTFLoader` mit Hilfsdateien in `vendor/three-0.187.0/`, neue Dateien `src/probe/kenneyParts.js`, `models.js`, `kenney3d.js`; `world3d.js` baut Gebäude, Bänder und Umgebung daraus (bei Stil- oder Farbwechsel neu), `probe.js` lädt zuerst die Modelle („Lädt …“) und hat den Schalter „Farben“; auf dem Handy heißt der Kamera-Knopf nur „📐 Schräg“.
+- Tests: Modelle und Lizenz im Projekt, Größe, verbaute Modelle ↔ Liste, Umfärben, Leucht-Tafel, Band-Stücke; Browser-Test mit Modellen, Farben-Schalter und drehendem Wasserrad bzw. Zahnrad.
+- Doku: `STAND.md`, `SPIEL.md`, `TECHNIK.md`, `vendor/README.md`, Archiv. Versionsnummer 0.33.0.
+
+**Geprüft:**
+- `npm test`: 414 von 414 bestanden.
+- GEPRUEFT_BROWSER
+
 ### v0.32.1 – Grafik-Probe getestet, Kenney im nächsten Chat (20.11.2026, nur Doku)
 
 **Vorgenommen:**

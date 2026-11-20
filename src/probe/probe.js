@@ -5,6 +5,9 @@
 //
 // Tobias (Chat 22): „In erster linie geht es mir darum, dass ich einfach mal
 // sehen kann, was alles möglich ist.“
+//
+// v0.33.0 (Teil 2): lädt zuerst Kenneys Modelle (models.js, mit Anzeige
+// „Lädt …“); neuer Schalter „Farben: Kenney ↔ Spiel“.
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -14,18 +17,33 @@ import { tick, TICK } from '../core/sim.js';
 import { VERSION } from '../version.js';
 import { onPress } from '../view/press.js';
 import { createProbeFactory, keepRunning, PROBE_AREA } from './factory.js';
+import { loadModels } from './models.js';
 import { createWorld } from './world3d.js';
 
 const canvas = document.getElementById('probe-canvas');
 const labelBox = document.getElementById('probe-label');
 const fpsBox = document.getElementById('probe-fps');
+const loadingBox = document.getElementById('probe-loading');
 document.getElementById('probe-version').textContent = `v${VERSION}`;
+
+// ---------- Modelle laden ----------
+
+let lib;
+try {
+  lib = await loadModels((done, total) => {
+    loadingBox.textContent = `⏳ Lädt die Modelle … ${done} / ${total}`;
+  });
+} catch (err) {
+  loadingBox.textContent = '⚠️ Die Modelle konnten nicht geladen werden. Bitte die Seite neu laden.';
+  throw err;
+}
+loadingBox.hidden = true;
 
 // ---------- Fabrik und Welt ----------
 
 const { state, origin } = createProbeFactory();
 const area = PROBE_AREA;
-const world = createWorld({ state, origin, area });
+const world = createWorld({ state, origin, area, lib });
 // etwas nach hinten, weil die obere Leiste den oberen Rand verdeckt
 const center = new THREE.Vector3(area.width / 2 - 0.25, 0, area.height / 2 - 0.75);
 
@@ -128,9 +146,11 @@ function turn(angle) {
 const settings = world.settings;
 settings.camera = 'schraeg';
 
+// Text in [ ] fällt auf dem Handy weg (sonst passt die Leiste nicht in eine Zeile)
 const LABELS = {
-  kamera: { schraeg: '📐 Schräg (wie Clash of Clans)', frei: '🎥 Frei drehbar' },
+  kamera: { schraeg: '📐 Schräg[ (wie Clash of Clans)]', frei: '🎥 Frei drehbar' },
   stil: { mittelalter: '🏰 Mittelalter', modern: '🏭 Modern' },
+  farben: { kenney: '🎨 Farben: Kenney', spiel: '🎨 Farben: Spiel' },
   effekte: { true: '✨ Effekte an', false: '◻️ Effekte aus' },
   licht: { tag: '☀️ Tag', abend: '🌙 Abend' },
 };
@@ -138,9 +158,18 @@ const buttons = {};
 for (const key of Object.keys(LABELS)) buttons[key] = document.querySelector(`[data-probe="${key}"]`);
 const turnButtons = [...document.querySelectorAll('[data-probe="links"], [data-probe="rechts"]')];
 
+function setLabel(button, text) {
+  const [main, long = ''] = text.split(/\[|\]/);
+  const extra = document.createElement('span');
+  extra.className = 'probe-long';
+  extra.textContent = long.replace(/^ /, '\u00a0'); // Leerzeichen am Anfang bliebe im Knopf sonst weg
+  button.replaceChildren(main, extra);
+}
+
 function refreshButtons() {
-  buttons.kamera.textContent = LABELS.kamera[settings.camera];
+  setLabel(buttons.kamera, LABELS.kamera[settings.camera]);
   buttons.stil.textContent = LABELS.stil[settings.style];
+  buttons.farben.textContent = LABELS.farben[settings.colors];
   buttons.effekte.textContent = LABELS.effekte[settings.effects];
   buttons.licht.textContent = LABELS.licht[settings.light];
   for (const b of turnButtons) b.hidden = settings.camera !== 'frei';
@@ -152,6 +181,11 @@ onPress(buttons.kamera, () => {
 });
 onPress(buttons.stil, () => {
   world.setStyle(settings.style === 'mittelalter' ? 'modern' : 'mittelalter');
+  hideLabel();
+  refreshButtons();
+});
+onPress(buttons.farben, () => {
+  world.setColors(settings.colors === 'kenney' ? 'spiel' : 'kenney');
   hideLabel();
   refreshButtons();
 });
@@ -294,6 +328,18 @@ window.__probe = {
   settings,
   fps: () => fps,
   items: () => world.itemCount(),
+  models: () => lib.count(),
+  // bewegte Teile eines Gebäudes (Wasserrad bzw. Zahnrad, Roboterarm): Drehwinkel
+  motion(type) {
+    const view = world.views().find((v) => v.building.type === type);
+    if (!view) return null;
+    const { wheel, arm } = view.parts;
+    const r = (v) => Math.round(v * 1000) / 1000;
+    return {
+      wheel: wheel ? r(wheel.rotation.x + wheel.rotation.y) : null,
+      arm: arm ? r(arm.getObjectByName('element-a').rotation.y + arm.getObjectByName('element-c').rotation.z) : null,
+    };
+  },
   label: () => (labelBox.hidden ? null : labelBox.textContent),
   // wohin die Kamera schaut (Punkt auf dem Boden) und wie weit gezoomt ist
   target: () => controls.target.toArray().map((v) => Math.round(v * 100) / 100),

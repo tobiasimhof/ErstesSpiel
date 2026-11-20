@@ -3079,12 +3079,20 @@ async function runProbe(browser, baseUrl, device) {
   await page.waitForURL(/grafik-probe\.html$/);
   await page.waitForFunction(() => window.__probe?.ready, null, { timeout: 20000 });
   await sleep(3000);
-  const info = await probe(() => ({ fps: window.__probe.fps(), items: window.__probe.items(), settings: { ...window.__probe.settings } }));
+  const info = await probe(() => ({
+    fps: window.__probe.fps(),
+    items: window.__probe.items(),
+    models: window.__probe.models(),
+    loading: !document.getElementById('probe-loading').hidden,
+    settings: { ...window.__probe.settings },
+  }));
   check(info.fps > 0, `Die Probe zeichnet laufend (${info.fps} Bilder/s im Test ohne Grafikchip)`);
   check(info.items > 0, `Waren fahren auf den Bändern (${info.items})`);
+  // v0.33.0: Kenneys Modelle sind geladen, die Anzeige „Lädt …“ ist weg
+  check(info.models >= 40 && !info.loading, `Kenneys Modelle geladen (${info.models}), „Lädt …“ verschwunden`);
   check(
-    JSON.stringify(info.settings) === JSON.stringify({ style: 'mittelalter', effects: true, light: 'tag', camera: 'schraeg' }),
-    `Start: Schräg wie Clash of Clans, Mittelalter, Effekte an, Tag (${JSON.stringify(info.settings)})`,
+    JSON.stringify(info.settings) === JSON.stringify({ style: 'mittelalter', colors: 'kenney', effects: true, light: 'tag', camera: 'schraeg' }),
+    `Start: Schräg wie Clash of Clans, Mittelalter, Kenneys Farben, Effekte an, Tag (${JSON.stringify(info.settings)})`,
   );
   const barFits = await probe(() =>
     [...document.querySelectorAll('.probe-bar > *')]
@@ -3129,7 +3137,22 @@ async function runProbe(browser, baseUrl, device) {
   await toggle('licht', 'light', 'tag', 'Abend → Tag');
   await toggle('stil', 'style', 'modern', 'Stil Mittelalter → Modern');
   await shot('probe-4-modern');
-  await toggle('stil', 'style', 'mittelalter', 'Stil Modern → Mittelalter');
+  // v0.33.0: Zahnrad (Modern) bzw. Wasserrad (Mittelalter) drehen sich, solange gesägt wird
+  const turns = async () => {
+    const start = await probe(() => window.__probe.motion('saegewerk').wheel);
+    return page
+      .waitForFunction((a) => window.__probe.motion('saegewerk').wheel !== a, start, { timeout: 15000 })
+      .then(() => true)
+      .catch(() => false);
+  };
+  check(await turns(), 'Modern: das Zahnrad am Sägewerk dreht sich');
+  await toggle('farben', 'colors', 'spiel', 'Farben: Kenney → Spiel (Modern)');
+  check((await page.textContent('[data-probe="farben"]')).includes('Spiel'), 'Knopf zeigt „Farben: Spiel“');
+  await shot('probe-4b-modern-farben-spiel');
+  await toggle('stil', 'style', 'mittelalter', 'Stil Modern → Mittelalter (Farben bleiben)');
+  check(await turns(), 'Mittelalter: das Wasserrad am Sägewerk dreht sich');
+  await shot('probe-4c-mittelalter-farben-spiel');
+  await toggle('farben', 'colors', 'kenney', 'Farben: Spiel → Kenney');
   check(!(await page.isVisible('[data-probe="rechts"]')), 'Schräg-Ansicht: keine Dreh-Knöpfe');
   await toggle('kamera', 'camera', 'frei', 'Kamera Schräg → Frei drehbar');
   check((await page.isVisible('[data-probe="links"]')) && (await page.isVisible('[data-probe="rechts"]')), 'Frei drehbar: Dreh-Knöpfe ⟲ ⟳');

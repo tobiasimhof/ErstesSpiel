@@ -1,17 +1,17 @@
-// v0.32.0: Grafik-Probe – die 3D-Welt mit three.js: Boden, Bäume, Gebäude,
-// Bänder, Waren, Licht und Effekte. Liest nur den Spielzustand (src/core),
-// ändert ihn nicht.
+// v0.32.0: Grafik-Probe – die 3D-Welt mit three.js: Boden, Umgebung,
+// Gebäude, Bänder, Waren, Licht und Effekte. Liest nur den Spielzustand
+// (src/core), ändert ihn nicht.
 //
-// Die Gebäude sind vorläufige Platzhalter aus einfachen Formen (Kasten, Dach,
-// Schornstein …) in zwei Stilen – Kenneys Modelle kommen dazu, sobald sie
-// geladen werden können (kenney.nl ist in Claudes Arbeitsumgebung gesperrt).
+// v0.33.0 (Teil 2): Gebäude, Bänder, Bäume und Zaun sind Kenneys Modelle
+// (kenney3d.js, models.js) statt Platzhaltern. Neuer Schalter „Farben“:
+// Kenneys eigene Farben oder die Farben des Spiels (Dächer bzw. Maschinen in
+// der Farbe ihres Reiters, wärmerer Stein).
 //
 // Koordinaten: 1 Feld = 1 Einheit, x nach rechts (Osten), z nach unten
 // (Süden), y nach oben. Feld (lx, ly) hat seine Mitte bei (lx + 0.5, ly + 0.5).
 
 import * as THREE from 'three';
 
-import { BUILDINGS } from '../core/data/buildings.js';
 import { ITEMS } from '../core/data/items.js';
 import { RECIPES } from '../core/data/recipes.js';
 import { DELTA } from '../core/dirs.js';
@@ -19,8 +19,7 @@ import { footprintSize } from '../core/geometry.js';
 import { productionOf, sourceInputs } from '../core/production.js';
 import { BELT_SPEED, TICK } from '../core/sim.js';
 import { parseTileKey } from '../core/state.js';
-
-const DIR_ANGLE = { N: 0, E: -Math.PI / 2, S: Math.PI, W: Math.PI / 2 };
+import { BELT_TOP, buildBeltTile, buildKenneyBuilding, buildSurroundings } from './kenney3d.js';
 
 // ---------- kleine Helfer ----------
 
@@ -36,39 +35,21 @@ function mesh(geometry, material, { x = 0, y = 0, z = 0, shadow = true } = {}) {
   return m;
 }
 
-// Pyramidendach über einer Grundfläche w × d
-function roof(w, d, height, material) {
-  const geo = new THREE.ConeGeometry(Math.SQRT1_2, height, 4, 1);
-  geo.rotateY(Math.PI / 4);
-  const m = mesh(geo, material);
-  m.scale.set(w, 1, d);
-  return m;
-}
-
-// Lauf-Pfeile für die Bänder (eine Textur für alle, sie wandert mit)
-function beltTexture() {
+// Lauf-Pfeile auf den Bändern (eine Textur für alle, sie wandert mit)
+function arrowTexture() {
   const c = document.createElement('canvas');
   c.width = 64;
   c.height = 64;
   const g = c.getContext('2d');
-  g.fillStyle = '#4a4440';
-  g.fillRect(0, 0, 64, 64);
-  g.strokeStyle = '#2e2a27';
-  g.lineWidth = 3;
-  for (let y = 0; y <= 64; y += 16) {
-    g.beginPath();
-    g.moveTo(0, y);
-    g.lineTo(64, y);
-    g.stroke();
-  }
-  g.strokeStyle = '#e0b84f';
+  g.clearRect(0, 0, 64, 64);
+  g.strokeStyle = 'rgba(255, 214, 120, 0.85)';
   g.lineWidth = 6;
   g.lineCap = 'round';
   g.lineJoin = 'round';
   g.beginPath();
-  g.moveTo(18, 40);
-  g.lineTo(32, 24);
-  g.lineTo(46, 40);
+  g.moveTo(20, 40);
+  g.lineTo(32, 26);
+  g.lineTo(44, 40);
   g.stroke();
   const tex = new THREE.CanvasTexture(c);
   tex.colorSpace = THREE.SRGBColorSpace;
@@ -77,7 +58,9 @@ function beltTexture() {
   return tex;
 }
 
-// ---------- Waren ----------
+const DIR_ANGLE = { N: 0, E: -Math.PI / 2, S: Math.PI, W: Math.PI / 2 };
+
+// ---------- Waren (eigene Formen – solche Waren gibt es bei Kenney nicht) ----------
 
 function itemTemplate(type) {
   const def = ITEMS[type] ?? { color: '#cccccc' };
@@ -110,137 +93,14 @@ function itemTemplate(type) {
   return g;
 }
 
-// ---------- Gebäude (Platzhalter) ----------
-
-const STYLE = {
-  mittelalter: { wall: '#e3d3b0', base: '#8d8a82', timber: '#6b4a2b', door: '#5a3a20' },
-  modern: { wall: '#a9aeb3', base: '#6d7378', timber: '#55606b', door: '#3d454d' },
-};
-
-// Baut ein Gebäude als Gruppe. parts: Teile, die sich bewegen (Säge, Ring …).
-function buildBuilding(building, style) {
-  const def = BUILDINGS[building.type];
-  const { width: w, height: d } = footprintSize(building.type, building.rot);
-  const s = STYLE[style];
-  const g = new THREE.Group();
-  const parts = {};
-  const accent = def.color;
-  const windows = [];
-
-  if (building.type === 'versandportal') {
-    // Portal: ein schwebender, leuchtender Ring über einem Sockel
-    g.add(mesh(new THREE.CylinderGeometry(0.42, 0.46, 0.12, 24), mat(s.base), { y: 0.06 }));
-    const ringMat = mat('#8a6bd1', { emissive: '#6b45c9', emissiveIntensity: 0.6, roughness: 0.4 });
-    const ring = mesh(new THREE.TorusGeometry(0.3, 0.07, 12, 32), ringMat, { y: 0.55 });
-    g.add(ring);
-    const core = mesh(new THREE.CircleGeometry(0.24, 24), mat('#c9b5ff', { emissive: '#a58cff', emissiveIntensity: 0.9, side: THREE.DoubleSide }), {
-      y: 0.55,
-      shadow: false,
-    });
-    g.add(core);
-    parts.ring = ring;
-    parts.core = core;
-    parts.glow = [ringMat];
-    return { group: g, parts, windows };
-  }
-
-  if (building.type === 'lagerhaus') {
-    // offener Schuppen bzw. Container mit Kisten
-    const roofY = style === 'mittelalter' ? 0.75 : 0.7;
-    for (const [px, pz] of [[-w / 2 + 0.12, -d / 2 + 0.12], [w / 2 - 0.12, -d / 2 + 0.12], [-w / 2 + 0.12, d / 2 - 0.12], [w / 2 - 0.12, d / 2 - 0.12]]) {
-      g.add(mesh(new THREE.BoxGeometry(0.1, roofY, 0.1), mat(s.timber), { x: px, y: roofY / 2, z: pz }));
-    }
-    const top = style === 'mittelalter' ? roof(w * 1.05, d * 1.15, 0.35, mat(accent)) : mesh(new THREE.BoxGeometry(w * 0.98, 0.08, d * 0.98), mat(s.base));
-    top.position.y = style === 'mittelalter' ? roofY + 0.17 : roofY + 0.04;
-    g.add(top);
-    const crate = mat(style === 'mittelalter' ? '#a8784a' : '#c08a3e');
-    for (const [px, pz, sz] of [[-0.45, 0, 0.32], [0, 0.05, 0.28], [0.42, -0.02, 0.34], [0.2, 0.0, 0.2]]) {
-      g.add(mesh(new THREE.BoxGeometry(sz, sz, sz), crate, { x: px, y: sz / 2 + (sz === 0.2 ? 0.28 : 0), z: pz }));
-    }
-    return { group: g, parts, windows };
-  }
-
-  // Werkstatt / Rohstoff-Gebäude: Haus mit Dach
-  const wallH = 0.7;
-  const bw = w * 0.84;
-  const bd = d * 0.84;
-  g.add(mesh(new THREE.BoxGeometry(bw + 0.08, 0.12, bd + 0.08), mat(s.base), { y: 0.06 }));
-  g.add(mesh(new THREE.BoxGeometry(bw, wallH, bd), mat(s.wall), { y: 0.12 + wallH / 2 }));
-  if (style === 'mittelalter') {
-    // Fachwerk-Balken an den Ecken
-    for (const [px, pz] of [[-bw / 2, -bd / 2], [bw / 2, -bd / 2], [-bw / 2, bd / 2], [bw / 2, bd / 2]]) {
-      g.add(mesh(new THREE.BoxGeometry(0.09, wallH, 0.09), mat(s.timber), { x: px, y: 0.12 + wallH / 2, z: pz }));
-    }
-    g.add(mesh(new THREE.BoxGeometry(bw + 0.02, 0.07, bd + 0.02), mat(s.timber), { y: 0.12 + wallH * 0.55 }));
-    const r = roof(bw * 1.12, bd * 1.12, 0.75, mat(accent));
-    r.position.y = 0.12 + wallH + 0.375;
-    g.add(r);
-  } else {
-    g.add(mesh(new THREE.BoxGeometry(bw + 0.1, 0.1, bd + 0.1), mat(s.base), { y: 0.12 + wallH + 0.05 }));
-    g.add(mesh(new THREE.BoxGeometry(bw + 0.01, 0.12, bd + 0.01), mat(accent), { y: 0.12 + wallH * 0.82 }));
-  }
-  // Tür nach Süden, Fenster an den Seiten (leuchten am Abend)
-  g.add(mesh(new THREE.BoxGeometry(0.28, 0.42, 0.04), mat(s.door), { y: 0.12 + 0.21, z: bd / 2 + 0.01 }));
-  const winMat = mat('#3a3020', { emissive: '#ffcf6b', emissiveIntensity: 0 });
-  for (const px of [-bw / 4 - 0.1, bw / 4 + 0.1]) {
-    const win = mesh(new THREE.BoxGeometry(0.18, 0.16, 0.03), winMat, { x: px, y: 0.12 + wallH * 0.62, z: bd / 2 + 0.01, shadow: false });
-    g.add(win);
-  }
-  windows.push(winMat);
-
-  const top = 0.12 + wallH;
-  switch (building.type) {
-    case 'holzfaeller': {
-      // Holzstapel neben dem Haus
-      const log = mat('#8a5a2b');
-      for (const [px, py] of [[-0.12, 0.09], [0.12, 0.09], [0, 0.25]]) {
-        const l = mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.6, 10), log, { x: w / 2 - 0.25 + px, y: py, z: d / 2 - 0.08 });
-        l.rotation.z = Math.PI / 2;
-        l.rotation.y = Math.PI / 2;
-        g.add(l);
-      }
-      break;
-    }
-    case 'saegewerk': {
-      // Kreissäge vor dem Haus
-      const blade = mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.03, 20), mat('#c9d1d8', { metalness: 0.7, roughness: 0.3 }), {
-        x: w / 2 - 0.05,
-        y: 0.42,
-        z: 0,
-      });
-      blade.rotation.z = Math.PI / 2;
-      g.add(blade);
-      g.add(mesh(new THREE.BoxGeometry(0.2, 0.3, 0.5), mat(s.timber), { x: w / 2 - 0.05, y: 0.15, z: 0 }));
-      parts.saw = blade;
-      break;
-    }
-    case 'kohlenmeiler':
-    case 'schmiede': {
-      // Schornstein mit Rauch, glühende Öffnung
-      const chimney = mesh(new THREE.BoxGeometry(0.22, 0.7, 0.22), mat(style === 'mittelalter' ? '#9a8d80' : '#7a8085'), {
-        x: bw / 4,
-        y: top + 0.5,
-        z: -bd / 4,
-      });
-      g.add(chimney);
-      const glowMat = mat('#ff8a2a', { emissive: '#ff6a00', emissiveIntensity: 1.2 });
-      g.add(mesh(new THREE.BoxGeometry(0.3, 0.22, 0.03), glowMat, { x: 0, y: 0.12 + 0.13, z: bd / 2 + 0.02, shadow: false }));
-      parts.chimneyTop = new THREE.Vector3(bw / 4, top + 0.85, -bd / 4);
-      parts.glow = [glowMat];
-      if (building.type === 'schmiede') {
-        g.add(mesh(new THREE.BoxGeometry(0.26, 0.16, 0.12), mat('#444a52', { metalness: 0.6, roughness: 0.4 }), { x: -w / 2 + 0.2, y: 0.2, z: d / 2 - 0.1 }));
-      }
-      break;
-    }
-    default:
-      break;
-  }
-  return { group: g, parts, windows };
-}
-
 // ---------- Welt ----------
 
-export function createWorld({ state, origin, area }) {
+const GROUND = {
+  mittelalter: { field: '#7fae55', outer: '#5f8a43', line: '#5d8a3d', line2: '#6f9c4a' },
+  modern: { field: '#a3a7ad', outer: '#5f8a43', line: '#878b91', line2: '#959a9f' },
+};
+
+export function createWorld({ state, origin, area, lib }) {
   const scene = new THREE.Scene();
   const root = new THREE.Group();
   scene.add(root);
@@ -260,15 +120,19 @@ export function createWorld({ state, origin, area }) {
   sc.near = 1;
   sc.far = 60;
   sun.shadow.bias = -0.0005;
+  sun.shadow.normalBias = 0.02;
   sun.target.position.set(area.width / 2, 0, area.height / 2);
   scene.add(sun, sun.target);
-  const lanterns = [];
+  const lights = [];
 
-  // Boden: Wiese mit Raster über dem Grundstück, außen dunkleres Gras
-  const outer = mesh(new THREE.PlaneGeometry(80, 80), mat('#5f8a43'), { x: area.width / 2, y: -0.02, z: area.height / 2, shadow: false });
+  // Boden: Wiese (Mittelalter) bzw. Betonboden (Modern) mit Raster über dem
+  // Grundstück, außen dunkleres Gras
+  const outerMat = mat(GROUND.mittelalter.outer);
+  const outer = mesh(new THREE.PlaneGeometry(80, 80), outerMat, { x: area.width / 2, y: -0.02, z: area.height / 2, shadow: false });
   outer.rotation.x = -Math.PI / 2;
   root.add(outer);
-  const field = mesh(new THREE.PlaneGeometry(area.width + 2, area.height + 2), mat('#7fae55'), {
+  const fieldMat = mat(GROUND.mittelalter.field);
+  const field = mesh(new THREE.PlaneGeometry(area.width + 2, area.height + 2), fieldMat, {
     x: area.width / 2,
     y: 0,
     z: area.height / 2,
@@ -276,52 +140,31 @@ export function createWorld({ state, origin, area }) {
   });
   field.rotation.x = -Math.PI / 2;
   root.add(field);
-  const grid = new THREE.GridHelper(area.width + 2, area.width + 2, '#5d8a3d', '#6f9c4a');
-  grid.position.set(area.width / 2, 0.005, area.height / 2);
-  grid.scale.z = (area.height + 2) / (area.width + 2);
-  grid.material.transparent = true;
-  grid.material.opacity = 0.45;
-  root.add(grid);
+  let grid = null;
 
-  // Bäume und ein paar Steine rund um das Grundstück (fester Zufall)
-  let seed = 11;
-  const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
-  const trunk = mat('#6b4a2b');
-  const leafA = mat('#3f7a3a');
-  const leafB = mat('#4e8c3f');
-  for (let i = 0; i < 46; i++) {
-    const angle = rand() * Math.PI * 2;
-    const r = 0.5 + rand() * 0.5;
-    const x = area.width / 2 + Math.cos(angle) * (area.width / 2 + 2.5 + r * 5);
-    const z = area.height / 2 + Math.sin(angle) * (area.height / 2 + 2.5 + r * 4);
-    const h = 0.8 + rand() * 0.7;
-    const tree = new THREE.Group();
-    tree.add(mesh(new THREE.CylinderGeometry(0.08, 0.1, h * 0.5, 6), trunk, { y: h * 0.25 }));
-    tree.add(mesh(new THREE.ConeGeometry(0.45, h, 7), rand() < 0.5 ? leafA : leafB, { y: h * 0.5 + h / 2 - 0.1 }));
-    tree.position.set(x, 0, z);
-    root.add(tree);
+  function applyGround(style) {
+    const c = GROUND[style];
+    fieldMat.color.set(c.field);
+    outerMat.color.set(c.outer);
+    if (grid) root.remove(grid);
+    grid = new THREE.GridHelper(area.width + 2, area.width + 2, c.line, c.line2);
+    grid.position.set(area.width / 2, 0.005, area.height / 2);
+    grid.scale.z = (area.height + 2) / (area.width + 2);
+    grid.material.transparent = true;
+    grid.material.opacity = 0.45;
+    root.add(grid);
   }
 
-  // Bänder: Sockel + laufende Pfeile
-  const beltTex = beltTexture();
-  const beltTop = new THREE.MeshStandardMaterial({ map: beltTex, roughness: 0.9 });
-  const beltBase = mat('#2e2a27');
-  const beltGeo = new THREE.BoxGeometry(0.92, 0.08, 0.92);
-  const beltTopGeo = new THREE.PlaneGeometry(0.72, 1);
-  const beltKeys = Object.keys(state.belts);
-  for (const key of beltKeys) {
-    const { x, y } = parseTileKey(key);
-    const p = local(x, y);
-    const b = state.belts[key];
-    const tile = new THREE.Group();
-    tile.position.set(p.x + 0.5, 0, p.z + 0.5);
-    tile.add(mesh(beltGeo, beltBase, { y: 0.04 }));
-    const top = mesh(beltTopGeo, beltTop, { y: 0.081, shadow: false });
-    top.rotation.x = -Math.PI / 2;
-    tile.add(top);
-    tile.rotation.y = DIR_ANGLE[b.outs[0]] ?? 0;
-    root.add(tile);
-  }
+  // Gruppen, die beim Umschalten von Stil oder Farben neu gebaut werden
+  const envRoot = new THREE.Group();
+  const beltRoot = new THREE.Group();
+  const buildingRoot = new THREE.Group();
+  root.add(envRoot, beltRoot, buildingRoot);
+
+  // Pfeile auf den Bändern (Effekt „laufende Bänder“)
+  const arrowTex = arrowTexture();
+  const arrowMat = new THREE.MeshBasicMaterial({ map: arrowTex, transparent: true, depthWrite: false });
+  const arrowGeo = new THREE.PlaneGeometry(0.5, 1);
 
   // Waren: je Band-Feld ein Platz
   const templates = new Map();
@@ -330,36 +173,79 @@ export function createWorld({ state, origin, area }) {
     return templates.get(type);
   };
   const itemSlots = new Map(); // key → { type, obj }
+  const beltKeys = Object.keys(state.belts);
 
-  // Gebäude
   let buildingViews = [];
-  const buildingRoot = new THREE.Group();
-  root.add(buildingRoot);
+  let lanternPoints = [];
+  const settings = { style: 'mittelalter', colors: 'kenney', effects: true, light: 'tag' };
 
-  function buildAll(style) {
+  function buildBuildings() {
     buildingRoot.clear();
     buildingViews = state.buildings.map((b) => {
       const { width: w, height: d } = footprintSize(b.type, b.rot);
       const p = local(b.x, b.y);
-      const view = buildBuilding(b, style);
+      const view = buildKenneyBuilding(lib, b, settings.style, settings.colors);
       view.group.position.set(p.x + w / 2, 0, p.z + d / 2);
       view.group.userData.buildingId = b.id;
       view.building = b;
       view.bounce = 0;
       view.pop = 0;
       view.lastShipped = b.prod.shipped ?? 0;
+      if (view.parts.wheel && view.parts.wheelAxis === 'x') view.parts.wheel.rotation.order = 'YXZ';
       buildingRoot.add(view.group);
       return view;
     });
-    for (const l of lanterns) scene.remove(l);
-    lanterns.length = 0;
-    for (const v of buildingViews) {
-      if (v.building.type !== 'versandportal' && v.building.type !== 'kohlenmeiler') continue;
-      const light = new THREE.PointLight(v.building.type === 'versandportal' ? '#b89cff' : '#ffb060', 0, 4, 1.6);
-      light.position.copy(v.group.position).add(new THREE.Vector3(0, 0.9, 0.4));
-      scene.add(light);
-      lanterns.push(light);
+  }
+
+  function buildBelts() {
+    beltRoot.clear();
+    for (const key of beltKeys) {
+      const { x, y } = parseTileKey(key);
+      const p = local(x, y);
+      const tile = buildBeltTile(lib, state, key, settings.style);
+      tile.position.set(p.x + 0.5, 0, p.z + 0.5);
+      beltRoot.add(tile);
+      // Pfeil in Laufrichtung
+      const arrow = new THREE.Mesh(arrowGeo, arrowMat);
+      arrow.rotation.x = -Math.PI / 2;
+      arrow.rotation.z = DIR_ANGLE[state.belts[key].outs[0]] ?? 0;
+      arrow.position.set(p.x + 0.5, BELT_TOP + 0.004, p.z + 0.5);
+      arrow.renderOrder = 1;
+      beltRoot.add(arrow);
     }
+  }
+
+  function buildEnvironment() {
+    envRoot.clear();
+    const env = buildSurroundings(lib, area, settings.style, settings.colors);
+    envRoot.add(env.group);
+    lanternPoints = env.lanterns;
+  }
+
+  // Lichter am Abend: Laternen, Versandportale, Ofen
+  function buildLights() {
+    for (const l of lights) scene.remove(l);
+    lights.length = 0;
+    const add = (pos, color) => {
+      const light = new THREE.PointLight(color, 0, 4, 1.6);
+      light.position.copy(pos);
+      scene.add(light);
+      lights.push(light);
+    };
+    for (const p of lanternPoints) add(p, '#ffc070');
+    for (const v of buildingViews) {
+      if (v.building.type === 'versandportal') add(v.group.position.clone().add(new THREE.Vector3(0, 0.9, 0.4)), '#b89cff');
+      if (v.building.type === 'kohlenmeiler') add(v.group.position.clone().add(new THREE.Vector3(0.4, 0.5, 1.1)), '#ffb060');
+    }
+  }
+
+  function rebuild() {
+    applyGround(settings.style);
+    buildBuildings();
+    buildBelts();
+    buildEnvironment();
+    buildLights();
+    applyLight();
   }
 
   // Rauch: wenige Kugeln, die aufsteigen und verblassen
@@ -370,11 +256,9 @@ export function createWorld({ state, origin, area }) {
     const m = new THREE.Mesh(smokeGeo, smokeMat.clone());
     m.visible = false;
     root.add(m);
-    smoke.push({ mesh: m, life: 0, source: null });
+    smoke.push({ mesh: m, life: 0 });
   }
   let smokeTimer = 0;
-
-  const settings = { style: 'mittelalter', effects: true, light: 'tag' };
 
   function isWorking(b) {
     const p = productionOf(b.type);
@@ -407,14 +291,15 @@ export function createWorld({ state, origin, area }) {
     sun.intensity = evening ? 0.9 : 2.4;
     const c = new THREE.Vector3(area.width / 2, 0, area.height / 2);
     sun.position.copy(c).add(evening ? new THREE.Vector3(-16, 5, 6) : new THREE.Vector3(-8, 18, 10));
-    for (const v of buildingViews) for (const m of v.windows) m.emissiveIntensity = evening ? 1.4 : 0;
-    for (const l of lanterns) l.intensity = evening ? 6 : 0;
+    lib.setGlow(evening ? 1.6 : 0);
+    for (const l of lights) l.intensity = evening ? 6 : 0;
   }
 
   function applyEffects(renderer) {
     renderer.shadowMap.enabled = settings.effects;
     sun.castShadow = settings.effects;
     for (const s of smoke) s.mesh.visible = false;
+    arrowMat.visible = settings.effects;
     // Materialien neu übersetzen, damit Schatten an- oder ausgehen
     scene.traverse((o) => {
       if (o.material) o.material.needsUpdate = true;
@@ -423,8 +308,12 @@ export function createWorld({ state, origin, area }) {
 
   function setStyle(style) {
     settings.style = style;
-    buildAll(style);
-    applyLight();
+    rebuild();
+  }
+
+  function setColors(colors) {
+    settings.colors = colors;
+    rebuild();
   }
 
   // Position einer Ware auf dem Band (wie im 2D-Spiel: vom Eingang zur
@@ -449,10 +338,12 @@ export function createWorld({ state, origin, area }) {
     return { x: p.x + 0.5 + dx, z: p.z + 0.5 + dz };
   }
 
+  let time = 0;
   function update(dt, alpha) {
     const fx = settings.effects;
+    time += dt;
     // Bänder: die Pfeile laufen mit
-    if (fx) beltTex.offset.y = (beltTex.offset.y - dt * BELT_SPEED) % 1;
+    if (fx) arrowTex.offset.y = (arrowTex.offset.y - dt * BELT_SPEED) % 1;
 
     // Waren
     for (const key of beltKeys) {
@@ -471,15 +362,28 @@ export function createWorld({ state, origin, area }) {
         root.add(slot.obj);
       }
       const pos = itemPosition(key, belt, alpha);
-      slot.obj.position.set(pos.x, 0.08, pos.z);
+      slot.obj.position.set(pos.x, BELT_TOP, pos.z);
     }
 
-    // Gebäude: Säge, Portal, Hüpfen, Rauch
+    // Gebäude: Wasserrad bzw. Zahnrad, Roboterarm, Portal, Hüpfen, Rauch
     smokeTimer -= dt;
     for (const v of buildingViews) {
       const b = v.building;
       const working = isWorking(b);
-      if (v.parts.saw && fx && working) v.parts.saw.rotation.x += dt * 14;
+      const { wheel, arm } = v.parts;
+      if (wheel && fx && working) {
+        if (v.parts.wheelAxis === 'x') wheel.rotation.x -= dt * 2.2;
+        else wheel.rotation.y += dt * 3;
+      }
+      if (arm && fx) {
+        const k = working ? 1 : 0.15;
+        const a = arm.getObjectByName('element-a');
+        const c = arm.getObjectByName('element-c');
+        const e = arm.getObjectByName('element-e');
+        if (a) a.rotation.y = Math.sin(time * 1.3) * 1.1 * k;
+        if (c) c.rotation.z = (0.35 + Math.sin(time * 2.6) * 0.35) * k;
+        if (e) e.rotation.z = (0.5 + Math.sin(time * 2.6 + 1) * 0.4) * k;
+      }
       if (v.parts.ring && fx) {
         v.parts.ring.rotation.y += dt * 1.2;
         v.parts.ring.rotation.x = Math.sin(performance.now() / 900) * 0.25;
@@ -534,8 +438,7 @@ export function createWorld({ state, origin, area }) {
     return null;
   }
 
-  buildAll(settings.style);
-  applyLight();
+  rebuild();
 
   return {
     scene,
@@ -543,6 +446,7 @@ export function createWorld({ state, origin, area }) {
     update,
     pick,
     setStyle,
+    setColors,
     applyLight,
     applyEffects,
     productOf,
