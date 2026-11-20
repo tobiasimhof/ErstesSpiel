@@ -61,7 +61,32 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Grafik-Probe, Teil 2 – Kenney-Modelle (vorgemerkt in v0.32.1, nächster Chat)
+### Grafik-Probe, Teil 2 – Kenneys Modelle (fertig, v0.33.0)
+
+**Freigabe (Tobias, Chat 23, 20.11.2026):** „1. Ja lass uns beides probieren, damit ich alles sehen kann. Wir sind aktuell ja in der Testphase. 2. Ja bin ich mit einverstanden. 3. Ja, bin ich auch mit einverstanden. Lass uns direkt damit anfangen“
+
+**Wie die Modelle ins Projekt kamen:** Die eigene Arbeitsumgebung „ErstesSpiel“ (kenney.nl, www.kenney.nl) hat Tobias bestätigt. kenney.nl lässt aber keine automatischen Programme zu (403); den Download über den Knopf der Seite hat Claudes Arbeitsumgebung gestoppt. Tobias hat die drei Pakete selbst heruntergeladen und auf GitHub in den Arbeitsstand hochgeladen (`kenney_castle-kit.zip` 2,2 MB, `kenney_factory-kit_3.0.zip` 4,5 MB, `kenney_fantasy-town-kit_2.0.zip` 3,9 MB). Ins Projekt kamen nur die gebrauchten Modelle (`assets/kenney/`), die ZIP-Dateien wurden vor dem Merge wieder entfernt. Das frühere Conveyor Kit steckt heute im Factory Kit.
+
+**Umgesetzt wie im Entwurf unten.** Abweichungen und Einzelheiten:
+- **Bänder:** statt der fertigen Kurven-, Abzweig- und Kreuzungsteile (andere Farbe, ganze Feldbreite) setzen sich diese aus „Armen“ zusammen – je verbundene Seite ein halbes Band-Stück vom Rand bis knapp über die Mitte. Gerade Strecken bestehen aus zwei halben Stücken, durchgehend in der Mitte einer Strecke und mit rundem Ende an Gebäuden. Bänder halb so hoch und 80 % so breit wie bei Kenney; die laufenden Pfeile (Effekt) liegen obendrauf.
+- **Holzfällerlager:** das Haus steht am Band, Stämme und Baumstümpfe daneben. **Sägewerk:** Wasserrad in einem kleinen Bach vor dem Haus. **Lagerhaus:** Schuppen auf vier Pfosten mit Bretterstapel und Karren.
+- **Modern:** Die Bänder laufen durch die Öffnung der Maschinen. Der Ofen bekommt ein senkrecht gestelltes Rohr als Schornstein, die Schmiede einen Roboterarm mit Gelenken, der beim Arbeiten schwenkt.
+- **Farben: Spiel:** Dächer (Mittelalter) bzw. Maschinen (Modern) in der Farbe ihres Reiters (Holz braun, Eisen stahlblau, Lagerhaus sandfarben), Stein warm-grau statt lila-grau, das übrige Metall neutral grau. Umgesetzt durch Nachmalen einzelner Felder der Farbtafel (Helligkeit bleibt).
+- **Abend:** Das Glas der Laternen leuchtet, Punktlichter an 3 Laternen, den Portalen und dem Ofen.
+- **Handy:** Der Kamera-Knopf heißt dort nur „📐 Schräg“, damit die Leiste in eine Zeile passt.
+
+### Entwurf v0.33.0 – Grafik-Probe, Teil 2 (Chat 23; angenommen, umgesetzt in v0.33.0)
+
+**Ziel:** Die Platzhalter-Gebäude der Grafik-Probe durch echte Kenney-Modelle ersetzen, damit Tobias sieht, wie das Spiel in 3D wirklich aussehen könnte. Das Spiel selbst bleibt unverändert (2D), Tobias' Fabrik wird nicht berührt.
+
+- **Mittelalter** (Fantasy Town Kit, ein paar Teile aus dem Castle Kit): Holzfällerlager – Holzhaus mit Tür, Fensterläden und Satteldach, daneben Baumstämme und Baumstümpfe; Sägewerk – Holzhaus mit hohem Dach und einem Wasserrad, das sich beim Sägen dreht, davor ein Bretterstapel; Ofen und Schmiede – Steinhäuser mit Schornstein (Rauch), die Schmiede mit Vordach; Lagerhaus – offener Schuppen mit Karren und Brettern; Umgebung – Kenney-Bäume, Felsen, Zaun ums Grundstück, Weg, Laternen, die am Abend leuchten.
+- **Modern** (Factory Kit): Maschinen statt Häuser – mit Trichter (Holzfällerlager), drehendem Zahnrad (Sägewerk), dickem Rohr als Schornstein (Ofen), Roboterarm (Schmiede); Lagerhaus als Kistenstapel; Bodenplatten und Warnkegel.
+- **In beiden Stilen:** Förderbänder aus dem Factory Kit (gerade, Kurve, Abzweig, Kreuzung); die Waren bleiben eigene Formen; alle Schalter bleiben.
+- **Größe:** nur die ausgewählten Modelle, etwa 50 Dateien mit rund 1 MB, dazu Kenneys Lizenz; beim Öffnen kurz „Lädt …“. Die ZIP-Dateien kommen nicht ins Live-Spiel.
+- **Prüfen:** automatische Tests, Bilder in Tablet- und Handygröße.
+- **Fragen an Tobias:** 1. Farben – Kenneys eigene (grüne und rote Dächer, lila-graue Steinwände) oder die des Spiels (Dächer in den Reiterfarben, wärmerer Stein)? Vorschlag: ein vierter Schalter „Farben: Kenney ↔ Spiel“. 2. Bänder im Mittelalter aus dem Factory Kit in Holz und Eisen umfärben? 3. Versandportal: den leuchtenden Ring behalten (über rundem Steinbecken bzw. Metallsockel)?
+
+### Grafik-Probe, Teil 2 – Kenney-Modelle (vorgemerkt in v0.32.1; erledigt in v0.33.0 – siehe oben)
 
 **Tobias (Chat 22, 20.11.2026):** „Ich war eben noch am Tablet und da stand, dass ich die Freigabe nur am PC machen kann, deswegen sitze ich jetzt am PC, aber ich habs gerade auf dem Tablet getestet und dort habe ich 60-90 fps. Speicher gerne alles im repo und dann würde ich danach einen neuen Chat anfangen. Ich würde gerne, dass ich dir schreibe "Bringe dich auf den aktuellen stand" und dann fragst du mich, ob wir mit den Kennysachen nochmal starten wollen, dann würde ich dir die Freigabe geben, weil ich am PC bin. Falls das immer noch nicht funktionieren sollte, dann würde ich dir die Dateien einfach auf github hochladen“
 
