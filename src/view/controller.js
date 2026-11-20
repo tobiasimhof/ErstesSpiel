@@ -308,14 +308,18 @@ export function createController({
             },
           });
         }
-        const buyable = sourceInputTypes(b.type).filter(isBuyable);
+        // v0.31.0: nur Rohstoffe, die es auf diesem Level schon gibt (der Ofen
+        // nimmt Sand erst ab Level 13) – so bleibt es vorher bei „🧺 Kaufen“
+        const buyable = sourceInputTypes(b.type).filter((t) => isBuyable(t) && isItemUnlocked(state, t));
         for (const type of buyable) {
           const input = ITEMS[type];
           const price = ` · ${numberFormat.format(input.buyPrice)} 🪙`;
           actions.push({
             key: `buy:${type}`,
-            // Gibt es nur einen Rohstoff, reicht „Kaufen“ (passt in eine Zeile)
-            label: buyable.length > 1 ? ['🧺 ', createItemIcon(type, 20), ` kaufen${price}`] : `🧺 Kaufen${price}`,
+            // Gibt es nur einen Rohstoff, reicht „Kaufen“ (passt in eine Zeile).
+            // v0.31.0: Bei mehreren (Ofen: Holzstamm und Sand) das Warenbild statt
+            // 🧺, sonst passt „kaufen · 1.100 🪙“ nicht in den halben Knopf.
+            label: buyable.length > 1 ? [createItemIcon(type, 20), ` kaufen${price}`] : `🧺 Kaufen${price}`,
             title: `${input.name} kaufen · ${numberFormat.format(input.buyPrice)} Gold`,
             size: 'half',
             onClick: () => {

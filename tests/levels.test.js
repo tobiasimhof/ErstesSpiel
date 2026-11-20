@@ -27,7 +27,7 @@ import { createNewGame } from '../src/core/state.js';
 // ---------- Datentabellen ----------
 
 test('Level-Tabelle: jedes Level ein Bauabschnitt mit 2–5 Aufträgen; ab Level 2 Preis, Level 2–10 Gratis-Rohstoff (v0.13.0)', () => {
-  assert.equal(MAX_LEVEL, 12);
+  assert.equal(MAX_LEVEL, 13);
   let lastCost = 0;
   for (let level = 1; level <= MAX_LEVEL; level++) {
     const def = LEVELS[level];
@@ -194,12 +194,12 @@ test('Aufstieg auf Level 2: erst genug Erfahrung, dann kostet er Gold; dafür gi
   assert.equal(levelUpBlocker(state), 'xp');
 });
 
-test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 und 8 mit Samen, Level 9 mit Holzstamm, Level 10 mit Schafgarbensamen und mehr Fläche, Level 11 ohne Geschenk für 5.000 Gold, Level 12 für 7.500; danach ist Schluss', () => {
+test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 und 8 mit Samen, Level 9 mit Holzstamm, Level 10 mit Schafgarbensamen und mehr Fläche, Level 11 ohne Geschenk für 5.000 Gold, Level 12 für 7.500, Level 13 für 10.000; danach ist Schluss', () => {
   const state = createNewGame(3);
   state.shopLevel = 3;
   state.gold = 100000;
   const results = [];
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < 10; i++) {
     state.quest.xp = xpNeeded(state.shopLevel);
     results.push(levelUp(state));
   }
@@ -220,8 +220,10 @@ test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 
     { level: 11, gift: {}, cost: 5000, moreLand: false },
     // v0.29.0: Level 12 „Die Apotheke“ – Aufstieg 7.500 Gold (Tobias, Chat 21)
     { level: 12, gift: {}, cost: 7500, moreLand: false },
+    // v0.31.0: Level 13 „Die Glashütte“ – Aufstieg 10.000 Gold (Tobias, Chat 22)
+    { level: 13, gift: {}, cost: 10000, moreLand: false },
   ]);
-  assert.equal(state.gold, 100000 - 3500 - 1670 - 2000 - 5000 - 7500);
+  assert.equal(state.gold, 100000 - 3500 - 1670 - 2000 - 5000 - 7500 - 10000);
   assert.equal(state.counters.length, 2, 'Theken gibt es nur noch für Gold');
   assert.equal(storageCount(state, 'eisenerz'), 3);
   assert.equal(storageCount(state, 'leinsamen'), 1);
@@ -230,7 +232,7 @@ test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 
   assert.equal(levelUpBlocker(state), 'max', 'höchstes Level');
   assert.equal(nextLevelCost(state), null);
   assert.equal(levelUp(state), null);
-  assert.equal(state.shopLevel, 12);
+  assert.equal(state.shopLevel, 13);
 });
 
 test('Ein neues Spiel lässt sich von Holz bis Eisen durchspielen', () => {

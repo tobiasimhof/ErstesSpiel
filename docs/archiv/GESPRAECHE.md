@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 20.11.2026 – Chat 22 (Fortsetzung): Level 13 „Die Glashütte“ (v0.31.0), Frage nach 3D-Grafik
+
+**Tobias** (zum Entwurf Level 13): „Klingt alles sehr gut nur ich würde gerne die Zeit für die Fläschen von 10s auf 30s erhöhen. Ich finde der Ofen könnte bereits ab Spielbeginn Ofen heißen. Natürlich wird er erst ab lvl 9 eingeführt, aber das sollte der neue Name sein. Ich denke die Preise passen so. Ich werde das ganze ausprobieren und spielen und dann werde ich sehen inwiefern wi noch feintunen müssen. Die Aufträge passen auch so. Sorry, da hab ich mich wohl verschrieben. Ich meinte Steinplatte + 3 holzstäbe, damit der Möser aus Stein ist und der Stab aus Holz. Von mir aus, kannst du das gerne so umsetzen. Ich hab noch eine Frage, die du gerne nachdem du alles codiert hast beantworten kannst. Mittlerweile nimmt das Spiel schon etwas Form an und wir haben bald unsere Level und unsere "Grundstruktur". Darauf können wir natürlich aufbauen und das Spiel beliebig erweitern bzw. die Aufträge "schwieriger" machen, sodass es länger dauert ein Level zu erreichen. Aktuell spiele ich im Browser ohne Musik und alles noch 2D gehalten. Natürlich verstehe ich, dass das Ganze fürs entwickeln so viel einfacher ist, weil wir nur die Logik testen. Ich würde aber gerne mich so langsam von diesem 2D Design trennen und das ganze mehr in die "Clash of Clans"-Richtung bringen. Wir hatten schon mal über kostenlose Assets und alles weitere gesprochen. Können wir nachdem wir das codiert haben uns darüber unterhalten wie wir rein theoretisch dieses 2D-Browser-Game in eine 2D/3D Spielewelt übersetzen können ? Ich habe bei Kenny beispielsweise schon ein kostenloses Factory Asset gesehen“
+
+**Claude** hat v0.31.0 gebaut: Der Kohlenmeiler heißt in allen Leveln „Ofen“ und brennt ab Level 13 auch Sand (1.100 Gold beim Händler) zu 100 Glas; die Schmiede macht ab Level 13 aus 5 Glas ein Fläschchen (30 s); Aufstieg 10.000 Gold, 4 Aufträge; die 6. Theke lässt sich ab Level 13 für 150.000 Gold kaufen. Der Mörser (1 Steinplatte + 3 Holzstäbe) ist für Level 14 festgehalten. Danach die Grafik-Frage beantwortet (`PLAENE.md`, „Überlegung: Weg vom 2D-Design“): Spielregeln und Darstellung sind getrennt, nur der Zeichner wird ausgetauscht; Clash of Clans hat eine feste Schrägansicht; Wege A (Bilder in Schrägansicht), B (echtes 3D mit three.js und Kenney-Modellen), C (Engine-Wechsel, nicht jetzt); Empfehlung B, zuerst eine Grafik-Probe als eigene Seite; Kenney-Pakete sind CC0, Factory/Conveyor Kit modern, Castle/Fantasy Town Kit mittelalterlich. 4 Fragen an Tobias.
+
+**Umgesetzt:** v0.31.0.
+
 ### 19.11.2026 – Chat 22: Antworten zum Tränke-Kapitel, Entwurf Level 13 (v0.30.3)
 
 **Tobias:** „Hey, lies dir den aktuellen Stand der Dinge durch. Wir hatten uns mit den nächsten level beschäftigt und ich sollte dir auf deine Frage antworten.“

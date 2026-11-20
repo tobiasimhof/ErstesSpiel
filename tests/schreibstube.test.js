@@ -40,14 +40,15 @@ const worth = (items) => Object.entries(items).reduce((sum, [t, n]) => sum + ITE
 
 // ---------- Datentabellen ----------
 
-test('Level 9 gibt es (seit v0.29.0 ist Level 12 das höchste)', () => {
-  assert.equal(MAX_LEVEL, 12);
+test('Level 9 gibt es (seit v0.31.0 ist Level 13 das höchste)', () => {
+  assert.equal(MAX_LEVEL, 13);
 });
 
-test('Kohlenmeiler: wie das Holzfällerlager – 1 Holzstamm → 100 Holzkohle in 15 Minuten, Vorrat 3', () => {
+test('Kohlenmeiler (seit v0.31.0 „Ofen“): wie das Holzfällerlager – 1 Holzstamm → 100 Holzkohle in 15 Minuten, Vorrat 3', () => {
   const def = BUILDINGS.kohlenmeiler;
-  assert.deepEqual([def.level, def.size, def.color], [9, [2, 2], TAB_COLORS.holz]);
-  assert.deepEqual(def.production, { kind: 'source', input: 'holzstamm', output: 'holzkohle', amount: 100, duration: 900, capacity: 3 });
+  assert.deepEqual([def.level, def.size, def.color, def.name], [9, [2, 2], TAB_COLORS.holz, 'Ofen']);
+  // v0.31.0: ab Level 13 auch Sand → Glas (tests/glashuette.test.js)
+  assert.deepEqual(def.production, { kind: 'source', inputs: { holzstamm: 'holzkohle', sand: 'glas' }, amount: 100, duration: 900, capacity: 3 });
   assert.equal(def.ports.filter((p) => p.kind === 'out').length, 1);
 });
 

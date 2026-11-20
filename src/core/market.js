@@ -271,23 +271,33 @@ export function nextCounterPrice(state) {
   return COUNTERS.prices[state.counters.length - COUNTERS.start] ?? null;
 }
 
-// Alle Plätze der Theken-Ansicht (COUNTERS.max): { index, status, price }.
+// v0.31.0: Ab welchem Laden-Level sich die Theke mit dieser Nummer (0 = erste)
+// kaufen lässt – die 6. erst ab Level 13 (Tobias, Chat 21).
+export function counterLevel(index) {
+  return COUNTERS.levels?.[index - COUNTERS.start] ?? 1;
+}
+
+// Alle Plätze der Theken-Ansicht (COUNTERS.max): { index, status, price, level }.
 // status: 'owned' (gekauft) | 'next' (als Nächste zu kaufen) | 'later' (erst
-// die davor kaufen) | 'locked' (Preis noch offen, kommt später im Spiel)
+// die davor kaufen) | 'locked' (erst ab einem höheren Level – level – oder
+// Preis noch offen, kommt später im Spiel)
 export function counterSlots(state) {
   return Array.from({ length: Math.max(COUNTERS.max, state.counters.length) }, (_, index) => {
-    if (index < state.counters.length) return { index, status: 'owned', price: null };
+    if (index < state.counters.length) return { index, status: 'owned', price: null, level: null };
     const price = COUNTERS.prices[index - COUNTERS.start] ?? null;
-    if (price === null) return { index, status: 'locked', price };
-    return { index, status: index === state.counters.length ? 'next' : 'later', price };
+    const level = counterLevel(index);
+    if (price === null || level > state.shopLevel) return { index, status: 'locked', price, level };
+    return { index, status: index === state.counters.length ? 'next' : 'later', price, level };
   });
 }
 
-// Kauft die nächste Theke (nur Gold, kein Mindest-Level).
-// Ergebnis: 'ok' | 'gold' (zu wenig Gold) | 'later' (gibt es noch nicht)
+// Kauft die nächste Theke (nur Gold; seit v0.31.0 die 6. erst ab Level 13).
+// Ergebnis: 'ok' | 'gold' (zu wenig Gold) | 'level' (erst ab einem höheren
+// Level) | 'later' (gibt es noch nicht)
 export function buyCounter(state) {
   const price = nextCounterPrice(state);
   if (price === null) return 'later';
+  if (counterLevel(state.counters.length) > state.shopLevel) return 'level';
   if (state.gold < price) return 'gold';
   state.gold -= price;
   state.counters.push(emptyCounter());

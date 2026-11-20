@@ -129,8 +129,10 @@ test('Jeder Laden beginnt mit 2 Theken und je einem Kunden-Takt', () => {
   assert.ok(state.market.timers.every((t) => t >= 15 && t <= 25));
 });
 
-test('Theken kaufen: 3. für 15.000, 4. für 35.000, 5. für 70.000 Gold – die 6. kommt später', () => {
-  assert.deepEqual(COUNTERS.prices, [15000, 35000, 70000, null]);
+test('Theken kaufen: 3. für 15.000, 4. für 35.000, 5. für 70.000 Gold – die 6. für 150.000 erst ab Level 13', () => {
+  assert.deepEqual(COUNTERS.prices, [15000, 35000, 70000, 150000]);
+  // v0.31.0 (Tobias, Chat 21): „auf Level 13 dann auch die 6. Theke … für einen Preis von 150.000 Gold“
+  assert.deepEqual(COUNTERS.levels, [1, 1, 1, 13]);
   const state = createNewGame(5);
   state.gold = 14999;
   assert.equal(nextCounterPrice(state), 15000);
@@ -150,14 +152,28 @@ test('Theken kaufen: 3. für 15.000, 4. für 35.000, 5. für 70.000 Gold – die
   assert.equal(buyCounter(state), 'ok');
   assert.equal(state.gold, 0);
   assert.equal(state.counters.length, 5);
-  assert.equal(nextCounterPrice(state), null, 'die 6. Theke hat noch keinen Preis');
+  assert.equal(nextCounterPrice(state), 150000, 'die 6. Theke');
   state.gold = 1e9;
-  assert.equal(buyCounter(state), 'later');
+  assert.equal(buyCounter(state), 'level', 'erst ab Level 13');
   assert.equal(state.counters.length, 5);
   assert.equal(state.gold, 1e9);
+  state.shopLevel = 12;
+  assert.equal(buyCounter(state), 'level', 'auf Level 12 noch nicht');
+  state.shopLevel = 13;
+  state.gold = 149999;
+  assert.equal(buyCounter(state), 'gold');
+  state.gold = 150000;
+  assert.equal(buyCounter(state), 'ok');
+  assert.equal(state.gold, 0);
+  assert.equal(state.counters.length, 6);
+  assert.equal(state.market.timers.length, 6, 'auch die 6. Theke hat ihre eigenen Kunden');
+  assert.equal(nextCounterPrice(state), null, 'mehr als 6 Theken gibt es nicht');
+  state.gold = 1e9;
+  assert.equal(buyCounter(state), 'later');
+  assert.equal(state.counters.length, 6);
 });
 
-test('Theken kaufen geht auf jedem Level – es zählt nur das Gold', () => {
+test('Theken 3 bis 5 kaufen geht auf jedem Level – es zählt nur das Gold', () => {
   const state = createNewGame(5);
   assert.equal(state.shopLevel, 1);
   state.gold = 15000;
@@ -165,17 +181,17 @@ test('Theken kaufen geht auf jedem Level – es zählt nur das Gold', () => {
   assert.equal(state.counters.length, 3);
 });
 
-test('Theken-Ansicht: immer 6 Plätze – gekauft, als Nächste zu kaufen, später, kommt später', () => {
+test('Theken-Ansicht: immer 6 Plätze – gekauft, als Nächste zu kaufen, später, die 6. erst ab Level 13', () => {
   const state = createNewGame(5);
   assert.deepEqual(
-    counterSlots(state).map((s) => [s.status, s.price]),
+    counterSlots(state).map((s) => [s.status, s.price, s.level]),
     [
-      ['owned', null],
-      ['owned', null],
-      ['next', 15000],
-      ['later', 35000],
-      ['later', 70000],
-      ['locked', null],
+      ['owned', null, null],
+      ['owned', null, null],
+      ['next', 15000, 1],
+      ['later', 35000, 1],
+      ['later', 70000, 1],
+      ['locked', 150000, 13],
     ],
   );
   state.gold = 50000;
@@ -184,6 +200,18 @@ test('Theken-Ansicht: immer 6 Plätze – gekauft, als Nächste zu kaufen, spät
   assert.deepEqual(
     counterSlots(state).map((s) => s.status),
     ['owned', 'owned', 'owned', 'owned', 'next', 'locked'],
+  );
+  // v0.31.0: Ab Level 13 lässt sich die 6. kaufen – erst nach der 5.
+  state.shopLevel = 13;
+  assert.deepEqual(
+    counterSlots(state).map((s) => s.status),
+    ['owned', 'owned', 'owned', 'owned', 'next', 'later'],
+  );
+  state.gold = 70000;
+  buyCounter(state);
+  assert.deepEqual(
+    counterSlots(state).map((s) => [s.status, s.price]).slice(4),
+    [['owned', null], ['next', 150000]],
   );
 });
 

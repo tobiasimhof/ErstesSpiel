@@ -126,11 +126,12 @@ export const LEVELS = {
   // v0.26.0: Level 9 (Tobias, Chat 19): Die Werkzeuge wachsen weiter, während
   // das Kräuter-Kapitel läuft – abwechselnd ein Werkzeug-Level (9, 11) und ein
   // Kräuter-Level (10, 12), die Aufträge verlangen Waren aus beiden Bereichen.
-  // Einen neuen Rohstoff gibt es nicht: 1 Holzstamm für den Kohlenmeiler.
+  // Einen neuen Rohstoff gibt es nicht: 1 Holzstamm für den Kohlenmeiler
+  // (seit v0.31.0 heißt er „Ofen“).
   9: {
     name: 'Die Schreibstube',
     story:
-      'Die Stadt wächst schneller, als man bauen kann. Baumeister Anton richtet eine Schreibstube ein und zeichnet Pläne für Spital, Rathaus und eine Ratsuhr – mit Zirkel und Kohle, die ein Köhler draußen im Wald brennt.',
+      'Die Stadt wächst schneller, als man bauen kann. Baumeister Anton richtet eine Schreibstube ein und zeichnet Pläne für Spital, Rathaus und eine Ratsuhr – mit Zirkel und Holzkohle aus dem neuen Ofen.',
     cost: 1670,
     gift: { holzstamm: 1 },
     quests: [
@@ -186,6 +187,23 @@ export const LEVELS = {
       { from: 'Apothekerin Klara', text: 'Aus Schafgarbe und Kamille mische ich meine Grundrezepte.', items: { kraeutermischung: 10 } },
       { from: 'Heilerin Agnes', text: 'Im Spital schlafen die Kranken schlecht – und für Wege übers Land brauche ich Heilpäckchen.', items: { kamillenkissen: 5, heilpaeckchen: 4 } },
       { from: 'Baumeister Anton', text: 'Für Klaras Fläschchen plane ich eine Glashütte – dafür brauche ich richtige Reißbretter.', items: { reissbrett: 2 } },
+    ],
+  },
+  // v0.31.0: Level 13 (Entwurf v0.30.3, Tobias, Chat 22: „Klingt alles sehr
+  // gut“, „Die Aufträge passen auch so“) – der Anfang der Tränke, klein wie
+  // Level 7: Sand, Glas aus dem Ofen, Fläschchen aus der Schmiede, keine neue
+  // Maschine. Aufstieg 10.000 Gold (Tobias: „Ja, das passt alles so.“), kein
+  // Geschenk. Mit Level 13 lässt sich die 6. Theke kaufen (data/shop.js).
+  13: {
+    name: 'Die Glashütte',
+    story:
+      'Antons Glashütte am Fluss ist fertig. Schmied Konrad heizt seinen Ofen jetzt so stark, dass Sand zu Glas schmilzt, und bläst in der Schmiede daraus Fläschchen. Endlich kann Apothekerin Klara ihre Kräuter abfüllen – und sie träumt schon von ihrem ersten Trank.',
+    cost: 10000,
+    quests: [
+      { from: 'Schmied Konrad', text: 'Mein Ofen ist heiß genug für Sand! Bring mir Glas, damit ich sehe, ob es klar wird.', items: { glas: 50 } },
+      { from: 'Apothekerin Klara', text: 'Endlich Fläschchen! Jetzt kann ich Tee und Säfte abfüllen.', items: { flaeschchen: 25 } },
+      { from: 'Baumeister Anton', text: 'Die Sternenuhren im Rathausturm bekommen Glas vor das Zifferblatt.', items: { glas: 100, sternenuhr: 2 } },
+      { from: 'Apothekerin Klara', text: 'Für meinen ersten Trank brauche ich viele Fläschchen und Kräutermischungen.', items: { flaeschchen: 20, kraeutermischung: 15 } },
     ],
   },
 };

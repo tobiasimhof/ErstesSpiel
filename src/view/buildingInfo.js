@@ -240,7 +240,10 @@ function sourceBody(state, building) {
     if (layoutKey(b) !== layout) render(b);
     const p = productionOf(b.type);
     const prod = b.prod;
-    const facts = [`in ${formatDuration(p.duration)}${Object.keys(sourceInputs(p)).length > 1 ? ' je Pflanze' : ''}`];
+    // v0.31.0: „je Pflanze“ nur bei der Erntebank (der Ofen nimmt Holzstämme und Sand)
+    const plants = Object.keys(sourceInputs(p)).filter((t) => isItemUnlocked(state, t));
+    const perPlant = plants.length > 1 && plants.every((t) => ITEMS[t]?.grown);
+    const facts = [`in ${formatDuration(p.duration)}${perPlant ? ' je Pflanze' : ''}`];
     if (prod.loaded) {
       const left = prod.remaining + (prod.queued ?? 0) * p.amount;
       facts.push(`leer in etwa ${formatDuration(left * (p.duration / p.amount))}`);
