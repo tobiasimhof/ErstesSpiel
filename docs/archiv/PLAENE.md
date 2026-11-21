@@ -61,6 +61,21 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Level 1 in der neuen Grafik (vorgemerkt in v0.33.1, Plan im nächsten Chat)
+
+**Tobias (Chat 23, 21.11.2026):** „ICh würde gerne in einem neuen Chat weitermachen, deswegen würde ich dir jetzt mein Feedback geben und danach in einem neuen Chat weitermachen. Ich habe auf dem Tablet konstant 60 fps. Mir gefällt das frei drehbare besser, weil man dadurch vermutlich besser bauen und auch sieht, wenn man ein zulauf verstopft ist. Mir gefällt Mitteralter besser. Finde die Idee mit den Häusern auch sehr gut, dass wir die Häuser einfach spezifisch gestalten, sodass man weiß, was ein Sägewerk ist und was nicht. Das Versandportal sieht noch etwas komisch aus. Mir gefällt die SPielfarbe besser, weil es mehr harmoniert. Mir gefällt allerdings auch der Mix aus Modern und Mittelalter. Evtl. könnte man die modernen Gebäude noch etwas mitteraltermäßiger gestalten ohne Greifarm. Ich würde gerne in den nächsten Schritten ein wenig mit der Grafik weitermachen, um das Spiel evtl. Testweise auf dieses Niveau zu heben, sodass man evtl. das erste Level in dieser neuen Grafik spielen kann. Wie gesagt, ich würde danach in einem neuen Chat weitermachen wollen“
+
+**Festgehalten aus dem Test der Grafik-Probe, Teil 2:** konstant 60 Bilder pro Sekunde auf dem Galaxy Tab S9; Kamera **frei drehbar**; Stil **Mittelalter**; **Spiel-Farben**; **eigene Häuser je Gebäude**, damit man sie erkennt. Zu verbessern: das **Versandportal** (der Leuchtring über dem Becken „sieht noch etwas komisch aus“). Idee: der Mix aus Modern und Mittelalter – moderne Teile mittelalterlicher gestalten, **ohne Greifarm**.
+
+**Ablauf im nächsten Chat:** Auf „Bringe dich auf den aktuellen Stand“ liest Claude `STAND.md`, `SPIEL.md` und diesen Abschnitt, schaut in den Code (`src/probe/`, `src/view/`) und stellt den Plan vor – Ziel, was sich im Spiel ändert, offene Fragen. Erst nach Tobias' OK programmieren; lieber mehrere kleine Versionen.
+
+**Claudes erste Gedanken (noch nicht mit Tobias besprochen):**
+- **Wie die 3D-Ansicht ins Spiel kommt:** wie in Chat 22 vorgeschlagen über einen Schalter (z. B. im Menü ☰ „3D-Ansicht (Test)“); die 2D-Ansicht bleibt Standard, bis alles da ist. Spielregeln (`src/core`) und Spielstand bleiben gleich – die 3D-Ansicht zeichnet nur anders, Tobias' Fabrik bleibt erhalten.
+- **Was Level 1 braucht:** Holzfällerlager, Sägewerk, Lagerhaus, Versandportal, Förderband; Rohstoff einlegen, Bänder legen, Gebäude bauen, verschieben, drehen und abreißen, Infofenster, Laden, Aufträge. Die Fenster und Leisten (Laden, Bauleiste, Infofenster, Level-Fenster) sind schon HTML und können über der 3D-Ansicht bleiben.
+- **Was neu gebaut werden muss:** Antippen und Bauen in 3D (Feld unter dem Finger über einen Strahl auf den Boden), Vorschau beim Platzieren, Bänder mit dem Finger ziehen, ohne dass die freie Kamera mitdreht (z. B. eigener Bau-Modus: ein Finger baut, zwei Finger bewegen und drehen), Fläche kaufen und die Schilder am Rand, die ganze Welt bis 46 × 38 Felder (Leistung prüfen).
+- **Mögliche Schritte (je eine Version):** (1) 3D-Ansicht zum Ansehen der eigenen Fabrik mit Antippen und Infofenster; (2) Bauen, Bänder legen, Abreißen in 3D; (3) Verschieben, Drehen, Bereich markieren; (4) neues Versandportal und Feinschliff. Die Gebäude ab Level 2 (Steinbruch, Steinmetz …) bräuchten weitere Häuser aus Kenneys Teilen.
+- **Fragen an Tobias (im nächsten Chat):** Schalter im Menü oder gleich als neue Standard-Ansicht? Wie soll das Versandportal aussehen (z. B. ein kleiner Turm, ein Tor, ein Brunnen, ein Wagen)? Soll der Mix aus Modern und Mittelalter ein eigener Stil werden?
+
 ### Grafik-Probe, Teil 2 – Kenneys Modelle (fertig, v0.33.0)
 
 **Freigabe (Tobias, Chat 23, 20.11.2026):** „1. Ja lass uns beides probieren, damit ich alles sehen kann. Wir sind aktuell ja in der Testphase. 2. Ja bin ich mit einverstanden. 3. Ja, bin ich auch mit einverstanden. Lass uns direkt damit anfangen“

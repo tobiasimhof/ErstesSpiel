@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 21.11.2026 – Chat 23 (Fortsetzung): Grafik-Probe, Teil 2 getestet (v0.33.1)
+
+**Tobias:** „ICh würde gerne in einem neuen Chat weitermachen, deswegen würde ich dir jetzt mein Feedback geben und danach in einem neuen Chat weitermachen. Ich habe auf dem Tablet konstant 60 fps. Mir gefällt das frei drehbare besser, weil man dadurch vermutlich besser bauen und auch sieht, wenn man ein zulauf verstopft ist. Mir gefällt Mitteralter besser. Finde die Idee mit den Häusern auch sehr gut, dass wir die Häuser einfach spezifisch gestalten, sodass man weiß, was ein Sägewerk ist und was nicht. Das Versandportal sieht noch etwas komisch aus. Mir gefällt die SPielfarbe besser, weil es mehr harmoniert. Mir gefällt allerdings auch der Mix aus Modern und Mittelalter. Evtl. könnte man die modernen Gebäude noch etwas mitteraltermäßiger gestalten ohne Greifarm. Ich würde gerne in den nächsten Schritten ein wenig mit der Grafik weitermachen, um das Spiel evtl. Testweise auf dieses Niveau zu heben, sodass man evtl. das erste Level in dieser neuen Grafik spielen kann. Wie gesagt, ich würde danach in einem neuen Chat weitermachen wollen“
+
+**Claude** hat das Feedback als v0.33.1 festgehalten (nur Doku): Entscheidungen in `ENTSCHEIDUNGEN.md`, offene Frage 15 in `STAND.md`, und als nächsten Schritt „Level 1 in der neuen Grafik“ mit Claudes ersten Gedanken in `PLAENE.md` – der Plan wird im neuen Chat vorgestellt, programmiert wird erst nach Tobias' OK.
+
+**Umgesetzt:** v0.33.1 (nur Doku). Weiter im neuen Chat.
+
 ### 20.11.2026 – Chat 23: Kenney-Modelle in der Grafik-Probe (v0.33.0)
 
 **Tobias:** „Bringe dich auf den aktuellen Stand der Dinge.“
