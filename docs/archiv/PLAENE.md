@@ -61,7 +61,34 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Level 1 in der neuen Grafik (vorgemerkt in v0.33.1, Plan im nächsten Chat)
+### 3D-Test, Teil 1 (fertig, v0.34.0)
+
+**Umgesetzt wie im Entwurf unten.** Einzelheiten:
+- **Aufruf:** `index.html?ansicht=3d` (Menü ☰ → „🧊 3D-Test (Level 1)“ speichert vorher); zurück über „🗺️ Zurück zur echten Fabrik (2D)“. Eigener Spielstand `erstesspiel-spielstand-3d-test`.
+- **Versandportal:** Kenneys `wall-narrow-gate` (Castle Kit), um 90° gedreht, damit das Band durch den Bogen fährt; Farbtafel `tor` (warmes Steingrau wie die Steinhäuser); darin eine violette, leicht pulsierende Fläche und sieben Funken, die aufsteigen; kommt eine Ware an, leuchtet der Schimmer kurz auf (das Tor selbst „ploppt“ nicht). Ein Schild zeigt das Portal nur, wenn das Laden-Lager voll ist. Auch die Grafik-Probe nutzt im Mittelalter jetzt das Tor.
+- **Kamera:** Startansicht um die Gebäude (mindestens 16 × 10 Felder); leicht gedreht (etwa 23°), damit es räumlich wirkt, Norden bleibt ungefähr oben. Neigung nah etwa 42°, weit etwa 62°.
+- **Schilder** werden von weitem größer (bis 2,4-fach), ganz nah etwas kleiner.
+- **Abweichung:** Ein einzelnes Gebäude lässt sich über sein Infofenster („↔ Verschieben“) schon verschieben – die Vorschau gibt es ja; nur „Bereich markieren“ in der Bauleiste ist noch aus.
+
+### Entwurf v0.34.0 – 3D-Test, Teil 1: Level 1 in 3D spielen (Chat 24; angenommen, umgesetzt in v0.34.0)
+
+**Tobias (Chat 24, 21.11.2026):** Frage 1 „Da entscheide ich mich für A. Ich will es erstmal testen, bevor wir die ganze Spielwelt in die "Neue Grafik" holen.“ – Versandportal: erst „rausnehmen“, nach Claudes Hinweis (ohne Portal bleibt der Start stecken) „Alles klar, hatte ich vergessen. Dann lass uns das Versandportal einfach sehr schlicht halten mit deinem ersten Vorschlag dass es mehr ein Torbogen ist mit einem kleinem mythischen Schauer“. Zum Rest: „Ich würde mir erstmal anschauen, was du zauberst und danach können wir noch das Feintuning machen.“
+
+**Ziel:** Level 1 lässt sich testweise in der neuen 3D-Grafik spielen. Das 2D-Spiel bleibt die normale Ansicht, Tobias' Fabrik wird nicht berührt.
+
+- **Eigener Test-Spielstand ab Level 1** (Frage 1: A): Menü ☰ → „🧊 3D-Test (Level 1)“ speichert die echte Fabrik und öffnet das Spiel in 3D mit einem eigenen Spielstand. Von dort führt das Menü zurück zur echten Fabrik; sie holt die verpasste Zeit nach wie beim Zurückkommen. Sichern und Laden einer Datei gehen auch im 3D-Test.
+- **Aussehen:** Mittelalter in Spiel-Farben (Tobias' Wahl aus der Probe). Holzfällerlager, Sägewerk und Lagerhaus wie in der Probe; Förderbänder aus Holz; Waren als kleine 3D-Formen. Gebäude ohne eigenes Haus (ab Level 2 oder aus einer geladenen Datei) bekommen vorerst ein einfaches Haus mit Dach in Reiterfarbe.
+- **Versandportal:** ein schlichter Torbogen aus Stein mit einem kleinen, geheimnisvollen Schimmer; das Band fährt hinein, die Waren verschwinden darin.
+- **Über jedem Gebäude** ein kleines schwebendes Schild wie auf der 2D-Karte: Warenbild, Statuslicht, Fortschrittsring. Anschlüsse als blaue (Eingang) und orange (Ausgang) Pfeile am Boden.
+- **Kamera frei drehbar:** ein Finger wie heute (Karte verschieben; im Bau-Modus bauen, Bänder ziehen, abreißen), zwei Finger zoomen, verschieben und drehen; Knöpfe ⟲ ⟳, Tasten Q/E; die Neigung bleibt fest.
+- **Bauen:** Vorschau als halbdurchsichtiges Haus (grün/rot), „↻ Drehen“, „✓ Bauen“; Bänder ziehen mit Vorschau; Abreißen per Antippen und Wischen; Taste R wie bisher.
+- **Wie heute:** Infofenster, Rohstoff einlegen und Auffüllen, Laden, Händler, Theken, Aufträge, Aufstieg, „Willkommen zurück“, Sichern und Laden.
+- **Effekte:** Wasserrad dreht beim Sägen, Hüpfen beim Antippen, Waren „ploppen“ ins Portal, Schatten.
+- **Noch nicht (Teil 2, v0.35.0):** Verschieben, Bereich markieren und Fläche kaufen – die Knöpfe sind im 3D-Test ausgegraut („kommt im nächsten Schritt“). Dazu Tobias' Wünsche aus dem Test.
+- **Bleibt gleich:** Spielregeln und Spielstand-Format; das 2D-Spiel lädt three.js nicht.
+- **Später:** Mix aus Modern und Mittelalter als eigener Stil (ohne Greifarm), Abend, Sound; weitere Level in 3D und 3D für die echte Fabrik entscheidet Tobias nach dem Test.
+
+### Level 1 in der neuen Grafik (vorgemerkt in v0.33.1; geplant in Chat 24, siehe Entwurf v0.34.0 oben)
 
 **Tobias (Chat 23, 21.11.2026):** „ICh würde gerne in einem neuen Chat weitermachen, deswegen würde ich dir jetzt mein Feedback geben und danach in einem neuen Chat weitermachen. Ich habe auf dem Tablet konstant 60 fps. Mir gefällt das frei drehbare besser, weil man dadurch vermutlich besser bauen und auch sieht, wenn man ein zulauf verstopft ist. Mir gefällt Mitteralter besser. Finde die Idee mit den Häusern auch sehr gut, dass wir die Häuser einfach spezifisch gestalten, sodass man weiß, was ein Sägewerk ist und was nicht. Das Versandportal sieht noch etwas komisch aus. Mir gefällt die SPielfarbe besser, weil es mehr harmoniert. Mir gefällt allerdings auch der Mix aus Modern und Mittelalter. Evtl. könnte man die modernen Gebäude noch etwas mitteraltermäßiger gestalten ohne Greifarm. Ich würde gerne in den nächsten Schritten ein wenig mit der Grafik weitermachen, um das Spiel evtl. Testweise auf dieses Niveau zu heben, sodass man evtl. das erste Level in dieser neuen Grafik spielen kann. Wie gesagt, ich würde danach in einem neuen Chat weitermachen wollen“
 

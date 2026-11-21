@@ -6,7 +6,7 @@ import { onPress } from './press.js';
 
 const numberFormat = new Intl.NumberFormat('de-DE');
 
-export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, onLevel, onSaveFile, onLoadFile, onProbe }) {
+export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, onLevel, onSaveFile, onLoadFile, onProbe, onSwitch3d, is3d = false }) {
   const gold = document.getElementById('hud-gold');
   const goldGain = document.getElementById('hud-gold-gain');
   const testPackButton = document.getElementById('menu-test-pack');
@@ -23,7 +23,7 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
   const fpsBadge = document.getElementById('hud-fps');
   const testModeButton = document.getElementById('menu-test-mode');
 
-  document.getElementById('hud-version').textContent = `v${version}`;
+  document.getElementById('hud-version').textContent = is3d ? `v${version} · 3D-Test` : `v${version}`;
 
   function closeMenu() {
     menu.hidden = true;
@@ -64,6 +64,13 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
   onPress(document.getElementById('menu-probe'), () => {
     closeMenu();
     onProbe();
+  });
+  // v0.34.0: 3D-Test mit eigenem Spielstand (Tobias, Chat 24) – und zurück
+  const switch3d = document.getElementById('menu-3d');
+  if (is3d) switch3d.textContent = '🗺️ Zurück zur echten Fabrik (2D)';
+  onPress(switch3d, () => {
+    closeMenu();
+    onSwitch3d();
   });
 
   // Vollbild (Android/PC). Ohne Vollbild-Funktion wird der Knopf ausgeblendet.

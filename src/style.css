@@ -646,6 +646,42 @@ button.danger {
   border: 1px solid rgba(243, 230, 196, 0.35);
 }
 
+/* v0.34.0: 3D-Test – Knöpfe zum Drehen der Kamera, oben links */
+.turn-buttons {
+  position: absolute;
+  top: 12px;
+  left: max(12px, var(--safe-left));
+  display: flex;
+  gap: 8px;
+  z-index: 3;
+}
+
+.turn-buttons[hidden] {
+  display: none;
+}
+
+.turn-buttons button {
+  width: 48px;
+  height: 44px;
+  padding: 0;
+  font-size: 24px;
+  font-weight: 700;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* v0.34.0: Über der 3D-Ansicht hält Chrome das scrollbare Infofenster für
+   größer, als es ist, und zeichnet darunter die 3D-Welt nicht (schwarzer
+   Kasten auf dem Handy). Ein Hauch Durchsichtigkeit verhindert das. */
+.view-3d #info-panel {
+  background-color: rgba(243, 230, 196, 0.985);
+}
+
+/* v0.34.0: Im 3D-Test kommt „Bereich markieren“ erst im nächsten Schritt */
+.build-item.soon {
+  opacity: 0.5;
+}
+
 /* ---------- Untere Leisten ---------- */
 
 #bottom-bar {

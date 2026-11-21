@@ -3,8 +3,17 @@
 
 import { deserializeGame, serializeGame } from '../core/save.js';
 
-const KEY = 'erstesspiel-spielstand';
+let KEY = 'erstesspiel-spielstand';
 const SETTINGS_KEY = 'erstesspiel-einstellungen';
+
+// v0.34.0: Der 3D-Test hat seinen eigenen Spielstand (Tobias, Chat 24: „Ich
+// will es erstmal testen, bevor wir die ganze Spielwelt in die "Neue Grafik"
+// holen.“). Muss vor dem ersten Laden gesetzt werden; Sichern, Laden aus einer
+// Datei und „Neues Spiel“ betreffen dann nur diesen Spielstand.
+export const TEST_3D_SLOT = '3d-test';
+export function useSaveSlot(slot) {
+  KEY = slot ? `erstesspiel-spielstand-${slot}` : 'erstesspiel-spielstand';
+}
 
 // Ergebnis: { status: 'none' | 'ok' | 'invalid', state?, savedAt? }
 export function loadGame() {

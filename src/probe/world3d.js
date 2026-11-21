@@ -19,7 +19,7 @@ import { footprintSize } from '../core/geometry.js';
 import { productionOf, sourceInputs } from '../core/production.js';
 import { BELT_SPEED, TICK } from '../core/sim.js';
 import { parseTileKey } from '../core/state.js';
-import { BELT_TOP, buildBeltTile, buildKenneyBuilding, buildSurroundings } from './kenney3d.js';
+import { BELT_TOP, animateShimmer, buildBeltTile, buildKenneyBuilding, buildSurroundings } from './kenney3d.js';
 
 // ---------- kleine Helfer ----------
 
@@ -396,7 +396,9 @@ export function createWorld({ state, origin, area, lib }) {
       if (v.pop > 0) v.pop = Math.max(0, v.pop - dt * 3);
       if (v.bounce > 0) v.bounce = Math.max(0, v.bounce - dt * 2.8);
       const squash = Math.sin(v.bounce * Math.PI * 2) * v.bounce * 0.18;
-      const pop = Math.sin(v.pop * Math.PI) * 0.25;
+      // v0.34.0: Das Tor des Portals bleibt stehen – dafür leuchtet sein Schimmer auf.
+      const pop = v.parts.shimmer ? 0 : Math.sin(v.pop * Math.PI) * 0.25;
+      if (v.parts.shimmer) animateShimmer(v.parts.shimmer, time, fx ? Math.sin(v.pop * Math.PI) : 0);
       v.group.scale.set(1 - squash * 0.5 + pop, 1 + squash + pop, 1 - squash * 0.5 + pop);
       if (v.parts.glow) for (const m of v.parts.glow) m.emissiveIntensity = (working || b.type === 'versandportal' ? 1.2 : 0.15) * (settings.light === 'abend' ? 1.6 : 1);
       if (fx && working && v.parts.chimneyTop && smokeTimer <= 0) {

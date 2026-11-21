@@ -1,6 +1,7 @@
 // Setzt die Versionsnummer überall, wo der Browser sie braucht:
 //   - src/version.js (Anzeige im Spiel)
-//   - index.html: alle ?v= Angaben und die Import-Map
+//   - index.html: alle ?v= Angaben und die Import-Map (seit v0.34.0 mit
+//     three.js für den 3D-Test)
 //
 // Die Import-Map hängt an JEDE Programmdatei ?v=<Version>. Ohne sie lädt der
 // Browser nach einem Update nur main.js neu und nimmt die übrigen Dateien bis zu
@@ -74,7 +75,9 @@ if (isMain) {
   } else {
     version = read('src/version.js').match(/VERSION = '([^']+)'/)[1];
   }
-  updatePage('index.html', version);
+  // v0.34.0: Der 3D-Test (index.html?ansicht=3d) lädt three.js nach – nur dort,
+  // die Import-Map allein lädt nichts.
+  updatePage('index.html', version, PROBE_IMPORTS);
   updatePage('grafik-probe.html', version, PROBE_IMPORTS);
   console.log(`Version ${version}: src/version.js, index.html und grafik-probe.html (${sourceFiles().length} Dateien in der Import-Map) aktualisiert.`);
 }

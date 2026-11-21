@@ -4,6 +4,22 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 21.11.2026 – Chat 24: 3D-Test, Teil 1 – Level 1 in 3D (v0.34.0)
+
+**Tobias:** „Bringe dich auf den aktuellen Stand“
+
+**Claude** hat `STAND.md`, `SPIEL.md`, den Abschnitt „Level 1 in der neuen Grafik“ in `PLAENE.md` und den Code gelesen und den Plan vorgestellt: **3D-Test in zwei Versionen** – v0.34.0 „Level 1 in 3D spielen“ (Menü ☰ → „🧊 3D-Test (Level 1)“, Mittelalter in Spiel-Farben, freie Kamera mit zwei Fingern drehen und zoomen, Knöpfe ⟲ ⟳, Tasten Q/E; Holzfällerlager, Sägewerk, Lagerhaus aus der Probe; Bänder aus Holz; über jedem Gebäude ein schwebendes Schild mit Warenbild, Statuslicht und Fortschrittsring; Anschlüsse als Pfeile am Boden; Bauen mit halbdurchsichtiger Vorschau grün/rot, Bänder ziehen, Abreißen; Infofenster, Laden, Aufträge wie heute; Effekte Wasserrad, Hüpfen, Schatten; Verschieben, Bereich markieren und Fläche kaufen noch ausgegraut) und v0.35.0 (Verschieben, Bereich markieren, Fläche kaufen und Tobias' Wünsche aus dem Test). Spielregeln und Spielstand-Format bleiben, das 2D-Spiel bleibt Standard. Kenneys drei Pakete liegen noch vollständig im Verlauf des Projekts – nichts muss neu hochgeladen werden. Fragen: 1. eigener Test-Spielstand ab Level 1 (A) oder Schalter für die echte Fabrik (B)? 2. Versandportal: Torbogen mit Wirbel, Turm mit Fahne, Verladestelle mit Karren oder eigene Idee? 3. Passt die Aufteilung?
+
+**Tobias:** „Frage 1: Da entscheide ich mich für A. Ich will es erstmal testen, bevor wir die ganze Spielwelt in die "Neue Grafik" holen. Frage 2: Ich würde das Versandportal erstmal rausnehmen. Wir haben mit dem Zwischenlager die Option Waren von der Produktion in das aktive Verkaufslager zu schicken. Ich würde mir erstmal anschauen, was du zauberst und danach können wir noch das Feintuning machen.“
+
+**Claude** hat auf einen Haken hingewiesen: Ohne Versandportal bleibt der Start stecken (Holzblöcke kommen nur übers Portal ins Laden-Lager; das Sägewerk kostet 40 Holzblöcke, das Lagerhaus 8 Holzplatten – deshalb steht das Portal seit v0.7.0 schon beim Start da). Vorschlag: Im 3D-Test steht beim Start ein **Lagerhaus statt des Versandportals**; Waren kommen über „↩ Ausräumen ins Laden-Lager“ in den Laden; das Portal fehlt in der Bauleiste des 3D-Tests; das 2D-Spiel behält seine Portale. Rückfrage, ob das so passt.
+
+**Tobias:** „Alles klar, hatte ich vergessen. Dann lass uns das Versandportal einfach sehr schlicht halten mit deinem ersten Vorschlag dass es mehr ein Torbogen ist mit einem kleinem mythischen Schauer“
+
+**Claude** baut v0.34.0 nach dem Entwurf in `PLAENE.md` (Versandportal als schlichter Torbogen mit leichtem Schimmer, das Portal bleibt im 3D-Test). Als Torbogen dient Kenneys kleines Burgtor aus dem Castle Kit (lag noch im Verlauf des Projekts), in warmem Steingrau mit violettem Schimmer.
+
+**Umgesetzt:** v0.34.0 – Menü ☰ → „🧊 3D-Test (Level 1)“. Als Nächstes testet Tobias; danach Teil 2 (v0.35.0).
+
 ### 21.11.2026 – Chat 23 (Fortsetzung): Grafik-Probe, Teil 2 getestet (v0.33.1)
 
 **Tobias:** „ICh würde gerne in einem neuen Chat weitermachen, deswegen würde ich dir jetzt mein Feedback geben und danach in einem neuen Chat weitermachen. Ich habe auf dem Tablet konstant 60 fps. Mir gefällt das frei drehbare besser, weil man dadurch vermutlich besser bauen und auch sieht, wenn man ein zulauf verstopft ist. Mir gefällt Mitteralter besser. Finde die Idee mit den Häusern auch sehr gut, dass wir die Häuser einfach spezifisch gestalten, sodass man weiß, was ein Sägewerk ist und was nicht. Das Versandportal sieht noch etwas komisch aus. Mir gefällt die SPielfarbe besser, weil es mehr harmoniert. Mir gefällt allerdings auch der Mix aus Modern und Mittelalter. Evtl. könnte man die modernen Gebäude noch etwas mitteraltermäßiger gestalten ohne Greifarm. Ich würde gerne in den nächsten Schritten ein wenig mit der Grafik weitermachen, um das Spiel evtl. Testweise auf dieses Niveau zu heben, sodass man evtl. das erste Level in dieser neuen Grafik spielen kann. Wie gesagt, ich würde danach in einem neuen Chat weitermachen wollen“

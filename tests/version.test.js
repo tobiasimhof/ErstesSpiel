@@ -39,7 +39,7 @@ test('Doku: STAND.md und SPIEL.md bleiben kurz, das Archiv ist vollständig da',
 
 test('Import-Map in index.html versieht jede Programmdatei mit der aktuellen Version', async () => {
   // Ohne das mischt der Browser nach einem Update alte und neue Dateien (v0.7.0).
-  const { sourceFiles } = await import('../tools/set-version.mjs');
+  const { PROBE_IMPORTS, sourceFiles } = await import('../tools/set-version.mjs');
   const html = read('index.html');
   const block = html.match(/<script type="importmap">([\s\S]*?)<\/script>/);
   assert.ok(block, 'keine Import-Map in index.html');
@@ -49,6 +49,9 @@ test('Import-Map in index.html versieht jede Programmdatei mit der aktuellen Ver
   for (const file of files) {
     assert.equal(imports[file], `${file}?v=${VERSION}`, `${file} fehlt oder hat die falsche Version – node tools/set-version.mjs ausführen`);
   }
-  assert.deepEqual(Object.keys(imports).sort(), files, 'Import-Map nennt Dateien, die es nicht gibt');
+  // v0.34.0: dazu three.js für den 3D-Test (ohne ?v=, die Version steht im Ordnernamen)
+  for (const [name, path] of Object.entries(PROBE_IMPORTS)) assert.equal(imports[name], path, `${name} für den 3D-Test`);
+  const own = Object.keys(imports).filter((key) => !(key in PROBE_IMPORTS));
+  assert.deepEqual(own.sort(), files, 'Import-Map nennt Dateien, die es nicht gibt');
   assert.ok(html.indexOf('type="importmap"') < html.indexOf('type="module"'), 'Import-Map muss vor dem Spiel-Script stehen');
 });

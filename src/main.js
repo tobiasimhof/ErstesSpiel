@@ -24,11 +24,29 @@ import { isRipe, productionOf } from './core/production.js';
 import { createLevelView, unlockText } from './view/levels.js';
 import { costText, numberFormat } from './view/format.js';
 import { redrawItemIcons } from './view/itemArt.js';
-import { clearGame, loadGame, loadSettings, rememberLoadedFile, replaceGame, saveGame, saveSettings, takeLoadedFile } from './view/storage.js';
+import {
+  TEST_3D_SLOT,
+  clearGame,
+  loadGame,
+  loadSettings,
+  rememberLoadedFile,
+  replaceGame,
+  saveGame,
+  saveSettings,
+  takeLoadedFile,
+  useSaveSlot,
+} from './view/storage.js';
 import { createBackup } from './view/backup.js';
 import { OFFLINE } from './core/data/offline.js';
 import { catchUpProgress, extendCatchUp, offlineReport, runCatchUp, startCatchUp } from './core/offline.js';
 import { createOfflineView } from './view/offline.js';
+import { onPress } from './view/press.js';
+
+// v0.34.0: 3D-Test (Tobias, Chat 24) – index.html?ansicht=3d zeigt das Spiel
+// in 3D mit einem eigenen Spielstand ab Level 1; die echte Fabrik (2D) bleibt
+// unberührt. Spielregeln, Steuerung und Fenster sind dieselben.
+const VIEW_3D = new URLSearchParams(location.search).get('ansicht') === '3d';
+if (VIEW_3D) useSaveSlot(TEST_3D_SLOT);
 
 const loaded = loadGame();
 const state = loaded.status === 'ok' ? loaded.state : createNewGame();
@@ -38,8 +56,41 @@ const ui = { mode: 'normal', selected: null, ghost: null, beltPreview: null, sim
 const settings = loadSettings();
 const TEST_SPEED = 10;
 const camera = createCamera();
-const renderer = createRenderer(canvas);
+const view3d = VIEW_3D ? await start3d() : null;
+const renderer = view3d ?? createRenderer(canvas);
 const panels = createPanels();
+
+// v0.34.0: Lädt three.js und Kenneys Modelle (nur im 3D-Test) und zeigt so
+// lange „Lädt die 3D-Ansicht …“. Klappt das nicht, bleibt eine Meldung mit
+// dem Weg zurück zur echten Fabrik stehen.
+async function start3d() {
+  window.__loading3d = true;
+  const box = document.getElementById('catchup');
+  const text = document.getElementById('catchup-text');
+  const fill = document.getElementById('catchup-fill');
+  box.querySelector('.catchup-icon').textContent = '🧊';
+  text.textContent = '3D-Test: Lädt die Modelle …';
+  fill.style.width = '0%';
+  box.hidden = false;
+  try {
+    const { createView3d } = await import('./view3d/view3d.js');
+    const view = await createView3d({
+      canvas,
+      onProgress(done, total) {
+        text.textContent = `3D-Test: Lädt die Modelle … ${done} / ${total}`;
+        fill.style.width = `${Math.round((done / total) * 100)}%`;
+      },
+    });
+    box.hidden = true;
+    box.querySelector('.catchup-icon').textContent = '⏩';
+    return view;
+  } catch (err) {
+    text.textContent = '⚠️ Die 3D-Ansicht konnte nicht laden. Bitte neu laden – oder über index.html zurück zur echten Fabrik.';
+    throw err;
+  } finally {
+    window.__loading3d = false;
+  }
+}
 
 let needsDraw = true;
 const requestDraw = () => {
@@ -150,7 +201,8 @@ function onLevelUp({ level, gift, moreLand }) {
   levelReady = false;
   // v0.27.0: Bringt das Level mehr Fläche, zeigt die Karte die ganze Welt –
   // so sieht man die neuen Schilder „＋ Fläche kaufen“ am Rand.
-  if (moreLand) fitRect(camera, worldRect(), 36, worldBounds());
+  if (moreLand && view3d) view3d.cam.fitRect(state.world, { padBottom: buildBar.bottomCover() });
+  else if (moreLand) fitRect(camera, worldRect(), 36, worldBounds());
   onChange();
   buildBar.updateCosts(state);
   const tip = moreLand ? ' Tippe auf die ＋-Schilder am Rand.' : '';
@@ -191,6 +243,12 @@ const hud = createHud({
     saveNow();
     location.href = 'grafik-probe.html';
   },
+  // v0.34.0: 3D-Test (eigener Spielstand) – erst speichern, dann wechseln
+  is3d: VIEW_3D,
+  onSwitch3d: () => {
+    saveNow();
+    location.href = VIEW_3D ? 'index.html' : 'index.html?ansicht=3d';
+  },
 });
 hud.setTestMode(Boolean(settings.testMode), TEST_SPEED);
 
@@ -202,6 +260,39 @@ function worldBounds() {
   const w = state.world;
   const padRight = Math.min(320, 0.42 * canvas.clientWidth) + 24;
   return { x: w.x * TILE, y: w.y * TILE, width: w.width * TILE, height: w.height * TILE, padBottom: buildBar.bottomCover(), padRight };
+}
+
+// v0.34.0: Ausschnitt beim Öffnen des 3D-Tests – die Gebäude in der Mitte,
+// mit Platz drumherum (mindestens 16 × 10 Felder, höchstens die Welt)
+function startRect3d() {
+  const p = state.plot;
+  const w = state.world;
+  let x0 = Infinity;
+  let y0 = Infinity;
+  let x1 = -Infinity;
+  let y1 = -Infinity;
+  for (const b of state.buildings) {
+    x0 = Math.min(x0, b.x);
+    y0 = Math.min(y0, b.y);
+    x1 = Math.max(x1, b.x + 2);
+    y1 = Math.max(y1, b.y + 2);
+  }
+  if (!Number.isFinite(x0)) return { ...p };
+  const grow = (a, b, min, lo, hi) => {
+    let from = a - 3;
+    let to = b + 3;
+    if (to - from < min) {
+      const extra = (min - (to - from)) / 2;
+      from -= extra;
+      to += extra;
+    }
+    from = Math.max(lo, from);
+    to = Math.min(hi, to);
+    return [from, to];
+  };
+  const [rx0, rx1] = grow(x0, x1, 16, w.x, w.x + w.width);
+  const [ry0, ry1] = grow(y0, y1, 10, w.y, w.y + w.height);
+  return { x: rx0, y: ry0, width: rx1 - rx0, height: ry1 - ry0 };
 }
 
 function plotRect() {
@@ -237,7 +328,22 @@ const buildBar = createBuildBar({
 const shopView = createShopView({ state, panels, onChange });
 const offlineView = createOfflineView({ panels });
 const warehouseView = createWarehouseView({ state, panels, onChange });
-controller = createController({ state, camera, ui, panels, buildBar, shopView, warehouseView, onChange, requestDraw, worldBounds });
+controller = createController({
+  state,
+  camera: view3d ? view3d.cam : camera,
+  ui,
+  panels,
+  buildBar,
+  shopView,
+  warehouseView,
+  onChange,
+  requestDraw,
+  worldBounds,
+  // v0.34.0: im 3D-Test fragt die Steuerung die 3D-Kamera
+  ...(view3d
+    ? { tileAt: (x, y) => view3d.cam.tileAt(x, y), panScreen: (dx, dy) => view3d.cam.panBy(dx, dy), areaTool: false, landPurchase: false }
+    : {}),
+});
 buildBar.setMode('normal');
 panels.setInfoCloseHandler(() => controller.closeInfo());
 
@@ -248,15 +354,33 @@ attachInput(canvas, {
   onDragEnd: (x, y) => controller.onDragEnd(x, y),
   onDragCancel: () => controller.onDragCancel(),
   onPan(dx, dy) {
-    panBy(camera, dx, dy, worldBounds());
+    if (view3d) view3d.cam.panBy(dx, dy);
+    else panBy(camera, dx, dy, worldBounds());
     requestDraw();
   },
   onZoom(x, y, factor) {
-    zoomAt(camera, x, y, factor, worldBounds());
+    if (view3d) view3d.cam.zoomAt(x, y, factor);
+    else zoomAt(camera, x, y, factor, worldBounds());
     requestDraw();
   },
+  // v0.34.0: zwei Finger umeinander drehen die 3D-Kamera
+  ...(view3d ? { onRotate: (angle) => view3d.cam.rotate(angle) } : {}),
   onInteract: () => hud.hideHint(),
 });
+
+// v0.34.0: 3D-Test – Knöpfe ⟲ ⟳ (oben links) und Tasten Q/E drehen um 45°;
+// „Bereich markieren“ kommt dort erst im nächsten Schritt.
+if (view3d) {
+  document.body.classList.add('view-3d');
+  document.getElementById('turn-buttons').hidden = false;
+  onPress(document.getElementById('btn-turn-left'), () => view3d.turn(-1));
+  onPress(document.getElementById('btn-turn-right'), () => view3d.turn(1));
+  document.getElementById('hint').textContent = 'Ziehen: verschieben · Zwei Finger: zoomen und drehen · Gebäude antippen';
+  const areaButton = document.querySelector('.build-item[data-tool="area"]');
+  areaButton?.classList.add('soon');
+  const note = areaButton?.querySelector('.build-note');
+  if (note) note.textContent = 'kommt bald';
+}
 
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') controller.back();
@@ -266,6 +390,12 @@ document.addEventListener('keydown', (event) => {
   const typing = event.target instanceof HTMLElement && event.target.closest('input, textarea, select, [contenteditable]');
   if (event.key.toLowerCase() === 'r' && !event.ctrlKey && !event.metaKey && !event.altKey && !event.repeat && !typing) {
     if (controller.rotateKey()) event.preventDefault();
+  }
+  // v0.34.0: Q/E drehen die 3D-Kamera
+  const key = event.key.toLowerCase();
+  if (view3d && (key === 'q' || key === 'e') && !event.ctrlKey && !event.metaKey && !event.altKey && !typing) {
+    view3d.turn(key === 'q' ? -1 : 1);
+    event.preventDefault();
   }
 });
 
@@ -286,6 +416,17 @@ window.addEventListener('pageshow', () => {
 function handleResize() {
   const size = renderer.resize();
   buildBar.resize();
+  if (view3d) {
+    // v0.34.0: Beim ersten Mal die Gebäude mit etwas Platz drumherum ins Bild
+    // holen (mindestens 16 × 10 Felder, höchstens das Grundstück)
+    if (!view3d.fitted && size.width > 0) {
+      view3d.fitted = true;
+      view3d.cam.setBounds(state.world);
+      view3d.cam.fitRect(startRect3d(), { padding: 16, padBottom: buildBar.bottomCover() });
+    }
+    requestDraw();
+    return;
+  }
   const firstLayout = camera.viewWidth === 0;
   setViewSize(camera, size.width, size.height);
   // Rand von 36 px: Die Schilder zum Flächenkauf über und unter dem Grundstück bleiben sichtbar.
@@ -469,8 +610,39 @@ requestAnimationFrame(frame);
 window.__game = {
   VERSION,
   state,
-  camera,
+  camera: view3d ? view3d.cam : camera,
   ui,
+  // v0.34.0: für den Browser-Test des 3D-Tests
+  view3d: view3d
+    ? {
+        // Bildschirmpunkt (Seite) der Mitte eines Felds am Boden bzw. über einem Gebäude
+        tile(x, y) {
+          const r = canvas.getBoundingClientRect();
+          const p = view3d.cam.screenOf(x + 0.5, 0, y + 0.5);
+          return { x: r.left + p.x, y: r.top + p.y };
+        },
+        building(id, height = 0.4) {
+          const b = state.buildings.find((item) => item.id === id);
+          if (!b) return null;
+          const r = canvas.getBoundingClientRect();
+          const c = view3d.world.buildingTop(id);
+          const p = view3d.cam.screenOf(c.x, height, c.z);
+          return { x: r.left + p.x, y: r.top + p.y };
+        },
+        tileAt: (x, y) => view3d.cam.tileAt(x, y),
+        yaw: () => view3d.cam.yaw,
+        distance: () => view3d.cam.distance,
+        target: () => [view3d.cam.target.x, view3d.cam.target.z],
+        isTurning: () => view3d.isTurning(),
+        counts: () => view3d.world.counts(),
+        sign: (id) => view3d.world.signOf(id),
+        shimmer: (id) => view3d.world.shimmerOf(id),
+        wheel: (id) => view3d.world.wheelOf(id),
+        hasGhost: () => view3d.world.hasGhost(),
+        overlayCount: () => view3d.world.overlayCount(),
+        models: () => view3d.models(),
+      }
+    : null,
   TILE,
   saveNow,
   openLevel,

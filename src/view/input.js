@@ -8,6 +8,8 @@
 // - onDragCancel():           ... abgebrochen (z. B. zweiter Finger kommt dazu)
 // - onPan(dx, dy):            Karte verschieben (zwei Finger, rechte/mittlere Maustaste)
 // - onZoom(x, y, factor):     zoomen (zwei Finger, Mausrad)
+// - onRotate(angle):          v0.34.0, nur im 3D-Test: zwei Finger umeinander
+//                             drehen (Bogenmaß seit dem letzten Aufruf)
 // - onInteract():             irgendeine Berührung (z. B. um Hinweise auszublenden)
 // Alle Koordinaten sind CSS-Pixel relativ zum Element.
 
@@ -27,7 +29,7 @@ export function attachInput(element, handlers) {
 
   function pinchInfo() {
     const [a, b] = [...pointers.values()];
-    return { dist: Math.hypot(b.x - a.x, b.y - a.y), midX: (a.x + b.x) / 2, midY: (a.y + b.y) / 2 };
+    return { dist: Math.hypot(b.x - a.x, b.y - a.y), midX: (a.x + b.x) / 2, midY: (a.y + b.y) / 2, angle: Math.atan2(b.y - a.y, b.x - a.x) };
   }
 
   element.addEventListener('pointerdown', (event) => {
@@ -65,6 +67,12 @@ export function attachInput(element, handlers) {
       if (pinch && pinch.dist > 0 && now.dist > 0) {
         h.onZoom(now.midX, now.midY, now.dist / pinch.dist);
         h.onPan(now.midX - pinch.midX, now.midY - pinch.midY);
+        if (h.onRotate) {
+          let turn = now.angle - pinch.angle;
+          if (turn > Math.PI) turn -= Math.PI * 2;
+          if (turn < -Math.PI) turn += Math.PI * 2;
+          h.onRotate(turn);
+        }
       }
       pinch = now;
       return;
