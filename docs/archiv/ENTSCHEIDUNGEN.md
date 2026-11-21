@@ -325,3 +325,8 @@ Neue Entscheidungen kommen unten in die Tabelle (älteste oben). Wird eine Entsc
 | 20.11.2026 | Grafik-Probe, Teil 2 mit Fantasy Town Kit und Castle Kit (Mittelalter) und Factory Kit (Modern); ins Projekt kommen nur die gebrauchten Modelle, die ZIP-Pakete nicht | Claudes Plan v0.33.0, Tobias: „Lass uns direkt damit anfangen“ (Chat 23). |
 | 20.11.2026 | Schalter „Farben: Kenney ↔ Spiel“ in der Grafik-Probe – beides ansehen | Tobias: „Ja lass uns beides probieren, damit ich alles sehen kann. Wir sind aktuell ja in der Testphase.“ |
 | 20.11.2026 | Bänder im Mittelalter aus dem Factory Kit, in Holz umgefärbt; Versandportal bleibt ein Leuchtring (über Steinbecken bzw. Metallsockel) | Tobias: „Ja bin ich mit einverstanden.“ / „Ja, bin ich auch mit einverstanden.“ |
+| 21.11.2026 | Die Grafik mit Kenneys Modellen läuft auf dem Tablet flüssig (konstant 60 Bilder pro Sekunde) | Tobias' Test der Grafik-Probe, Teil 2 (Chat 23). |
+| 21.11.2026 | Kamera frei drehbar statt fest schräg | Tobias: „weil man dadurch vermutlich besser bauen und auch sieht, wenn man ein zulauf verstopft ist“ |
+| 21.11.2026 | Stil Mittelalter, Spiel-Farben (Dächer in der Farbe des Reiters) | Tobias: „Mir gefällt Mitteralter besser.“ / „Mir gefällt die SPielfarbe besser, weil es mehr harmoniert.“ |
+| 21.11.2026 | Jedes Gebäude bekommt ein eigenes, erkennbares Haus | Tobias: „dass wir die Häuser einfach spezifisch gestalten, sodass man weiß, was ein Sägewerk ist und was nicht“ |
+| 21.11.2026 | Als Nächstes Level 1 testweise in der neuen Grafik spielbar machen (vor Level 14), Plan im neuen Chat | Tobias: „um das Spiel evtl. Testweise auf dieses Niveau zu heben, sodass man evtl. das erste Level in dieser neuen Grafik spielen kann“ |

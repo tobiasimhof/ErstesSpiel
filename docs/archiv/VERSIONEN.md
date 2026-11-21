@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.33.1 – Grafik-Probe, Teil 2 getestet (21.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Feedback zur Grafik-Probe, Teil 2 festhalten, damit es im neuen Chat weitergeht.
+
+**Fragen, die wir uns gestellt haben:**
+- Welche Richtung? → frei drehbare Kamera, Mittelalter, Spiel-Farben, eigene Häuser je Gebäude; konstant 60 Bilder pro Sekunde. Offen: das Versandportal und ob moderne Teile mittelalterlicher werden (ohne Greifarm).
+- Wie weiter? → Level 1 testweise in der neuen Grafik spielbar machen; Plan im neuen Chat.
+
+**Gemacht:**
+- `STAND.md` (Status, Nächster Schritt, offene Frage 15, letzte Arbeitsschritte), `PLAENE.md` („Level 1 in der neuen Grafik – vorgemerkt“), Archiv. Versionsnummer 0.33.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 414 von 414 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.33.0 – Grafik-Probe, Teil 2: Kenneys Modelle (20.11.2026)
 
 **Vorgenommen:**

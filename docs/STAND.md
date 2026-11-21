@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.33.0 – Grafik-Probe, Teil 2: Kenneys 3D-Modelle (Mittelalter und Modern) und der Schalter „Farben: Kenney ↔ Spiel“ (das Spiel selbst unverändert, Level 13) |
+| **Aktuelle Version** | v0.33.1 – Grafik-Probe, Teil 2 getestet: konstant 60 Bilder/s, Tobias wählt frei drehbar, Mittelalter, Spiel-Farben (nur Doku; im Spiel: Level 13 und die Grafik-Probe mit Kenneys Modellen) |
 | **Phase** | M2 – Produktionsketten (Werkzeuge 1–6, Kräuter 7–12 fertig; die Tränke haben mit Level 13 begonnen) |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | **Tobias testet die Grafik-Probe, Teil 2** auf dem Tablet (Menü ☰ → „🎨 Grafik-Probe“): Mittelalter ↔ Modern, Farben Kenney ↔ Spiel, Schräg ↔ frei, Tag ↔ Abend – was gefällt, läuft es flüssig (Bilder/s)? Danach entscheiden wir die Richtung der Grafik (offene Frage 15) – oder machen erst mit Level 14 weiter. |
+| **Nächster Schritt** | **Neuer Chat – Level 1 in der neuen Grafik (testweise)** (Tobias, Chat 23): „Ich würde gerne in den nächsten Schritten ein wenig mit der Grafik weitermachen, um das Spiel evtl. Testweise auf dieses Niveau zu heben, sodass man evtl. das erste Level in dieser neuen Grafik spielen kann.“ Auf „Bringe dich auf den aktuellen Stand“ liest Claude `STAND.md` und `SPIEL.md`, dann `PLAENE.md` („Level 1 in der neuen Grafik – vorgemerkt“) und stellt den Plan vor (Ziel, was sich ändert, Fragen) – **erst nach Tobias' OK programmieren**. Dabei Tobias' Wünsche aus dem Test: frei drehbare Kamera, Mittelalter, Spiel-Farben, eigene Häuser je Gebäude, Versandportal neu gestalten, moderne Teile mittelalterlicher (ohne Greifarm). |
 
 **Tobias' Fabrik – Level 11** (Chat 21, 17./18.11.2026, v0.28.0, ohne Screenshot): Level 11 läuft, alle Gebäude gebaut, die Aufträge laufen. **Platz zu etwa 60 % belegt.** Die Kräuterstraße baut er gerade: Er stellt die Wundverbände für Agnes' letzten Auftrag her. **Etwa 60.000 Gold** – bald reicht es für Theke 5 (70.000); „Das Tempo des Geld verdienens fühlt sich eigentlich gut an.“ **Das Laden-Lager steht immer bei 950+ von 1.000** – „Aktuell kämpfe ich auch sehr mit meinem Lager“.
 
@@ -23,7 +23,7 @@
 | M1 | Fabrik-Grundgerüst | Spielfeld, Bauen, Bänder, erste Kette, Speichern, Offline-Produktion – erledigt |
 | **M2** | **Produktionsketten** | **jetzt:** Werkzeuge (Level 1–6) und Kräuter (7–12) fertig, Tränke ab Level 13 |
 | M3 | Wirtschaft & Fortschritt | Nachfrage und Trends, Laden-Ausbau mit Waren, evtl. Freischaltpunkte (Laden-Level, Aufträge und Fläche kaufen gibt es schon) |
-| M4 | Optik & Gefühl | Grafik (Tobias, Chat 22: „mehr in die "Clash of Clans"-Richtung“ – eine Grafik-Probe kommt jetzt vorgezogen), Animationen, Sound (später), Einführung für neue Spieler |
+| M4 | Optik & Gefühl | Grafik (Tobias, Chat 22: „mehr in die "Clash of Clans"-Richtung“ – vorgezogen: Grafik-Probe fertig, als Nächstes Level 1 testweise in 3D), Animationen, Sound (später), Einführung für neue Spieler |
 | M5 | Online | Spielerkonto, Spielstand auf dem Server, globaler Schwarzmarkt |
 | M6 | Clans & Handel | Clans, Handel zwischen Spielern |
 | M7 | App | Android und iOS |
@@ -31,7 +31,7 @@
 **Nächste Schritte** (der Reihe nach; neu geordnet von Tobias in Chat 19; jeder Schritt erst nach Tobias' OK):
 
 1. **Tränke-Kapitel ab Level 13** (Tobias, Chat 21/22): alte Maschinen bekommen neue Funktionen statt einer neuen Maschine je Level; neue Maschinen nur, wo es Sinn ergibt – „Ich finde es sehr wichtig, dass das Ganze auch Sinn ergibt.“ **Level 13 „Die Glashütte“ ist im Spiel (v0.31.0).** Nach der Grafik-Probe **Level 14:** der Mörser als Ware in der Zimmerei aus **1 Steinplatte + 3 Holzstäben** (Schale aus Stein, Stößel aus Holz); **Level 15:** eine neue Maschine, die Kräuter, Kohle und Sand zu Staub zerkleinert (Baukosten z. B. 10 Mörser + 10 Räderwerke); Tinktur (Fläschchen + Kräutermischung) und erster Zaubertrank in der Apotheke – Einzelheiten, wenn wir dort sind; vorerst kein Reiter „Tränke“. Leitlinie (Chat 21): „der Fokus soll auf dem optimieren dieser Produktionsstraßen liegen.“ (Erledigt: Level 9–12 nach dem Entwurf v0.25.1, Laden-Lager vergrößern – Einzelheiten im Archiv.)
-2. **Grafik Richtung Clash of Clans** (Tobias, Chat 22): „Ich würde aber gerne mich so langsam von diesem 2D Design trennen“. **Grafik-Probe jetzt** (vor Level 14) – „damit ich weiß in welche Richtung das Spiel gehen kann“; Tobias möchte sehen, „was alles möglich ist“; Stil Mittelalter, notfalls erst modern; Sound später. Teil 1 (v0.32.0) lief auf Tobias' Tablet mit 60–90 Bildern pro Sekunde. **Teil 2 ist im Spiel (v0.33.0):** Menü ☰ → „🎨 Grafik-Probe“ – Holz- und Glas-Straße mit Kenneys 3D-Modellen (Mittelalter: Fantasy Town Kit und Castle Kit, Modern: Factory Kit; Bänder in beiden Stilen aus dem Factory Kit, im Mittelalter in Holz), Schalter Kamera, Stil, **Farben (Kenney ↔ Spiel)**, Effekte, Tag ↔ Abend. Nach Tobias' Test: Richtung festlegen (offene Frage 15).
+2. **Grafik Richtung Clash of Clans** (Tobias, Chat 22): „Ich würde aber gerne mich so langsam von diesem 2D Design trennen“. **Grafik-Probe jetzt** (vor Level 14) – „damit ich weiß in welche Richtung das Spiel gehen kann“; Tobias möchte sehen, „was alles möglich ist“; Stil Mittelalter, notfalls erst modern; Sound später. Teil 1 (v0.32.0) lief auf Tobias' Tablet mit 60–90 Bildern pro Sekunde. **Teil 2 ist im Spiel (v0.33.0):** Menü ☰ → „🎨 Grafik-Probe“ – Holz- und Glas-Straße mit Kenneys 3D-Modellen (Mittelalter: Fantasy Town Kit und Castle Kit, Modern: Factory Kit; Bänder in beiden Stilen aus dem Factory Kit, im Mittelalter in Holz), Schalter Kamera, Stil, **Farben (Kenney ↔ Spiel)**, Effekte, Tag ↔ Abend. **Tobias' Test (Chat 23):** konstant 60 Bilder pro Sekunde; frei drehbar, Mittelalter und Spiel-Farben gefallen ihm am besten (offene Frage 15). **Als Nächstes: Level 1 testweise in der neuen Grafik spielbar machen** (vor Level 14).
 3. **Nach hinten verschoben** (Tobias, Chat 19): die drei folgenden Schritte.
 4. **Was Tester brauchen** – mit v0.22.0 können Tester auch auf Tobias' Tablet spielen (sichern → neues Spiel → Tester spielt → laden); Testmodus und Test-Knopf bleiben sichtbar. Eine kurze Einführung bleibt im Hinterkopf (M4) (offene Frage 13).
 5. **Bereich kopieren** (Tobias: „sehr wichtig“) – einen markierten Bereich als Ganzes noch einmal bauen, wenn die Waren reichen (Tobias baut gleiche Straßen mehrfach). Plan noch zu machen.
@@ -57,9 +57,15 @@ Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute, 
 13. **Anderen das Spiel zeigen** (nach hinten verschoben, Chat 19) (Tobias, Chat 15): Er möchte den jetzigen Stand anderen zum Testen geben, ohne dass sein Spielstand verloren geht. Jedes Gerät hat seinen eigenen Spielstand – wer den Link auf seinem eigenen Gerät öffnet, beginnt ein neues Spiel und berührt Tobias' Fabrik nicht. Tobias (Chat 16): „Das können wir im Hinterkopf behalten, aber ich möchte frühestens nächste Woche jemandem das Spiel zeigen.“ Seit v0.22.0 geht beides ohne zweiten Spielstand: auf eigenen Geräten (Start bei Level 1 oder Tobias' Datei laden) oder auf Tobias' Tablet (sichern → neues Spiel → Tester spielt → laden). Testmodus und Test-Knopf bleiben sichtbar. Noch offen: kurze Einführung?
 
 14. **Techbaum: Werkzeuge, Kräuter und Tränke wachsen parallel** (Tobias, Chat 19): erst Werkzeuge, dann Kräuter, dann Tränke; die Werkzeuge stehen dabei nicht still (Level 9 und 11). **Höchstens 2 Eingänge je Maschine**, jedes Produkt entsteht logisch aus seinen Zutaten. Level 9–12 umgesetzt (v0.26.0 bis v0.29.0), Level 13 (v0.31.0); Einzelheiten in `PLAENE.md`.
-15. **Grafik-Richtung** (nach dem Test der Grafik-Probe, Teil 2): Mittelalter oder Modern? Kenneys Farben oder die des Spiels? Kamera schräg wie Clash of Clans oder frei drehbar? Kommt die 3D-Ansicht ins Spiel – Claudes Vorschlag (Chat 22): Schritt für Schritt über einen Schalter im Menü, die 2D-Ansicht bleibt, bis alles da ist (Boden und Gebäude → Bänder und Waren → Bauen und Verschieben → Animationen). Für die übrigen Gebäude (Steinbruch, Beet, Erntebank, Uhrmacherei …) bräuchte es weitere Kenney-Teile oder eigene Zusammenstellungen.
+15. **Grafik-Richtung** (Tobias' Test der Grafik-Probe, Teil 2, Chat 23): **entschieden:** Kamera frei drehbar („weil man dadurch vermutlich besser bauen und auch sieht, wenn man ein zulauf verstopft ist“), Stil Mittelalter, Spiel-Farben („weil es mehr harmoniert“), eigene Häuser je Gebäude („sodass man weiß, was ein Sägewerk ist und was nicht“); auf dem Tablet konstant 60 Bilder pro Sekunde. **Noch offen:** Das Versandportal „sieht noch etwas komisch aus“; der Mix aus Modern und Mittelalter gefällt ihm auch – „Evtl. könnte man die modernen Gebäude noch etwas mitteraltermäßiger gestalten ohne Greifarm.“ Wie die 3D-Ansicht ins Spiel kommt, planen wir mit „Level 1 in der neuen Grafik“ (Claudes Vorschlag aus Chat 22: über einen Schalter, die 2D-Ansicht bleibt, bis alles da ist).
 
 ## Die letzten 3 Arbeitsschritte
+
+### v0.33.1 – Grafik-Probe, Teil 2 getestet (21.11.2026, nur Doku)
+
+- **Tobias (Chat 23):** konstant **60 Bilder pro Sekunde** auf dem Tablet. Frei drehbar gefällt ihm besser (besser bauen, verstopfte Zuläufe sehen), Mittelalter besser, die eigenen Häuser je Gebäude „sehr gut“, die Spiel-Farben besser („weil es mehr harmoniert“). Das Versandportal „sieht noch etwas komisch aus“. Der Mix aus Modern und Mittelalter gefällt ihm auch – moderne Gebäude evtl. mittelalterlicher, ohne Greifarm.
+- **Wunsch:** mit der Grafik weitermachen und **Level 1 testweise in der neuen Grafik spielbar** machen – im neuen Chat planen.
+- Spiel unverändert, nur die Versionsnummer steigt.
 
 ### v0.33.0 – Grafik-Probe, Teil 2: Kenneys Modelle (20.11.2026)
 
@@ -71,9 +77,3 @@ Abgelehnt: „Umlagern“, „Alle auffüllen“, Fabrik-Übersicht pro Minute, 
 
 - **Tobias (Chat 22):** Auf dem Tablet läuft die Grafik-Probe mit **60–90 Bildern pro Sekunde**. Die Freigabe für kenney.nl ging auf dem Tablet nicht („nur am PC“). Wunsch für den neuen Chat: auf „Bringe dich auf den aktuellen Stand“ fragt Claude, ob wir mit den Kenney-Sachen weitermachen; Tobias gibt dann am PC die Freigabe – „Falls das immer noch nicht funktionieren sollte, dann würde ich dir die Dateien einfach auf github hochladen“.
 - Spiel unverändert, nur die Versionsnummer steigt.
-
-### v0.32.0 – Grafik-Probe, Teil 1 (20.11.2026)
-
-- **Warum (Tobias, Chat 22):** „Ich würde gerne eine kleine Grafik-Probe jetzt machen, damit ich weiß in welche Richtung das Spiel gehen kann“ – zum Entwurf: „Passt alles so, du darfst loslegen.“
-- **Umgesetzt:** eigene Seite `grafik-probe.html` (Menü ☰ → „🎨 Grafik-Probe“, speichert vorher) mit three.js: Holzfällerlager und Lagerhaus → Sägewerk → Portal, Ofen (Sand) → Schmiede (Fläschchen) → Portal, nach den echten Spielregeln. Schalter: Kamera schräg wie Clash of Clans ↔ frei drehbar (⟲ ⟳), Mittelalter ↔ Modern, Effekte (Schatten, Rauch, Säge, laufende Bänder, Hüpfen, Portal ploppt), Tag ↔ Abend; Bilder pro Sekunde; Gebäude antippen zeigt Name und Ware. Das Spiel selbst ist unverändert.
-- **Offen:** Kenneys Modelle – kenney.nl ist gesperrt, die vorgeschlagene Freigabe wurde abgelehnt. Bis dahin sind die Gebäude Platzhalter aus einfachen Formen.
