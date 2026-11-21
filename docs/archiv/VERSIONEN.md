@@ -4,6 +4,24 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.35.0 – 3D-Test, Teil 2: Tor, Bereich markieren, Fläche kaufen (21.11.2026)
+
+**Vorgenommen:**
+- Tobias' Test des 3D-Tests umsetzen: das falsch gedrehte Tor richten und, wie geplant, Bereich markieren und Fläche kaufen in 3D (Tobias: „Können wir Tor drehen und Bereich markieren, die Punkte als nächsten Schritt gemeinsam machen?“).
+
+**Fragen, die wir uns gestellt haben:**
+- Warum musste die Ware seitlich ins Tor? → Claude hatte das Burgtor in v0.34.0 um 90° gedreht, weil eine Probe-Ansicht das Modell schon gedreht gezeigt hatte. Kenneys Tor ist von sich aus in x-Richtung offen – genau wie das Band, das von Westen hineinfährt. Jetzt ungedreht (auch in der Grafik-Probe).
+- Wie sieht man beim Verschieben, wo der Bereich war? → Er verschwindet an der alten Stelle, dort bleiben blasse Felder; die Vorschau (Häuser und Bänder halbdurchsichtig grün bzw. rot) zeigt die neue Stelle, darunter grüne bzw. rote Felder.
+- Wo stehen die Schilder zum Flächenkauf? → Sie schweben vor dem Zaun, mittig zur Seite; sie wachsen mit der Entfernung weniger mit als die Schilder über den Gebäuden.
+- Schneller Start (500 Gold, Theken alle 15 Sekunden) → kommt danach (v0.36.0, Tobias).
+
+**Gemacht:**
+- `kenney3d.js`: Tor ungedreht. `scene3d.js`: `syncArea` und `syncLand`, Auswahl eines Streifens. Steuerung ohne die Sperren aus v0.34.0 (`areaTool`, `landPurchase` entfernt).
+
+**Geprüft:**
+- `npm test`: 419 von 419 bestanden.
+- Browser-Test in Tablet- und Handygröße: alle Prüfungen bestanden, neu im 3D-Test Bereich markieren, verschieben, drehen und Fläche kaufen (Screenshots `3d-8` bis `3d-11`) angesehen.
+
 ### v0.34.0 – 3D-Test, Teil 1: Level 1 in 3D spielen (21.11.2026)
 
 **Vorgenommen:**

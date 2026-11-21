@@ -118,12 +118,9 @@ export function createController({
   requestDraw,
   worldBounds,
   // v0.34.0: 3D-Test – die 3D-Kamera sagt, welches Feld unter dem Finger
-  // liegt, und verschiebt selbst; Bereich markieren und Fläche kaufen kommen
-  // dort erst im nächsten Schritt (Tobias, Chat 24).
+  // liegt, und verschiebt selbst.
   tileAt = null,
   panScreen = null,
-  areaTool = true,
-  landPurchase = true,
 }) {
   let mode = 'normal';
   let drag = null;
@@ -611,14 +608,12 @@ export function createController({
     if (beltAt(state, tile.x, tile.y)) return select({ kind: 'belt', x: tile.x, y: tile.y });
     if (isOwned(state, tile.x, tile.y)) return select(null);
     const side = landSideAt(state, tile.x, tile.y);
-    if (side && landPurchase) return select({ kind: 'land', side });
+    if (side) return select({ kind: 'land', side });
     select(null);
     panels.showInfo({
       icon: '🔒',
       title: 'Gesperrte Fläche',
-      text: landPurchase
-        ? 'Diese Ecke gehört noch nicht zu deinem Laden. Kaufe Fläche an den Seiten deines Grundstücks – die Ecken kommen dabei nach und nach mit dazu.'
-        : 'Diese Fläche gehört noch nicht zu deinem Laden. Fläche kaufen kommt im 3D-Test im nächsten Schritt – in der echten Fabrik (2D) geht es wie gewohnt.',
+      text: 'Diese Ecke gehört noch nicht zu deinem Laden. Kaufe Fläche an den Seiten deines Grundstücks – die Ecken kommen dabei nach und nach mit dazu.',
     });
   }
 
@@ -651,10 +646,7 @@ export function createController({
       return setMode('belt', { text: TEXT.belt });
     }
     if (tool === 'erase') return setMode('erase', { text: TEXT.erase });
-    if (tool === 'area') {
-      if (!areaTool) return panels.toast('Bereich markieren und verschieben kommt im 3D-Test im nächsten Schritt.', 3200);
-      return startArea();
-    }
+    if (tool === 'area') return startArea();
     if (!BUILDINGS[tool]) return;
     if (!isBuildingUnlocked(state, tool)) return toastLocked(tool);
     if (!canAfford(state, BUILDINGS[tool].cost)) return toastMissing(BUILDINGS[tool].cost);

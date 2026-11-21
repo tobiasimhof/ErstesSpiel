@@ -61,6 +61,19 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Schnellerer Start (vorgemerkt für v0.36.0)
+
+**Tobias (Chat 24):** „Mir ist aufgefallen, dass man am Anfang sehr lange warten muss bis man die einzelnen Aufträge erledigt hat und evtl. können wir den Prozess etwas beschleunigen mit mehr Startgold … Ich dachte, dass wir alle 15 sekunden etwas verkaufen statt 25 sekunden.“ – Startgold: „Ich dachte da an 500 Gold sozusagen als "Startkapital" - kann man später vermutlich auch geschichtlich ganz gut einbinden.“
+
+**Vorgemerkt:** `START_GOLD` 170 → 500 (`data/shop.js`, nur neue Spielstände; die Startkapital-Umwandlung alter Spielstände in `save.js` bleibt unberührt); Theken Level 1–3 `customerSeconds` [15, 25] → [15, 15] (4 statt 3 Stück pro Minute je Theke); Bilder pro Sekunde im 3D-Test immer sichtbar (Claudes Vorschlag). Tobias' echte Fabrik (Level 13) ändert sich dadurch nicht. Tests anpassen (Start 170 Gold an mehreren Stellen, Tempo je Level in `theken.test.js`). Vor dem Programmieren kurz bestätigen lassen.
+
+### 3D-Test, Teil 2 (fertig, v0.35.0)
+
+- **Tor:** in v0.34.0 um 90° falsch gedreht (Tobias: „Man muss die Ware seitlich rein befördern“) – Kenneys `wall-narrow-gate` ist von sich aus in x-Richtung offen; jetzt ungedreht, mittig mit x: -0,17.
+- **Bereich markieren:** wie im 2D-Spiel (Controller unverändert). 3D: gelbe Flächen auf markierten Bändern und Gebäuden (mit Rahmen), weißer Rahmen um das gezogene Rechteck; beim Verschieben die Gruppe an der alten Stelle ausgeblendet (blasse Felder), Vorschau mit Kenneys Häusern und Bändern in halbdurchsichtigem Grün bzw. Rot (nur neu gebaut, wenn Drehung oder „passt“ sich ändert, sonst verschoben), grüne bzw. rote Felder, Rahmen.
+- **Fläche kaufen:** Schilder „＋ Preis 🪙“ (wie auf der 2D-Karte) schweben 1,6–1,9 Felder vor dem Zaun mittig zur Seite, nur beim Ansehen und in der Bauleiste; antippen trifft den Boden dahinter, der zur selben Seite gehört (`landSideAt`); der Streifen leuchtet gelb; nach dem Kauf wachsen Grundstück, Raster und Zaun.
+- **Tobias' Rückmeldung zu v0.34.0:** „Alles läuft sehr flüssig“, im Testmodus 70–119 Bilder pro Sekunde; zwei Finger drehen klappt; das richtige Feld trifft man; „Die sucht hat mich direkt wieder gefesselt“; Idee für später: eine Stadt um die Fabrik, die von Level zu Level wächst.
+
 ### 3D-Test, Teil 1 (fertig, v0.34.0)
 
 **Umgesetzt wie im Entwurf unten.** Einzelheiten:

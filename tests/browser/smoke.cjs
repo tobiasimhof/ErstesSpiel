@@ -3181,8 +3181,8 @@ async function runProbe(browser, baseUrl, device) {
 
 // v0.34.0: 3D-Test (Tobias, Chat 24) – Level 1 in der neuen Grafik mit
 // eigenem Spielstand. Spielt per Touch: Holzstamm einlegen, Band ziehen,
-// Sägewerk bauen, antippen, Kamera drehen und zoomen, abreißen; Bereich
-// markieren und Fläche kaufen kommen erst im nächsten Schritt.
+// Sägewerk bauen, antippen, Kamera drehen und zoomen, abreißen; seit v0.35.0
+// auch Bereich markieren, verschieben, drehen und Fläche kaufen.
 async function run3d(browser, baseUrl, device) {
   currentDevice = `${device.name}-3d`;
   console.log(`\n${device.name} – 3D-Test`);
@@ -3405,35 +3405,102 @@ async function run3d(browser, baseUrl, device) {
   await page.tap('#tool-confirm');
   await sleep(150);
 
-  // Bereich markieren kommt im nächsten Schritt
+  // v0.35.0: Bereich markieren, verschieben und drehen – wie im 2D-Spiel
+  const areaInfo = () =>
+    game(page, () => {
+      const a = window.__game.ui.area;
+      const g = a?.ghost;
+      return {
+        mode: window.__game.ui.mode,
+        buildings: a?.sel.buildings.length ?? 0,
+        belts: a?.sel.belts.length ?? 0,
+        ghost: g ? { x: g.x, y: g.y, turns: g.turns, valid: g.plan?.valid, w: g.plan?.width, h: g.plan?.height } : null,
+        counts: window.__game.view3d.areaCounts(),
+      };
+    });
+  const sawNow = () => game(page, () => ({ ...window.__game.state.buildings.find((b) => b.type === 'saegewerk') }));
+  const saw0 = await sawNow();
+  await game(page, (b) => {
+    const c = window.__game.camera;
+    c.distance = 18;
+    c.target.set(b.x + 1, 0, b.y + 2.5);
+    c.update();
+  }, saw0);
+  await sleep(200);
   if (await page.isVisible('#btn-build')) await page.tap('#btn-build');
   await sleep(150);
-  check(await page.locator('.build-item[data-tool="area"]').evaluate((e) => e.classList.contains('soon')), 'Bauleiste: „Verschieben“ ist ausgegraut („kommt bald“)');
   await page.locator('.build-item[data-tool="area"]').tap();
   await sleep(150);
+  check((await areaInfo()).mode === 'area', 'Werkzeug „Verschieben“ öffnet „Bereich markieren“');
+  const ra = await tile(saw0.x, saw0.y);
+  const rb = await tile(saw0.x + 1, saw0.y + 1);
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ ...ra, id: 9 }] });
+  for (let st = 1; st <= 6; st++) {
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: ra.x + ((rb.x - ra.x) * st) / 6, y: ra.y + ((rb.y - ra.y) * st) / 6, id: 9 }] });
+  }
+  await sleep(80);
+  const dragging = await areaInfo();
+  await shot('3d-8-bereich-markieren');
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await sleep(150);
+  let ai = await areaInfo();
+  check(ai.buildings === 1 && dragging.counts.marks > 0 && ai.counts.marks > 0, `Rechteck ziehen markiert das Sägewerk, es leuchtet gelb (${ai.buildings} Gebäude, ${ai.counts.marks} Markierungen)`);
+  await page.tap('#tool-area-move');
+  await sleep(200);
+  ai = await areaInfo();
+  check(ai.mode === 'areaMove' && ai.ghost?.valid && ai.counts.ghost > 0 && ai.counts.tiles > 0, `Verschieben: Vorschau mit grünen Feldern (${JSON.stringify(ai.counts)})`);
+  await page.keyboard.press('r');
+  await sleep(150);
+  ai = await areaInfo();
+  check(ai.ghost.turns === 1, 'Taste R dreht den Bereich');
+  const ga = await tile(ai.ghost.x, ai.ghost.y);
+  const gb = await tile(ai.ghost.x, ai.ghost.y + 3);
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ ...ga, id: 10 }] });
+  for (let st = 1; st <= 6; st++) {
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: ga.x + ((gb.x - ga.x) * st) / 6, y: ga.y + ((gb.y - ga.y) * st) / 6, id: 10 }] });
+  }
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await sleep(200);
+  const moved3d = await areaInfo();
+  check(moved3d.ghost.y === ai.ghost.y + 3 && moved3d.ghost.valid, `Vorschau mit dem Finger verschoben (${ai.ghost.x},${ai.ghost.y} → ${moved3d.ghost.x},${moved3d.ghost.y})`);
+  await shot('3d-9-bereich-verschieben');
+  await page.tap('#tool-confirm');
+  await sleep(200);
+  const saw1 = await sawNow();
   check(
-    (await game(page, () => window.__game.ui.mode)) === 'menu' && (await page.textContent('#toast')).includes('nächsten Schritt'),
-    '„Verschieben“ sagt, dass es im nächsten Schritt kommt',
+    saw1.id === saw0.id && saw1.y === saw0.y + 3 && saw1.rot === (saw0.rot + 1) % 4,
+    `Sägewerk gedreht und umgesetzt (${saw0.x},${saw0.y} → ${saw1.x},${saw1.y})`,
   );
-  await page.tap('#build-close');
+  await page.tap('#tool-confirm');
+  await sleep(150);
+  if (await page.isVisible('#build-close')) await page.tap('#build-close');
   await sleep(150);
 
-  // Gesperrte Fläche antippen: kein Kauf, nur ein Hinweis
-  const w = await game(page, () => ({ ...window.__game.state.plot }));
-  await game(page, (p) => {
+  // v0.35.0: Fläche kaufen – Schilder an den Seiten, antippen, kaufen
+  await game(page, () => {
+    window.__game.state.gold = 500;
     const c = window.__game.camera;
-    c.target.set(p.x + p.width / 2, 0, p.y - 1);
+    const p = window.__game.state.plot;
+    c.distance = 34;
+    c.target.set(p.x + p.width / 2, 0, p.y + p.height / 2);
     c.update();
-  }, w);
-  await sleep(150);
-  const lp = await tile(w.x + Math.floor(w.width / 2), w.y - 2);
-  await page.touchscreen.tap(lp.x, lp.y);
-  await sleep(200);
-  check(
-    (await page.textContent('#info-title')).includes('Gesperrte Fläche') && (await page.textContent('#info-text')).includes('nächsten Schritt'),
-    'Gesperrte Fläche antippen: Hinweis, Fläche kaufen kommt im nächsten Schritt',
-  );
-  await page.tap('#info-close');
+  });
+  await sleep(300);
+  const signs = await game(page, () => window.__game.view3d.landSigns());
+  check(signs.length === 4, `An allen vier Seiten ein Schild „＋ 170 🪙“ (${signs.map((x) => x.side).join(', ')})`);
+  await shot('3d-10-flaeche-schilder');
+  const plot0 = await game(page, () => ({ ...window.__game.state.plot }));
+  const sp = await game(page, () => window.__game.view3d.landSign('W'));
+  await page.touchscreen.tap(sp.x, sp.y);
+  await sleep(250);
+  check((await page.textContent('#info-title')) === 'Fläche kaufen', 'Schild links antippen bietet Fläche an');
+  check((await game(page, () => window.__game.view3d.overlayCount())) > 0, 'Der Streifen leuchtet gelb');
+  await shot('3d-11-flaeche-gewaehlt');
+  await page.locator('#info-actions button', { hasText: 'Kaufen' }).tap();
+  await sleep(300);
+  const plot1 = await game(page, () => ({ plot: { ...window.__game.state.plot }, gold: window.__game.state.gold }));
+  check(plot1.plot.x === plot0.x - 4 && plot1.plot.width === plot0.width + 4 && plot1.gold === 330, `Fläche gekauft (${plot0.width} → ${plot1.plot.width} Felder breit, 500 → ${plot1.gold} Gold)`);
+  if (await page.isVisible('#info-close')) await page.tap('#info-close');
 
   // Eigener Spielstand: der 3D-Test speichert getrennt, die echte Fabrik bleibt
   await game(page, () => window.__game.saveNow());

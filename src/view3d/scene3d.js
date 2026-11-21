@@ -18,7 +18,9 @@ import { BUILDINGS } from '../core/data/buildings.js';
 import { ITEMS } from '../core/data/items.js';
 import { DELTA } from '../core/dirs.js';
 import { buildingPorts, footprintSize } from '../core/geometry.js';
+import { selectionTiles } from '../core/area.js';
 import { beltLine, pathDirections } from '../core/belts.js';
+import { landOffer, landOffers } from '../core/land.js';
 import { buildingStatus, gardenCrop, growth, productionOf } from '../core/production.js';
 import { BELT_SPEED, TICK } from '../core/sim.js';
 import { beltAt, parseTileKey } from '../core/state.js';
@@ -261,6 +263,31 @@ function drawSign(ctx, face, status) {
       ctx.stroke();
     }
   }
+}
+
+// v0.35.0: Schild „＋ Preis 🪙“ zum Flächenkauf (wie auf der 2D-Karte)
+const LAND_SIGN = { w: 256, h: 88 };
+function drawLandSign(ctx, price, affordable) {
+  const { w, h } = LAND_SIGN;
+  ctx.clearRect(0, 0, w, h);
+  const r = 34;
+  ctx.beginPath();
+  ctx.moveTo(8 + r, 8);
+  ctx.arcTo(w - 8, 8, w - 8, h - 8, r);
+  ctx.arcTo(w - 8, h - 8, 8, h - 8, r);
+  ctx.arcTo(8, h - 8, 8, 8, r);
+  ctx.arcTo(8, 8, w - 8, 8, r);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(36, 26, 16, 0.86)';
+  ctx.fill();
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = '#f3e6c4';
+  ctx.stroke();
+  ctx.font = '700 40px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif, "Noto Color Emoji"';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = affordable ? '#ffe066' : 'rgba(243, 230, 196, 0.6)';
+  ctx.fillText(`＋ ${price.toLocaleString('de-DE')} 🪙`, w / 2, h / 2 + 2);
 }
 
 // Was das Schild zeigt: wie die 2D-Karte (buildingFace), beim Beet die Pflanze
@@ -661,7 +688,14 @@ export function createScene3d({ lib }) {
   function syncOverlay(state, ui) {
     const sel = ui.selected;
     const prev = ui.beltPreview;
-    const key = JSON.stringify([sel, prev?.tiles, prev?.endDir, sel?.kind === 'building' ? buildingKey(views.get(sel.id)?.building ?? {}) : '', sel?.kind === 'belt' ? beltsKey.length : 0]);
+    const key = JSON.stringify([
+      sel,
+      prev?.tiles,
+      prev?.endDir,
+      sel?.kind === 'building' ? buildingKey(views.get(sel.id)?.building ?? {}) : '',
+      sel?.kind === 'belt' ? beltsKey.length : 0,
+      sel?.kind === 'land' ? state.plot : 0,
+    ]);
     if (key === overlayKey) return;
     overlayKey = key;
     overlay.clear();
@@ -678,6 +712,13 @@ export function createScene3d({ lib }) {
         overlay.add(groundRect(1, 1, lineMat, { x: t.x + 0.5, y: 0.012, z: t.y + 0.5 }));
       }
       overlay.add(frame(sel.x + 0.04, sel.y + 0.04, 0.92, 0.92, selectMat, { y: BELT_TOP + 0.02, width: 0.07 }));
+    } else if (sel?.kind === 'land') {
+      // v0.35.0: der Streifen, der gekauft würde
+      const offer = landOffer(state, sel.side);
+      if (offer) {
+        overlay.add(groundRect(offer.width, offer.height, lineMat, { x: offer.x + offer.width / 2, y: 0.012, z: offer.y + offer.height / 2 }));
+        overlay.add(frame(offer.x, offer.y, offer.width, offer.height, selectMat, { width: 0.1 }));
+      }
     }
     if (prev) {
       const dirs = pathDirections(prev);
@@ -690,6 +731,156 @@ export function createScene3d({ lib }) {
         }
       });
     }
+  }
+
+  // ---------- Bereich markieren und verschieben (v0.35.0) ----------
+  // Wie im 2D-Spiel (v0.11.0): Beim Markieren leuchten die erfassten Gebäude
+  // und Bänder gelb, beim Ziehen zeigt ein Rahmen das Rechteck. Beim
+  // Verschieben verschwindet der Bereich an der alten Stelle (dort bleiben
+  // blasse Felder), die Vorschau zeigt ihn an der neuen Stelle – grüne Felder
+  // passen, rote sind belegt oder gehören nicht zum Grundstück.
+
+  const areaMarks = new THREE.Group();
+  const areaGhostRoot = new THREE.Group();
+  const areaTiles = new THREE.Group();
+  overlayRoot.add(areaMarks, areaGhostRoot, areaTiles);
+  const markMat = flatMat(COLOR.select, { opacity: 0.38 });
+  const rectMat = flatMat('#fff8dc', { opacity: 0.95 });
+  const oldSpotMat = flatMat('#fff8dc', { opacity: 0.22 });
+  const okMat = flatMat(COLOR.ok, { opacity: 0.32 });
+  const badMat = flatMat(COLOR.bad, { opacity: 0.6 });
+  const hidden = { buildings: new Set(), belts: new Set() };
+  let marksKey = '';
+  let areaGhost = null; // { key, at: { x, y } }
+  let tilesKey = '';
+
+  function syncArea(state, ui) {
+    const area = ui.area ?? null;
+    const marking = ui.mode === 'area' && area;
+    const g = ui.mode === 'areaMove' ? area?.ghost : null;
+    const plan = g?.plan ?? null;
+
+    // markierte Gebäude und Bänder, Rahmen beim Ziehen
+    const mk = marking ? JSON.stringify([area.sel, area.rect, beltsKey.length]) : '';
+    if (mk !== marksKey) {
+      marksKey = mk;
+      areaMarks.clear();
+      if (marking) {
+        for (const key of area.sel.belts) {
+          const t = parseTileKey(key);
+          areaMarks.add(groundRect(1, 1, markMat, { x: t.x + 0.5, y: BELT_TOP + 0.015, z: t.y + 0.5 }));
+        }
+        for (const id of area.sel.buildings) {
+          const b = state.buildings.find((item) => item.id === id);
+          if (!b) continue;
+          const { width: w, height: d } = footprintSize(b.type, b.rot);
+          areaMarks.add(groundRect(w, d, markMat, { x: b.x + w / 2, y: 0.014, z: b.y + d / 2 }));
+          areaMarks.add(frame(b.x + 0.03, b.y + 0.03, w - 0.06, d - 0.06, selectMat, { width: 0.09 }));
+        }
+        if (area.rect) {
+          const { a, b } = area.rect;
+          const x = Math.min(a.x, b.x);
+          const y = Math.min(a.y, b.y);
+          areaMarks.add(frame(x, y, Math.abs(a.x - b.x) + 1, Math.abs(a.y - b.y) + 1, rectMat, { y: BELT_TOP + 0.03, width: 0.07 }));
+        }
+      }
+    }
+
+    // was verschoben wird, ist an der alten Stelle ausgeblendet
+    hidden.buildings = new Set(plan ? area.sel.buildings : []);
+    hidden.belts = new Set(plan ? area.sel.belts : []);
+
+    // Vorschau an der neuen Stelle (nur neu gebaut, wenn sich Drehung oder
+    // „passt / passt nicht“ ändern – sonst nur verschoben)
+    const gk = plan ? `${g.turns}|${plan.valid}|${JSON.stringify(area.sel)}` : '';
+    if (!areaGhost || areaGhost.key !== gk) {
+      areaGhostRoot.clear();
+      areaGhost = null;
+      if (plan) {
+        const m = ghostMats[plan.valid];
+        const pseudo = { belts: plan.belts, buildings: plan.buildings };
+        for (const b of plan.buildings) {
+          const { width: w, height: d } = footprintSize(b.type, b.rot);
+          const built = buildKenneyBuilding(lib, b, STYLE, COLORS);
+          built.group.position.set(b.x + w / 2, 0, b.y + d / 2);
+          areaGhostRoot.add(built.group, portArrows(b));
+        }
+        for (const key of Object.keys(plan.belts)) {
+          const t = parseTileKey(key);
+          const tile = buildBeltTile(lib, pseudo, key, STYLE);
+          tile.position.set(t.x + 0.5, 0, t.y + 0.5);
+          areaGhostRoot.add(tile);
+        }
+        areaGhostRoot.traverse((o) => {
+          if (o.isMesh && o.material !== m && !o.material.isMeshBasicMaterial) {
+            o.material = m;
+            o.castShadow = false;
+            o.renderOrder = 4;
+          }
+        });
+        areaGhost = { key: gk, at: { x: g.x, y: g.y } };
+      }
+    }
+    if (areaGhost) areaGhostRoot.position.set(g.x - areaGhost.at.x, 0, g.y - areaGhost.at.y);
+    else areaGhostRoot.position.set(0, 0, 0);
+
+    // Felder: alte Stelle blass, neue grün bzw. rot, Rahmen um die Vorschau
+    const tk = plan ? JSON.stringify([g.x, g.y, g.turns, plan.valid, plan.tiles.map((t) => (t.ok ? 1 : 0)).join(''), area.sel]) : '';
+    if (tk !== tilesKey) {
+      tilesKey = tk;
+      areaTiles.clear();
+      if (plan) {
+        for (const t of selectionTiles(state, area.sel)) areaTiles.add(groundRect(0.94, 0.94, oldSpotMat, { x: t.x + 0.5, y: 0.01, z: t.y + 0.5 }));
+        for (const t of plan.tiles) areaTiles.add(groundRect(0.96, 0.96, t.ok ? okMat : badMat, { x: t.x + 0.5, y: t.ok ? 0.016 : BELT_TOP + 0.06, z: t.y + 0.5 }));
+        areaTiles.add(frame(g.x, g.y, plan.width, plan.height, ghostEdge[plan.valid], { y: BELT_TOP + 0.04, width: 0.09 }));
+      }
+    }
+  }
+
+  // ---------- Fläche kaufen (v0.35.0) ----------
+  // An jeder Seite, an der es noch Fläche gibt, schwebt ein Schild mit dem
+  // Preis direkt vor dem Zaun; antippen wählt den Streifen (wie im 2D-Spiel).
+
+  const landRoot = new THREE.Group();
+  scene.add(landRoot);
+  let landKey = '';
+  const landSigns = [];
+  function syncLand(state, ui) {
+    const show = ui.mode === 'normal' || ui.mode === 'menu';
+    landRoot.visible = show;
+    if (!show) return;
+    const offers = landOffers(state);
+    const key = JSON.stringify([state.plot, offers.map((o) => [o.side, o.price, state.gold >= o.price])]);
+    if (key === landKey) return;
+    landKey = key;
+    for (const s of landSigns) {
+      s.material.map.dispose();
+      s.material.dispose();
+    }
+    landSigns.length = 0;
+    landRoot.clear();
+    const p = state.plot;
+    for (const offer of offers) {
+      const canvas = document.createElement('canvas');
+      canvas.width = LAND_SIGN.w;
+      canvas.height = LAND_SIGN.h;
+      drawLandSign(canvas.getContext('2d'), offer.price, state.gold >= offer.price);
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      const sign = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, depthTest: false, depthWrite: false, transparent: true }));
+      sign.renderOrder = 9;
+      let x = offer.x + offer.width / 2;
+      let z = offer.y + offer.height / 2;
+      if (offer.side === 'N') z = p.y - 1.6;
+      if (offer.side === 'S') z = p.y + p.height + 1.6;
+      if (offer.side === 'W') x = p.x - 1.9;
+      if (offer.side === 'E') x = p.x + p.width + 1.9;
+      sign.position.set(x, 0.7, z);
+      sign.userData = { side: offer.side, w: 1.8, h: 1.8 * (LAND_SIGN.h / LAND_SIGN.w) };
+      landSigns.push(sign);
+      landRoot.add(sign);
+    }
+    signScale = 0; // Größe passend zur Entfernung setzen
   }
 
   // ---------- Bewegung ----------
@@ -725,9 +916,15 @@ export function createScene3d({ lib }) {
     }
     const movingId = ui.ghost?.movingId ?? null;
     smokeTimer -= dt;
+    for (const [k, belt] of belts) {
+      const off = hidden.belts.has(k);
+      belt.group.visible = !off;
+      belt.arrow.visible = !off;
+    }
+    for (const [k, slot] of itemSlots) slot.obj.visible = !hidden.belts.has(k);
     for (const v of views.values()) {
       const b = v.building;
-      const moving = b.id === movingId;
+      const moving = b.id === movingId || hidden.buildings.has(b.id);
       v.group.visible = !moving;
       v.ports.visible = !moving;
       if (moving) v.sign.visible = false;
@@ -786,6 +983,8 @@ export function createScene3d({ lib }) {
       v.sign.scale.set(s, s, 1);
       v.sign.position.y = v.sign.userData.top + s * 0.45;
     }
+    const kl = Math.min(k, 1.5); // Flächen-Schilder wachsen weniger mit, sie sind schon breit
+    for (const sign of landSigns) sign.scale.set(sign.userData.w * kl, sign.userData.h * kl, 1);
   }
 
   let signTimer = 0;
@@ -797,6 +996,8 @@ export function createScene3d({ lib }) {
     syncItems(state, ui.simAlpha ?? 0);
     syncGhost(ui);
     syncOverlay(state, ui);
+    syncArea(state, ui);
+    syncLand(state, ui);
     // Schilder etwa 8-mal pro Sekunde prüfen (das reicht für Ring und Licht)
     signTimer -= dt;
     if (signTimer <= 0) {
@@ -830,5 +1031,8 @@ export function createScene3d({ lib }) {
     },
     hasGhost: () => Boolean(ghost),
     overlayCount: () => overlay.children.length,
+    // v0.35.0: Bereich und Fläche
+    areaCounts: () => ({ marks: areaMarks.children.length, ghost: areaGhostRoot.children.length, tiles: areaTiles.children.length }),
+    landSigns: () => (landRoot.visible ? landSigns.map((s) => ({ side: s.userData.side, x: s.position.x, y: s.position.y, z: s.position.z })) : []),
   };
 }
