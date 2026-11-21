@@ -4,6 +4,12 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 21.11.2026 – Chat 24 (Fortsetzung): Tobias testet den 3D-Test (nach v0.34.0)
+
+**Tobias** (mit zwei Screenshots: das Tor nah, seine 3D-Fabrik auf Level 4): „Alles läuft sehr flüssig. Eine FPS Anzeige konnte ich nicht entdecken. Mit zwei fingern drehen läuft auch. Ich finde das richtige Feld, allerdings ist das versandportal falsch ausgerichtet. Man muss die Ware seitlich rein befördern, damit die ware im lager ankommt. Ich habe mal weiter gespielt und bin mittlerweile in level 4 angekommen. Die sucht hat mich direkt wieder gefesselt. Mir ist aufgefallen, dass man am Anfang sehr lange warten muss bis man die einzelnen Aufträge erledigt hat und evtl. können wir den Prozess etwas beschleunigen mit mehr Startgold, damit man etwas zügiger am Anfang Rohstoffe kaufen kann, um Sachen zu verkaufen. Ich denke, wir sollten am Anfang die Verkaufszeit auch etwas erhöhen, weil der Verkauf mit den kleinen Beträgen doch sehr langsam abläuft. Ich dachte, dass wir alle 15 sekunden etwas verkaufen statt 25 sekunden. Was mir auch gefällt ist diese 3D welt. Später könnte man daran denken, dass man um die eigene Produktion eine Stadt baut, bei der man sieht, wie die Stadt von level zu level wächst, aber das sind Gedanken, die sehr weit in der Zukunft liegen. Teil 2 finde ich auch gut mit dem Bereich markieren und Fläche kaufen“
+
+**Claude:** Das Tor ist um 90° falsch gedreht (Claudes Fehler: der Bogen zeigt zur Seite, der Eingang – der blaue Pfeil – liegt aber an der Wand); die Spielregeln sind richtig, nur das Modell muss gedreht werden. Die Bilder pro Sekunde zeigt das Spiel bisher nur im Testmodus. Vorschlag (noch nicht freigegeben): v0.34.1 Tor drehen; v0.35.0 schnellerer Start (mehr Startgold, Theken auf Level 1–3 alle 15 Sekunden, Bilder pro Sekunde im 3D-Test immer sichtbar); v0.36.0 3D-Test, Teil 2. Rückfrage: wie viel Startgold?
+
 ### 21.11.2026 – Chat 24: 3D-Test, Teil 1 – Level 1 in 3D (v0.34.0)
 
 **Tobias:** „Bringe dich auf den aktuellen Stand“
