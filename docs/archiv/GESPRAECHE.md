@@ -10,6 +10,10 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Claude:** Das Tor ist um 90° falsch gedreht (Claudes Fehler: der Bogen zeigt zur Seite, der Eingang – der blaue Pfeil – liegt aber an der Wand); die Spielregeln sind richtig, nur das Modell muss gedreht werden. Die Bilder pro Sekunde zeigt das Spiel bisher nur im Testmodus. Vorschlag (noch nicht freigegeben): v0.34.1 Tor drehen; v0.35.0 schnellerer Start (mehr Startgold, Theken auf Level 1–3 alle 15 Sekunden, Bilder pro Sekunde im 3D-Test immer sichtbar); v0.36.0 3D-Test, Teil 2. Rückfrage: wie viel Startgold?
 
+**Tobias:** „Im Testmodus habe ich 70-119 FPS, das konnte ich sehen. Frage 1: Ich dachte da an 500 Gold sozusagen als "Startkapital" - kann man später vermutlich auch geschichtlich ganz gut einbinden. Frage 2: Können wir Tor drehen und Bereich markieren, die Punkte als nächsten Schritt gemeinsam machen ? Dann kann ich wenn das fertig ist auch viel besser das Spiel weiter ausprobieren auf der 3D Version. Schneller Start können wir gerne danach machen.“
+
+**Umgesetzt:** v0.35.0 – Tor richtig gedreht, Bereich markieren und verschieben sowie Fläche kaufen im 3D-Test. Als Nächstes v0.36.0: schnellerer Start (500 Gold Startkapital, Theken auf Level 1–3 alle 15 Sekunden, Bilder pro Sekunde im 3D-Test immer sichtbar).
+
 ### 21.11.2026 – Chat 24: 3D-Test, Teil 1 – Level 1 in 3D (v0.34.0)
 
 **Tobias:** „Bringe dich auf den aktuellen Stand“

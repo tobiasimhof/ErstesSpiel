@@ -1,8 +1,10 @@
 // v0.34.0: 3D-Test (Tobias, Chat 24) – Level 1 in der neuen Grafik mit
 // eigenem Spielstand. Geprüft wird hier, was ohne Browser geht: der eigene
 // Spielstand, der Menü-Eintrag, die Knöpfe zum Drehen, das neue Versandportal
-// (Burgtor) und dass das 2D-Spiel three.js nicht lädt. Bedienung und Aussehen
-// prüft der Browser-Test (tests/browser/smoke.cjs, run3d).
+// (Burgtor) und dass das 2D-Spiel three.js nicht lädt; seit v0.35.0 auch, dass
+// Bereich markieren und Fläche kaufen in 3D freigegeben sind und das Tor
+// richtig steht. Bedienung und Aussehen prüft der Browser-Test
+// (tests/browser/smoke.cjs, run3d).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -81,10 +83,19 @@ test('Versandportal im Mittelalter: Burgtor aus dem Castle Kit in warmem Steingr
   assert.ok(source.includes("building.type === 'versandportal' && style !== 'mittelalter'"));
 });
 
-test('3D-Test: Bereich markieren und Fläche kaufen sind dort noch aus', () => {
+test('3D-Test, Teil 2 (v0.35.0): Bereich markieren und Fläche kaufen gehen auch in 3D', () => {
   const main = read('src/main.js');
-  assert.ok(main.includes('areaTool: false, landPurchase: false'));
+  assert.ok(!main.includes('areaTool') && !main.includes('landPurchase'), 'keine Sperren mehr im 3D-Test');
   const controller = read('src/view/controller.js');
-  assert.ok(controller.includes('if (side && landPurchase) return select'));
-  assert.ok(controller.includes("if (!areaTool) return panels.toast('Bereich markieren und verschieben kommt im 3D-Test im nächsten Schritt."));
+  assert.ok(controller.includes("if (side) return select({ kind: 'land', side });"));
+  assert.ok(controller.includes("if (tool === 'area') return startArea();"));
+  const scene = read('src/view3d/scene3d.js');
+  assert.ok(scene.includes('function syncArea(state, ui)') && scene.includes('function syncLand(state, ui)'));
+  assert.ok(scene.includes("import { landOffer, landOffers } from '../core/land.js';"));
+});
+
+test('Versandportal (v0.35.0): das Tor ist nicht mehr gedreht – das Band fährt durch den Bogen', () => {
+  const source = read('src/probe/kenney3d.js');
+  assert.ok(source.includes("put(lib, g, CK, 'wall-narrow-gate', { x: -0.17, scale: 0.92,"));
+  assert.ok(!/wall-narrow-gate'[^)]*rot:/.test(source), 'keine Drehung am Tor');
 });

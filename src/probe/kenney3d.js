@@ -188,8 +188,10 @@ function medievalBuilding(lib, building, colors) {
       // v0.34.0 (Tobias, Chat 24): „sehr schlicht … mehr ein Torbogen … mit
       // einem kleinem mythischen Schauer“ – das kleine Burgtor, durch das das
       // Band hineinfährt (Eingang im Westen), darin ein leichter Schimmer.
-      // (Kenneys Tor ist nach Süden offen und hinten breiter – um 90° gedreht und mittig gesetzt)
-      put(lib, g, CK, 'wall-narrow-gate', { z: 0.17, rot: Math.PI / 2, scale: 0.92, variant: colors === 'kenney' ? 'kenney' : 'tor' });
+      // Kenneys Tor ist in x-Richtung offen – wie das Band, das von Westen
+      // hineinfährt (v0.35.0: nicht mehr gedreht, Tobias: „das versandportal
+      // [ist] falsch ausgerichtet“); es ist nicht mittig gebaut, daher x: -0.17.
+      put(lib, g, CK, 'wall-narrow-gate', { x: -0.17, scale: 0.92, variant: colors === 'kenney' ? 'kenney' : 'tor' });
       portalShimmer(g, parts);
       break;
     default:

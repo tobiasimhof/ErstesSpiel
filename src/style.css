@@ -677,11 +677,6 @@ button.danger {
   background-color: rgba(243, 230, 196, 0.985);
 }
 
-/* v0.34.0: Im 3D-Test kommt „Bereich markieren“ erst im nächsten Schritt */
-.build-item.soon {
-  opacity: 0.5;
-}
-
 /* ---------- Untere Leisten ---------- */
 
 #bottom-bar {

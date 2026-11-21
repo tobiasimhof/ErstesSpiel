@@ -340,9 +340,7 @@ controller = createController({
   requestDraw,
   worldBounds,
   // v0.34.0: im 3D-Test fragt die Steuerung die 3D-Kamera
-  ...(view3d
-    ? { tileAt: (x, y) => view3d.cam.tileAt(x, y), panScreen: (dx, dy) => view3d.cam.panBy(dx, dy), areaTool: false, landPurchase: false }
-    : {}),
+  ...(view3d ? { tileAt: (x, y) => view3d.cam.tileAt(x, y), panScreen: (dx, dy) => view3d.cam.panBy(dx, dy) } : {}),
 });
 buildBar.setMode('normal');
 panels.setInfoCloseHandler(() => controller.closeInfo());
@@ -368,18 +366,13 @@ attachInput(canvas, {
   onInteract: () => hud.hideHint(),
 });
 
-// v0.34.0: 3D-Test – Knöpfe ⟲ ⟳ (oben links) und Tasten Q/E drehen um 45°;
-// „Bereich markieren“ kommt dort erst im nächsten Schritt.
+// v0.34.0: 3D-Test – Knöpfe ⟲ ⟳ (oben links) und Tasten Q/E drehen um 45°.
 if (view3d) {
   document.body.classList.add('view-3d');
   document.getElementById('turn-buttons').hidden = false;
   onPress(document.getElementById('btn-turn-left'), () => view3d.turn(-1));
   onPress(document.getElementById('btn-turn-right'), () => view3d.turn(1));
   document.getElementById('hint').textContent = 'Ziehen: verschieben · Zwei Finger: zoomen und drehen · Gebäude antippen';
-  const areaButton = document.querySelector('.build-item[data-tool="area"]');
-  areaButton?.classList.add('soon');
-  const note = areaButton?.querySelector('.build-note');
-  if (note) note.textContent = 'kommt bald';
 }
 
 document.addEventListener('keydown', (event) => {
@@ -629,6 +622,16 @@ window.__game = {
           const p = view3d.cam.screenOf(c.x, height, c.z);
           return { x: r.left + p.x, y: r.top + p.y };
         },
+        // v0.35.0: Bildschirmpunkt (Seite) eines Schilds „＋ Fläche“
+        landSign(side) {
+          const sign = view3d.world.landSigns().find((item) => item.side === side);
+          if (!sign) return null;
+          const r = canvas.getBoundingClientRect();
+          const p = view3d.cam.screenOf(sign.x, sign.y, sign.z);
+          return { x: r.left + p.x, y: r.top + p.y };
+        },
+        landSigns: () => view3d.world.landSigns(),
+        areaCounts: () => view3d.world.areaCounts(),
         tileAt: (x, y) => view3d.cam.tileAt(x, y),
         yaw: () => view3d.cam.yaw,
         distance: () => view3d.cam.distance,
