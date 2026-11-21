@@ -135,7 +135,7 @@ test('Leere Theke: Kunde geht ohne Kauf', () => {
   assert.equal(state.gold, 0);
 });
 
-test('Kunden einer Theke: auf Level 1 im Schnitt 3 Stück pro Minute', () => {
+test('Kunden einer Theke: auf Level 1 4 Stück pro Minute (v0.36.0: alle 15 Sekunden)', () => {
   const state = emptyGame({ holzplatte: 1000 });
   setCounterItem(state, 0, 'holzplatte');
   let sold = 0;
@@ -151,7 +151,7 @@ test('Kunden einer Theke: auf Level 1 im Schnitt 3 Stück pro Minute', () => {
   }
   sold = 1000 - storageCount(state, 'holzplatte') - state.counters[0].count;
   assert.ok(customers === state.market.nextSaleId - 1);
-  assert.ok(customers >= 160 && customers <= 200, `${customers} Kunden in einer Stunde (im Schnitt 180)`);
+  assert.ok(customers >= 230 && customers <= 250, `${customers} Kunden in einer Stunde (240)`);
   assert.ok(sold >= customers * CUSTOMERS.minItems && sold <= customers * CUSTOMERS.maxItems);
   assert.equal(state.gold, sold * ITEMS.holzplatte.price);
 });

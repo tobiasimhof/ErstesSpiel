@@ -562,7 +562,7 @@ function frame(now) {
     fps.value = (fps.frames * 1000) / (now - fps.since);
     fps.frames = 0;
     fps.since = now;
-    if (settings.testMode) hud.setFps(fps.value);
+    if (settings.testMode || view3d) hud.setFps(fps.value);
   }
 
   if (now - lastRefresh > 400) {

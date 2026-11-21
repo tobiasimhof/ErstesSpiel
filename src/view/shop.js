@@ -42,6 +42,11 @@ import {
 import { createItemIcon } from './itemArt.js';
 import { itemCount, numberFormat } from './format.js';
 
+// v0.36.0: „alle 15 Sekunden“ (Level 1–3) bzw. „etwa alle 25–45 Sekunden“
+function secondsText(min, max) {
+  return Math.round(min) === Math.round(max) ? `alle ${Math.round(min)} Sekunden` : `etwa alle ${Math.round(min)}–${Math.round(max)} Sekunden`;
+}
+
 const TABS = [
   { key: 'lager', label: '📦 Lager' },
   { key: 'theken', label: '🛒 Theken' },
@@ -193,7 +198,7 @@ export function createShopView({ state, panels, onChange }) {
     const { min, max } = customerRange(state.shopLevel);
     const items =
       CUSTOMERS.minItems === CUSTOMERS.maxItems ? `${CUSTOMERS.minItems} Stück` : `${CUSTOMERS.minItems}–${CUSTOMERS.maxItems} Stück`;
-    return `Jede Theke hat ihre eigenen Kunden: Auf Level ${state.shopLevel} kommt etwa alle ${Math.round(min)}–${Math.round(max)} Sekunden einer und kauft ${items}. Mehr Theken verkaufen mehr.`;
+    return `Jede Theke hat ihre eigenen Kunden: Auf Level ${state.shopLevel} kommt ${secondsText(min, max)} einer und kauft ${items}. Mehr Theken verkaufen mehr.`;
   }
 
   // v0.24.0: Theke kaufen – mit Rückfrage, weil es viel Gold kostet.
@@ -204,7 +209,7 @@ export function createShopView({ state, panels, onChange }) {
     const { min, max } = customerRange(state.shopLevel);
     const ok = await panels.confirm({
       title: `Theke ${number} kaufen?`,
-      text: `Für ${numberFormat.format(price)} Gold bekommst du eine weitere Theke mit eigenen Kunden – auf Level ${state.shopLevel} kommt dort etwa alle ${min}–${max} Sekunden einer.\nDanach hast du noch ${numberFormat.format(Math.max(0, state.gold - price))} Gold.`,
+      text: `Für ${numberFormat.format(price)} Gold bekommst du eine weitere Theke mit eigenen Kunden – auf Level ${state.shopLevel} kommt dort ${secondsText(min, max)} einer.\nDanach hast du noch ${numberFormat.format(Math.max(0, state.gold - price))} Gold.`,
       okLabel: `🛒 Kaufen · ${numberFormat.format(price)} 🪙`,
     });
     if (!ok) return;
@@ -460,7 +465,7 @@ export function createShopView({ state, panels, onChange }) {
     card.append(text, missing, buttons);
     return () => {
       const { min, max } = customerRange(state.shopLevel);
-      text.textContent = `Noch nicht gekauft · eigene Kunden: alle ${min}–${max} Sekunden einer`;
+      text.textContent = `Noch nicht gekauft · eigene Kunden: ${secondsText(min, max).replace('etwa ', '')} einer`;
       const lack = slot.price - state.gold;
       button.disabled = lack > 0;
       missing.textContent = lack > 0 ? `Dir fehlen noch ${numberFormat.format(Math.ceil(lack))} 🪙` : '';

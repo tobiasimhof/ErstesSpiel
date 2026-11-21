@@ -15,10 +15,13 @@
 // Theke Level 4–6 alle 25–45 Sekunden ein Kunde (vorher 30–50), ab Level 7
 // alle 45–60 (vorher 60–100), damit Waren, die man gerade nicht weiter-
 // verarbeiten kann, schneller verkauft sind und das Lager nicht volläuft.
+// v0.36.0 (Tobias, Chat 24): Level 1–3 genau alle 15 Sekunden (vorher 15–25),
+// „weil der Verkauf mit den kleinen Beträgen doch sehr langsam abläuft“ –
+// je Theke 4 statt 3 Stück pro Minute.
 export const SHOP_LEVELS = {
-  1: { storage: 500, counterSize: 20, customerSeconds: [15, 25] },
-  2: { storage: 500, counterSize: 20, customerSeconds: [15, 25] },
-  3: { storage: 500, counterSize: 20, customerSeconds: [15, 25] },
+  1: { storage: 500, counterSize: 20, customerSeconds: [15, 15] },
+  2: { storage: 500, counterSize: 20, customerSeconds: [15, 15] },
+  3: { storage: 500, counterSize: 20, customerSeconds: [15, 15] },
   4: { storage: 1000, counterSize: 25, customerSeconds: [25, 45] },
   5: { storage: 1000, counterSize: 30, customerSeconds: [25, 45] },
   6: { storage: 1000, counterSize: 30, customerSeconds: [25, 45] },
@@ -69,7 +72,10 @@ export const CUSTOMERS = { minItems: 1, maxItems: 1 };
 // v0.9.1: 500 Gold Startkapital (Tobias) – der erste Holzstamm muss auch die
 // ersten Gebäude bezahlen und brachte allein nie genug für den zweiten.
 // v0.23.0: durch 3 wie alle Preise (500 → 170).
-export const START_GOLD = 170;
+// v0.36.0 (Tobias, Chat 24): 500 Gold „sozusagen als "Startkapital"“, damit man
+// am Anfang gleich mehrere Holzstämme kaufen kann (vorher reichten 170 Gold
+// nicht einmal für einen). Gilt für neue Spielstände.
+export const START_GOLD = 500;
 export const START_STORAGE = { holzstamm: 1, holzblock: 20 };
 
 // Pleiteschutz: Wer gar nicht mehr weiterkommt, bekommt diesen Rohstoff geschenkt.

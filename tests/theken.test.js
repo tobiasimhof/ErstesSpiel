@@ -55,23 +55,23 @@ const near = (value, expected, share = 0.08) => Math.abs(value - expected) <= ex
 
 // ---------- Tempo je Level ----------
 
-test('Tempo je Theke (v0.25.0): Level 1–3 alle 15–25 s ein Kunde, Level 4–6 alle 25–45 s, ab Level 7 alle 45–60 s', () => {
-  const expected = { 1: [15, 25], 2: [15, 25], 3: [15, 25], 4: [25, 45], 5: [25, 45], 6: [25, 45], 7: [45, 60], 8: [45, 60] };
+test('Tempo je Theke (v0.25.0, v0.36.0): Level 1–3 alle 15 s ein Kunde, Level 4–6 alle 25–45 s, ab Level 7 alle 45–60 s', () => {
+  const expected = { 1: [15, 15], 2: [15, 15], 3: [15, 15], 4: [25, 45], 5: [25, 45], 6: [25, 45], 7: [45, 60], 8: [45, 60] };
   for (const [level, [min, max]] of Object.entries(expected)) {
     assert.deepEqual(SHOP_LEVELS[level].customerSeconds, [min, max], `Level ${level}`);
     assert.deepEqual(customerRange(Number(level)), { min, max });
   }
-  // Ein Kunde kauft 1 Stück: je Theke 3 / etwa 1,7 / etwa 1,1 Stück pro Minute
+  // Ein Kunde kauft 1 Stück: je Theke 4 / etwa 1,7 / etwa 1,1 Stück pro Minute
   assert.deepEqual([CUSTOMERS.minItems, CUSTOMERS.maxItems], [1, 1]);
   assert.equal(customerSeconds(8), 52.5);
-  assert.equal(perCounterMinute(1), 3);
+  assert.equal(perCounterMinute(1), 4);
   assert.ok(Math.abs(perCounterMinute(4) - 60 / 35) < 1e-9);
   assert.ok(Math.abs(perCounterMinute(7) - 60 / 52.5) < 1e-9);
 });
 
 test('Eine volle Theke verkauft je Level so schnell wie geplant (10 Stunden gemessen)', () => {
   for (const [level, perHour] of [
-    [1, 180],
+    [1, 240],
     [4, 3600 / 35],
     [7, 3600 / 52.5],
   ]) {
@@ -81,9 +81,9 @@ test('Eine volle Theke verkauft je Level so schnell wie geplant (10 Stunden geme
   }
 });
 
-test('Die 2 Start-Theken zusammen: 360 / etwa 206 / etwa 137 Stück pro Stunde', () => {
+test('Die 2 Start-Theken zusammen: 480 / etwa 206 / etwa 137 Stück pro Stunde', () => {
   for (const [level, perHour] of [
-    [2, 360],
+    [2, 480],
     [5, 7200 / 35],
     [8, 7200 / 52.5],
   ]) {

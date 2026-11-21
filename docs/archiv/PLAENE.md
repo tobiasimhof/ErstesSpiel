@@ -61,7 +61,7 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Schnellerer Start (vorgemerkt für v0.36.0)
+### Schnellerer Start (fertig, v0.36.0 – umgesetzt wie vorgemerkt; Tobias: „OK“)
 
 **Tobias (Chat 24):** „Mir ist aufgefallen, dass man am Anfang sehr lange warten muss bis man die einzelnen Aufträge erledigt hat und evtl. können wir den Prozess etwas beschleunigen mit mehr Startgold … Ich dachte, dass wir alle 15 sekunden etwas verkaufen statt 25 sekunden.“ – Startgold: „Ich dachte da an 500 Gold sozusagen als "Startkapital" - kann man später vermutlich auch geschichtlich ganz gut einbinden.“
 

@@ -123,7 +123,7 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
       testModeButton.textContent = `⏩ Testmodus: ${on ? 'an' : 'aus'} (Zeit ×${factor})`;
       speedBadge.textContent = `⏩ ×${factor}`;
       speedBadge.hidden = !on;
-      fpsBadge.hidden = !on;
+      fpsBadge.hidden = !on && !is3d; // v0.36.0: im 3D-Test immer sichtbar
       testPackButton.hidden = !on;
     },
     // v0.21.0 (Belastungstest): Bilder pro Sekunde, nur im Testmodus zu sehen
