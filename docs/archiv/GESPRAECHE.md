@@ -14,6 +14,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Umgesetzt:** v0.35.0 – Tor richtig gedreht, Bereich markieren und verschieben sowie Fläche kaufen im 3D-Test. Als Nächstes v0.36.0: schnellerer Start (500 Gold Startkapital, Theken auf Level 1–3 alle 15 Sekunden, Bilder pro Sekunde im 3D-Test immer sichtbar).
 
+**Claude** hat v0.35.0 vorgestellt und für v0.36.0 um ein OK gebeten (die 500 Gold gibt es nur bei einem neuen Spiel, Tobias' 3D-Fabrik auf Level 4 und die echte Fabrik merken nichts).
+
+**Tobias:** „OK“
+
+**Umgesetzt:** v0.36.0 – schnellerer Start.
+
 ### 21.11.2026 – Chat 24: 3D-Test, Teil 1 – Level 1 in 3D (v0.34.0)
 
 **Tobias:** „Bringe dich auf den aktuellen Stand“

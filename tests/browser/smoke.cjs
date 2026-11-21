@@ -241,7 +241,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(JSON.stringify(types) === '["holzfaeller","versandportal"]', 'Start nur mit Holz: Holzfällerlager und Versandportal');
   check((await page.textContent('#btn-level')).includes('Laden-Level 1'), 'Oben steht „Laden-Level 1“');
   check(!(await page.isVisible('#hud-level-ready')), 'Noch kein Aufstieg möglich (kein ⬆)');
-  check((await page.textContent('#hud-gold')) === '170', 'Start mit 170 Gold Startkapital');
+  check((await page.textContent('#hud-gold')) === '500', 'Start mit 500 Gold Startkapital (v0.36.0)');
   check(await page.isVisible('#btn-shop'), 'Knopf „Laden“ sichtbar');
   check(await page.isVisible('#btn-build'), 'Knopf „Bauen“ sichtbar');
 
@@ -288,10 +288,10 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const startFit = await infoFits(page);
   check(startFit.length === 0, `Alle Knöpfe passen ins Infofenster (${startFit.join(' | ')})`);
   check(
-    (await page.locator('#info-actions button', { hasText: 'Auffüllen' }).textContent()) === '⏫ Auffüllen: 1 Holzstamm',
-    'Auffüllen nimmt den Holzstamm aus dem Laden-Lager (Gold reicht nicht für mehr)',
+    (await page.locator('#info-actions button', { hasText: 'Auffüllen' }).textContent()) === '⏫ Auffüllen: 3 Holzstämme · kauft 2 für 366 🪙',
+    'Auffüllen nimmt den Holzstamm aus dem Laden-Lager und kauft 2 dazu (500 Gold Startkapital)',
   );
-  check(await infoButton(page, 'buy:holzstamm').isDisabled(), 'Mit 170 Gold reicht es noch nicht für einen Holzstamm (183)');
+  check(!(await infoButton(page, 'buy:holzstamm').isDisabled()), 'Mit 500 Gold reicht es für Holzstämme (183)');
   await page.locator('#info-tools button', { hasText: 'Drehen' }).tap();
   await sleep(80);
   check((await game(page, () => window.__game.state.buildings[0].rot)) === 1, 'Drehen dreht das Gebäude');
@@ -3229,13 +3229,16 @@ async function run3d(browser, baseUrl, device) {
     loading: !document.getElementById('catchup').hidden,
     version: document.getElementById('hud-version').textContent,
     turn: !document.getElementById('turn-buttons').hidden,
+    fps: !document.getElementById('hud-fps').hidden,
   }));
   check(
-    start.level === 1 && start.gold === 170 && JSON.stringify(start.types) === '["holzfaeller","versandportal"]',
-    `Eigener Spielstand ab Level 1: 170 Gold, Holzfällerlager und Versandportal (${JSON.stringify(start)})`,
+    start.level === 1 && start.gold === 500 && JSON.stringify(start.types) === '["holzfaeller","versandportal"]',
+    `Eigener Spielstand ab Level 1: 500 Gold, Holzfällerlager und Versandportal (${JSON.stringify(start)})`,
   );
   check(start.models >= 40 && !start.loading && start.counts.buildings === 2, `Kenneys Modelle geladen (${start.models}), beide Gebäude in 3D`);
   check(start.version.includes('3D-Test') && start.turn, `Oben „3D-Test“, Dreh-Knöpfe ⟲ ⟳ sichtbar (${start.version})`);
+  // v0.36.0: Bilder pro Sekunde im 3D-Test immer sichtbar, auch ohne Testmodus
+  check(start.fps && !(await page.isVisible('#hud-speed')), `Bilder pro Sekunde oben sichtbar, ohne Testmodus (${await page.textContent('#hud-fps')})`);
   await shot('3d-1-start');
 
   // Holzstamm einlegen (Holzfällerlager antippen)

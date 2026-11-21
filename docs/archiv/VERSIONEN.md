@@ -4,6 +4,23 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.36.0 – schnellerer Start (21.11.2026)
+
+**Vorgenommen:**
+- Den Anfang beschleunigen (Tobias, Chat 24, beim Spielen des 3D-Tests: „am Anfang sehr lange warten … bis man die einzelnen Aufträge erledigt hat“).
+
+**Fragen, die wir uns gestellt haben:**
+- Wie viel Startgold? → 500 Gold (Tobias: „sozusagen als "Startkapital" - kann man später vermutlich auch geschichtlich ganz gut einbinden“); damit lassen sich gleich 2 Holzstämme dazukaufen (183 Gold je Stamm). Gilt nur für neue Spielstände; die Umwandlung sehr alter Spielstände (Startkapital vor Format 8) bleibt unberührt.
+- Wie schnell verkaufen die Theken am Anfang? → Level 1–3 genau alle 15 Sekunden statt zufällig 15–25 (Tobias' Zahl) – je Theke 4 statt 3 Stück pro Minute, die 2 Start-Theken 480 statt 360 Stück pro Stunde. Im Laden steht dann „alle 15 Sekunden“ statt „alle 15–15“.
+- Bilder pro Sekunde → im 3D-Test immer sichtbar (Claudes Vorschlag), im 2D-Spiel weiter nur im Testmodus.
+
+**Gemacht:**
+- `data/shop.js`: `START_GOLD` 500, `customerSeconds` Level 1–3 [15, 15]. `view/shop.js`: Text „alle 15 Sekunden“ bzw. „etwa alle 25–45 Sekunden“ (`secondsText`). `hud.js`/`main.js`: Bilder pro Sekunde im 3D-Test. Tests: Startgold, Tempo je Level, Kunden pro Stunde, Browser-Test (Start 500 Gold, Auffüllen kauft 2 Stämme dazu, Bilder pro Sekunde im 3D-Test).
+
+**Geprüft:**
+- `npm test`: 419 von 419 bestanden.
+- Browser-Test in Tablet- und Handygröße: alle Prüfungen bestanden.
+
 ### v0.35.0 – 3D-Test, Teil 2: Tor, Bereich markieren, Fläche kaufen (21.11.2026)
 
 **Vorgenommen:**
