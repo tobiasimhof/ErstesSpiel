@@ -14,6 +14,10 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Claude** hat auf einen Haken hingewiesen: Ohne Versandportal bleibt der Start stecken (Holzblöcke kommen nur übers Portal ins Laden-Lager; das Sägewerk kostet 40 Holzblöcke, das Lagerhaus 8 Holzplatten – deshalb steht das Portal seit v0.7.0 schon beim Start da). Vorschlag: Im 3D-Test steht beim Start ein **Lagerhaus statt des Versandportals**; Waren kommen über „↩ Ausräumen ins Laden-Lager“ in den Laden; das Portal fehlt in der Bauleiste des 3D-Tests; das 2D-Spiel behält seine Portale. Rückfrage, ob das so passt.
 
+**Tobias:** „Alles klar, hatte ich vergessen. Dann lass uns das Versandportal einfach sehr schlicht halten mit deinem ersten Vorschlag dass es mehr ein Torbogen ist mit einem kleinem mythischen Schauer“
+
+**Claude** baut v0.34.0 nach dem Entwurf in `PLAENE.md` (Versandportal als schlichter Torbogen mit leichtem Schimmer, das Portal bleibt im 3D-Test).
+
 ### 21.11.2026 – Chat 23 (Fortsetzung): Grafik-Probe, Teil 2 getestet (v0.33.1)
 
 **Tobias:** „ICh würde gerne in einem neuen Chat weitermachen, deswegen würde ich dir jetzt mein Feedback geben und danach in einem neuen Chat weitermachen. Ich habe auf dem Tablet konstant 60 fps. Mir gefällt das frei drehbare besser, weil man dadurch vermutlich besser bauen und auch sieht, wenn man ein zulauf verstopft ist. Mir gefällt Mitteralter besser. Finde die Idee mit den Häusern auch sehr gut, dass wir die Häuser einfach spezifisch gestalten, sodass man weiß, was ein Sägewerk ist und was nicht. Das Versandportal sieht noch etwas komisch aus. Mir gefällt die SPielfarbe besser, weil es mehr harmoniert. Mir gefällt allerdings auch der Mix aus Modern und Mittelalter. Evtl. könnte man die modernen Gebäude noch etwas mitteraltermäßiger gestalten ohne Greifarm. Ich würde gerne in den nächsten Schritten ein wenig mit der Grafik weitermachen, um das Spiel evtl. Testweise auf dieses Niveau zu heben, sodass man evtl. das erste Level in dieser neuen Grafik spielen kann. Wie gesagt, ich würde danach in einem neuen Chat weitermachen wollen“
