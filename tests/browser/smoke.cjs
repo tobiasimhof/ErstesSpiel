@@ -3179,6 +3179,285 @@ async function runProbe(browser, baseUrl, device) {
   await context.close();
 }
 
+// v0.34.0: 3D-Test (Tobias, Chat 24) – Level 1 in der neuen Grafik mit
+// eigenem Spielstand. Spielt per Touch: Holzstamm einlegen, Band ziehen,
+// Sägewerk bauen, antippen, Kamera drehen und zoomen, abreißen; Bereich
+// markieren und Fläche kaufen kommen erst im nächsten Schritt.
+async function run3d(browser, baseUrl, device) {
+  currentDevice = `${device.name}-3d`;
+  console.log(`\n${device.name} – 3D-Test`);
+  const context = await browser.newContext({
+    viewport: device.viewport,
+    deviceScaleFactor: device.deviceScaleFactor,
+    hasTouch: true,
+    isMobile: true,
+  });
+  const page = await context.newPage();
+  const cdp = await context.newCDPSession(page);
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  const shot = (name) => page.screenshot({ path: path.join(OUT, `${device.name}-${name}.png`) });
+  const vp = device.viewport;
+
+  // Die echte Fabrik (2D) mit etwas Gold – sie darf sich durch den 3D-Test nicht ändern
+  await page.goto(baseUrl);
+  await waitForGame(page);
+  await game(page, () => {
+    window.__game.state.gold = 4321;
+    window.__game.saveNow();
+  });
+  await page.tap('#btn-menu');
+  await sleep(100);
+  const menuBox = await page.locator('#menu').boundingBox();
+  check(
+    (await page.textContent('#menu-3d')).includes('3D-Test') && menuBox.y + menuBox.height <= vp.height,
+    `Menü ☰ zeigt „🧊 3D-Test (Level 1)“ und passt auf den Bildschirm (${Math.round(menuBox.y + menuBox.height)} ≤ ${vp.height})`,
+  );
+  await page.tap('#menu-3d');
+  await page.waitForURL(/ansicht=3d/);
+  await page.waitForFunction(() => window.__game?.view3d && window.__game.camera.viewWidth > 0, null, { timeout: 30000 });
+  // so hat die echte Fabrik beim Wechsel gespeichert – der 3D-Test darf daran nichts ändern
+  const real = await game(page, () => localStorage.getItem('erstesspiel-spielstand'));
+  await sleep(1500);
+  const start = await game(page, () => ({
+    level: window.__game.state.shopLevel,
+    gold: window.__game.state.gold,
+    types: window.__game.state.buildings.map((b) => b.type).sort(),
+    counts: window.__game.view3d.counts(),
+    models: window.__game.view3d.models(),
+    loading: !document.getElementById('catchup').hidden,
+    version: document.getElementById('hud-version').textContent,
+    turn: !document.getElementById('turn-buttons').hidden,
+  }));
+  check(
+    start.level === 1 && start.gold === 170 && JSON.stringify(start.types) === '["holzfaeller","versandportal"]',
+    `Eigener Spielstand ab Level 1: 170 Gold, Holzfällerlager und Versandportal (${JSON.stringify(start)})`,
+  );
+  check(start.models >= 40 && !start.loading && start.counts.buildings === 2, `Kenneys Modelle geladen (${start.models}), beide Gebäude in 3D`);
+  check(start.version.includes('3D-Test') && start.turn, `Oben „3D-Test“, Dreh-Knöpfe ⟲ ⟳ sichtbar (${start.version})`);
+  await shot('3d-1-start');
+
+  // Holzstamm einlegen (Holzfällerlager antippen)
+  const ids = await game(page, () => Object.fromEntries(window.__game.state.buildings.map((b) => [b.type, b.id])));
+  const at = (id) => game(page, (i) => window.__game.view3d.building(i), id);
+  let pos = await at(ids.holzfaeller);
+  await page.touchscreen.tap(pos.x, pos.y);
+  await sleep(250);
+  check((await page.textContent('#info-title')).includes('Holzfällerlager'), 'Holzfällerlager antippen öffnet sein Infofenster');
+  await infoButton(page, 'refill').tap();
+  await sleep(150);
+  check(await game(page, (id) => window.__game.state.buildings.find((b) => b.id === id).prod.loaded, ids.holzfaeller), 'Auffüllen legt einen Holzstamm ein');
+  await page.tap('#info-close');
+
+  // Band ziehen: vom Ausgang des Holzfällerlagers zum Versandportal
+  const tile = (x, y) => game(page, ([a, b]) => window.__game.view3d.tile(a, b), [x, y]);
+  const hf = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'holzfaeller'));
+  const portal = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'versandportal'));
+  const route = [
+    [hf.x + 2, hf.y],
+    [hf.x + 2, portal.y],
+    [portal.x - 1, portal.y],
+  ];
+  await page.tap('#btn-build');
+  await sleep(150);
+  await page.locator('.build-item[data-tool="belt"]').tap();
+  await sleep(150);
+  const pts = [];
+  for (const [x, y] of route) pts.push(await tile(x, y));
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ ...pts[0], id: 7 }] });
+  let previewSeen = 0;
+  for (let i = 1; i < pts.length; i++) {
+    for (let st = 1; st <= 8; st++) {
+      const t = st / 8;
+      await cdp.send('Input.dispatchTouchEvent', {
+        type: 'touchMove',
+        touchPoints: [{ x: pts[i - 1].x + (pts[i].x - pts[i - 1].x) * t, y: pts[i - 1].y + (pts[i].y - pts[i - 1].y) * t, id: 7 }],
+      });
+    }
+    await sleep(60);
+    previewSeen = Math.max(previewSeen, await game(page, () => window.__game.view3d.overlayCount()));
+  }
+  await shot('3d-2-band-vorschau');
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await sleep(150);
+  const beltCount = await game(page, () => Object.keys(window.__game.state.belts).length);
+  const expected = Math.abs(portal.y - hf.y) + (portal.x - 1 - (hf.x + 2)) + 1;
+  check(previewSeen > 0, `Beim Ziehen zeigt die Vorschau Felder und Pfeile (${previewSeen} Teile)`);
+  check(beltCount === expected, `Mit einem Finger ein Band zum Portal gezogen (${beltCount} von ${expected} Feldern)`);
+  await page.tap('#tool-confirm');
+  await sleep(100);
+  const before = await game(page, () => window.__game.state.storage.holzblock ?? 0);
+  await game(page, () => window.__game.simulate(60));
+  await sleep(400);
+  const after3d = await game(page, () => ({ blocks: window.__game.state.storage.holzblock ?? 0, counts: window.__game.view3d.counts() }));
+  check(after3d.blocks > before && after3d.counts.belts === beltCount, `Holzblöcke fahren übers Band durchs Tor ins Laden-Lager (${before} → ${after3d.blocks}), ${after3d.counts.belts} Bänder in 3D`);
+  const sh1 = await game(page, (id) => window.__game.view3d.shimmer(id), ids.versandportal);
+  await sleep(500);
+  const sh2 = await game(page, (id) => window.__game.view3d.shimmer(id), ids.versandportal);
+  check(sh1 !== null && sh1 !== sh2, `Das Tor des Versandportals schimmert (${sh1} → ${sh2})`);
+  await shot('3d-3-band-laeuft');
+
+  // Sägewerk bauen: Vorschau als halbdurchsichtiges Haus
+  await game(page, () => {
+    window.__game.state.storage.holzblock = 120;
+  });
+  if (await page.isVisible('#btn-build')) await page.tap('#btn-build');
+  await sleep(150);
+  await tapBuild(page, 'saegewerk');
+  await sleep(250);
+  const ghost = await game(page, () => ({ ui: window.__game.ui.ghost, shown: window.__game.view3d.hasGhost() }));
+  check(ghost.ui && ghost.shown && ghost.ui.valid, `Vorschau des Sägewerks steht auf einem freien Platz (${JSON.stringify(ghost.ui)})`);
+  await shot('3d-4-vorschau');
+  // Vorschau mit dem Finger verschieben
+  const g0 = await tile(ghost.ui.x + 1, ghost.ui.y + 1);
+  const g1 = await tile(ghost.ui.x - 1, ghost.ui.y + 1);
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ ...g0, id: 8 }] });
+  for (let st = 1; st <= 6; st++) {
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: g0.x + ((g1.x - g0.x) * st) / 6, y: g0.y + ((g1.y - g0.y) * st) / 6, id: 8 }] });
+  }
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await sleep(150);
+  const moved = await game(page, () => window.__game.ui.ghost);
+  check(moved.x === ghost.ui.x - 2 && moved.y === ghost.ui.y, `Vorschau folgt dem Finger (${ghost.ui.x},${ghost.ui.y} → ${moved.x},${moved.y})`);
+  await page.tap('#tool-confirm');
+  await sleep(200);
+  if (await page.isVisible('#build-close')) await page.tap('#build-close');
+  const saw = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'saegewerk'));
+  check(Boolean(saw), 'Sägewerk gebaut');
+  await sleep(300);
+  pos = await at(saw.id);
+  await page.touchscreen.tap(pos.x, pos.y);
+  await sleep(300);
+  const sel = await game(page, () => ({ sel: window.__game.ui.selected, overlay: window.__game.view3d.overlayCount() }));
+  check(
+    (await page.textContent('#info-title')).includes('Sägewerk') && sel.sel?.id === saw.id && sel.overlay > 0,
+    'Sägewerk antippen: Infofenster und gelber Rahmen am Boden',
+  );
+  check((await game(page, (id) => window.__game.view3d.sign(id), saw.id))?.includes('holzplatte'), 'Schild über dem Sägewerk zeigt die Holzplatte');
+  await shot('3d-5-infofenster');
+  await page.tap('#info-close');
+
+  // Kamera: Knöpfe ⟲ ⟳, Tasten Q/E, zwei Finger drehen und zoomen, ein Finger verschiebt
+  const yaw0 = await game(page, () => window.__game.view3d.yaw());
+  await page.tap('#btn-turn-right');
+  await page.waitForFunction(() => !window.__game.view3d.isTurning(), null, { timeout: 3000 }).catch(() => {});
+  const yaw1 = await game(page, () => window.__game.view3d.yaw());
+  check(Math.abs(yaw1 - yaw0 - Math.PI / 4) < 0.01, `⟳ dreht die Kamera um 45° (${yaw0.toFixed(2)} → ${yaw1.toFixed(2)})`);
+  await shot('3d-6-gedreht');
+  await page.keyboard.press('q');
+  await page.waitForFunction(() => !window.__game.view3d.isTurning(), null, { timeout: 3000 }).catch(() => {});
+  const yaw2 = await game(page, () => window.__game.view3d.yaw());
+  check(Math.abs(yaw2 - yaw0) < 0.01, `Taste Q dreht zurück (${yaw2.toFixed(2)})`);
+  const cx = vp.width * 0.45;
+  const cy = vp.height * 0.5;
+  const twoFinger = async (from, to) => {
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ ...from[0], id: 1 }, { ...from[1], id: 2 }] });
+    for (let st = 1; st <= 8; st++) {
+      const t = st / 8;
+      const lerp = (a, b) => ({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t });
+      await cdp.send('Input.dispatchTouchEvent', {
+        type: 'touchMove',
+        touchPoints: [{ ...lerp(from[0], to[0]), id: 1 }, { ...lerp(from[1], to[1]), id: 2 }],
+      });
+    }
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await sleep(150);
+  };
+  const r = 80;
+  await twoFinger(
+    [{ x: cx - r, y: cy }, { x: cx + r, y: cy }],
+    [{ x: cx - r * Math.cos(0.5), y: cy - r * Math.sin(0.5) }, { x: cx + r * Math.cos(0.5), y: cy + r * Math.sin(0.5) }],
+  );
+  const yaw3 = await game(page, () => window.__game.view3d.yaw());
+  check(Math.abs(yaw3 - yaw2 - 0.5) < 0.05, `Zwei Finger umeinander drehen die Kamera mit (${yaw2.toFixed(2)} → ${yaw3.toFixed(2)})`);
+  const d0 = await game(page, () => window.__game.view3d.distance());
+  await twoFinger(
+    [{ x: cx - 40, y: cy }, { x: cx + 40, y: cy }],
+    [{ x: cx - 120, y: cy }, { x: cx + 120, y: cy }],
+  );
+  const d1 = await game(page, () => window.__game.view3d.distance());
+  check(d1 < d0 * 0.6, `Zwei Finger auseinander zoomen heran (Abstand ${d0.toFixed(1)} → ${d1.toFixed(1)})`);
+  await shot('3d-7-nah');
+  const t0 = await game(page, () => window.__game.view3d.target());
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: cx, y: cy, id: 3 }] });
+  for (let st = 1; st <= 8; st++) await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: cx - st * 12, y: cy - st * 5, id: 3 }] });
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await sleep(150);
+  const t1 = await game(page, () => window.__game.view3d.target());
+  check(JSON.stringify(t0) !== JSON.stringify(t1), `Ein Finger verschiebt die Karte (${t0.map((v) => v.toFixed(1))} → ${t1.map((v) => v.toFixed(1))})`);
+  // wieder weiter weg, damit der Rest im Bild ist
+  await twoFinger(
+    [{ x: cx - 120, y: cy }, { x: cx + 120, y: cy }],
+    [{ x: cx - 40, y: cy }, { x: cx + 40, y: cy }],
+  );
+
+  // Abreißen: ein Band-Feld antippen
+  await page.tap('#btn-build');
+  await sleep(150);
+  await page.locator('.build-item[data-tool="erase"]').tap();
+  await sleep(150);
+  const [ex, ey] = route[2];
+  const ep = await tile(ex, ey);
+  await page.touchscreen.tap(ep.x, ep.y);
+  await sleep(200);
+  check(!(await game(page, (k) => Boolean(window.__game.state.belts[k]), `${ex},${ey}`)), 'Abreißen: ein Band-Feld antippen entfernt es');
+  await page.tap('#tool-confirm');
+  await sleep(150);
+
+  // Bereich markieren kommt im nächsten Schritt
+  if (await page.isVisible('#btn-build')) await page.tap('#btn-build');
+  await sleep(150);
+  check(await page.locator('.build-item[data-tool="area"]').evaluate((e) => e.classList.contains('soon')), 'Bauleiste: „Verschieben“ ist ausgegraut („kommt bald“)');
+  await page.locator('.build-item[data-tool="area"]').tap();
+  await sleep(150);
+  check(
+    (await game(page, () => window.__game.ui.mode)) === 'menu' && (await page.textContent('#toast')).includes('nächsten Schritt'),
+    '„Verschieben“ sagt, dass es im nächsten Schritt kommt',
+  );
+  await page.tap('#build-close');
+  await sleep(150);
+
+  // Gesperrte Fläche antippen: kein Kauf, nur ein Hinweis
+  const w = await game(page, () => ({ ...window.__game.state.plot }));
+  await game(page, (p) => {
+    const c = window.__game.camera;
+    c.target.set(p.x + p.width / 2, 0, p.y - 1);
+    c.update();
+  }, w);
+  await sleep(150);
+  const lp = await tile(w.x + Math.floor(w.width / 2), w.y - 2);
+  await page.touchscreen.tap(lp.x, lp.y);
+  await sleep(200);
+  check(
+    (await page.textContent('#info-title')).includes('Gesperrte Fläche') && (await page.textContent('#info-text')).includes('nächsten Schritt'),
+    'Gesperrte Fläche antippen: Hinweis, Fläche kaufen kommt im nächsten Schritt',
+  );
+  await page.tap('#info-close');
+
+  // Eigener Spielstand: der 3D-Test speichert getrennt, die echte Fabrik bleibt
+  await game(page, () => window.__game.saveNow());
+  const slots = await game(page, () => ({
+    test: localStorage.getItem('erstesspiel-spielstand-3d-test'),
+    real: localStorage.getItem('erstesspiel-spielstand'),
+  }));
+  check(Boolean(slots.test) && slots.real === real, '3D-Test hat einen eigenen Spielstand, die echte Fabrik bleibt unverändert');
+  check(errors.length === 0, `Keine Fehler in der Konsole des 3D-Tests${errors.length ? ': ' + errors.join(' | ') : ''}`);
+
+  // Zurück zur echten Fabrik
+  await page.tap('#btn-menu');
+  await sleep(100);
+  check((await page.textContent('#menu-3d')).includes('Zurück zur echten Fabrik'), 'Menü im 3D-Test: „Zurück zur echten Fabrik (2D)“');
+  await page.tap('#menu-3d');
+  await page.waitForURL((u) => !u.search.includes('ansicht=3d'));
+  await waitForGame(page);
+  const back = await game(page, () => ({ gold: window.__game.state.gold, view3d: window.__game.view3d }));
+  check(back.gold === 4321 && back.view3d === null, `Zurück in der echten Fabrik (2D, ${back.gold} Gold)`);
+  // aufräumen: der nächste Durchlauf beginnt mit einem neuen 3D-Test
+  await game(page, () => localStorage.removeItem('erstesspiel-spielstand-3d-test'));
+  await context.close();
+}
+
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
   const versionSource = fs.readFileSync(path.join(ROOT, 'src', 'version.js'), 'utf8');
@@ -3188,10 +3467,14 @@ async function runProbe(browser, baseUrl, device) {
   const baseUrl = `http://127.0.0.1:${server.address().port}/`;
   const browser = await chromium.launch();
   try {
-    for (const device of DEVICES) await runDevice(browser, baseUrl, device, expectedVersion);
-    await runPortrait(browser, baseUrl);
-    await runNarrowPhone(browser, baseUrl);
-    for (const device of DEVICES) await runProbe(browser, baseUrl, device);
+    // v0.34.0: ONLY=3d prüft nur den 3D-Test (schneller beim Entwickeln)
+    if (process.env.ONLY !== '3d') {
+      for (const device of DEVICES) await runDevice(browser, baseUrl, device, expectedVersion);
+      await runPortrait(browser, baseUrl);
+      await runNarrowPhone(browser, baseUrl);
+      for (const device of DEVICES) await runProbe(browser, baseUrl, device);
+    }
+    for (const device of DEVICES) await run3d(browser, baseUrl, device);
   } finally {
     await browser.close();
     server.close();

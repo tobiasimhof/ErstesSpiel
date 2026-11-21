@@ -39,7 +39,6 @@ export const MODELS = {
     'planks',
     'cart',
     'pillar-wood',
-    'fountain-round',
     'tree',
     'tree-high',
     'tree-crooked',
@@ -52,7 +51,8 @@ export const MODELS = {
     'lantern',
     'road',
   ],
-  'castle-kit': ['tree-log', 'tree-trunk', 'tree-large', 'tree-small'],
+  // v0.34.0: das kleine Burgtor ist das Versandportal im Mittelalter (Tobias, Chat 24)
+  'castle-kit': ['tree-log', 'tree-trunk', 'tree-large', 'tree-small', 'wall-narrow-gate'],
   'factory-kit': [
     'conveyor-long-part-middle',
     'conveyor-long-part-end',
@@ -93,6 +93,12 @@ export const PALETTES = {
   },
   'castle-kit': {
     spiel: [{ band: 3, cols: [2, 3], color: '#bdb3a3' }],
+    // v0.34.0: das Burgtor des Versandportals in warmem Steingrau wie die
+    // Steinhäuser (statt Kenneys Sandstein): Band 3, Spalte 13 = Mauer, 15 = Kanten
+    tor: [
+      { band: 3, cols: [13], color: '#bdb3a3' },
+      { band: 3, cols: [15], color: '#8f877b' },
+    ],
   },
   'factory-kit': {
     // Maschinen in der Farbe ihres Reiters, das übrige Metall neutral grau

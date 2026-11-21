@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 21.11.2026 – Chat 24: Plan „Level 1 in der neuen Grafik“ (in Arbeit)
+### 21.11.2026 – Chat 24: 3D-Test, Teil 1 – Level 1 in 3D (v0.34.0)
 
 **Tobias:** „Bringe dich auf den aktuellen Stand“
 
@@ -16,7 +16,9 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Tobias:** „Alles klar, hatte ich vergessen. Dann lass uns das Versandportal einfach sehr schlicht halten mit deinem ersten Vorschlag dass es mehr ein Torbogen ist mit einem kleinem mythischen Schauer“
 
-**Claude** baut v0.34.0 nach dem Entwurf in `PLAENE.md` (Versandportal als schlichter Torbogen mit leichtem Schimmer, das Portal bleibt im 3D-Test).
+**Claude** baut v0.34.0 nach dem Entwurf in `PLAENE.md` (Versandportal als schlichter Torbogen mit leichtem Schimmer, das Portal bleibt im 3D-Test). Als Torbogen dient Kenneys kleines Burgtor aus dem Castle Kit (lag noch im Verlauf des Projekts), in warmem Steingrau mit violettem Schimmer.
+
+**Umgesetzt:** v0.34.0 – Menü ☰ → „🧊 3D-Test (Level 1)“. Als Nächstes testet Tobias; danach Teil 2 (v0.35.0).
 
 ### 21.11.2026 – Chat 23 (Fortsetzung): Grafik-Probe, Teil 2 getestet (v0.33.1)
 

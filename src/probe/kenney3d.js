@@ -185,12 +185,113 @@ function medievalBuilding(lib, building, colors) {
       break;
     }
     case 'versandportal':
-      put(lib, g, FT, 'fountain-round', { scale: [0.46, 0.6, 0.46], ...opts });
+      // v0.34.0 (Tobias, Chat 24): „sehr schlicht … mehr ein Torbogen … mit
+      // einem kleinem mythischen Schauer“ – das kleine Burgtor, durch das das
+      // Band hineinfährt (Eingang im Westen), darin ein leichter Schimmer.
+      // (Kenneys Tor ist nach Süden offen und hinten breiter – um 90° gedreht und mittig gesetzt)
+      put(lib, g, CK, 'wall-narrow-gate', { z: 0.17, rot: Math.PI / 2, scale: 0.92, variant: colors === 'kenney' ? 'kenney' : 'tor' });
+      portalShimmer(g, parts);
       break;
     default:
+      // v0.34.0: Gebäude ohne eigenes Haus (3D-Test ab Level 2 oder aus einer
+      // geladenen Datei): ein einfaches Steinhaus mit Dach in Reiterfarbe bzw.
+      // ein Beet mit Holzrahmen.
+      otherBuilding(lib, g, building, colors, opts);
       break;
   }
   return { group: g, parts };
+}
+
+// v0.34.0: Der Schimmer im Tor des Versandportals – eine leuchtende Fläche
+// in der Öffnung und ein paar Funken, die langsam aufsteigen (bewegt in
+// world3d.js bzw. scene3d.js über parts.shimmer).
+let shimmerTexture = null;
+function shimmerMap() {
+  if (shimmerTexture) return shimmerTexture;
+  const c = document.createElement('canvas');
+  c.width = 64;
+  c.height = 128;
+  const ctx = c.getContext('2d');
+  const grad = ctx.createRadialGradient(32, 80, 4, 32, 72, 70);
+  grad.addColorStop(0, 'rgba(236, 228, 255, 0.95)');
+  grad.addColorStop(0.3, 'rgba(176, 146, 255, 0.85)');
+  grad.addColorStop(0.7, 'rgba(118, 88, 222, 0.45)');
+  grad.addColorStop(1, 'rgba(92, 66, 200, 0)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 64, 128);
+  shimmerTexture = new THREE.CanvasTexture(c);
+  shimmerTexture.colorSpace = THREE.SRGBColorSpace;
+  return shimmerTexture;
+}
+
+function portalShimmer(g, parts) {
+  const veilMat = new THREE.MeshBasicMaterial({
+    map: shimmerMap(),
+    transparent: true,
+    opacity: 0.7,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+  });
+  const veil = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 0.66), veilMat);
+  veil.rotation.y = Math.PI / 2; // die Fläche steht quer zum Band (Band läuft in x)
+  veil.position.set(0, 0.36, 0);
+  veil.renderOrder = 2;
+  g.add(veil);
+  const sparkMat = new THREE.MeshBasicMaterial({ color: '#e6dcff', transparent: true, opacity: 0.9, depthWrite: false, blending: THREE.AdditiveBlending });
+  const sparkGeo = new THREE.SphereGeometry(0.022, 6, 4);
+  const sparks = [];
+  for (let i = 0; i < 7; i++) {
+    const m = new THREE.Mesh(sparkGeo, sparkMat);
+    m.userData.phase = i / 7;
+    m.userData.offset = ((i * 37) % 11) / 11 - 0.5;
+    g.add(m);
+    sparks.push(m);
+  }
+  parts.shimmer = { veil, veilMat, sparks, sparkMat };
+}
+
+// Funken und Schimmer bewegen: time in Sekunden, flash 0…1 (Ware angekommen)
+export function animateShimmer(shimmer, time, flash = 0) {
+  const pulse = 0.5 + 0.5 * Math.sin(time * 2.1);
+  shimmer.veilMat.opacity = Math.min(1, 0.55 + pulse * 0.2 + flash * 0.3);
+  shimmer.veil.scale.set(1 + flash * 0.12, 1 + pulse * 0.04 + flash * 0.12, 1);
+  for (const m of shimmer.sparks) {
+    const k = (time * 0.35 + m.userData.phase) % 1;
+    m.position.set(Math.sin(time * 1.7 + m.userData.phase * 9) * 0.04, 0.06 + k * 0.7, m.userData.offset * 0.36);
+    m.scale.setScalar(1 - k * 0.6);
+  }
+  shimmer.sparkMat.opacity = 0.75 + flash * 0.25;
+}
+
+function otherBuilding(lib, g, building, colors, opts) {
+  const def = BUILDINGS[building.type];
+  const [w, d] = def.size ?? [2, 2];
+  if (def.production?.kind === 'garden') {
+    // Beet: Holzrahmen mit Erde
+    const wood = mat('#8a6039');
+    const soil = mat('#5b3f27');
+    g.add(simpleMesh(new THREE.BoxGeometry(w * 0.86, 0.1, d * 0.86), soil, { y: 0.05 }));
+    for (const [x, z, bw, bd] of [
+      [0, -d * 0.43, w * 0.9, 0.08],
+      [0, d * 0.43, w * 0.9, 0.08],
+      [-w * 0.43, 0, 0.08, d * 0.9],
+      [w * 0.43, 0, 0.08, d * 0.9],
+    ]) {
+      g.add(simpleMesh(new THREE.BoxGeometry(bw, 0.16, bd), wood, { x, y: 0.08, z }));
+    }
+    return;
+  }
+  const h = house(lib, colors, opts.color, {
+    walls: {
+      N: ['wall', 'wall'],
+      W: ['wall', 'wall-window-shutters'],
+      E: ['wall-window-shutters', 'wall'],
+      S: ['wall-door', 'wall-window-stone'],
+    },
+  });
+  const s = Math.min(w, d) / 2;
+  h.scale.set((w / 2) * 0.82, s * 0.82, (d / 2) * 0.82);
+  g.add(h);
 }
 
 // ---------- Modern: Maschinen aus dem Factory Kit ----------
@@ -289,7 +390,8 @@ function portalRing(g, parts) {
 // je 90° im Uhrzeigersinn) dreht die ganze Gruppe mit.
 export function buildKenneyBuilding(lib, building, style, colors) {
   const view = style === 'mittelalter' ? medievalBuilding(lib, building, colors) : modernBuilding(lib, building, colors);
-  if (building.type === 'versandportal') portalRing(view.group, view.parts);
+  // v0.34.0: Im Mittelalter ist das Portal ein Torbogen mit Schimmer, der Ring bleibt nur im Modern-Stil.
+  if (building.type === 'versandportal' && style !== 'mittelalter') portalRing(view.group, view.parts);
   const angle = (-(building.rot ?? 0) * Math.PI) / 2;
   view.group.rotation.y = angle;
   view.parts.chimneyTop?.applyAxisAngle(new THREE.Vector3(0, 1, 0), angle);

@@ -4,6 +4,25 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.34.0 – 3D-Test, Teil 1: Level 1 in 3D spielen (21.11.2026)
+
+**Vorgenommen:**
+- Level 1 testweise in der neuen Grafik spielbar machen (Tobias, Chat 23: „sodass man evtl. das erste Level in dieser neuen Grafik spielen kann“), mit seinen Entscheidungen aus der Grafik-Probe: frei drehbar, Mittelalter, Spiel-Farben, eigene Häuser je Gebäude.
+
+**Fragen, die wir uns gestellt haben:**
+- Eigener Test-Spielstand oder Schalter für die echte Fabrik? → eigener Spielstand ab Level 1 (Tobias: A, „Ich will es erstmal testen, bevor wir die ganze Spielwelt in die "Neue Grafik" holen.“).
+- Wie sieht das Versandportal aus? → Tobias wollte es erst herausnehmen; ohne Portal bleibt der Start aber stecken (die ersten Holzblöcke kommen nur übers Portal ins Laden-Lager). Dann: „sehr schlicht … mehr ein Torbogen … mit einem kleinem mythischen Schauer“ → Kenneys kleines Burgtor (Castle Kit, `wall-narrow-gate`) in warmem Steingrau mit violettem Schimmer und Funken. Kenneys Pakete lagen noch im Verlauf des Projekts, Tobias musste nichts neu hochladen.
+- Wie kommt die 3D-Ansicht ins Spiel, ohne das 2D-Spiel zu belasten? → dieselbe Seite mit `?ansicht=3d`; `main.js` lädt die 3D-Ansicht (und three.js) nur dann nach. Die Steuerung bleibt dieselbe und fragt im 3D-Test die 3D-Kamera nach dem Feld unter dem Finger.
+- Wie dreht man, ohne beim Bauen versehentlich zu drehen? → Ein Finger bleibt wie im 2D-Spiel (verschieben bzw. bauen), zwei Finger zoomen, verschieben und drehen; dazu Knöpfe ⟲ ⟳ und Tasten Q/E (je 45°, weich).
+
+**Gemacht:**
+- Neue Dateien `src/view3d/view3d.js`, `camera3d.js`, `scene3d.js`; Menü-Eintrag „🧊 3D-Test (Level 1)“ bzw. „🗺️ Zurück zur echten Fabrik (2D)“; eigener Spielstand (`useSaveSlot`), Anzeige „Lädt die Modelle …“, oben „· 3D-Test“; Kamera mit Neigung je nach Zoom und Startansicht um die Gebäude; Schilder über den Gebäuden (wie die 2D-Karte), Pfeile an den Anschlüssen, Vorschau beim Bauen (halbdurchsichtig grün/rot), Band-Vorschau, Auswahlrahmen, Hüpfen, Wasserrad; Zaun ums Grundstück, Bäume um die Welt; Gebäude ohne eigenes Haus als Steinhaus mit Dach in Reiterfarbe bzw. Beet. „Verschieben“ (Bereich) und Fläche kaufen sind im 3D-Test noch aus.
+- Grafik-Probe: Das Portal im Mittelalter ist dort jetzt ebenfalls das Burgtor (der Brunnen `fountain-round` wurde entfernt).
+
+**Geprüft:**
+- `npm test`: 418 von 418 bestanden (neu: `tests/dreid.test.js`).
+- Browser-Test in Tablet- und Handygröße: alle Prüfungen bestanden, neu der 3D-Test (`run3d`, Screenshots `3d-1-start` bis `3d-7-nah`) angesehen.
+
 ### v0.33.1 – Grafik-Probe, Teil 2 getestet (21.11.2026, nur Doku)
 
 **Vorgenommen:**

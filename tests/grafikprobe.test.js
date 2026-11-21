@@ -90,11 +90,14 @@ test('three.js liegt mit Lizenz im Projekt (Version im Ordnernamen)', () => {
   assert.ok(read('vendor/three-0.187.0/LICENSE').includes('The MIT License'));
 });
 
-test('Nur die Probe lädt three.js – das Spiel und die Spielregeln nicht', () => {
-  const game = read('index.html');
-  assert.ok(!game.includes('"three"'), 'index.html kennt three.js nicht');
+test('Nur die Probe und der 3D-Test laden three.js – das 2D-Spiel und die Spielregeln nicht', () => {
+  // v0.34.0: index.html kennt three.js (für den 3D-Test), lädt es aber nur dort:
+  // main.js holt die 3D-Ansicht erst mit import(…), wenn ?ansicht=3d gewählt ist.
+  const main = read('src/main.js');
+  assert.ok(!/^import [^;]*view3d/m.test(main), 'main.js lädt die 3D-Ansicht nicht beim Start');
+  assert.ok(main.includes("await import('./view3d/view3d.js')"), 'main.js lädt die 3D-Ansicht nur im 3D-Test nach');
   for (const file of sourceFiles()) {
-    if (file.startsWith('./src/probe/')) continue;
+    if (file.startsWith('./src/probe/') || file.startsWith('./src/view3d/')) continue;
     assert.ok(!read(file).includes("from 'three'"), `${file} lädt three.js`);
   }
   assert.ok(!read('src/probe/factory.js').includes("from 'three'"), 'die Probe-Fabrik kommt ohne three.js aus');
@@ -141,7 +144,8 @@ test('Jedes Modell, das die Probe verbaut, steht in der Liste – und jedes Mode
   const source = read('src/probe/kenney3d.js');
   const used = new Set([...source.matchAll(/\b(FT|CK|FK), '([a-z-]+)'/g)].map(([, kit, name]) => `${KIT[kit]}/${name}`));
   // Wände und Dächer der Häuser (Fantasy Town Kit) stehen als Namen in house(…)
-  for (const [, name] of source.matchAll(/'((?:wall|roof)[a-z-]*)'/g)) used.add(`fantasy-town-kit/${name}`);
+  // (v0.34.0: außer dem Burgtor des Portals, das aus dem Castle Kit kommt)
+  for (const [, name] of source.matchAll(/'((?:wall|roof)[a-z-]*)'/g)) if (!used.has(`castle-kit/${name}`)) used.add(`fantasy-town-kit/${name}`);
   const { state } = createProbeFactory();
   for (const key of Object.keys(state.belts)) for (const p of beltPieces(state, key)) used.add(`factory-kit/${p.name}`);
   const listed = new Set(Object.entries(MODELS).flatMap(([kit, names]) => names.map((n) => `${kit}/${n}`)));
