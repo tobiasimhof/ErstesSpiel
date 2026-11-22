@@ -56,12 +56,35 @@ export const MODELS = {
     'roof-point',
     'stall-bench',
     'planks-half',
+    // v0.43.0: Erntebank, Webstube, Kräuterstube, Apotheke
+    'stall-green',
+    'wheel',
+    'balcony-wall-fence',
+    'banner-green',
+    'lantern',
   ],
   // v0.34.0: das kleine Burgtor ist das Versandportal im Mittelalter (Tobias, Chat 24)
   // v0.42.0: Turm der Schmelzhütte, Felsen im Steinbruch, Eisengitter der Schlosserei
-  'castle-kit': ['tree-log', 'tree-trunk', 'tree-large', 'tree-small', 'wall-narrow-gate', 'tower-base', 'tower-top', 'rocks-large', 'metal-gate'],
+  // v0.43.0: Türme für Schreibstube (sechseckig, mit Fahne) und Uhrmacherei (eckig)
+  'castle-kit': [
+    'tree-log',
+    'tree-trunk',
+    'tree-large',
+    'tree-small',
+    'wall-narrow-gate',
+    'tower-base',
+    'tower-top',
+    'rocks-large',
+    'metal-gate',
+    'tower-hexagon-base',
+    'tower-hexagon-roof',
+    'flag-pennant',
+    'tower-square-base',
+    'tower-square-roof',
+  ],
   // die Bänder (in Holz umgefärbt); v0.42.0: ein Zahnrad (Messing bzw. als Sägeblatt Stahl)
-  'factory-kit': ['conveyor-long-part-middle', 'conveyor-long-part-end', 'cog-a'],
+  // v0.43.0: Glasrohre an der Apotheke
+  'factory-kit': ['conveyor-long-part-middle', 'conveyor-long-part-end', 'cog-a', 'pipe-glass-large-long'],
 };
 
 // ---------- Farbtafeln ----------
@@ -89,6 +112,13 @@ export const PALETTES = {
       { band: 3, cols: [13], color: '#bdb3a3' },
       { band: 3, cols: [15], color: '#8f877b' },
     ],
+    // v0.43.0: Türme in warmem Steingrau wie die Steinhäuser, Dach und Fahne
+    // in der Farbe des Reiters (Band 2, Spalte 9 = Kenneys blaue Dächer)
+    turm: [
+      { band: 3, cols: [13], color: '#bdb3a3' },
+      { band: 3, cols: [15], color: '#8f877b' },
+      { band: 2, cols: [9], color: 'gebäude' },
+    ],
     // v0.42.0: das Eisengitter der Schlosserei dunkler, wie geschmiedetes Eisen
     eisen: [
       { band: 3, cols: [5], color: '#6f757e' },
@@ -106,6 +136,12 @@ export const PALETTES = {
     stahl: [
       { band: 3, cols: [0, 1], color: '#5b5f66' },
       { band: 3, cols: [4, 5], color: '#b9bdc2' },
+    ],
+    // v0.43.0: Glasrohre der Apotheke – helles, grünliches Glas (Spalte 0)
+    // mit Messingringen (Spalte 1)
+    glas: [
+      { band: 3, cols: [0], color: '#bfe8de' },
+      { band: 3, cols: [1], color: '#9a7a34' },
     ],
     // Bänder im Mittelalter: Holz und Leder statt Metall (Tobias, Chat 23: ja)
     holz: [

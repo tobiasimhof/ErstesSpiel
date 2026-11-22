@@ -114,7 +114,8 @@ test('Jedes Modell, das der 3D-Test verbaut, steht in der Liste – und jedes Mo
   const used = new Set([...houses.matchAll(/\b(FT|CK|FK), '([a-z-]+)'/g)].map(([, kit, name]) => `${KIT[kit]}/${name}`));
   // Wände und Dächer der Häuser (Fantasy Town Kit) stehen als Namen in house(…)
   // (außer dem Burgtor des Portals, das aus dem Castle Kit kommt)
-  for (const [, name] of houses.matchAll(/'((?:wall|roof)[a-z-]*)'/g)) if (!used.has(`castle-kit/${name}`)) used.add(`fantasy-town-kit/${name}`);
+  // (v0.43.0: auch das Balkon-Geländer der Webstube)
+  for (const [, name] of houses.matchAll(/'((?:wall|roof|balcony)[a-z-]*)'/g)) if (!used.has(`castle-kit/${name}`)) used.add(`fantasy-town-kit/${name}`);
   // Zaun, Bäume und Felsen setzt die 3D-Welt selbst (scene3d.js)
   for (const [, kit, name] of read('src/view3d/scene3d.js').matchAll(/'(fantasy-town-kit|castle-kit|factory-kit)', '([a-z-]+)'/g)) used.add(`${kit}/${name}`);
   const { state } = smallFactory();

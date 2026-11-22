@@ -4,6 +4,26 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.43.0 – eigene Häuser für Level 7–12 (22.11.2026)
+
+**Vorgenommen:**
+- Tobias' Test von v0.42.0 („man erkennt alles … BLeibt auch flüssig auf dem Tablet. Mach gerne weiter“) – den Entwurf aus `PLAENE.md` für Level 7–12 umsetzen.
+
+**Fragen, die wir uns gestellt haben:**
+- Passt alles unter 1 MB? → Ja: 11 neue Modelle, zusammen jetzt 872 KB. Hecke und Dach mit Dachfenster flogen nach den Probebildern wieder raus (sahen nicht gut aus).
+- Wie schwingen die Stoffbahnen? → Jedes Banner hängt an einem Drehpunkt oben (`hangingBanner`) und schwingt beim Arbeiten (`parts.sway`).
+- Wie wird die Erntebank „arbeitend“? → Wie jedes Rohstoff-Gebäude, solange eine Pflanze eingelegt ist.
+
+**Gemacht:**
+- `view3d/kenney3d.js`: Häuser für Erntebank, Webstube, Kräuterstube, Schreibstube, Uhrmacherei, Apotheke; Helfer `spinningWheel` und `hangingBanner`. `view3d/scene3d.js`: `parts.sway`. `kenneyParts.js`: 11 Modelle, Farbtafeln Castle Kit `turm` (Stein warm, Dach und Fahne in Reiterfarbe) und Factory Kit `glas`.
+- Tests: `modelle3d` erkennt auch das Balkon-Geländer als Wandteil; Browser-Test 3D setzt alle zwölf eigenen Häuser und prüft ihre bewegten bzw. leuchtenden Teile.
+- Doku: `STAND.md`, `SPIEL.md`, `BEDIENUNG.md`, `TECHNIK.md`, Archiv.
+
+**Geprüft:**
+- `npm test`: 423 von 423 bestanden.
+- Browser-Test: 2D 912 und 3D 142 Prüfungen bestanden (alle zwölf eigenen Häuser mit ihren bewegten bzw. leuchtenden Teilen, Belastungstest unter 1.000 Zeichenaufrufen).
+- Probebilder angesehen und verbessert (Hecken, Dach der Kräuterstube, Rad der Erntebank); Nahaufnahmen und Übersicht an Tobias vor dem Merge.
+
 ### v0.42.0 – eigene Häuser für Level 2–6, Flächenpreise (22.11.2026)
 
 **Vorgenommen:**

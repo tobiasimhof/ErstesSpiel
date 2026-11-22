@@ -435,16 +435,16 @@ async function run3d(browser, baseUrl, device) {
   check(plot1.plot.x === plot0.x - 4 && plot1.plot.width === plot0.width + 4 && plot1.gold === 330, `Fläche gekauft (${plot0.width} → ${plot1.plot.width} Felder breit, 500 → ${plot1.gold} Gold)`);
   if (await page.isVisible('#info-close')) await page.tap('#info-close');
 
-  // v0.42.0: eigene Häuser für Level 2–6 (Tobias, Chat 26: Möglichkeit B) – im neuen Streifen links,
-  // je Haus ein Teil, das sich beim Arbeiten bewegt oder leuchtet
-  const houseTypes = ['steinbruch', 'steinmetz', 'schmelzhuette', 'zimmerei', 'feinschmiede', 'schlosserei'];
+  // v0.42.0/v0.43.0: eigene Häuser für Level 2–12 (Tobias, Chat 26: Möglichkeit B) – im neuen
+  // Streifen links (4 × 14 Felder), je Haus ein Teil, das sich beim Arbeiten bewegt oder leuchtet
+  const houseTypes = ['steinbruch', 'steinmetz', 'schmelzhuette', 'zimmerei', 'feinschmiede', 'schlosserei', 'flachsbreche', 'webstube', 'kraeuterstube', 'schreibstube', 'uhrmacherei', 'apotheke'];
   const houseIds = await game(page, (types) => {
     const p = window.__game.state.plot;
-    return types.map((type, i) => window.__game.place(type, p.x + (i % 2) * 2, p.y + 1 + Math.floor(i / 2) * 3, 0));
+    return types.map((type, i) => window.__game.place(type, p.x + (i % 2) * 2, p.y + (i < 6 ? 0 : 7) + Math.floor((i % 6) / 2) * 2, 0));
   }, houseTypes);
-  check(houseIds.every((id) => id !== null), `Sechs neue Häuser gesetzt (${houseIds.join(', ')})`);
+  check(houseIds.every((id) => id !== null), `Zwölf eigene Häuser gesetzt (${houseIds.join(', ')})`);
   await game(page, (ids) => {
-    const raw = { steinbruch: 'felsbrocken', schmelzhuette: 'eisenerz' };
+    const raw = { steinbruch: 'felsbrocken', schmelzhuette: 'eisenerz', flachsbreche: 'flachspflanze' };
     for (const id of ids) {
       const b = window.__game.state.buildings.find((item) => item.id === id);
       if (raw[b.type]) Object.assign(b.prod, { loaded: true, input: raw[b.type], remaining: 200, timer: 0 });
@@ -452,16 +452,29 @@ async function run3d(browser, baseUrl, device) {
     }
     const c = window.__game.camera;
     const p = window.__game.state.plot;
-    c.distance = 13;
-    c.target.set(p.x + 2, 0, p.y + 5.5);
+    c.distance = 17;
+    c.target.set(p.x + 2, 0, p.y + 6.5);
     c.update();
   }, houseIds);
   await sleep(1500);
   const motions = await game(page, (ids) => ids.map((id) => window.__game.view3d.motion(id)), houseIds);
-  const want = { steinbruch: ['swing'], steinmetz: ['dustSpot'], schmelzhuette: ['chimneyTop', 'glow'], zimmerei: ['spin'], feinschmiede: ['spin'], schlosserei: ['chimneyTop', 'glow'] };
+  const want = {
+    steinbruch: ['swing'],
+    steinmetz: ['dustSpot'],
+    schmelzhuette: ['chimneyTop', 'glow'],
+    zimmerei: ['spin'],
+    feinschmiede: ['spin'],
+    schlosserei: ['chimneyTop', 'glow'],
+    flachsbreche: ['spin'],
+    webstube: ['sway'],
+    kraeuterstube: ['chimneyTop'],
+    schreibstube: ['glow'],
+    uhrmacherei: ['spin'],
+    apotheke: ['glow'],
+  };
   houseTypes.forEach((type, i) => {
     const m = motions[i];
-    const moving = want[type].includes('spin') || want[type].includes('swing') ? m.sum > 0 : true;
+    const moving = ['spin', 'swing', 'sway'].some((k) => want[type].includes(k)) ? m.sum > 0 : true;
     check(Boolean(m) && want[type].every((k) => m.kinds.includes(k)) && moving, `${type}: eigenes Haus, beim Arbeiten ${want[type].join(' + ')} (${JSON.stringify(m)})`);
   });
   await shot('3d-11b-neue-haeuser');
