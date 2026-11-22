@@ -8,17 +8,20 @@
 //
 // depth:   So viele Felder tief ist ein Streifen.
 // perSide: So oft lässt sich jede Seite erweitern (ohne LAND_MORE).
-// price:   Gold für einen dieser Streifen. Ein Rest-Streifen (nur in
-//          Spielständen von vor v0.10.2 möglich) kostet anteilig weniger.
+// prices:  Gold für den 1., 2. … dieser Streifen an einer Seite. Ein
+//          Rest-Streifen (nur in Spielständen von vor v0.10.2 möglich) kostet
+//          anteilig weniger.
 // roundTo: Preise werden auf so viel Gold gerundet.
 //
-// Beispiel: Der erste Streifen rechts (4 × 14 = 56 Felder) kostet 170 Gold,
-// der zweite auch (v0.23.0: durch 3 wie alle Preise, vorher 500).
+// Beispiel: Der erste Streifen rechts (4 × 14 = 56 Felder) kostet 170 Gold
+// (v0.23.0: durch 3 wie alle Preise, vorher 500), der zweite seit v0.42.0
+// 500 Gold (Tobias, Chat 26: „eine schöne Steigerung von 170 auf 500“, der
+// dritte ab Level 10 bleibt bei 2.000).
 
 export const LAND = {
   depth: 4,
   perSide: 2,
-  price: 170,
+  prices: [170, 500],
   roundTo: 10,
 };
 

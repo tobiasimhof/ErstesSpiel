@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren, Entwurf eigene Häuser (v0.40.1 bis v0.41.2)
+### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren, eigene Häuser Level 2–6 (v0.40.1 bis v0.42.0)
 
 **Tobias:** „Infomiere dich über den aktuellen Stand. Hier ist mein Feedback zu dem letzten Update v40: Beim heraus und hereinzoomen hab ich jeweils zwischen 60 und 80 Fps. Was sind nun die nächsten Schritte ?“
 
@@ -35,6 +35,10 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat Tobias' Upload der drei Kenney-Pakete aus Chat 23 in der Versionsgeschichte gefunden (alles da, nichts neu herunterladen), Kenneys Übersichtsbilder geschickt und den Entwurf geschrieben (`PLAENE.md`): je Gebäude Bauart, Dachform, Erkennungszeichen und ein Teil, das sich beim Arbeiten bewegt oder leuchtet (Tabelle für 12 Gebäude); A rein Mittelalter oder B (Empfehlung) mit ein paar Technik-Teilen (Zahnräder, Glasrohre); Flächenpreise 170 → 500 → 2.500; v0.42.0 Level 2–6 mit den Flächenpreisen, v0.43.0 Level 7–12. Fragen: A oder B? Ideen je Gebäude? Flächenpreise richtig verstanden? Reihenfolge?
 
 **Umgesetzt:** v0.41.2 (nur Doku). Wartet auf Tobias' Antworten.
+
+**Tobias:** „Da hab ich mich verschrieben. Die Preise sollen bei der dritten Fläche bei 2000 bleiben. B passt für mich sehr gut. Die Reihenfolge passt auch mit den level 2-6, dann sehe ich auch direkt eine optische Veränderung bei meiner Hauptproduktionsstätte“
+
+**Umgesetzt:** v0.42.0 – eigene Häuser für Steinbruch, Steinmetz, Schmelzhütte, Zimmerei, Feinschmiede und Schlosserei (Möglichkeit B), Flächenpreise je Seite 170 → 500 → 2.000. Claude hat Tobias vor dem Merge Nahaufnahmen der sechs Häuser geschickt.
 
 ### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test, Analyse, Belastungstest, 3D schneller (v0.36.1 bis v0.40.0)
 

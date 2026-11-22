@@ -13,8 +13,8 @@ function richGame(gold = 100000) {
   return state;
 }
 
-test('Datentabelle (v0.10.2): 4 Reihen je Kauf, 170 Gold (v0.23.0, vorher 500), jede Seite 2×', () => {
-  assert.deepEqual(LAND, { depth: 4, perSide: 2, price: 170, roundTo: 10 });
+test('Datentabelle (v0.10.2): 4 Reihen je Kauf, jede Seite 2×; v0.42.0: der 1. Streifen 170, der 2. 500 Gold', () => {
+  assert.deepEqual(LAND, { depth: 4, perSide: 2, prices: [170, 500], roundTo: 10 });
   assert.equal(stripDepth(), 4);
 });
 
@@ -47,16 +47,18 @@ test('Schon auf Level 1 sind Streifen 4 tief – auf jedem Level gleich', () => 
   assert.deepEqual([landOffer(state, 'N').fields, landOffer(state, 'N').price], [88, 170], 'oben 4 × 22 Felder');
 });
 
-test('Der Preis steigt nicht: jeder Kauf kostet 170 Gold', () => {
+test('v0.42.0 (Tobias): je Seite kostet der 1. Streifen 170 Gold, der 2. 500 Gold', () => {
   const state = richGame(1e6);
   const prices = [];
-  for (const side of ['E', 'E', 'S', 'N', 'W', 'S', 'W', 'N']) {
+  const sides = ['E', 'E', 'S', 'N', 'W', 'S', 'W', 'N'];
+  const expected = [170, 500, 170, 170, 170, 500, 500, 500];
+  sides.forEach((side, i) => {
     prices.push(landOffer(state, side).price);
     const gold = state.gold;
     assert.equal(buyLand(state, side), 'ok', side);
-    assert.equal(gold - state.gold, 170, `${side} kostet 170 Gold`);
-  }
-  assert.deepEqual(prices, Array(8).fill(170));
+    assert.equal(gold - state.gold, expected[i], `${i + 1}. Kauf (${side}) kostet ${expected[i]} Gold`);
+  });
+  assert.deepEqual(prices, expected);
   assert.equal(state.landBought, 8);
 });
 
@@ -70,13 +72,13 @@ test('Jede Seite lässt sich 2× erweitern, danach ist dort Schluss', () => {
   assert.equal(landOffer(state, 'N'), null);
   assert.equal(buyLand(state, 'N'), 'edge');
   assert.equal(state.plot.y, -3, 'oben bis an den Rand der Welt');
-  assert.equal(state.gold, 1e6 - 340);
+  assert.equal(state.gold, 1e6 - 670);
   // Die anderen Seiten sind davon unberührt
   for (const side of ['E', 'S', 'W']) assert.equal(landBuysLeft(state, side), 2, side);
 });
 
-test('Alles gekauft: 38 × 30 Felder für 8 × 170 = 1.360 Gold, fast viermal so viel wie zum Start', () => {
-  const state = richGame(1360);
+test('Alles gekauft: 38 × 30 Felder für 4 × 170 + 4 × 500 = 2.680 Gold, fast viermal so viel wie zum Start', () => {
+  const state = richGame(2680);
   const start = state.plot.width * state.plot.height;
   let buys = 0;
   while (landOffers(state).length > 0) {
@@ -120,7 +122,7 @@ test('Rest-Streifen (aus alten Spielständen) kosten anteilig weniger', () => {
   assert.equal(landBuysLeft(state, 'E'), 2);
   assert.deepEqual([landOffer(state, 'E').depth, landOffer(state, 'E').price], [4, 170]);
   buyLand(state, 'E');
-  assert.deepEqual([landOffer(state, 'E').depth, landOffer(state, 'E').price], [2, 90], 'Rest: 2 Spalten für 90 Gold');
+  assert.deepEqual([landOffer(state, 'E').depth, landOffer(state, 'E').price], [2, 250], 'Rest des 2. Streifens: 2 Spalten für 250 Gold');
   buyLand(state, 'E');
   assert.equal(landOffer(state, 'E'), null);
   assert.equal(state.plot.x + state.plot.width, 38);

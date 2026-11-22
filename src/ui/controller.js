@@ -527,7 +527,7 @@ export function createController({
 
   // ---------- Fläche kaufen (v0.9.0) ----------
 
-  // v0.10.2: Jeder Streifen kostet gleich viel; jede Seite geht 2×.
+  // v0.10.2: jede Seite geht 2×; v0.42.0: der 1. Streifen 170, der 2. 500 Gold.
   // v0.27.0: ab Level 10 noch ein Streifen je Seite, teurer (LAND_MORE).
   function landInfoText(side) {
     const left = landBuysLeft(state, side);
@@ -539,7 +539,8 @@ export function createController({
       const which = m.strips === 1 ? `der ${from}.` : `der ${from}. bis ${n}.`;
       return `ab Level ${m.level} ${which} je ${numberFormat.format(m.price)} Gold`;
     });
-    const prices = `Die ersten ${LAND.perSide} Streifen je Seite kosten je ${numberFormat.format(LAND.price)} Gold${later.length ? `, ${later.join(', ')}` : ''}.`;
+    const first = LAND.prices.map((p, i) => `der ${i + 1}. ${numberFormat.format(p)}`).join(', ');
+    const prices = `Je Seite kostet ${first} Gold${later.length ? `, ${later.join(', ')}` : ''}.`;
     return `Vergrößert dein Grundstück an dieser Seite. Gebäude und Bänder bleiben, wo sie sind. ${prices} ${more}`;
   }
 

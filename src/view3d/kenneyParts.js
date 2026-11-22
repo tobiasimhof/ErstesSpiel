@@ -47,11 +47,21 @@ export const MODELS = {
     'rock-small',
     'rock-wide',
     'fence',
+    // v0.42.0: eigene Häuser für Steinmetz, Zimmerei, Feinschmiede, Schlosserei
+    'wall-doorway-round',
+    'wall-doorway-square-wide',
+    'wall-wood-doorway-square-wide',
+    'wall-window-round',
+    'wall-window-small',
+    'roof-point',
+    'stall-bench',
+    'planks-half',
   ],
   // v0.34.0: das kleine Burgtor ist das Versandportal im Mittelalter (Tobias, Chat 24)
-  'castle-kit': ['tree-log', 'tree-trunk', 'tree-large', 'tree-small', 'wall-narrow-gate'],
-  // die Bänder (in Holz umgefärbt)
-  'factory-kit': ['conveyor-long-part-middle', 'conveyor-long-part-end'],
+  // v0.42.0: Turm der Schmelzhütte, Felsen im Steinbruch, Eisengitter der Schlosserei
+  'castle-kit': ['tree-log', 'tree-trunk', 'tree-large', 'tree-small', 'wall-narrow-gate', 'tower-base', 'tower-top', 'rocks-large', 'metal-gate'],
+  // die Bänder (in Holz umgefärbt); v0.42.0: ein Zahnrad (Messing bzw. als Sägeblatt Stahl)
+  'factory-kit': ['conveyor-long-part-middle', 'conveyor-long-part-end', 'cog-a'],
 };
 
 // ---------- Farbtafeln ----------
@@ -79,8 +89,24 @@ export const PALETTES = {
       { band: 3, cols: [13], color: '#bdb3a3' },
       { band: 3, cols: [15], color: '#8f877b' },
     ],
+    // v0.42.0: das Eisengitter der Schlosserei dunkler, wie geschmiedetes Eisen
+    eisen: [
+      { band: 3, cols: [5], color: '#6f757e' },
+      { band: 3, cols: [7], color: '#4b5058' },
+    ],
   },
   'factory-kit': {
+    // v0.42.0 (Tobias, Chat 26: Möglichkeit B, Mittelalter mit ein paar
+    // Technik-Teilen): das Zahnrad (Band 3, Spalten 1 und 5) in Messing für
+    // die Feinschmiede, in Stahl als Sägeblatt der Zimmerei
+    messing: [
+      { band: 3, cols: [0, 1], color: '#7a5a24' },
+      { band: 3, cols: [4, 5], color: '#c9a043' },
+    ],
+    stahl: [
+      { band: 3, cols: [0, 1], color: '#5b5f66' },
+      { band: 3, cols: [4, 5], color: '#b9bdc2' },
+    ],
     // Bänder im Mittelalter: Holz und Leder statt Metall (Tobias, Chat 23: ja)
     holz: [
       { band: 3, cols: [0, 1], color: '#6e4a2c' },

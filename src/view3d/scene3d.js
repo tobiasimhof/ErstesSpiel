@@ -1039,10 +1039,16 @@ export function createScene3d({ lib }) {
       // v0.40.0: von weitem nur das Statuslicht (statusDots), sonst das Schild
       v.sign.visible = v.wantSign && !moving && !signsFar;
       const working = isWorking(b);
-      const { wheel } = v.parts;
+      const { wheel, spin, swing } = v.parts;
       if (wheel && working) {
         if (v.parts.wheelAxis === 'x') wheel.rotation.x -= dt * 2.2;
         else wheel.rotation.y += dt * 3;
+      }
+      // v0.42.0: Zahnräder drehen sich, der Kran im Steinbruch schwenkt – nur beim Arbeiten
+      if (spin && working) for (const sp of spin) sp.obj.rotation[sp.axis] += dt * sp.speed;
+      if (swing) {
+        if (working) swing.t += dt;
+        swing.obj.rotation.y = swing.base + Math.sin(swing.t * swing.speed) * swing.amp;
       }
       const shipped = b.prod?.shipped ?? 0;
       if (shipped > v.lastShipped) v.pop = 1;
@@ -1053,11 +1059,13 @@ export function createScene3d({ lib }) {
       const squash = Math.sin(v.bounce * Math.PI * 2) * v.bounce * 0.18;
       v.group.scale.set(1 - squash * 0.5, 1 + squash, 1 - squash * 0.5);
       if (v.parts.glow) for (const m of v.parts.glow) m.emissiveIntensity = working ? 1.2 : 0.15;
-      if (working && v.parts.chimneyTop && smokeTimer <= 0) {
-        const free = smoke.find((s) => s.life <= 0);
-        if (free) {
+      // Rauch aus dem Schornstein, v0.42.0 auch Staub an der Werkbank des Steinmetz
+      if (working && smokeTimer <= 0) {
+        for (const spot of [v.parts.chimneyTop, v.parts.dustSpot]) {
+          const free = spot && smoke.find((s) => s.life <= 0);
+          if (!free) continue;
           free.life = 1;
-          free.mesh.position.copy(v.parts.chimneyTop).add(v.group.position);
+          free.mesh.position.copy(spot).add(v.group.position);
           free.mesh.visible = true;
         }
       }
@@ -1202,6 +1210,16 @@ export function createScene3d({ lib }) {
     wheelOf: (id) => {
       const w = views.get(id)?.parts.wheel;
       return w ? Math.round((w.rotation.x + w.rotation.y) * 1000) / 1000 : null;
+    },
+    // v0.42.0: was sich an einem Haus bewegt (Summe der Drehungen) und welche
+    // bewegten bzw. leuchtenden Teile es hat
+    motionOf: (id) => {
+      const parts = views.get(id)?.parts;
+      if (!parts) return null;
+      let sum = 0;
+      for (const sp of parts.spin ?? []) sum += Math.abs(sp.obj.rotation[sp.axis]);
+      if (parts.swing) sum += parts.swing.t;
+      return { sum: Math.round(sum * 1000) / 1000, kinds: Object.keys(parts).filter((k) => parts[k]).sort() };
     },
     hasGhost: () => Boolean(ghost),
     // v0.41.0: Beim Kopieren bleibt das Original zu sehen

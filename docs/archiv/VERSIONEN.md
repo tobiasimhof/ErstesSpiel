@@ -4,6 +4,23 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.42.0 – eigene Häuser für Level 2–6, Flächenpreise (22.11.2026)
+
+**Vorgenommen:**
+- Den Entwurf aus `PLAENE.md` für Level 2–6 umsetzen (Tobias: „B passt für mich sehr gut“) und die Flächenpreise je Seite auf 170 → 500 → 2.000 setzen („Die Preise sollen bei der dritten Fläche bei 2000 bleiben“).
+
+**Fragen, die wir uns gestellt haben:**
+- Woher die Modelle? → Tobias' Upload aus Chat 23 (Commit `465be0c`), dafür die ganze Versionsgeschichte geholt; nur die gebrauchten 13 Modelle kommen ins Projekt (zusammen jetzt 731 KB, Grenze 1 MB – der hohe Karren mit 88 KB blieb draußen).
+- Wie werden Zahnrad und Gitter passend gefärbt? → neue Farbtafeln: Factory Kit `messing` und `stahl` (Band 3, Spalten 0/1 und 4/5), Castle Kit `eisen` (Spalten 5 und 7).
+- Wie bleibt es schnell? → Jedes Haus wird wie seit v0.40.0 zusammengefügt; nur Zahnrad und Kranarm bleiben für sich. Der Belastungstest (mit Steinbrüchen, Steinmetzen, Schmelzhütten) bleibt unter 1.000 Zeichenaufrufen.
+- Ändern sich alte Spielstände? → Nein; schon gekaufte Fläche bleibt, nur künftige zweite Streifen kosten 500. Ein Rest-Streifen aus sehr alten Spielständen kostet anteilig vom 2. Streifen.
+
+**Gemacht:**
+- `data/land.js`: `prices: [170, 500]` statt `price`; `core/land.js` (`stripPrice`), Text im Infofenster und im Hinweis für alte Spielstände.
+- `view3d/kenney3d.js`: Häuser für Steinbruch, Steinmetz, Schmelzhütte, Zimmerei, Feinschmiede, Schlosserei; Helfer `gear` (Zahnrad senkrecht) und `stones`; `parts.spin`, `swing`, `dustSpot` bleiben beim Zusammenfügen für sich. `view3d/scene3d.js`: Zahnräder drehen sich, der Kran schwenkt, Staub steigt auf – nur beim Arbeiten; Abfrage `motionOf`. `kenneyParts.js`: 13 Modelle und die Farbtafeln. `main.js`: `__game.place` für den Browser-Test.
+- Tests: Flächenpreise (`land`, `spital`, `save`), Browser-Test 2D (zweiter Streifen 500) und 3D (sechs Häuser mit ihren bewegten Teilen, Bild `3d-11b-neue-haeuser`).
+- Doku: `STAND.md`, `SPIEL.md`, `BEDIENUNG.md`, `TECHNIK.md`, Archiv.
+
 ### v0.41.2 – Entwurf eigene Häuser und Flächenpreise (22.11.2026, nur Doku)
 
 **Vorgenommen:**

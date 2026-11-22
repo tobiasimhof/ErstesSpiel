@@ -76,15 +76,15 @@ function stripIndex(state, side) {
 }
 
 // Preis eines vollen Streifens: die ersten LAND.perSide je Seite kosten
-// LAND.price, danach gilt LAND_MORE der Reihe nach.
+// LAND.prices (v0.42.0: 170, dann 500), danach gilt LAND_MORE der Reihe nach.
 export function stripPrice(index) {
-  if (index < LAND.perSide) return LAND.price;
+  if (index < LAND.perSide) return LAND.prices[Math.min(index, LAND.prices.length - 1)];
   let upTo = LAND.perSide;
   for (const more of LAND_MORE) {
     upTo += more.strips;
     if (index < upTo) return more.price;
   }
-  return LAND_MORE.at(-1)?.price ?? LAND.price;
+  return LAND_MORE.at(-1)?.price ?? LAND.prices.at(-1);
 }
 
 // ---------- Streifen kaufen ----------
@@ -116,7 +116,7 @@ export function landStrip(state, side) {
   return { side, depth, ...rect, fields: rect.width * rect.height };
 }
 
-// Preis eines Streifens: ein voller Streifen kostet LAND.price (seit v0.27.0
+// Preis eines Streifens: ein voller Streifen kostet LAND.prices (seit v0.27.0
 // ab dem 3. Streifen einer Seite LAND_MORE, siehe stripCost). Nur ein
 // Rest-Streifen am Rand der Welt (bei Spielständen von vor v0.10.2, die schon
 // 2 Reihen gekauft hatten) kostet anteilig weniger, z. B. 2 Reihen 90 Gold.

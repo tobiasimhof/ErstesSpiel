@@ -77,6 +77,30 @@ function chimney(lib, parent, { cx, cz, scale = 1 }) {
   return new THREE.Vector3(cx + 0.34 * scale, 2.63 * scale, cz);
 }
 
+// v0.42.0: ein Zahnrad (Factory Kit) senkrecht an einer Wand oder auf einer
+// Bank – es liegt flach im Modell, deshalb um 90° gekippt. Ergebnis: die
+// Gruppe, die sich beim Arbeiten um z dreht (parts.spin).
+function gear(lib, parent, { x, y, z, scale, variant }) {
+  const g = new THREE.Group();
+  g.position.set(x, y, z);
+  const cog = put(lib, g, FK, 'cog-a', { scale, variant });
+  cog.rotation.x = Math.PI / 2;
+  cog.position.z = 0.04 * scale; // die Scheibe liegt im Modell nicht mittig
+  parent.add(g);
+  return g;
+}
+
+// Kleine Steine (Erz, Blöcke) als einfache Formen
+function stones(g, material, list, size = 0.09) {
+  const geo = new THREE.DodecahedronGeometry(size);
+  for (const [x, y, z, s = 1] of list) {
+    const m = simpleMesh(geo, material, { x, y, z });
+    m.scale.setScalar(s);
+    m.rotation.set(x * 7, z * 5, x * 3);
+    g.add(m);
+  }
+}
+
 function medievalBuilding(lib, building) {
   const g = new THREE.Group();
   const parts = {};
@@ -171,6 +195,141 @@ function medievalBuilding(lib, building) {
       g.add(simpleMesh(new THREE.BoxGeometry(0.3, 0.2, 0.04), glowMat, { x: 0.42, y: 0.25, z: 0.87, shadow: false }));
       g.add(simpleMesh(new THREE.BoxGeometry(0.26, 0.16, 0.12), mat('#444a52', { metalness: 0.6, roughness: 0.4 }), { x: 0.05, y: 0.08, z: 0.98 }));
       parts.glow = [glowMat];
+      break;
+    }
+    // ---------- v0.42.0: eigene Häuser für Level 2–6 (Tobias, Chat 26) ----------
+    // „Dadurch bekommt das Game nochmal mehr Aussehen und man [kann] besser
+    // erkennen, welches Gebäude was gerade macht.“ Je Haus ein Teil, das sich
+    // nur beim Arbeiten bewegt oder leuchtet (parts.spin, swing, glow, Rauch).
+    case 'steinbruch': {
+      // offene Grube mit Felsen; ein Holzkran schwenkt beim Arbeiten einen
+      // Steinblock; geschnittene Blöcke am Ausgang, ein Karren mit Steinen
+      g.add(simpleMesh(new THREE.BoxGeometry(1.76, 0.03, 1.76), mat('#a39a8b'), { y: 0.015, shadow: false }));
+      put(lib, g, CK, 'rocks-large', { x: -0.42, z: -0.38, rot: 0.4, scale: 0.85 });
+      put(lib, g, FT, 'rock-wide', { x: -0.6, z: 0.5, rot: 1.1, scale: 0.4 });
+      put(lib, g, FT, 'rock-small', { x: 0.1, z: -0.72, rot: 2.0, scale: 0.32 });
+      const block = mat('#cfc6b6');
+      for (const [x, y, z] of [[0.6, 0.09, -0.66], [0.8, 0.09, -0.66], [0.7, 0.27, -0.66]]) {
+        g.add(simpleMesh(new THREE.BoxGeometry(0.18, 0.18, 0.18), block, { x, y, z }));
+      }
+      put(lib, g, FT, 'pillar-wood', { x: 0.25, z: 0.2, scale: [1.7, 1.3, 1.7], ...opts });
+      const wood = mat('#7a5232');
+      const arm = new THREE.Group();
+      arm.position.set(0.25, 1.26, 0.2);
+      arm.add(simpleMesh(new THREE.BoxGeometry(1.0, 0.08, 0.08), wood, { x: -0.32 }));
+      arm.add(simpleMesh(new THREE.BoxGeometry(0.02, 0.5, 0.02), mat('#3b3127'), { x: -0.74, y: -0.27, shadow: false }));
+      arm.add(simpleMesh(new THREE.BoxGeometry(0.22, 0.17, 0.22), block, { x: -0.74, y: -0.6 }));
+      g.add(arm);
+      parts.swing = { obj: arm, base: 0.5, amp: 0.75, speed: 1.1, t: 0 };
+      put(lib, g, FT, 'cart', { x: 0.62, z: 0.62, rot: Math.PI / 2 - 0.25, scale: 0.55, ...opts });
+      stones(g, block, [[0.56, 0.33, 0.6], [0.7, 0.33, 0.66], [0.63, 0.43, 0.63, 0.8]]);
+      break;
+    }
+    case 'steinmetz': {
+      // Steinhaus mit großem Rundbogen; davor eine Werkbank mit Steinplatten,
+      // beim Arbeiten steigt Staub auf
+      const h = house(lib, color, {
+        walls: {
+          N: ['wall', 'wall'],
+          W: ['wall', 'wall-window-small'],
+          E: ['wall-window-small', 'wall'],
+          S: ['wall-doorway-round', 'wall-window-stone'],
+        },
+      });
+      h.scale.setScalar(0.8);
+      h.position.set(0, 0, -0.2);
+      g.add(h);
+      put(lib, g, FT, 'stall-bench', { x: 0.38, z: 0.8, rot: Math.PI / 2, scale: 1.15, ...opts });
+      const slab = mat('#d2c9b9');
+      g.add(simpleMesh(new THREE.BoxGeometry(0.24, 0.04, 0.2), slab, { x: 0.12, y: 0.28, z: 0.8 }));
+      g.add(simpleMesh(new THREE.BoxGeometry(0.24, 0.04, 0.2), slab, { x: 0.14, y: 0.32, z: 0.8 }));
+      g.add(simpleMesh(new THREE.BoxGeometry(0.16, 0.16, 0.16), slab, { x: 0.62, y: 0.34, z: 0.8 }));
+      put(lib, g, FT, 'rock-small', { x: -0.6, z: 0.8, rot: 0.7, scale: 0.22 });
+      parts.dustSpot = new THREE.Vector3(0.45, 0.42, 0.8);
+      break;
+    }
+    case 'schmelzhuette': {
+      // runder Steinturm (Castle Kit) mit Schornstein; unten glüht die
+      // Öffnung, oben raucht es beim Arbeiten; davor Erz und fertige Barren
+      const tx = -0.15;
+      const tz = -0.1;
+      const s = 1.05;
+      put(lib, g, CK, 'tower-base', { x: tx, z: tz, scale: s, variant: 'tor' });
+      put(lib, g, CK, 'tower-top', { x: tx, y: 1.31 * s, z: tz, scale: s, variant: 'tor' });
+      const top = new THREE.Group();
+      top.position.set(tx, 1.31 * s, tz);
+      g.add(top);
+      parts.chimneyTop = chimney(lib, top, { cx: -0.14, cz: 0, scale: 0.42 }).add(top.position);
+      const glowMat = mat('#ff8a2a', { emissive: '#ff6a00', emissiveIntensity: 1.2 });
+      g.add(simpleMesh(new THREE.BoxGeometry(0.34, 0.3, 0.06), mat('#3d3a36'), { x: tx, y: 0.2, z: tz + 0.5 }));
+      g.add(simpleMesh(new THREE.BoxGeometry(0.24, 0.2, 0.06), glowMat, { x: tx, y: 0.18, z: tz + 0.52, shadow: false }));
+      parts.glow = [glowMat];
+      stones(g, mat('#5f5a66'), [[-0.68, 0.07, 0.72], [-0.54, 0.07, 0.8], [-0.62, 0.17, 0.76, 0.8], [-0.42, 0.06, 0.7, 0.7]]);
+      const bar = mat('#a3acb7', { roughness: 0.6 });
+      for (const [x, y, z] of [[0.62, 0.05, -0.66], [0.62, 0.05, -0.5], [0.62, 0.13, -0.58]]) {
+        g.add(simpleMesh(new THREE.BoxGeometry(0.34, 0.08, 0.12), bar, { x, y, z }));
+      }
+      break;
+    }
+    case 'zimmerei': {
+      // Holzschuppen mit breitem Tor; davor Bretterstapel und eine Säge,
+      // deren Blatt sich beim Arbeiten dreht
+      const h = house(lib, color, {
+        walls: {
+          N: ['wall-wood', 'wall-wood'],
+          W: ['wall-wood', 'wall-wood'],
+          E: ['wall-wood-window-glass', 'wall-wood'],
+          S: ['wall-wood-doorway-square-wide', 'wall-wood-window-shutters'],
+        },
+      });
+      h.scale.setScalar(0.78);
+      h.position.set(0, 0, -0.22);
+      g.add(h);
+      put(lib, g, FT, 'planks', { x: -0.55, y: 0.0, z: 0.76, scale: 0.45, ...opts });
+      put(lib, g, FT, 'planks-half', { x: -0.62, y: 0.03, z: 0.76, rot: 0.12, scale: 0.45, ...opts });
+      put(lib, g, FT, 'planks', { x: -0.55, y: 0.06, z: 0.76, rot: -0.08, scale: 0.45, ...opts });
+      g.add(simpleMesh(new THREE.BoxGeometry(0.5, 0.22, 0.22), mat('#7a5232'), { x: 0.45, y: 0.11, z: 0.8 }));
+      parts.spin = [{ obj: gear(lib, g, { x: 0.45, y: 0.3, z: 0.8, scale: 0.34, variant: 'stahl' }), axis: 'z', speed: 7 }];
+      break;
+    }
+    case 'feinschmiede': {
+      // kleines Steinhaus mit Spitzdach und runden Fenstern; an der Front ein
+      // Messing-Zahnrad, das sich beim Arbeiten dreht
+      const h = house(lib, color, {
+        walls: {
+          N: ['wall', 'wall'],
+          W: ['wall', 'wall-window-round'],
+          E: ['wall-window-round', 'wall'],
+          S: ['wall-door', 'wall'],
+        },
+        roof: 'roof-point',
+        roofHeight: 2.3,
+      });
+      h.scale.setScalar(0.76);
+      g.add(h);
+      parts.spin = [{ obj: gear(lib, g, { x: 0.38, y: 0.5, z: 0.8, scale: 0.44, variant: 'messing' }), axis: 'z', speed: 1.3 }];
+      break;
+    }
+    case 'schlosserei': {
+      // Steinhaus mit breitem Tor, darin glüht beim Arbeiten die Esse, oben
+      // raucht der Schornstein; davor ein Eisengitter (Gitter und Schlösser)
+      const h = house(lib, color, {
+        walls: {
+          N: ['wall', 'wall'],
+          W: ['wall-window-small', 'wall'],
+          E: ['wall', 'wall-window-small'],
+          S: ['wall-doorway-square-wide', 'wall-window-small'],
+        },
+      });
+      h.scale.setScalar(0.85);
+      g.add(h);
+      parts.chimneyTop = chimney(lib, h, { cx: 0.5, cz: -0.5, scale: 1 }).multiplyScalar(0.85);
+      const glowMat = mat('#ff8a2a', { emissive: '#ff6a00', emissiveIntensity: 1.2 });
+      // die Esse steht gleich hinter dem Tor, damit man die Glut sieht
+      g.add(simpleMesh(new THREE.BoxGeometry(0.36, 0.26, 0.26), mat('#57534d'), { x: -0.42, y: 0.13, z: 0.6 }));
+      g.add(simpleMesh(new THREE.BoxGeometry(0.28, 0.04, 0.2), glowMat, { x: -0.42, y: 0.27, z: 0.6, shadow: false }));
+      parts.glow = [glowMat];
+      put(lib, g, CK, 'metal-gate', { x: 0.5, z: 0.92, rot: Math.PI / 2, scale: 0.85, variant: 'eisen' });
       break;
     }
     case 'lagerhaus': {
@@ -308,13 +467,15 @@ export function buildKenneyBuilding(lib, building) {
   const view = medievalBuilding(lib, building);
   const angle = (-(building.rot ?? 0) * Math.PI) / 2;
   view.group.rotation.y = angle;
-  view.parts.chimneyTop?.applyAxisAngle(new THREE.Vector3(0, 1, 0), angle);
+  const up = new THREE.Vector3(0, 1, 0);
+  view.parts.chimneyTop?.applyAxisAngle(up, angle);
+  view.parts.dustSpot?.applyAxisAngle(up, angle);
   const outer = new THREE.Group();
   outer.add(view.group);
   // v0.40.0: alle Teile des Hauses zu wenigen zusammenfügen (schneller); was
-  // sich bewegt (Wasserrad, Schimmer im Tor), bleibt für sich
-  const { wheel, shimmer } = view.parts;
-  mergeStatic(outer, [wheel, shimmer?.veil, shimmer?.sparks]);
+  // sich bewegt (Wasserrad, Schimmer im Tor, v0.42.0 Zahnräder und Kran), bleibt für sich
+  const { wheel, shimmer, spin = [], swing } = view.parts;
+  mergeStatic(outer, [wheel, shimmer?.veil, shimmer?.sparks, ...spin.map((s) => s.obj), swing?.obj]);
   return { group: outer, parts: view.parts };
 }
 

@@ -138,11 +138,11 @@ test('Aufträge auf Level 10: 4 Stück aus beiden Bereichen, zusammen 2.116 Erfa
 
 // ---------- Mehr Fläche ab Level 10 ----------
 
-test('Datentabelle: ab Level 10 je Seite ein Streifen mehr für 2.000 Gold; die ersten beiden bleiben bei 170', () => {
-  assert.deepEqual(LAND, { depth: 4, perSide: 2, price: 170, roundTo: 10 });
+test('Datentabelle: ab Level 10 je Seite ein Streifen mehr für 2.000 Gold; davor 170 und 500 (v0.42.0)', () => {
+  assert.deepEqual(LAND, { depth: 4, perSide: 2, prices: [170, 500], roundTo: 10 });
   assert.deepEqual(LAND_MORE, [{ level: 10, strips: 1, price: 2000 }]);
   assert.deepEqual([1, 9, 10, 12].map(stripsPerSide), [2, 2, 3, 3]);
-  assert.deepEqual([0, 1, 2].map(stripPrice), [170, 170, 2000]);
+  assert.deepEqual([0, 1, 2].map(stripPrice), [170, 500, 2000]);
 });
 
 test('Die Welt wächst mit dem Level: bis Level 9 38 × 30, ab Level 10 46 × 38', () => {
@@ -194,14 +194,14 @@ test('Alle vier neuen Streifen kaufen: 46 × 38 Felder für 4 × 2.000 Gold, dan
   assert.ok(isOwned(state, -4, -7) && isOwned(state, 41, 30), 'die Ecken gehören dazu');
 });
 
-test('Wer auf Level 10 noch nicht alles gekauft hat, zahlt für die ersten beiden Streifen weiter 170 Gold', () => {
+test('Wer auf Level 10 noch nicht alles gekauft hat, zahlt für die ersten beiden Streifen weiter 170 und 500 Gold', () => {
   const state = levelGame(10, 100000);
   const prices = [];
   for (let i = 0; i < 3; i++) {
     prices.push(landOffer(state, 'E').price);
     assert.equal(buyLand(state, 'E'), 'ok');
   }
-  assert.deepEqual(prices, [170, 170, 2000]);
+  assert.deepEqual(prices, [170, 500, 2000]);
   assert.equal(landOffer(state, 'E'), null);
   assert.equal(buyLand(state, 'E'), 'edge');
   assert.equal(state.plot.x + state.plot.width, 42);
