@@ -3,6 +3,7 @@
 
 import { VERSION } from './version.js';
 import { createNewGame } from './core/state.js';
+import { placeBuilding } from './core/buildings.js';
 import { createStressFactory } from './core/belastungstest.js';
 import { TICK, simulate, tick } from './core/sim.js';
 import { TILE, createCamera, setViewSize, zoomAt, panBy, fitRect, clampCamera } from './view2d/camera.js';
@@ -459,7 +460,7 @@ if (loaded.status === 'ok' && loaded.migratedFrom) {
     from === 5 ? 'Neu: Die Schmiede macht Eisenstangen statt Nägel.' : '',
     from < 7 ? 'Neu: Fläche kaufen – tippe auf die ＋-Schilder am Rand. Deine Fabrik hat Laden-Level 3, alles bleibt freigeschaltet.' : '',
     from < 8 ? 'Neu: Startkapital – du bekommst es einmalig nachgezahlt.' : '',
-    from < 9 ? `Neu: Fläche kostet jetzt immer ${numberFormat.format(LAND.price)} Gold für ${LAND.depth} Reihen; jede Seite lässt sich ${LAND.perSide}× erweitern.` : '',
+    from < 9 ? `Neu: Fläche gibt es jetzt in Streifen von ${LAND.depth} Reihen ab ${numberFormat.format(LAND.prices[0])} Gold; jede Seite lässt sich ${LAND.perSide}× erweitern.` : '',
     from < 10 ? 'Neu: Lagerhäuser lassen sich aus dem Laden-Lager befüllen, Bänder lassen sich leeren.' : '',
     from < 11 ? 'Neu: Aufträge der Bewohner – tippe oben auf „Laden-Level“. Einige Waren heißen jetzt anders, z. B. Mechanischer Schalter → Räderwerk, Mini-Schloss → Vorhängeschloss.' : '',
     from < 12
@@ -660,6 +661,7 @@ window.__game = {
         sign: (id) => view3d.world.signOf(id),
         shimmer: (id) => view3d.world.shimmerOf(id),
         wheel: (id) => view3d.world.wheelOf(id),
+        motion: (id) => view3d.world.motionOf(id),
         hasGhost: () => view3d.world.hasGhost(),
         overlayCount: () => view3d.world.overlayCount(),
         models: () => view3d.models(),
@@ -672,6 +674,13 @@ window.__game = {
     simulate(state, seconds);
     controller.refresh();
     requestDraw();
+  },
+  // v0.42.0: für den Browser-Test – ein Gebäude ohne Kosten und Freischalten
+  // setzen (z. B. die neuen Häuser nebeneinander). Ergebnis: id oder null.
+  place(type, x, y, rot = 0) {
+    const b = placeBuilding(state, type, x, y, rot);
+    requestDraw();
+    return b ? b.id : null;
   },
   // v0.14.0: so tun, als wäre das Spiel so lange zu gewesen
   away(seconds) {

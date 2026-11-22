@@ -1414,7 +1414,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await page.textContent('#modal-content')).includes('Kaufen · 35.000'), 'Als Nächstes lässt sich Theke 4 kaufen');
   await shot('16c-drei-theken');
   await page.tap('#modal-close');
-  // v0.10.2: Jeder Streifen kostet gleich viel (seit v0.23.0 170 Gold), jede Seite geht 2×
+  // v0.10.2: jede Seite geht 2×; v0.42.0: der 1. Streifen kostet 170, der 2. 500 Gold
   const plotNow = await game(page, () => ({ ...window.__game.state.plot }));
   await tapTile(page, plotNow.x + plotNow.width, plotNow.y + 3);
   check((await page.textContent('#info-title')) === 'Fläche kaufen', 'Fläche rechts antippen bietet Fläche an');
@@ -1423,8 +1423,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     `Angebot: 4 Spalten (${await page.textContent('#info-meta')})`,
   );
   await shot('16b-flaeche-level6');
-  // 340 Gold dazu, damit die beiden Käufe den weiteren Ablauf nicht arm machen
-  const goldRight = await game(page, () => (window.__game.state.gold += 340));
+  // 670 Gold dazu, damit die beiden Käufe den weiteren Ablauf nicht arm machen
+  const goldRight = await game(page, () => (window.__game.state.gold += 670));
   await page.locator('#info-actions button', { hasText: 'Kaufen · 170' }).tap();
   await sleep(120);
   // Karte so schieben, dass der nächste Streifen rechts zu sehen ist (danach zurück)
@@ -1435,7 +1435,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }, plotNow.x + plotNow.width + 4);
   await tapTile(page, plotNow.x + plotNow.width + 4, plotNow.y + 3);
   check((await page.textContent('#info-text')).includes('letzte Kauf'), `Zweiter Streifen rechts ist der letzte an dieser Seite (Gold ${goldRight})`);
-  await page.locator('#info-actions button', { hasText: 'Kaufen · 170' }).tap();
+  await page.locator('#info-actions button', { hasText: 'Kaufen · 500' }).tap();
   await sleep(120);
   const right = await game(page, () => ({
     plot: { ...window.__game.state.plot },
@@ -1447,7 +1447,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     `Rechts 2× gekauft: Grundstück reicht bis an den Rand der Welt (${right.plot.width} × ${right.plot.height})`,
   );
   // Kunden können währenddessen kaufen, deshalb höchstens etwas mehr Gold
-  check(right.gold <= goldRight - 340 + 70 && right.gold >= goldRight - 340, `Beide Streifen kosten je 170 Gold (${goldRight} → ${right.gold})`);
+  check(right.gold <= goldRight - 670 + 70 && right.gold >= goldRight - 670, `Die Streifen kosten 170 und 500 Gold (${goldRight} → ${right.gold})`);
   await shot('16c-flaeche-rechts-fertig');
 
   // ---------- Level 7: Beet, Flachsbreche, Webstube (v0.16.0) ----------

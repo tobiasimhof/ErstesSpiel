@@ -321,10 +321,11 @@ test('Spielstand aus v0.10.1 (Version 8): Welt bekommt eine Ecke, gekaufte Fläc
   assert.equal(JSON.stringify({ buildings: s.buildings, belts: s.belts }), before, 'Gebäude und Bänder unverändert');
   assert.deepEqual([s.gold, s.shopLevel, s.landBought], [411, 4, 5], 'kein Startkapital doppelt (1.234 / 3), Level bleibt');
   assert.deepEqual(loaded.notes, []);
-  // Was schon gekauft ist, zählt mit: rechts noch 2 Spalten (Rest, 90 Gold),
-  // oben noch 3 Reihen (130 Gold), links und unten je 2 volle Streifen (170).
-  assert.deepEqual([landOffer(s, 'E').depth, landOffer(s, 'E').price], [2, 90]);
-  assert.deepEqual([landOffer(s, 'N').depth, landOffer(s, 'N').price], [3, 130]);
+  // Was schon gekauft ist, zählt mit: rechts noch 2 Spalten (Rest des
+  // 2. Streifens, seit v0.42.0 anteilig von 500: 250 Gold), oben noch 3 Reihen
+  // (ebenso vom 2. Streifen: 380 Gold), links und unten je 2 volle Streifen (der 1. für 170).
+  assert.deepEqual([landOffer(s, 'E').depth, landOffer(s, 'E').price], [2, 250]);
+  assert.deepEqual([landOffer(s, 'N').depth, landOffer(s, 'N').price], [3, 380]);
   assert.deepEqual([landOffer(s, 'W').depth, landOffer(s, 'W').price], [4, 170]);
   assert.deepEqual([landOffer(s, 'S').depth, landOffer(s, 'S').price], [4, 170]);
 });
@@ -337,8 +338,9 @@ test('Spielstand aus v0.10.1, der schon weiter reicht: die Welt wächst mit, nic
   assert.deepEqual(loaded.state.world, { x: 0, y: -3, width: 40, height: 30 });
   assert.deepEqual(loaded.state.plot, v8.plot);
   assert.equal(landOffer(loaded.state, 'E'), null, 'rechts ist nichts mehr zu kaufen');
-  // unten reicht die Welt jetzt bis y = 27 (Start 19 + 8): noch 1 Reihe für 40 Gold
-  assert.deepEqual([landOffer(loaded.state, 'S').depth, landOffer(loaded.state, 'S').price], [1, 40]);
+  // unten reicht die Welt jetzt bis y = 27 (Start 19 + 8): noch 1 Reihe des
+  // 2. Streifens (seit v0.42.0 anteilig von 500: 130 Gold)
+  assert.deepEqual([landOffer(loaded.state, 'S').depth, landOffer(loaded.state, 'S').price], [1, 130]);
 });
 
 test('Ungültiges Level, Zähler oder Flächenkäufe werden erkannt', () => {
