@@ -61,6 +61,36 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.41.0 – Weiche (Chat 26; wartet auf Tobias' OK und seine Antworten)
+
+**Tobias' Messung nach v0.40.0 (Tablet, Belastungstest):** „Beim heraus und hereinzoomen hab ich jeweils zwischen 60 und 80 Fps.“ Vorher herausgezoomt 40–50 – die 3D-Ansicht reicht damit auch für eine voll bebaute Fläche. Zum Verschieben großer Bereiche hat Tobias noch nichts gesagt. Nach der vereinbarten Reihenfolge kommt jetzt die Weiche, dann „Bereich kopieren“.
+
+**Wozu:** Ab Level 8 brauchen Maschinen zwei Zutaten, ab Level 13 legt der Ofen Holzkohle und Glas auf denselben Ausgang. Heute heißt das: für jede Ware eine eigene Straße. Die Weiche trennt ein gemischtes Band wieder („hier laufen nur Stäbe und hier nur Bleche“, Tobias, Chat 15) – so können zwei Waren ein langes Band teilen und werden erst an der Maschine getrennt.
+
+**Wie die Bänder heute aufteilen:** Ein Band-Feld mit mehreren Ausgängen gibt die Waren abwechselnd in jede Richtung und überspringt Richtungen, die gerade voll sind (`sim.js`). Darauf baut Vorschlag A auf.
+
+**Vorschlag A (Claudes Empfehlung): Ein Band-Feld wird zur Weiche.**
+- Band antippen → im Infofenster „🔀 Weiche“ → eine Ware wählen (oben die Waren, die gerade auf der Strecke liegen, darunter alle bisher freigeschalteten). „Aus“ macht wieder ein normales Band daraus.
+- So ein Band **lässt nur diese Ware hinein.** Darauf steht ein kleines Schild mit dem Warenbild (in 2D das Warenbild auf dem Feld).
+- **Am Abzweig** (wie heute ein Band, das in mehrere Richtungen zeigt): Die eingestellte Ware läuft nur in das Band, das auf sie eingestellt ist; alle anderen Waren laufen in die übrigen, nicht eingestellten Richtungen (abwechselnd, wie heute).
+- **Beispiel:** Ofen → Band → Abzweig nach rechts und geradeaus. Das erste Band rechts auf „Glas“ stellen: Glas geht nach rechts zur Schmiede, Holzkohle (und alles andere) geradeaus.
+- Mehrere Bänder auf dieselbe Ware: Sie bekommen sie abwechselnd. Zwei Waren abzweigen: zwei Weichen hintereinander oder ein Abzweig in drei Richtungen mit zwei eingestellten Bändern.
+- Kostet nichts und geht ab Level 1 (wie das Aufteilen); jederzeit umstellbar. Beim Verschieben und Drehen, auch im markierten Bereich, bleibt die Einstellung erhalten; Abreißen wie bei jedem Band.
+- **Warum A:** baut auf dem Aufteilen auf, das Tobias kennt; kein neues Gebäude, nur ein Feld; man stellt genau das Band ein, das man antippt – kein „links oder rechts?“, wenn die Kamera gedreht ist; passt in bestehende Straßen ohne Umbau.
+
+**Vorschlag B: Weiche als eigenes Gebäude** (1 × 1 in der Bauleiste, kostet Waren, z. B. Holzplatten und eine Eisenstange; ein Eingang, bis zu drei Ausgänge; im Infofenster die Ware je Ausgang). Sichtbarer und mit eigenem Häuschen, aber mehr Arbeit, braucht ein Feld mehr in der Straße, und die Ausgänge im Infofenster müssen sich mit der Kamera mitdrehen, damit „links“ auch links ist.
+
+**Regeln (Vorschlag, für A und B gleich):**
+1. **Passt eine Ware zu keinem Ausgang** (kein freier, nicht eingestellter Ausgang): Sie bleibt stehen, das Band staut sich wie heute; „🧺 Strecke leeren“ hilft. Nichts verschwindet heimlich. Alternative: automatisch ins Laden-Lager.
+2. **Ist das eingestellte Band voll:** Die Ware wartet – sie rutscht nicht in die anderen Richtungen, sonst wäre die Sortierung nicht mehr sauber. Alternative: ausweichen, damit nichts stockt. (Folge von „warten“: Wird eine Ware nicht abgenommen, steht das ganze gemischte Band – das Verhältnis der Waren gehört dann zum Optimieren.)
+3. **Eine Ware je Weiche;** für zwei Waren zwei Weichen.
+
+**Was sich sonst ändert:** Spielstand-Format 19 (ein Band kann auf eine Ware eingestellt sein); alte Spielstände bleiben, wie sie sind. Der Belastungstest bleibt gleich.
+
+**Prüfen:** neue Tests (sortieren, warten, Stau, Spielstand, Verschieben und Drehen), Browser-Test in 3D und 2D (Weiche im Infofenster einstellen, Glas und Holzkohle trennen), Screenshots.
+
+**Fragen an Tobias:** (1) Vorschlag A oder B? (2) Passen die drei Regeln? (3) Wie fühlt sich das Verschieben großer Bereiche seit v0.40.0 an?
+
 ### Entwurf v0.40.0 – 3D schneller und lesbarer (Chat 25, nach dem Belastungstest; angenommen mit Vorschlag A, umgesetzt in v0.40.0 – dazu Bäume nur außerhalb der Welt)
 
 **Tobias' Messung (Tablet, v0.39.0):** herausgezoomt 40–50 Bilder/s, „leicht ruckelig“; nah etwa 70, „sehr flüssig“; „wenn ich größere Produktionen verschieben will, dass es leicht ruckelig ist“.

@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 22.11.2026 – Chat 26: v0.40.0 gemessen, Entwurf Weiche (v0.40.1)
+
+**Tobias:** „Infomiere dich über den aktuellen Stand. Hier ist mein Feedback zu dem letzten Update v40: Beim heraus und hereinzoomen hab ich jeweils zwischen 60 und 80 Fps. Was sind nun die nächsten Schritte ?“
+
+**Claude:** Die 3D-Ansicht reicht damit (vorher herausgezoomt 40–50). Nach der vereinbarten Reihenfolge kommt die Weiche, dann „Bereich kopieren“. Entwurf v0.41.0 „Weiche“ (in `PLAENE.md`): Vorschlag A (Claudes Empfehlung) – ein Band lässt sich auf eine Ware einstellen und nimmt nur noch sie an; am Abzweig läuft die eingestellte Ware nur dorthin, alles andere in die übrigen Richtungen. Vorschlag B – eigenes Gebäude mit Ware je Ausgang. Regeln: Ware ohne passenden Ausgang bleibt stehen (Stau, „Strecke leeren“), ist das eingestellte Band voll, wartet die Ware, eine Ware je Weiche. Fragen: A oder B? Passen die Regeln? Wie fühlt sich das Verschieben großer Bereiche jetzt an?
+
+**Umgesetzt:** v0.40.1 (nur Doku). Wartet auf Tobias' Antworten.
+
 ### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test, Analyse, Belastungstest, 3D schneller (v0.36.1 bis v0.40.0)
 
 **Tobias:** „Hey, ich habe an meinem Pc den neuen Start getestet und bisher fühlt er sich sehr gut an. Die neuen 500 Startgold fallen nicht so schwer ins Gewicht und erleichtern die ersten Level erheblich. Lies dir den aktuellen Stand durch und berichte mir bei welchem Schritt wir gerade sind.“
