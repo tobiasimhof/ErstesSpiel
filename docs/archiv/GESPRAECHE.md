@@ -42,7 +42,7 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Tobias** (nach dem Test von v0.42.0): „Ja, man erkennt alles und es sieht sehr gut aus für den ersten Entwurf. BLeibt auch flüssig auf dem Tablet. Mach gerne weiter“
 
-**Umgesetzt:** v0.43.0 – eigene Häuser für Erntebank, Webstube, Kräuterstube, Schreibstube, Uhrmacherei und Apotheke; Nahaufnahmen vor dem Merge.
+**Umgesetzt:** v0.43.0 – eigene Häuser für Erntebank, Webstube, Kräuterstube, Schreibstube, Uhrmacherei und Apotheke; Nahaufnahmen vor dem Merge. – **Tobias:** „ok“ → live.
 
 ### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test, Analyse, Belastungstest, 3D schneller (v0.36.1 bis v0.40.0)
 
