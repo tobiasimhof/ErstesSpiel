@@ -61,6 +61,22 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf: die nächsten Schritte nach v0.41.0 (Chat 26; wartet auf Tobias' Antworten)
+
+**Tobias' Test von v0.41.0:** „Ja, sie steht an einer sinnvollen Stelle. Der Stempel hilft auch und das schließen der Bauleiste fühlt sich ebenfalls gut an. Lass uns jetzt die nächsten Schritte planen“
+
+**Wo wir stehen:** Die vereinbarte Reihenfolge aus der Analyse ist erledigt – Belastungstest (v0.39.0), 3D schneller (v0.40.0, Tablet 60–80 Bilder/s, Verschieben flüssig), Weiche zurückgestellt (v0.40.2), Bereich kopieren (v0.41.0). Tobias spielt den 3D-Test (zuletzt Level 7, bald 8); im Spiel sind Level 1–13.
+
+**Vorschlag – Reihenfolge (je ein Schritt erst nach Tobias' OK):**
+1. **v0.42.0 Erinnerung zum Sichern (klein):** Der 3D-Spielstand liegt nur im Browser des Tablets – werden die Website-Daten gelöscht oder kommt ein neues Gerät, ist er weg. Nach jedem Aufstieg steht im Glückwunsch ein Knopf „💾 Jetzt sichern“, im Menü „Zuletzt gesichert: vor 3 Tagen“ (bzw. „noch nie“). Kein Zwang, kein ständiges Nachfragen.
+2. **Level 14 und 15 planen (erst nur Doku), sobald Tobias etwa Level 11 erreicht:** damit nach Level 13 nicht Schluss ist (Mörser, neue Maschine zum Zerkleinern; `AUSBLICK.md`). Erst Entwurf, dann je eine Version.
+3. **Kurze Einführung für neue Spieler (mittel),** sobald Tobias den 3D-Test anderen zeigen will. Dafür beim Spielen „Stolpersteine“ notieren: Was war am Anfang unklar?
+4. **Später, ohne feste Reihenfolge:** Rechenwerkzeug für die Zahlen (Rohstoffe, Zeit und Gold je Level – für die Platzhalter); eigene Häuser ab Level 2; Verbesserungen mit Erfahrung; Wirtschaft (M3: Nachfrage, Trends); die echte Fabrik in 3D übernehmen und die 2D-Ansicht entfernen (gemessen: der 2D-Teil des Browser-Tests braucht nur noch etwa 5 Minuten, der 3D-Teil etwa 13 – kaum Zeitgewinn, aber eine Ansicht weniger zu pflegen); gründliche Durchsicht des Codes.
+
+**Beobachten:** Mit „Bereich kopieren“ entstehen schneller mehr Straßen – stellt die Fabrik deutlich mehr her, als die Theken verkaufen (Laden-Lager voll), wäre das das nächste Thema (offene Frage 1, M3).
+
+**Fragen an Tobias:** (1) Passt die Reihenfolge – als Nächstes die Erinnerung zum Sichern? (2) Erinnerung nur nach jedem Aufstieg, oder zusätzlich beim Öffnen, wenn länger als ein paar Tage nicht gesichert wurde? (3) Auf welchem Level ist er im 3D-Test? (4) Stört ihn beim Spielen gerade etwas?
+
 ### Entwurf v0.41.0 – Bereich kopieren (Chat 26; angenommen, umgesetzt in v0.41.0 – dazu: Antippen der Karte schließt die Bauleiste)
 
 **Tobias:** „Ja, das passt so für mich und du kannst das umsetzen. Ja, alles oder nichts ist sehr gut und dann eine kurze Meldung was fehlt“. **Umgesetzt** wie unten; die erste Kopie steht direkt neben dem Original (breite Gruppe darunter, hohe rechts daneben), jede weitere im selben Abstand wie die vorige. **Bauleiste** (Tobias' Anmerkung, Claudes Vorschlag angenommen): kurzes Antippen der Karte schließt sie, Wischen nicht, nach „✓ Bauen“ bleibt sie offen.

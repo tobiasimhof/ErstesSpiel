@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren (v0.40.1 bis v0.41.0)
+### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren (v0.40.1 bis v0.41.1)
 
 **Tobias:** „Infomiere dich über den aktuellen Stand. Hier ist mein Feedback zu dem letzten Update v40: Beim heraus und hereinzoomen hab ich jeweils zwischen 60 und 80 Fps. Was sind nun die nächsten Schritte ?“
 
@@ -23,6 +23,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** (Rückfrage zur Bauleiste): Kurzes Antippen der Karte schließt die Bauleiste, ein angetipptes Gebäude oder Band zeigt dabei sein Infofenster; Wischen verschiebt die Karte weiter, ohne sie zu schließen; nach „✓ Bauen“ bleibt sie offen. Gleich mit in v0.41.0? – **Tobias:** „Ja, mit in v0.41.0“.
 
 **Umgesetzt:** v0.41.0 – Bereich kopieren wie im Entwurf (Stempel, alles oder nichts mit Meldung, was fehlt), dazu schließt Antippen der Karte die Bauleiste. Als Nächstes testet Tobias.
+
+**Tobias:** „Ja, sie steht an einer sinnvollen Stelle. Der Stempel hilft auch und das schließen der Bauleiste fühlt sich ebenfalls gut an. Lass uns jetzt die nächsten Schritte planen“
+
+**Claude:** Die vereinbarte Reihenfolge ist erledigt. Vorschlag (in `PLAENE.md`): v0.42.0 Erinnerung zum Sichern (nach jedem Aufstieg „💾 Jetzt sichern“, im Menü „Zuletzt gesichert: …“); Level 14 und 15 planen, sobald Tobias etwa Level 11 erreicht; kurze Einführung, sobald er den 3D-Test anderen zeigen will; später Rechenwerkzeug, eigene Häuser, Verbesserungen mit Erfahrung, Wirtschaft, 2D entfernen, Code-Durchsicht. Fragen: Reihenfolge? Erinnerung nur nach Aufstieg oder auch beim Öffnen? Welches Level? Stört gerade etwas?
+
+**Umgesetzt:** v0.41.1 (nur Doku). Wartet auf Tobias' Antworten.
 
 ### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test, Analyse, Belastungstest, 3D schneller (v0.36.1 bis v0.40.0)
 
