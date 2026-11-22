@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.40.1 – 3D gemessen, Entwurf Weiche (22.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Messung nach v0.40.0 festhalten und den nächsten Schritt (Weiche) planen.
+
+**Fragen, die wir uns gestellt haben:**
+- Reicht die 3D-Ansicht jetzt? → Ja: Belastungstest heraus- und hineingezoomt 60–80 Bilder/s (vorher herausgezoomt 40–50).
+- Wie passt eine Weiche zu den Bändern? → Ein Band mit mehreren Ausgängen überspringt heute schon Richtungen, die nichts annehmen (`sim.js`); ein Band, das nur eine Ware hineinlässt, macht daraus eine Weiche (Vorschlag A).
+
+**Gemacht:**
+- `STAND.md`, `PLAENE.md` (Entwurf v0.41.0 mit Vorschlag A und B und drei Regeln), Archiv. Versionsnummer 0.40.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 417 von 417 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.40.0 – 3D schneller und lesbarer (22.11.2026)
 
 **Vorgenommen:**
