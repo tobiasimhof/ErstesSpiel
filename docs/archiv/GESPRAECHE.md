@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test, Analyse, Belastungstest (v0.36.1 bis v0.39.0)
+### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test, Analyse, Belastungstest (v0.36.1 bis v0.39.1)
 
 **Tobias:** „Hey, ich habe an meinem Pc den neuen Start getestet und bisher fühlt er sich sehr gut an. Die neuen 500 Startgold fallen nicht so schwer ins Gewicht und erleichtern die ersten Level erheblich. Lies dir den aktuellen Stand durch und berichte mir bei welchem Schritt wir gerade sind.“
 
@@ -33,6 +33,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Tobias:** „Ja, diese Reihenfolge passt mir. Lass uns erst sehen, wie der Belastungstest ist, weil ich bald auf level 8 bin und dann geht es eigentlich zückig weiter auf lvl 9 weil ich bisher alle einzelteile der schlosserei schon automatisiert habe. Level 14 können wir erstmal hinten anstellen, da ich auch auf den token verbrauch achten muss und dadurch immer wieder kleine Spielpausen für mich entstehen. Ich denke, es wird noch etwas dauern, bis ich auf level 13 bin“
 
 **Umgesetzt:** v0.39.0 – Belastungstest wie in der Analyse beschrieben (im Testmodus ☰ → „🏭 Belastungstest (volle Fabrik)“, wird nie gespeichert). Als Nächstes misst Tobias auf dem Tablet.
+
+**Tobias:** „Herausgezoomt waren es 40-50 FPS und es war leicht ruckelig. Beim verschieben ist mir schon aufgefallen, dass wenn ich größere Produktionen verschieben will, dass es leicht ruckelig ist. Wenn ich ganz nah hineinzoome habe ich so 70 FPS und alles fühlt sich sehr flüssig an.“
+
+**Claude:** Entwurf v0.40.0 „3D schneller und lesbarer“ (in `PLAENE.md`): gleiche Teile in einem Rutsch, sparsamere Schatten, Vorschau beim Verschieben nur einmal bauen, Schilder von weitem schlicht (A: nur Statuslicht, B: kleiner). Wartet auf Tobias' OK.
+
+**Umgesetzt:** v0.39.1 (nur Doku).
 
 ### 21.11.2026 – Chat 24 (Fortsetzung): Tobias testet den 3D-Test (nach v0.34.0)
 
