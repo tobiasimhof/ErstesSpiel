@@ -61,7 +61,27 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.41.0 – Weiche (Chat 26; wartet auf Tobias' OK und seine Antworten)
+### Entwurf v0.41.0 – Bereich kopieren (Chat 26; wartet auf Tobias' OK)
+
+**Warum:** Tobias transportiert bewusst jede Ware auf einer eigenen Straße (Chat 26) – Massenproduktion heißt also, dieselbe Straße oft zu bauen, in 3D mit dem Finger mühsam. „Bereich kopieren und das Ganze nochmal bauen finde ich sehr wichtig“ (Tobias, Chat 15). Das Verschieben ist seit v0.40.0 flüssig (Tobias, Chat 26); Kopieren baut darauf auf.
+
+**So geht es:**
+- „✥ Verschieben“ → Bereich markieren wie heute → neuer Knopf **„📋 Kopieren“** neben Verschieben, Drehen und Abreißen.
+- Die Kopie hängt als Vorschau am Finger (grün passt, rot passt nicht) und lässt sich wie beim Verschieben ziehen und um 90° drehen; das Original bleibt stehen.
+- Unten steht, was die Kopie kostet (z. B. „Kostet: 40 Holzplatten, 25 Holzstäbe, 12 Holzblöcke“) und ob das Laden-Lager reicht. **„✓ Hier bauen“** baut alles auf einmal.
+- **Stempel:** Danach bleibt die Kopie am Finger und lässt sich gleich noch einmal setzen, bis **„✕ Fertig“** – so stehen vier gleiche Straßen schnell nebeneinander.
+- **Was mitkommt:** Gebäude mit ihrer Einstellung (was die Maschine herstellt), Bänder mit Richtungen, Abzweigen und Zusammenführungen. **Was nicht mitkommt:** Inhalte – Rohstoff-Vorrat, Waren in Maschinen, auf Bändern und im Lagerhaus, Saat im Beet. Die Kopie ist leer und wird wie gewohnt befüllt.
+- **Kosten:** wie beim Bauen jedes Teils (Gebäude nach Tabelle, je Band 1 Holzblock) aus dem Laden-Lager, kein Gold. Reicht es nicht, wird **nichts** gebaut und eine Meldung sagt, was fehlt („Es fehlen 12 Holzplatten“) – keine halben Straßen. Abreißen gibt die Kosten wie gewohnt zurück.
+- Gleich in 3D und 2D. Spielstand-Format bleibt gleich (die Kopie besteht aus ganz normalen Gebäuden und Bändern).
+
+**Prüfen:** neue Tests (Kopie mit Einstellungen, leer, gedreht, Kosten, zu wenig Waren → nichts gebaut, zweimal setzen), Browser-Test in 3D und 2D (markieren, kopieren, setzen, Fertig), Screenshots.
+
+**Fragen an Tobias:** (1) OK so? (2) Passt „alles oder nichts“ bei zu wenig Waren und der Stempel?
+
+### Entwurf Weiche (Chat 26; von Tobias nicht angenommen – zurückgestellt)
+
+**Tobias' Antwort:** „Das Verschieben fühlt sich jetzt auch sehr flüssig an. Die regeln passen so aber ich bin mit beiden Vorschlägen nicht ganz zufrieden. Bisher kann man alles mit eigenen Straßen transportieren und man kommt sich in der Produktion aktuell nicht in die Quere und es hat den Vorteil, dass sich die Weiche nicht staut, weil manchmal brauchen wir 5 teile davon und 10 teile davon und dann würde sich das ganze wohl stauen, deswegen bräuchten wir eher eine Lösung, die dieses Problem umgeht. Eine Weiche macht nur Sinn, wenn man jedes Teil zum gleichen Verhältnis braucht, wie Räderwerke und Zahnradwellen, dann könnte man das zusammenführen das Band aber müsste es wieder trennen, damit es getrennt rein läuft bzw. es können auch beide Teile in den gleichen Eingang, deswegen sehe ich aktuell noch nicht den Vorteil einer Weiche“ **Claude:** Stimmt – eine Maschine mit zwei Zutaten nimmt jede ihrer Zutaten an jedem Eingang an (bis doppelt so viel, wie ein Stück braucht; `canAccept` in `production.js`). Bei gleichem Verhältnis reicht also ein gemischtes Band in einen Eingang, bei ungleichem staut es sich – mit oder ohne Weiche. Eigene Straßen sind die bessere Lösung; die Weiche ruht, bis ein echtes Problem sie braucht. Nächster Schritt: Bereich kopieren.
+
 
 **Tobias' Messung nach v0.40.0 (Tablet, Belastungstest):** „Beim heraus und hereinzoomen hab ich jeweils zwischen 60 und 80 Fps.“ Vorher herausgezoomt 40–50 – die 3D-Ansicht reicht damit auch für eine voll bebaute Fläche. Zum Verschieben großer Bereiche hat Tobias noch nichts gesagt. Nach der vereinbarten Reihenfolge kommt jetzt die Weiche, dann „Bereich kopieren“.
 
