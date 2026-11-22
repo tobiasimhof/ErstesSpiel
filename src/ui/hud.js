@@ -60,9 +60,10 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
     closeMenu();
     onNewGame();
   });
-  // v0.34.0: 3D-Test mit eigenem Spielstand (Tobias, Chat 24) – und zurück
+  // v0.34.0: 3D-Test mit eigenem Spielstand (Tobias, Chat 24) – und zurück;
+  // seit v0.38.0 ist der 3D-Test der Start, die echte Fabrik hinten angestellt
   const switch3d = document.getElementById('menu-3d');
-  if (is3d) switch3d.textContent = '🗺️ Zurück zur echten Fabrik (2D)';
+  if (is3d) switch3d.textContent = '🗺️ Zur echten Fabrik (2D)';
   onPress(switch3d, () => {
     closeMenu();
     onSwitch3d();

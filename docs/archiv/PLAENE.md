@@ -61,9 +61,11 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Start im 3D-Test (vorgemerkt für v0.38.0; Tobias: „Ja, jetzt das 3D Spiel fokussieren“)
+### Start im 3D-Test (fertig, v0.38.0; Tobias: „Ja, jetzt das 3D Spiel fokussieren“)
 
 Der Link (`index.html` ohne Zusatz) öffnet den 3D-Test mit seinem eigenen Spielstand; die echte Fabrik (2D) bleibt über das Menü ☰ erreichbar und holt beim Öffnen die Zeit nach. Die Spielstände bleiben unter ihren Schlüsseln – nichts wird umgewandelt.
+
+**Umgesetzt (v0.38.0):** ohne Zusatz oder mit `?ansicht=3d` (alte Links) der 3D-Test, mit `?ansicht=2d` die echte Fabrik; Menü im 3D-Test „🗺️ Zur echten Fabrik (2D)“, in 2D „🧊 Zurück zum 3D-Test“; vor jedem Wechsel wird gespeichert. Das Symbol auf dem Startbildschirm (`start_url: ./`) öffnet damit auch den 3D-Test. Lädt die 3D-Ansicht nicht, nennt die Meldung `?ansicht=2d`.
 
 ### Neue Ordnung (fertig, v0.37.0 – wie im Entwurf; dazu die Grafik-Probe entfernt)
 

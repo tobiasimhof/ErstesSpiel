@@ -4,6 +4,24 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.38.0 – Start im 3D-Test (22.11.2026)
+
+**Vorgenommen:**
+- Tobias (Chat 25): „Ja, jetzt das 3D Spiel fokussieren, weil die Kenny dateien alle funktionen und das Spiel spielbar aussieht und funktioniert.“ – der Link soll direkt den 3D-Test öffnen.
+
+**Fragen, die wir uns gestellt haben:**
+- Was passiert mit den Spielständen? → nichts: Der 3D-Test bleibt unter `erstesspiel-spielstand-3d-test`, die echte Fabrik unter `erstesspiel-spielstand`.
+- Wie kommt man zur echten Fabrik? → Menü ☰ → „🗺️ Zur echten Fabrik (2D)“ bzw. `?ansicht=2d`; zurück mit „🧊 Zurück zum 3D-Test“. Alte Links mit `?ansicht=3d` öffnen weiter den 3D-Test.
+
+**Gemacht:**
+- `main.js`: `VIEW_3D` gilt, solange nicht `?ansicht=2d` dasteht; Wechsel `index.html?ansicht=2d` ↔ `index.html`; die Meldung bei einem Ladefehler nennt `?ansicht=2d`. Menütexte in `index.html` und `hud.js`.
+- Tests: `dreid.test.js` (Adresse und Wechsel), Browser-Test – der 2D-Teil öffnet `?ansicht=2d`, der 3D-Teil wechselt aus der echten Fabrik zum Link ohne Zusatz und wieder zurück.
+- Doku: `STAND.md`, `SPIEL.md`, `TECHNIK.md`, `BEDIENUNG.md`, `README.md`, Archiv.
+
+**Geprüft:**
+- `npm test`: 414 von 414 bestanden.
+- Browser-Test (Tablet und Handy im Querformat, Hochformat, schmales Handy, 3D-Test): alle 976 Prüfungen bestanden; Screenshots angesehen (Menü in 2D mit „🧊 Zurück zum 3D-Test“, Start im 3D-Test mit 500 Gold).
+
 ### v0.37.0 – neue Ordnung (22.11.2026)
 
 **Vorgenommen:**

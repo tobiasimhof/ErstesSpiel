@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung (v0.36.1, v0.36.2, v0.37.0)
+### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test (v0.36.1 bis v0.38.0)
 
 **Tobias:** „Hey, ich habe an meinem Pc den neuen Start getestet und bisher fühlt er sich sehr gut an. Die neuen 500 Startgold fallen nicht so schwer ins Gewicht und erleichtern die ersten Level erheblich. Lies dir den aktuellen Stand durch und berichte mir bei welchem Schritt wir gerade sind.“
 
@@ -21,6 +21,8 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Tobias:** „Finde deine Ideen sehr gut. Frage 1: Ja, jetzt das 3D Spiel fokussieren, weil die Kenny dateien alle funktionen und das Spiel spielbar aussieht und funktioniert. Frage 2: Ja können wir gernen entfernen und auf das Hauptspiel auf lvl 7 konzentrieren“
 
 **Umgesetzt:** v0.37.0 – neue Ordnung wie im Entwurf, dazu die Grafik-Probe entfernt (mit dem Modern-Stil, den nur sie hatte, und den Modellen, die nur sie brauchte). Als Nächstes v0.38.0: Der Link öffnet direkt den 3D-Test.
+
+**Umgesetzt:** v0.38.0 – der Link öffnet den 3D-Test; die echte Fabrik über ☰ → „🗺️ Zur echten Fabrik (2D)“ (`?ansicht=2d`), zurück mit „🧊 Zurück zum 3D-Test“. Als Nächstes: Claudes Analyse als Spielentwickler.
 
 ### 21.11.2026 – Chat 24 (Fortsetzung): Tobias testet den 3D-Test (nach v0.34.0)
 

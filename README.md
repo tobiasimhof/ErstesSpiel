@@ -4,7 +4,7 @@ Erstes Spiel gecodet zusammen mit Claude.
 
 Ein **Aufbau- und Fabrikspiel mit Wirtschaftssimulation im Mittelalter** (Arbeitstitel offen). Man baut auf einem kleinen Grundstück seine eigene Fabrik: Rohstoffe wie Holzstämme kauft man beim Händler, verarbeitet sie über Förderbänder in Werkstätten zu immer komplexeren Waren und verkauft sie im eigenen Laden. Mit dem Gold kauft man neue Rohstoffe und mehr Fläche und steigt im Level auf; die Bewohner des wachsenden Ortes geben dafür Aufträge. Gespielt wird im Browser auf Tablet und Handy im Querformat.
 
-**Spielen:** https://tobiasimhof.github.io/ErstesSpiel/ (3D-Test: https://tobiasimhof.github.io/ErstesSpiel/?ansicht=3d)
+**Spielen:** https://tobiasimhof.github.io/ErstesSpiel/ (3D; die alte 2D-Fabrik: https://tobiasimhof.github.io/ErstesSpiel/?ansicht=2d)
 
 ## Dokumentation
 
