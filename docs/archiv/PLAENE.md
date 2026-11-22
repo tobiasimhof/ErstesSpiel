@@ -61,7 +61,9 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.41.0 – Bereich kopieren (Chat 26; wartet auf Tobias' OK)
+### Entwurf v0.41.0 – Bereich kopieren (Chat 26; angenommen, umgesetzt in v0.41.0 – dazu: Antippen der Karte schließt die Bauleiste)
+
+**Tobias:** „Ja, das passt so für mich und du kannst das umsetzen. Ja, alles oder nichts ist sehr gut und dann eine kurze Meldung was fehlt“. **Umgesetzt** wie unten; die erste Kopie steht direkt neben dem Original (breite Gruppe darunter, hohe rechts daneben), jede weitere im selben Abstand wie die vorige. **Bauleiste** (Tobias' Anmerkung, Claudes Vorschlag angenommen): kurzes Antippen der Karte schließt sie, Wischen nicht, nach „✓ Bauen“ bleibt sie offen.
 
 **Warum:** Tobias transportiert bewusst jede Ware auf einer eigenen Straße (Chat 26) – Massenproduktion heißt also, dieselbe Straße oft zu bauen, in 3D mit dem Finger mühsam. „Bereich kopieren und das Ganze nochmal bauen finde ich sehr wichtig“ (Tobias, Chat 15). Das Verschieben ist seit v0.40.0 flüssig (Tobias, Chat 26); Kopieren baut darauf auf.
 

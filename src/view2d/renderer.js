@@ -133,9 +133,10 @@ export function createRenderer(canvas) {
     // blass stehen, die Vorschau zeigt die neue.
     const simAlpha = ui.simAlpha ?? 0;
     const area = ui.area ?? null;
-    const areaGhost = ui.mode === 'areaMove' ? area?.ghost : null;
-    const dimBelts = areaGhost ? new Set(area.sel.belts) : null;
-    const dimBuildings = areaGhost ? new Set(area.sel.buildings) : null;
+    // v0.41.0: Beim Kopieren bleibt das Original ganz zu sehen (und markiert).
+    const areaGhost = ui.mode === 'areaMove' || ui.mode === 'areaCopy' ? area?.ghost : null;
+    const dimBelts = areaGhost && ui.mode === 'areaMove' ? new Set(area.sel.belts) : null;
+    const dimBuildings = areaGhost && ui.mode === 'areaMove' ? new Set(area.sel.buildings) : null;
     if (dimBelts) {
       drawBelts(state, simAlpha, (key) => !dimBelts.has(key), view);
       ctx.globalAlpha = 0.3;
@@ -165,7 +166,7 @@ export function createRenderer(canvas) {
       const ghost = moving ? { ...ui.ghost, prod: moving.prod } : ui.ghost;
       drawBuilding(ghost, cam, { alpha: 0.7, outline: ui.ghost.valid ? COLORS.ghostOk : COLORS.ghostBad });
     }
-    if (area && ui.mode === 'area') drawAreaMarks(state, cam, area);
+    if (area && (ui.mode === 'area' || ui.mode === 'areaCopy')) drawAreaMarks(state, cam, area);
     if (areaGhost?.plan) drawAreaGhost(cam, areaGhost, simAlpha);
 
     drawPlotLabel(state, cam);

@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Entwurf Bereich kopieren (v0.40.1, v0.40.2)
+### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren (v0.40.1 bis v0.41.0)
 
 **Tobias:** „Infomiere dich über den aktuellen Stand. Hier ist mein Feedback zu dem letzten Update v40: Beim heraus und hereinzoomen hab ich jeweils zwischen 60 und 80 Fps. Was sind nun die nächsten Schritte ?“
 
@@ -17,6 +17,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude:** Tobias hat recht – im Code bestätigt: Eine Maschine mit zwei Zutaten nimmt jede Zutat an jedem Eingang an; bei gleichem Verhältnis geht ein gemischtes Band schon heute ohne Weiche, bei ungleichem staut es sich mit oder ohne. Vorschlag: Weiche zurückstellen, als Nächstes „Bereich kopieren“ (Entwurf v0.41.0 in `PLAENE.md`): markieren, „📋 Kopieren“, Kopie am Finger ziehen und drehen, „✓ Hier bauen“, danach gleich noch einmal setzen (Stempel) bis „✕ Fertig“; Gebäude mit Einstellung und Bänder kommen mit, Inhalte nicht; Kosten wie beim Bauen, bei zu wenig Waren wird nichts gebaut. Fragen: OK so? Passen „alles oder nichts“ und der Stempel?
 
 **Umgesetzt:** v0.40.2 (nur Doku). Wartet auf Tobias' OK.
+
+**Tobias:** „Ja, das passt so für mich und du kannst das umsetzen. Ja, alles oder nichts ist sehr gut und dann eine kurze Meldung was fehlt, damit man sich darauf auch konzentrieren kann. Ich hab noch eine kleine Anmerkung: Immer wenn ich das Baumenü offen habe, muss ich es mit X schließen. Ich hätte das gerne, dass es so ist, wie bei dem Lager, wenn ich auf die Fläche klicke, dass dann nur die Fläche zu sehen ist und das Baumenü, dann wieder minimiert. Ich muss das Baumenü immer mit X entfernen und das ist schon sehr nervig“
+
+**Claude** (Rückfrage zur Bauleiste): Kurzes Antippen der Karte schließt die Bauleiste, ein angetipptes Gebäude oder Band zeigt dabei sein Infofenster; Wischen verschiebt die Karte weiter, ohne sie zu schließen; nach „✓ Bauen“ bleibt sie offen. Gleich mit in v0.41.0? – **Tobias:** „Ja, mit in v0.41.0“.
+
+**Umgesetzt:** v0.41.0 – Bereich kopieren wie im Entwurf (Stempel, alles oder nichts mit Meldung, was fehlt), dazu schließt Antippen der Karte die Bauleiste. Als Nächstes testet Tobias.
 
 ### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test, Analyse, Belastungstest, 3D schneller (v0.36.1 bis v0.40.0)
 

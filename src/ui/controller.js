@@ -36,8 +36,10 @@ import {
 import {
   areaLosesWork,
   cleanSelection,
+  copyArea,
   isEmptySelection,
   moveArea,
+  planAreaCopy,
   planAreaMove,
   removeArea,
   selectArea,
@@ -86,8 +88,14 @@ const TEXT = {
   erase: 'Abreißen: über Förderbänder wischen oder ein Gebäude antippen.',
   // v0.11.0: Bereich markieren und verschieben
   area: 'Bereich markieren: mit einem Finger ein Rechteck ziehen oder ein Teil antippen. Zwei Finger bewegen die Karte.',
-  areaMarked: (summary) => `Markiert: ${summary}. Verschieben, abreißen oder neu markieren.`,
+  areaMarked: (summary) => `Markiert: ${summary}. Verschieben, kopieren, abreißen oder neu markieren.`,
   areaMove: 'An die neue Stelle ziehen oder dorthin tippen. ↻ Drehen (Taste R) dreht die ganze Gruppe.',
+  // v0.41.0: Bereich kopieren – was die Kopie kostet und was im Laden-Lager fehlt
+  areaCopy: (cost, missing) =>
+    `Kopie kostet ${costText(cost) || 'nichts'}. ` +
+    (Object.keys(missing).length > 0
+      ? `⚠ Es fehlen: ${costText(missing)}.`
+      : 'Hinziehen, „✓ Hier bauen“ – so oft du willst.'),
 };
 
 // "2 Gebäude und 14 Bänder"
@@ -139,8 +147,8 @@ export function createController({
   function setMode(next, options) {
     mode = next;
     ui.mode = next;
-    // Die Markierung gibt es nur in den Bereich-Modi (v0.11.0).
-    if (next !== 'area' && next !== 'areaMove') ui.area = null;
+    // Die Markierung gibt es nur in den Bereich-Modi (v0.11.0, Kopieren v0.41.0).
+    if (next !== 'area' && next !== 'areaMove' && next !== 'areaCopy') ui.area = null;
     buildBar.setMode(next, options);
     requestDraw();
   }
@@ -792,9 +800,67 @@ export function createController({
   function validateAreaGhost() {
     const g = ui.area?.ghost;
     if (!g) return;
-    g.plan = planAreaMove(state, ui.area.sel, g.x, g.y, g.turns);
+    if (mode === 'areaCopy') {
+      g.plan = planAreaCopy(state, ui.area.sel, g.x, g.y, g.turns);
+      if (g.plan) buildBar.setText(TEXT.areaCopy(g.plan.cost, g.plan.missing));
+    } else {
+      g.plan = planAreaMove(state, ui.area.sel, g.x, g.y, g.turns);
+    }
+    // Beim Kopieren bleibt „✓ Hier bauen“ antippbar, auch wenn Waren fehlen –
+    // dann sagt eine Meldung, was fehlt (Tobias: „alles oder nichts … und dann
+    // eine kurze Meldung was fehlt“).
     buildBar.setConfirmEnabled(Boolean(g.plan?.valid));
     requestDraw();
+  }
+
+  // ---------- Bereich kopieren (v0.41.0) ----------
+  // Die Kopie hängt als Vorschau am Finger; „✓ Hier bauen“ baut sie, danach
+  // wartet die nächste Kopie einen Schritt weiter (Stempel), bis „✕ Fertig“.
+
+  function startAreaCopy() {
+    if (!ui.area) return;
+    const sel = cleanSelection(state, ui.area.sel);
+    const box = selectionBounds(state, sel);
+    if (!box) return;
+    const area = ui.area;
+    setMode('areaCopy', { text: '', confirmLabel: '✓ Hier bauen', cancelLabel: '✕ Fertig' });
+    ui.area = area;
+    area.sel = sel;
+    area.rect = null;
+    // Erste Stelle: direkt neben dem Original – bei einer breiten Gruppe
+    // darunter, bei einer hohen rechts daneben (wie parallele Straßen).
+    const below = { x: box.x, y: box.y + box.height };
+    const right = { x: box.x + box.width, y: box.y };
+    const candidates =
+      box.width >= box.height
+        ? [below, right, { x: box.x, y: box.y - box.height }, { x: box.x - box.width, y: box.y }]
+        : [right, below, { x: box.x - box.width, y: box.y }, { x: box.x, y: box.y - box.height }];
+    const spot = candidates.find((c) => planAreaCopy(state, sel, c.x, c.y, 0)?.valid) ?? candidates[0];
+    area.ghost = { x: spot.x, y: spot.y, turns: 0, plan: null, last: { x: box.x, y: box.y } };
+    validateAreaGhost();
+  }
+
+  function confirmAreaCopy() {
+    const g = ui.area?.ghost;
+    if (!g?.plan?.valid) return;
+    const res = copyArea(state, ui.area.sel, g.x, g.y, g.turns);
+    if (res.result === 'locked') return toastLocked(res.type);
+    if (res.result === 'cost') {
+      panels.toast(`Nichts gebaut – im Laden-Lager fehlen: ${costText(res.missing)}.`, 3500);
+      return validateAreaGhost();
+    }
+    if (res.result !== 'ok') {
+      validateAreaGhost();
+      return panels.toast('Hier ist kein Platz.');
+    }
+    changed();
+    panels.toast(`Kopie gebaut (−${costText(res.cost)}).`, 2500);
+    // Stempel: die nächste Kopie im selben Abstand weiter
+    const step = { x: g.x - g.last.x, y: g.y - g.last.y };
+    g.last = { x: g.x, y: g.y };
+    g.x += step.x;
+    g.y += step.y;
+    validateAreaGhost();
   }
 
   // Dreht die Vorschau um 90° im Uhrzeigersinn, ungefähr um ihre Mitte.
@@ -876,7 +942,7 @@ export function createController({
       rotateGhost();
       return true;
     }
-    if (mode === 'areaMove') {
+    if (mode === 'areaMove' || mode === 'areaCopy') {
       rotateAreaGhost();
       return true;
     }
@@ -916,19 +982,23 @@ export function createController({
     confirmTool() {
       if (mode === 'place') confirmPlace();
       else if (mode === 'areaMove') confirmAreaMove();
+      else if (mode === 'areaCopy') confirmAreaCopy();
       else if (mode === 'belt' || mode === 'erase' || mode === 'area') setMode('menu');
     },
     rotateTool() {
       if (mode === 'place') rotateGhost();
-      else if (mode === 'areaMove') rotateAreaGhost();
+      else if (mode === 'areaMove' || mode === 'areaCopy') rotateAreaGhost();
     },
     cancelTool() {
       if (mode === 'place') cancelPlace();
-      else if (mode === 'areaMove') cancelAreaMove();
+      else if (mode === 'areaMove' || mode === 'areaCopy') cancelAreaMove();
       else if (mode === 'belt' || mode === 'erase' || mode === 'area') setMode('menu');
     },
     areaMoveTool() {
       if (mode === 'area') startAreaMove();
+    },
+    areaCopyTool() {
+      if (mode === 'area') startAreaCopy();
     },
     areaEraseTool() {
       if (mode === 'area') askRemoveArea();
@@ -948,7 +1018,7 @@ export function createController({
     back() {
       if (panels.isModalOpen()) return panels.closeTopmost();
       if (mode === 'place') return cancelPlace();
-      if (mode === 'areaMove') return cancelAreaMove();
+      if (mode === 'areaMove' || mode === 'areaCopy') return cancelAreaMove();
       if (mode === 'belt' || mode === 'erase' || mode === 'area') return setMode('menu');
       if (mode === 'menu') return closeMenu();
       select(null);
@@ -957,12 +1027,16 @@ export function createController({
     onTap(sx, sy) {
       const tile = tileAtScreen(sx, sy);
       if (mode === 'normal' || mode === 'menu') {
+        // v0.41.0 (Tobias): Antippen der Karte schließt die Bauleiste – wie
+        // ein Fenster, das sich beim Tippen daneben schließt. Wischen
+        // verschiebt die Karte weiter, ohne sie zu schließen.
+        if (mode === 'menu') closeMenu();
         tapNormal(tile);
       } else if (mode === 'place') {
         if (isOwned(state, tile.x, tile.y)) moveGhostCenterTo(tile);
       } else if (mode === 'area') {
         markArea(tile, tile);
-      } else if (mode === 'areaMove') {
+      } else if (mode === 'areaMove' || mode === 'areaCopy') {
         if (isOwned(state, tile.x, tile.y)) moveAreaGhostCenterTo(tile);
       } else if (mode === 'belt') {
         if (rotateBelt(state, tile.x, tile.y)) {
@@ -992,7 +1066,7 @@ export function createController({
         drag = { kind: 'area', start: tile };
         ui.area.rect = { a: tile, b: tile };
         markArea(tile, tile);
-      } else if (mode === 'areaMove' && areaGhostContains(tile)) {
+      } else if ((mode === 'areaMove' || mode === 'areaCopy') && areaGhostContains(tile)) {
         const g = ui.area.ghost;
         drag = { kind: 'areaGhost', offsetX: tile.x - g.x, offsetY: tile.y - g.y };
       } else {

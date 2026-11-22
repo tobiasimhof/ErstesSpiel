@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt kurz, wie das Spiel **jetzt** ist (Stand v0.40.0). Einzelheiten stehen in **`docs/inhalte/`** und werden nur gelesen, wenn wir daran arbeiten: `LEVEL.md` (Level, Aufträge, Aufstiege), `GEBAEUDE.md` (Gebäude, Baukosten), `WAREN.md` (Waren, Rezepte, Preise), `BEDIENUNG.md` (Bedienung im Einzelnen), `AUSBLICK.md` (Techbaum, Ideen). Bei jeder Änderung wird der Text **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt kurz, wie das Spiel **jetzt** ist (Stand v0.41.0). Einzelheiten stehen in **`docs/inhalte/`** und werden nur gelesen, wenn wir daran arbeiten: `LEVEL.md` (Level, Aufträge, Aufstiege), `GEBAEUDE.md` (Gebäude, Baukosten), `WAREN.md` (Waren, Rezepte, Preise), `BEDIENUNG.md` (Bedienung im Einzelnen), `AUSBLICK.md` (Techbaum, Ideen). Bei jeder Änderung wird der Text **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
@@ -36,7 +36,7 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 - **Rohstoff-Gebäude** (Holzfällerlager, Steinbruch, Schmelzhütte, Ofen, Erntebank): 1 Rohstoff → 200 Blöcke bzw. Barren in 15 Minuten (Ofen 100, Erntebank 50 in 10 Minuten), Vorrat bis 3; „⏫ Auffüllen“ nimmt erst aus dem Laden-Lager, dann vom Händler.
 - **Maschinen** verarbeiten nach Rezept und lassen sich umstellen (Teile bleiben drin, „↩ Reste ins Laden-Lager“).
 - **Beet:** säen → 30 Minuten wachsen → ernten, von Hand. **Lagerhaus** (2 × 1): 3 Fächer × 50, Puffer und Zusatzlager, von Hand befüllen. **Versandportal** (1 × 1): schickt alles ins Laden-Lager (in 3D ein Burgtor mit Schimmer).
-- **Bauen** geht sofort und kostet Waren aus dem Laden-Lager, kein Gold; Abreißen gibt sie zurück, Verschieben und Drehen kosten nichts. Bauleiste mit den Reitern Holz, Stein, Eisen, Erde, Werkstatt (höchstens 4 Gebäude je Reiter), dazu immer Förderband, Lagerhaus, Portal, „✥ Verschieben“ (Bereich markieren, als Ganzes verschieben, drehen oder abreißen) und Abreißen.
+- **Bauen** geht sofort und kostet Waren aus dem Laden-Lager, kein Gold; Abreißen gibt sie zurück, Verschieben und Drehen kosten nichts. Bauleiste mit den Reitern Holz, Stein, Eisen, Erde, Werkstatt (höchstens 4 Gebäude je Reiter), dazu immer Förderband, Lagerhaus, Portal, „✥ Verschieben“ (Bereich markieren, als Ganzes verschieben, drehen, abreißen oder **kopieren** – die Kopie ist leer, behält die Einstellungen, kostet wie das Bauen und lässt sich mehrmals hintereinander setzen; fehlen Waren, wird nichts gebaut) und Abreißen. Antippen der Karte schließt die Bauleiste.
 
 ## 5. Wirtschaft und Fortschritt
 
