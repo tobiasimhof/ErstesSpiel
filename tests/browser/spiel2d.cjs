@@ -530,6 +530,30 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     'Zuleitung zeigt nach dem Drehen nach unten in den Eingang des Sägewerks',
   );
   check((await mode(page)) === 'area' && (await area()).buildings === 1, 'Danach bleibt die Gruppe markiert');
+  // v0.41.0: Bereich kopieren – Vorschau mit Kosten; fehlen Waren, wird nichts gebaut
+  const sawCount = () => game(page, () => window.__game.state.buildings.filter((b) => b.type === 'saegewerk').length);
+  const sawsBeforeCopy = await sawCount();
+  const savedBlocks = await game(page, () => {
+    const n = window.__game.state.storage.holzblock ?? 0;
+    window.__game.state.storage.holzblock = 5;
+    return n;
+  });
+  await page.tap('#tool-area-copy');
+  await sleep(80);
+  marked = await area();
+  check((await mode(page)) === 'areaCopy' && marked.ghost.valid, `Kopieren: Vorschau neben dem Original (${marked.ghost.x},${marked.ghost.y})`);
+  const copyText2d = await page.textContent('#tool-text');
+  check(copyText2d.includes('40 Holzblöcke') && copyText2d.includes('Es fehlen'), `Kosten und was fehlt stehen unten („${copyText2d}“)`);
+  await shot('19b-bereich-kopieren');
+  await page.tap('#tool-confirm');
+  await sleep(80);
+  check((await sawCount()) === sawsBeforeCopy && (await page.textContent('#toast')).includes('Nichts gebaut'), 'Zu wenig Holzblöcke: nichts gebaut, Meldung');
+  await page.tap('#tool-cancel');
+  await sleep(80);
+  await game(page, (n) => {
+    window.__game.state.storage.holzblock = n;
+  }, savedBlocks);
+  check((await mode(page)) === 'area' && (await area()).buildings === 1, '„✕ Fertig“: zurück, die Gruppe bleibt markiert');
   // Bereich abreißen
   const blocksBeforeErase = await game(page, () => window.__game.state.storage.holzblock ?? 0);
   await page.tap('#tool-area-erase');

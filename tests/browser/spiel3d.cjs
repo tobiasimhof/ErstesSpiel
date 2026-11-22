@@ -263,6 +263,38 @@ async function run3d(browser, baseUrl, device) {
   await page.tap('#tool-confirm');
   await sleep(150);
 
+  // v0.41.0 (Tobias): Wischen lässt die Bauleiste offen, Antippen der Karte schließt sie
+  check(await page.isVisible('#build-bar'), 'Nach „✓ Fertig“ ist die Bauleiste wieder offen');
+  const freeTile = await game(page, () => {
+    const s = window.__game.state;
+    const [tx, tz] = window.__game.view3d.target();
+    for (let r = 0; r < 8; r++) {
+      for (let dy = -r; dy <= r; dy++) {
+        for (let dx = -r; dx <= r; dx++) {
+          const x = Math.round(tx) + dx;
+          const y = Math.round(tz) + dy;
+          const owned = x >= s.plot.x && x < s.plot.x + s.plot.width && y >= s.plot.y && y < s.plot.y + s.plot.height;
+          const used = s.belts[`${x},${y}`] || s.buildings.some((b) => x >= b.x && x < b.x + 2 && y >= b.y && y < b.y + 2);
+          if (owned && !used) return { x, y };
+        }
+      }
+    }
+    return null;
+  });
+  const fp = await tile(freeTile.x, freeTile.y);
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ ...fp, id: 8 }] });
+  for (let st = 1; st <= 6; st++) await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: fp.x + st * 10, y: fp.y, id: 8 }] });
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await sleep(150);
+  check((await game(page, () => window.__game.ui.mode)) === 'menu' && (await page.isVisible('#build-bar')), 'Wischen über die Karte lässt die Bauleiste offen');
+  const fp2 = await tile(freeTile.x, freeTile.y);
+  await page.touchscreen.tap(fp2.x, fp2.y);
+  await sleep(200);
+  check(
+    (await game(page, () => window.__game.ui.mode)) === 'normal' && !(await page.isVisible('#build-bar')) && (await page.isVisible('#btn-build')),
+    'Antippen der Karte schließt die Bauleiste (unten wieder „Laden“ und „Bauen“)',
+  );
+
   // v0.35.0: Bereich markieren, verschieben und drehen – wie im 2D-Spiel
   const areaInfo = () =>
     game(page, () => {
@@ -329,6 +361,49 @@ async function run3d(browser, baseUrl, device) {
     saw1.id === saw0.id && saw1.y === saw0.y + 3 && saw1.rot === (saw0.rot + 1) % 4,
     `Sägewerk gedreht und umgesetzt (${saw0.x},${saw0.y} → ${saw1.x},${saw1.y})`,
   );
+
+  // v0.41.0: Bereich kopieren – Stempel, alles oder nichts
+  const saws = () => game(page, () => window.__game.state.buildings.filter((b) => b.type === 'saegewerk').length);
+  const saws0 = await saws();
+  await game(page, () => {
+    window.__game.state.storage.holzblock = 100;
+  });
+  check(await page.isVisible('#tool-area-copy'), 'Markiert: Knopf „📋 Kopieren“ ist da');
+  await page.tap('#tool-area-copy');
+  await sleep(250);
+  let ci = await areaInfo();
+  const copyText = await page.textContent('#tool-text');
+  check(
+    ci.mode === 'areaCopy' && ci.ghost?.valid && ci.counts.ghost > 0 && ci.counts.marks > 0 && (await page.textContent('#tool-cancel')).includes('Fertig'),
+    `Kopieren: Vorschau neben dem Original, das markiert stehen bleibt (${JSON.stringify(ci.counts)})`,
+  );
+  check(copyText.includes('40 Holzblöcke'), `Kopieren zeigt die Kosten („${copyText}“)`);
+  check(await game(page, (id) => window.__game.view3d.buildingVisible(id), saw0.id), 'Das Original bleibt beim Kopieren zu sehen');
+  await shot('3d-9b-bereich-kopieren');
+  const firstSpot = ci.ghost;
+  // erst mit zu wenig Holzblöcken: nichts wird gebaut, eine Meldung sagt, was fehlt
+  await game(page, () => {
+    window.__game.state.storage.holzblock = 10;
+  });
+  await page.tap('#tool-confirm');
+  await sleep(250);
+  const toastText = (await page.textContent('#toast')) ?? '';
+  check((await saws()) === saws0 && toastText.includes('fehlen') && toastText.includes('30 Holzblöcke'), `Zu wenig Waren: nichts gebaut, Meldung („${toastText}“)`);
+  check((await page.textContent('#tool-text')).includes('Es fehlen'), 'Die Leiste sagt, was fehlt');
+  await game(page, () => {
+    window.__game.state.storage.holzblock = 100;
+  });
+  await page.tap('#tool-confirm');
+  await sleep(250);
+  ci = await areaInfo();
+  check((await saws()) === saws0 + 1 && ci.mode === 'areaCopy', `„✓ Hier bauen“ baut die Kopie (${saws0} → ${await saws()} Sägewerke)`);
+  check(
+    ci.ghost.x - firstSpot.x === firstSpot.x - saw1.x && ci.ghost.y - firstSpot.y === firstSpot.y - saw1.y,
+    `Stempel: die nächste Kopie wartet einen Schritt weiter (${firstSpot.x},${firstSpot.y} → ${ci.ghost.x},${ci.ghost.y})`,
+  );
+  await page.tap('#tool-cancel');
+  await sleep(200);
+  check((await areaInfo()).mode === 'area', '„✕ Fertig“ beendet das Kopieren, der Bereich bleibt markiert');
   await page.tap('#tool-confirm');
   await sleep(150);
   if (await page.isVisible('#build-close')) await page.tap('#build-close');

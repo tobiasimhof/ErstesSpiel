@@ -846,8 +846,10 @@ export function createScene3d({ lib }) {
 
   function syncArea(state, ui) {
     const area = ui.area ?? null;
-    const marking = ui.mode === 'area' && area;
-    const g = ui.mode === 'areaMove' ? area?.ghost : null;
+    // v0.41.0: Beim Kopieren bleibt das Original stehen und markiert.
+    const copying = ui.mode === 'areaCopy';
+    const marking = (ui.mode === 'area' || copying) && area;
+    const g = ui.mode === 'areaMove' || copying ? area?.ghost : null;
     const plan = g?.plan ?? null;
 
     // markierte Gebäude und Bänder, Rahmen beim Ziehen
@@ -883,13 +885,13 @@ export function createScene3d({ lib }) {
     }
 
     // was verschoben wird, ist an der alten Stelle ausgeblendet
-    hidden.buildings = new Set(plan ? area.sel.buildings : []);
-    hidden.belts = new Set(plan ? area.sel.belts : []);
+    hidden.buildings = new Set(plan && !copying ? area.sel.buildings : []);
+    hidden.belts = new Set(plan && !copying ? area.sel.belts : []);
 
     // Vorschau an der neuen Stelle (nur neu gebaut, wenn sich die Drehung
     // ändert – sonst nur verschoben; v0.40.0: „passt / passt nicht“ wechselt
     // nur die Farbe, und die ganze Vorschau ist zu wenigen Teilen zusammengefügt)
-    const gk = plan ? `${g.turns}|${JSON.stringify(area.sel)}` : '';
+    const gk = plan ? `${ui.mode}|${g.turns}|${JSON.stringify(area.sel)}` : '';
     if (!areaGhost || areaGhost.key !== gk) {
       disposeMerged(areaGhostRoot);
       areaGhostRoot.clear();
@@ -932,14 +934,14 @@ export function createScene3d({ lib }) {
     else areaGhostRoot.position.set(0, 0, 0);
 
     // Felder: alte Stelle blass, neue grün bzw. rot, Rahmen um die Vorschau
-    const tk = plan ? JSON.stringify([g.x, g.y, g.turns, plan.valid, plan.tiles.map((t) => (t.ok ? 1 : 0)).join(''), area.sel]) : '';
+    const tk = plan ? JSON.stringify([ui.mode, g.x, g.y, g.turns, plan.valid, plan.tiles.map((t) => (t.ok ? 1 : 0)).join(''), area.sel]) : '';
     if (tk !== tilesKey) {
       tilesKey = tk;
       disposeMerged(areaTiles);
       areaTiles.clear();
       if (plan) {
         // v0.40.0: alle Felder als je ein Teil (wird bei jedem Schritt des Fingers neu gebaut)
-        const old = selectionTiles(state, area.sel).map((t) => ({ x: t.x + 0.5, z: t.y + 0.5, w: 0.94, d: 0.94, y: 0.01 }));
+        const old = copying ? [] : selectionTiles(state, area.sel).map((t) => ({ x: t.x + 0.5, z: t.y + 0.5, w: 0.94, d: 0.94, y: 0.01 }));
         const ok = [];
         const bad = [];
         for (const t of plan.tiles) (t.ok ? ok : bad).push({ x: t.x + 0.5, z: t.y + 0.5, w: 0.96, d: 0.96, y: t.ok ? 0.016 : BELT_TOP + 0.06 });
@@ -1202,6 +1204,8 @@ export function createScene3d({ lib }) {
       return w ? Math.round((w.rotation.x + w.rotation.y) * 1000) / 1000 : null;
     },
     hasGhost: () => Boolean(ghost),
+    // v0.41.0: Beim Kopieren bleibt das Original zu sehen
+    buildingVisible: (id) => views.get(id)?.group.visible ?? false,
     overlayCount: () => overlay.children.length,
     // v0.35.0: Bereich und Fläche
     areaCounts: () => ({ marks: areaMarks.children.length, ghost: areaGhostRoot.children.length, tiles: areaTiles.children.length }),

@@ -330,6 +330,7 @@ const buildBar = createBuildBar({
   onRotate: () => controller.rotateTool(),
   onCancel: () => controller.cancelTool(),
   onAreaMove: () => controller.areaMoveTool(),
+  onAreaCopy: () => controller.areaCopyTool(),
   onAreaErase: () => controller.areaEraseTool(),
   // v0.18.0: Der zuletzt geöffnete Reiter bleibt gemerkt.
   initialTab: settings.buildTab,
@@ -645,6 +646,7 @@ window.__game = {
         },
         landSigns: () => view3d.world.landSigns(),
         areaCounts: () => view3d.world.areaCounts(),
+        buildingVisible: (id) => view3d.world.buildingVisible(id),
         tileAt: (x, y) => view3d.cam.tileAt(x, y),
         yaw: () => view3d.cam.yaw,
         distance: () => view3d.cam.distance,

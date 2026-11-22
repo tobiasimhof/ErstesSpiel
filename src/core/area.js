@@ -1,16 +1,19 @@
 // Bereiche umbauen (v0.11.0): einen rechteckigen Bereich markieren und alles
 // darin – Gebäude und Förderbänder – auf einmal verschieben, drehen oder
 // abreißen. So lässt sich z. B. eine ganze Eisen-Linie umsetzen, ohne jedes
-// Band neu zu legen (Wunsch von Tobias). Kennt keine Grafik.
+// Band neu zu legen (Wunsch von Tobias). v0.41.0: auch kopieren (Tobias:
+// „Bereich kopieren und das Ganze nochmal bauen finde ich sehr wichtig“).
+// Kennt keine Grafik.
 //
 // Eine Auswahl ist { buildings: [Gebäude-IDs], belts: ["x,y", …] }.
 // Gebäude gehören dazu, sobald eines ihrer Felder im Rechteck liegt.
 
-import { BELT_COST } from './data/buildings.js';
+import { BELT_COST, BUILDINGS } from './data/buildings.js';
 import { DIRS, opposite, rotateCW, sortDirs, step } from './dirs.js';
 import { footprintSize, rotateLocal } from './geometry.js';
-import { buildingContents, losesWorkOnRemove } from './production.js';
-import { addAllToStorage } from './shop.js';
+import { isBuildingUnlocked } from './levels.js';
+import { buildingContents, createProductionState, losesWorkOnRemove, productionOf } from './production.js';
+import { addAllToStorage, missingFor, payCost } from './shop.js';
 import { beltAt, buildingAt, findBuilding, isOwned, parseTileKey, tileKey } from './state.js';
 
 // Alles, was in dem Rechteck zwischen den Feldern a und b liegt.
@@ -71,16 +74,19 @@ export function selectionBounds(state, sel) {
 // Rechnet die Auswahl an eine neue Stelle um: (x, y) ist die linke obere Ecke
 // des (gedrehten) Rechtecks um die Auswahl, turns = Vierteldrehungen im
 // Uhrzeigersinn. Gebäude und Bänder werden dabei nicht verändert.
+// copy (v0.41.0): Die Auswahl bleibt stehen und wird kopiert – dann sind ihre
+// Felder Hindernisse, und die Vorschau zeigt leere Gebäude (mit derselben
+// Einstellung) und leere Bänder.
 // Ergebnis: { buildings: [{ id, type, x, y, rot, prod }], belts: { "x,y": Band },
 //             tiles: [{ x, y, ok }], valid, width, height }
-export function planAreaMove(state, sel, x, y, turns = 0) {
+export function planAreaMove(state, sel, x, y, turns = 0, { copy = false } = {}) {
   const box = selectionBounds(state, sel);
   if (!box) return null;
   const t = ((turns % 4) + 4) % 4;
   const width = t % 2 === 1 ? box.height : box.width;
   const height = t % 2 === 1 ? box.width : box.height;
-  const moving = new Set(sel.buildings);
-  const movingBelts = new Set(sel.belts);
+  const moving = new Set(copy ? [] : sel.buildings);
+  const movingBelts = new Set(copy ? [] : sel.belts);
 
   const buildings = [];
   for (const id of sel.buildings) {
@@ -98,7 +104,7 @@ export function planAreaMove(state, sel, x, y, turns = 0) {
       [w, h] = [h, w];
       [boxW, boxH] = [boxH, boxW];
     }
-    buildings.push({ id, type: b.type, x: x + lx, y: y + ly, rot: (b.rot + t) % 4, prod: b.prod });
+    buildings.push({ id, type: b.type, x: x + lx, y: y + ly, rot: (b.rot + t) % 4, prod: copy ? copiedProd(b) : b.prod });
   }
 
   const belts = {};
@@ -107,7 +113,7 @@ export function planAreaMove(state, sel, x, y, turns = 0) {
     if (!belt) continue;
     const pos = parseTileKey(key);
     const local = rotateLocal(pos.x - box.x, pos.y - box.y, box.width, box.height, t);
-    belts[tileKey(x + local.x, y + local.y)] = turnBelt(belt, t);
+    belts[tileKey(x + local.x, y + local.y)] = copy ? { outs: turnBelt(belt, t).outs } : turnBelt(belt, t);
   }
 
   // Passt es? Jedes Zielfeld muss zum Grundstück gehören und frei sein –
@@ -131,6 +137,14 @@ export function planAreaMove(state, sel, x, y, turns = 0) {
     tiles.push({ x: p.x, y: p.y, ok: !blocked(p.x, p.y) });
   }
   return { buildings, belts, tiles, valid: tiles.every((tile) => tile.ok), width, height };
+}
+
+// v0.41.0: Ein kopiertes Gebäude ist leer, behält aber seine Einstellung
+// (was die Maschine herstellt).
+function copiedProd(b) {
+  const prod = createProductionState(b.type);
+  if (productionOf(b.type)?.kind === 'workshop' && productionOf(b.type).recipes.includes(b.prod?.recipe)) prod.recipe = b.prod.recipe;
+  return prod;
 }
 
 // Ein Band, um t Vierteldrehungen gedreht (Ausgänge und die Ware darauf).
@@ -181,6 +195,58 @@ export function moveArea(state, sel, x, y, turns = 0) {
     }
   }
   return { buildings: plan.buildings.map((b) => b.id), belts: Object.keys(plan.belts) };
+}
+
+// ---------- Bereich kopieren (v0.41.0) ----------
+// Die Kopie besteht aus ganz normalen Gebäuden und Bändern: Sie kostet, was
+// das Bauen jedes Teils kostet, und gibt es beim Abreißen zurück. Mit kommen
+// Gebäude mit ihrer Einstellung und Bänder mit Richtungen, Abzweigen und
+// Zusammenführungen; Inhalte (Vorrat, Waren, Saat) nicht. Reichen die Waren
+// nicht, wird nichts gebaut („alles oder nichts“, Tobias).
+
+// Was die Kopie der Auswahl kostet: { Ware: Anzahl }.
+export function copyCost(state, sel) {
+  const cost = {};
+  const add = (c, times = 1) => {
+    for (const [type, n] of Object.entries(c ?? {})) if (n > 0) cost[type] = (cost[type] ?? 0) + n * times;
+  };
+  for (const id of sel.buildings) {
+    const b = findBuilding(state, id);
+    if (b) add(BUILDINGS[b.type].cost);
+  }
+  add(BELT_COST, sel.belts.filter((key) => state.belts[key]).length);
+  return cost;
+}
+
+// Wie planAreaMove, nur für eine Kopie; dazu Kosten, was im Laden-Lager fehlt
+// (missing) und welches Gebäude noch gesperrt ist (locked, sonst null).
+export function planAreaCopy(state, sel, x, y, turns = 0) {
+  const plan = planAreaMove(state, sel, x, y, turns, { copy: true });
+  if (!plan) return null;
+  const cost = copyCost(state, sel);
+  const locked = plan.buildings.find((b) => !isBuildingUnlocked(state, b.type))?.type ?? null;
+  return { ...plan, cost, missing: missingFor(state, cost), locked };
+}
+
+// Baut die Kopie. Ergebnis: { result: 'ok', sel } mit der Auswahl der Kopie,
+// { result: 'space' } (passt hier nicht), { result: 'cost', missing } (Waren
+// fehlen – dann wird nichts gebaut) oder { result: 'locked', type }.
+export function copyArea(state, sel, x, y, turns = 0) {
+  const clean = cleanSelection(state, sel);
+  const plan = planAreaCopy(state, clean, x, y, turns);
+  if (!plan || !plan.valid) return { result: 'space' };
+  if (plan.locked) return { result: 'locked', type: plan.locked };
+  if (Object.keys(plan.missing).length > 0 || !payCost(state, plan.cost)) return { result: 'cost', missing: plan.missing };
+  const ids = [];
+  for (const b of plan.buildings) {
+    const building = { id: state.nextBuildingId++, type: b.type, x: b.x, y: b.y, rot: b.rot, prod: b.prod };
+    const cost = BUILDINGS[b.type].cost ?? {};
+    if (Object.keys(cost).length > 0) building.paid = { ...cost };
+    state.buildings.push(building);
+    ids.push(building.id);
+  }
+  for (const [key, belt] of Object.entries(plan.belts)) state.belts[key] = { outs: [...belt.outs], paid: true };
+  return { result: 'ok', sel: { buildings: ids, belts: Object.keys(plan.belts) }, cost: plan.cost };
 }
 
 // Geht beim Abreißen der Auswahl ein angefangener Rohstoff verloren?

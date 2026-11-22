@@ -4,6 +4,24 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.41.0 – Bereich kopieren, Bauleiste schließt beim Antippen (22.11.2026)
+
+**Vorgenommen:**
+- Den Entwurf „Bereich kopieren“ aus `PLAENE.md` umsetzen (Tobias: „du kannst das umsetzen“, „alles oder nichts ist sehr gut und dann eine kurze Meldung was fehlt“); dazu Tobias' Anmerkung, dass die Bauleiste nur mit ✕ zugeht.
+
+**Fragen, die wir uns gestellt haben:**
+- Wo erscheint die erste Kopie? → direkt neben dem Original: bei einer breiten Gruppe darunter, bei einer hohen rechts daneben (wie parallele Straßen); passt dort nichts, links bzw. oben.
+- Wie funktioniert der Stempel? → Nach „✓ Hier bauen“ wartet die nächste Kopie im selben Abstand wie zwischen der vorigen und ihrem Vorgänger (erst Original → erste Kopie).
+- Darf „✓ Hier bauen“ bei fehlenden Waren antippbar sein? → Ja: Es baut nichts und sagt, was fehlt; unten steht es schon vorher („⚠ Es fehlen: …“). Ausgegraut nur, wenn kein Platz ist.
+- Bauleiste: Was schließt sie? → ein kurzes Antippen der Karte (ein angetipptes Gebäude oder Band zeigt sein Infofenster); Wischen nicht, nach dem Bauen bleibt sie offen (Tobias: „Ja, mit in v0.41.0“).
+
+**Gemacht:**
+- `core/area.js`: `planAreaMove` mit `copy` (Original als Hindernis, leere Gebäude mit Einstellung, leere Bänder), `copyCost`, `planAreaCopy` (Kosten, was fehlt, gesperrtes Gebäude), `copyArea` (alles oder nichts; Gebäude merken die Baukosten, Bänder `paid`). Spielstand-Format unverändert.
+- `ui/controller.js`: Modus `areaCopy` (Vorschau, Text mit Kosten, Stempel, Meldungen), Antippen der Karte schließt die Bauleiste; `ui/buildbar.js` und `index.html`: Knopf „📋 Kopieren“, „✕ Fertig“ statt „✕ Abbrechen“ beim Kopieren.
+- `view3d/scene3d.js` und `view2d/renderer.js`: Beim Kopieren bleibt das Original zu sehen und markiert; Abfrage `buildingVisible` für den Browser-Test.
+- Tests: `tests/kopieren.test.js` (Kosten, leer mit Einstellung, alles oder nichts, kein Platz, gesperrt, gedreht, Stempel, Abreißen, Spielstand); Browser-Test 3D (kopieren, Stempel, zu wenig Waren, Fertig; Bauleiste: Wischen lässt offen, Antippen schließt) und 2D (Vorschau, Kosten, nichts gebaut).
+- Doku: `STAND.md`, `SPIEL.md`, `BEDIENUNG.md`, `TECHNIK.md`, Archiv.
+
 ### v0.40.2 – Weiche zurückgestellt, Entwurf Bereich kopieren (22.11.2026, nur Doku)
 
 **Vorgenommen:**

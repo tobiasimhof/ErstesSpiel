@@ -23,7 +23,7 @@ const TOOLS_AFTER = [
   { tool: 'erase', icon: '🧹', name: 'Abreißen', meta: 'Bänder & Gebäude' },
 ];
 
-const TOOL_MODES = ['place', 'belt', 'erase', 'area', 'areaMove'];
+const TOOL_MODES = ['place', 'belt', 'erase', 'area', 'areaMove', 'areaCopy'];
 
 function buildingEntry(type, extra = {}) {
   const def = BUILDINGS[type];
@@ -90,6 +90,7 @@ export function createBuildBar({
   onRotate,
   onCancel,
   onAreaMove,
+  onAreaCopy,
   onAreaErase,
   initialTab,
   onTabChange,
@@ -106,6 +107,7 @@ export function createBuildBar({
   const toolCancel = document.getElementById('tool-cancel');
   const toolConfirm = document.getElementById('tool-confirm');
   const toolAreaMove = document.getElementById('tool-area-move');
+  const toolAreaCopy = document.getElementById('tool-area-copy');
   const toolAreaErase = document.getElementById('tool-area-erase');
 
   onPress(document.getElementById('btn-shop'), onShop);
@@ -115,6 +117,7 @@ export function createBuildBar({
   onPress(toolCancel, onCancel);
   onPress(toolConfirm, onConfirm);
   onPress(toolAreaMove, onAreaMove);
+  onPress(toolAreaCopy, onAreaCopy);
   onPress(toolAreaErase, onAreaErase);
 
   // Links: immer sichtbar
@@ -217,8 +220,9 @@ export function createBuildBar({
   }
 
   return {
-    // mode: normal | menu | place | belt | erase | area | areaMove
-    setMode(mode, { text = '', confirmLabel = '✓ Fertig' } = {}) {
+    // mode: normal | menu | place | belt | erase | area | areaMove | areaCopy
+    // v0.41.0: cancelLabel – beim Kopieren heißt „Abbrechen“ „✕ Fertig“
+    setMode(mode, { text = '', confirmLabel = '✓ Fertig', cancelLabel = '✕ Abbrechen' } = {}) {
       currentMode = mode;
       stage.dataset.mode = mode;
       bottomBar.hidden = mode !== 'normal';
@@ -229,10 +233,12 @@ export function createBuildBar({
       if (mode === 'menu') buildCover = coverOf(buildBar);
       toolBar.hidden = !TOOL_MODES.includes(mode);
       toolText.textContent = text;
-      const moving = mode === 'place' || mode === 'areaMove';
+      const moving = mode === 'place' || mode === 'areaMove' || mode === 'areaCopy';
       toolRotate.hidden = !moving;
       toolCancel.hidden = !moving;
+      toolCancel.textContent = cancelLabel;
       toolAreaMove.hidden = mode !== 'area';
+      toolAreaCopy.hidden = mode !== 'area';
       toolAreaErase.hidden = mode !== 'area';
       toolConfirm.textContent = confirmLabel;
       toolConfirm.disabled = false;
@@ -247,6 +253,7 @@ export function createBuildBar({
     // Bereich (v0.11.0): Verschieben und Abreißen erst, wenn etwas markiert ist.
     setAreaEnabled(enabled) {
       toolAreaMove.disabled = !enabled;
+      toolAreaCopy.disabled = !enabled;
       toolAreaErase.disabled = !enabled;
     },
     // Neu messen, wenn sich die Bildschirmgröße ändert.

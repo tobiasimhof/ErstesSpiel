@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.40.2 – Weiche zurückgestellt (Tobias: eigene Straßen stauen nicht), Verschieben flüssig, Entwurf „Bereich kopieren“ (nur Doku) |
+| **Aktuelle Version** | v0.41.0 – Bereich kopieren: markieren → „📋 Kopieren“ → „✓ Hier bauen“ (Stempel, bis „✕ Fertig“), leer mit Einstellungen, alles oder nichts mit Meldung; Antippen der Karte schließt die Bauleiste |
 | **Phase** | M2 – Produktionsketten (Level 1–13 im Spiel); Fokus jetzt auf dem 3D-Test |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ (3D-Test; die echte Fabrik: https://tobiasimhof.github.io/ErstesSpiel/?ansicht=2d) |
-| **Nächster Schritt** | **v0.41.0 „Bereich kopieren“** – Entwurf in `docs/archiv/PLAENE.md` (markieren, „📋 Kopieren“, setzen wie ein Stempel; Inhalte bleiben leer; bei zu wenig Waren wird nichts gebaut), wartet auf Tobias' OK. |
+| **Nächster Schritt** | **Tobias testet** Bereich kopieren und die Bauleiste (schließt beim Antippen der Karte). Danach gemeinsam wählen: kleine Gewinne (Erinnerung zum Sichern) oder Level 14 planen. |
 
 **Tobias' 3D-Test – Level 7, bald 8** (Chat 25): Hier spielt und testet Tobias jetzt alles neu. Die Einzelteile der Schlosserei sind schon automatisiert, Level 9 kommt deshalb zügig; bis Level 13 „wird es noch etwas dauern“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“ Gleich aussehende Häuser stören ihn nicht: „Die Logik ist mir erstmal wichtiger.“
 
@@ -25,7 +25,7 @@
 
 **Nächste Schritte** (jeder erst nach Tobias' OK):
 
-- **Reihenfolge (Tobias, Chat 25: „diese Reihenfolge passt mir“; Analyse in `PLAENE.md`):** Belastungstest (v0.39.0) → 3D schneller und lesbarer (v0.40.0: volle Fläche 730 statt 6.200 Zeichenaufrufe je Bild, Tablet 60–80 Bilder/s) → ~~Weiche~~ (zurückgestellt, Chat 26) → **Bereich kopieren** (Entwurf v0.41.0). **Level 14 hinten angestellt** (Tobias: auch wegen des Token-Verbrauchs, bis Level 13 dauert es noch). Kleine Gewinne: Erinnerung zum Sichern, Rechenwerkzeug für die Zahlen.
+- **Reihenfolge (Tobias, Chat 25: „diese Reihenfolge passt mir“; Analyse in `PLAENE.md`):** Belastungstest (v0.39.0) → 3D schneller und lesbarer (v0.40.0: volle Fläche 730 statt 6.200 Zeichenaufrufe je Bild, Tablet 60–80 Bilder/s) → ~~Weiche~~ (zurückgestellt, Chat 26) → Bereich kopieren (v0.41.0). **Level 14 hinten angestellt** (Tobias: auch wegen des Token-Verbrauchs, bis Level 13 dauert es noch). Kleine Gewinne: Erinnerung zum Sichern, Rechenwerkzeug für die Zahlen.
 1. **Tränke-Kapitel:** Level 14 der Mörser (Zimmerei, 1 Steinplatte + 3 Holzstäbe), Level 15 eine neue Maschine, die Kräuter, Kohle und Sand zu Staub zerkleinert, später Tinktur und erster Zaubertrank (`docs/inhalte/AUSBLICK.md`). Leitlinie: alte Maschinen bekommen neue Funktionen, neue nur, wo es Sinn ergibt.
 2. **3D-Grafik** (später, die Logik geht vor): eigene Häuser ab Level 2, Mix aus Modern und Mittelalter als eigener Stil (ohne Greifarm), eine Stadt um die Fabrik, die mit dem Level wächst (Idee).
 3. **Nach hinten verschoben:** Was Tester brauchen (kurze Einführung, M4; Chat 19); **Weiche** (Chat 26: eigene Straßen sind besser, siehe offene Frage 5).
@@ -55,6 +55,12 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.41.0 – Bereich kopieren, Bauleiste schließt beim Antippen (22.11.2026)
+
+- **Warum (Tobias, Chat 26):** „Ja, das passt so für mich und du kannst das umsetzen. Ja, alles oder nichts ist sehr gut und dann eine kurze Meldung was fehlt“. Zur Bauleiste: „Ich muss das Baumenü immer mit X entfernen und das ist schon sehr nervig“ – Claudes Vorschlag (Antippen schließt, Wischen nicht, nach dem Bauen bleibt sie offen) angenommen.
+- **Umgesetzt:** Im markierten Bereich „📋 Kopieren“: Vorschau neben dem Original, Kosten unten, „✓ Hier bauen“ baut alles oder nichts (Meldung, was fehlt), danach wartet die nächste Kopie im selben Abstand (Stempel) bis „✕ Fertig“. Gebäude behalten ihre Einstellung, Inhalte kommen nicht mit. In 2D und 3D; Spielstand-Format unverändert.
+- **Offen:** Tobias' Test.
+
 ### v0.40.2 – Weiche zurückgestellt, Entwurf Bereich kopieren (22.11.2026, nur Doku)
 
 - **Tobias (Chat 26):** „Das Verschieben fühlt sich jetzt auch sehr flüssig an.“ Zur Weiche: „Bisher kann man alles mit eigenen Straßen transportieren … manchmal brauchen wir 5 teile davon und 10 teile davon und dann würde sich das ganze wohl stauen … deswegen sehe ich aktuell noch nicht den Vorteil einer Weiche“.
@@ -64,9 +70,3 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 - **Tobias (Chat 26, Tablet):** „Beim heraus und hereinzoomen hab ich jeweils zwischen 60 und 80 Fps.“ – „Was sind nun die nächsten Schritte ?“
 - **Claudes Entwurf „Weiche“:** A – ein Band auf eine Ware einstellen, B – eigenes Gebäude. Tobias: beide nicht überzeugend, Weiche zurückgestellt (v0.40.2).
-
-### v0.40.0 – 3D schneller und lesbarer (22.11.2026)
-
-- **Warum (Tobias, Chat 25):** Belastungstest herausgezoomt 40–50 Bilder/s, „leicht ruckelig“, größere Bereiche verschieben ruckelt; zum Plan: „Ich würde mich vor Vorschlag a aussprechen.“ – „Gerne ok“. Dazu: „wenn ich über Bäume baue, die Bäume nicht verschwinden, sondern dann einfach aus dem Haus z.b. herausragen.“
-- **Umgesetzt:** Häuser, Pfeile, Bänder, Zaun und Bäume werden zu wenigen Teilen zusammengefügt, Waren und die Funken im Tor als ein Teil je Sorte; Waren werfen keinen Schatten. Von weitem (Tablet ab Abstand 32) nur Statuslichter, beim Heranzoomen wieder die Schilder. Beim Verschieben wird die Vorschau nur einmal gebaut, grün ↔ rot wechselt nur die Farbe, die Felder sind je ein Teil. Bäume und Felsen stehen nur noch außerhalb der Welt. Gemessen (volle Fläche): herausgezoomt 6.200 → 730, nah 3.700 → etwa 450 Zeichenaufrufe je Bild; am Aussehen sonst nichts geändert.
-- **Tobias' Messung:** heraus- und hineingezoomt 60–80 Bilder/s (v0.40.1); Verschieben „sehr flüssig“ (v0.40.2).
