@@ -9,8 +9,8 @@ import { beltLine, inputSides, pathDirections } from '../core/belts.js';
 import { landOffer, landOffers } from '../core/land.js';
 import { buildingProgress, buildingStatus, gardenCrop, growth, isRipe } from '../core/production.js';
 import { BELT_SPEED, TICK } from '../core/sim.js';
-import { buildingFace } from './buildingFace.js';
-import { drawItem } from './itemArt.js';
+import { buildingFace } from '../ui/buildingFace.js';
+import { drawItem } from '../ui/itemArt.js';
 import { beltAt, isOwned, parseTileKey } from '../core/state.js';
 
 const COLORS = {

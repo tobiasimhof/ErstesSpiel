@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung geplant (v0.36.1, v0.36.2)
+### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung (v0.36.1, v0.36.2, v0.37.0)
 
 **Tobias:** „Hey, ich habe an meinem Pc den neuen Start getestet und bisher fühlt er sich sehr gut an. Die neuen 500 Startgold fallen nicht so schwer ins Gewicht und erleichtern die ersten Level erheblich. Lies dir den aktuellen Stand durch und berichte mir bei welchem Schritt wir gerade sind.“
 
@@ -17,6 +17,10 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat gemessen, was es liest: zu Beginn jedes Chats etwa 62 KB Doku (`CLAUDE.md`, `STAND.md`, `SPIEL.md`), beim Programmieren dazu `TECHNIK.md` (37 KB) und die betroffenen Dateien; die großen Ordner (three.js 2,3 MB, Kenneys Modelle 0,9 MB) liest es nie, das Archiv nur per Suche. Vorschlag v0.37.0 „Neue Ordnung“ (Entwurf in `PLAENE.md`): Doku schlanker (`STAND.md` und `SPIEL.md` kürzer, die großen Tabellen nach `docs/inhalte/`, `TECHNIK.md` kurz), Code in Bereiche (`src/core` Logik, `src/ui` Oberfläche für 2D und 3D, `src/view3d` 3D-Grafik, `src/view2d` 2D-Grafik hinten angestellt), Browser-Test aufgeteilt; am Spiel ändert sich nichts. Fragen: Link direkt im 3D-Test öffnen? Grafik-Probe entfernen? Danach die Analyse als Spielentwickler.
 
 **Umgesetzt:** v0.36.2 (nur Doku: Tobias' Wunsch und der Entwurf festgehalten). Wartet auf Tobias' OK.
+
+**Tobias:** „Finde deine Ideen sehr gut. Frage 1: Ja, jetzt das 3D Spiel fokussieren, weil die Kenny dateien alle funktionen und das Spiel spielbar aussieht und funktioniert. Frage 2: Ja können wir gernen entfernen und auf das Hauptspiel auf lvl 7 konzentrieren“
+
+**Umgesetzt:** v0.37.0 – neue Ordnung wie im Entwurf, dazu die Grafik-Probe entfernt (mit dem Modern-Stil, den nur sie hatte, und den Modellen, die nur sie brauchte). Als Nächstes v0.38.0: Der Link öffnet direkt den 3D-Test.
 
 ### 21.11.2026 – Chat 24 (Fortsetzung): Tobias testet den 3D-Test (nach v0.34.0)
 

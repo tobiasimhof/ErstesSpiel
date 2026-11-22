@@ -1,0 +1,25 @@
+# Level und Aufträge
+
+> Gehört zu `docs/SPIEL.md`. Nur lesen, wenn wir an Inhalten arbeiten (neues Level, Preise, Baukosten, Rezepte). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`. Bei jeder Änderung den Text **ersetzen**, nicht ergänzen.
+
+- **Level-Fenster** (oben auf „Laden-Level“ tippen) mit den Reitern „📜 Aufträge“ und „🏘️ Ort & Level“. Es gibt immer **genau einen Auftrag** eines Bewohners; „✓ Abgeben“ nimmt die Waren aus dem Laden-Lager und gibt **Erfahrung** (3 je 10 Gold Warenwert) und **Gold** (so viel, wie die Waren an der Theke bringen). 2–5 Aufträge je Level, nicht überspringbar. Die Erfahrung aller Aufträge eines Levels reicht genau für den Aufstieg; **der Aufstieg kostet Gold**. Erfahrung schaltet frei, Gold kauft das Level, Waren bauen die Maschinen. Am Knopf zeigt ❗ einen abgebbaren Auftrag, ⬆ einen möglichen Aufstieg.
+- **„🧪 Test: Auftrag erledigen“** (im Prototyp immer sichtbar, lila gestrichelt): gibt die Erfahrung, nimmt keine Waren, gibt kein Gold. Vor v1.0 entfernen (`QUEST_TEST_SKIP` in `data/levels.js`).
+- Beim Aufstieg gibt es bis Level 10 einen Rohstoff gratis; ab Level 11 keine Geschenke mehr (Tobias). Ab Level 11 wird der Aufstieg deutlich teurer (Level 11 5.000, Level 12 7.500, Level 13 10.000 Gold), damit man mit dem Gold planen muss („damit wir auch etwas mit dem Cash Flow arbeiten können“; Level 12: „weil man sehr viel Gold verdient“).
+
+| Level | Bauabschnitt | Neu | Aufträge (der Reihe nach) | Erfahrung | Aufstieg kostet | Geschenk |
+|---|---|---|---|---|---|---|
+| 1 | Die ersten Hütten | Holzfällerlager, Sägewerk, Lagerhaus, Versandportal, Förderband; Holzstamm | Zimmermann Jakob: 5 Holzplatten · Jakob: 10 Holzstäbe · Bürgermeisterin Hilde: 20 Holzstäbe + 10 Holzplatten | 81 | – (Start) | 1 Holzstamm (Start) |
+| 2 | Wege und Brunnen | Steinbruch, Steinmetz; Felsbrocken | Steinmetzin Berta: 10 Steinplatten · Berta: 10 Stein-Zahnräder · Hilde: 20 Steinplatten + 10 Holzstäbe | 90 | 30 | 1 Felsbrocken |
+| 3 | Die Dorfschmiede | Schmelzhütte, Schmiede; Eisenerz | Schmied Konrad: 5 Eisenstangen · Konrad: 5 Eisenbleche · Hilde: 10 Eisenstangen + 10 Holzplatten | 162 | 80 | 1 Eisenerz |
+| 4 | Die Mühle am Fluss | Zimmerei | Müllerin Grete: 2 Zahnradwellen · Grete: 4 Räderwerke · Grete: 2 Verstärkte Holzplatten · Hilde: 8 Räderwerke + 4 Zahnradwellen | 714 | 170 | 1 Eisenerz |
+| 5 | Der Markt | Feinschmiede | Händlerin Marta: 2 Scharniere · Marta: 2 Schlüssel · Baumeister Anton: 1 Zirkel · Marta: 3 Scharniere + 3 Schlüssel | 1.495 | 330 | 1 Eisenerz |
+| 6 | Das Stadttor | Schlosserei | Torwächter Ulrich: 4 Gewichtsteine · Ulrich: 2 Vorhängeschlösser · Hilde: 2 Uhrwerke · Ulrich: 4 Vorhängeschlösser + 4 Gewichtsteine | 1.840 | 670 | 1 Eisenerz |
+| 7 | Die Heilstube | Beet, Erntebank, Webstube; Leinsamen | Heilerin Agnes: 5 Verbände · Agnes: 50 Flachsfasern · Ulrich: 15 Verbände · Hilde: 20 Verbände + 50 Flachsfasern | 816 | 1.000 | 1 Leinsamen |
+| 8 | Der Kräutergarten | Kräuterstube; Ringelblumensamen | Agnes: 50 Ringelblüten · Agnes: 5 Heilverbände · Ulrich: 5 Kräuterkompressen · Hilde: 10 Heilverbände + 20 Verbände | 1.305 | 1.330 | 1 Ringelblumensamen |
+| 9 | Die Schreibstube | Ofen (Holzstamm → Holzkohle), Schreibstube (Reiter „Werkstatt“) | Schmied Konrad: 50 Holzkohle · Baumeister Anton: 3 Zeichenbretter · Anton: 2 Reißzeuge · Hilde: 4 Zeichenbretter + 10 Heilverbände | 1.657 | 1.670 | 1 Holzstamm |
+| 10 | Das Spital | Kräuterstube: Wundverband; Schafgarbensamen; mehr Fläche (je Seite noch 1×, je 2.000 Gold) | Heilerin Agnes: 50 Schafgarbenblüten · Agnes: 5 Wundverbände · Hilde: 2 Vorhängeschlösser (für die Arzneien) · Ulrich: 8 Wundverbände + 10 Kräuterkompressen | 2.116 | 2.000 | 1 Schafgarbensamen |
+| 11 | Die Uhrmacherei | Uhrmacherei (Reiter „Werkstatt“) | Hilde: 2 Räderuhren · Händlerin Marta: 2 Kastenschlösser · Baumeister Anton: 1 Sternenuhr · Agnes: 2 Räderuhren + 10 Wundverbände | 2.550 | 5.000 | – (keine Geschenke mehr) |
+| 12 | Die Apotheke | Apotheke (Reiter „Werkstatt“), Schreibstube: Reißbrett; Kamillensamen | Apothekerin Klara: 50 Kamillenblüten · Klara: 10 Kräutermischungen · Heilerin Agnes: 5 Kamillenkissen + 4 Heilpäckchen · Baumeister Anton: 2 Reißbretter | 2.722 | 7.500 | – |
+| 13 | Die Glashütte | Ofen: Glas aus Sand, Schmiede: Fläschchen; Sand; 6. Theke kaufen (150.000 Gold) | Schmied Konrad: 50 Glas · Apothekerin Klara: 25 Fläschchen · Baumeister Anton: 100 Glas + 2 Sternenuhren · Klara: 20 Fläschchen + 15 Kräutermischungen | 3.147 (sammelt sich, bis es Level 14 gibt) | 10.000 | – |
+
+„Erfahrung“ = was die Aufträge des Levels zusammen geben (genau so viel braucht der nächste Aufstieg). Ab Level 4 sind die Stückzahlen so gewählt, dass man auf Masse gehen muss; das Kräuter-Kapitel (Level 7) fängt wieder einfach an.

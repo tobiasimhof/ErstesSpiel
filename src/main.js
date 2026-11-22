@@ -4,15 +4,15 @@
 import { VERSION } from './version.js';
 import { createNewGame } from './core/state.js';
 import { TICK, simulate, tick } from './core/sim.js';
-import { TILE, createCamera, setViewSize, zoomAt, panBy, fitRect, clampCamera } from './view/camera.js';
-import { createRenderer } from './view/renderer.js';
-import { attachInput } from './view/input.js';
-import { createHud } from './view/hud.js';
-import { createPanels } from './view/panels.js';
-import { createBuildBar } from './view/buildbar.js';
-import { createController } from './view/controller.js';
-import { createShopView } from './view/shop.js';
-import { createWarehouseView } from './view/warehouse.js';
+import { TILE, createCamera, setViewSize, zoomAt, panBy, fitRect, clampCamera } from './view2d/camera.js';
+import { createRenderer } from './view2d/renderer.js';
+import { attachInput } from './ui/input.js';
+import { createHud } from './ui/hud.js';
+import { createPanels } from './ui/panels.js';
+import { createBuildBar } from './ui/buildbar.js';
+import { createController } from './ui/controller.js';
+import { createShopView } from './ui/shop.js';
+import { createWarehouseView } from './ui/warehouse.js';
 import { applyTestPack } from './core/market.js';
 import { COUNTERS, TEST_PACK } from './core/data/shop.js';
 import { ITEMS } from './core/data/items.js';
@@ -21,9 +21,9 @@ import { canLevelUp } from './core/levels.js';
 import { canDeliver, currentQuest, xpNeeded } from './core/quests.js';
 import { storageCapacity } from './core/shop.js';
 import { isRipe, productionOf } from './core/production.js';
-import { createLevelView, unlockText } from './view/levels.js';
-import { costText, numberFormat } from './view/format.js';
-import { redrawItemIcons } from './view/itemArt.js';
+import { createLevelView, unlockText } from './ui/levels.js';
+import { costText, numberFormat } from './ui/format.js';
+import { redrawItemIcons } from './ui/itemArt.js';
 import {
   TEST_3D_SLOT,
   clearGame,
@@ -35,12 +35,12 @@ import {
   saveSettings,
   takeLoadedFile,
   useSaveSlot,
-} from './view/storage.js';
-import { createBackup } from './view/backup.js';
+} from './ui/storage.js';
+import { createBackup } from './ui/backup.js';
 import { OFFLINE } from './core/data/offline.js';
 import { catchUpProgress, extendCatchUp, offlineReport, runCatchUp, startCatchUp } from './core/offline.js';
-import { createOfflineView } from './view/offline.js';
-import { onPress } from './view/press.js';
+import { createOfflineView } from './ui/offline.js';
+import { onPress } from './ui/press.js';
 
 // v0.34.0: 3D-Test (Tobias, Chat 24) – index.html?ansicht=3d zeigt das Spiel
 // in 3D mit einem eigenen Spielstand ab Level 1; die echte Fabrik (2D) bleibt
@@ -238,11 +238,6 @@ const hud = createHud({
     backup.save();
   },
   onLoadFile: () => backup.pickFile(),
-  // v0.32.0: Grafik-Probe – erst speichern, dann die eigene Seite öffnen
-  onProbe: () => {
-    saveNow();
-    location.href = 'grafik-probe.html';
-  },
   // v0.34.0: 3D-Test (eigener Spielstand) – erst speichern, dann wechseln
   is3d: VIEW_3D,
   onSwitch3d: () => {

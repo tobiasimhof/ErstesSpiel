@@ -1,15 +1,15 @@
-// v0.33.0: Grafik-Probe, Teil 2 – Kenneys 3D-Modelle (CC0, www.kenney.nl).
-// Tobias hat die Pakete heruntergeladen und hochgeladen (Chat 23); im
-// Projekt liegen nur die Modelle, die die Probe braucht (assets/kenney/).
+// 3D-Test: Kenneys 3D-Modelle (CC0, www.kenney.nl). Tobias hat die Pakete
+// heruntergeladen und hochgeladen (Chat 23); im Projekt liegen nur die
+// Modelle, die der 3D-Test braucht (assets/kenney/).
 //
 // Lädt die Modelle und Farbtafeln und setzt jedem Modell ein gemeinsames
-// Material je Paket und Farbwahl (Kenney bzw. Spiel). Welche Modelle und wie
-// umgefärbt wird, steht in kenneyParts.js.
+// Material je Paket und Farbwahl. Welche Modelle und wie umgefärbt wird,
+// steht in kenneyParts.js.
 
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-import { GLOW, KENNEY_DIR, MODELS, PALETTES, glowPixels, recolorPixels } from './kenneyParts.js';
+import { KENNEY_DIR, MODELS, PALETTES, recolorPixels } from './kenneyParts.js';
 
 // ---------- Laden ----------
 
@@ -75,8 +75,6 @@ export async function loadModels(onProgress = () => {}) {
 
 function createLibrary(images, scenes) {
   const materials = new Map(); // "kit|variant|farbe" → Material
-  const glowing = []; // Materialien mit leuchtenden Feldern (Abend)
-  let glowIntensity = 0;
 
   function material(kit, variant, color) {
     const rules = variant === 'kenney' ? null : PALETTES[kit]?.[variant];
@@ -86,12 +84,6 @@ function createLibrary(images, scenes) {
       if (rules) recolorPixels(data, w, h, rules, color);
     });
     const m = new THREE.MeshStandardMaterial({ map, roughness: 0.9, metalness: 0 });
-    if (GLOW[kit]) {
-      m.emissiveMap = canvasTexture(images[kit], (data, w, h) => glowPixels(data, w, h, GLOW[kit]));
-      m.emissive = new THREE.Color('#ffffff');
-      m.emissiveIntensity = glowIntensity;
-      glowing.push(m);
-    }
     materials.set(key, m);
     return m;
   }
@@ -116,10 +108,5 @@ function createLibrary(images, scenes) {
   return {
     place,
     count: () => Object.keys(scenes).length,
-    // Abend: Laternen leuchten
-    setGlow(intensity) {
-      glowIntensity = intensity;
-      for (const m of glowing) m.emissiveIntensity = intensity;
-    },
   };
 }

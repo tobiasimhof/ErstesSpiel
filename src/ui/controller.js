@@ -67,7 +67,7 @@ import {
 import { affordableCount, canAfford, missingFor, storageCount } from '../core/shop.js';
 import { beltAt, buildingAt, findBuilding, isInWorld, isOwned } from '../core/state.js';
 import { emptyWarehouse, warehouseTotal } from '../core/warehouse.js';
-import { TILE, panBy, screenToWorld } from './camera.js';
+import { TILE, panBy, screenToWorld } from '../view2d/camera.js';
 import { createBuildingBody } from './buildingInfo.js';
 import { costText, formatDuration, numberFormat } from './format.js';
 import { createItemIcon } from './itemArt.js';
@@ -183,7 +183,7 @@ export function createController({
 
   // Aktualisiert Status, Warenbilder und Knöpfe eines Gebäude-Infofensters.
   // v0.19.0 (Tobias): Das Statuslicht steht oben unter dem Namen; die Waren
-  // stehen als Bilder im Inhalt (src/view/buildingInfo.js) – seit v0.20.0 auch
+  // stehen als Bilder im Inhalt (src/ui/buildingInfo.js) – seit v0.20.0 auch
   // bei Beet, Lagerhaus und Versandportal.
   function updateBuildingInfo(id) {
     const b = findBuilding(state, id);
@@ -385,7 +385,7 @@ export function createController({
       }
       if (p?.kind === 'workshop') {
         // v0.19.0: Umgestellt wird über die Knöpfe „Umstellen auf“ im Inhalt
-        // (src/view/buildingInfo.js); die Webstube hat nur eine Einstellung.
+        // (src/ui/buildingInfo.js); die Webstube hat nur eine Einstellung.
         actions.push({
           key: 'leftovers',
           label: '↩ Reste ins Laden-Lager',

@@ -125,7 +125,7 @@ test('Rezepte aus Grundteilen: 10 + 5 Stück, zwei verschiedene Zutaten, jedes R
   }
 });
 
-test('Werte der neuen Waren: Zutaten + 20 % (Tabelle in docs/SPIEL.md)', () => {
+test('Werte der neuen Waren: Zutaten + 20 % (Tabelle in docs/inhalte/WAREN.md)', () => {
   const expected = {
     // v0.23.0: alle Preise durch 3 (vorher 324, 324, 648, 1.296, 1.296, 1.987, 648, 778, 1.944)
     zahnradwelle: 108,

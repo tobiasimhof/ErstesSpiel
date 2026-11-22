@@ -7,7 +7,7 @@
 
 import * as THREE from 'three';
 
-import { loadModels } from '../probe/models.js';
+import { loadModels } from './models.js';
 import { createCamera3d, TURN_STEP } from './camera3d.js';
 import { createScene3d } from './scene3d.js';
 

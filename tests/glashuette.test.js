@@ -23,7 +23,7 @@ import { SAVE_VERSION, deserializeGame, serializeGame } from '../src/core/save.j
 import { storageCount } from '../src/core/shop.js';
 import { simulate } from '../src/core/sim.js';
 import { createNewGame } from '../src/core/state.js';
-import { unlockText } from '../src/view/levels.js';
+import { unlockText } from '../src/ui/levels.js';
 
 function levelGame(level, gold = 0) {
   const state = createNewGame(13);

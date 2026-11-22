@@ -61,7 +61,15 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.37.0 – Neue Ordnung: Doku schlanker, Code in klare Bereiche (Chat 25; wartet auf Tobias' OK)
+### Start im 3D-Test (vorgemerkt für v0.38.0; Tobias: „Ja, jetzt das 3D Spiel fokussieren“)
+
+Der Link (`index.html` ohne Zusatz) öffnet den 3D-Test mit seinem eigenen Spielstand; die echte Fabrik (2D) bleibt über das Menü ☰ erreichbar und holt beim Öffnen die Zeit nach. Die Spielstände bleiben unter ihren Schlüsseln – nichts wird umgewandelt.
+
+### Neue Ordnung (fertig, v0.37.0 – wie im Entwurf; dazu die Grafik-Probe entfernt)
+
+Tobias: „Finde deine Ideen sehr gut.“ – Frage 2: „Ja können wir gernen entfernen“. Mit der Probe fielen der Modern-Stil (Maschinen, Leuchtring, Umgebung mit Laternen, Abendlicht) und die Modelle weg, die nur sie brauchte (15 aus dem Factory Kit, dazu Zauntor, Laterne und Weg; `OrbitControls.js`). Die alten Langfassungen von `STAND.md`, `SPIEL.md` und `TECHNIK.md` liegen wörtlich im Archiv; die Bedienung im Einzelnen steht zusätzlich zu den vier geplanten Dateien in `docs/inhalte/BEDIENUNG.md`.
+
+### Entwurf v0.37.0 – Neue Ordnung: Doku schlanker, Code in klare Bereiche (Chat 25; angenommen, umgesetzt in v0.37.0)
 
 **Tobias (Chat 25):** „Eventuell können wir im repo auch die Dateien so ordnen, dass wir die wichtigsten Sachen in einen neuen Abschnitt reinholen für Logik + Grafik, damit wir die Ordner vom KB - MB verhältnis klein halten können und du nicht so viel lesen musst. Daher würde ich als ersten Schritt eine neue Ordnerstruktur wollen, damit wir einfacher und schneller arbeiten können und im nächsten Schritt will ich dass du in die Rolle eines Spielentwicklers schlüpfst und analysierst, was die sinnvollsten nächsten Schritte wären und mir diese vorschlägst.“
 
