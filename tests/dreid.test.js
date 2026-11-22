@@ -57,10 +57,13 @@ test('3D-Test: eigener Spielstand – die echte Fabrik bleibt unberührt', () =>
 
 test('3D-Test: Menü-Eintrag, Knöpfe ⟲ ⟳ und Wechsel mit Speichern', () => {
   const html = read('index.html');
-  assert.ok(html.includes('id="menu-3d"') && html.includes('🧊 3D-Test (Level 1)'));
+  assert.ok(html.includes('id="menu-3d"') && html.includes('🧊 Zurück zum 3D-Test'));
   assert.ok(html.includes('id="btn-turn-left"') && html.includes('id="btn-turn-right"'));
   const main = read('src/main.js');
-  assert.ok(main.includes("get('ansicht') === '3d'"), 'Adresse ?ansicht=3d');
+  // v0.38.0: Der Link öffnet den 3D-Test, die echte Fabrik ist ?ansicht=2d
+  assert.ok(main.includes("get('ansicht') !== '2d'"), 'ohne Zusatz der 3D-Test, ?ansicht=2d die echte Fabrik');
+  assert.ok(main.includes("location.href = VIEW_3D ? 'index.html?ansicht=2d' : 'index.html';"), 'Wechsel zwischen beiden');
+  assert.ok(read('src/ui/hud.js').includes("'🗺️ Zur echten Fabrik (2D)'"));
   assert.ok(main.includes('if (VIEW_3D) useSaveSlot(TEST_3D_SLOT);'), 'eigener Spielstand vor dem ersten Laden');
   assert.ok(main.indexOf('useSaveSlot(TEST_3D_SLOT)') < main.indexOf('const loaded = loadGame();'));
   assert.ok(/onSwitch3d: \(\) => \{\s*saveNow\(\);/.test(main), 'vor dem Wechsel wird gespeichert');

@@ -1,8 +1,8 @@
 // v0.34.0: 3D-Test (Tobias, Chat 24) – verbindet die 3D-Welt (scene3d.js),
 // die Kamera (camera3d.js) und three.js mit dem Spiel (main.js).
 //
-// Wird nur im 3D-Test geladen (index.html?ansicht=3d, über das Menü ☰): Das
-// 2D-Spiel lädt weder diese Datei noch three.js. Die Spielregeln, die
+// Wird nur im 3D-Test geladen (seit v0.38.0 der Start; die echte Fabrik
+// unter index.html?ansicht=2d lädt weder diese Datei noch three.js). Die Spielregeln, die
 // Steuerung und alle Fenster bleiben dieselben – nur gezeichnet wird anders.
 
 import * as THREE from 'three';

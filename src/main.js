@@ -42,10 +42,12 @@ import { catchUpProgress, extendCatchUp, offlineReport, runCatchUp, startCatchUp
 import { createOfflineView } from './ui/offline.js';
 import { onPress } from './ui/press.js';
 
-// v0.34.0: 3D-Test (Tobias, Chat 24) – index.html?ansicht=3d zeigt das Spiel
-// in 3D mit einem eigenen Spielstand ab Level 1; die echte Fabrik (2D) bleibt
-// unberührt. Spielregeln, Steuerung und Fenster sind dieselben.
-const VIEW_3D = new URLSearchParams(location.search).get('ansicht') === '3d';
+// v0.34.0: 3D-Test (Tobias, Chat 24) – das Spiel in 3D mit einem eigenen
+// Spielstand ab Level 1; die echte Fabrik (2D) bleibt unberührt. Spielregeln,
+// Steuerung und Fenster sind dieselben. Seit v0.38.0 öffnet der Link den
+// 3D-Test (Tobias, Chat 25: „Ja, jetzt das 3D Spiel fokussieren“); die echte
+// Fabrik zeigt index.html?ansicht=2d (alte Links mit ?ansicht=3d gehen weiter).
+const VIEW_3D = new URLSearchParams(location.search).get('ansicht') !== '2d';
 if (VIEW_3D) useSaveSlot(TEST_3D_SLOT);
 
 const loaded = loadGame();
@@ -85,7 +87,7 @@ async function start3d() {
     box.querySelector('.catchup-icon').textContent = '⏩';
     return view;
   } catch (err) {
-    text.textContent = '⚠️ Die 3D-Ansicht konnte nicht laden. Bitte neu laden – oder über index.html zurück zur echten Fabrik.';
+    text.textContent = '⚠️ Die 3D-Ansicht konnte nicht laden. Bitte neu laden – die echte Fabrik (2D) öffnet index.html?ansicht=2d.';
     throw err;
   } finally {
     window.__loading3d = false;
@@ -239,10 +241,11 @@ const hud = createHud({
   },
   onLoadFile: () => backup.pickFile(),
   // v0.34.0: 3D-Test (eigener Spielstand) – erst speichern, dann wechseln
+  // (seit v0.38.0 ist der 3D-Test der Start, die echte Fabrik ?ansicht=2d)
   is3d: VIEW_3D,
   onSwitch3d: () => {
     saveNow();
-    location.href = VIEW_3D ? 'index.html' : 'index.html?ansicht=3d';
+    location.href = VIEW_3D ? 'index.html?ansicht=2d' : 'index.html';
   },
 });
 hud.setTestMode(Boolean(settings.testMode), TEST_SPEED);

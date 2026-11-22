@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt kurz, wie das Spiel **jetzt** ist (Stand v0.37.0). Einzelheiten stehen in **`docs/inhalte/`** und werden nur gelesen, wenn wir daran arbeiten: `LEVEL.md` (Level, Aufträge, Aufstiege), `GEBAEUDE.md` (Gebäude, Baukosten), `WAREN.md` (Waren, Rezepte, Preise), `BEDIENUNG.md` (Bedienung im Einzelnen), `AUSBLICK.md` (Techbaum, Ideen). Bei jeder Änderung wird der Text **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt kurz, wie das Spiel **jetzt** ist (Stand v0.38.0). Einzelheiten stehen in **`docs/inhalte/`** und werden nur gelesen, wenn wir daran arbeiten: `LEVEL.md` (Level, Aufträge, Aufstiege), `GEBAEUDE.md` (Gebäude, Baukosten), `WAREN.md` (Waren, Rezepte, Preise), `BEDIENUNG.md` (Bedienung im Einzelnen), `AUSBLICK.md` (Techbaum, Ideen). Bei jeder Änderung wird der Text **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
@@ -17,8 +17,8 @@
 
 ## 2. Zwei Spielstände: 3D-Test und echte Fabrik
 
-- **3D-Test** (Menü ☰ → „🧊 3D-Test (Level 1)“, Adresse `?ansicht=3d`): das Spiel in 3D mit eigenem Spielstand ab Level 1. **Hier spielt und testet Tobias jetzt** (Chat 25: Level 7). Sichern, Laden und „Neues Spiel“ betreffen dort nur den 3D-Test; zurück über „🗺️ Zurück zur echten Fabrik (2D)“.
-- **Echte Fabrik (2D)** – hinten angestellt (Tobias, Chat 25): Tobias' Fabrik auf Level 13 in der Draufsicht mit Platzhalter-Grafik. Sie läuft weiter und holt beim Öffnen die Zeit nach.
+- **3D-Test** – der Start (der Link ohne Zusatz): das Spiel in 3D mit eigenem Spielstand ab Level 1. **Hier spielt und testet Tobias jetzt** (Chat 25: Level 7). Sichern, Laden und „Neues Spiel“ betreffen dort nur den 3D-Test.
+- **Echte Fabrik (2D)** – hinten angestellt (Tobias, Chat 25): Tobias' Fabrik auf Level 13 in der Draufsicht mit Platzhalter-Grafik, über ☰ → „🗺️ Zur echten Fabrik (2D)“ (Adresse `?ansicht=2d`), zurück mit „🧊 Zurück zum 3D-Test“. Sie läuft weiter und holt beim Öffnen die Zeit nach.
 - Spielregeln, Fenster und Steuerung sind in beiden gleich; neue Inhalte gibt es in beiden.
 
 ## 3. Kernschleife und Zeit

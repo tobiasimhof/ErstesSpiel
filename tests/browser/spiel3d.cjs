@@ -50,8 +50,9 @@ async function run3d(browser, baseUrl, device) {
   const shot = (name) => page.screenshot({ path: path.join(OUT, `${device.name}-${name}.png`) });
   const vp = device.viewport;
 
-  // Die echte Fabrik (2D) mit etwas Gold – sie darf sich durch den 3D-Test nicht ändern
-  await page.goto(baseUrl);
+  // Die echte Fabrik (2D, seit v0.38.0 ?ansicht=2d) mit etwas Gold – sie darf
+  // sich durch den 3D-Test nicht ändern
+  await page.goto(`${baseUrl}?ansicht=2d`);
   await waitForGame(page);
   await game(page, () => {
     window.__game.state.gold = 4321;
@@ -62,10 +63,11 @@ async function run3d(browser, baseUrl, device) {
   const menuBox = await page.locator('#menu').boundingBox();
   check(
     (await page.textContent('#menu-3d')).includes('3D-Test') && menuBox.y + menuBox.height <= vp.height,
-    `Menü ☰ zeigt „🧊 3D-Test (Level 1)“ und passt auf den Bildschirm (${Math.round(menuBox.y + menuBox.height)} ≤ ${vp.height})`,
+    `Menü ☰ zeigt „🧊 Zurück zum 3D-Test“ und passt auf den Bildschirm (${Math.round(menuBox.y + menuBox.height)} ≤ ${vp.height})`,
   );
   await page.tap('#menu-3d');
-  await page.waitForURL(/ansicht=3d/);
+  // v0.38.0: Der 3D-Test ist der Start – der Link ohne Zusatz
+  await page.waitForURL((u) => !u.search.includes('ansicht'));
   await page.waitForFunction(() => window.__game?.view3d && window.__game.camera.viewWidth > 0, null, { timeout: 30000 });
   // so hat die echte Fabrik beim Wechsel gespeichert – der 3D-Test darf daran nichts ändern
   const real = await game(page, () => localStorage.getItem('erstesspiel-spielstand'));
@@ -368,9 +370,9 @@ async function run3d(browser, baseUrl, device) {
   // Zurück zur echten Fabrik
   await page.tap('#btn-menu');
   await sleep(100);
-  check((await page.textContent('#menu-3d')).includes('Zurück zur echten Fabrik'), 'Menü im 3D-Test: „Zurück zur echten Fabrik (2D)“');
+  check((await page.textContent('#menu-3d')).includes('Zur echten Fabrik'), 'Menü im 3D-Test: „🗺️ Zur echten Fabrik (2D)“');
   await page.tap('#menu-3d');
-  await page.waitForURL((u) => !u.search.includes('ansicht=3d'));
+  await page.waitForURL(/ansicht=2d/);
   await waitForGame(page);
   const back = await game(page, () => ({ gold: window.__game.state.gold, view3d: window.__game.view3d }));
   check(back.gold === 4321 && back.view3d === null, `Zurück in der echten Fabrik (2D, ${back.gold} Gold)`);

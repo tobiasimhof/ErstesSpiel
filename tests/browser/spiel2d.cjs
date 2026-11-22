@@ -47,7 +47,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
   const shot = (name) => page.screenshot({ path: path.join(OUT, `${device.name}-${name}.png`) });
 
-  await page.goto(baseUrl);
+  await page.goto(`${baseUrl}?ansicht=2d`); // v0.38.0: die echte Fabrik
   await waitForGame(page);
 
   // ---------- Start ----------
@@ -2640,7 +2640,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     return data.saveVersion;
   });
   check(backdated === 18, `Spielstand-Version 18 (${backdated})`);
-  await page2.goto(baseUrl);
+  await page2.goto(`${baseUrl}?ansicht=2d`);
   await waitForGame(page2);
   await page2.waitForFunction(() => !window.__game.isCatchingUp(), null, { timeout: 20000 });
   await sleep(200);
@@ -2819,7 +2819,7 @@ async function runPortrait(browser, baseUrl) {
     isMobile: true,
   });
   const page = await context.newPage();
-  await page.goto(baseUrl);
+  await page.goto(`${baseUrl}?ansicht=2d`); // v0.38.0: die echte Fabrik
   await page.waitForFunction(() => window.__game);
   check(await page.isVisible('#rotate-overlay'), 'Hochformat zeigt „Bitte drehen“');
   await page.screenshot({ path: path.join(OUT, 'handy-hoch.png') });
@@ -2839,7 +2839,7 @@ async function runNarrowPhone(browser, baseUrl) {
     isMobile: true,
   });
   const page = await context.newPage();
-  await page.goto(baseUrl);
+  await page.goto(`${baseUrl}?ansicht=2d`); // v0.38.0: die echte Fabrik
   await page.waitForFunction(() => window.__game);
   const tabsFit = () =>
     page.evaluate(() =>
