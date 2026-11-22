@@ -8,7 +8,7 @@
 
 import * as THREE from 'three';
 
-import { BUILDINGS } from '../core/data/buildings.js';
+import { BUILDINGS, TAB_COLORS } from '../core/data/buildings.js';
 import { BELT_SCALE_Y, BELT_WIDTH, FACE, beltPieces } from './kenneyParts.js';
 import { mergeStatic } from './merge.js';
 
@@ -104,6 +104,34 @@ function gear(lib, parent, { x, y, z, scale, variant }) {
   cog.position.z = 0.04 * scale; // die Scheibe liegt im Modell nicht mittig
   parent.add(g);
   return g;
+}
+
+// v0.43.0: ein Wagenrad (steht im Modell seitlich versetzt) als Gruppe, die
+// sich um ihre Mitte dreht; das Rad zeigt nach Süden (zur Kamera)
+function spinningWheel(lib, parent, { x, y, z, scale, color }) {
+  const holder = new THREE.Group();
+  holder.position.set(x, y, z);
+  holder.rotation.y = Math.PI / 2;
+  const spinner = new THREE.Group();
+  const w = put(lib, spinner, FT, 'wheel', { x: -0.32 * scale, y: -0.24 * scale, scale, color });
+  w.position.x = -0.32 * scale;
+  holder.add(spinner);
+  parent.add(holder);
+  return spinner;
+}
+
+// v0.43.0: ein Banner, das oben aufgehängt ist und beim Arbeiten leicht
+// schwingt (parts.sway). Es hängt an der Außenseite einer Wand nach side.
+function hangingBanner(lib, parent, { x, z, side, top = 1, color }) {
+  const pivot = new THREE.Group();
+  pivot.position.set(x, top, z);
+  pivot.rotation.y = FACE[side];
+  const inner = new THREE.Group();
+  pivot.add(inner);
+  const b = put(lib, inner, FT, 'banner-green', { color });
+  b.position.set(-0.36, -1, 0); // Stoff liegt im Modell bei x 0,38–0,43, oben bei y 1
+  parent.add(pivot);
+  return inner;
 }
 
 // Kleine Steine (Erz, Blöcke) als einfache Formen
@@ -346,6 +374,128 @@ function medievalBuilding(lib, building) {
       put(lib, g, CK, 'metal-gate', { x: 0.5, z: 0.92, rot: Math.PI / 2, scale: 0.85, variant: 'eisen' });
       break;
     }
+    // ---------- v0.43.0: eigene Häuser für Level 7–12 (Tobias: „Mach gerne weiter“) ----------
+    case 'flachsbreche': {
+      // Erntebank: Marktstand mit Stoffdach, daneben ein Karren mit Pflanzen
+      // und ein Rad in einem Holzgestell, das sich beim Arbeiten dreht; Büsche hinten
+      put(lib, g, FT, 'stall-green', { x: -0.28, z: -0.2, scale: 1.3, ...opts });
+      stones(g, '#4f7f3a', [[-0.85, 0.12, -0.75, 1.3], [-0.85, 0.1, 0.1], [-0.82, 0.12, 0.75, 1.2], [-0.4, 0.1, 0.82]], 0.12);
+      for (const x of [0.5, 0.74]) g.add(plain(new THREE.BoxGeometry(0.05, 0.36, 0.05), '#7a5232', { x, y: 0.18, z: -0.05 }));
+      put(lib, g, FT, 'cart', { x: 0.55, z: 0.58, rot: Math.PI / 2 + 0.2, scale: 0.55, ...opts });
+      stones(g, '#7aa64a', [[0.48, 0.34, 0.56, 1.1], [0.62, 0.34, 0.62], [0.55, 0.44, 0.58, 0.9]], 0.1);
+      stones(g, '#e2b53c', [[0.52, 0.5, 0.6, 0.5], [0.64, 0.45, 0.55, 0.45]], 0.1);
+      parts.spin = [{ obj: spinningWheel(lib, g, { x: 0.62, y: 0.3, z: -0.05, scale: 1.1, color }), axis: 'x', speed: 2.4 }];
+      break;
+    }
+    case 'webstube': {
+      // Holzhaus mit Balkon; Stoffbahnen in Reiterfarbe hängen an der Front
+      // und schwingen beim Arbeiten (Weben)
+      const h = house(lib, color, {
+        walls: {
+          N: ['wall-wood', 'wall-wood'],
+          W: ['wall-wood', 'wall-wood-window-shutters'],
+          E: ['wall-wood-window-shutters', 'wall-wood'],
+          S: ['wall-wood-door', 'balcony-wall-fence'],
+        },
+      });
+      h.scale.setScalar(0.8);
+      h.position.set(0, 0, -0.15);
+      g.add(h);
+      const wallZ = -0.15 + 0.8 * 1.02;
+      parts.sway = [
+        { obj: hangingBanner(lib, g, { x: 0.25, z: wallZ, side: 'S', top: 0.78, color }), axis: 'x', amp: 0.16, speed: 2.2, t: 0 },
+        { obj: hangingBanner(lib, g, { x: 0.62, z: wallZ, side: 'S', top: 0.78, color }), axis: 'x', amp: 0.16, speed: 2.2, t: 1.3 },
+      ];
+      put(lib, g, FT, 'planks', { x: -0.62, z: 0.82, scale: 0.36, ...opts });
+      break;
+    }
+    case 'kraeuterstube': {
+      // Holzhaus mit hohem Dach in Reiterfarbe und Schornstein (Kräuter werden
+      // gekocht, beim Arbeiten raucht es); davor ein kleiner Kräutergarten und eine Laterne
+      const h = house(lib, color, {
+        walls: {
+          N: ['wall-wood', 'wall-wood'],
+          W: ['wall-wood', 'wall-wood-window-shutters'],
+          E: ['wall-wood-window-shutters', 'wall-wood'],
+          S: ['wall-wood-door', 'wall-wood-window-glass'],
+        },
+        roof: 'roof-high-gable',
+        roofHeight: 0.9,
+      });
+      h.scale.setScalar(0.74);
+      h.position.set(0, 0, -0.26);
+      g.add(h);
+      parts.chimneyTop = chimney(lib, h, { cx: 0.5, cz: -0.5, scale: 1, color }).multiplyScalar(0.74).add(h.position);
+      g.add(plain(new THREE.BoxGeometry(1.0, 0.06, 0.34), '#5b3f27', { x: 0.3, y: 0.03, z: 0.78 }));
+      stones(g, '#4f8a3c', [[-0.1, 0.1, 0.78], [0.12, 0.1, 0.74], [0.34, 0.1, 0.8], [0.56, 0.1, 0.76], [0.74, 0.1, 0.8]], 0.08);
+      stones(g, '#e8c040', [[0.02, 0.17, 0.8, 0.45], [0.46, 0.17, 0.76, 0.45], [0.66, 0.17, 0.82, 0.45]], 0.08);
+      put(lib, g, FT, 'lantern', { x: -0.72, z: 0.72, scale: 0.5, ...opts });
+      break;
+    }
+    case 'schreibstube': {
+      // sechseckiger Turm mit Spitzdach und Fahne (Castle Kit); die Fenster
+      // leuchten warm, solange geschrieben wird; davor ein Schreibpult und eine Laterne
+      const tx = -0.12;
+      const tz = -0.15;
+      const s = 1.3;
+      put(lib, g, CK, 'tower-hexagon-base', { x: tx, z: tz, scale: s, variant: 'turm', color });
+      put(lib, g, CK, 'tower-hexagon-roof', { x: tx, y: 1.31 * s, z: tz, scale: s, variant: 'turm', color });
+      put(lib, g, CK, 'flag-pennant', { x: tx, y: (1.31 + 0.8) * s, z: tz, rot: -0.6, scale: 0.8, variant: 'turm', color });
+      const front = tz + 0.39 * s + 0.005;
+      g.add(plain(new THREE.BoxGeometry(0.26, 0.42, 0.04), '#5a3b25', { x: tx, y: 0.21, z: front }));
+      const glowMat = mat('#ffd27a', { emissive: '#ffb347', emissiveIntensity: 1.2 });
+      for (const [x, y] of [[tx - 0.18, 0.95], [tx + 0.18, 0.95], [tx, 1.45]]) {
+        g.add(simpleMesh(new THREE.BoxGeometry(0.11, 0.17, 0.03), glowMat, { x, y, z: front, shadow: false }));
+      }
+      parts.glow = [glowMat];
+      g.add(plain(new THREE.BoxGeometry(0.34, 0.06, 0.24), '#7a5232', { x: 0.55, y: 0.36, z: 0.68 }));
+      g.add(plain(new THREE.BoxGeometry(0.06, 0.34, 0.06), '#7a5232', { x: 0.55, y: 0.17, z: 0.68 }));
+      g.add(plain(new THREE.BoxGeometry(0.2, 0.01, 0.14), '#efe6cf', { x: 0.55, y: 0.395, z: 0.68 }));
+      put(lib, g, FT, 'lantern', { x: -0.62, z: 0.6, scale: 0.5, ...opts });
+      break;
+    }
+    case 'uhrmacherei': {
+      // hoher, eckiger Turm (Castle Kit) mit großem Messing-Zahnrad als „Uhr“
+      // an der Front und einem kleinen daneben – beide drehen sich beim Arbeiten
+      const tx = -0.1;
+      const tz = -0.15;
+      const s = 1.15;
+      put(lib, g, CK, 'tower-square-base', { x: tx, z: tz, scale: s, variant: 'turm', color });
+      put(lib, g, CK, 'tower-square-roof', { x: tx, y: 1.01 * s, z: tz, scale: s, variant: 'turm', color });
+      const front = tz + 0.5 * s + 0.02;
+      parts.spin = [
+        { obj: gear(lib, g, { x: tx, y: 1.55, z: front, scale: 0.62, variant: 'messing' }), axis: 'z', speed: 0.5 },
+        { obj: gear(lib, g, { x: tx + 0.42, y: 0.55, z: front + 0.02, scale: 0.3, variant: 'messing' }), axis: 'z', speed: -1.2 },
+      ];
+      g.add(plain(new THREE.BoxGeometry(0.28, 0.44, 0.04), '#5a3b25', { x: tx - 0.12, y: 0.22, z: front }));
+      put(lib, g, FT, 'planks', { x: 0.62, z: 0.72, scale: 0.34, ...opts });
+      break;
+    }
+    case 'apotheke': {
+      // Steinhaus mit grünem Marktdach davor; an der Seite Glasrohre, auf dem
+      // Tresen Fläschchen, die beim Arbeiten grün leuchten
+      const h = house(lib, color, {
+        walls: {
+          N: ['wall', 'wall'],
+          W: ['wall', 'wall-window-shutters'],
+          E: ['wall-window-shutters', 'wall'],
+          S: ['wall-door', 'wall-window-stone'],
+        },
+      });
+      h.scale.setScalar(0.78);
+      h.position.set(-0.1, 0, -0.22);
+      g.add(h);
+      put(lib, g, FT, 'stall-green', { x: 0.45, z: 0.62, scale: 0.75, color: TAB_COLORS.kraeuter });
+      for (const [x, z] of [[0.84, 0.1], [0.84, 0.36]]) {
+        const pipe = put(lib, g, FK, 'pipe-glass-large-long', { x, y: 0.52, z, scale: [0.3, 0.2, 0.2], variant: 'glas' });
+        pipe.rotation.z = Math.PI / 2;
+      }
+      const glowMat = mat('#7fe0a0', { emissive: '#2fd070', emissiveIntensity: 1.2 });
+      const flask = new THREE.CylinderGeometry(0.035, 0.045, 0.12, 10);
+      for (const [x, z] of [[0.3, 0.62], [0.42, 0.66], [0.55, 0.6]]) g.add(simpleMesh(flask, glowMat, { x, y: 0.36, z, shadow: false }));
+      parts.glow = [glowMat];
+      break;
+    }
     case 'lagerhaus': {
       // offener Schuppen auf vier Pfosten, darunter Bretter und ein Karren
       for (const [x, z] of [[-0.88, -0.4], [0.88, -0.4], [-0.88, 0.4], [0.88, 0.4]]) {
@@ -488,8 +638,8 @@ export function buildKenneyBuilding(lib, building) {
   outer.add(view.group);
   // v0.40.0: alle Teile des Hauses zu wenigen zusammenfügen (schneller); was
   // sich bewegt (Wasserrad, Schimmer im Tor, v0.42.0 Zahnräder und Kran), bleibt für sich
-  const { wheel, shimmer, spin = [], swing } = view.parts;
-  mergeStatic(outer, [wheel, shimmer?.veil, shimmer?.sparks, ...spin.map((s) => s.obj), swing?.obj]);
+  const { wheel, shimmer, spin = [], swing, sway = [] } = view.parts;
+  mergeStatic(outer, [wheel, shimmer?.veil, shimmer?.sparks, ...spin.map((s) => s.obj), swing?.obj, ...sway.map((s) => s.obj)]);
   return { group: outer, parts: view.parts };
 }
 

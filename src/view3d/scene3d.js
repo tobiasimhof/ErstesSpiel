@@ -1050,6 +1050,13 @@ export function createScene3d({ lib }) {
         if (working) swing.t += dt;
         swing.obj.rotation.y = swing.base + Math.sin(swing.t * swing.speed) * swing.amp;
       }
+      // v0.43.0: Stoffbahnen der Webstube schwingen beim Arbeiten
+      if (v.parts.sway) {
+        for (const sw of v.parts.sway) {
+          if (working) sw.t += dt;
+          sw.obj.rotation[sw.axis] = Math.sin(sw.t * sw.speed) * sw.amp;
+        }
+      }
       const shipped = b.prod?.shipped ?? 0;
       if (shipped > v.lastShipped) v.pop = 1;
       v.lastShipped = shipped;
@@ -1219,6 +1226,7 @@ export function createScene3d({ lib }) {
       let sum = 0;
       for (const sp of parts.spin ?? []) sum += Math.abs(sp.obj.rotation[sp.axis]);
       if (parts.swing) sum += parts.swing.t;
+      for (const sw of parts.sway ?? []) sum += sw.t;
       return { sum: Math.round(sum * 1000) / 1000, kinds: Object.keys(parts).filter((k) => parts[k]).sort() };
     },
     hasGhost: () => Boolean(ghost),
