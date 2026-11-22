@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.40.2 – Weiche zurückgestellt, Entwurf Bereich kopieren (22.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Antwort zur Weiche und zum Verschieben festhalten, den nächsten Schritt planen.
+
+**Fragen, die wir uns gestellt haben:**
+- Bringt die Weiche etwas? → Tobias: nein, solange jede Ware ihre eigene Straße hat; bei ungleichem Verhältnis (5 hiervon, 10 davon) staut ein gemischtes Band. Im Code bestätigt: Maschinen nehmen jede Zutat an jedem Eingang an (`canAccept`), bei gleichem Verhältnis geht ein gemischtes Band also schon heute ohne Weiche.
+- Ist das Verschieben jetzt flüssig? → Ja (Tobias).
+
+**Gemacht:**
+- `STAND.md`, `AUSBLICK.md`, `PLAENE.md` (Entwurf v0.41.0 „Bereich kopieren“, Weiche zurückgestellt), Archiv. Versionsnummer 0.40.2, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 417 von 417 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.40.1 – 3D gemessen, Entwurf Weiche (22.11.2026, nur Doku)
 
 **Vorgenommen:**

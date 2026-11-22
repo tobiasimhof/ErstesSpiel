@@ -4,13 +4,19 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 22.11.2026 – Chat 26: v0.40.0 gemessen, Entwurf Weiche (v0.40.1)
+### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Entwurf Bereich kopieren (v0.40.1, v0.40.2)
 
 **Tobias:** „Infomiere dich über den aktuellen Stand. Hier ist mein Feedback zu dem letzten Update v40: Beim heraus und hereinzoomen hab ich jeweils zwischen 60 und 80 Fps. Was sind nun die nächsten Schritte ?“
 
 **Claude:** Die 3D-Ansicht reicht damit (vorher herausgezoomt 40–50). Nach der vereinbarten Reihenfolge kommt die Weiche, dann „Bereich kopieren“. Entwurf v0.41.0 „Weiche“ (in `PLAENE.md`): Vorschlag A (Claudes Empfehlung) – ein Band lässt sich auf eine Ware einstellen und nimmt nur noch sie an; am Abzweig läuft die eingestellte Ware nur dorthin, alles andere in die übrigen Richtungen. Vorschlag B – eigenes Gebäude mit Ware je Ausgang. Regeln: Ware ohne passenden Ausgang bleibt stehen (Stau, „Strecke leeren“), ist das eingestellte Band voll, wartet die Ware, eine Ware je Weiche. Fragen: A oder B? Passen die Regeln? Wie fühlt sich das Verschieben großer Bereiche jetzt an?
 
 **Umgesetzt:** v0.40.1 (nur Doku). Wartet auf Tobias' Antworten.
+
+**Tobias:** „Das Verschieben fühlt sich jetzt auch sehr flüssig an. Die regeln passen so aber ich bin mit beiden Vorschlägen nicht ganz zufrieden. Bisher kann man alles mit eigenen Straßen transportieren und man kommt sich in der Produktion aktuell nicht in die Quere und es hat den Vorteil, dass sich die Weiche nicht staut, weil manchmal brauchen wir 5 teile davon und 10 teile davon und dann würde sich das ganze wohl stauen, deswegen bräuchten wir eher eine Lösung, die dieses Problem umgeht. Eine Weiche macht nur Sinn, wenn man jedes Teil zum gleichen Verhältnis braucht, wie Räderwerke und Zahnradwellen, dann könnte man das zusammenführen das Band aber müsste es wieder trennen, damit es getrennt rein läuft bzw. es können auch beide Teile in den gleichen Eingang, deswegen sehe ich aktuell noch nicht den Vorteil einer Weiche“
+
+**Claude:** Tobias hat recht – im Code bestätigt: Eine Maschine mit zwei Zutaten nimmt jede Zutat an jedem Eingang an; bei gleichem Verhältnis geht ein gemischtes Band schon heute ohne Weiche, bei ungleichem staut es sich mit oder ohne. Vorschlag: Weiche zurückstellen, als Nächstes „Bereich kopieren“ (Entwurf v0.41.0 in `PLAENE.md`): markieren, „📋 Kopieren“, Kopie am Finger ziehen und drehen, „✓ Hier bauen“, danach gleich noch einmal setzen (Stempel) bis „✕ Fertig“; Gebäude mit Einstellung und Bänder kommen mit, Inhalte nicht; Kosten wie beim Bauen, bei zu wenig Waren wird nichts gebaut. Fragen: OK so? Passen „alles oder nichts“ und der Stempel?
+
+**Umgesetzt:** v0.40.2 (nur Doku). Wartet auf Tobias' OK.
 
 ### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test, Analyse, Belastungstest, 3D schneller (v0.36.1 bis v0.40.0)
 
