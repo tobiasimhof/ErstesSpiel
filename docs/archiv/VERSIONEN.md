@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.38.1 – Analyse als Spielentwickler (22.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' zweiter Wunsch aus Chat 25: als Spielentwickler die sinnvollsten nächsten Schritte analysieren und vorschlagen.
+
+**Fragen, die wir uns gestellt haben:**
+- Schafft die 3D-Ansicht große Fabriken? → gemessen mit einem Playwright-Skript im Scratchpad (nicht im Projekt): Startfabrik etwa 260 Zeichenaufrufe je Bild, voll bebaute Fläche 46 × 38 (52 Holz-Straßen: 156 Gebäude, 312 Bänder) etwa 3.700 bei normalem Zoom und 6.200 ganz herausgezoomt; ein Tablet schafft flüssig grob 1.000–2.000.
+- Was fehlt dem Spiel am meisten? → siehe `PLAENE.md` („Analyse als Spielentwickler“).
+
+**Gemacht:**
+- `PLAENE.md` (Analyse mit Befunden und Reihenfolge), `STAND.md`, Archiv. Versionsnummer 0.38.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 414 von 414 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.38.0 – Start im 3D-Test (22.11.2026)
 
 **Vorgenommen:**

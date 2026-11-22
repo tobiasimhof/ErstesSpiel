@@ -61,6 +61,37 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Analyse als Spielentwickler – die sinnvollsten nächsten Schritte (Chat 25, v0.38.1; wartet auf Tobias' Entscheidung)
+
+**Tobias (Chat 25):** „im nächsten Schritt will ich dass du in die Rolle eines Spielentwicklers schlüpfst und analysierst, was die sinnvollsten nächsten Schritte wären und mir diese vorschlägst.“ – „Ja, du kannst loslegen.“
+
+**Ausgangslage:** Tobias spielt den 3D-Test (seit v0.38.0 der Start) und ist auf Level 7 (Level 4 am 21.11., Level 7 am 22.11. – er kommt schnell voran, die höheren Level dauern länger). Im Spiel sind Level 1–13; danach sammelt sich nur noch Erfahrung. Leitlinien: Massenproduktion und Optimieren der Straßen stehen im Mittelpunkt, die Logik geht vor dem Aussehen. Entschieden und deshalb nicht wieder vorgeschlagen: Theken von Hand bestücken, immer nur ein Auftrag, keine Fabrik-Übersicht pro Minute, kein „Umlagern“ und „Alle auffüllen“.
+
+**Was schon stark ist:** Die Kernschleife (Rohstoff → Straße → Laden → Gold → Ausbau) trägt, Tobias „fesselt“ sie auch beim zweiten Durchgang. Der Rhythmus „läuft weiter, bis etwas leer ist“ passt zum Tablet (reinschauen, nachlegen, umbauen). Waren sind zugleich Baumaterial, das zwingt zum Planen. Die Theken als knappe „Verkaufsplätze“ belohnen lange Straßen mit teuren Waren. Die Regeln sind sauber von der Grafik getrennt und gut getestet – neue Inhalte sind meist nur neue Zeilen in den Tabellen.
+
+**Befunde:**
+
+1. **3D bei großen Fabriken (gemessen, v0.38.0):** Eine Startfabrik braucht je Bild etwa **260 Zeichenaufrufe** (fast alles Zaun und Bäume). Eine voll bebaute Fläche wie Tobias' spätere Fabriken (46 × 38, 156 Gebäude, 312 Bänder, Holz-Straßen) braucht **etwa 3.700** (normaler Zoom) bis **6.200** (ganz herausgezoomt) – jedes Wandteil, jedes Band-Stück, jeder Zaunpfahl und jeder Schatten ist ein eigener Aufruf. Ein Tablet schafft flüssig grob 1.000–2.000. Die Fabrik im 3D-Test wird also ab etwa Level 9–10 spürbar ruckeln, wenn wir nichts tun (genau prüfen lässt sich das nur auf dem Tablet; der Testrechner hat keinen Grafikchip). Abhilfe ohne Änderung am Aussehen: gleiche Teile in einem Rutsch zeichnen („Instancing“: Zaun, Bäume, Band-Stücke, Wände und Dächer gleicher Häuser), Schatten nur, wo man sie sieht. Erwartung: ein Zehntel der Aufrufe.
+2. **Lesbarkeit großer Fabriken in 3D:** Ganz herausgezoomt verdecken die Schilder über den Gebäuden (von weitem größer) einen großen Teil der Fabrik. Vorschlag: von weitem nur Statuslicht und Ring, das Warenbild erst beim Heranzoomen – oder die Schilder kleiner.
+3. **Gemischte Bänder ohne Weiche:** Ab Level 8 haben Maschinen zwei Eingänge, ab Level 13 legt der Ofen Holzkohle und Glas auf dasselbe Band. Ohne Weiche bleibt nur, für jede Ware eine eigene Straße zu bauen. Die Weiche ist das wichtigste Werkzeug, das einem Fabrikspiel noch fehlt (Tobias: „sehr sinnvoll, damit die Produktionsstraßen länger werden“, seit Chat 15 geplant).
+4. **Gleiche Straßen mehrfach bauen:** Massenproduktion heißt, dieselbe Straße oft zu bauen; in 3D mit dem Finger ist das mühsam. „Bereich kopieren“ (Tobias: „sehr wichtig“) baut auf dem vorhandenen Bereich markieren und verschieben auf.
+5. **Nach Level 13 kommt nichts:** Bei Tobias' Tempo ist er in etwa ein bis zwei Wochen dort. Level 14 (Mörser) und 15 (neue Mühle zum Zerkleinern) sollten bis dahin geplant und im Spiel sein.
+6. **Verkaufen und Herstellen:** Ab Level 7 kauft je Theke etwa alle 45–60 Sekunden ein Kunde (rund 1,1 Stück pro Minute) – eine einzige Straße stellt mehr her. Das ist gewollt (teure Waren lohnen sich), drückt aber aufs Laden-Lager. Beobachten (offene Frage 1); kein eigener Schritt, solange Tobias es nicht stört.
+7. **Spielstand nur im Browser:** Der 3D-Spielstand liegt nur im Browser des Tablets. Wird der Browser-Speicher gelöscht, ist er weg. „💾 Spielstand sichern“ gibt es; eine kleine Erinnerung (z. B. nach jedem Aufstieg „Jetzt sichern?“) wäre ein schneller Gewinn.
+8. **Zahlen ohne Überblick:** Aufstiegspreise, Mengen und Zeiten sind Platzhalter (offene Frage 3). Ein kleines Rechenwerkzeug für uns (nicht im Spiel) könnte je Level ausrechnen, wie viele Rohstoffe, wie viel Zeit und wie viel Gold es braucht – dann stimmen wir Tobias' Gefühl beim Spielen mit Zahlen ab.
+9. **Später:** Einführung für neue Spieler (Tobias spielt gerade selbst von vorn – „Stolpersteine“ notieren hilft dafür), eigene Häuser ab Level 2, die echte Fabrik (Level 13) in 3D übernehmen (gleiches Spielstand-Format) und danach die 2D-Ansicht ganz entfernen (der 2D-Teil des Browser-Tests braucht den Großteil der 12 Minuten).
+
+**Vorschlag – Reihenfolge (je ein Schritt erst nach Tobias' OK):**
+
+1. **v0.39.0 Belastungstest (klein):** Im Testmodus ein Knopf, der für einen Moment eine voll bebaute Fabrik zeigt (ohne Tobias' Spielstand zu berühren); Tobias liest auf dem Tablet die Bilder pro Sekunde ab. So wissen wir, wie dringend Schritt 2 ist.
+2. **3D schneller und lesbarer (mittel, 1–2 Versionen):** gleiche Teile in einem Rutsch, Schatten sparsamer, Schilder von weitem schlicht. Am Aussehen ändert sich sonst nichts.
+3. **Weiche (mittel, erst Plan, dann 1–2 Versionen):** Ware je Ausgang einstellen, was mit nicht passenden Waren passiert.
+4. **Bereich kopieren (mittel, 1 Version).**
+5. **Level 14 und 15 (je 1 Version):** parallel als Entwurf planen, umsetzen, bevor Tobias Level 13 erreicht.
+6. Kleine Gewinne zwischendurch: Erinnerung zum Sichern; später das Rechenwerkzeug für die Zahlen.
+
+**Fragen an Tobias:** Passt die Reihenfolge? Wann rechnet er ungefähr mit Level 13 im 3D-Test (damit Level 14 rechtzeitig fertig ist)?
+
 ### Start im 3D-Test (fertig, v0.38.0; Tobias: „Ja, jetzt das 3D Spiel fokussieren“)
 
 Der Link (`index.html` ohne Zusatz) öffnet den 3D-Test mit seinem eigenen Spielstand; die echte Fabrik (2D) bleibt über das Menü ☰ erreichbar und holt beim Öffnen die Zeit nach. Die Spielstände bleiben unter ihren Schlüsseln – nichts wird umgewandelt.

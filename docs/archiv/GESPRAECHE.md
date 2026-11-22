@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test (v0.36.1 bis v0.38.0)
+### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test, Analyse (v0.36.1 bis v0.38.1)
 
 **Tobias:** „Hey, ich habe an meinem Pc den neuen Start getestet und bisher fühlt er sich sehr gut an. Die neuen 500 Startgold fallen nicht so schwer ins Gewicht und erleichtern die ersten Level erheblich. Lies dir den aktuellen Stand durch und berichte mir bei welchem Schritt wir gerade sind.“
 
@@ -23,6 +23,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Umgesetzt:** v0.37.0 – neue Ordnung wie im Entwurf, dazu die Grafik-Probe entfernt (mit dem Modern-Stil, den nur sie hatte, und den Modellen, die nur sie brauchte). Als Nächstes v0.38.0: Der Link öffnet direkt den 3D-Test.
 
 **Umgesetzt:** v0.38.0 – der Link öffnet den 3D-Test; die echte Fabrik über ☰ → „🗺️ Zur echten Fabrik (2D)“ (`?ansicht=2d`), zurück mit „🧊 Zurück zum 3D-Test“. Als Nächstes: Claudes Analyse als Spielentwickler.
+
+**Tobias:** „Ja, du kannst loslegen.“
+
+**Claude** hat als Spielentwickler analysiert (ausführlich in `PLAENE.md`, „Analyse als Spielentwickler“) und dafür gemessen, wie viele Zeichenaufrufe die 3D-Ansicht braucht: Startfabrik etwa 260 je Bild, eine voll bebaute Fläche (156 Gebäude, 312 Bänder) etwa 3.700 bis 6.200 – ein Tablet schafft flüssig grob 1.000–2.000. Vorschlag der Reihenfolge: v0.39.0 Belastungstest-Knopf (Tobias misst auf dem Tablet), dann 3D schneller und Schilder von weitem schlichter, dann Weiche, Bereich kopieren, Level 14 und 15 parallel planen; kleine Gewinne: Erinnerung zum Sichern, Rechenwerkzeug für die Zahlen. Fragen: Passt die Reihenfolge? Wann ungefähr Level 13 im 3D-Test?
+
+**Umgesetzt:** v0.38.1 (nur Doku). Wartet auf Tobias' Entscheidung.
 
 ### 21.11.2026 – Chat 24 (Fortsetzung): Tobias testet den 3D-Test (nach v0.34.0)
 
