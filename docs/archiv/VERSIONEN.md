@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.41.1 – Kopieren getestet, Plan für die nächsten Schritte (22.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Test von v0.41.0 festhalten und die nächsten Schritte planen.
+
+**Fragen, die wir uns gestellt haben:**
+- Passt v0.41.0? → Ja: erste Kopie an sinnvoller Stelle, Stempel hilft, Bauleiste schließen fühlt sich gut an (Tobias).
+- Lohnt es, die 2D-Ansicht zu entfernen, um den Browser-Test zu beschleunigen? → Kaum: gemessen braucht der 2D-Teil nur noch etwa 5 Minuten, der 3D-Teil etwa 13.
+
+**Gemacht:**
+- `STAND.md`, `PLAENE.md` (Entwurf der nächsten Schritte), Archiv. Versionsnummer 0.41.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 423 von 423 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.41.0 – Bereich kopieren, Bauleiste schließt beim Antippen (22.11.2026)
 
 **Vorgenommen:**
