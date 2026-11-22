@@ -6,7 +6,7 @@ import { onPress } from './press.js';
 
 const numberFormat = new Intl.NumberFormat('de-DE');
 
-export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, onLevel, onSaveFile, onLoadFile, onProbe, onSwitch3d, is3d = false }) {
+export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, onLevel, onSaveFile, onLoadFile, onSwitch3d, is3d = false }) {
   const gold = document.getElementById('hud-gold');
   const goldGain = document.getElementById('hud-gold-gain');
   const testPackButton = document.getElementById('menu-test-pack');
@@ -59,11 +59,6 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
   onPress(document.getElementById('menu-new-game'), () => {
     closeMenu();
     onNewGame();
-  });
-  // v0.32.0: Grafik-Probe (eigene Seite, Tobias, Chat 22)
-  onPress(document.getElementById('menu-probe'), () => {
-    closeMenu();
-    onProbe();
   });
   // v0.34.0: 3D-Test mit eigenem Spielstand (Tobias, Chat 24) – und zurück
   const switch3d = document.getElementById('menu-3d');

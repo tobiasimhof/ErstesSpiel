@@ -4,7 +4,7 @@
 // beides nie.
 //
 // Stil wie Tobias in der Grafik-Probe gewählt hat: Mittelalter mit den
-// Farben des Spiels, eigene Häuser je Gebäude (src/probe/kenney3d.js), das
+// Farben des Spiels, eigene Häuser je Gebäude (kenney3d.js), das
 // Versandportal als Torbogen mit Schimmer. Über jedem Gebäude schwebt ein
 // Schild wie auf der 2D-Karte (Warenbild, Fortschrittsring, Statuslicht);
 // Ein- und Ausgänge zeigen Pfeile (blau hinein, orange hinaus).
@@ -24,12 +24,11 @@ import { landOffer, landOffers } from '../core/land.js';
 import { buildingStatus, gardenCrop, growth, productionOf } from '../core/production.js';
 import { BELT_SPEED, TICK } from '../core/sim.js';
 import { beltAt, parseTileKey } from '../core/state.js';
-import { buildingFace } from '../view/buildingFace.js';
-import { drawItem } from '../view/itemArt.js';
-import { BELT_TOP, animateShimmer, buildBeltTile, buildKenneyBuilding } from '../probe/kenney3d.js';
-import { beltPieces, FACE } from '../probe/kenneyParts.js';
+import { buildingFace } from '../ui/buildingFace.js';
+import { drawItem } from '../ui/itemArt.js';
+import { BELT_TOP, animateShimmer, buildBeltTile, buildKenneyBuilding } from './kenney3d.js';
+import { beltPieces, FACE } from './kenneyParts.js';
 
-const STYLE = 'mittelalter';
 const COLORS = 'spiel';
 
 const COLOR = {
@@ -430,7 +429,7 @@ export function createScene3d({ lib }) {
 
   function makeView(b) {
     const { width: w, height: d } = footprintSize(b.type, b.rot);
-    const built = buildKenneyBuilding(lib, b, STYLE, COLORS);
+    const built = buildKenneyBuilding(lib, b);
     const group = built.group;
     group.position.set(b.x + w / 2, 0, b.y + d / 2);
     group.userData.buildingId = b.id;
@@ -556,7 +555,7 @@ export function createScene3d({ lib }) {
       if (old && old.sig === sig) continue;
       if (old) beltRoot.remove(old.group, old.arrow);
       const { x, y } = parseTileKey(k);
-      const group = buildBeltTile(lib, state, k, STYLE);
+      const group = buildBeltTile(lib, state, k);
       group.position.set(x + 0.5, 0, y + 0.5);
       const arrow = new THREE.Mesh(arrowGeo, arrowMat);
       arrow.rotation.x = -Math.PI / 2;
@@ -664,7 +663,7 @@ export function createScene3d({ lib }) {
       const b = { id: -1, type: g.type, x: 0, y: 0, rot: g.rot };
       const { width: w, height: d } = footprintSize(g.type, g.rot);
       const group = new THREE.Group();
-      const built = buildKenneyBuilding(lib, b, STYLE, COLORS);
+      const built = buildKenneyBuilding(lib, b);
       built.group.traverse((o) => {
         if (o.isMesh || o.isLineSegments) {
           o.material = ghostMats[valid];
@@ -801,13 +800,13 @@ export function createScene3d({ lib }) {
         const pseudo = { belts: plan.belts, buildings: plan.buildings };
         for (const b of plan.buildings) {
           const { width: w, height: d } = footprintSize(b.type, b.rot);
-          const built = buildKenneyBuilding(lib, b, STYLE, COLORS);
+          const built = buildKenneyBuilding(lib, b);
           built.group.position.set(b.x + w / 2, 0, b.y + d / 2);
           areaGhostRoot.add(built.group, portArrows(b));
         }
         for (const key of Object.keys(plan.belts)) {
           const t = parseTileKey(key);
-          const tile = buildBeltTile(lib, pseudo, key, STYLE);
+          const tile = buildBeltTile(lib, pseudo, key);
           tile.position.set(t.x + 0.5, 0, t.y + 0.5);
           areaGhostRoot.add(tile);
         }

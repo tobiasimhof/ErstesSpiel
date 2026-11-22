@@ -4,6 +4,25 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.37.0 – neue Ordnung (22.11.2026)
+
+**Vorgenommen:**
+- Tobias (Chat 25): „eine neue Ordnerstruktur …, damit wir einfacher und schneller arbeiten können“ und Claude „nicht so viel lesen“ muss; die echte Fabrik ist hinten angestellt, der Fokus liegt auf dem 3D-Test; die Grafik-Probe darf weg.
+
+**Fragen, die wir uns gestellt haben:**
+- Was liest Claude wirklich? → zu Beginn etwa 62 KB Doku (jetzt etwa 22 KB), beim Programmieren dazu `TECHNIK.md` (37 KB, jetzt etwa 11 KB); die großen Ordner (three.js, Kenneys Modelle) nie.
+- Wohin mit den Einzelheiten? → Tabellen und Bedienung nach `docs/inhalte/` (gelesen nur bei Bedarf), die alten Langfassungen wörtlich ins Archiv (`STAND-LANGFASSUNG.md`, `SPIEL-LANGFASSUNG.md`, `TECHNIK-LANGFASSUNG.md`) – nichts geht verloren.
+- Was fällt mit der Grafik-Probe weg? → `grafik-probe.html`, `src/probe/probe.js`, `factory.js`, `world3d.js`, der Menü-Eintrag, der Modern-Stil (Maschinen, Leuchtring, Umgebung mit Laternen und Weg, Abendlicht), die Modelle, die nur sie brauchte (15 aus dem Factory Kit, Zauntor, Laterne, Weg) und `OrbitControls.js`. Der 3D-Test sieht genauso aus wie vorher.
+
+**Gemacht:**
+- Doku: `STAND.md` (7,7 KB), `SPIEL.md` (7,3 KB) und `TECHNIK.md` (10,5 KB) neu und kurz; `docs/inhalte/` mit `LEVEL.md`, `GEBAEUDE.md`, `WAREN.md`, `BEDIENUNG.md`, `AUSBLICK.md` (die Texte wörtlich aus der alten `SPIEL.md`, ohne die Grafik-Probe); `CLAUDE.md` und `README.md` angepasst (was wann gelesen wird, neue Pfade).
+- Code: `src/view/` → `src/ui/` (Oberfläche für 2D und 3D); `renderer.js` und `camera.js` → `src/view2d/`; `kenney3d.js`, `kenneyParts.js`, `models.js` → `src/view3d/` (nur noch Mittelalter in Spiel-Farben, ohne die Parameter für Stil und Farbwahl); `PROBE_IMPORTS` heißt `THREE_IMPORTS`, `set-version.mjs` schreibt nur noch `index.html`. `assets/kenney/` 0,9 → 0,6 MB.
+- Tests: `grafikprobe.test.js` → `modelle3d.test.js` (Modelle, Farbtafeln, Band-Stücke mit einer kleinen Test-Fabrik, three.js nur im 3D-Test, Probe entfernt); `version.test.js` prüft strengere Größen (STAND < 10.000, SPIEL < 12.000, TECHNIK < 16.000, CLAUDE < 9.000 Byte) und dass `docs/inhalte/` und die Langfassungen da sind. Browser-Test aufgeteilt: `smoke.cjs` (startet), `helpers.cjs`, `spiel2d.cjs`, `spiel3d.cjs`; der Probe-Durchlauf fällt weg.
+
+**Geprüft:**
+- `npm test`: 414 von 414 bestanden.
+- Browser-Test (Tablet und Handy im Querformat, Hochformat, schmales Handy, 3D-Test): 2D-Teil alles bestanden; im 3D-Teil erwartete eine Prüfung noch mindestens 40 Modelle (jetzt 33, gewollt) – angepasst, danach `ONLY=3d` alle 72 Prüfungen bestanden. Die Screenshots sind Bild für Bild verglichen: Unterschiede nur bei der Versionsnummer, einer Meldung, die zu einem anderen Zeitpunkt erschien, und im Menü (ohne „🎨 Grafik-Probe“); die 3D-Bilder sind gleich.
+
 ### v0.36.2 – neue Ordnung geplant (22.11.2026, nur Doku)
 
 **Vorgenommen:**

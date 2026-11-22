@@ -85,7 +85,7 @@ export function createPanels() {
     // Knöpfe mit "key" lassen sich später ändern (Beschriftung, gesperrt,
     // hervorgehoben), ohne neu erzeugt zu werden – so geht kein Tippen verloren.
     // v0.19.0 (Tobias: übersichtlicher): body = eigener Inhalt mit
-    // Warenbildern (src/view/buildingInfo.js), tools = kleine Knöpfe in einer
+    // Warenbildern (src/ui/buildingInfo.js), tools = kleine Knöpfe in einer
     // Zeile unten (Verschieben, Drehen, Abreißen), hint = kurzer Tipp ganz unten.
     showInfo({ icon, title, meta, text, hint, body, soon, actions = [], tools = [], status = [] }) {
       infoIcon.textContent = icon;

@@ -10,8 +10,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 import { createNewGame } from '../src/core/state.js';
-import { MODELS, PALETTES } from '../src/probe/kenneyParts.js';
-import { TEST_3D_SLOT, clearGame, loadGame, saveGame, useSaveSlot } from '../src/view/storage.js';
+import { MODELS, PALETTES } from '../src/view3d/kenneyParts.js';
+import { TEST_3D_SLOT, clearGame, loadGame, saveGame, useSaveSlot } from '../src/ui/storage.js';
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
@@ -77,16 +77,16 @@ test('Versandportal im Mittelalter: Burgtor aus dem Castle Kit in warmem Steingr
       [3, [15], '#8f877b'],
     ],
   );
-  const source = read('src/probe/kenney3d.js');
+  const source = read('src/view3d/kenney3d.js');
   assert.ok(source.includes("CK, 'wall-narrow-gate'") && source.includes('portalShimmer(g, parts)'));
-  // der Ring bleibt nur im Modern-Stil
-  assert.ok(source.includes("building.type === 'versandportal' && style !== 'mittelalter'"));
+  // v0.37.0: den Leuchtring des Modern-Stils gibt es mit der Grafik-Probe nicht mehr
+  assert.ok(!source.includes('portalRing'));
 });
 
 test('3D-Test, Teil 2 (v0.35.0): Bereich markieren und Fläche kaufen gehen auch in 3D', () => {
   const main = read('src/main.js');
   assert.ok(!main.includes('areaTool') && !main.includes('landPurchase'), 'keine Sperren mehr im 3D-Test');
-  const controller = read('src/view/controller.js');
+  const controller = read('src/ui/controller.js');
   assert.ok(controller.includes("if (side) return select({ kind: 'land', side });"));
   assert.ok(controller.includes("if (tool === 'area') return startArea();"));
   const scene = read('src/view3d/scene3d.js');
@@ -95,7 +95,7 @@ test('3D-Test, Teil 2 (v0.35.0): Bereich markieren und Fläche kaufen gehen auch
 });
 
 test('Versandportal (v0.35.0): das Tor ist nicht mehr gedreht – das Band fährt durch den Bogen', () => {
-  const source = read('src/probe/kenney3d.js');
+  const source = read('src/view3d/kenney3d.js');
   assert.ok(source.includes("put(lib, g, CK, 'wall-narrow-gate', { x: -0.17, scale: 0.92,"));
   assert.ok(!/wall-narrow-gate'[^)]*rot:/.test(source), 'keine Drehung am Tor');
 });

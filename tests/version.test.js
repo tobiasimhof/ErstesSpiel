@@ -22,14 +22,20 @@ test('docs/STAND.md nennt die aktuelle Version in der Status-Tabelle', () => {
   assert.ok(stand.includes(`| **Aktuelle Version** | v${VERSION}`), `STAND.md zeigt nicht v${VERSION}`);
 });
 
-// v0.18.1: Diese Dateien liest Claude zu Beginn jedes Chats – sie sollen kurz
-// bleiben. Ausführliches gehört ins Archiv (docs/archiv/).
-test('Doku: STAND.md und SPIEL.md bleiben kurz, das Archiv ist vollständig da', () => {
+// v0.18.1: Diese Dateien liest Claude zu Beginn jedes Chats bzw. beim
+// Programmieren – sie sollen kurz bleiben. Seit v0.37.0 (Tobias, Chat 25:
+// „damit … du nicht so viel lesen musst“) deutlich strenger; Einzelheiten
+// gehören nach docs/inhalte/, Verlauf und Zitate ins Archiv (docs/archiv/).
+test('Doku: STAND.md, SPIEL.md und TECHNIK.md bleiben kurz, Inhalte und Archiv sind vollständig da', () => {
   const size = (path) => Buffer.byteLength(read(path), 'utf8');
-  assert.ok(size('docs/STAND.md') < 20000, `docs/STAND.md ist ${size('docs/STAND.md')} Byte groß (Grenze 20.000)`);
-  assert.ok(size('docs/SPIEL.md') < 40000, `docs/SPIEL.md ist ${size('docs/SPIEL.md')} Byte groß (Grenze 40.000)`);
-  assert.ok(size('CLAUDE.md') < 12000, `CLAUDE.md ist ${size('CLAUDE.md')} Byte groß (Grenze 12.000)`);
-  for (const file of ['ENTSCHEIDUNGEN', 'VERSIONEN', 'GESPRAECHE', 'PLAENE', 'KONZEPT-VERLAUF']) {
+  const limits = { 'docs/STAND.md': 10000, 'docs/SPIEL.md': 12000, 'docs/TECHNIK.md': 16000, 'CLAUDE.md': 9000 };
+  for (const [path, limit] of Object.entries(limits)) {
+    assert.ok(size(path) < limit, `${path} ist ${size(path)} Byte groß (Grenze ${limit}) – Einzelheiten nach docs/inhalte/ oder ins Archiv`);
+  }
+  for (const file of ['LEVEL', 'GEBAEUDE', 'WAREN', 'BEDIENUNG', 'AUSBLICK']) {
+    assert.ok(size(`docs/inhalte/${file}.md`) > 1000, `docs/inhalte/${file}.md fehlt oder ist leer`);
+  }
+  for (const file of ['ENTSCHEIDUNGEN', 'VERSIONEN', 'GESPRAECHE', 'PLAENE', 'KONZEPT-VERLAUF', 'STAND-LANGFASSUNG', 'SPIEL-LANGFASSUNG', 'TECHNIK-LANGFASSUNG']) {
     assert.ok(size(`docs/archiv/${file}.md`) > 1000, `docs/archiv/${file}.md fehlt oder ist leer`);
   }
   const stand = read('docs/STAND.md');
@@ -39,7 +45,7 @@ test('Doku: STAND.md und SPIEL.md bleiben kurz, das Archiv ist vollständig da',
 
 test('Import-Map in index.html versieht jede Programmdatei mit der aktuellen Version', async () => {
   // Ohne das mischt der Browser nach einem Update alte und neue Dateien (v0.7.0).
-  const { PROBE_IMPORTS, sourceFiles } = await import('../tools/set-version.mjs');
+  const { THREE_IMPORTS, sourceFiles } = await import('../tools/set-version.mjs');
   const html = read('index.html');
   const block = html.match(/<script type="importmap">([\s\S]*?)<\/script>/);
   assert.ok(block, 'keine Import-Map in index.html');
@@ -50,8 +56,8 @@ test('Import-Map in index.html versieht jede Programmdatei mit der aktuellen Ver
     assert.equal(imports[file], `${file}?v=${VERSION}`, `${file} fehlt oder hat die falsche Version – node tools/set-version.mjs ausführen`);
   }
   // v0.34.0: dazu three.js für den 3D-Test (ohne ?v=, die Version steht im Ordnernamen)
-  for (const [name, path] of Object.entries(PROBE_IMPORTS)) assert.equal(imports[name], path, `${name} für den 3D-Test`);
-  const own = Object.keys(imports).filter((key) => !(key in PROBE_IMPORTS));
+  for (const [name, path] of Object.entries(THREE_IMPORTS)) assert.equal(imports[name], path, `${name} für den 3D-Test`);
+  const own = Object.keys(imports).filter((key) => !(key in THREE_IMPORTS));
   assert.deepEqual(own.sort(), files, 'Import-Map nennt Dateien, die es nicht gibt');
   assert.ok(html.indexOf('type="importmap"') < html.indexOf('type="module"'), 'Import-Map muss vor dem Spiel-Script stehen');
 });

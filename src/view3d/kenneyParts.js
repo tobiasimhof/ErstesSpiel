@@ -1,15 +1,15 @@
-// v0.33.0: Grafik-Probe, Teil 2 – was von Kenneys Modellen gebraucht wird,
-// ohne three.js (deshalb in node testbar): welche Modelle aus welchem Paket,
-// wie die Farbtafeln für „Farben: Spiel“ umgefärbt werden und aus welchen
-// Stücken ein Band-Feld besteht.
+// 3D-Test: was von Kenneys Modellen gebraucht wird, ohne three.js (deshalb
+// in node testbar): welche Modelle aus welchem Paket, wie die Farbtafeln in
+// die Farben des Spiels umgefärbt werden und aus welchen Stücken ein
+// Band-Feld besteht.
 //
 // Alle Modelle eines Pakets färben sich über eine gemeinsame kleine
 // Farbtafel (Textures/colormap.png, 512 × 512): 16 Spalten × 4 Bänder, jedes
 // Feld 32 × 128 Bildpunkte, oben hell, unten dunkel. Für den Schalter
 // „Farben: Spiel“ malen wir einzelne Felder in neuen Farben nach (die
 // Helligkeit jedes Bildpunkts bleibt) – so bekommen z. B. die Dächer die
-// Farbe ihres Reiters wie im Spiel (Tobias, Chat 23: „Ja lass uns beides
-// probieren, damit ich alles sehen kann“).
+// Farbe ihres Reiters wie im Spiel (Tobias' Wahl aus der Grafik-Probe,
+// Chat 23: „weil es mehr harmoniert“).
 
 import { inputSides } from '../core/belts.js';
 import { DELTA } from '../core/dirs.js';
@@ -17,8 +17,8 @@ import { parseTileKey } from '../core/state.js';
 
 export const KENNEY_DIR = 'assets/kenney';
 
-// Welche Modelle die Probe aus welchem Paket lädt (ein Test prüft, dass
-// genau diese Dateien im Projekt liegen).
+// Welche Modelle der 3D-Test aus welchem Paket lädt (ein Test prüft, dass
+// genau diese Dateien im Projekt liegen und jede verbaut wird).
 export const MODELS = {
   'fantasy-town-kit': [
     'wall-wood',
@@ -47,31 +47,11 @@ export const MODELS = {
     'rock-small',
     'rock-wide',
     'fence',
-    'fence-gate',
-    'lantern',
-    'road',
   ],
   // v0.34.0: das kleine Burgtor ist das Versandportal im Mittelalter (Tobias, Chat 24)
   'castle-kit': ['tree-log', 'tree-trunk', 'tree-large', 'tree-small', 'wall-narrow-gate'],
-  'factory-kit': [
-    'conveyor-long-part-middle',
-    'conveyor-long-part-end',
-    'machine',
-    'machine-window',
-    'machine-fortified',
-    'machine-connection-hole',
-    'hopper-square',
-    'cog-a',
-    'pipe-large',
-    'robot-arm-a',
-    'box-large',
-    'box-wide',
-    'box-long',
-    'box-small',
-    'button-floor-round',
-    'cone',
-    'indicator-special-lines',
-  ],
+  // die Bänder (in Holz umgefärbt)
+  'factory-kit': ['conveyor-long-part-middle', 'conveyor-long-part-end'],
 };
 
 // ---------- Farbtafeln ----------
@@ -81,8 +61,8 @@ export const MODELS = {
 //
 // fantasy-town-kit / castle-kit: Band 3, Spalten 0–3 = rote und grüne Dächer;
 // Band 2, Spalten 2–3 und Band 3, Spalten 14–15 = lila-grauer Stein.
-// factory-kit: Band 3, Spalten 8–11 = blaue Maschinen; Spalten 0–7 = lila-graues
-// Metall und die Bänder (Spalte 7 = Gurt, 5 = helle Teile, 1 = Rahmen).
+// factory-kit: Band 3, Spalten 0–7 = lila-graues Metall der Bänder
+// (Spalte 7 = Gurt, 5 = helle Teile, 1 = Rahmen).
 const WARM_STONE = [
   { band: 2, cols: [2, 3], color: '#bdb3a3' },
   { band: 3, cols: [14, 15], color: '#8f877b' },
@@ -101,15 +81,6 @@ export const PALETTES = {
     ],
   },
   'factory-kit': {
-    // Maschinen in der Farbe ihres Reiters, das übrige Metall neutral grau
-    spiel: [
-      { band: 3, cols: [8, 9], color: 'gebäude' },
-      { band: 3, cols: [10, 11], color: 'gebäude-hell' },
-      { band: 3, cols: [0, 1], color: '#7e8086' },
-      { band: 3, cols: [2, 3], color: '#56585e' },
-      { band: 3, cols: [4, 5], color: '#9a9ca2' },
-      { band: 3, cols: [6, 7], color: '#3a3b40' },
-    ],
     // Bänder im Mittelalter: Holz und Leder statt Metall (Tobias, Chat 23: ja)
     holz: [
       { band: 3, cols: [0, 1], color: '#6e4a2c' },
@@ -120,18 +91,9 @@ export const PALETTES = {
   },
 };
 
-// Felder, die am Abend leuchten (Glas der Laterne)
-export const GLOW = {
-  'fantasy-town-kit': [{ band: 2, cols: [5], color: '#ffd27a' }],
-};
-
 function hexRgb(hex) {
   const n = parseInt(hex.slice(1), 16);
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-}
-
-function lighten(hex, f) {
-  return '#' + hexRgb(hex).map((v) => Math.round(v + (255 - v) * f).toString(16).padStart(2, '0')).join('');
 }
 
 // Malt die Felder einer Farbtafel nach (rgba-Daten, Breite, Höhe).
@@ -145,7 +107,6 @@ export function recolorPixels(data, width, height, rules, buildingColor = null) 
   for (const rule of rules) {
     let hex = rule.color;
     if (hex === 'gebäude') hex = buildingColor;
-    if (hex === 'gebäude-hell') hex = lighten(buildingColor, 0.25);
     const target = hexRgb(hex);
     for (const col of rule.cols) {
       const x0 = col * bw;
@@ -165,29 +126,6 @@ export function recolorPixels(data, width, height, rules, buildingColor = null) 
           const i = (y * width + x) * 4;
           const f = lum(i) / mean;
           for (let c = 0; c < 3; c++) data[i + c] = Math.max(0, Math.min(255, Math.round(target[c] * f)));
-        }
-      }
-    }
-  }
-}
-
-// Malt nur die leuchtenden Felder auf schwarzem Grund (für emissiveMap)
-export function glowPixels(data, width, height, rules) {
-  const bw = width / 16;
-  const bh = height / 4;
-  for (let i = 0; i < data.length; i += 4) {
-    data[i] = data[i + 1] = data[i + 2] = 0;
-    data[i + 3] = 255;
-  }
-  for (const rule of rules) {
-    const [r, g, b] = hexRgb(rule.color);
-    for (const col of rule.cols) {
-      for (let y = rule.band * bh; y < (rule.band + 1) * bh; y++) {
-        for (let x = col * bw; x < (col + 1) * bw; x++) {
-          const i = (y * width + x) * 4;
-          data[i] = r;
-          data[i + 1] = g;
-          data[i + 2] = b;
         }
       }
     }

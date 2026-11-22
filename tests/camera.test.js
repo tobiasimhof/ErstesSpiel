@@ -15,7 +15,7 @@ import {
   setViewSize,
   worldToScreen,
   zoomAt,
-} from '../src/view/camera.js';
+} from '../src/view2d/camera.js';
 
 const BIG_WORLD = { x: -100000, y: -100000, width: 200000, height: 200000 };
 

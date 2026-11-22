@@ -9,7 +9,7 @@ import { catchUp } from '../src/core/offline.js';
 import { loadInput, sourceCount } from '../src/core/production.js';
 import { SAVE_VERSION, serializeGame } from '../src/core/save.js';
 import { createNewGame } from '../src/core/state.js';
-import { backupFileName, backupSummary, loadQuestion, readBackup, savedAtText } from '../src/view/backup.js';
+import { backupFileName, backupSummary, loadQuestion, readBackup, savedAtText } from '../src/ui/backup.js';
 
 function drag(state, points) {
   let trace = [];

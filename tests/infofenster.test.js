@@ -24,7 +24,7 @@ import {
 import { SAVE_VERSION, deserializeGame, isValidState, serializeGame } from '../src/core/save.js';
 import { storageCapacity, storageCount } from '../src/core/shop.js';
 import { createNewGame } from '../src/core/state.js';
-import { formatDuration } from '../src/view/format.js';
+import { formatDuration } from '../src/ui/format.js';
 
 function level8() {
   const state = createNewGame(8);

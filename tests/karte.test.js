@@ -10,8 +10,8 @@ import { BUILDINGS, BUILD_ALWAYS, BUILD_TABS, TAB_COLORS } from '../src/core/dat
 import { RECIPES } from '../src/core/data/recipes.js';
 import { addRawToSource, productionOf, setRecipe, updateProduction } from '../src/core/production.js';
 import { createNewGame } from '../src/core/state.js';
-import { buildingFace } from '../src/view/buildingFace.js';
-import { createCamera, intersects, setViewSize, visibleRect } from '../src/view/camera.js';
+import { buildingFace } from '../src/ui/buildingFace.js';
+import { createCamera, intersects, setViewSize, visibleRect } from '../src/view2d/camera.js';
 
 function level8() {
   const state = createNewGame(21);

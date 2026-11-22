@@ -6,9 +6,10 @@
 
 ## Zu Beginn jedes Chats
 
-1. Lies **`docs/STAND.md`** (wo wir stehen, nächster Schritt, offene Fragen, die letzten 3 Arbeitsschritte) und **`docs/SPIEL.md`** (das Spiel, wie es heute ist). Das reicht, um loszulegen.
+1. Lies **`docs/STAND.md`** (wo wir stehen, nächster Schritt, offene Fragen, die letzten 3 Arbeitsschritte) und **`docs/SPIEL.md`** (das Spiel kurz, wie es heute ist). Das reicht, um loszulegen.
 2. `docs/TECHNIK.md` erst lesen, wenn programmiert wird.
-3. `docs/archiv/` nie komplett lesen, sondern **gezielt durchsuchen** (z. B. `grep`), wenn es um Früheres geht – warum etwas so entschieden wurde, was Tobias genau gesagt hat, wie ein alter Plan aussah.
+3. `docs/inhalte/` nur lesen, was gebraucht wird: `LEVEL.md`, `GEBAEUDE.md`, `WAREN.md` (neue Level, Preise, Baukosten, Rezepte), `BEDIENUNG.md` (Fenster, Bauleiste, Karte), `AUSBLICK.md` (Techbaum, Ideen).
+4. `docs/archiv/` nie komplett lesen, sondern **gezielt durchsuchen** (z. B. `grep`), wenn es um Früheres geht – warum etwas so entschieden wurde, was Tobias genau gesagt hat, wie ein alter Plan aussah.
 
 ## Zusammenarbeit (Regeln von Tobias, 05.11.2026)
 
@@ -37,21 +38,21 @@
 ## Doku pflegen (bei jeder Version)
 
 - **`docs/STAND.md`:** Status-Tabelle (Version, nächster Schritt), Tobias' Fabrik, offene Fragen (Erledigtes raus, als Entscheidung ins Archiv). Den neuen Arbeitsschritt **oben** unter „Die letzten 3 Arbeitsschritte“ eintragen (kurz: warum, was umgesetzt, Tobias' Rückmeldung, was offen ist); **nur 3 bleiben stehen**, der älteste fällt weg.
-- **`docs/SPIEL.md`:** Ändert sich das Spiel, den betroffenen Text **ersetzen** (nur der aktuelle Stand, kein „seit v0.x“-Verlauf). Tabellen (Level, Gebäude, Waren) aktuell halten.
-- **`docs/TECHNIK.md`:** neue Dateien in die Projektstruktur, neue Test-Inhalte.
+- **`docs/SPIEL.md`** (kurz) und **`docs/inhalte/`** (Einzelheiten, Tabellen für Level, Gebäude, Waren): Ändert sich das Spiel, den betroffenen Text **ersetzen** (nur der aktuelle Stand, kein „seit v0.x“-Verlauf).
+- **`docs/TECHNIK.md`:** neue Dateien in die Projektstruktur (je Datei eine kurze Zeile), neue Tests kurz; Einzelheiten und Verlauf gehören nach `VERSIONEN.md`.
 - **Archiv (`docs/archiv/`):**
   - `VERSIONEN.md` – neuer Eintrag **oben**: vorgenommen, Fragen, gemacht, geprüft.
   - `GESPRAECHE.md` – **oben**: was Tobias gesagt hat (möglichst mit seinen Worten), Claudes Vorschläge, Antworten, was umgesetzt wurde.
   - `ENTSCHEIDUNGEN.md` – **unten** in der Tabelle: Datum, Entscheidung, Begründung (von wem).
   - `PLAENE.md` – der ausführliche Plan der Version, über dem neuesten Plan.
 - **Nichts darf verloren gehen:** Besteht ein Chat nur aus Feedback, Rückfragen oder Planung, sofort als eigene kleine Doku-Version (`C` + 1) festhalten (Chat 12 ging so verloren).
-- `STAND.md` und `SPIEL.md` kurz halten – sie werden in jedem Chat gelesen. Ausführliches gehört ins Archiv.
+- `STAND.md`, `SPIEL.md` und `TECHNIK.md` kurz halten – sie werden in jedem Chat bzw. beim Programmieren gelesen (ein Test prüft die Größe). Ausführliches gehört nach `docs/inhalte/` oder ins Archiv.
 
 ## Technische Regeln
 
-- Spielregeln (Simulation, `src/core/`) strikt getrennt von der Darstellung (`src/view/`) halten; Waren, Rezepte, Gebäude, Preise, Zeiten und Mengen stehen nur in den Datentabellen (`src/core/data/`). Die Simulation läuft in festen Takten (`src/core/sim.js`).
+- Spielregeln (Simulation, `src/core/`) strikt getrennt von der Darstellung halten – Oberfläche für 2D und 3D in `src/ui/`, 3D-Grafik in `src/view3d/`, 2D-Grafik (hinten angestellt) in `src/view2d/`; Waren, Rezepte, Gebäude, Preise, Zeiten und Mengen stehen nur in den Datentabellen (`src/core/data/`). Die Simulation läuft in festen Takten (`src/core/sim.js`).
 - Nach dem Anlegen einer neuen Programmdatei `node tools/set-version.mjs` aufrufen – sonst lädt der Browser alte und neue Dateien gemischt (ein Test prüft das).
-- Knöpfe immer mit `onPress` aus `src/view/press.js` verbinden, nicht mit `click` (Chrome verschluckt Klicks direkt nach schnellem Wischen).
+- Knöpfe immer mit `onPress` aus `src/ui/press.js` verbinden, nicht mit `click` (Chrome verschluckt Klicks direkt nach schnellem Wischen).
 - Browser-Tests nicht von echter Zeit abhängig machen: `window.__game.simulate(sekunden)` nutzen. Die Fabrik läuft im Browser ständig weiter – Prüfungen müssen das aushalten. Gebäude in der Bauleiste im Browser-Test über `tapBuild(page, typ)` antippen (öffnet den passenden Reiter).
 - Bei automatischen Textersetzungen (z. B. mit Python) nur genau ein Vorkommen ersetzen und das vorher prüfen; ein mehrfaches Ersetzen hat schon einmal das CSS beschädigt.
 - Spielstand-Format (`src/core/save.js`): Bei Änderungen `SAVE_VERSION` erhöhen und alte Spielstände umwandeln, damit Tobias' Fabrik nicht verloren geht.

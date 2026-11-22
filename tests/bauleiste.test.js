@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { BUILDINGS, BUILD_ALWAYS, BUILD_MENU, BUILD_TABS } from '../src/core/data/buildings.js';
 import { ITEMS } from '../src/core/data/items.js';
 import { unlocksOf } from '../src/core/levels.js';
-import { clampCamera, createCamera, panBy, setViewSize } from '../src/view/camera.js';
+import { clampCamera, createCamera, panBy, setViewSize } from '../src/view2d/camera.js';
 
 // v0.19.0 (Tobias): Der Reiter „Kräuter“ heißt „Erde“.
 // v0.26.0: dazu „Werkstatt“ für die Werkzeug-Maschinen ab Level 9.

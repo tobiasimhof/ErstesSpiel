@@ -41,9 +41,9 @@ export function importMapJson(version, extra = {}) {
   return JSON.stringify({ imports: { ...imports, ...extra } }, null, 2);
 }
 
-// v0.32.0: Die Grafik-Probe (grafik-probe.html) lädt dazu three.js. Die
-// Versionsnummer von three.js steht im Ordnernamen, deshalb ohne ?v=.
-export const PROBE_IMPORTS = {
+// Der 3D-Test lädt dazu three.js. Die Versionsnummer von three.js steht im
+// Ordnernamen, deshalb ohne ?v=.
+export const THREE_IMPORTS = {
   three: './vendor/three-0.187.0/build/three.module.js',
   'three/addons/': './vendor/three-0.187.0/examples/jsm/',
 };
@@ -77,7 +77,6 @@ if (isMain) {
   }
   // v0.34.0: Der 3D-Test (index.html?ansicht=3d) lädt three.js nach – nur dort,
   // die Import-Map allein lädt nichts.
-  updatePage('index.html', version, PROBE_IMPORTS);
-  updatePage('grafik-probe.html', version, PROBE_IMPORTS);
-  console.log(`Version ${version}: src/version.js, index.html und grafik-probe.html (${sourceFiles().length} Dateien in der Import-Map) aktualisiert.`);
+  updatePage('index.html', version, THREE_IMPORTS);
+  console.log(`Version ${version}: src/version.js und index.html (${sourceFiles().length} Dateien in der Import-Map) aktualisiert.`);
 }
