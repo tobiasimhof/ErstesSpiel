@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt kurz, wie das Spiel **jetzt** ist (Stand v0.38.0). Einzelheiten stehen in **`docs/inhalte/`** und werden nur gelesen, wenn wir daran arbeiten: `LEVEL.md` (Level, Aufträge, Aufstiege), `GEBAEUDE.md` (Gebäude, Baukosten), `WAREN.md` (Waren, Rezepte, Preise), `BEDIENUNG.md` (Bedienung im Einzelnen), `AUSBLICK.md` (Techbaum, Ideen). Bei jeder Änderung wird der Text **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt kurz, wie das Spiel **jetzt** ist (Stand v0.39.0). Einzelheiten stehen in **`docs/inhalte/`** und werden nur gelesen, wenn wir daran arbeiten: `LEVEL.md` (Level, Aufträge, Aufstiege), `GEBAEUDE.md` (Gebäude, Baukosten), `WAREN.md` (Waren, Rezepte, Preise), `BEDIENUNG.md` (Bedienung im Einzelnen), `AUSBLICK.md` (Techbaum, Ideen). Bei jeder Änderung wird der Text **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
@@ -26,7 +26,7 @@
 Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeiten → Versandportal → Laden-Lager → Theken → Kunden zahlen Gold → neue Rohstoffe, Fläche, Theken, größeres Lager, Aufstieg. Waren sind zugleich Baumaterial: verkaufen oder damit bauen?
 
 - **Echtzeit:** Die Fabrik läuft auch bei geschlossenem Spiel weiter, **bis etwas leer ist** (Rohstoff, Zutaten, Lagerhaus; Laden-Lager voll; Theken leer; Beete reif). Nachlegen ist Handarbeit („wie Clash of Clans, nur umgekehrt“). Beim Zurückkommen wird nachgerechnet; nach mehr als 10 Minuten erscheint „👋 Willkommen zurück!“.
-- **Menü ☰:** Spielstand als Datei sichern und laden (auch zum Teilen), Testmodus (Zeit ×10, Testpaket), 3D-Test ↔ echte Fabrik, Neues Spiel. Oben stehen im 3D-Test immer die Bilder pro Sekunde.
+- **Menü ☰:** Spielstand als Datei sichern und laden (auch zum Teilen), Testmodus (Zeit ×10, Testpaket, im 3D-Spiel der Belastungstest: eine voll bebaute Fläche zum Ablesen der Bilder pro Sekunde, wird nie gespeichert), 3D-Test ↔ echte Fabrik, Neues Spiel. Oben stehen im 3D-Test immer die Bilder pro Sekunde.
 
 ## 4. Die Fabrik
 

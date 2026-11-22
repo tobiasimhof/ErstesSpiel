@@ -367,6 +367,42 @@ async function run3d(browser, baseUrl, device) {
   check(Boolean(slots.test) && slots.real === real, '3D-Test hat einen eigenen Spielstand, die echte Fabrik bleibt unverändert');
   check(errors.length === 0, `Keine Fehler in der Konsole des 3D-Tests${errors.length ? ': ' + errors.join(' | ') : ''}`);
 
+  // v0.39.0: Belastungstest – im Testmodus aus dem Menü, volle Fabrik, wird nie gespeichert
+  await page.tap('#btn-menu');
+  await sleep(100);
+  check(!(await page.isVisible('#menu-stress')), 'Ohne Testmodus kein Belastungstest im Menü');
+  await page.tap('#menu-test-mode');
+  await sleep(150);
+  await page.tap('#btn-menu');
+  await sleep(100);
+  const stressMenu = await page.locator('#menu').boundingBox();
+  check((await page.isVisible('#menu-stress')) && stressMenu.y + stressMenu.height <= vp.height, `Testmodus: „🏭 Belastungstest“ im Menü, Menü passt (${Math.round(stressMenu.y + stressMenu.height)} ≤ ${vp.height})`);
+  await page.tap('#menu-stress');
+  await page.waitForURL(/belastungstest=1/);
+  await page.waitForFunction(() => window.__game?.view3d && window.__game.camera.viewWidth > 0, null, { timeout: 60000 });
+  // vor dem Wechsel hat das 3D-Spiel gespeichert – ab hier darf sich nichts mehr ändern
+  const before3d = await game(page, () => localStorage.getItem('erstesspiel-spielstand-3d-test'));
+  await sleep(1500);
+  const stress = await game(page, () => ({ counts: window.__game.view3d.counts(), level: window.__game.state.shopLevel, plot: [window.__game.state.plot.width, window.__game.state.plot.height] }));
+  check(stress.counts.buildings >= 150 && stress.counts.belts >= 300 && stress.level === 13 && stress.plot.join() === '46,38', `Volle Fabrik in 3D (${JSON.stringify(stress)})`);
+  check(await page.isVisible('#stress-banner'), 'Hinweis „Belastungstest … Bilder/s ablesen“ mit „↩ Beenden“');
+  const bannerBox = await page.locator('#stress-banner').boundingBox();
+  check(bannerBox.x >= 0 && bannerBox.x + bannerBox.width <= vp.width, `Hinweis passt auf den Bildschirm (${Math.round(bannerBox.x)}–${Math.round(bannerBox.x + bannerBox.width)})`);
+  await shot('3d-12-belastungstest');
+  await game(page, () => window.__game.saveNow());
+  const stressSlots = await game(page, () => ({ test: localStorage.getItem('erstesspiel-spielstand-3d-test'), own: localStorage.getItem('erstesspiel-spielstand-belastungstest') }));
+  check(stressSlots.test === before3d && stressSlots.own === null, 'Der Belastungstest speichert nichts – der 3D-Spielstand bleibt, wie er war');
+  await page.tap('#stress-exit');
+  await page.waitForURL((u) => !u.search.includes('belastungstest'));
+  await page.waitForFunction(() => window.__game?.view3d && window.__game.camera.viewWidth > 0, null, { timeout: 60000 });
+  const after = await game(page, () => ({ level: window.__game.state.shopLevel, buildings: window.__game.state.buildings.length }));
+  check(after.level === 1 && after.buildings < 10, `„↩ Beenden“ führt zurück ins eigene 3D-Spiel (Level ${after.level}, ${after.buildings} Gebäude)`);
+  // Testmodus wieder aus
+  await page.tap('#btn-menu');
+  await sleep(100);
+  await page.tap('#menu-test-mode');
+  await sleep(150);
+
   // Zurück zur echten Fabrik
   await page.tap('#btn-menu');
   await sleep(100);

@@ -65,7 +65,7 @@ test('3D-Test: Menü-Eintrag, Knöpfe ⟲ ⟳ und Wechsel mit Speichern', () => 
   assert.ok(main.includes("location.href = VIEW_3D ? 'index.html?ansicht=2d' : 'index.html';"), 'Wechsel zwischen beiden');
   assert.ok(read('src/ui/hud.js').includes("'🗺️ Zur echten Fabrik (2D)'"));
   assert.ok(main.includes('if (VIEW_3D) useSaveSlot(TEST_3D_SLOT);'), 'eigener Spielstand vor dem ersten Laden');
-  assert.ok(main.indexOf('useSaveSlot(TEST_3D_SLOT)') < main.indexOf('const loaded = loadGame();'));
+  assert.ok(main.indexOf('useSaveSlot(TEST_3D_SLOT)') < main.indexOf('const loaded = '));
   assert.ok(/onSwitch3d: \(\) => \{\s*saveNow\(\);/.test(main), 'vor dem Wechsel wird gespeichert');
 });
 

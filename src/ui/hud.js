@@ -6,7 +6,7 @@ import { onPress } from './press.js';
 
 const numberFormat = new Intl.NumberFormat('de-DE');
 
-export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, onLevel, onSaveFile, onLoadFile, onSwitch3d, is3d = false }) {
+export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, onLevel, onSaveFile, onLoadFile, onSwitch3d, onStressTest, is3d = false, stressTest = false }) {
   const gold = document.getElementById('hud-gold');
   const goldGain = document.getElementById('hud-gold-gain');
   const testPackButton = document.getElementById('menu-test-pack');
@@ -46,6 +46,16 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
   onPress(testPackButton, () => {
     closeMenu();
     onTestPack();
+  });
+  // v0.39.0: Belastungstest (nur im Testmodus des 3D-Spiels) – mit Hinweis und „Beenden“
+  const stressButton = document.getElementById('menu-stress');
+  onPress(stressButton, () => {
+    closeMenu();
+    onStressTest();
+  });
+  document.getElementById('stress-banner').hidden = !stressTest;
+  onPress(document.getElementById('stress-exit'), () => {
+    location.href = 'index.html';
   });
   // v0.22.0: Spielstand als Datei sichern und laden
   onPress(document.getElementById('menu-save-file'), () => {
@@ -121,6 +131,7 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
       speedBadge.hidden = !on;
       fpsBadge.hidden = !on && !is3d; // v0.36.0: im 3D-Test immer sichtbar
       testPackButton.hidden = !on;
+      stressButton.hidden = !on || !is3d || stressTest;
     },
     // v0.21.0 (Belastungstest): Bilder pro Sekunde, nur im Testmodus zu sehen
     setFps(fps) {

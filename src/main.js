@@ -3,6 +3,7 @@
 
 import { VERSION } from './version.js';
 import { createNewGame } from './core/state.js';
+import { createStressFactory } from './core/belastungstest.js';
 import { TICK, simulate, tick } from './core/sim.js';
 import { TILE, createCamera, setViewSize, zoomAt, panBy, fitRect, clampCamera } from './view2d/camera.js';
 import { createRenderer } from './view2d/renderer.js';
@@ -25,6 +26,7 @@ import { createLevelView, unlockText } from './ui/levels.js';
 import { costText, numberFormat } from './ui/format.js';
 import { redrawItemIcons } from './ui/itemArt.js';
 import {
+  STRESS_SLOT,
   TEST_3D_SLOT,
   clearGame,
   loadGame,
@@ -50,8 +52,15 @@ import { onPress } from './ui/press.js';
 const VIEW_3D = new URLSearchParams(location.search).get('ansicht') !== '2d';
 if (VIEW_3D) useSaveSlot(TEST_3D_SLOT);
 
-const loaded = loadGame();
-const state = loaded.status === 'ok' ? loaded.state : createNewGame();
+// v0.39.0: Belastungstest (Tobias, Chat 25) – index.html?belastungstest=1
+// zeigt eine voll bebaute Fabrik (Level 13, 46 × 38), um die Bilder pro
+// Sekunde abzulesen. Sie wird nie gespeichert; dazu ein eigener Speicherplatz,
+// damit auch „Neues Spiel“ oder „Laden“ keinen echten Spielstand berühren.
+const STRESS_TEST = new URLSearchParams(location.search).has('belastungstest');
+if (STRESS_TEST) useSaveSlot(STRESS_SLOT);
+
+const loaded = STRESS_TEST ? { status: 'none' } : loadGame();
+const state = STRESS_TEST ? createStressFactory() : loaded.status === 'ok' ? loaded.state : createNewGame();
 
 const canvas = document.getElementById('game');
 const ui = { mode: 'normal', selected: null, ghost: null, beltPreview: null, simAlpha: 0 };
@@ -113,7 +122,7 @@ let lastRipe = ripeCount();
 function saveNow() {
   clearTimeout(saveTimer);
   saveTimer = null;
-  if (!resetting && !catchUpJob) saveGame(state);
+  if (!resetting && !catchUpJob && !STRESS_TEST) saveGame(state);
 }
 function scheduleSave() {
   clearTimeout(saveTimer);
@@ -240,9 +249,15 @@ const hud = createHud({
     backup.save();
   },
   onLoadFile: () => backup.pickFile(),
+  // v0.39.0: Belastungstest – erst speichern, dann die volle Fabrik zeigen
+  onStressTest: () => {
+    saveNow();
+    location.href = 'index.html?belastungstest=1';
+  },
   // v0.34.0: 3D-Test (eigener Spielstand) – erst speichern, dann wechseln
   // (seit v0.38.0 ist der 3D-Test der Start, die echte Fabrik ?ansicht=2d)
   is3d: VIEW_3D,
+  stressTest: STRESS_TEST,
   onSwitch3d: () => {
     saveNow();
     location.href = VIEW_3D ? 'index.html?ansicht=2d' : 'index.html';

@@ -4,6 +4,23 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.39.0 – Belastungstest (22.11.2026)
+
+**Vorgenommen:**
+- Tobias (Chat 25): „Lass uns erst sehen, wie der Belastungstest ist“ – auf dem Tablet ablesen, wie flüssig der 3D-Test mit einer voll bebauten Fläche läuft (Analyse v0.38.1: 3.700–6.200 Zeichenaufrufe je Bild).
+
+**Fragen, die wir uns gestellt haben:**
+- Wie bleibt Tobias' Spielstand sicher? → eigene Adresse `?belastungstest=1` mit eigenem Speicherplatz (`STRESS_SLOT`); dort wird nie gespeichert, auch „Neues Spiel“ oder „Laden“ träfen nur diesen Platz. Vor dem Wechsel speichert das eigene Spiel.
+- Wie realistisch? → die ganze Fläche von Level 13 (46 × 38) mit 52 Straßen aus vier Arten (Holz, Stein, Eisen, Glas), alle mit Waren auf den Bändern.
+
+**Gemacht:**
+- `src/core/belastungstest.js` (`createStressFactory`), `main.js` (`STRESS_TEST`, kein Laden, kein Speichern, `onStressTest`), `storage.js` (`STRESS_SLOT`), Menüeintrag „🏭 Belastungstest (volle Fabrik)“ (nur im Testmodus des 3D-Spiels) und Hinweis mit „↩ Beenden“ (`index.html`, `hud.js`, `style.css`).
+- Tests: `belastungstest.test.js` (volle Fläche, alle Haus-Arten, läuft, speichert nie), `dreid.test.js` angepasst, Browser-Test `spiel3d.cjs` (Menüeintrag nur im Testmodus, volle Fabrik, Hinweis passt, nichts gespeichert, Beenden; Screenshot `3d-12-belastungstest`).
+
+**Geprüft:**
+- `npm test`: 417 von 417 bestanden.
+- Browser-Test: alle 990 Prüfungen bestanden. Beim ersten Versuch schlug eine neue Prüfung fehl, weil sie den 3D-Spielstand vor dem gewollten Speichern beim Wechsel verglich – Prüfung korrigiert. Screenshot auf dem Handy angesehen (Hinweis passt, volle Fabrik sichtbar).
+
 ### v0.38.1 – Analyse als Spielentwickler (22.11.2026, nur Doku)
 
 **Vorgenommen:**
