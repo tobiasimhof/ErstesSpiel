@@ -63,4 +63,4 @@ Wie das Spiel gebaut ist. Nur lesen, wenn programmiert wird; die Arbeitsregeln s
 
 ## Prüfen vor jedem Merge
 
-`npm test` und `SCREENSHOT_DIR=<Scratchpad>/shots npm run test:browser`, danach die Screenshots ansehen. `ONLY=3d` davor prüft nur den 3D-Test (schneller beim Entwickeln; vor dem Merge den ganzen Test).
+`npm test` und `SCREENSHOT_DIR=<Scratchpad>/shots npm run test:browser`, danach die Screenshots ansehen. `ONLY=3d` davor prüft nur den 3D-Test, `ONLY=2d` nur die echte Fabrik (schneller beim Entwickeln; vor dem Merge den ganzen Test).

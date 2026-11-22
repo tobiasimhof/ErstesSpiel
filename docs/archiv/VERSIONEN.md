@@ -20,7 +20,12 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 - `ui/controller.js`: Modus `areaCopy` (Vorschau, Text mit Kosten, Stempel, Meldungen), Antippen der Karte schließt die Bauleiste; `ui/buildbar.js` und `index.html`: Knopf „📋 Kopieren“, „✕ Fertig“ statt „✕ Abbrechen“ beim Kopieren.
 - `view3d/scene3d.js` und `view2d/renderer.js`: Beim Kopieren bleibt das Original zu sehen und markiert; Abfrage `buildingVisible` für den Browser-Test.
 - Tests: `tests/kopieren.test.js` (Kosten, leer mit Einstellung, alles oder nichts, kein Platz, gesperrt, gedreht, Stempel, Abreißen, Spielstand); Browser-Test 3D (kopieren, Stempel, zu wenig Waren, Fertig; Bauleiste: Wischen lässt offen, Antippen schließt) und 2D (Vorschau, Kosten, nichts gebaut).
-- Doku: `STAND.md`, `SPIEL.md`, `BEDIENUNG.md`, `TECHNIK.md`, Archiv.
+- Doku: `STAND.md`, `SPIEL.md`, `BEDIENUNG.md`, `TECHNIK.md`, Archiv. Browser-Test: neuer Schalter `ONLY=2d` (nur die echte Fabrik).
+
+**Geprüft:**
+- `npm test`: 423 von 423 bestanden (6 neue in `kopieren.test.js`).
+- Browser-Test, ganzer Lauf: alles bestanden bis auf eine falsche Erwartung im 2D-Teil (die markierte Gruppe hat 6 Bänder, die Kopie kostet also 46 statt 40 Holzblöcke – das Spiel zeigte es richtig); korrigiert und den 2D-Teil (`ONLY=2d`) noch einmal laufen lassen: 912 Prüfungen bestanden. 3D: 116 Prüfungen bestanden.
+- Screenshots angesehen: Kopie als grüne Vorschau direkt neben dem markierten Original (3D und 2D, Tablet und Handy), unten Kosten und „⚠ Es fehlen: …“; auf dem Handy passen „Abreißen“, „Kopieren“, „Verschieben“, „Fertig“ nebeneinander.
 
 ### v0.40.2 – Weiche zurückgestellt, Entwurf Bereich kopieren (22.11.2026, nur Doku)
 

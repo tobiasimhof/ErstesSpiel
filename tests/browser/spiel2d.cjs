@@ -543,7 +543,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   marked = await area();
   check((await mode(page)) === 'areaCopy' && marked.ghost.valid, `Kopieren: Vorschau neben dem Original (${marked.ghost.x},${marked.ghost.y})`);
   const copyText2d = await page.textContent('#tool-text');
-  check(copyText2d.includes('40 Holzblöcke') && copyText2d.includes('Es fehlen'), `Kosten und was fehlt stehen unten („${copyText2d}“)`);
+  check(copyText2d.includes('46 Holzblöcke') && copyText2d.includes('Es fehlen: 41 Holzblöcke'), `Kosten und was fehlt stehen unten („${copyText2d}“)`);
   await shot('19b-bereich-kopieren');
   await page.tap('#tool-confirm');
   await sleep(80);

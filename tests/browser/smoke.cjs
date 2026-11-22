@@ -3,7 +3,7 @@
 // wichtigsten Funktionen per Touch durch. Screenshots landen im Ordner aus
 // SCREENSHOT_DIR (Standard: test-output/).
 //
-// Aufruf: node tests/browser/smoke.cjs (ONLY=3d davor: nur der 3D-Test)
+// Aufruf: node tests/browser/smoke.cjs (ONLY=3d davor: nur der 3D-Test, ONLY=2d: nur die echte Fabrik)
 // Teile: helpers.cjs (gemeinsame Hilfen), spiel2d.cjs (2D), spiel3d.cjs (3D).
 
 const fs = require('node:fs');
@@ -29,7 +29,8 @@ const { run3d } = require('./spiel3d.cjs');
       await runPortrait(browser, baseUrl);
       await runNarrowPhone(browser, baseUrl);
     }
-    for (const device of DEVICES) await run3d(browser, baseUrl, device);
+    // v0.41.0: ONLY=2d prüft nur die echte Fabrik
+    if (process.env.ONLY !== '2d') for (const device of DEVICES) await run3d(browser, baseUrl, device);
   } finally {
     await browser.close();
     server.close();
