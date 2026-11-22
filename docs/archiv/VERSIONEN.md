@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.36.1 – schnellerer Start getestet (22.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zum schnelleren Start festhalten (Regel „Nichts darf verloren gehen“).
+
+**Fragen, die wir uns gestellt haben:**
+- Passt der neue Start? → Ja: „bisher fühlt er sich sehr gut an“; die 500 Gold „fallen nicht so schwer ins Gewicht und erleichtern die ersten Level erheblich“ (am PC getestet).
+- Wie weiter? → Tobias entscheidet: weitere Häuser für Level 2+ im 3D-Test, 3D für die echte Fabrik oder Level 14.
+
+**Gemacht:**
+- `STAND.md` (Status, Nächster Schritt, offene Frage 1, letzte Arbeitsschritte), Archiv. Versionsnummer 0.36.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 419 von 419 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.36.0 – schnellerer Start (21.11.2026)
 
 **Vorgenommen:**
@@ -208,7 +223,7 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 - Entwurf in `PLAENE.md` (Gesamtbild 13–18, Level 13 im Detail, 5 Fragen). `STAND.md`, Archiv. Versionsnummer 0.30.1, Spiel unverändert.
 
 **Geprüft:**
-- `npm test` (nur Doku und Versionsnummer geändert).
+- `npm test`: 419 von 419 bestanden (nur Doku und Versionsnummer geändert).
 
 ### v0.30.0 – Laden-Lager vergrößern (19.11.2026)
 
