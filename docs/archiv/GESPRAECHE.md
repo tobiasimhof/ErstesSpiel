@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test, Analyse (v0.36.1 bis v0.38.1)
+### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test, Analyse, Belastungstest (v0.36.1 bis v0.39.0)
 
 **Tobias:** „Hey, ich habe an meinem Pc den neuen Start getestet und bisher fühlt er sich sehr gut an. Die neuen 500 Startgold fallen nicht so schwer ins Gewicht und erleichtern die ersten Level erheblich. Lies dir den aktuellen Stand durch und berichte mir bei welchem Schritt wir gerade sind.“
 
@@ -29,6 +29,10 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat als Spielentwickler analysiert (ausführlich in `PLAENE.md`, „Analyse als Spielentwickler“) und dafür gemessen, wie viele Zeichenaufrufe die 3D-Ansicht braucht: Startfabrik etwa 260 je Bild, eine voll bebaute Fläche (156 Gebäude, 312 Bänder) etwa 3.700 bis 6.200 – ein Tablet schafft flüssig grob 1.000–2.000. Vorschlag der Reihenfolge: v0.39.0 Belastungstest-Knopf (Tobias misst auf dem Tablet), dann 3D schneller und Schilder von weitem schlichter, dann Weiche, Bereich kopieren, Level 14 und 15 parallel planen; kleine Gewinne: Erinnerung zum Sichern, Rechenwerkzeug für die Zahlen. Fragen: Passt die Reihenfolge? Wann ungefähr Level 13 im 3D-Test?
 
 **Umgesetzt:** v0.38.1 (nur Doku). Wartet auf Tobias' Entscheidung.
+
+**Tobias:** „Ja, diese Reihenfolge passt mir. Lass uns erst sehen, wie der Belastungstest ist, weil ich bald auf level 8 bin und dann geht es eigentlich zückig weiter auf lvl 9 weil ich bisher alle einzelteile der schlosserei schon automatisiert habe. Level 14 können wir erstmal hinten anstellen, da ich auch auf den token verbrauch achten muss und dadurch immer wieder kleine Spielpausen für mich entstehen. Ich denke, es wird noch etwas dauern, bis ich auf level 13 bin“
+
+**Umgesetzt:** v0.39.0 – Belastungstest wie in der Analyse beschrieben (im Testmodus ☰ → „🏭 Belastungstest (volle Fabrik)“, wird nie gespeichert). Als Nächstes misst Tobias auf dem Tablet.
 
 ### 21.11.2026 – Chat 24 (Fortsetzung): Tobias testet den 3D-Test (nach v0.34.0)
 

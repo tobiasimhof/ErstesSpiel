@@ -4,12 +4,12 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.38.1 – Analyse als Spielentwickler (nur Doku; im Spiel: Start im 3D-Test, die echte Fabrik über ☰ bzw. `?ansicht=2d`) |
+| **Aktuelle Version** | v0.39.0 – Belastungstest: im Testmodus ☰ → „🏭 Belastungstest (volle Fabrik)“ zeigt eine voll bebaute Fläche (46 × 38, 156 Gebäude) zum Ablesen der Bilder pro Sekunde; wird nie gespeichert |
 | **Phase** | M2 – Produktionsketten (Level 1–13 im Spiel); Fokus jetzt auf dem 3D-Test |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ (3D-Test; die echte Fabrik: https://tobiasimhof.github.io/ErstesSpiel/?ansicht=2d) |
-| **Nächster Schritt** | **Tobias entscheidet über Claudes Vorschläge** (Analyse in `docs/archiv/PLAENE.md`): v0.39.0 Belastungstest-Knopf (Bilder pro Sekunde einer voll bebauten Fabrik auf dem Tablet ablesen) → 3D schneller und lesbarer → Weiche → Bereich kopieren; Level 14 und 15 parallel planen. Erst nach Tobias' OK programmieren. |
+| **Nächster Schritt** | **Tobias misst auf dem Tablet:** ☰ → Testmodus an → ☰ → „🏭 Belastungstest“, heraus- und heranzoomen, oben die Bilder pro Sekunde ablesen, „↩ Beenden“. Danach: 3D schneller und lesbarer (je nach Ergebnis), dann Weiche, dann Bereich kopieren. Erst nach Tobias' OK programmieren. |
 
-**Tobias' 3D-Test – Level 7, bald 8** (Chat 25): Hier spielt und testet Tobias jetzt alles neu. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“ Gleich aussehende Häuser stören ihn nicht: „Die Logik ist mir erstmal wichtiger.“
+**Tobias' 3D-Test – Level 7, bald 8** (Chat 25): Hier spielt und testet Tobias jetzt alles neu. Die Einzelteile der Schlosserei sind schon automatisiert, Level 9 kommt deshalb zügig; bis Level 13 „wird es noch etwas dauern“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“ Gleich aussehende Häuser stören ihn nicht: „Die Logik ist mir erstmal wichtiger.“
 
 **Echte Fabrik (2D) – Level 13, hinten angestellt** (Chat 25). Frühere Stände (Level 8, 10, 11 mit Zitaten) in `docs/archiv/STAND-LANGFASSUNG.md`.
 
@@ -25,7 +25,7 @@
 
 **Nächste Schritte** (jeder erst nach Tobias' OK):
 
-- **Vorschlag (Chat 25, Analyse in `PLAENE.md`), wartet auf Tobias:** Belastungstest auf dem Tablet → 3D schneller und lesbarer (gemessen: volle Fläche 3.700–6.200 Zeichenaufrufe je Bild, Tablet flüssig grob 1.000–2.000) → Weiche → Bereich kopieren; Level 14 und 15 parallel planen; kleine Gewinne: Erinnerung zum Sichern, Rechenwerkzeug für die Zahlen.
+- **Reihenfolge (Tobias, Chat 25: „diese Reihenfolge passt mir“; Analyse in `PLAENE.md`):** Belastungstest (v0.39.0, im Spiel) → 3D schneller und lesbarer (gemessen: volle Fläche 3.700–6.200 Zeichenaufrufe je Bild, Tablet flüssig grob 1.000–2.000) → Weiche → Bereich kopieren. **Level 14 hinten angestellt** (Tobias: auch wegen des Token-Verbrauchs, bis Level 13 dauert es noch). Kleine Gewinne: Erinnerung zum Sichern, Rechenwerkzeug für die Zahlen.
 1. **Tränke-Kapitel:** Level 14 der Mörser (Zimmerei, 1 Steinplatte + 3 Holzstäbe), Level 15 eine neue Maschine, die Kräuter, Kohle und Sand zu Staub zerkleinert, später Tinktur und erster Zaubertrank (`docs/inhalte/AUSBLICK.md`). Leitlinie: alte Maschinen bekommen neue Funktionen, neue nur, wo es Sinn ergibt.
 2. **3D-Grafik** (später, die Logik geht vor): eigene Häuser ab Level 2, Mix aus Modern und Mittelalter als eigener Stil (ohne Greifarm), eine Stadt um die Fabrik, die mit dem Level wächst (Idee).
 3. **Nach hinten verschoben** (Chat 19): Was Tester brauchen (kurze Einführung, M4), **Bereich kopieren** (Tobias: „sehr wichtig“), **Weiche** (Tobias: „sehr sinnvoll“).
@@ -55,20 +55,14 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.39.0 – Belastungstest (22.11.2026)
+
+- **Warum (Tobias, Chat 25):** „Ja, diese Reihenfolge passt mir. Lass uns erst sehen, wie der Belastungstest ist“ – Level 8 und 9 kommen bald.
+- **Umgesetzt:** Im Testmodus des 3D-Spiels ☰ → „🏭 Belastungstest (volle Fabrik)“: speichert erst das eigene Spiel, zeigt dann eine voll bebaute Fläche (Level 13, 46 × 38, 52 Straßen mit Holz, Stein, Eisen und Glas, 156 Gebäude, 312 Bänder) mit Hinweis und „↩ Beenden“. Sie wird nie gespeichert (eigener Speicherplatz, kein Speichern) – das eigene 3D-Spiel bleibt, wie es war.
+- **Offen:** Tobias' Messung auf dem Tablet.
+
 ### v0.38.1 – Analyse als Spielentwickler (22.11.2026, nur Doku)
 
 - **Tobias (Chat 25):** „Ja, du kannst loslegen.“
 - **Claudes Analyse** (`PLAENE.md`): gemessen – die 3D-Ansicht braucht bei voll bebauter Fläche 3.700–6.200 Zeichenaufrufe je Bild (Startfabrik 260); ohne Abhilfe ruckelt der 3D-Test ab etwa Level 9–10. Dazu: Schilder verdecken große Fabriken, die Weiche fehlt für gemischte Bänder, Bereich kopieren für Massenproduktion, nach Level 13 kommt noch nichts. Vorschlag: Belastungstest → 3D schneller → Weiche → Bereich kopieren, Level 14/15 parallel.
 - **Offen:** Tobias' Entscheidung zur Reihenfolge; wann ungefähr Level 13 im 3D-Test?
-
-### v0.38.0 – Start im 3D-Test (22.11.2026)
-
-- **Warum (Tobias, Chat 25):** „Ja, jetzt das 3D Spiel fokussieren, weil die Kenny dateien alle funktionen und das Spiel spielbar aussieht und funktioniert.“
-- **Umgesetzt:** Der Link (und das Symbol auf dem Startbildschirm) öffnet den 3D-Test mit seinem Spielstand. Die echte Fabrik: ☰ → „🗺️ Zur echten Fabrik (2D)“ oder `?ansicht=2d`; von dort zurück mit „🧊 Zurück zum 3D-Test“. Beide Spielstände bleiben, wie sie sind.
-- **Offen:** Tobias' Eindruck; danach die Analyse als Spielentwickler.
-
-### v0.37.0 – neue Ordnung (22.11.2026)
-
-- **Warum (Tobias, Chat 25):** „damit wir einfacher und schneller arbeiten können“ und „du nicht so viel lesen musst“; zu den Fragen: „Ja, jetzt das 3D Spiel fokussieren“ und Grafik-Probe „können wir gernen entfernen und auf das Hauptspiel auf lvl 7 konzentrieren“.
-- **Umgesetzt:** `STAND.md` und `SPIEL.md` kurz, die Einzelheiten in `docs/inhalte/` (LEVEL, GEBAEUDE, WAREN, BEDIENUNG, AUSBLICK), `TECHNIK.md` kurz, die alten Langfassungen im Archiv. Code: `src/ui/` (Oberfläche für 2D und 3D), `src/view3d/` (3D mit Kenneys Modellen), `src/view2d/` (2D, hinten angestellt). Browser-Test in `helpers.cjs`, `spiel2d.cjs`, `spiel3d.cjs`. Grafik-Probe samt Modern-Stil und ungebrauchten Modellen entfernt. Am Spiel sonst nichts geändert.
-- **Offen:** v0.38.0 (Start im 3D-Test, gleich danach umgesetzt).

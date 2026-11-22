@@ -11,6 +11,8 @@ const SETTINGS_KEY = 'erstesspiel-einstellungen';
 // holen.“). Muss vor dem ersten Laden gesetzt werden; Sichern, Laden aus einer
 // Datei und „Neues Spiel“ betreffen dann nur diesen Spielstand.
 export const TEST_3D_SLOT = '3d-test';
+// v0.39.0: Belastungstest – eigener Platz, in den aber nie gespeichert wird
+export const STRESS_SLOT = 'belastungstest';
 export function useSaveSlot(slot) {
   KEY = slot ? `erstesspiel-spielstand-${slot}` : 'erstesspiel-spielstand';
 }

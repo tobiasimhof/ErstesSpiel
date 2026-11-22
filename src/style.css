@@ -646,6 +646,37 @@ button.danger {
   border: 1px solid rgba(243, 230, 196, 0.35);
 }
 
+/* v0.39.0: Belastungstest – Hinweis oben in der Mitte mit „Beenden“ */
+.stress-banner {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100% - 300px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 6px 6px 14px;
+  background: rgba(36, 26, 16, 0.9);
+  border: 1px solid rgba(243, 230, 196, 0.35);
+  border-radius: 14px;
+  color: #f3e6c4;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 3;
+}
+
+.stress-banner[hidden] {
+  display: none;
+}
+
+.stress-banner button {
+  flex: none;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
 /* v0.34.0: 3D-Test – Knöpfe zum Drehen der Kamera, oben links */
 .turn-buttons {
   position: absolute;

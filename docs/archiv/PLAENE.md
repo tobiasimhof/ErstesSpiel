@@ -61,7 +61,11 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Analyse als Spielentwickler – die sinnvollsten nächsten Schritte (Chat 25, v0.38.1; wartet auf Tobias' Entscheidung)
+### Belastungstest (fertig, v0.39.0 – wie in der Analyse vorgeschlagen)
+
+Tobias: „Ja, diese Reihenfolge passt mir. Lass uns erst sehen, wie der Belastungstest ist“. Umgesetzt: im Testmodus des 3D-Spiels ☰ → „🏭 Belastungstest (volle Fabrik)“ → `index.html?belastungstest=1`: `createStressFactory` (`src/core/belastungstest.js`) füllt die Fläche von Level 13 (46 × 38) mit 52 Straßen (Holzfällerlager → Sägewerk, Steinbruch → Steinmetz, Schmelzhütte → Schmiede, Ofen mit Sand → Schmiede auf Fläschchen, je mit Versandportal) und lässt sie 2 Minuten laufen. Eigener Speicherplatz (`STRESS_SLOT`), `saveNow` speichert dort nie; ein Hinweis oben mit „↩ Beenden“ führt zurück ins eigene Spiel. Als Nächstes misst Tobias auf dem Tablet; danach „3D schneller und lesbarer“.
+
+### Analyse als Spielentwickler – die sinnvollsten nächsten Schritte (Chat 25, v0.38.1; Reihenfolge angenommen, Level 14 hinten angestellt)
 
 **Tobias (Chat 25):** „im nächsten Schritt will ich dass du in die Rolle eines Spielentwicklers schlüpfst und analysierst, was die sinnvollsten nächsten Schritte wären und mir diese vorschlägst.“ – „Ja, du kannst loslegen.“
 
