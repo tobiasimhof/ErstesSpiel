@@ -4,6 +4,28 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.40.0 – 3D schneller und lesbarer (22.11.2026)
+
+**Vorgenommen:**
+- Tobias' Messung (v0.39.1: herausgezoomt 40–50 Bilder/s, leicht ruckelig; großes Verschieben ruckelt) – den Entwurf aus `PLAENE.md` umsetzen, mit Vorschlag A („von weitem nur Statuslicht“); dazu Tobias' Fund: Bäume ragten aus Häusern, die auf ihnen gebaut wurden.
+
+**Fragen, die wir uns gestellt haben:**
+- Was kostet am meisten? → jedes Teil ein eigener Zeichenaufruf (Wände, Dächer, Band-Stücke, Zaunpfähle, Bäume, Pfeile mit eigenem Material je Pfeil, 7 Funken je Tor), Schatten doppelt. Gemessen mit `renderer.info.render.calls` im Belastungstest.
+- Warum ruckelt das Verschieben? → die Vorschau wurde bei jedem Wechsel grün ↔ rot neu gebaut, und die Felder darunter bei jedem Fingerschritt als einzelne Teile.
+- Handy: Dort steht die Kamera schon beim Start weiter weg → „von weitem“ hängt von der Bildschirmhöhe ab (Tablet ab 32, niedrigere Bildschirme bis doppelt so weit), sonst zeigte das Handy beim Start nur Lichter.
+
+**Gemacht:**
+- `src/view3d/merge.js` (neu): `mergeMeshes`, `mergeStatic`, `disposeMerged`, `flatRects`.
+- `kenney3d.js`: jedes Haus beim Bauen zusammengefügt (Wasserrad und Schimmer bleiben für sich); Funken als `InstancedMesh`.
+- `scene3d.js`: Pfeile mit gemeinsamen Materialien, alle Pfeile aller Gebäude, alle Bänder (mit Laufpfeilen) sowie Zaun, Bäume, Felsen als je ein Teil (neu nur bei Änderungen oder beim Verschieben); Waren als `InstancedMesh` je Sorte ohne Schatten; Statuslichter von weitem als ein `Points`-Teil; Markierungen, Felder und Band-Strecke als `flatRects`; Vorschau beim Verschieben nur einmal gebaut, grün ↔ rot tauscht das Material; Bäume und Felsen nur außerhalb der Welt (Abstand 1,5).
+- `view3d.js`/`main.js`: `drawCalls()`, `farSigns()`, `treesInWorld()` für den Browser-Test.
+- Browser-Test `spiel3d.cjs`: keine Bäume auf der Welt; Belastungstest herausgezoomt nur Statuslichter und < 1.000 Zeichenaufrufe, nah wieder Schilder (Screenshot `3d-13-belastungstest-weit`).
+
+**Geprüft:**
+- Gemessen (volle Fläche, 156 Gebäude, 312 Bänder): herausgezoomt 6.207 → 734 Zeichenaufrufe je Bild, mittel 3.738 → etwa 480, nah etwa 450.
+- `npm test`: 417 von 417 bestanden.
+- Browser-Test: alle 996 Prüfungen bestanden (im 3D-Teil zeigte das Handy zuerst beim Start nur Lichter – behoben, s. o.); Screenshots vorher/nachher verglichen (gleiches Aussehen, auch die Vorschau beim Verschieben).
+
 ### v0.39.1 – Belastungstest gemessen (22.11.2026, nur Doku)
 
 **Vorgenommen:**

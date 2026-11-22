@@ -651,6 +651,10 @@ window.__game = {
         target: () => [view3d.cam.target.x, view3d.cam.target.z],
         isTurning: () => view3d.isTurning(),
         counts: () => view3d.world.counts(),
+        // v0.40.0: Zeichenaufrufe je Bild und Statuslichter von weitem
+        drawCalls: () => view3d.drawCalls(),
+        farSigns: () => view3d.world.farSigns(),
+        treesInWorld: () => view3d.world.treesInWorld(state),
         sign: (id) => view3d.world.signOf(id),
         shimmer: (id) => view3d.world.shimmerOf(id),
         wheel: (id) => view3d.world.wheelOf(id),

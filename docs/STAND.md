@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.39.1 – Belastungstest gemessen: herausgezoomt 40–50 Bilder/s und leicht ruckelig, nah etwa 70 und flüssig; größere Bereiche verschieben ruckelt leicht (nur Doku) |
+| **Aktuelle Version** | v0.40.0 – 3D schneller und lesbarer: volle Fläche herausgezoomt etwa 730 statt 6.200 Zeichenaufrufe je Bild; von weitem nur Statuslichter (Vorschlag A); Verschieben ohne Neubau der Vorschau; Bäume nur außerhalb der Welt |
 | **Phase** | M2 – Produktionsketten (Level 1–13 im Spiel); Fokus jetzt auf dem 3D-Test |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ (3D-Test; die echte Fabrik: https://tobiasimhof.github.io/ErstesSpiel/?ansicht=2d) |
-| **Nächster Schritt** | **v0.40.0 „3D schneller und lesbarer“** – Entwurf in `docs/archiv/PLAENE.md`, wartet auf Tobias' OK und seine Antwort zu den Schildern. Danach Weiche, dann Bereich kopieren. |
+| **Nächster Schritt** | **Tobias misst noch einmal** mit dem Belastungstest (herausgezoomt und nah, Bilder pro Sekunde) und probiert das Verschieben großer Bereiche. Danach: **Weiche** – erst den Plan besprechen (Ware je Ausgang einstellen, was mit nicht passenden Waren passiert), dann Bereich kopieren. |
 
 **Tobias' 3D-Test – Level 7, bald 8** (Chat 25): Hier spielt und testet Tobias jetzt alles neu. Die Einzelteile der Schlosserei sind schon automatisiert, Level 9 kommt deshalb zügig; bis Level 13 „wird es noch etwas dauern“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“ Gleich aussehende Häuser stören ihn nicht: „Die Logik ist mir erstmal wichtiger.“
 
@@ -25,7 +25,7 @@
 
 **Nächste Schritte** (jeder erst nach Tobias' OK):
 
-- **Reihenfolge (Tobias, Chat 25: „diese Reihenfolge passt mir“; Analyse in `PLAENE.md`):** Belastungstest (v0.39.0, im Spiel) → 3D schneller und lesbarer (gemessen: volle Fläche 3.700–6.200 Zeichenaufrufe je Bild, Tablet flüssig grob 1.000–2.000) → Weiche → Bereich kopieren. **Level 14 hinten angestellt** (Tobias: auch wegen des Token-Verbrauchs, bis Level 13 dauert es noch). Kleine Gewinne: Erinnerung zum Sichern, Rechenwerkzeug für die Zahlen.
+- **Reihenfolge (Tobias, Chat 25: „diese Reihenfolge passt mir“; Analyse in `PLAENE.md`):** Belastungstest (v0.39.0) → 3D schneller und lesbarer (v0.40.0: volle Fläche 730 statt 6.200 Zeichenaufrufe je Bild) → **Weiche** → Bereich kopieren. **Level 14 hinten angestellt** (Tobias: auch wegen des Token-Verbrauchs, bis Level 13 dauert es noch). Kleine Gewinne: Erinnerung zum Sichern, Rechenwerkzeug für die Zahlen.
 1. **Tränke-Kapitel:** Level 14 der Mörser (Zimmerei, 1 Steinplatte + 3 Holzstäbe), Level 15 eine neue Maschine, die Kräuter, Kohle und Sand zu Staub zerkleinert, später Tinktur und erster Zaubertrank (`docs/inhalte/AUSBLICK.md`). Leitlinie: alte Maschinen bekommen neue Funktionen, neue nur, wo es Sinn ergibt.
 2. **3D-Grafik** (später, die Logik geht vor): eigene Häuser ab Level 2, Mix aus Modern und Mittelalter als eigener Stil (ohne Greifarm), eine Stadt um die Fabrik, die mit dem Level wächst (Idee).
 3. **Nach hinten verschoben** (Chat 19): Was Tester brauchen (kurze Einführung, M4), **Bereich kopieren** (Tobias: „sehr wichtig“), **Weiche** (Tobias: „sehr sinnvoll“).
@@ -51,17 +51,17 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 12. **Vor v1.0:** Test-Knopf entfernen (`QUEST_TEST_SKIP = false`). Später: Schwarzmarkt, verbundene Läden, Arbeitstitel.
 13. **Anderen das Spiel zeigen:** geht seit v0.22.0 (eigene Geräte oder sichern → neues Spiel → laden); offen: eine kurze Einführung?
 14. **Techbaum:** Werkzeuge, Kräuter und Tränke wachsen parallel; höchstens 2 Eingänge je Maschine; jedes Produkt entsteht logisch aus seinen Zutaten.
-15. **Grafik:** entschieden – frei drehbar, Mittelalter, Spiel-Farben, eigene Häuser je Gebäude. Offen: Mix aus Modern und Mittelalter als eigener Stil.
+15. **Grafik:** entschieden – frei drehbar, Mittelalter, Spiel-Farben, eigene Häuser je Gebäude; von weitem nur Statuslichter (Vorschlag A, Chat 25). Offen: Mix aus Modern und Mittelalter als eigener Stil.
 
 ## Die letzten 3 Arbeitsschritte
+
+### v0.40.0 – 3D schneller und lesbarer (22.11.2026)
+
+- **Warum (Tobias, Chat 25):** Belastungstest herausgezoomt 40–50 Bilder/s, „leicht ruckelig“, größere Bereiche verschieben ruckelt; zum Plan: „Ich würde mich vor Vorschlag a aussprechen.“ – „Gerne ok“. Dazu: „wenn ich über Bäume baue, die Bäume nicht verschwinden, sondern dann einfach aus dem Haus z.b. herausragen.“
+- **Umgesetzt:** Häuser, Pfeile, Bänder, Zaun und Bäume werden zu wenigen Teilen zusammengefügt, Waren und die Funken im Tor als ein Teil je Sorte; Waren werfen keinen Schatten. Von weitem (Tablet ab Abstand 32) nur Statuslichter, beim Heranzoomen wieder die Schilder. Beim Verschieben wird die Vorschau nur einmal gebaut, grün ↔ rot wechselt nur die Farbe, die Felder sind je ein Teil. Bäume und Felsen stehen nur noch außerhalb der Welt. Gemessen (volle Fläche): herausgezoomt 6.200 → 730, nah 3.700 → etwa 450 Zeichenaufrufe je Bild; am Aussehen sonst nichts geändert.
+- **Offen:** Tobias' Messung auf dem Tablet.
 
 ### v0.39.1 – Belastungstest gemessen (22.11.2026, nur Doku)
 
 - **Tobias (Chat 25, Tablet):** „Herausgezoomt waren es 40-50 FPS und es war leicht ruckelig. Beim verschieben ist mir schon aufgefallen, dass wenn ich größere Produktionen verschieben will, dass es leicht ruckelig ist. Wenn ich ganz nah hineinzoome habe ich so 70 FPS und alles fühlt sich sehr flüssig an.“
 - **Claudes Entwurf v0.40.0** in `PLAENE.md`: gleiche Teile in einem Rutsch zeichnen, Vorschau beim Verschieben nicht mehr neu bauen, Schilder von weitem schlicht. Wartet auf Tobias' OK.
-
-### v0.39.0 – Belastungstest (22.11.2026)
-
-- **Warum (Tobias, Chat 25):** „Ja, diese Reihenfolge passt mir. Lass uns erst sehen, wie der Belastungstest ist“ – Level 8 und 9 kommen bald.
-- **Umgesetzt:** Im Testmodus des 3D-Spiels ☰ → „🏭 Belastungstest (volle Fabrik)“: speichert erst das eigene Spiel, zeigt dann eine voll bebaute Fläche (Level 13, 46 × 38, 52 Straßen mit Holz, Stein, Eisen und Glas, 156 Gebäude, 312 Bänder) mit Hinweis und „↩ Beenden“. Sie wird nie gespeichert (eigener Speicherplatz, kein Speichern) – das eigene 3D-Spiel bleibt, wie es war.
-- **Tobias' Messung:** herausgezoomt 40–50 Bilder/s, nah etwa 70 (v0.39.1).
