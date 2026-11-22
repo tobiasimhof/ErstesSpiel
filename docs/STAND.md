@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.39.0 – Belastungstest: im Testmodus ☰ → „🏭 Belastungstest (volle Fabrik)“ zeigt eine voll bebaute Fläche (46 × 38, 156 Gebäude) zum Ablesen der Bilder pro Sekunde; wird nie gespeichert |
+| **Aktuelle Version** | v0.39.1 – Belastungstest gemessen: herausgezoomt 40–50 Bilder/s und leicht ruckelig, nah etwa 70 und flüssig; größere Bereiche verschieben ruckelt leicht (nur Doku) |
 | **Phase** | M2 – Produktionsketten (Level 1–13 im Spiel); Fokus jetzt auf dem 3D-Test |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ (3D-Test; die echte Fabrik: https://tobiasimhof.github.io/ErstesSpiel/?ansicht=2d) |
-| **Nächster Schritt** | **Tobias misst auf dem Tablet:** ☰ → Testmodus an → ☰ → „🏭 Belastungstest“, heraus- und heranzoomen, oben die Bilder pro Sekunde ablesen, „↩ Beenden“. Danach: 3D schneller und lesbarer (je nach Ergebnis), dann Weiche, dann Bereich kopieren. Erst nach Tobias' OK programmieren. |
+| **Nächster Schritt** | **v0.40.0 „3D schneller und lesbarer“** – Entwurf in `docs/archiv/PLAENE.md`, wartet auf Tobias' OK und seine Antwort zu den Schildern. Danach Weiche, dann Bereich kopieren. |
 
 **Tobias' 3D-Test – Level 7, bald 8** (Chat 25): Hier spielt und testet Tobias jetzt alles neu. Die Einzelteile der Schlosserei sind schon automatisiert, Level 9 kommt deshalb zügig; bis Level 13 „wird es noch etwas dauern“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“ Gleich aussehende Häuser stören ihn nicht: „Die Logik ist mir erstmal wichtiger.“
 
@@ -55,14 +55,13 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.39.1 – Belastungstest gemessen (22.11.2026, nur Doku)
+
+- **Tobias (Chat 25, Tablet):** „Herausgezoomt waren es 40-50 FPS und es war leicht ruckelig. Beim verschieben ist mir schon aufgefallen, dass wenn ich größere Produktionen verschieben will, dass es leicht ruckelig ist. Wenn ich ganz nah hineinzoome habe ich so 70 FPS und alles fühlt sich sehr flüssig an.“
+- **Claudes Entwurf v0.40.0** in `PLAENE.md`: gleiche Teile in einem Rutsch zeichnen, Vorschau beim Verschieben nicht mehr neu bauen, Schilder von weitem schlicht. Wartet auf Tobias' OK.
+
 ### v0.39.0 – Belastungstest (22.11.2026)
 
 - **Warum (Tobias, Chat 25):** „Ja, diese Reihenfolge passt mir. Lass uns erst sehen, wie der Belastungstest ist“ – Level 8 und 9 kommen bald.
 - **Umgesetzt:** Im Testmodus des 3D-Spiels ☰ → „🏭 Belastungstest (volle Fabrik)“: speichert erst das eigene Spiel, zeigt dann eine voll bebaute Fläche (Level 13, 46 × 38, 52 Straßen mit Holz, Stein, Eisen und Glas, 156 Gebäude, 312 Bänder) mit Hinweis und „↩ Beenden“. Sie wird nie gespeichert (eigener Speicherplatz, kein Speichern) – das eigene 3D-Spiel bleibt, wie es war.
-- **Offen:** Tobias' Messung auf dem Tablet.
-
-### v0.38.1 – Analyse als Spielentwickler (22.11.2026, nur Doku)
-
-- **Tobias (Chat 25):** „Ja, du kannst loslegen.“
-- **Claudes Analyse** (`PLAENE.md`): gemessen – die 3D-Ansicht braucht bei voll bebauter Fläche 3.700–6.200 Zeichenaufrufe je Bild (Startfabrik 260); ohne Abhilfe ruckelt der 3D-Test ab etwa Level 9–10. Dazu: Schilder verdecken große Fabriken, die Weiche fehlt für gemischte Bänder, Bereich kopieren für Massenproduktion, nach Level 13 kommt noch nichts. Vorschlag: Belastungstest → 3D schneller → Weiche → Bereich kopieren, Level 14/15 parallel.
-- **Offen:** Tobias' Entscheidung zur Reihenfolge; wann ungefähr Level 13 im 3D-Test?
+- **Tobias' Messung:** herausgezoomt 40–50 Bilder/s, nah etwa 70 (v0.39.1).

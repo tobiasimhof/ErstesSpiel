@@ -61,6 +61,20 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.40.0 – 3D schneller und lesbarer (Chat 25, nach dem Belastungstest; wartet auf Tobias' OK)
+
+**Tobias' Messung (Tablet, v0.39.0):** herausgezoomt 40–50 Bilder/s, „leicht ruckelig“; nah etwa 70, „sehr flüssig“; „wenn ich größere Produktionen verschieben will, dass es leicht ruckelig ist“.
+
+**Ursachen (Claude):** Jedes Wandteil, Dach, Band-Stück, jeder Zaunpfahl, Baum und jedes Schild wird einzeln gezeichnet – bei voller Fläche 3.700–6.200 Zeichenaufrufe je Bild, für die Schatten noch einmal. Beim Verschieben eines Bereichs kommt die ganze Gruppe als Vorschau ein zweites Mal dazu, und sie wird jedes Mal neu gebaut, wenn sie zwischen „passt“ (grün) und „passt nicht“ (rot) wechselt. Herausgezoomt ist alles im Bild, deshalb dort am langsamsten.
+
+**Was sich ändert (am Aussehen nichts, außer den Schildern von weitem):**
+1. **Gleiche Teile in einem Rutsch:** Jedes Haus wird beim Bauen zu einem Stück zusammengefügt (statt aus 10–20 Teilen), Zaun, Bäume und Felsen zu je einem Stück, Bänder ebenso. Ziel: unter 1.000 Zeichenaufrufe bei voller Fläche.
+2. **Schatten sparsamer:** Waren auf den Bändern und die Schilder werfen keine Schatten.
+3. **Verschieben:** Die Vorschau wird einmal gebaut und danach nur noch verschoben; grün ↔ rot wechselt nur die Farbe.
+4. **Schilder von weitem** (Frage an Tobias): Vorschlag A – herausgezoomt nur ein kleines Statuslicht (grün, gelb, rot) über jedem Gebäude, das ganze Schild (Ware, Ring, Vorrat) erst beim Heranzoomen. Vorschlag B – die Schilder bleiben, werden aber von weitem kleiner.
+
+**Prüfen:** Zeichenaufrufe vorher/nachher mit dem Belastungstest messen (Ziel: unter 1.000), Browser-Test, Screenshots vergleichen; danach misst Tobias auf dem Tablet.
+
 ### Belastungstest (fertig, v0.39.0 – wie in der Analyse vorgeschlagen)
 
 Tobias: „Ja, diese Reihenfolge passt mir. Lass uns erst sehen, wie der Belastungstest ist“. Umgesetzt: im Testmodus des 3D-Spiels ☰ → „🏭 Belastungstest (volle Fabrik)“ → `index.html?belastungstest=1`: `createStressFactory` (`src/core/belastungstest.js`) füllt die Fläche von Level 13 (46 × 38) mit 52 Straßen (Holzfällerlager → Sägewerk, Steinbruch → Steinmetz, Schmelzhütte → Schmiede, Ofen mit Sand → Schmiede auf Fläschchen, je mit Versandportal) und lässt sie 2 Minuten laufen. Eigener Speicherplatz (`STRESS_SLOT`), `saveNow` speichert dort nie; ein Hinweis oben mit „↩ Beenden“ führt zurück ins eigene Spiel. Als Nächstes misst Tobias auf dem Tablet; danach „3D schneller und lesbarer“.

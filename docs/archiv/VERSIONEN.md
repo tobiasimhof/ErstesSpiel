@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.39.1 – Belastungstest gemessen (22.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Messung festhalten und den nächsten Schritt planen.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie flüssig ist eine volle Fläche auf dem Tablet? → herausgezoomt 40–50 Bilder/s (leicht ruckelig), nah etwa 70 (flüssig); größere Bereiche verschieben ruckelt leicht.
+- Warum ruckelt das Verschieben? → die Vorschau verdoppelt die Zeichenaufrufe der Gruppe und wird bei jedem Wechsel grün ↔ rot neu gebaut (`syncArea` in `scene3d.js`).
+
+**Gemacht:**
+- `STAND.md`, `PLAENE.md` (Entwurf v0.40.0), Archiv. Versionsnummer 0.39.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 417 von 417 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.39.0 – Belastungstest (22.11.2026)
 
 **Vorgenommen:**
