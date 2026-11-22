@@ -61,6 +61,37 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.37.0 – Neue Ordnung: Doku schlanker, Code in klare Bereiche (Chat 25; wartet auf Tobias' OK)
+
+**Tobias (Chat 25):** „Eventuell können wir im repo auch die Dateien so ordnen, dass wir die wichtigsten Sachen in einen neuen Abschnitt reinholen für Logik + Grafik, damit wir die Ordner vom KB - MB verhältnis klein halten können und du nicht so viel lesen musst. Daher würde ich als ersten Schritt eine neue Ordnerstruktur wollen, damit wir einfacher und schneller arbeiten können und im nächsten Schritt will ich dass du in die Rolle eines Spielentwicklers schlüpfst und analysierst, was die sinnvollsten nächsten Schritte wären und mir diese vorschlägst.“
+
+**Was Claude heute liest (gemessen):** Zu Beginn jedes Chats `CLAUDE.md` (6 KB, automatisch), `STAND.md` (18 KB) und `SPIEL.md` (38 KB) – zusammen etwa 62 KB. Beim Programmieren dazu `TECHNIK.md` (37 KB, davon 31 KB Projekt-Tabelle mit langen „seit v0.x“-Verläufen) und die betroffenen Programmdateien (je 1–42 KB), oft Teile des Browser-Tests (`tests/browser/smoke.cjs`, 187 KB in einer Datei). **Nie gelesen** werden die großen Ordner: `vendor/` (three.js, 2,3 MB) und `assets/` (Kenneys Modelle, 0,9 MB); das Archiv (580 KB) wird nur durchsucht. Der größte Gewinn liegt also in der Doku, die jeder Chat liest, und im großen Browser-Test.
+
+**Am Spiel ändert sich nichts** (gleiches Aussehen, gleiche Regeln, gleiche Spielstände, kein neues Spielstand-Format).
+
+1. **Doku schlanker:**
+   - `STAND.md` auf etwa 6–8 KB: Status, nächste Schritte, offene Fragen als kurze Zeilen (die Langfassungen mit Tobias' Zitaten wandern ins Archiv), die letzten 3 Arbeitsschritte. Tobias' Fabrik: vorn der 3D-Test (Level 7), die echte Fabrik (Level 13, hinten angestellt) in einer Zeile.
+   - `SPIEL.md` auf etwa 12–15 KB: wie das Spiel funktioniert (Idee, Kernschleife, Fabrik, Laden, Level, 3D-Test). Die großen Tabellen und der Ausblick kommen in den neuen Ordner **`docs/inhalte/`**: `LEVEL.md` (Level-Tabelle), `GEBAEUDE.md` (Gebäude und Baukosten), `WAREN.md` (Waren, Rezepte, Rechenbeispiele), `AUSBLICK.md` (Techbaum und Ideen) – gelesen nur, wenn wir an Inhalten arbeiten.
+   - `TECHNIK.md` auf etwa 10 KB: Grundsätze kurz, je Datei eine Zeile (die Verläufe stehen in `VERSIONEN.md`).
+   - Ziel: zu Beginn jedes Chats etwa 25 statt 62 KB.
+2. **Code in klare Bereiche** (nur Umzug und angepasste Pfade, kein neuer Inhalt):
+   - `src/core/` – Logik (wie heute).
+   - `src/ui/` – Oberfläche und Steuerung für 2D und 3D gleich: Fenster, Laden, Aufträge, Bauleiste, Infofenster, Eingabe, Speichern (heute `src/view/` ohne die 2D-Zeichner).
+   - `src/view3d/` – 3D-Grafik; dazu ziehen aus der Grafik-Probe die Dateien um, die der 3D-Test braucht (`kenney3d.js`, `kenneyParts.js`, `models.js`).
+   - `src/view2d/` – 2D-Grafik, hinten angestellt (`renderer.js`, `camera.js`).
+   - `src/probe/` – nur noch die Grafik-Probe selbst (oder sie fällt weg, Frage 2).
+   - `vendor/` und `assets/` bleiben, wie sie sind.
+3. **Browser-Test aufteilen:** `smoke.cjs` in einen Hilfsteil (Server, Antippen, Wischen), den 2D-Test, den 3D-Test (und die Probe); `smoke.cjs` startet sie nur noch, `ONLY=3d` bleibt. Beim Arbeiten am 3D-Test liest Claude dann nur dessen Teil.
+4. **`CLAUDE.md`** anpassen (neue Pfade, z. B. `src/ui/press.js`; was zu Beginn gelesen wird).
+
+**Prüfen:** `npm test` und der ganze Browser-Test (2D und 3D, Tablet und Handy); die Screenshots müssen aussehen wie vorher.
+
+**Fragen an Tobias:**
+1. Soll der Link künftig **direkt den 3D-Test öffnen**? Claudes Vorschlag: ja, als eigene kleine Version direkt nach der neuen Ordnung; die echte Fabrik bleibt über das Menü ☰ erreichbar und holt beim Öffnen die Zeit nach.
+2. **Grafik-Probe** behalten oder entfernen? Claudes Vorschlag: entfernen – die Richtung ist entschieden, die Probe kostet bei jedem Test Zeit; im Verlauf (v0.36.x) ist sie jederzeit zurückholbar.
+
+**Danach** (Tobias' zweiter Wunsch): Claude analysiert als Spielentwickler, was die sinnvollsten nächsten Schritte sind, und schlägt sie vor (als Doku-Version).
+
 ### Schnellerer Start (fertig, v0.36.0 – umgesetzt wie vorgemerkt; Tobias: „OK“)
 
 **Tobias (Chat 24):** „Mir ist aufgefallen, dass man am Anfang sehr lange warten muss bis man die einzelnen Aufträge erledigt hat und evtl. können wir den Prozess etwas beschleunigen mit mehr Startgold … Ich dachte, dass wir alle 15 sekunden etwas verkaufen statt 25 sekunden.“ – Startgold: „Ich dachte da an 500 Gold sozusagen als "Startkapital" - kann man später vermutlich auch geschichtlich ganz gut einbinden.“
