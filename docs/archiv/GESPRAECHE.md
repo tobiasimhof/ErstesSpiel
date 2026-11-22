@@ -38,7 +38,7 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Tobias:** „Da hab ich mich verschrieben. Die Preise sollen bei der dritten Fläche bei 2000 bleiben. B passt für mich sehr gut. Die Reihenfolge passt auch mit den level 2-6, dann sehe ich auch direkt eine optische Veränderung bei meiner Hauptproduktionsstätte“
 
-**Umgesetzt:** v0.42.0 – eigene Häuser für Steinbruch, Steinmetz, Schmelzhütte, Zimmerei, Feinschmiede und Schlosserei (Möglichkeit B), Flächenpreise je Seite 170 → 500 → 2.000. Claude hat Tobias vor dem Merge Nahaufnahmen der sechs Häuser geschickt.
+**Umgesetzt:** v0.42.0 – eigene Häuser für Steinbruch, Steinmetz, Schmelzhütte, Zimmerei, Feinschmiede und Schlosserei (Möglichkeit B), Flächenpreise je Seite 170 → 500 → 2.000. Claude hat Tobias vor dem Merge Nahaufnahmen der sechs Häuser geschickt. – **Tobias:** „ok“ → live.
 
 ### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test, Analyse, Belastungstest, 3D schneller (v0.36.1 bis v0.40.0)
 
