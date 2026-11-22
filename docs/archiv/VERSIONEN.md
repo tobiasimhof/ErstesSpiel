@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.36.2 – neue Ordnung geplant (22.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Wunsch festhalten (Chat 25): echte Fabrik hinten anstellen, im 3D-Test weiterspielen, zuerst eine neue Ordnerstruktur, danach eine Analyse als Spielentwickler.
+
+**Fragen, die wir uns gestellt haben:**
+- Was liest Claude wirklich? → zu Beginn etwa 62 KB Doku, beim Programmieren dazu `TECHNIK.md` (37 KB) und die betroffenen Dateien; three.js und Kenneys Modelle (die MB-Ordner) nie, das Archiv nur per Suche.
+- Was bringt am meisten? → die Doku schlanker machen, den Code in Bereiche ordnen, den großen Browser-Test aufteilen (Entwurf v0.37.0).
+
+**Gemacht:**
+- `STAND.md` (Status, Nächster Schritt, Tobias' 3D-Test, letzte Arbeitsschritte), `PLAENE.md` (Entwurf v0.37.0), Archiv. Versionsnummer 0.36.2, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 419 von 419 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.36.1 – schnellerer Start getestet (22.11.2026, nur Doku)
 
 **Vorgenommen:**

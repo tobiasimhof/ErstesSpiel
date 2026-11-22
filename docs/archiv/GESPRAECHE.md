@@ -4,13 +4,19 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 22.11.2026 – Chat 25: schnellerer Start getestet (v0.36.1)
+### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung geplant (v0.36.1, v0.36.2)
 
 **Tobias:** „Hey, ich habe an meinem Pc den neuen Start getestet und bisher fühlt er sich sehr gut an. Die neuen 500 Startgold fallen nicht so schwer ins Gewicht und erleichtern die ersten Level erheblich. Lies dir den aktuellen Stand durch und berichte mir bei welchem Schritt wir gerade sind.“
 
 **Claude** hat `STAND.md` und `SPIEL.md` gelesen, Tobias' Rückmeldung als v0.36.1 festgehalten (nur Doku) und berichtet: Der schnellere Start (v0.36.0) war der letzte Schritt; als Nächstes entscheidet Tobias zwischen weiteren eigenen Häusern für die Gebäude ab Level 2 im 3D-Test, 3D für die echte Fabrik oder Level 14 (Mörser).
 
 **Umgesetzt:** v0.36.1 (nur Doku).
+
+**Tobias:** „Prinzipiell spiele ich aktuell viel in der 3D Welt um alles nochmal neu zu testen, deswegen würde ich gerne meinen Spielstand, den ich auf Level 13 habe gerne "hinten anstellen" und mich auf die 3D welt konzentrieren, weil ich dadurch das Spielerlebnis viel besser nachvollziehen kann. Mich stört es aktuell nicht, dass die Häuser noch alle "gleich" aussehen, weil es mir mehr um das Spielerlebnis geht, als um das äußere Design. Die Logik ist mir erstmal wichtiger. Bei dem 3D stand bin ich auf lvl 7 und bald 8. Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben. Eventuell können wir im repo auch die Dateien so ordnen, dass wir die wichtigsten Sachen in einen neuen Abschnitt reinholen für Logik + Grafik, damit wir die Ordner vom KB - MB verhältnis klein halten können und du nicht so viel lesen musst. Daher würde ich als ersten Schritt eine neue Ordnerstruktur wollen, damit wir einfacher und schneller arbeiten können und im nächsten Schritt will ich dass du in die Rolle eines Spielentwicklers schlüpfst und analysierst, was die sinnvollsten nächsten Schritte wären und mir diese vorschlägst.“
+
+**Claude** hat gemessen, was es liest: zu Beginn jedes Chats etwa 62 KB Doku (`CLAUDE.md`, `STAND.md`, `SPIEL.md`), beim Programmieren dazu `TECHNIK.md` (37 KB) und die betroffenen Dateien; die großen Ordner (three.js 2,3 MB, Kenneys Modelle 0,9 MB) liest es nie, das Archiv nur per Suche. Vorschlag v0.37.0 „Neue Ordnung“ (Entwurf in `PLAENE.md`): Doku schlanker (`STAND.md` und `SPIEL.md` kürzer, die großen Tabellen nach `docs/inhalte/`, `TECHNIK.md` kurz), Code in Bereiche (`src/core` Logik, `src/ui` Oberfläche für 2D und 3D, `src/view3d` 3D-Grafik, `src/view2d` 2D-Grafik hinten angestellt), Browser-Test aufgeteilt; am Spiel ändert sich nichts. Fragen: Link direkt im 3D-Test öffnen? Grafik-Probe entfernen? Danach die Analyse als Spielentwickler.
+
+**Umgesetzt:** v0.36.2 (nur Doku: Tobias' Wunsch und der Entwurf festgehalten). Wartet auf Tobias' OK.
 
 ### 21.11.2026 – Chat 24 (Fortsetzung): Tobias testet den 3D-Test (nach v0.34.0)
 
