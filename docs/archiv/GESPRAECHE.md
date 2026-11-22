@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren (v0.40.1 bis v0.41.1)
+### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren, Entwurf eigene Häuser (v0.40.1 bis v0.41.2)
 
 **Tobias:** „Infomiere dich über den aktuellen Stand. Hier ist mein Feedback zu dem letzten Update v40: Beim heraus und hereinzoomen hab ich jeweils zwischen 60 und 80 Fps. Was sind nun die nächsten Schritte ?“
 
@@ -29,6 +29,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude:** Die vereinbarte Reihenfolge ist erledigt. Vorschlag (in `PLAENE.md`): v0.42.0 Erinnerung zum Sichern (nach jedem Aufstieg „💾 Jetzt sichern“, im Menü „Zuletzt gesichert: …“); Level 14 und 15 planen, sobald Tobias etwa Level 11 erreicht; kurze Einführung, sobald er den 3D-Test anderen zeigen will; später Rechenwerkzeug, eigene Häuser, Verbesserungen mit Erfahrung, Wirtschaft, 2D entfernen, Code-Durchsicht. Fragen: Reihenfolge? Erinnerung nur nach Aufstieg oder auch beim Öffnen? Welches Level? Stört gerade etwas?
 
 **Umgesetzt:** v0.41.1 (nur Doku). Wartet auf Tobias' Antworten.
+
+**Tobias:** „Mir ist gerade eingefallen, dass die zweite Fläche zum Kaufen auch 170 Gold kostet, das könnten wir auf 500 ändern, damit wir eine schöne Steigerung von 170 af 500 auf 2500 erreichen können. Ich hab mittlerweile auch Level 10 erreicht. Ich würde auch gerne erst bis Level 13 kommen, bevor wir weiterplanen, weil dann kann ich das ganze Gefühl mitnehmen. Sichern finde ich ehrlich gesagt nicht so wichtig. Ich wechsel mein Gerät nicht und lösche in diesem Browser keine Cookies oder Daten, weil der auch für die Uni ist. Kurze Einführung finde ich cool, aber würde ich erst machen, wenn ich das Spiel tatsächlich anderen Leuten zeigen möchte. Was mich bei den ganzen Punkten am meisten angesprochen hat, war tatsächlich die individuellen Häuser. Dadurch bekommt das Game nochmal mehr Aussehen und man besser erkennen, welches Gebäude was gerade macht.  Wie stellst du dir das vor und welche Möglichkeiten haben wir mit unseren Assets ?“
+
+**Claude** hat Tobias' Upload der drei Kenney-Pakete aus Chat 23 in der Versionsgeschichte gefunden (alles da, nichts neu herunterladen), Kenneys Übersichtsbilder geschickt und den Entwurf geschrieben (`PLAENE.md`): je Gebäude Bauart, Dachform, Erkennungszeichen und ein Teil, das sich beim Arbeiten bewegt oder leuchtet (Tabelle für 12 Gebäude); A rein Mittelalter oder B (Empfehlung) mit ein paar Technik-Teilen (Zahnräder, Glasrohre); Flächenpreise 170 → 500 → 2.500; v0.42.0 Level 2–6 mit den Flächenpreisen, v0.43.0 Level 7–12. Fragen: A oder B? Ideen je Gebäude? Flächenpreise richtig verstanden? Reihenfolge?
+
+**Umgesetzt:** v0.41.2 (nur Doku). Wartet auf Tobias' Antworten.
 
 ### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test, Analyse, Belastungstest, 3D schneller (v0.36.1 bis v0.40.0)
 

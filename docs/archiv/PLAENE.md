@@ -61,7 +61,46 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf: die nächsten Schritte nach v0.41.0 (Chat 26; wartet auf Tobias' Antworten)
+### Entwurf v0.42.0 und v0.43.0 – eigene Häuser für alle Gebäude, Flächenpreise (Chat 26; wartet auf Tobias' Antworten)
+
+**Tobias:** „Mir ist gerade eingefallen, dass die zweite Fläche zum Kaufen auch 170 Gold kostet, das könnten wir auf 500 ändern, damit wir eine schöne Steigerung von 170 af 500 auf 2500 erreichen können. Ich hab mittlerweile auch Level 10 erreicht. Ich würde auch gerne erst bis Level 13 kommen, bevor wir weiterplanen, weil dann kann ich das ganze Gefühl mitnehmen. Sichern finde ich ehrlich gesagt nicht so wichtig. Ich wechsel mein Gerät nicht und lösche in diesem Browser keine Cookies oder Daten, weil der auch für die Uni ist. Kurze Einführung finde ich cool, aber würde ich erst machen, wenn ich das Spiel tatsächlich anderen Leuten zeigen möchte. Was mich bei den ganzen Punkten am meisten angesprochen hat, war tatsächlich die individuellen Häuser. Dadurch bekommt das Game nochmal mehr Aussehen und man besser erkennen, welches Gebäude was gerade macht.  Wie stellst du dir das vor und welche Möglichkeiten haben wir mit unseren Assets ?“
+
+**Was wir haben (Claude hat nachgesehen):** Tobias' Upload aus Chat 23 (`kenney_fantasy-town-kit_2.0.zip`, `kenney_castle-kit.zip`, `kenney_factory-kit_3.0.zip`) liegt vollständig in der Versionsgeschichte (Commit `465be0c`) – Tobias muss nichts neu herunterladen. Im Spiel stecken davon bisher 26 Modelle.
+- **Fantasy Town Kit (167 Teile):** Wände aus Stein und Holz mit Türen, Fenstern (Läden, Glas, rund, klein), Bögen, breiten Toren, Balkonen; über 20 Dachformen (Sattel, hoch, spitz, rund, mit Dachfenster); Marktstände (rot, grün), Banner, Laternen, Brunnen, Hecken, Zäune, Treppen, zwei Wasserräder, Windmühlenflügel, Karren, Bretter, Pfähle, Schornsteine.
+- **Castle Kit (76 Teile):** runde, eckige und sechseckige Türme mit Spitz- und Holzdächern, Mauern, Tore, Eisengitter, Fahnen und Banner, Zugbrücke, Belagerungsmaschinen.
+- **Factory Kit (Technik, rund 150 Teile):** Zahnräder, Trichter, Rohre (auch aus Glas), Kolben, Kräne – passt nur in Maßen, umgefärbt (Messing, Holz).
+- **Grenzen:** keine Figuren oder Tiere, keine fertige Uhr, kein Amboss – Kleinigkeiten bauen wir wie beim Amboss der Schmiede aus einfachen Formen.
+
+**Leitidee:** Jedes Gebäude bekommt ein eigenes Haus, erkennbar an drei Dingen: **Bauart** (Holz beim Reiter Holz, Stein bei Stein und Eisen, Holz mit Grün bei Erde, Türme bei der Werkstatt), **Dachform** in der Farbe des Reiters und einem **Erkennungszeichen** davor, das zeigt, was drinnen passiert. **Ein Teil je Haus bewegt sich oder leuchtet nur, solange es arbeitet** (wie heute das Wasserrad am Sägewerk) – so sieht man auch von weiter weg, was gerade läuft. Alles bleibt 2 × 2 Felder, die Pfeile bleiben, wo sie sind; die echte Fabrik (2D) ändert sich nicht.
+
+| Gebäude (Level) | Haus | Erkennungszeichen | beim Arbeiten |
+|---|---|---|---|
+| Steinbruch (2) | kein Haus: offene Grube mit Felsen, kleiner Holzkran aus Pfählen | Felsbrocken, Karren mit Steinen | Kran schwenkt |
+| Steinmetz (2) | Steinhaus mit großem Rundbogen (offene Werkstatt) | Werkbank mit Steinplatten davor | Staubwölkchen |
+| Schmelzhütte (3) | runder Steinturm (Castle Kit) mit Schornstein | glühende Öffnung unten | Glut leuchtet, Rauch |
+| Zimmerei (4) | offener Holzschuppen mit breitem Tor | Bretterstapel, Balkengerüst | Sägeblatt dreht sich |
+| Feinschmiede (5) | kleines Steinhaus mit Spitzdach und runden Fenstern | Zahnrad an der Wand | Zahnrad dreht sich |
+| Schlosserei (6) | Steinhaus mit breitem Tor | Eisengitter davor (Gitter und Schlösser) | Glut in der Esse |
+| Erntebank (7) | Marktstand mit grünem Stoffdach | Karren mit Pflanzen, Hecke | Rad dreht sich |
+| Webstube (7) | Holzhaus mit Balkon | Stoffbahnen (Banner) am Balkon | Banner schwingen |
+| Kräuterstube (8) | Holzhaus mit Dachfenster, Hecke ringsum | kleiner Kräutergarten, Laterne | Rauch aus dem Schornstein |
+| Schreibstube (9) | sechseckiger Turm mit Spitzdach (Castle Kit) | Fahne, Laterne an der Tür | Fenster leuchten warm |
+| Uhrmacherei (11) | hoher, schmaler Turm | großes Zahnrad als „Uhr“ an der Front (messingfarben) | Zahnrad dreht sich |
+| Apotheke (12) | Steinhaus mit grünem Marktdach | Glasrohre an der Seite (Alchemie) | Flüssigkeit in den Rohren leuchtet |
+
+Holzfällerlager, Sägewerk, Ofen, Schmiede, Lagerhaus, Portal und Beet bleiben, wie sie sind. Die Windmühlenflügel heben wir für die Mühle auf (Level 15: zerkleinert Kräuter, Kohle und Sand).
+
+**Zwei Möglichkeiten:** A – rein Mittelalter (Fantasy Town und Castle Kit); B (Claudes Empfehlung) – Mittelalter mit ein paar Technik-Teilen (Zahnräder, Glasrohre) in Messing und Holz, der „Mix aus Modern und Mittelalter“, den Tobias als eigenen Stil angeregt hat – sparsam, ohne Greifarm.
+
+**Leistung:** Jedes Haus wird wie seit v0.40.0 zu wenigen Teilen zusammengefügt, nur das bewegte Teil bleibt für sich; der Belastungstest muss weiter unter 1.000 Zeichenaufrufen bleiben. Neue Dateien: etwa 25–35 Modelle, zusammen unter 1 MB.
+
+**Flächenpreise (Tobias):** je Seite der erste Streifen 170, der zweite 500, der dritte (ab Level 10) 2.500 statt 2.000 Gold – „eine schöne Steigerung von 170 auf 500 auf 2500“. Gekaufte Fläche bleibt; es gilt nur für künftige Käufe (3D-Test und echte Fabrik). Kein neues Spielstand-Format.
+
+**Versionen:** v0.42.0 die Werkzeug-Gebäude (Level 2–6: Steinbruch, Steinmetz, Schmelzhütte, Zimmerei, Feinschmiede, Schlosserei) und die Flächenpreise; v0.43.0 Kräuter und Werkstatt (Level 7–12). Vor jedem Merge bekommt Tobias Nahaufnahmen der neuen Häuser.
+
+**Fragen an Tobias:** (1) A oder B? (2) Passen die Ideen je Gebäude, oder hat er eigene Wünsche? (3) Flächenpreise 170 → 500 → 2.500 richtig verstanden? (4) Reihenfolge: erst Level 2–6 mit den Flächenpreisen, dann 7–12?
+
+### Entwurf: die nächsten Schritte nach v0.41.0 (Chat 26; beantwortet: Sichern nicht nötig, Level 14 erst ab Level 13, Einführung erst, wenn Tobias das Spiel anderen zeigt – stattdessen eigene Häuser, siehe oben)
 
 **Tobias' Test von v0.41.0:** „Ja, sie steht an einer sinnvollen Stelle. Der Stempel hilft auch und das schließen der Bauleiste fühlt sich ebenfalls gut an. Lass uns jetzt die nächsten Schritte planen“
 

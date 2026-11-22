@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.41.2 – Entwurf eigene Häuser und Flächenpreise (22.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Antworten zum Plan festhalten (Level 10 erreicht; Sichern nicht nötig; Level 14 erst ab Level 13; Einführung später; Flächenpreise 170 → 500 → 2.500) und die eigenen Häuser entwerfen.
+
+**Fragen, die wir uns gestellt haben:**
+- Welche Modelle haben wir? → Tobias' vollständiger Upload aus Chat 23 liegt in der Versionsgeschichte (Commit `465be0c`): Fantasy Town Kit 167, Castle Kit 76, Factory Kit rund 150 Teile. Keine Figuren, keine Uhr, kein Amboss.
+- Woran erkennt man ein Gebäude? → Bauart je Reiter, Dachform in Reiterfarbe, Erkennungszeichen davor, ein Teil, das sich beim Arbeiten bewegt oder leuchtet.
+
+**Gemacht:**
+- `STAND.md`, `PLAENE.md` (Entwurf v0.42.0/v0.43.0 mit Tabelle je Gebäude), Archiv. Versionsnummer 0.41.2, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 423 von 423 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.41.1 – Kopieren getestet, Plan für die nächsten Schritte (22.11.2026, nur Doku)
 
 **Vorgenommen:**
