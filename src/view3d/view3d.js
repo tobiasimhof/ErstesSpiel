@@ -29,11 +29,13 @@ export async function createView3d({ canvas, onProgress = () => {} }) {
   let last = performance.now();
   let worldKey = '';
   let turning = 0; // noch zu drehender Winkel (Knöpfe ⟲ ⟳, Tasten Q/E – weich in ein paar Bildern)
+  let viewHeight = 800; // v0.40.0: für „Schilder von weitem“
 
   function resize() {
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
     renderer.setSize(width, height, false);
+    viewHeight = height;
     cam.resize(width, height);
     return { width, height };
   }
@@ -56,7 +58,7 @@ export async function createView3d({ canvas, onProgress = () => {} }) {
       turning -= step;
       if (Math.abs(turning) < 1e-4) turning = 0;
     }
-    world.sync(state, ui, dt, cam.distance);
+    world.sync(state, ui, dt, cam.distance, viewHeight);
     renderer.render(world.scene, cam.camera);
   }
 
@@ -74,5 +76,7 @@ export async function createView3d({ canvas, onProgress = () => {} }) {
     isTurning: () => turning !== 0,
     clearCache() {},
     models: () => lib.count(),
+    // v0.40.0: Zeichenaufrufe des letzten Bildes (Schatten mitgezählt)
+    drawCalls: () => renderer.info.render.calls,
   };
 }

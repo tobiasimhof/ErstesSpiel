@@ -28,6 +28,7 @@ import { buildingFace } from '../ui/buildingFace.js';
 import { drawItem } from '../ui/itemArt.js';
 import { BELT_TOP, animateShimmer, buildBeltTile, buildKenneyBuilding } from './kenney3d.js';
 import { beltPieces, FACE } from './kenneyParts.js';
+import { disposeMerged, flatRects, mergeMeshes, mergeStatic } from './merge.js';
 
 const COLORS = 'spiel';
 
@@ -76,6 +77,16 @@ function frame(x0, z0, w, d, material, { y = 0.03, width = 0.08 } = {}) {
   return g;
 }
 
+// v0.40.0: die vier Leisten eines Rahmens als Rechtecke für flatRects
+function frameRects(x0, z0, w, d, { y = 0.03, width = 0.08 } = {}) {
+  return [
+    { x: x0 + w / 2, z: z0 + width / 2, w, d: width, y },
+    { x: x0 + w / 2, z: z0 + d - width / 2, w, d: width, y },
+    { x: x0 + width / 2, z: z0 + d / 2, w: width, d, y },
+    { x: x0 + w - width / 2, z: z0 + d / 2, w: width, d, y },
+  ];
+}
+
 // ---------- Pfeile (Anschlüsse, Band-Vorschau) ----------
 
 // Ein flacher Pfeil, Spitze in +x (wird mit FACE gedreht)
@@ -88,11 +99,19 @@ const ARROW_GEO = new THREE.ShapeGeometry(arrowShape);
 ARROW_GEO.rotateX(-Math.PI / 2); // liegt flach, Spitze in +x
 const ARROW_EDGE = new THREE.EdgesGeometry(ARROW_GEO);
 
+// v0.40.0: gleiche Farbe = dasselbe Material (lässt sich zusammenfügen)
+const arrowFills = new Map();
+const arrowFill = (color) => {
+  if (!arrowFills.has(color)) arrowFills.set(color, flatMat(color, { opacity: 0.95 }));
+  return arrowFills.get(color);
+};
+const ARROW_EDGE_MAT = new THREE.LineBasicMaterial({ color: '#2a2018', transparent: true, opacity: 0.7 });
+
 function flatArrow(color, dir, { x, y, z, scale = 1 }) {
   const g = new THREE.Group();
-  const fill = new THREE.Mesh(ARROW_GEO, flatMat(color, { opacity: 0.95 }));
+  const fill = new THREE.Mesh(ARROW_GEO, arrowFill(color));
   fill.renderOrder = 3;
-  const edge = new THREE.LineSegments(ARROW_EDGE, new THREE.LineBasicMaterial({ color: '#2a2018', transparent: true, opacity: 0.7 }));
+  const edge = new THREE.LineSegments(ARROW_EDGE, ARROW_EDGE_MAT);
   edge.renderOrder = 3;
   g.add(fill, edge);
   g.rotation.y = FACE[dir];
@@ -113,6 +132,7 @@ function portArrows(building) {
     const dir = port.kind === 'out' ? port.side : OPPOSITE[port.side];
     g.add(flatArrow(port.kind === 'out' ? COLOR.portOut : COLOR.portIn, dir, { x, y: BELT_TOP + 0.03, z, scale: 1.05 }));
   }
+  mergeStatic(g); // v0.40.0: alle Pfeile eines Gebäudes als ein Teil je Farbe
   return g;
 }
 
@@ -388,8 +408,11 @@ export function createScene3d({ lib }) {
     envRoot.add(o);
     return o;
   }
+  let envSpots = []; // wo Bäume und Felsen stehen (für den Browser-Test)
   function buildEnvironment(state) {
+    disposeMerged(envRoot);
     envRoot.clear();
+    envSpots = [];
     const w = state.world;
     const p = state.plot;
     // Zaun direkt außerhalb des Grundstücks
@@ -402,11 +425,14 @@ export function createScene3d({ lib }) {
       fence(p.x - 0.5, z + 0.5, 'W');
       fence(p.x + p.width + 0.5, z + 0.5, 'E');
     }
-    // Bäume rund um die Welt
+    // Bäume rund um die Welt – v0.40.0: nur außerhalb der Welt (Tobias,
+    // Chat 25: Bäume ragten aus Häusern, die auf ihnen gebaut wurden)
     let seed = 11;
     const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
     const count = Math.round((w.width + w.height) * 1.3);
-    for (let i = 0; i < count; i++) {
+    const margin = 1.5;
+    const inWorld = (x, z) => x > w.x - margin && x < w.x + w.width + margin && z > w.y - margin && z < w.y + w.height + margin;
+    for (let i = 0, placed = 0; placed < count && i < count * 4; i++) {
       const angle = rand() * Math.PI * 2;
       const r = rand();
       const x = w.x + w.width / 2 + Math.cos(angle) * (w.width / 2 + 2 + r * 7);
@@ -415,13 +441,22 @@ export function createScene3d({ lib }) {
       const rot = rand() * Math.PI * 2;
       const size = 0.85 + rand() * 0.4;
       const [kit, name, s] = pick < 0.12 ? ROCKS[Math.floor(rand() * ROCKS.length)] : TREES[Math.floor(rand() * TREES.length)];
+      if (inWorld(x, z)) continue;
       place(kit, name, { x, z, rot, scale: s * size });
+      envSpots.push({ x, z });
+      placed++;
     }
+    mergeStatic(envRoot); // v0.40.0: Zaun, Bäume und Felsen als wenige Teile
   }
 
   // ---------- Gebäude ----------
 
   const views = new Map(); // id → { key, group, house, ports, sign, building, … }
+  // v0.40.0: die Pfeile aller Gebäude als wenige Teile (portRoot), neu
+  // zusammengefügt nur, wenn Gebäude dazukommen, wegfallen oder verschoben werden
+  const portRoot = new THREE.Group();
+  scene.add(portRoot);
+  let buildingsVersion = 0;
 
   function buildingKey(b) {
     return `${b.type}|${b.x}|${b.y}|${b.rot ?? 0}`;
@@ -448,7 +483,8 @@ export function createScene3d({ lib }) {
     sign.position.set(b.x + w / 2, top + size * 0.45, b.y + d / 2);
     sign.userData.size = size;
     sign.userData.top = top;
-    buildingRoot.add(group, ports, sign);
+    buildingRoot.add(group, sign);
+    buildingsVersion++;
     const view = {
       key: buildingKey(b),
       group,
@@ -458,6 +494,8 @@ export function createScene3d({ lib }) {
       canvas,
       texture,
       signKey: '',
+      wantSign: b.type !== 'versandportal',
+      level: 'idle',
       building: b,
       bounce: 0,
       pop: 0,
@@ -469,6 +507,9 @@ export function createScene3d({ lib }) {
 
   function dropView(view) {
     buildingRoot.remove(view.group, view.ports, view.sign);
+    disposeMerged(view.group);
+    disposeMerged(view.ports);
+    buildingsVersion++;
     view.texture.dispose();
     view.sign.material.dispose();
   }
@@ -500,11 +541,10 @@ export function createScene3d({ lib }) {
   function updateSign(state, view) {
     const b = view.building;
     const status = buildingStatus(state, b);
+    view.level = status.level;
     // Das Versandportal zeigt nur dann ein Schild, wenn es nichts annimmt.
-    if (b.type === 'versandportal') {
-      view.sign.visible = status.level === 'blocked';
-      if (!view.sign.visible) return;
-    }
+    view.wantSign = b.type !== 'versandportal' || status.level === 'blocked';
+    if (!view.wantSign || signsFar) return; // v0.40.0: von weitem nur das Statuslicht
     const face = signFace(b);
     const key = signKey(face, status);
     if (key === view.signKey) return;
@@ -515,7 +555,11 @@ export function createScene3d({ lib }) {
 
   // ---------- Bänder ----------
 
+  // v0.40.0: Jedes Band-Feld wird einzeln gebaut (und gemerkt), gezeichnet
+  // werden aber alle zusammen als wenige Teile (beltRoot); neu
+  // zusammengefügt nur, wenn sich Bänder ändern oder ein Bereich verschoben wird.
   const belts = new Map(); // key → { sig, group, arrow }
+  let beltsVersion = 0;
   const arrowTex = (() => {
     const c = document.createElement('canvas');
     c.width = c.height = 64;
@@ -553,7 +597,7 @@ export function createScene3d({ lib }) {
       const sig = JSON.stringify(pieces) + state.belts[k].outs[0];
       const old = belts.get(k);
       if (old && old.sig === sig) continue;
-      if (old) beltRoot.remove(old.group, old.arrow);
+      beltsVersion++;
       const { x, y } = parseTileKey(k);
       const group = buildBeltTile(lib, state, k);
       group.position.set(x + 0.5, 0, y + 0.5);
@@ -562,25 +606,57 @@ export function createScene3d({ lib }) {
       arrow.rotation.z = DIR_ANGLE[state.belts[k].outs[0]] ?? 0;
       arrow.position.set(x + 0.5, BELT_TOP + 0.004, y + 0.5);
       arrow.renderOrder = 1;
-      beltRoot.add(group, arrow);
       belts.set(k, { sig, group, arrow });
     }
-    for (const [k, old] of belts) {
+    for (const k of belts.keys()) {
       if (!seen.has(k)) {
-        beltRoot.remove(old.group, old.arrow);
         belts.delete(k);
+        beltsVersion++;
       }
     }
   }
 
+  let portsKey = '';
+  function syncPorts(ui) {
+    const movingId = ui.ghost?.movingId ?? null;
+    const key = `${buildingsVersion}|${movingId}|${[...hidden.buildings].sort().join(',')}`;
+    if (key === portsKey) return;
+    portsKey = key;
+    disposeMerged(portRoot);
+    portRoot.clear();
+    const sources = [];
+    for (const v of views.values()) if (v.building.id !== movingId && !hidden.buildings.has(v.building.id)) sources.push(v.ports);
+    for (const m of mergeMeshes(sources).meshes) portRoot.add(m);
+  }
+
+  let beltMeshKey = '';
+  function syncBeltMesh() {
+    const key = `${beltsVersion}|${[...hidden.belts].sort().join(';')}`;
+    if (key === beltMeshKey) return;
+    beltMeshKey = key;
+    disposeMerged(beltRoot);
+    beltRoot.clear();
+    const sources = [];
+    for (const [k, b] of belts) if (!hidden.belts.has(k)) sources.push(b.group, b.arrow);
+    for (const m of mergeMeshes(sources).meshes) beltRoot.add(m);
+  }
+
   // ---------- Waren auf den Bändern ----------
 
-  const templates = new Map();
-  const template = (type) => {
-    if (!templates.has(type)) templates.set(type, itemTemplate(type));
-    return templates.get(type);
-  };
-  const itemSlots = new Map(); // key → { type, obj }
+  // v0.40.0: Jede Warensorte ist ein Teil mit vielen Stellen (Instancing) –
+  // hundert Holzblöcke kosten so so viel wie einer; Waren werfen keinen Schatten.
+  const itemKinds = new Map(); // type → { geo, mat, mesh, cap }
+  function itemKind(type) {
+    let kind = itemKinds.get(type);
+    if (!kind) {
+      const merged = mergeMeshes([itemTemplate(type)]).meshes[0];
+      kind = { geo: merged.geometry, mat: merged.material, mesh: null, cap: 0 };
+      itemKinds.set(type, kind);
+    }
+    return kind;
+  }
+  const itemSpot = new THREE.Object3D();
+  let itemCount = 0;
 
   function itemPosition(key, belt, alpha) {
     const { x, y } = parseTileKey(key);
@@ -603,27 +679,40 @@ export function createScene3d({ lib }) {
   }
 
   function syncItems(state, alpha) {
-    for (const [key, slot] of itemSlots) {
-      const belt = state.belts[key];
-      if (!belt || belt.item?.type !== slot.type) {
-        itemRoot.remove(slot.obj);
-        itemSlots.delete(key);
-      }
-    }
+    const spots = new Map(); // type → [x, z, Drehung, …]
+    itemCount = 0;
     for (const key in state.belts) {
       const belt = state.belts[key];
       const type = belt.item?.type;
       if (!type) continue;
-      let slot = itemSlots.get(key);
-      if (!slot) {
-        slot = { type, obj: template(type).clone() };
-        itemSlots.set(key, slot);
-        itemRoot.add(slot.obj);
-      }
+      itemCount++;
+      if (hidden.belts.has(key)) continue;
       const pos = itemPosition(key, belt, alpha);
-      slot.obj.position.set(pos.x, BELT_TOP, pos.z);
       const exit = belt.item.progress < 0.5 ? (belt.item.from ? OPPOSITE[belt.item.from] : belt.outs[0]) : belt.outs[(belt.rr ?? 0) % belt.outs.length];
-      slot.obj.rotation.y = FACE[exit] ?? 0;
+      if (!spots.has(type)) spots.set(type, []);
+      spots.get(type).push(pos.x, pos.z, FACE[exit] ?? 0);
+    }
+    for (const [type, kind] of itemKinds) if (kind.mesh && !spots.has(type)) kind.mesh.count = 0;
+    for (const [type, list] of spots) {
+      const kind = itemKind(type);
+      const n = list.length / 3;
+      if (n > kind.cap) {
+        if (kind.mesh) itemRoot.remove(kind.mesh);
+        kind.cap = Math.max(16, 2 ** Math.ceil(Math.log2(n)));
+        kind.mesh = new THREE.InstancedMesh(kind.geo, kind.mat, kind.cap);
+        kind.mesh.castShadow = false;
+        kind.mesh.receiveShadow = true;
+        kind.mesh.frustumCulled = false;
+        itemRoot.add(kind.mesh);
+      }
+      for (let i = 0; i < n; i++) {
+        itemSpot.position.set(list[i * 3], BELT_TOP, list[i * 3 + 1]);
+        itemSpot.rotation.set(0, list[i * 3 + 2], 0);
+        itemSpot.updateMatrix();
+        kind.mesh.setMatrixAt(i, itemSpot.matrix);
+      }
+      kind.mesh.count = n;
+      kind.mesh.instanceMatrix.needsUpdate = true;
     }
   }
 
@@ -697,6 +786,7 @@ export function createScene3d({ lib }) {
     ]);
     if (key === overlayKey) return;
     overlayKey = key;
+    disposeMerged(overlay);
     overlay.clear();
     if (sel?.kind === 'building') {
       const view = views.get(sel.id);
@@ -706,10 +796,11 @@ export function createScene3d({ lib }) {
         overlay.add(frame(b.x - 0.04, b.y - 0.04, w + 0.08, d + 0.08, selectMat, { width: 0.1 }));
       }
     } else if (sel?.kind === 'belt') {
-      for (const k of beltLine(state, sel.x, sel.y)) {
+      const line = beltLine(state, sel.x, sel.y).map((k) => {
         const t = parseTileKey(k);
-        overlay.add(groundRect(1, 1, lineMat, { x: t.x + 0.5, y: 0.012, z: t.y + 0.5 }));
-      }
+        return { x: t.x + 0.5, z: t.y + 0.5, w: 1, d: 1, y: 0.012 };
+      });
+      if (line.length) overlay.add(flatRects(line, lineMat));
       overlay.add(frame(sel.x + 0.04, sel.y + 0.04, 0.92, 0.92, selectMat, { y: BELT_TOP + 0.02, width: 0.07 }));
     } else if (sel?.kind === 'land') {
       // v0.35.0: der Streifen, der gekauft würde
@@ -763,19 +854,25 @@ export function createScene3d({ lib }) {
     const mk = marking ? JSON.stringify([area.sel, area.rect, beltsKey.length]) : '';
     if (mk !== marksKey) {
       marksKey = mk;
+      disposeMerged(areaMarks);
       areaMarks.clear();
       if (marking) {
+        // v0.40.0: alle Markierungen als je ein Teil
+        const marks = [];
+        const frames = [];
         for (const key of area.sel.belts) {
           const t = parseTileKey(key);
-          areaMarks.add(groundRect(1, 1, markMat, { x: t.x + 0.5, y: BELT_TOP + 0.015, z: t.y + 0.5 }));
+          marks.push({ x: t.x + 0.5, z: t.y + 0.5, w: 1, d: 1, y: BELT_TOP + 0.015 });
         }
         for (const id of area.sel.buildings) {
           const b = state.buildings.find((item) => item.id === id);
           if (!b) continue;
           const { width: w, height: d } = footprintSize(b.type, b.rot);
-          areaMarks.add(groundRect(w, d, markMat, { x: b.x + w / 2, y: 0.014, z: b.y + d / 2 }));
-          areaMarks.add(frame(b.x + 0.03, b.y + 0.03, w - 0.06, d - 0.06, selectMat, { width: 0.09 }));
+          marks.push({ x: b.x + w / 2, z: b.y + d / 2, w, d, y: 0.014 });
+          frames.push(...frameRects(b.x + 0.03, b.y + 0.03, w - 0.06, d - 0.06, { width: 0.09 }));
         }
+        if (marks.length) areaMarks.add(flatRects(marks, markMat));
+        if (frames.length) areaMarks.add(flatRects(frames, selectMat));
         if (area.rect) {
           const { a, b } = area.rect;
           const x = Math.min(a.x, b.x);
@@ -789,10 +886,12 @@ export function createScene3d({ lib }) {
     hidden.buildings = new Set(plan ? area.sel.buildings : []);
     hidden.belts = new Set(plan ? area.sel.belts : []);
 
-    // Vorschau an der neuen Stelle (nur neu gebaut, wenn sich Drehung oder
-    // „passt / passt nicht“ ändern – sonst nur verschoben)
-    const gk = plan ? `${g.turns}|${plan.valid}|${JSON.stringify(area.sel)}` : '';
+    // Vorschau an der neuen Stelle (nur neu gebaut, wenn sich die Drehung
+    // ändert – sonst nur verschoben; v0.40.0: „passt / passt nicht“ wechselt
+    // nur die Farbe, und die ganze Vorschau ist zu wenigen Teilen zusammengefügt)
+    const gk = plan ? `${g.turns}|${JSON.stringify(area.sel)}` : '';
     if (!areaGhost || areaGhost.key !== gk) {
+      disposeMerged(areaGhostRoot);
       areaGhostRoot.clear();
       areaGhost = null;
       if (plan) {
@@ -817,8 +916,17 @@ export function createScene3d({ lib }) {
             o.renderOrder = 4;
           }
         });
-        areaGhost = { key: gk, at: { x: g.x, y: g.y } };
+        mergeStatic(areaGhostRoot);
+        areaGhost = { key: gk, at: { x: g.x, y: g.y }, valid: plan.valid };
       }
+    }
+    if (areaGhost && plan && areaGhost.valid !== plan.valid) {
+      const from = ghostMats[areaGhost.valid];
+      const to = ghostMats[plan.valid];
+      areaGhostRoot.traverse((o) => {
+        if (o.isMesh && o.material === from) o.material = to;
+      });
+      areaGhost.valid = plan.valid;
     }
     if (areaGhost) areaGhostRoot.position.set(g.x - areaGhost.at.x, 0, g.y - areaGhost.at.y);
     else areaGhostRoot.position.set(0, 0, 0);
@@ -827,11 +935,18 @@ export function createScene3d({ lib }) {
     const tk = plan ? JSON.stringify([g.x, g.y, g.turns, plan.valid, plan.tiles.map((t) => (t.ok ? 1 : 0)).join(''), area.sel]) : '';
     if (tk !== tilesKey) {
       tilesKey = tk;
+      disposeMerged(areaTiles);
       areaTiles.clear();
       if (plan) {
-        for (const t of selectionTiles(state, area.sel)) areaTiles.add(groundRect(0.94, 0.94, oldSpotMat, { x: t.x + 0.5, y: 0.01, z: t.y + 0.5 }));
-        for (const t of plan.tiles) areaTiles.add(groundRect(0.96, 0.96, t.ok ? okMat : badMat, { x: t.x + 0.5, y: t.ok ? 0.016 : BELT_TOP + 0.06, z: t.y + 0.5 }));
-        areaTiles.add(frame(g.x, g.y, plan.width, plan.height, ghostEdge[plan.valid], { y: BELT_TOP + 0.04, width: 0.09 }));
+        // v0.40.0: alle Felder als je ein Teil (wird bei jedem Schritt des Fingers neu gebaut)
+        const old = selectionTiles(state, area.sel).map((t) => ({ x: t.x + 0.5, z: t.y + 0.5, w: 0.94, d: 0.94, y: 0.01 }));
+        const ok = [];
+        const bad = [];
+        for (const t of plan.tiles) (t.ok ? ok : bad).push({ x: t.x + 0.5, z: t.y + 0.5, w: 0.96, d: 0.96, y: t.ok ? 0.016 : BELT_TOP + 0.06 });
+        if (old.length) areaTiles.add(flatRects(old, oldSpotMat));
+        if (ok.length) areaTiles.add(flatRects(ok, okMat));
+        if (bad.length) areaTiles.add(flatRects(bad, badMat));
+        areaTiles.add(flatRects(frameRects(g.x, g.y, plan.width, plan.height, { y: BELT_TOP + 0.04, width: 0.09 }), ghostEdge[plan.valid]));
       }
     }
   }
@@ -915,19 +1030,12 @@ export function createScene3d({ lib }) {
     }
     const movingId = ui.ghost?.movingId ?? null;
     smokeTimer -= dt;
-    for (const [k, belt] of belts) {
-      const off = hidden.belts.has(k);
-      belt.group.visible = !off;
-      belt.arrow.visible = !off;
-    }
-    for (const [k, slot] of itemSlots) slot.obj.visible = !hidden.belts.has(k);
     for (const v of views.values()) {
       const b = v.building;
       const moving = b.id === movingId || hidden.buildings.has(b.id);
       v.group.visible = !moving;
-      v.ports.visible = !moving;
-      if (moving) v.sign.visible = false;
-      else if (b.type !== 'versandportal') v.sign.visible = true;
+      // v0.40.0: von weitem nur das Statuslicht (statusDots), sonst das Schild
+      v.sign.visible = v.wantSign && !moving && !signsFar;
       const working = isWorking(b);
       const { wheel } = v.parts;
       if (wheel && working) {
@@ -973,7 +1081,65 @@ export function createScene3d({ lib }) {
   // Von weitem werden die Schilder größer, damit man sie noch lesen kann; ganz
   // nah etwas kleiner, damit sie die Häuser nicht verdecken.
   let signScale = 1;
-  function scaleSigns(distance) {
+  // v0.40.0 (Tobias, Chat 25: Vorschlag A): Von weitem zeigt jedes Gebäude nur
+  // ein kleines Statuslicht (grün arbeitet, gelb wartet, rot blockiert) –
+  // alle zusammen als ein Teil; Ware, Ring und Vorrat erst beim Heranzoomen.
+  // Ab diesem Abstand gilt „von weitem“ – auf dem Tablet (800 Punkte hoch) 32;
+  // auf niedrigeren Bildschirmen (Handy) später, weil dort schon die
+  // Startansicht weiter weg ist (höchstens doppelt so weit).
+  const SIGN_FAR = 32;
+  const farDistance = (viewHeight) => SIGN_FAR * THREE.MathUtils.clamp(800 / Math.max(1, viewHeight), 1, 2);
+  let signsFar = false;
+  const dotTexture = (() => {
+    const c = document.createElement('canvas');
+    c.width = c.height = 32;
+    const g = c.getContext('2d');
+    g.fillStyle = '#ffffff';
+    g.strokeStyle = 'rgba(40, 30, 20, 0.9)';
+    g.lineWidth = 4;
+    g.beginPath();
+    g.arc(16, 16, 12, 0, Math.PI * 2);
+    g.fill();
+    g.stroke();
+    const tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    return tex;
+  })();
+  const dots = new THREE.Points(
+    new THREE.BufferGeometry(),
+    new THREE.PointsMaterial({ size: 13, sizeAttenuation: false, vertexColors: true, map: dotTexture, transparent: true, alphaTest: 0.3, depthTest: false, depthWrite: false }),
+  );
+  dots.renderOrder = 10;
+  dots.frustumCulled = false;
+  dots.visible = false;
+  scene.add(dots);
+  let dotCount = 0;
+  const dotColor = new THREE.Color();
+  function syncDots(state) {
+    dots.visible = signsFar;
+    if (!signsFar) return;
+    const pos = [];
+    const col = [];
+    for (const v of views.values()) {
+      if (!v.wantSign || !v.group.visible) continue;
+      pos.push(v.sign.position.x, v.sign.userData.top + 0.35, v.sign.position.z);
+      dotColor.set(COLOR[v.level] ?? COLOR.idle);
+      col.push(dotColor.r, dotColor.g, dotColor.b);
+    }
+    dotCount = pos.length / 3;
+    dots.geometry.dispose();
+    dots.geometry = new THREE.BufferGeometry();
+    dots.geometry.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    dots.geometry.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  }
+
+  function scaleSigns(distance, viewHeight = 800) {
+    const far = distance > farDistance(viewHeight);
+    if (far !== signsFar) {
+      signsFar = far;
+      signTimer = 0; // Schilder bzw. Lichter gleich neu
+      for (const v of views.values()) v.signKey = '';
+    }
     const k = THREE.MathUtils.clamp(distance / 16, 0.65, 2.4);
     if (Math.abs(k - signScale) < 0.01) return;
     signScale = k;
@@ -987,8 +1153,8 @@ export function createScene3d({ lib }) {
   }
 
   let signTimer = 0;
-  function sync(state, ui, dt, distance = 16) {
-    scaleSigns(distance);
+  function sync(state, ui, dt, distance = 16, viewHeight = 800) {
+    scaleSigns(distance, viewHeight);
     syncGround(state);
     syncBuildings(state);
     syncBelts(state);
@@ -996,12 +1162,15 @@ export function createScene3d({ lib }) {
     syncGhost(ui);
     syncOverlay(state, ui);
     syncArea(state, ui);
+    syncBeltMesh();
+    syncPorts(ui);
     syncLand(state, ui);
     // Schilder etwa 8-mal pro Sekunde prüfen (das reicht für Ring und Licht)
     signTimer -= dt;
     if (signTimer <= 0) {
       signTimer = 0.12;
       for (const v of views.values()) updateSign(state, v);
+      syncDots(state);
     }
     animate(state, ui, dt);
   }
@@ -1018,7 +1187,11 @@ export function createScene3d({ lib }) {
     sun,
     sync,
     buildingTop,
-    counts: () => ({ buildings: views.size, belts: belts.size, items: itemSlots.size }),
+    counts: () => ({ buildings: views.size, belts: belts.size, items: itemCount }),
+    // v0.40.0: von weitem nur Statuslichter statt der Schilder
+    // v0.40.0: Bäume und Felsen, die auf der Welt (bebaubar oder kaufbar) stehen – soll 0 sein
+    treesInWorld: (state) => envSpots.filter((p) => p.x > state.world.x && p.x < state.world.x + state.world.width && p.z > state.world.y && p.z < state.world.y + state.world.height).length,
+    farSigns: () => ({ far: signsFar, dots: signsFar ? dotCount : 0, signs: [...views.values()].filter((v) => v.sign.visible).length }),
     signOf: (id) => views.get(id)?.signKey ?? null,
     shimmerOf: (id) => {
       const s = views.get(id)?.parts.shimmer;

@@ -10,6 +10,7 @@ import * as THREE from 'three';
 
 import { BUILDINGS } from '../core/data/buildings.js';
 import { BELT_SCALE_Y, BELT_WIDTH, FACE, beltPieces } from './kenneyParts.js';
+import { mergeStatic } from './merge.js';
 
 export { BELT_TOP } from './kenneyParts.js';
 
@@ -240,28 +241,33 @@ function portalShimmer(g, parts) {
   veil.renderOrder = 2;
   g.add(veil);
   const sparkMat = new THREE.MeshBasicMaterial({ color: '#e6dcff', transparent: true, opacity: 0.9, depthWrite: false, blending: THREE.AdditiveBlending });
-  const sparkGeo = new THREE.SphereGeometry(0.022, 6, 4);
-  const sparks = [];
-  for (let i = 0; i < 7; i++) {
-    const m = new THREE.Mesh(sparkGeo, sparkMat);
-    m.userData.phase = i / 7;
-    m.userData.offset = ((i * 37) % 11) / 11 - 0.5;
-    g.add(m);
-    sparks.push(m);
-  }
+  // v0.40.0: alle 7 Funken als ein Teil mit 7 Stellen (Instancing)
+  const sparks = new THREE.InstancedMesh(SPARK_GEO, sparkMat, SPARKS);
+  sparks.frustumCulled = false;
+  g.add(sparks);
   parts.shimmer = { veil, veilMat, sparks, sparkMat };
+  animateShimmer(parts.shimmer, 0);
 }
+
+const SPARKS = 7;
+const SPARK_GEO = new THREE.SphereGeometry(0.022, 6, 4);
+const sparkSpot = new THREE.Object3D();
 
 // Funken und Schimmer bewegen: time in Sekunden, flash 0…1 (Ware angekommen)
 export function animateShimmer(shimmer, time, flash = 0) {
   const pulse = 0.5 + 0.5 * Math.sin(time * 2.1);
   shimmer.veilMat.opacity = Math.min(1, 0.55 + pulse * 0.2 + flash * 0.3);
   shimmer.veil.scale.set(1 + flash * 0.12, 1 + pulse * 0.04 + flash * 0.12, 1);
-  for (const m of shimmer.sparks) {
-    const k = (time * 0.35 + m.userData.phase) % 1;
-    m.position.set(Math.sin(time * 1.7 + m.userData.phase * 9) * 0.04, 0.06 + k * 0.7, m.userData.offset * 0.36);
-    m.scale.setScalar(1 - k * 0.6);
+  for (let i = 0; i < SPARKS; i++) {
+    const phase = i / SPARKS;
+    const offset = ((i * 37) % 11) / 11 - 0.5;
+    const k = (time * 0.35 + phase) % 1;
+    sparkSpot.position.set(Math.sin(time * 1.7 + phase * 9) * 0.04, 0.06 + k * 0.7, offset * 0.36);
+    sparkSpot.scale.setScalar(1 - k * 0.6);
+    sparkSpot.updateMatrix();
+    shimmer.sparks.setMatrixAt(i, sparkSpot.matrix);
   }
+  shimmer.sparks.instanceMatrix.needsUpdate = true;
   shimmer.sparkMat.opacity = 0.75 + flash * 0.25;
 }
 
@@ -305,6 +311,10 @@ export function buildKenneyBuilding(lib, building) {
   view.parts.chimneyTop?.applyAxisAngle(new THREE.Vector3(0, 1, 0), angle);
   const outer = new THREE.Group();
   outer.add(view.group);
+  // v0.40.0: alle Teile des Hauses zu wenigen zusammenfügen (schneller); was
+  // sich bewegt (Wasserrad, Schimmer im Tor), bleibt für sich
+  const { wheel, shimmer } = view.parts;
+  mergeStatic(outer, [wheel, shimmer?.veil, shimmer?.sparks]);
   return { group: outer, parts: view.parts };
 }
 

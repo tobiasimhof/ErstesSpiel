@@ -345,3 +345,5 @@ Neue Entscheidungen kommen unten in die Tabelle (älteste oben). Wird eine Entsc
 | 22.11.2026 | Der Link soll künftig direkt den 3D-Test öffnen (eigene kleine Version v0.38.0); die echte Fabrik bleibt über das Menü erreichbar | Tobias: „Ja, jetzt das 3D Spiel fokussieren, weil die Kenny dateien alle funktionen und das Spiel spielbar aussieht und funktioniert.“ |
 | 22.11.2026 | Reihenfolge nach Claudes Analyse: Belastungstest → 3D schneller und lesbarer → Weiche → Bereich kopieren | Tobias: „Ja, diese Reihenfolge passt mir. Lass uns erst sehen, wie der Belastungstest ist“ |
 | 22.11.2026 | Level 14 wird hinten angestellt | Tobias: „da ich auch auf den token verbrauch achten muss … Ich denke, es wird noch etwas dauern, bis ich auf level 13 bin“ |
+| 22.11.2026 | Schilder im 3D-Test: von weitem nur ein kleines Statuslicht, das ganze Schild erst beim Heranzoomen (Vorschlag A) | Tobias: „Ich würde mich vor Vorschlag a aussprechen.“ |
+| 22.11.2026 | Bäume und Felsen stehen nur außerhalb der Welt (nicht auf bebaubarer oder kaufbarer Fläche) | Tobias: Bäume ragten aus Häusern, die darauf gebaut wurden. |

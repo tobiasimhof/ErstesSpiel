@@ -61,7 +61,7 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.40.0 – 3D schneller und lesbarer (Chat 25, nach dem Belastungstest; wartet auf Tobias' OK)
+### Entwurf v0.40.0 – 3D schneller und lesbarer (Chat 25, nach dem Belastungstest; angenommen mit Vorschlag A, umgesetzt in v0.40.0 – dazu Bäume nur außerhalb der Welt)
 
 **Tobias' Messung (Tablet, v0.39.0):** herausgezoomt 40–50 Bilder/s, „leicht ruckelig“; nah etwa 70, „sehr flüssig“; „wenn ich größere Produktionen verschieben will, dass es leicht ruckelig ist“.
 

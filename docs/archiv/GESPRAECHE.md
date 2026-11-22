@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test, Analyse, Belastungstest (v0.36.1 bis v0.39.1)
+### 22.11.2026 – Chat 25: schnellerer Start getestet, neue Ordnung, Start im 3D-Test, Analyse, Belastungstest, 3D schneller (v0.36.1 bis v0.40.0)
 
 **Tobias:** „Hey, ich habe an meinem Pc den neuen Start getestet und bisher fühlt er sich sehr gut an. Die neuen 500 Startgold fallen nicht so schwer ins Gewicht und erleichtern die ersten Level erheblich. Lies dir den aktuellen Stand durch und berichte mir bei welchem Schritt wir gerade sind.“
 
@@ -39,6 +39,10 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude:** Entwurf v0.40.0 „3D schneller und lesbarer“ (in `PLAENE.md`): gleiche Teile in einem Rutsch, sparsamere Schatten, Vorschau beim Verschieben nur einmal bauen, Schilder von weitem schlicht (A: nur Statuslicht, B: kleiner). Wartet auf Tobias' OK.
 
 **Umgesetzt:** v0.39.1 (nur Doku).
+
+**Tobias:** „Sehr gut herausgefunden. Ich würde mich vor Vorschlag a aussprechen. Mir ist auch aufgefallen, dass wenn ich über Bäume baue, die Bäume nicht verschwinden, sondern dann einfach aus dem Haus z.b. herausragen. Gerne ok“
+
+**Umgesetzt:** v0.40.0 – wie im Entwurf, mit Vorschlag A (von weitem nur Statuslichter) und den Bäumen nur außerhalb der Welt. Gemessen: volle Fläche herausgezoomt 6.200 → 730 Zeichenaufrufe je Bild. Auf dem Handy schaltet „von weitem“ später um (sonst zeigte schon die Startansicht nur Lichter). Als Nächstes misst Tobias; danach die Weiche.
 
 ### 21.11.2026 – Chat 24 (Fortsetzung): Tobias testet den 3D-Test (nach v0.34.0)
 

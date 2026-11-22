@@ -88,6 +88,8 @@ async function run3d(browser, baseUrl, device) {
     `Eigener Spielstand ab Level 1: 500 Gold, Holzfällerlager und Versandportal (${JSON.stringify(start)})`,
   );
   // v0.37.0: 33 Modelle (die nur von der Grafik-Probe gebrauchten sind entfernt)
+  // v0.40.0: keine Bäume mehr auf der Welt (sie ragten aus Häusern, Tobias, Chat 25)
+  check((await game(page, () => window.__game.view3d.treesInWorld())) === 0, 'Bäume und Felsen stehen nur außerhalb der Welt');
   check(start.models >= 30 && !start.loading && start.counts.buildings === 2, `Kenneys Modelle geladen (${start.models}), beide Gebäude in 3D`);
   check(start.version.includes('3D-Test') && start.turn, `Oben „3D-Test“, Dreh-Knöpfe ⟲ ⟳ sichtbar (${start.version})`);
   // v0.36.0: Bilder pro Sekunde im 3D-Test immer sichtbar, auch ohne Testmodus
@@ -386,6 +388,23 @@ async function run3d(browser, baseUrl, device) {
   const stress = await game(page, () => ({ counts: window.__game.view3d.counts(), level: window.__game.state.shopLevel, plot: [window.__game.state.plot.width, window.__game.state.plot.height] }));
   check(stress.counts.buildings >= 150 && stress.counts.belts >= 300 && stress.level === 13 && stress.plot.join() === '46,38', `Volle Fabrik in 3D (${JSON.stringify(stress)})`);
   check(await page.isVisible('#stress-banner'), 'Hinweis „Belastungstest … Bilder/s ablesen“ mit „↩ Beenden“');
+  // v0.40.0: 3D schneller – weit weg nur Statuslichter, wenige Zeichenaufrufe je Bild (vorher bis 6.200)
+  const view = async (d) => {
+    await game(page, (dist) => {
+      const c = window.__game.camera;
+      const p = window.__game.state.plot;
+      c.distance = dist;
+      c.target.set(p.x + p.width / 2, 0, p.y + p.height / 2);
+      c.update();
+    }, d);
+    await sleep(900);
+    return game(page, () => ({ calls: window.__game.view3d.drawCalls(), ...window.__game.view3d.farSigns() }));
+  };
+  const far = await view(70);
+  check(far.far && far.dots >= 100 && far.signs === 0 && far.calls < 1000, `Herausgezoomt: nur Statuslichter, ${far.calls} Zeichenaufrufe je Bild (${JSON.stringify(far)})`);
+  await shot('3d-13-belastungstest-weit');
+  const near = await view(20);
+  check(!near.far && near.dots === 0 && near.signs > 0 && near.calls < 1000, `Herangezoomt: Schilder wieder da, ${near.calls} Zeichenaufrufe (${JSON.stringify(near)})`);
   const bannerBox = await page.locator('#stress-banner').boundingBox();
   check(bannerBox.x >= 0 && bannerBox.x + bannerBox.width <= vp.width, `Hinweis passt auf den Bildschirm (${Math.round(bannerBox.x)}–${Math.round(bannerBox.x + bannerBox.width)})`);
   await shot('3d-12-belastungstest');

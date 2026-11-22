@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt kurz, wie das Spiel **jetzt** ist (Stand v0.39.0). Einzelheiten stehen in **`docs/inhalte/`** und werden nur gelesen, wenn wir daran arbeiten: `LEVEL.md` (Level, Aufträge, Aufstiege), `GEBAEUDE.md` (Gebäude, Baukosten), `WAREN.md` (Waren, Rezepte, Preise), `BEDIENUNG.md` (Bedienung im Einzelnen), `AUSBLICK.md` (Techbaum, Ideen). Bei jeder Änderung wird der Text **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt kurz, wie das Spiel **jetzt** ist (Stand v0.40.0). Einzelheiten stehen in **`docs/inhalte/`** und werden nur gelesen, wenn wir daran arbeiten: `LEVEL.md` (Level, Aufträge, Aufstiege), `GEBAEUDE.md` (Gebäude, Baukosten), `WAREN.md` (Waren, Rezepte, Preise), `BEDIENUNG.md` (Bedienung im Einzelnen), `AUSBLICK.md` (Techbaum, Ideen). Bei jeder Änderung wird der Text **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
@@ -12,7 +12,7 @@
 - **Kapitel:** Werkzeuge (Level 1–6: Holz, Stein, Eisen), Kräuter (7–12: Flachs, Ringelblume, Schafgarbe, Kamille, Apotheke), ab Level 9 wachsen die Werkzeuge weiter (Holzkohle, Schreibstube, Uhrmacherei), ab Level 13 Tränke (Sand, Glas, Fläschchen). Die Level wechseln sich ab, die Aufträge verlangen Waren aus beiden Bereichen.
 - **Kleine Waren:** Alles auf dem Band ist auch im echten Leben klein. Jedes Produkt entsteht logisch aus seinen Zutaten.
 - **Plattform:** Browser-Spiel für Tablet und Handy, **nur Querformat**, alles per Touch (Hauptgerät Galaxy Tab S9, oft mit Tastatur); später als App. Vorerst nur Deutsch.
-- **Grafik:** 3D mit Kenneys Modellen (CC0, www.kenney.nl) – Mittelalter in den Farben des Spiels, Kamera frei drehbar (Tobias' Wahl, Chat 23). Gebäude ohne eigenes Haus sind vorerst einfache Steinhäuser („Die Logik ist mir erstmal wichtiger“, Chat 25).
+- **Grafik:** 3D mit Kenneys Modellen (CC0, www.kenney.nl) – Mittelalter in den Farben des Spiels, Kamera frei drehbar (Tobias' Wahl, Chat 23). Gebäude ohne eigenes Haus sind vorerst einfache Steinhäuser („Die Logik ist mir erstmal wichtiger“, Chat 25). Über jedem Gebäude ein Schild (Ware, Ring, Statuslicht); von weitem nur ein kleines Statuslicht (grün arbeitet, gelb wartet, rot blockiert).
 - **Vorbilder nur für Mechaniken** (Alchemy Factory, Clash of Clans, Hay Day) – eigene Namen, Rezepte und Grafik. Geschäftsmodell später: kostenlos, Season Pass und Skins, kein Pay2Win.
 
 ## 2. Zwei Spielstände: 3D-Test und echte Fabrik
