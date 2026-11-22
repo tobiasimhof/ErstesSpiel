@@ -485,6 +485,7 @@ async function run3d(browser, baseUrl, device) {
   await sleep(100);
   const stressMenu = await page.locator('#menu').boundingBox();
   check((await page.isVisible('#menu-stress')) && stressMenu.y + stressMenu.height <= vp.height, `Testmodus: „🏭 Belastungstest“ im Menü, Menü passt (${Math.round(stressMenu.y + stressMenu.height)} ≤ ${vp.height})`);
+  const ownBuildings = await game(page, () => window.__game.state.buildings.length);
   await page.tap('#menu-stress');
   await page.waitForURL(/belastungstest=1/);
   await page.waitForFunction(() => window.__game?.view3d && window.__game.camera.viewWidth > 0, null, { timeout: 60000 });
@@ -521,7 +522,7 @@ async function run3d(browser, baseUrl, device) {
   await page.waitForURL((u) => !u.search.includes('belastungstest'));
   await page.waitForFunction(() => window.__game?.view3d && window.__game.camera.viewWidth > 0, null, { timeout: 60000 });
   const after = await game(page, () => ({ level: window.__game.state.shopLevel, buildings: window.__game.state.buildings.length }));
-  check(after.level === 1 && after.buildings < 10, `„↩ Beenden“ führt zurück ins eigene 3D-Spiel (Level ${after.level}, ${after.buildings} Gebäude)`);
+  check(after.level === 1 && after.buildings === ownBuildings, `„↩ Beenden“ führt zurück ins eigene 3D-Spiel (Level ${after.level}, ${after.buildings} Gebäude wie vorher)`);
   // Testmodus wieder aus
   await page.tap('#btn-menu');
   await sleep(100);

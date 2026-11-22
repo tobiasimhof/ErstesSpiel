@@ -12,14 +12,19 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 **Fragen, die wir uns gestellt haben:**
 - Woher die Modelle? → Tobias' Upload aus Chat 23 (Commit `465be0c`), dafür die ganze Versionsgeschichte geholt; nur die gebrauchten 13 Modelle kommen ins Projekt (zusammen jetzt 731 KB, Grenze 1 MB – der hohe Karren mit 88 KB blieb draußen).
 - Wie werden Zahnrad und Gitter passend gefärbt? → neue Farbtafeln: Factory Kit `messing` und `stahl` (Band 3, Spalten 0/1 und 4/5), Castle Kit `eisen` (Spalten 5 und 7).
-- Wie bleibt es schnell? → Jedes Haus wird wie seit v0.40.0 zusammengefügt; nur Zahnrad und Kranarm bleiben für sich. Der Belastungstest (mit Steinbrüchen, Steinmetzen, Schmelzhütten) bleibt unter 1.000 Zeichenaufrufen.
+- Wie bleibt es schnell? → Erster Lauf: herausgezoomt 1.088 Zeichenaufrufe (Grenze 1.000), weil jede einfache Form (Block, Stein, Balken) ihr eigenes Material hatte. Lösung: ein gemeinsames Material für alle einfachen Formen, die Farbe steckt in den Ecken der Form (`plain` in `kenney3d.js`), dazu Schornstein und Felsen im selben Material wie ihr Haus, der Kranarm als ein Teil. Danach (Belastungstest): herausgezoomt 829, nah 508 Zeichenaufrufe (vor v0.42.0: 730 und 450).
 - Ändern sich alte Spielstände? → Nein; schon gekaufte Fläche bleibt, nur künftige zweite Streifen kosten 500. Ein Rest-Streifen aus sehr alten Spielständen kostet anteilig vom 2. Streifen.
 
 **Gemacht:**
 - `data/land.js`: `prices: [170, 500]` statt `price`; `core/land.js` (`stripPrice`), Text im Infofenster und im Hinweis für alte Spielstände.
-- `view3d/kenney3d.js`: Häuser für Steinbruch, Steinmetz, Schmelzhütte, Zimmerei, Feinschmiede, Schlosserei; Helfer `gear` (Zahnrad senkrecht) und `stones`; `parts.spin`, `swing`, `dustSpot` bleiben beim Zusammenfügen für sich. `view3d/scene3d.js`: Zahnräder drehen sich, der Kran schwenkt, Staub steigt auf – nur beim Arbeiten; Abfrage `motionOf`. `kenneyParts.js`: 13 Modelle und die Farbtafeln. `main.js`: `__game.place` für den Browser-Test.
-- Tests: Flächenpreise (`land`, `spital`, `save`), Browser-Test 2D (zweiter Streifen 500) und 3D (sechs Häuser mit ihren bewegten Teilen, Bild `3d-11b-neue-haeuser`).
+- `view3d/kenney3d.js`: Häuser für Steinbruch, Steinmetz, Schmelzhütte, Zimmerei, Feinschmiede, Schlosserei; Helfer `gear` (Zahnrad senkrecht), `stones` und `plain` (einfache Formen mit gemeinsamem Material, auch für Beet und Amboss der Schmiede); `chimney` nimmt die Farbe des Hauses; `parts.spin`, `swing`, `dustSpot` bleiben beim Zusammenfügen für sich. `view3d/scene3d.js`: Zahnräder drehen sich, der Kran schwenkt, Staub steigt auf – nur beim Arbeiten; Abfrage `motionOf`. `kenneyParts.js`: 13 Modelle und die Farbtafeln. `main.js`: `__game.place` für den Browser-Test.
+- Tests: Flächenpreise (`land`, `spital`, `save`), Browser-Test 2D (zweiter Streifen 500) und 3D (sechs Häuser mit ihren bewegten Teilen, Bild `3d-11b-neue-haeuser`; nach dem Belastungstest zählt der Test die eigenen Gebäude statt „weniger als 10“).
 - Doku: `STAND.md`, `SPIEL.md`, `BEDIENUNG.md`, `TECHNIK.md`, Archiv.
+
+**Geprüft:**
+- `npm test`: 423 von 423 bestanden.
+- Browser-Test: 2D (`ONLY=2d`) 912 Prüfungen bestanden, 3D (`ONLY=3d`) 130 Prüfungen bestanden – sechs Häuser mit ihren bewegten Teilen, Belastungstest herausgezoomt 828 und nah 508 Zeichenaufrufe.
+- Nahaufnahmen aller sechs Häuser angesehen (Tablet, zweifache Auflösung) und Tobias vor dem Merge geschickt; auf dem Handy zeigt das Schild am zweiten Streifen „＋ 500“.
 
 ### v0.41.2 – Entwurf eigene Häuser und Flächenpreise (22.11.2026, nur Doku)
 
