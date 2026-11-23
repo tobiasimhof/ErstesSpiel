@@ -479,6 +479,51 @@ async function run3d(browser, baseUrl, device) {
   });
   await shot('3d-11b-neue-haeuser');
 
+  // v0.46.0: Waren auf dem Band mit eigenem Aussehen (Tobias, Chat 27) – alle Waren
+  // nebeneinander auf Bändern, je Ware eine eigene Form, nicht größer als ein Feld
+  const goodsArea = await game(page, async () => {
+    const { ITEMS } = await import('./src/core/data/items.js');
+    const types = Object.keys(ITEMS).filter((t) => !ITEMS[t].raw && ITEMS[t].price);
+    const g = window.__game;
+    const p = g.state.plot;
+    const cols = 8;
+    const rows = Math.ceil(types.length / cols);
+    for (let y0 = p.y; y0 + rows <= p.y + p.height; y0++) {
+      for (let x0 = p.x; x0 + cols <= p.x + p.width; x0++) {
+        let free = true;
+        for (let i = 0; i < cols * rows && free; i++) free = g.isFree(x0 + (i % cols), y0 + Math.floor(i / cols));
+        if (!free) continue;
+        types.forEach((type, i) => {
+          g.state.belts[`${x0 + (i % cols)},${y0 + Math.floor(i / cols)}`] = { outs: ['E'], item: { type, progress: 1, from: 'W' } };
+        });
+        g.camera.distance = 9;
+        g.camera.target.set(x0 + cols / 2, 0, y0 + rows / 2);
+        g.camera.update();
+        g.simulate(0);
+        return { x0, y0, cols, rows, types };
+      }
+    }
+    return null;
+  });
+  check(Boolean(goodsArea), `Freie Fläche für ein Band mit allen Waren gefunden (${goodsArea ? `${goodsArea.x0},${goodsArea.y0}` : 'keine'})`);
+  if (goodsArea) {
+    await sleep(1500);
+    const shapes = await game(page, () => window.__game.view3d.itemShapes());
+    const byType = new Map(shapes.map((s) => [s.type, s]));
+    const missing = goodsArea.types.filter((t) => !byType.has(t));
+    check(goodsArea.types.length === 40 && missing.length === 0, `Alle ${goodsArea.types.length} Waren liegen auf dem Band und haben eine Form (fehlt: ${missing.join(', ') || '–'})`);
+    const tooBig = shapes.filter((s) => s.size[0] > 0.62 || s.size[2] > 0.62 || s.size[1] > 0.42).map((s) => `${s.type} ${s.size.join('×')}`);
+    check(tooBig.length === 0, `Jede Ware passt aufs Band: höchstens 0,62 breit und 0,42 hoch (${tooBig.join(', ') || 'alle passen'})`);
+    const heavy = shapes.filter((s) => s.triangles > 900).map((s) => `${s.type} ${s.triangles}`);
+    check(heavy.length === 0, `Jede Ware hat höchstens 900 Dreiecke (${heavy.join(', ') || `meist ${Math.max(...shapes.map((s) => s.triangles))}`})`);
+    await shot('3d-11c-waren');
+    await game(page, (area) => {
+      const g = window.__game;
+      area.types.forEach((type, i) => delete g.state.belts[`${area.x0 + (i % area.cols)},${area.y0 + Math.floor(i / area.cols)}`]);
+      g.simulate(0);
+    }, goodsArea);
+  }
+
   // Eigener Spielstand: der 3D-Test speichert getrennt, die echte Fabrik bleibt
   await game(page, () => window.__game.saveNow());
   const slots = await game(page, () => ({

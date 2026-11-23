@@ -2,7 +2,7 @@
 // Eingabe, Anzeige und Speichern.
 
 import { VERSION } from './version.js';
-import { createNewGame } from './core/state.js';
+import { beltAt, buildingAt, createNewGame, isOwned } from './core/state.js';
 import { placeBuilding } from './core/buildings.js';
 import { createStressFactory } from './core/belastungstest.js';
 import { TICK, simulate, tick } from './core/sim.js';
@@ -662,6 +662,7 @@ window.__game = {
         shimmer: (id) => view3d.world.shimmerOf(id),
         wheel: (id) => view3d.world.wheelOf(id),
         motion: (id) => view3d.world.motionOf(id),
+        itemShapes: () => view3d.world.itemShapes(),
         hasGhost: () => view3d.world.hasGhost(),
         overlayCount: () => view3d.world.overlayCount(),
         models: () => view3d.models(),
@@ -682,6 +683,8 @@ window.__game = {
     requestDraw();
     return b ? b.id : null;
   },
+  // v0.46.0: für den Browser-Test – ein Feld ist gekauft und frei (kein Gebäude, kein Band)
+  isFree: (x, y) => isOwned(state, x, y) && !buildingAt(state, x, y) && !beltAt(state, x, y),
   // v0.14.0: so tun, als wäre das Spiel so lange zu gewesen
   away(seconds) {
     beginCatchUp(seconds);

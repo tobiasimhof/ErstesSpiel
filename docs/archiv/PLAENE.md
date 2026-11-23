@@ -61,7 +61,12 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.46.0 – Waren auf dem Band mit eigenem Aussehen (Chat 27, v0.45.1; wartet auf Tobias' Antworten)
+### Entwurf v0.46.0 – Waren auf dem Band mit eigenem Aussehen (Chat 27, v0.45.1; angenommen, umgesetzt in v0.46.0)
+
+**Tobias' Antwort:** „Die Probebilder haben mir sehr gut gefallen. Die sollen so groß bleiben wie sie sind, beim rauszoomen erkennt man sie sowieso nicht mehr, weshalb es mir nur ein die Ansicht geht, wenn man quasi so halb reinzoomt um einen genauerer überblick zu bekommen. Alles gerne auf einmal“
+
+**Umgesetzt** wie im Entwurf; Abweichungen: Die Formen stehen als Daten in `view3d/itemForms.js` (in node testbar), `items3d.js` baut daraus je Ware ein Teil. Die Verbandsrollen liegen in Laufrichtung (quer sahen sie von vorn wie Dosen aus). Das gläserne Fläschchen ist nicht durchsichtig (ein gemeinsames Material für alle Waren).
+
 
 **Tobias (Chat 27, nach dem Merge von Level 14):** „Alles klar ich teste es direkt. Kannst du in der zwischenzeit mal die Kenny assets anschauen und parallel dazu anschauen wie es mit unseren Produkten und einzelteilen aussieht ? Evtl. können wir als v46 diese änderung in angriff nehmen, damit man auch besser unterscheiden kann, was auf dem band liegt“
 
