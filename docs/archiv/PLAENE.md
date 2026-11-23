@@ -61,7 +61,7 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.47.0 – Probefenster: Kräuter klar unterscheidbar, schlichte Oberfläche mit Kenney (Chat 28, v0.46.2; wartet auf Tobias' OK)
+### Entwurf v0.47.0 – Probefenster: Kräuter klar unterscheidbar, schlichte Oberfläche mit Kenney (Chat 28, v0.46.2; angenommen mit Rahmen B, umgesetzt in v0.47.0 – Klänge erst mit dem Menü)
 
 **Tobias (Chat 28):** „Wenn ich auswählen muss, welche Kräuter ich nutzen möchte, damit daraus Blüten entstehen. Aktuell gibt es nur 4 Buttons bei dem ich auswählen kann, welche Kräuter und diese Kräuter sehen alle gleich aus unterscheiden sich nur in der Farbe, das finde ich sehr unübersichtlich. Außerdem die Bilder in den Kräuterbeeten kann man jetzt auch nicht wirklich gut erkenne, deswegen denke ich es wäre besser die Kräuter anders darzustellen, damit man da einen klaren Unterschied erkennen kann. Mir passt es, dass du erst ein probefenster baust. Ich möchte noch kein fertiges perfektes UI design, sondern eher was schlichtes, damit man einfach eine besseres Bild von dem Spiel bekommt als diese KI-HTML darstellung, weil wir über diesen level mit den assets ja schon hinaus sind. Ich hab dir noch Audio für UI hinzugefügt und noch ein weiteres Pack, weil ich das ausversehen verwechselt habe.“
 
@@ -90,6 +90,8 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 Spielregeln und Spielstand-Format bleiben gleich.
 
 **Fragen an Tobias:** 1. Rahmen A oder B? 2. Passen die Kräuterbilder? 3. Beete in 3D mit wachsenden Pflanzen – so? 4. Klänge jetzt in der Probe oder später?
+
+**Tobias' Antwort:** „Mir gefällt B besser und die neuen Kräuterbilder sind auch sehr gut. Die Idee, dass man die Kräuter auch aufwachsen sieht, finde ich auch super. Die Sounds machen wir erst bei dem Menu, dass wir auch einen Menüpunkt mit Audio haben, um das ganze zu steuern, aber der Stil des UI's gefällt mir“ **Umgesetzt in v0.47.0** wie im Vorschlag (Punkte 1–5). Abweichungen: Die Bilder liegen in `assets/kenney-ui/ui-pack-adventure/` (nicht unter `assets/kenney/`, dort prüft ein Test nur die 3D-Modelle); das Adventure-Paket hat keinen grünen Knopf – `button_green.png` ist der rote Knopf, grün umgefärbt; das Infofenster ist 340 statt 320 Bildpunkte breit, weil Rahmen und Knöpfe dicker sind. **Nächster Schritt (v0.48.0):** der Rest der Oberfläche im selben Stil und die Klänge mit einem Menüpunkt „Audio“.
 
 ### Vorbereitung für den nächsten Chat: Oberfläche mit Kenneys UI-Paketen (Chat 27, v0.46.1; in Chat 28 aufgegriffen – Entwurf v0.47.0 oben)
 

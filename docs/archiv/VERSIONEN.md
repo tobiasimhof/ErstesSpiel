@@ -4,6 +4,29 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.47.0 – Probefenster: Kräuter klar unterscheidbar, Infofenster im Kenney-Stil (23.11.2026)
+
+**Vorgenommen:**
+- Den Entwurf v0.47.0 umsetzen (Tobias: „Mir gefällt B besser und die neuen Kräuterbilder sind auch sehr gut. Die Idee, dass man die Kräuter auch aufwachsen sieht, finde ich auch super. Die Sounds machen wir erst bei dem Menu …“).
+
+**Fragen, die wir uns gestellt haben:**
+- Wo steht die Form der Kräuter? → In der Waren-Tabelle: `bloom` je Pflanze (`stars`, `disc`, `umbel`, `daisies`), `grows` je Samen (welche Pflanze auf die Tüte kommt). `ui/itemArt.js` zeichnet daraus die Bilder (Raster aus 40 Einheiten wie im Musterbild; Umriss nur außen herum, damit kleine Bilder klar bleiben); 2D-Karte, Listen und die 3D-Schilder nutzen dieselben Bilder.
+- Wie wachsen die Pflanzen in 3D, ohne langsam zu werden? → `view3d/plantForms.js` beschreibt je Kraut und Stufe eine Pflanze aus Grundkörpern (wie die Waren), ein Beet hat 3 × 3 Pflanzen (1,6-mal so groß wie eine Ware, leicht gedreht und verschieden groß). `scene3d.js` prüft die Beete mit den Schildern (8-mal pro Sekunde) und setzt nur bei neuer Pflanze oder Stufe ein neues Teil; die Geometrie je Pflanze und Stufe teilen sich alle Beete (`items3d.formGeometry`, Material `ITEM_MAT`). Ein wachsendes Beet kostet einen Zeichenaufruf.
+- Wohin mit den Kenney-Bildern? → `assets/kenney-ui/ui-pack-adventure/` (6 Bilder, 6 KB, mit Lizenz) – `assets/kenney/` prüft ein Test nur auf 3D-Modelle. Doppelt große Bilder, halb so groß gezeigt (scharf auf dem Tablet). Das Paket hat keinen grünen Knopf: `button_green.png` ist der rote, grün umgefärbt.
+- Was ändert sich am Infofenster? → Nur das Aussehen (`style.css`, alles unter `#info-panel`): Rahmen `panel_brown_corners_a` (`border-image`, ohne `fill`, damit der Hintergrund wie bisher einen Hauch durchsichtig bleibt – sonst zeichnet Chrome auf dem Handy die 3D-Welt darunter nicht), Knöpfe `button_brown` / grün / `button_red`, Kästen `panel_border_brown_detail`, Vorrat in `round_brown`. Rahmen 16 Bildpunkte, Fenster 340 statt 320 Bildpunkte breit, halbe Knöpfe etwas weniger fett, „Verschieben, Drehen, Abreißen“ etwas kleiner – sonst passten beim Ofen auf Level 13 „kaufen · 1.100 🪙“ und „Auffüllen … 2.200 🪙“ nicht (Browser-Test). Die 2D-Karte lässt sich rechts entsprechend weiter schieben (`main.js`: `min(340, 44 %) + 24`), damit das breitere Fenster kein Gebäude am Rand verdeckt.
+- Klänge? → Nach Tobias' Wunsch erst mit dem Menü (Menüpunkt „Audio“), v0.48.0.
+
+**Gemacht:**
+- `core/data/items.js` (`bloom`, `grows`), `ui/itemArt.js` (Pflanzen und Samentüte), `ui/controller.js` (Knöpfe „➕ Pflanze“ mit großem Bild; Säen mit größerem Bild), `style.css` (Infofenster), `view3d/plantForms.js` (neu), `view3d/items3d.js` (`formGeometry`), `view3d/scene3d.js` (`updateCrop`, `cropOf`), `main.js` (`view3d.crop` für den Browser-Test, Rand rechts neben dem Infofenster), `assets/kenney-ui/`.
+- Neuer Test `tests/pflanzen.test.js` (Wuchsform je Kraut verschieden, Samentüte zeigt die Pflanze aus dem Beet, Stufen, Formen werden größer, Beet mit 9 Pflanzen im Rahmen); Browser-Test: vier Beete wachsen in Stufen (`3d-11d-beete`), Erntebank mit vier Kräuter-Knöpfen, Kenney-Rahmen, nichts ragt heraus (`3d-11e-erntebank`).
+- Doku: `STAND.md`, `SPIEL.md`, `BEDIENUNG.md`, `GEBAEUDE.md`, `WAREN.md`, `TECHNIK.md`, Archiv. Versionsnummer 0.47.0.
+
+**Geprüft:**
+- `npm test`: 449 von 449 bestanden.
+- Browser-Test (Tablet und Handy, 2D und 3D): im vollen Lauf 1.107 von 1.108 bestanden – nur auf dem Handy „Rechter Rand der Fläche lässt sich links neben das Infofenster schieben“: Der Test begann sein Wischen bei 60 % der Breite, wo jetzt das breitere Infofenster liegt; er beginnt jetzt bei 50 %. Danach der 2D-Teil noch einmal: 944 von 944 bestanden. Vorher gefunden und behoben: beim Ofen auf Level 13 passten „kaufen · 1.100 🪙“ und „Auffüllen … 2.200 🪙“ nicht, die Karte ließ sich rechts nicht weit genug schieben.
+- Beete: Keimlinge → Knospen (65 %) → reif, je Pflanze die eigene Form. Belastungstest unverändert: herausgezoomt 828, nah 508–558 Zeichenaufrufe.
+- Bildschirmfotos angesehen: Beete in allen Stufen, Erntebank (Tablet und Handy), Ofen auf Level 13, Kräuterstube, Lagerhaus, Beet in 2D.
+
 ### v0.46.2 – Entwurf Probefenster mit Kenneys UI-Paketen (23.11.2026, nur Doku)
 
 **Vorgenommen:**

@@ -605,6 +605,111 @@ button.danger {
   opacity: 0.65;
 }
 
+/* ---------- v0.47.0: Infofenster im Kenney-Stil (Probe) ----------
+   Tobias (Chat 28): „eher was schlichtes“ statt der KI-HTML-Darstellung –
+   Rahmen B (Holz mit Eisenbeschlägen) aus Kenneys UI Pack Adventure
+   (assets/kenney-ui/, CC0). Die Bilder sind doppelt groß (128 px) und werden
+   halb so groß gezeigt, damit sie auf dem Tablet scharf sind. Erst nur dieses
+   Fenster; Bauleiste, Laden, Level-Fenster und Menü folgen. */
+#info-panel {
+  /* etwas breiter als vorher (320 px), weil Rahmen und Knöpfe dicker sind –
+     so passen „Auffüllen: 3 Sand · kauft 2 für 2.200 🪙“ und „kaufen · 1.100 🪙“ */
+  width: min(340px, 44vw);
+  padding: 2px 4px;
+  background: #fff1d2;
+  background-clip: padding-box;
+  border: 16px solid transparent;
+  border-image: url('../assets/kenney-ui/ui-pack-adventure/panel_brown_corners_a.png') 40 / 16px stretch;
+  border-radius: 0;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+#info-panel button {
+  border: 5px solid transparent;
+  border-image: url('../assets/kenney-ui/ui-pack-adventure/button_brown.png') 10 fill / 5px stretch;
+  border-radius: 0;
+  background: none;
+  font-weight: 700;
+}
+
+#info-panel button:active {
+  background: none;
+  filter: brightness(0.9);
+}
+
+/* halbe Knöpfe (einlegen, kaufen) etwas schmaler geschrieben */
+#info-panel button.half {
+  font-weight: 600;
+}
+
+#info-panel button.primary {
+  border-image-source: url('../assets/kenney-ui/ui-pack-adventure/button_green.png');
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+#info-panel button.danger,
+#info-panel #info-close {
+  border-image-source: url('../assets/kenney-ui/ui-pack-adventure/button_red.png');
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+#info-panel #info-close {
+  top: 0;
+  right: 0;
+  width: 36px;
+  min-height: 36px;
+  font-size: 16px;
+}
+
+/* Verschieben, Drehen, Abreißen: dürfen schrumpfen, damit alle drei passen */
+#info-panel .info-tools button {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0 2px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+/* Kästen („Stellt her“, „Wächst hier“ …): Holzrahmen mit Verzierung */
+#info-panel .info-card {
+  padding: 1px 4px;
+  background: rgba(246, 226, 184, 0.7);
+  background-clip: padding-box;
+  border: 10px solid transparent;
+  border-image: url('../assets/kenney-ui/ui-pack-adventure/panel_border_brown_detail.png') 30 / 10px stretch;
+  border-radius: 0;
+}
+
+#info-panel .info-card .info-cap {
+  color: #7a5a2e;
+}
+
+/* Vorrat: jedes Stück in einem runden Fach */
+#info-panel .source-slots .item-icon {
+  box-sizing: content-box;
+  padding: 6px;
+  background: url('../assets/kenney-ui/ui-pack-adventure/round_brown.png') center / contain no-repeat;
+}
+
+/* v0.47.0: Pflanzen einlegen – großes Bild, Name darunter */
+.panel-actions button.herb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-height: 64px;
+  padding: 2px 4px;
+  font-size: 13px;
+  line-height: 1.15;
+}
+
+.panel-actions button.herb .item-icon {
+  display: block;
+}
+
 /* ---------- Hinweis & Meldungen ---------- */
 
 #hint,
@@ -705,7 +810,7 @@ button.danger {
    größer, als es ist, und zeichnet darunter die 3D-Welt nicht (schwarzer
    Kasten auf dem Handy). Ein Hauch Durchsichtigkeit verhindert das. */
 .view-3d #info-panel {
-  background-color: rgba(243, 230, 196, 0.985);
+  background-color: rgba(255, 241, 210, 0.985);
 }
 
 /* ---------- Untere Leisten ---------- */
@@ -1559,7 +1664,8 @@ button.level-up {
   #info-panel {
     top: 8px;
     max-height: calc(100% - 76px);
-    padding: 10px 12px;
+    /* v0.47.0: im Kenney-Rahmen wenig Abstand */
+    padding: 1px 2px;
     font-size: 14px;
   }
 
