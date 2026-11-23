@@ -4,6 +4,22 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.45.1 – Entwurf: Waren auf dem Band mit eigenem Aussehen (23.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Auftrag: Kenneys Modelle und unsere Waren ansehen, damit man besser erkennt, was auf dem Band liegt.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie sehen die Waren heute aus? → 9 von 40 haben eine Form, 31 sind Kugeln in ihrer Farbe.
+- Was bieten Kenneys Pakete? → Tobias' Upload (Commit `465be0c`, auf einem alten Branch; dafür alle Branches geholt): fast nur Bauteile; als Waren passen Zahnräder, Bretter, Stangen, Felsen.
+- Wie sähen eigene Formen aus? → Probebild außerhalb des Spiels (three.js, 10 Waren neben den heutigen Kugeln), an Tobias geschickt.
+
+**Gemacht:**
+- `PLAENE.md`: Entwurf v0.46.0. `STAND.md`, `AUSBLICK.md`, Archiv. Versionsnummer 0.45.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 439 von 439 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.45.0 – Level 14 „Die Tinktur“ (23.11.2026)
 
 **Vorgenommen:**
