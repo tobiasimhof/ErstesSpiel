@@ -4,6 +4,25 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.45.0 – Level 14 „Die Tinktur“ (23.11.2026)
+
+**Vorgenommen:**
+- Den Entwurf v0.45.0 aus `PLAENE.md` umsetzen (Tobias: „Ja, die Rezepte passen so und der aufstieg + aufträge auch. Aussehen passt auch.“).
+
+**Fragen, die wir uns gestellt haben:**
+- Passt das Infofenster mit 4 Einstellungen? → Ja: auf Tablet und Handy ragt nichts heraus; auf dem Handy scrollt das Fenster wie bisher.
+- Wie sehen die neuen Waren aus? → Warenbilder `mortar` (graue Steinschale mit Holzstößel) und `tincture` (braune Flasche mit Korken und grünem Kräuter-Etikett); auf den Bändern im 3D-Test wie die anderen besonderen Waren eine Kugel in ihrer Farbe (eigene Formen aus Kenneys Teilen: Tobias' Idee für einen späteren Schritt).
+- Muss das Spielstand-Format geändert werden? → Nein, Format 18 bleibt; beide Spielstände können auf Level 14 aufsteigen.
+
+**Gemacht:**
+- Daten: `items.js` (Mörser 29, Tinktur 346), `recipes.js` (beide ab Level 14), `buildings.js` (Zimmerei und Apotheke je eine Einstellung mehr), `levels.js` (Level 14 mit Geschichte und 4 Aufträgen, Aufstieg 12.500), `shop.js` (Level 14 wie 13). `ui/itemArt.js`: zwei Warenbilder.
+- Tests: `tests/tinktur.test.js` (neu, 12 Prüfungen); Level-Tests auf 14 Level angepasst (`levels`, `quests`, `save`, Kapitel-Tests prüfen nur noch, dass ihr Level da ist, `combo` zählt die Grundeinstellungen); Browser-Test 2D: Aufstieg auf Level 14, Zimmerei und Apotheke mit 4 Einstellungen.
+- Doku: `LEVEL.md`, `WAREN.md`, `GEBAEUDE.md`, `BEDIENUNG.md`, `AUSBLICK.md` (Level 14 im Spiel, Idee Waren mit Kenneys Teilen), `SPIEL.md`, `TECHNIK.md`, `ZAHLEN.md` neu geschrieben; `STAND.md`, Archiv.
+
+**Geprüft:**
+- `npm test`: 439 von 439 bestanden.
+- Browser-Test 2D (`ONLY=2d`): 944 Prüfungen bestanden, Bilder der Infofenster auf Tablet und Handy angesehen.
+
 ### v0.44.1 – Entwurf Level 14 „Die Tinktur“ (23.11.2026, nur Doku)
 
 **Vorgenommen:**
