@@ -4,6 +4,22 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.43.4 – Grobplan Tränke-Kapitel, 2. Fassung (23.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Antworten zur 1. Fassung einarbeiten („Verarbeite die Informationen erstmal und schlage mir evtl einen neuen TechBaum mit ähnlicher Struktur vor“).
+
+**Fragen, die wir uns gestellt haben:**
+- Wie kommt der Traumtrank auf Level 15? → Ein alter Magier zieht wegen der Tinktur in den Ort und bringt den Zauberkessel mit; alle Tränke entstehen dort.
+- Wie wird es weniger Umbau? → Kein bestehendes Rezept ändert sich, 11 statt 16 neue Waren, je Level höchstens 1 neue Maschine.
+- Holzkohle als Feuer? → Wäre ein dritter Eingang (Tobias' Regel: höchstens 2) – zwei Wege zur Wahl; der Ofen bleibt unverändert.
+
+**Gemacht:**
+- `PLAENE.md`: 2. Fassung. `STAND.md`, `AUSBLICK.md` (Hinweis), Archiv. Versionsnummer 0.43.4, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 423 von 423 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.43.3 – Grobplan Tränke-Kapitel Level 14–18 (23.11.2026, nur Doku)
 
 **Vorgenommen:**

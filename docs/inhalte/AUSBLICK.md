@@ -13,7 +13,7 @@
 | 11 | Die Uhrmacherei (Werkzeuge): Räderuhr (Uhrwerk + Gewichtstein), Kastenschloss (Vorhängeschloss + Schlüssel), Sternenuhr (Uhrwerk + Zirkel), je 1 Minute | im Spiel |
 | 12 | Die Apotheke (Abschluss der Kräuter): Kamille als 4. Pflanze, Apotheke im Reiter „Werkstatt“ mit Kräutermischung, Kamillenkissen, Heilpäckchen (Wundverband + Kräuterkompresse); Reißbrett (Zeichenbrett + Reißzeug, 60 s) | im Spiel |
 | 13 | Die Glashütte (Tränke, Anfang): Der Ofen brennt ab Level 13 auch Sand zu Glas (Glas gibt es nur dort); Schmiede: 5 Glas → 1 Fläschchen (30 s); 6. Theke für 150.000 Gold; Aufstieg 10.000 Gold | im Spiel |
-| 14 | der Mörser als Ware (Zimmerei, nicht 1 : 1 – 1 Steinplatte + 3 Holzstäbe: die Schale aus Stein, der Stößel aus Holz) | Idee – Grobplan Level 14–18 in `PLAENE.md` (Chat 27, wartet auf Tobias) |
+| 14 | der Mörser als Ware (Zimmerei, nicht 1 : 1 – 1 Steinplatte + 3 Holzstäbe: die Schale aus Stein, der Stößel aus Holz) | Idee – Grobplan Level 14–18 in `PLAENE.md` (Chat 27, Gerüst angenommen, 2. Fassung wartet auf Tobias) |
 | 15 | eine neue Maschine, die Kräuter, Kohle und Sand zu Staub zerkleinert (Baukosten z. B. 10 Mörser + 10 Räderwerke) | Idee |
 | später | Tinktur (Fläschchen + Kräutermischung) und erster Zaubertrank (Tinktur + Kamillenblüten) in der Apotheke – Einzelheiten, wenn wir dort sind; Zaubertränke (Lebens-, Mana-, Alterstrank …); Linse → Lupe/Fernrohr; Farn als Zauberkraut (Idee) | Ideen |
 
