@@ -61,7 +61,45 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Grobplan Tränke-Kapitel Level 14–18 – das Gerüst ohne Zahlen (Chat 27, v0.43.3; wartet auf Tobias' Antworten)
+### Grobplan Tränke-Kapitel, 2. Fassung – Magier und Zauberkessel ab Level 15 (Chat 27, v0.43.4; wartet auf Tobias' Antworten)
+
+**Tobias (Chat 27, zur 1. Fassung unten):** „Das Gerüst passt für mich. Bei den Namen müssen wir nochmal schauen, dass wir evtl. etwas geschmeidigeres finden als die enden "Staub". Den Traumtrank würde ich erst auf Level 15 kommen lassen dann kann man geschichtlich die Trinktur nutzen, damit sich ein alter magier oder ähnliches ansiedelt, der mit der Tixtur und alten Geheimnissen, diese Tränke herstellen kann. Ich finde gut, dass wir bei den maschinen mehr mit stein arbeiten, weil wir da noch nicht so viele maschinen haben. Ich würde evtl. irgendwas in richtung fementieren gehen, weil wir die einzelnen blüten trocknen müssen damit daraus wirklich "staub" wird. Ich finde die Reihenfolge gut, aber ich frage mich, ob man bei den ganzen neuen Sachen nicht evtl. zu viel umbauen muss, aber Level 14 finde ich schon mal sehr passend. Verarbeite die Informationen erstmal und schlage mir evtl einen neuen TechBaum mit ähnlicher Struktur vor. Zauberkessel finde ich eine gute Maschine für die Tränke. Da könnte man auch daran denken, dass man den Feuerkessel mit Holzkohle beheizen muss statt mit holzstämmen und dadurch könnte der ofen auch einen Eingang bekommen für Holzkohle und zwei für die Rohstoffe oder so ähnlich hatte ich gedacht. Farn finde ich gut, weil dann können wir die Pflanze weiter benutzen“
+
+**Was sich gegenüber der 1. Fassung ändert:**
+- **Ein alter Magier zieht auf Level 15 in den Ort** – angelockt von Klaras Tinktur. Er bringt den **Zauberkessel** mit (Tobias: „eine gute Maschine für die Tränke“) und braut mit der Tinktur und alten Geheimnissen den ersten Trank, den Traumtrank. Damit gibt es die Trank-Maschine ab dem ersten Trank, und sie bekommt auf den nächsten Leveln neue Tränke – die Apotheke bleibt übersichtlich (nur die Tinktur kommt dazu).
+- **Weniger neue Waren** (11 statt 16): kein Kohlestaub und keine Tinte (die Holzkohle wird stattdessen das Feuer im Zauberkessel), kein Farnstaub (der Farnwedel geht direkt in den Trank), keine Lupe (Tobias: „Lupe und/oder Fernrohr“ – die Sternwarte braucht das Fernrohr). Den Alterstrank heben wir uns für nach Level 18 auf.
+- **Keine Namen auf „-staub“:** Heilpuder (gemahlene Ringelblüten, Wundpuder gab es wirklich), Sternensand (gemahlenes Glas, glitzert wie Sterne). Die Mühle heißt **Kräutermühle** – Müllerin Grete von Level 4 kann sie bauen.
+- **Beide neuen Maschinen im Reiter „Stein“** (Tobias: „mehr mit Stein arbeiten“): die Kräutermühle (Mahlsteine) und der Zauberkessel (auf einem gemauerten Herd). Damit ist „Stein“ voll; „Werkstatt“ behält einen freien Platz für später.
+
+| Level | Bauabschnitt | Bereich | Neu | Wo, aus was |
+|---|---|---|---|---|
+| 14 | Die Tinktur | Werkzeuge + Kräuter | **Mörser**, **Tinktur** | Zimmerei: 1 Steinplatte + 3 Holzstäbe (Klara braucht Mörser für ihre Arbeit). Apotheke: Fläschchen + Kräutermischung – die Grundzutat aller Tränke |
+| 15 | Der alte Magier | Tränke | **Zauberkessel** (neue Maschine, mit Holzkohle befeuert), **Traumtrank** | Kessel: Tinktur + Kamillenblüten |
+| 16 | Die Kräutermühle | Kräuter + Tränke | **Kräutermühle** (neue Maschine, 1 Eingang, Baukosten Mörser + Räderwerke), **Heilpuder**, **Heiltrank** | Mühle: Ringelblüten → Heilpuder. Kessel: Tinktur + Heilpuder |
+| 17 | Die Sternwarte | Werkzeuge | **Linse**, **Fernrohr**, **Sternensand** | Steinmetz: Glas schleifen → Linse. Uhrmacherei: Linse + Eisenblech (Rohr) → Fernrohr. Mühle: Glas → Sternensand |
+| 18 | Die Zauberei | Kräuter + Tränke (Abschluss) | **Farn** (5. Pflanze) → **Farnwedel**, **Lebenstrank**, **Manatrank** | Farnsamen beim Händler, Beet, Erntebank. Kessel: Heiltrank + Farnwedel → Lebenstrank, Traumtrank + Sternensand → Manatrank |
+
+**Zu Tobias' Frage „zu viel umbauen?“:**
+- **Kein bestehendes Rezept ändert sich** – alle heutigen Straßen laufen unverändert weiter.
+- **Jedes Level bringt höchstens 1 neue Maschine und 2–3 neue Waren**, und die Zutaten stellt man schon her (Fläschchen, Kräutermischung, Kamillenblüten, Ringelblüten, Glas, Holzkohle). Neue Straßen hängen sich an die Enden der alten – man baut dazu, statt umzubauen.
+- Die Zutaten für die Tränke kommen aus verschiedenen Ecken der Fabrik zusammen (Glas, Kräuter). Das ist gewollt (Makro-Spiel: früh planen), Lagerhäuser als Puffer und „Bereich kopieren“ helfen dabei. Wird der Platz knapp, wäre ein weiterer Flächenstreifen ab Level 16 eine Zeile in den Daten.
+
+**Zum Trocknen und Fermentieren:** Die Erntebank trocknet die Blüten schon (Tobias' Entscheidung vom 08.11.2026: „getrocknete Ringelblüten“, bewusst einfach gehalten) – die Kräutermühle kann sie also direkt mahlen. Fermentieren (Gären) wäre eine eigene, zusätzliche Stufe: Aus Kräutern und Honig wird z. B. Kräuterwein, daraus macht man in echt Tinkturen. Schön, aber noch mehr Waren und Straßen – Claudes Vorschlag: weglassen.
+
+**Das Feuer im Zauberkessel** (Tobias' Idee: mit Holzkohle befeuern). Die Tränke brauchen schon 2 Zutaten; ein Eingang für die Holzkohle wäre der dritte. Tobias' Regel (13.11.2026): „das mit den 2 Eingängen will ich beibehalten“. Zwei Wege:
+- **A – Feuer von Hand (Claudes Empfehlung):** 2 Eingänge für die Zutaten, dazu ein Feuerfach für Holzkohle, das man wie einen Rohstoff nachlegt („⏫ Auffüllen“ nimmt sie aus dem Laden-Lager). Die Regel bleibt, keine dritte Straße je Kessel, und das Nachlegen von Hand passt zum Spiel. Die Holzkohle wird dabei in großen Mengen verbraucht.
+- **B – dritter Eingang nur für Holzkohle:** eine Ausnahme von der Regel, gut erkennbar (eigene Pfeilfarbe). Ganz automatisch, aber je Kessel drei Straßen.
+- **Der Ofen bleibt, wie er ist** – bräuchte er Holzkohle für das Glas, müsste jeder seine Glas-Straßen aus Level 13 umbauen. (Später denkbar: Holzkohle als freiwilliger Zusatz, der den Ofen schneller macht.)
+
+**Nach Level 18 (Ideen):** Alterstrank, Stahl (Holzkohle + Eisen), Lupe, ein Astrolabium (Sternenuhr + Fernrohr), weitere Tränke mit Farn.
+
+**Fragen an Tobias:**
+1. Passt die 2. Fassung – der Magier mit dem Zauberkessel auf Level 15, die Kräutermühle auf Level 16?
+2. Das Feuer im Zauberkessel: A (von Hand, Regel bleibt) oder B (dritter Eingang nur für Holzkohle)? Und der Ofen bleibt unverändert?
+3. Die Namen: Heilpuder, Sternensand, Kräutermühle, Farnwedel – geschmeidig genug, oder hast du andere?
+4. Fermentieren weglassen?
+
+### Grobplan Tränke-Kapitel Level 14–18 – das Gerüst ohne Zahlen (Chat 27, v0.43.3; Gerüst angenommen, überarbeitet in der 2. Fassung oben)
 
 **Tobias (Chat 27, mit Bild seiner Fabrik auf Level 12, 60 Bilder/s):** „Okay, lass uns damit anfangen. Ich bin leider die letzten 2 Stunden total im Game versackt und bin jetzt auf level 12 und mache gerade die Kamillenaufträge, damit ich so schnell wie möglich auf Level 13 komme. Das ist aktuell meine Produktion. Von den Baustoffen stelle ich eigentlich alles automatisiert her, was man herstellen kann. Aktuell versuche ich mich noch durch das Pflanzenthema zu jonglieren. Schwierig ist hier, dass man viele Einzelteile wie z.b. Zahnradwelle, damit man genug erntebänken, webstuben etc bauen kann, um da weiter voran zu kommen, von daher passt mir das GLeichgewicht bis hier hin sehr gut“
 

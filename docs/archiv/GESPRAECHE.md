@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel (v0.43.1 bis v0.43.3)
+### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen (v0.43.1 bis v0.43.4)
 
 **Tobias:** „Hey, bringe dich auf den aktuellen Stand der Dinge und berichte mir was die nächsten Schritte sind. Bis v43 sieht alles sehr gut aus und die einzelnen Gebäude wirken auch unterschiedlich genug, sodass man sie erkennt. Da wir die "karte" frei bewegen können, kann ich mir jedes Haus auch von hinten ansehen. Wenn ich z.b. einmal rechts und einmal links baue, dann ist die Produktion auf der anderen Seite immer von hinten zu sehen und da sieht man z.b. keine Unterschiede, aber das ist nur eine kleine Anmerkung für später. Ansonsten sieht es sehr gut aus“
 
@@ -23,6 +23,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat Tobias' frühere Ideen im Archiv nachgelesen und den Grobplan geschrieben (`PLAENE.md`): 14 Die Trankküche (Zimmerei: Mörser; Apotheke: Tinktur, Traumtrank), 15 Der Alchemist (neue Stampfmühle: Blütenstaub, Kohlestaub; Heiltrank; Tinte in der Schreibstube), 16 Die Sternwarte (Linse im Steinmetz, Lupe, Fernrohr), 17 Der Zaubergarten (Farn, Farnwedel, Farnstaub), 18 Die Zauberei (Glasstaub; Lebens-, Mana-, Alterstrank). Nur eine neue Maschine, sonst neue Einstellungen; Zahlen erst mit Rechenwerkzeug und Level 13. Fragen: Gerüst? Traumtrank schon auf 14? Name Stampfmühle, Glas statt Sand? Zaubertränke in Apotheke oder Zauberkessel (Empfehlung)? Farn, Alterstrank?
 
 **Umgesetzt:** v0.43.3 (nur Doku). Wartet auf Tobias' Antworten.
+
+**Tobias:** „Das Gerüst passt für mich. Bei den Namen müssen wir nochmal schauen, dass wir evtl. etwas geschmeidigeres finden als die enden "Staub". Den Traumtrank würde ich erst auf Level 15 kommen lassen dann kann man geschichtlich die Trinktur nutzen, damit sich ein alter magier oder ähnliches ansiedelt, der mit der Tixtur und alten Geheimnissen, diese Tränke herstellen kann. Ich finde gut, dass wir bei den maschinen mehr mit stein arbeiten, weil wir da noch nicht so viele maschinen haben. Ich würde evtl. irgendwas in richtung fementieren gehen, weil wir die einzelnen blüten trocknen müssen damit daraus wirklich "staub" wird. Ich finde die Reihenfolge gut, aber ich frage mich, ob man bei den ganzen neuen Sachen nicht evtl. zu viel umbauen muss, aber Level 14 finde ich schon mal sehr passend. Verarbeite die Informationen erstmal und schlage mir evtl einen neuen TechBaum mit ähnlicher Struktur vor. Zauberkessel finde ich eine gute Maschine für die Tränke. Da könnte man auch daran denken, dass man den Feuerkessel mit Holzkohle beheizen muss statt mit holzstämmen und dadurch könnte der ofen auch einen Eingang bekommen für Holzkohle und zwei für die Rohstoffe oder so ähnlich hatte ich gedacht. Farn finde ich gut, weil dann können wir die Pflanze weiter benutzen“
+
+**Claude** (2. Fassung in `PLAENE.md`): 14 Die Tinktur (Mörser, Tinktur), 15 Der alte Magier (Zauberkessel, Traumtrank), 16 Die Kräutermühle (Heilpuder, Heiltrank), 17 Die Sternwarte (Linse, Fernrohr, Sternensand), 18 Die Zauberei (Farn → Farnwedel, Lebens- und Manatrank); 11 statt 16 neue Waren, beide neuen Maschinen im Reiter „Stein“. Zu „zu viel umbauen“: kein bestehendes Rezept ändert sich, je Level höchstens 1 neue Maschine und 2–3 Waren aus Zutaten, die man schon herstellt. Trocknen: macht die Erntebank schon; Fermentieren wäre eine zusätzliche Stufe – Vorschlag: weglassen. Feuer im Kessel: Ein Holzkohle-Eingang wäre der dritte (Tobias' Regel: höchstens 2) – A Feuerfach von Hand (Empfehlung) oder B dritter Eingang nur für Holzkohle; der Ofen bleibt, sonst müssten alle Glas-Straßen umgebaut werden. Fragen: 2. Fassung? A oder B? Namen? Fermentieren weglassen?
+
+**Umgesetzt:** v0.43.4 (nur Doku). Wartet auf Tobias' Antworten.
 
 ### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren, eigene Häuser (v0.40.1 bis v0.43.0)
 
