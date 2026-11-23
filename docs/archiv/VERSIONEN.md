@@ -23,7 +23,9 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
 **Geprüft:**
 - `npm test`: 449 von 449 bestanden.
-- Browser-Test: TESTERGEBNIS
+- Browser-Test (Tablet und Handy, 2D und 3D): im vollen Lauf 1.107 von 1.108 bestanden – nur auf dem Handy „Rechter Rand der Fläche lässt sich links neben das Infofenster schieben“: Der Test begann sein Wischen bei 60 % der Breite, wo jetzt das breitere Infofenster liegt; er beginnt jetzt bei 50 %. Danach der 2D-Teil noch einmal: 944 von 944 bestanden. Vorher gefunden und behoben: beim Ofen auf Level 13 passten „kaufen · 1.100 🪙“ und „Auffüllen … 2.200 🪙“ nicht, die Karte ließ sich rechts nicht weit genug schieben.
+- Beete: Keimlinge → Knospen (65 %) → reif, je Pflanze die eigene Form. Belastungstest unverändert: herausgezoomt 828, nah 508–558 Zeichenaufrufe.
+- Bildschirmfotos angesehen: Beete in allen Stufen, Erntebank (Tablet und Handy), Ofen auf Level 13, Kräuterstube, Lagerhaus, Beet in 2D.
 
 ### v0.46.2 – Entwurf Probefenster mit Kenneys UI-Paketen (23.11.2026, nur Doku)
 
