@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt kurz, wie das Spiel **jetzt** ist (Stand v0.43.0). Einzelheiten stehen in **`docs/inhalte/`** und werden nur gelesen, wenn wir daran arbeiten: `LEVEL.md` (Level, Aufträge, Aufstiege), `GEBAEUDE.md` (Gebäude, Baukosten), `WAREN.md` (Waren, Rezepte, Preise), `BEDIENUNG.md` (Bedienung im Einzelnen), `AUSBLICK.md` (Techbaum, Ideen). Bei jeder Änderung wird der Text **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt kurz, wie das Spiel **jetzt** ist (Stand v0.43.0). Einzelheiten stehen in **`docs/inhalte/`** und werden nur gelesen, wenn wir daran arbeiten: `LEVEL.md` (Level, Aufträge, Aufstiege), `GEBAEUDE.md` (Gebäude, Baukosten), `WAREN.md` (Waren, Rezepte, Preise), `BEDIENUNG.md` (Bedienung im Einzelnen), `AUSBLICK.md` (Techbaum, Ideen), `ZAHLEN.md` (Rohstoffe, Zeit und Gold je Level und Ware, automatisch aus den Datentabellen). Bei jeder Änderung wird der Text **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 

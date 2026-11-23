@@ -4,6 +4,24 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.44.0 – Rechenwerkzeug für die Zahlen (23.11.2026)
+
+**Vorgenommen:**
+- Den Entwurf aus `PLAENE.md` umsetzen (Tobias: „das Rechenwerkzeug hat mir noch gefehlt“); am Spiel ändert sich nichts.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie rechnet man „Zeit“? → Maschinenzeit (alle Sekunden je Stück, ohne Beet) und Engpass (je Schritt ein Gebäude, je Pflanze ein Beet – der langsamste Schritt bestimmt das Tempo).
+- Was sagt der Aufstieg in Theken-Stunden? → Nach dem ersten Lauf: immer nur wenige Minuten, deshalb stattdessen Gold je Stunde der Theken neben dem einer Straße, dazu „Wofür man Gold ausgibt“.
+- Bleibt die Seite aktuell? → Ein Test vergleicht sie mit dem, was das Werkzeug aus den Tabellen schreibt.
+
+**Gemacht:**
+- `tools/zahlen.mjs` (neu): `unitCost`, `bundleCost`, `levelFigures`, `buildReport`; schreibt `docs/inhalte/ZAHLEN.md`. `tests/zahlen.test.js` (neu): Rechnung an Beispielen (Holzplatte, Wundverband, Level 1), Erfahrung je Level, Seite aktuell.
+- Doku: `ZAHLEN.md` in `CLAUDE.md`, `SPIEL.md`, `TECHNIK.md`; Kristallsand in `AUSBLICK.md`; `STAND.md`, Archiv.
+
+**Geprüft:**
+- `npm test`: 427 von 427 bestanden.
+- Kein Browser-Test: kein Spielcode geändert (nur das Werkzeug, die Doku und die Versionsnummer).
+
 ### v0.43.5 – Techbaum Level 14–18 angenommen, Entwurf Rechenwerkzeug (23.11.2026, nur Doku)
 
 **Vorgenommen:**

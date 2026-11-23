@@ -61,7 +61,19 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.44.0 – Rechenwerkzeug für die Zahlen (Chat 27; wartet auf Tobias' OK)
+### Entwurf v0.44.0 – Rechenwerkzeug für die Zahlen (Chat 27; angenommen, umgesetzt in v0.44.0)
+
+**Tobias' OK:** „Da würde mir Kristallsand tatsächlich am besten gefallen. Ja, das Rechenwerkzeug hat mir noch gefehlt, damit wir alles im GLeichgewicht behalten können. Du kannst mir gern die wichtigsten Stellem im Chat zusammenfassen, wenn ich etwas genauer wissen will, werde ich nachfragen.“
+
+**Ergebnis (v0.44.0, `docs/inhalte/ZAHLEN.md`) – die wichtigsten Stellen:**
+1. **Der Aufstieg ist kaum eine Hürde:** Die Aufträge eines Levels bezahlen den nächsten Aufstieg fast immer allein (11–88 % ihres Golds; nur Level 12 → 13 braucht 110 %). Das übrige Gold kommt von den Theken – und die können bei teuren Waren weit mehr verkaufen, als eine Straße herstellt (Reißbrett: 2 Theken bis 193.000 Gold/h, eine Straße 9.000 Gold/h). Bei teuren Waren ist die Herstellung der Engpass, nicht die Theke.
+2. **Gold ausgeben geht nur begrenzt:** Theken 3–6 (270.000), Laden-Lager (162.500) und Fläche (10.680) – zusammen etwa 443.000 Gold, danach gibt es nichts mehr zu kaufen. Das erklärt Tobias' Gefühl, dass sich das Gold anhäuft. Level 14–18 brauchen neue Ausgaben: mehr Fläche ab Level 15 (Tobias), teurere Aufstiege und Gebäude, teure Farnsamen.
+3. **Die Kurve:** Level 4 ist der große Sprung (Gold ×4,4, Maschinenzeit von 14 min auf 2,4 h), Level 7 fängt bewusst wieder klein an (×0,4), ab Level 9 steigt es gleichmäßig um ×1,1–1,3 je Level (Level 13: 10.490 Gold, 2,8 h Maschinenzeit). Mit ×1,2–1,25 je Level weiter gedacht: Level 14 etwa 12.500–13.000 Gold an Aufträgen, Level 18 etwa 26.000–32.000.
+4. **Engpässe:** In Kräuter-Leveln sind es die Beete (Level 7: 6 Pflanzen – mit einem Beet 3 h), in Werkzeug-Leveln die Rohstoff-Gebäude (ein Holzfällerlager versorgt 4,5 Sägewerke).
+5. **Lange Ketten lohnen:** Der Aufschlag gegenüber den Rohstoffen wächst mit jeder Stufe – Blöcke +9 %, Zirkel +81 %, Reißbrett +140 %. Glas (+9 %) und Fläschchen (+31 %) lohnen sich noch wenig; erst die Tränke machen die Glas-Kette wertvoll.
+
+**Umgesetzt wie im Entwurf**, mit zwei Änderungen nach dem ersten Lauf: Beim Engpass zählen die Beete mit (je Pflanze ein Beet – sonst sähen Kräuterwaren viel zu schnell aus), und statt „Stunden Theken für den Aufstieg“ (immer nur wenige Minuten) steht, wie viel Gold die Theken pro Stunde höchstens verkaufen; dazu eine Tabelle „Wofür man Gold ausgibt“.
+
 
 **Tobias (Chat 27, zur 2. Fassung des Grobplans):** „Ich finde neuer Platz könnte schon mit Level 15 kommen, weil sich das Gold allmählich anhäuft mit den Produkten, die wir aktuell nicht weiterverarbeiten können. Ich bin aktuell Level 13 und an dem letzten Auftrag dran, aber keine hektik bzgl. programmieren. Mir gefällt der neue Plan viel besser können wir auch gerne so umsetzen. Mühle macht auch Glas sternensand gefällt mir noch nicht so hundertprozentig. Was ist mit Mühle gemeint ? Die Holzkohle Idee mit A finde ich sehr gut. So kann man einfach aus dem Warenlager rausnehmen. Die Namen gefallen mir auch deutlich besser. Wir lassen fermentieren weg.“
 
@@ -85,7 +97,7 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 1. OK so?
 2. Reicht die Seite in der Doku (Claude fasst die Auffälligkeiten im Chat zusammen)?
 
-**Zum „gemahlenen Glas“ (Tobias: „Was ist mit Mühle gemeint?“):** „Mühle“ war kurz für die **Kräutermühle** aus Level 16 – sie sollte auf Level 17 zusätzlich Glas mahlen. Dass eine Kräutermühle Glas mahlt, passt nicht ganz. Vorschlag: Das Glas mahlt der **Steinmetz** (er schleift auf Level 17 ja auch die Linse), die Kräutermühle bleibt bei den Kräutern. Namen statt „Sternensand“: z. B. **Sternenglanz**, **Glitzersand**, **Kristallsand** – oder Tobias' eigener. Entscheidung, wenn wir Level 17 planen.
+**Zum „gemahlenen Glas“ (Tobias: „Was ist mit Mühle gemeint?“):** „Mühle“ war kurz für die **Kräutermühle** aus Level 16 – sie sollte auf Level 17 zusätzlich Glas mahlen. Dass eine Kräutermühle Glas mahlt, passt nicht ganz. Vorschlag: Das Glas mahlt der **Steinmetz** (er schleift auf Level 17 ja auch die Linse), die Kräutermühle bleibt bei den Kräutern. Namen statt „Sternensand“: z. B. **Sternenglanz**, **Glitzersand**, **Kristallsand** – oder Tobias' eigener. Entscheidung, wenn wir Level 17 planen. – **Tobias:** „Da würde mir Kristallsand tatsächlich am besten gefallen.“
 
 ### Grobplan Tränke-Kapitel, 2. Fassung – Magier und Zauberkessel ab Level 15 (Chat 27, v0.43.4; angenommen: „Mir gefällt der neue Plan viel besser“, Feuer A, Namen, ohne Fermentieren; dazu mehr Fläche ab Level 15; offen: das gemahlene Glas – siehe Entwurf v0.44.0 oben)
 

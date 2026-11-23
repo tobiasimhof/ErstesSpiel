@@ -8,7 +8,7 @@
 
 1. Lies **`docs/STAND.md`** (wo wir stehen, nächster Schritt, offene Fragen, die letzten 3 Arbeitsschritte) und **`docs/SPIEL.md`** (das Spiel kurz, wie es heute ist). Das reicht, um loszulegen.
 2. `docs/TECHNIK.md` erst lesen, wenn programmiert wird.
-3. `docs/inhalte/` nur lesen, was gebraucht wird: `LEVEL.md`, `GEBAEUDE.md`, `WAREN.md` (neue Level, Preise, Baukosten, Rezepte), `BEDIENUNG.md` (Fenster, Bauleiste, Karte), `AUSBLICK.md` (Techbaum, Ideen).
+3. `docs/inhalte/` nur lesen, was gebraucht wird: `LEVEL.md`, `GEBAEUDE.md`, `WAREN.md` (neue Level, Preise, Baukosten, Rezepte), `BEDIENUNG.md` (Fenster, Bauleiste, Karte), `AUSBLICK.md` (Techbaum, Ideen), `ZAHLEN.md` (Rechenwerkzeug: Rohstoffe, Zeit und Gold je Level und Ware – automatisch erzeugt, neu schreiben mit `node tools/zahlen.mjs`).
 4. `docs/archiv/` nie komplett lesen, sondern **gezielt durchsuchen** (z. B. `grep`), wenn es um Früheres geht – warum etwas so entschieden wurde, was Tobias genau gesagt hat, wie ein alter Plan aussah.
 
 ## Zusammenarbeit (Regeln von Tobias, 05.11.2026)

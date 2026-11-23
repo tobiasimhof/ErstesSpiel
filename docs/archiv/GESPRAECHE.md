@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen, Entwurf Rechenwerkzeug (v0.43.1 bis v0.43.5)
+### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen, Rechenwerkzeug (v0.43.1 bis v0.44.0)
 
 **Tobias:** „Hey, bringe dich auf den aktuellen Stand der Dinge und berichte mir was die nächsten Schritte sind. Bis v43 sieht alles sehr gut aus und die einzelnen Gebäude wirken auch unterschiedlich genug, sodass man sie erkennt. Da wir die "karte" frei bewegen können, kann ich mir jedes Haus auch von hinten ansehen. Wenn ich z.b. einmal rechts und einmal links baue, dann ist die Produktion auf der anderen Seite immer von hinten zu sehen und da sieht man z.b. keine Unterschiede, aber das ist nur eine kleine Anmerkung für später. Ansonsten sieht es sehr gut aus“
 
@@ -35,6 +35,10 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude:** „Mühle“ war kurz für die Kräutermühle aus Level 16, die auf Level 17 auch Glas mahlen sollte – das passt nicht ganz; Vorschlag: Das Glas mahlt der Steinmetz (er schleift auch die Linse), Namen z. B. Sternenglanz, Glitzersand, Kristallsand – Entscheidung bei Level 17. Mehr Fläche kommt mit Level 15 (Preis bei der Planung von Level 15; vorher mit dem Belastungstest prüfen, dass die größere Fläche flüssig bleibt). Techbaum in `AUSBLICK.md` übernommen. Entwurf v0.44.0 Rechenwerkzeug (`PLAENE.md`): `tools/zahlen.mjs` schreibt `docs/inhalte/ZAHLEN.md` – je Level Warenwert, Erfahrung, Rohstoffe, Arbeitszeit, Baukosten, Aufstieg in Theken-Stunden, Sprung zum Vorlevel; am Spiel ändert sich nichts. Fragen: OK? Reicht die Seite in der Doku?
 
 **Umgesetzt:** v0.43.5 (nur Doku). Wartet auf Tobias' OK.
+
+**Tobias:** „Da würde mir Kristallsand tatsächlich am besten gefallen. Ja, das Rechenwerkzeug hat mir noch gefehlt, damit wir alles im GLeichgewicht behalten können. Du kannst mir gern die wichtigsten Stellem im Chat zusammenfassen, wenn ich etwas genauer wissen will, werde ich nachfragen.“
+
+**Umgesetzt:** v0.44.0 – Rechenwerkzeug (`tools/zahlen.mjs` → `docs/inhalte/ZAHLEN.md`). **Claude** hat die wichtigsten Stellen zusammengefasst (`PLAENE.md`): Die Aufträge bezahlen den Aufstieg fast allein; nach etwa 443.000 Gold (Theken, Lager, Fläche) gibt es nichts mehr zu kaufen, deshalb häuft sich das Gold; ab Level 9 steigt es gleichmäßig um ×1,1–1,3 je Level; Engpass sind Beete bzw. Rohstoff-Gebäude; lange Ketten lohnen, die Glas-Kette erst mit den Tränken. Als Nächstes: Level 14 im Detail planen.
 
 ### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren, eigene Häuser (v0.40.1 bis v0.43.0)
 
