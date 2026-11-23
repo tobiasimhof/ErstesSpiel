@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.43.5 – Techbaum Level 14–18 angenommen, Entwurf Rechenwerkzeug (23.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Antworten zur 2. Fassung festhalten und den nächsten Schritt (Rechenwerkzeug) als Entwurf vorstellen.
+
+**Fragen, die wir uns gestellt haben:**
+- Was ist mit „Mühle“ gemeint? → Die Kräutermühle aus Level 16; dass sie Glas mahlt, passt nicht ganz → Vorschlag Steinmetz, Name offen.
+- Wann mehr Fläche? → Mit Level 15 (Tobias); Preis bei der Planung von Level 15, vorher mit dem Belastungstest prüfen.
+
+**Gemacht:**
+- `AUSBLICK.md`: Techbaum Level 14–18 (angenommene 2. Fassung). `PLAENE.md`: Entwurf v0.44.0 Rechenwerkzeug. `STAND.md`, Archiv. Versionsnummer 0.43.5, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 423 von 423 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.43.4 – Grobplan Tränke-Kapitel, 2. Fassung (23.11.2026, nur Doku)
 
 **Vorgenommen:**
