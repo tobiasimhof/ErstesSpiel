@@ -22,6 +22,7 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 **Geprüft:**
 - `npm test`: 439 von 439 bestanden.
 - Browser-Test 2D (`ONLY=2d`): 944 Prüfungen bestanden, Bilder der Infofenster auf Tablet und Handy angesehen.
+- Browser-Test 3D (`ONLY=3d`): 142 Prüfungen bestanden, Belastungstest herausgezoomt 825, nah 508 Zeichenaufrufe.
 
 ### v0.44.1 – Entwurf Level 14 „Die Tinktur“ (23.11.2026, nur Doku)
 
