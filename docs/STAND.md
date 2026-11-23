@@ -58,7 +58,7 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 - **Warum (Tobias, Chat 27):** „damit man auch besser unterscheiden kann, was auf dem band liegt“; zum Probebild: „Die Probebilder haben mir sehr gut gefallen. Die sollen so groß bleiben wie sie sind … Alles gerne auf einmal“.
 - **Umgesetzt:** Die 31 Waren, die bisher Kugeln waren, haben eine eigene Form (Zahnräder, Metallteile, Uhren, Bretter, Blüten, Verbandsrollen mit Streifen, Glas und Tränke); das Stein-Zahnrad hat Zähne. Je Ware ein Teil mit gemeinsamem Material – gleich viele Zeichenaufrufe wie vorher.
-- **Offen:** Tobias' Test.
+- **Tobias zu den Bildern vor dem Merge:** „Ja passt so“. Offen: sein Test im Spiel.
 
 ### v0.45.1 – Entwurf: Waren auf dem Band (23.11.2026, nur Doku)
 

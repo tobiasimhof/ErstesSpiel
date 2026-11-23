@@ -22,7 +22,7 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 **Geprüft:**
 - `npm test`: 444 von 444 bestanden.
 - Browser-Test 2D und 3D (Tablet und Handy): 1.094 Prüfungen bestanden.
-- Probebild aller 40 Waren (außerhalb des Spiels) und das Bild im Spiel angesehen; Tobias bekommt beide vor dem Merge.
+- Probebild aller 40 Waren (außerhalb des Spiels) und das Bild im Spiel angesehen und Tobias vor dem Merge geschickt – Tobias: „Ja passt so“.
 
 ### v0.45.1 – Entwurf: Waren auf dem Band mit eigenem Aussehen (23.11.2026, nur Doku)
 

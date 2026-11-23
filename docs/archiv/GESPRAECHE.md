@@ -58,7 +58,7 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Tobias:** „Die Probebilder haben mir sehr gut gefallen. Die sollen so groß bleiben wie sie sind, beim rauszoomen erkennt man sie sowieso nicht mehr, weshalb es mir nur ein die Ansicht geht, wenn man quasi so halb reinzoomt um einen genauerer überblick zu bekommen. Alles gerne auf einmal“
 
-**Umgesetzt:** v0.46.0 – alle 31 Kugel-Waren mit eigener Form in der Größe des Probebilds, das Stein-Zahnrad mit Zähnen; Bild aller 40 Waren auf dem Band vor dem Merge angesehen.
+**Umgesetzt:** v0.46.0 – alle 31 Kugel-Waren mit eigener Form in der Größe des Probebilds, das Stein-Zahnrad mit Zähnen; Claude hat Tobias vor dem Merge das Bild aus dem 3D-Test und die Übersicht aller 40 Waren geschickt. – **Tobias:** „Ja passt so“ → live.
 
 ### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren, eigene Häuser (v0.40.1 bis v0.43.0)
 
