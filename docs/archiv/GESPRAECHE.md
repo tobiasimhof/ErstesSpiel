@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2 (v0.43.1, v0.43.2)
+### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel (v0.43.1 bis v0.43.3)
 
 **Tobias:** „Hey, bringe dich auf den aktuellen Stand der Dinge und berichte mir was die nächsten Schritte sind. Bis v43 sieht alles sehr gut aus und die einzelnen Gebäude wirken auch unterschiedlich genug, sodass man sie erkennt. Da wir die "karte" frei bewegen können, kann ich mir jedes Haus auch von hinten ansehen. Wenn ich z.b. einmal rechts und einmal links baue, dann ist die Produktion auf der anderen Seite immer von hinten zu sehen und da sieht man z.b. keine Unterschiede, aber das ist nur eine kleine Anmerkung für später. Ansonsten sieht es sehr gut aus“
 
@@ -17,6 +17,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** (Analyse als Spielentwickler, Teil 2, in `PLAENE.md`): Ja, der Grundrahmen trägt; der wichtigste Hebel ist jetzt Inhalt, und warten lohnt sich nicht: Ein Kapitel zu planen dauert mehrere Chats, ein Level umzusetzen nur eine Version, und das Gefühl von Level 13 betrifft vor allem die Zahlen, nicht das Gerüst (Level 13 kennt Tobias zudem aus der echten Fabrik). Vorschlag: (1) Grobplan Tränke-Kapitel Level 14–18 ohne Zahlen, jetzt; (2) Rechenwerkzeug für die Zahlen (Rohstoffe, Maschinenzeit, Gold je Level, ändert nichts am Spiel); (3) Level 14, fertig bevor Tobias Level 13 abschließt, Zahlen nach seinem Gefühl; (4) Rückseiten zwischendurch, wenn er mag. Beobachtung: Eine Straße stellt etwa 13 Stück pro Minute her, alle 6 Theken verkaufen etwa 7 – Massenproduktion lohnt sich dort, wo Waren verbraucht werden; die Tränke-Rezepte sollten viel von den früheren Waren schlucken. Fragen: Reihenfolge? Bilder im Kopf für die Tränke? Rückseiten zwischendurch oder später?
 
 **Umgesetzt:** v0.43.2 (nur Doku). Wartet auf Tobias' Antworten.
+
+**Tobias** (mit einem Bild seiner Fabrik auf Level 12, 60 Bilder/s): „Okay, lass uns damit anfangen. Ich bin leider die letzten 2 Stunden total im Game versackt und bin jetzt auf level 12 und mache gerade die Kamillenaufträge, damit ich so schnell wie möglich auf Level 13 komme. Das ist aktuell meine Produktion. Von den Baustoffen stelle ich eigentlich alles automatisiert her, was man herstellen kann. Aktuell versuche ich mich noch durch das Pflanzenthema zu jonglieren. Schwierig ist hier, dass man viele Einzelteile wie z.b. Zahnradwelle, damit man genug erntebänken, webstuben etc bauen kann, um da weiter voran zu kommen, von daher passt mir das GLeichgewicht bis hier hin sehr gut“
+
+**Claude** hat Tobias' frühere Ideen im Archiv nachgelesen und den Grobplan geschrieben (`PLAENE.md`): 14 Die Trankküche (Zimmerei: Mörser; Apotheke: Tinktur, Traumtrank), 15 Der Alchemist (neue Stampfmühle: Blütenstaub, Kohlestaub; Heiltrank; Tinte in der Schreibstube), 16 Die Sternwarte (Linse im Steinmetz, Lupe, Fernrohr), 17 Der Zaubergarten (Farn, Farnwedel, Farnstaub), 18 Die Zauberei (Glasstaub; Lebens-, Mana-, Alterstrank). Nur eine neue Maschine, sonst neue Einstellungen; Zahlen erst mit Rechenwerkzeug und Level 13. Fragen: Gerüst? Traumtrank schon auf 14? Name Stampfmühle, Glas statt Sand? Zaubertränke in Apotheke oder Zauberkessel (Empfehlung)? Farn, Alterstrank?
+
+**Umgesetzt:** v0.43.3 (nur Doku). Wartet auf Tobias' Antworten.
 
 ### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren, eigene Häuser (v0.40.1 bis v0.43.0)
 

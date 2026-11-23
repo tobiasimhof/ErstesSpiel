@@ -4,6 +4,22 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.43.3 – Grobplan Tränke-Kapitel Level 14–18 (23.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Schritt 1 der Reihenfolge aus der Analyse (Tobias: „Okay, lass uns damit anfangen“): das Gerüst des Tränke-Kapitels ohne Zahlen; Tobias' Rückmeldung (Level 12, Gleichgewicht passt) festhalten.
+
+**Fragen, die wir uns gestellt haben:**
+- Woraus bauen wir das Gerüst? → Aus Tobias' Entscheidungen (Archiv): Mörser auf 14, Staub-Maschine auf 15, Tinktur und erster Zaubertrank in der Apotheke, Linse → Lupe/Fernrohr, Farn, Lebens-, Mana-, Alterstrank; Bauabschnitte aus dem Gesamtbild v0.30.1.
+- Wie viele neue Maschinen? → Eine (Stampfmühle), vielleicht ein Zauberkessel für Level 18 (Frage an Tobias).
+- Sand zu Staub? → Rohstoffe kommen nicht aufs Band, deshalb Glas → Glasstaub.
+
+**Gemacht:**
+- `PLAENE.md`: Grobplan. `STAND.md`, `AUSBLICK.md` (Hinweis auf den Grobplan), Archiv. Versionsnummer 0.43.3, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 423 von 423 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.43.2 – Kräuterstube passt, Analyse als Spielentwickler Teil 2 (23.11.2026, nur Doku)
 
 **Vorgenommen:**

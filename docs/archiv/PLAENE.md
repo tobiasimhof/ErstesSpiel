@@ -61,7 +61,38 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Analyse als Spielentwickler, Teil 2 – Techbaum jetzt oder warten? (Chat 27, v0.43.2; wartet auf Tobias' Antwort)
+### Grobplan Tränke-Kapitel Level 14–18 – das Gerüst ohne Zahlen (Chat 27, v0.43.3; wartet auf Tobias' Antworten)
+
+**Tobias (Chat 27, mit Bild seiner Fabrik auf Level 12, 60 Bilder/s):** „Okay, lass uns damit anfangen. Ich bin leider die letzten 2 Stunden total im Game versackt und bin jetzt auf level 12 und mache gerade die Kamillenaufträge, damit ich so schnell wie möglich auf Level 13 komme. Das ist aktuell meine Produktion. Von den Baustoffen stelle ich eigentlich alles automatisiert her, was man herstellen kann. Aktuell versuche ich mich noch durch das Pflanzenthema zu jonglieren. Schwierig ist hier, dass man viele Einzelteile wie z.b. Zahnradwelle, damit man genug erntebänken, webstuben etc bauen kann, um da weiter voran zu kommen, von daher passt mir das GLeichgewicht bis hier hin sehr gut“
+
+**Grundlage – was entschieden ist:** Grundkonzept Sand → Glas → Fläschchen → Tränke, Mörser und Staub, Zaubertränke (19.11.); alte Maschinen bekommen neue Funktionen, neue Maschinen nur, wo keine alte es sinnvoll kann; Mörser auf Level 14 als Ware in der Zimmerei aus 1 Steinplatte + 3 Holzstäben; auf Level 15 eine neue Maschine, die zu Staub zerkleinert (Baukosten z. B. Mörser + Räderwerke); Tinktur (Fläschchen + Kräutermischung) und erster Zaubertrank (Tinktur + Kamillenblüten) in der Apotheke; Linse → Lupe / Fernrohr („finde ich gut“); höchstens 2 Eingänge je Maschine; jedes Produkt logisch aus seinen Zutaten; nur kleine Waren. Die Bauabschnitte stammen aus dem Gesamtbild v0.30.1, das Tobias' Grundkonzept traf (Trankküche, Alchemist, Sternwarte, Zaubergarten, Zauberei) – nur ohne die vielen neuen Gebäude.
+
+**Leitidee:** Die Bereiche wechseln sich weiter ab (14 Werkzeuge + Tränke, 15 Tränke, 16 Werkzeuge, 17 Kräuter, 18 Tränke als Abschluss). Die Tränke sind die längsten Ketten des Spiels: Eine Tinktur braucht ein Fläschchen (5 Glas) und eine Kräutermischung (10 Blüten) – so schluckt das Kapitel viel von den früheren Waren, und Massenproduktion bleibt sinnvoll. Neue Gebäude kosten Zwischenprodukte wie Mörser und Räderwerke (Tobias: dass man viele Zahnradwellen für Erntebänke und Webstuben braucht, „passt mir … sehr gut“).
+
+| Level | Bauabschnitt | Bereich | Neue Waren (wo, aus was) | Neu sonst |
+|---|---|---|---|---|
+| 14 | Die Trankküche | Werkzeuge + Tränke | Zimmerei: **Mörser** (1 Steinplatte + 3 Holzstäbe). Apotheke: **Tinktur** (Fläschchen + Kräutermischung) – die Grundzutat aller Tränke; **Traumtrank** (Tinktur + Kamillenblüten) – der erste Trank, Kamille lässt gut schlafen und träumen | nichts – die Fläschchen aus Level 13 werden gleich gebraucht |
+| 15 | Der Alchemist | Tränke | neue Maschine **Stampfmühle** (1 Eingang wie der Steinmetz): Ringelblüten → **Blütenstaub**, Holzkohle → **Kohlestaub**. Apotheke: **Heiltrank** (Tinktur + Blütenstaub). Schreibstube: **Tinte** (Fläschchen + Kohlestaub – Tinte aus Ruß) | Stampfmühle im Reiter „Stein“ (2 Plätze frei), Baukosten Mörser + Räderwerke; eigenes Haus mit Stampfen, die sich heben und senken |
+| 16 | Die Sternwarte | Werkzeuge | Steinmetz: **Linse** (Glas schleifen). Feinschmiede: **Lupe** (Linse + Eisenstange als Fassung und Griff). Uhrmacherei: **Fernrohr** (Linse + Eisenblech als Rohr) | nichts |
+| 17 | Der Zaubergarten | Kräuter | 5. Pflanze **Farn** (nach altem Glauben macht Farnsamen unsichtbar): Beet, Erntebank → **Farnwedel**; Stampfmühle: **Farnstaub** | Farnsamen beim Händler |
+| 18 | Die Zauberei | Tränke (Abschluss) | Stampfmühle: **Glasstaub** (schimmert wie Sternenstaub). Zaubertränke: **Lebenstrank** (Heiltrank + Farnstaub), **Manatrank** (Traumtrank + Glasstaub), **Alterstrank** (Zutaten offen) | Frage 4: Apotheke oder Zauberkessel |
+
+**Was das fürs Spiel heißt:**
+- **Neue Maschinen im ganzen Kapitel:** nur die Stampfmühle (Tobias' Idee), vielleicht noch ein Zauberkessel (Frage 4). Alles andere sind neue Einstellungen alter Maschinen: Zimmerei, Steinmetz, Feinschmiede, Uhrmacherei und Schreibstube je eine mehr, die Apotheke drei mehr.
+- **Mehr als 3 Einstellungen je Maschine:** ab Level 14 nötig (Zimmerei, Apotheke). Das Infofenster zeigt die Liste dann länger; beim Umsetzen prüfen, ob es auf dem Handy kompakter sein muss.
+- **Sand auf der Stampfmühle:** Rohstoffe kommen nicht aufs Band – die Stampfmühle zerstampft deshalb Glas statt Sand (Glasstaub).
+- **Nicht alles wird weiterverarbeitet:** Räderuhr, Kastenschloss, Sternenuhr, Reißbrett, Kamillenkissen, Heilpäckchen, Lupe und Fernrohr bleiben Endprodukte für Theken und Aufträge – das ist in Ordnung (später vielleicht ein Astrolabium aus Sternenuhr + Fernrohr).
+- **Später, nach Level 18:** Stahl (Holzkohle + Eisen) als neue Werkzeug-Stufe, weitere Zaubertränke.
+- **Zahlen** (Mengen, Zeiten, Preise, Baukosten, Aufstiegspreise) kommen erst mit dem Rechenwerkzeug und Tobias' Gefühl von Level 13. Jedes Level wird vor dem Umsetzen noch einmal im Detail geplant (Aufträge, Bewohner, Haus).
+
+**Fragen an Tobias:**
+1. Passt das Gerüst – Reihenfolge der Bereiche, Bauabschnitte, die Waren je Level?
+2. Der erste Trank schon auf Level 14 (Traumtrank), damit die Fläschchen gleich gebraucht werden?
+3. Name „Stampfmühle“ für die neue Maschine – und dass sie Glas statt Sand zerstampft?
+4. Die Zaubertränke auf Level 18: auch in der Apotheke (dann 9 Einstellungen) oder in einem **Zauberkessel** (letzter freier Platz im Reiter „Werkstatt“, eigenes Haus mit Kessel und Dampf)? Claudes Empfehlung: Zauberkessel – über dem Feuer brauen ist etwas anderes als Kräuter mischen, und die Apotheke bleibt übersichtlich.
+5. Farn als Zauberpflanze auf Level 17 – und eine Idee für den Alterstrank?
+
+### Analyse als Spielentwickler, Teil 2 – Techbaum jetzt oder warten? (Chat 27, v0.43.2; Reihenfolge angenommen: „Okay, lass uns damit anfangen“ – Grobplan oben)
 
 **Tobias (Chat 27):** „Die Kräuterstube mit 2 Eingängen finde ich auch gut. Man muss die Produktion anders bauen, als bei den "Baustoffen", weil man z.b. zuerst Heilverbände braucht bevor man Wundverbände herstellen kann und dafür brauch man 2x das gleiche Gebäude, aber das finde ich eigentlich recht gut. Ich hab das mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben. So ist die Produktion mehr davon abhängig, wie viel man eingepflanzt hat etc. Für mich klingt es so, als würden wir nur darauf warten, dass ich wieder auf Level 13 komme, damit wir weiter entwickeln können, weil der Grundrahmen soweit passt ? Kannst du aus sicht eines Spieleentwicklers mal schauen, was am sinnvollsten für die nächsten Schritte ist ? Was könnten wir noch machen bevor wir uns weiter an den Techbaum machen oder sagst du, das Spiel läuft, der Techbaum ist der nächste sinnige Schritt auch wenn ich noch nicht da bin ?“
 
