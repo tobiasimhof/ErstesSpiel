@@ -2012,10 +2012,12 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   // v0.27.0 (Tobias): Die Karte lässt sich rechts unter dem Infofenster hervorschieben
   const box2 = await page.locator('#game').boundingBox();
   for (let i = 0; i < 4; i++) {
-    await page.mouse.move(box2.x + box2.width * 0.6, box2.y + box2.height * 0.5);
+    // v0.47.0: links vom (breiteren) Infofenster anfangen – auf dem Handy reicht
+    // es jetzt bis 58 % der Breite
+    await page.mouse.move(box2.x + box2.width * 0.5, box2.y + box2.height * 0.5);
     // rechte Maustaste verschiebt immer nur die Karte
     await page.mouse.down({ button: 'right' });
-    await page.mouse.move(box2.x + box2.width * 0.1, box2.y + box2.height * 0.5, { steps: 6 });
+    await page.mouse.move(box2.x + box2.width * 0.02, box2.y + box2.height * 0.5, { steps: 6 });
     await page.mouse.up({ button: 'right' });
     await sleep(60);
   }
