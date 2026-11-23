@@ -15,7 +15,6 @@
 import * as THREE from 'three';
 
 import { BUILDINGS } from '../core/data/buildings.js';
-import { ITEMS } from '../core/data/items.js';
 import { DELTA } from '../core/dirs.js';
 import { buildingPorts, footprintSize } from '../core/geometry.js';
 import { selectionTiles } from '../core/area.js';
@@ -28,6 +27,7 @@ import { buildingFace } from '../ui/buildingFace.js';
 import { drawItem } from '../ui/itemArt.js';
 import { BELT_TOP, animateShimmer, buildBeltTile, buildKenneyBuilding } from './kenney3d.js';
 import { beltPieces, FACE } from './kenneyParts.js';
+import { ITEM_MAT, itemGeometry } from './items3d.js';
 import { disposeMerged, flatRects, mergeMeshes, mergeStatic } from './merge.js';
 
 const COLORS = 'spiel';
@@ -133,51 +133,6 @@ function portArrows(building) {
     g.add(flatArrow(port.kind === 'out' ? COLOR.portOut : COLOR.portIn, dir, { x, y: BELT_TOP + 0.03, z, scale: 1.05 }));
   }
   mergeStatic(g); // v0.40.0: alle Pfeile eines Gebäudes als ein Teil je Farbe
-  return g;
-}
-
-// ---------- Waren ----------
-
-// Eigene kleine Formen (solche Waren gibt es bei Kenney nicht), nach der
-// Form aus der Waren-Tabelle (shape) und ihrer Farbe.
-function itemTemplate(type) {
-  const def = ITEMS[type] ?? { color: '#cccccc' };
-  const m = mat(def.color);
-  const g = new THREE.Group();
-  const add = (geo, y, rot = 0) => {
-    const mesh = new THREE.Mesh(geo, m);
-    mesh.position.y = y;
-    mesh.rotation.y = rot;
-    mesh.castShadow = true;
-    g.add(mesh);
-    return mesh;
-  };
-  switch (def.shape) {
-    case 'block':
-      add(new THREE.BoxGeometry(0.22, 0.22, 0.22), 0.11);
-      break;
-    case 'plate':
-      add(new THREE.BoxGeometry(0.36, 0.06, 0.28), 0.03);
-      break;
-    case 'smallplate':
-      add(new THREE.BoxGeometry(0.26, 0.05, 0.22), 0.025);
-      break;
-    case 'rod':
-      add(new THREE.BoxGeometry(0.42, 0.07, 0.07), 0.035);
-      add(new THREE.BoxGeometry(0.42, 0.07, 0.07), 0.105, 0.25);
-      break;
-    case 'bar':
-      add(new THREE.BoxGeometry(0.42, 0.06, 0.06), 0.03);
-      break;
-    case 'ingot':
-      add(new THREE.BoxGeometry(0.28, 0.1, 0.16), 0.05);
-      break;
-    case 'gear':
-      add(new THREE.CylinderGeometry(0.15, 0.15, 0.07, 10), 0.035);
-      break;
-    default:
-      add(new THREE.SphereGeometry(0.11, 12, 8), 0.11);
-  }
   return g;
 }
 
@@ -645,12 +600,12 @@ export function createScene3d({ lib }) {
 
   // v0.40.0: Jede Warensorte ist ein Teil mit vielen Stellen (Instancing) –
   // hundert Holzblöcke kosten so so viel wie einer; Waren werfen keinen Schatten.
+  // v0.46.0: jede Ware mit eigener Form (itemForms.js), alle mit einem Material.
   const itemKinds = new Map(); // type → { geo, mat, mesh, cap }
   function itemKind(type) {
     let kind = itemKinds.get(type);
     if (!kind) {
-      const merged = mergeMeshes([itemTemplate(type)]).meshes[0];
-      kind = { geo: merged.geometry, mat: merged.material, mesh: null, cap: 0 };
+      kind = { geo: itemGeometry(type), mat: ITEM_MAT, mesh: null, cap: 0 };
       itemKinds.set(type, kind);
     }
     return kind;
@@ -1205,6 +1160,12 @@ export function createScene3d({ lib }) {
     sync,
     buildingTop,
     counts: () => ({ buildings: views.size, belts: belts.size, items: itemCount }),
+    // v0.46.0: Formen der Waren, die gerade auf einem Band liegen (Größe, Dreiecke)
+    itemShapes: () =>
+      [...itemKinds].filter(([, kind]) => kind.mesh?.count > 0).map(([type, kind]) => {
+        const size = kind.geo.boundingBox.getSize(new THREE.Vector3());
+        return { type, size: [size.x, size.y, size.z].map((v) => Math.round(v * 100) / 100), triangles: kind.geo.attributes.position.count / 3 };
+      }),
     // v0.40.0: von weitem nur Statuslichter statt der Schilder
     // v0.40.0: Bäume und Felsen, die auf der Welt (bebaubar oder kaufbar) stehen – soll 0 sein
     treesInWorld: (state) => envSpots.filter((p) => p.x > state.world.x && p.x < state.world.x + state.world.width && p.z > state.world.y && p.z < state.world.y + state.world.height).length,

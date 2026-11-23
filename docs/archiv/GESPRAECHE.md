@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen, Rechenwerkzeug, Level 14, Entwurf Waren auf dem Band (v0.43.1 bis v0.45.1)
+### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen, Rechenwerkzeug, Level 14, Waren auf dem Band (v0.43.1 bis v0.46.0)
 
 **Tobias:** „Hey, bringe dich auf den aktuellen Stand der Dinge und berichte mir was die nächsten Schritte sind. Bis v43 sieht alles sehr gut aus und die einzelnen Gebäude wirken auch unterschiedlich genug, sodass man sie erkennt. Da wir die "karte" frei bewegen können, kann ich mir jedes Haus auch von hinten ansehen. Wenn ich z.b. einmal rechts und einmal links baue, dann ist die Produktion auf der anderen Seite immer von hinten zu sehen und da sieht man z.b. keine Unterschiede, aber das ist nur eine kleine Anmerkung für später. Ansonsten sieht es sehr gut aus“
 
@@ -55,6 +55,10 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat Tobias' Kenney-Upload aus der Versionsgeschichte entpackt und die Waren gezählt: 40 Waren können auf ein Band, 31 davon sind im 3D-Test Kugeln in ihrer Farbe (sechs fast weiß, sieben grau). Kenneys Pakete sind Bauteile für Gebäude – als Ware passen nur Zahnräder, Bretter, Stangen und Felsen. Entwurf v0.46.0 (`PLAENE.md`): eigene kleine 3D-Formen im Kenney-Stil für alle 31 Waren, nach Familien mit Erkennungszeichen (Verbände als Rollen mit farbigen Streifen, Blütenhäufchen, Zahnräder, Schlösser …), genauso schnell wie heute. Probebild mit 10 Waren geschickt. Fragen: Richtung? Größe? Alle auf einmal oder in zwei Schritten?
 
 **Umgesetzt:** v0.45.1 (nur Doku). Wartet auf Tobias' Antworten.
+
+**Tobias:** „Die Probebilder haben mir sehr gut gefallen. Die sollen so groß bleiben wie sie sind, beim rauszoomen erkennt man sie sowieso nicht mehr, weshalb es mir nur ein die Ansicht geht, wenn man quasi so halb reinzoomt um einen genauerer überblick zu bekommen. Alles gerne auf einmal“
+
+**Umgesetzt:** v0.46.0 – alle 31 Kugel-Waren mit eigener Form in der Größe des Probebilds, das Stein-Zahnrad mit Zähnen; Claude hat Tobias vor dem Merge das Bild aus dem 3D-Test und die Übersicht aller 40 Waren geschickt. – **Tobias:** „Ja passt so“ → live.
 
 ### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren, eigene Häuser (v0.40.1 bis v0.43.0)
 

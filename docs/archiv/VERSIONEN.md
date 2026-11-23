@@ -4,6 +4,26 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.46.0 – Waren auf dem Band mit eigenem Aussehen (23.11.2026)
+
+**Vorgenommen:**
+- Den Entwurf v0.46.0 umsetzen (Tobias: „Die Probebilder haben mir sehr gut gefallen. Die sollen so groß bleiben wie sie sind … Alles gerne auf einmal“).
+
+**Fragen, die wir uns gestellt haben:**
+- Wo stehen die Formen? → Als Daten in `view3d/itemForms.js` (Grundkörper `box`, `cyl`, `ball`, `ring`, Gruppen mit Maßstab), ohne three.js – so prüft ein Test in node, dass jede Ware eine eigene Form hat und keine zwei gleich sind.
+- Bleibt es schnell? → `items3d.js` fügt jede Form zu einem Teil zusammen (Farben in den Ecken, ein gemeinsames Material `ITEM_MAT`); je Ware bleibt es ein Stapel (Instancing). Belastungstest: herausgezoomt 825–828, nah 508–561 Zeichenaufrufe (vorher 825/508–558). Höchstens 552 Dreiecke je Ware.
+- Wie liegen die Verbände? → Erster Lauf: quer zur Laufrichtung, von vorn wie Dosen; jetzt längs mit losem Ende daneben.
+
+**Gemacht:**
+- `view3d/itemForms.js` (neu): Formen aller 40 Waren (die 9 bisherigen gleich, das Stein-Zahnrad mit Zähnen; neu: Mechanik, Metall, Uhren, Bretter, Kräuter, Verbände, Glas und Tränke). `view3d/items3d.js` (neu): `itemGeometry`, `ITEM_MAT`. `scene3d.js`: Waren aus `itemGeometry`, die alte `itemTemplate` (Kugeln) entfällt; Abfrage `itemShapes`. `main.js`: `__game.isFree` und `view3d.itemShapes` für den Browser-Test.
+- Tests: `tests/waren3d.test.js` (neu, 5 Prüfungen); Browser-Test 3D: alle 40 Waren auf Bändern (Form, Größe höchstens 0,62 × 0,42, Dreiecke), Bild `3d-11c-waren`.
+- Doku: `SPIEL.md`, `TECHNIK.md`, `AUSBLICK.md`, `STAND.md`, Archiv.
+
+**Geprüft:**
+- `npm test`: 444 von 444 bestanden.
+- Browser-Test 2D und 3D (Tablet und Handy): 1.094 Prüfungen bestanden.
+- Probebild aller 40 Waren (außerhalb des Spiels) und das Bild im Spiel angesehen und Tobias vor dem Merge geschickt – Tobias: „Ja passt so“.
+
 ### v0.45.1 – Entwurf: Waren auf dem Band mit eigenem Aussehen (23.11.2026, nur Doku)
 
 **Vorgenommen:**
