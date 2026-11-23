@@ -61,6 +61,52 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.45.0 – Level 14 „Die Tinktur“ im Detail (Chat 27, v0.44.1; wartet auf Tobias' OK)
+
+**Tobias (Chat 27, mit Bild seiner Fabrik, Level 13 abgeschlossen, 26.095 Gold):** „Das würde ich Tatsächlich mit Level 15 machen, wenn die Flächen dazu kommen, weil der Platz bei mir zu ca. 70% sinnvoll gefühlt ist. Größere Straßen zu bauen wird deshalb langsam schwierig und level 13 habe ich jetzt auch beendet. In vergangen Level wurde der Aufstieg dadurch gebremst, dass ich nicht einzelne rohstoffe hatte um gebäude zu bauen, deshalb war ich sehr lange bei den kräuter level beschäftigt. Plane gerne alles und stell es mir dann vor“
+
+**Ziel:** Das Tränke-Kapitel geht weiter – Klara setzt mit Mörser und Fläschchen die erste Tinktur an. Wie im Grobplan: keine neue Maschine, kein neuer Rohstoff, zwei neue Waren in alten Maschinen. Die neue Ausgabe für Gold kommt erst mit Level 15 und der neuen Fläche (Tobias).
+
+**Geschichte:** „Klara hat einen Weg gefunden, die Kraft der Kräuter in Fläschchen einzufangen: zerrieben im Mörser, angesetzt im Glas. Der Duft ihrer Tinkturen zieht durch den Ort – und bald weit darüber hinaus.“ (Der letzte Halbsatz bereitet den alten Magier auf Level 15 vor.)
+
+**Neue Waren** (Preise nach der Regel „jede Stufe rund 20 % mehr als ihre Zutaten“):
+
+| Ware | Wo | Rezept | Zeit | Wert | Aussehen |
+|---|---|---|---|---|---|
+| Mörser | Zimmerei, 4. Einstellung „Mörser“ | 1 Steinplatte + 3 Holzstäbe (Schale aus Stein, Stößel aus Holz) | 10 s | 29 (24 + 20 %) | graue Steinschale mit Holzstößel |
+| Tinktur | Apotheke, 4. Einstellung „Tinkturen“ | 1 Fläschchen + 1 Kräutermischung | 30 s | 346 (288 + 20 %) | kleine braune Flasche mit Korken und grünem Kräuter-Etikett |
+
+**Aufträge** (zusammen 12.761 Gold und 3.829 Erfahrung – ×1,2 gegenüber Level 13, wie die Kurve ab Level 9):
+
+| # | Wer | Was | Wert |
+|---|---|---|---|
+| 1 | Apothekerin Klara | 15 Mörser – „Bevor ich Tinkturen ansetzen kann, muss ich die Kräuter fein zerreiben.“ | 435 |
+| 2 | Apothekerin Klara | 10 Tinkturen – ihre ersten Tinkturen für das Regal | 3.460 |
+| 3 | Müllerin Grete | 20 Mörser + 10 Räderwerke – „Könnte man Kräuter nicht auch mit Wasserkraft mahlen? Ich will es ausprobieren.“ (bereitet die Kräutermühle auf Level 16 vor) | 1.660 |
+| 4 | Heilerin Agnes | 15 Tinkturen + 8 Wundverbände – ein Vorrat für das Spital | 7.206 |
+
+**Aufstieg auf Level 14:** 12.500 Gold (die Reihe 5.000 → 7.500 → 10.000 → 12.500); kein Geschenk (wie seit Level 11). Die Aufträge von Level 13 bringen 10.490 Gold – der Aufstieg kostet also etwas mehr (wie bei Level 13), Tobias hat genug. Die große Ausgabe kommt mit Level 15.
+
+**Rechenwerkzeug** (an einer Kopie mit diesen Zahlen gerechnet):
+- Rohstoffe für alle Aufträge: 3,9 Holzstämme, 3,4 Felsbrocken, 1,3 Sand, 0,8 Leinsamen, 0,8 Ringelblumensamen, 3,3 Schafgarbensamen, 2,5 Kamillensamen (zusammen 7.611 Gold), 7,4 Pflanzen – mit Tobias' 7 Beeten gut eine Runde.
+- Maschinenzeit 4,6 h (Level 13: 2,8 h) – vor allem Mörser (70 min), Räderwerke (72 min) und Tinkturen (102 min); das meiste läuft bei Tobias schon automatisch. Engpass mit je einem Beet: die Schafgarbe (1,7 h).
+- Tinktur: +70 % gegenüber ihren Rohstoffen, eine Straße etwa 6.900 Gold/h – die Glas-Kette lohnt sich jetzt.
+
+**Zu Tobias' Hinweis „nicht einzelne Rohstoffe für Gebäude“:** Level 14 braucht kein neues Gebäude. Für mehr Tinkturen braucht man höchstens weitere Apotheken (1 Verstärkte Holzplatte + 1 Gewichtstein) – beides stellt Tobias schon her. Für die neuen Gebäude auf Level 15 und 16 achten wir darauf, dass die Baukosten aus Waren bestehen, die bis dahin automatisch laufen.
+
+**Was sich im Spiel ändert:**
+- Daten: zwei Waren, zwei Rezepte (ab Level 14), Zimmerei und Apotheke je eine Einstellung mehr, Level 14 mit Geschichte und Aufträgen, Laden auf Level 14 wie auf Level 13. Beide Spielstände (3D-Test und echte Fabrik) bekommen Level 14; das Spielstand-Format bleibt.
+- Warenbilder für Mörser und Tinktur (für Schilder, Fenster und die 2D-Karte); auf den Bändern im 3D-Test kleine Kugeln in der Farbe der Ware wie bei den anderen besonderen Waren.
+- Zimmerei und Apotheke haben erstmals 4 Einstellungen – im Browser-Test auf Tablet und Handy prüfen, ob die Liste „Umstellen auf“ passt.
+- Tests: neue Datei für Level 14; Level-Tests, Browser-Test (Aufträge und Aufstiege bis Level 14).
+- Doku: `LEVEL.md`, `WAREN.md`, `GEBAEUDE.md`, `AUSBLICK.md`, `SPIEL.md`, `ZAHLEN.md`.
+
+**Fragen an Tobias:**
+1. Passen die Rezepte und Zeiten (Mörser 1 Steinplatte + 3 Holzstäbe in 10 s, Tinktur 1 Fläschchen + 1 Kräutermischung in 30 s)?
+2. Passen die vier Aufträge und ihre Mengen?
+3. Aufstieg auf Level 14 für 12.500 Gold?
+4. Passt das Aussehen (graue Steinschale mit Holzstößel; braune Flasche mit grünem Etikett)?
+
 ### Entwurf v0.44.0 – Rechenwerkzeug für die Zahlen (Chat 27; angenommen, umgesetzt in v0.44.0)
 
 **Tobias' OK:** „Da würde mir Kristallsand tatsächlich am besten gefallen. Ja, das Rechenwerkzeug hat mir noch gefehlt, damit wir alles im GLeichgewicht behalten können. Du kannst mir gern die wichtigsten Stellem im Chat zusammenfassen, wenn ich etwas genauer wissen will, werde ich nachfragen.“

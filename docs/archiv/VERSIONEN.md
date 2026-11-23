@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.44.1 – Entwurf Level 14 „Die Tinktur“ (23.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Level 14 im Detail planen (Tobias: „Plane gerne alles und stell es mir dann vor“) und seine Rückmeldung festhalten (Level 13 beendet, Platz zu 70 % gefüllt, Gold-Ausgabe erst mit Level 15).
+
+**Fragen, die wir uns gestellt haben:**
+- Wie viel soll Level 14 bringen? → Rechenwerkzeug: ab Level 9 je Level ×1,1–1,3; Entwurf an einer Kopie gerechnet: 12.761 Gold (×1,2).
+- Was bremste Tobias? → Fehlende Teile für neue Gebäude; Level 14 braucht keins.
+
+**Gemacht:**
+- `PLAENE.md`: Entwurf v0.45.0. `STAND.md`, Archiv. Versionsnummer 0.44.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 427 von 427 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.44.0 – Rechenwerkzeug für die Zahlen (23.11.2026)
 
 **Vorgenommen:**
