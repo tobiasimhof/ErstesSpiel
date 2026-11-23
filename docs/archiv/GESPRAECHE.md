@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 23.11.2026 – Chat 27: eigene Häuser getestet (v0.43.1)
+
+**Tobias:** „Hey, bringe dich auf den aktuellen Stand der Dinge und berichte mir was die nächsten Schritte sind. Bis v43 sieht alles sehr gut aus und die einzelnen Gebäude wirken auch unterschiedlich genug, sodass man sie erkennt. Da wir die "karte" frei bewegen können, kann ich mir jedes Haus auch von hinten ansehen. Wenn ich z.b. einmal rechts und einmal links baue, dann ist die Produktion auf der anderen Seite immer von hinten zu sehen und da sieht man z.b. keine Unterschiede, aber das ist nur eine kleine Anmerkung für später. Ansonsten sieht es sehr gut aus“
+
+**Claude** hat `STAND.md` und `SPIEL.md` gelesen, die Rückmeldung als v0.43.1 festgehalten (nur Doku) und berichtet: Die vereinbarten Schritte aus Chat 26 sind alle erledigt (Belastungstest, 3D schneller, Bereich kopieren, eigene Häuser für alle Gebäude). Als Nächstes spielt Tobias den 3D-Test weiter bis Level 13; dann planen wir gemeinsam Level 14 (Mörser) und das Tränke-Kapitel. Die Rückseiten der Häuser stehen als Punkt für später unter „Nächste Schritte“.
+
+**Umgesetzt:** v0.43.1 (nur Doku).
+
 ### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren, eigene Häuser (v0.40.1 bis v0.43.0)
 
 **Tobias:** „Infomiere dich über den aktuellen Stand. Hier ist mein Feedback zu dem letzten Update v40: Beim heraus und hereinzoomen hab ich jeweils zwischen 60 und 80 Fps. Was sind nun die nächsten Schritte ?“
