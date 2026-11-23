@@ -61,7 +61,37 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Vorbereitung für den nächsten Chat: Oberfläche mit Kenneys UI-Paketen (Chat 27, v0.46.1; noch kein Entwurf)
+### Entwurf v0.47.0 – Probefenster: Kräuter klar unterscheidbar, schlichte Oberfläche mit Kenney (Chat 28, v0.46.2; wartet auf Tobias' OK)
+
+**Tobias (Chat 28):** „Wenn ich auswählen muss, welche Kräuter ich nutzen möchte, damit daraus Blüten entstehen. Aktuell gibt es nur 4 Buttons bei dem ich auswählen kann, welche Kräuter und diese Kräuter sehen alle gleich aus unterscheiden sich nur in der Farbe, das finde ich sehr unübersichtlich. Außerdem die Bilder in den Kräuterbeeten kann man jetzt auch nicht wirklich gut erkenne, deswegen denke ich es wäre besser die Kräuter anders darzustellen, damit man da einen klaren Unterschied erkennen kann. Mir passt es, dass du erst ein probefenster baust. Ich möchte noch kein fertiges perfektes UI design, sondern eher was schlichtes, damit man einfach eine besseres Bild von dem Spiel bekommt als diese KI-HTML darstellung, weil wir über diesen level mit den assets ja schon hinaus sind. Ich hab dir noch Audio für UI hinzugefügt und noch ein weiteres Pack, weil ich das ausversehen verwechselt habe.“
+
+**Tobias' Upload** (Commit `eeabe8a` „Add files via upload“ auf dem Arbeitsbranch; die ZIP-Dateien sind danach wieder aus dem Projekt genommen und liegen nur in der Versionsgeschichte – herausholen mit `git show eeabe8a:<Datei>`), alle CC0:
+- **UI Pack – Adventure** (`kenney_ui-pack-adventure.zip`, 128 Teile, je einfach und doppelt groß, dazu SVG): Fenster, Kästen, Knöpfe, Häkchen, Banner, Fortschrittsbalken in Holz und Pergament (braun), Grau und Rot – passt am besten zum Mittelalter.
+- **Fantasy UI Borders** (`kenney_fantasy-ui-borders.zip`, über 130 Teile): weiße Linienrahmen mit Ecken, einfärbbar.
+- **UI Pack** (`kenney_ui-pack.zip`, 430 Teile): allgemeine Knöpfe in 5 Farben, Häkchen, Pfeile, Regler, Sterne – Ersatzteillager.
+- **UI Pack – Pixel Adventure** (`kenney_ui-pack-pixel-adventure.zip`): dasselbe wie Adventure in Pixelgrafik – verwechselt, wird nicht gebraucht.
+- **UI Audio** (`kenney_ui-audio.zip`, 50 Klänge als `.ogg`): Klicken, Schalter, Überfahren.
+
+**Was Claude im Spiel gesehen hat** (Bildschirmfotos, Level 13):
+- **Erntebank:** vier halbe Knöpfe „➕ 1 [Bild] einlegen“ – das Bild ist 20 Pixel groß, ohne Namen. Die vier Pflanzen sind dieselbe Zeichnung (Form `plant` in `ui/itemArt.js`), nur die Blütenfarbe ist anders (blau, orange, weiß, weiß mit Gelb); Schafgarbe und Kamille sind kaum zu trennen.
+- **Beet:** Die vier Samen sind derselbe Beutel (Form `seeds`) in ähnlichen Brauntönen.
+- **Beete in 3D:** ein leerer brauner Kasten; was darin wächst, zeigt nur das runde Schild darüber mit einem kleinen Pflanzenbild.
+
+**Musterbild** (an Tobias geschickt, noch nicht im Spiel): das Fenster der Erntebank in **A** (Holzrahmen schlicht, `panel_brown`) und **B** (Holzrahmen mit Eisenbeschlägen, `panel_brown_corners_a`); Knöpfe aus `button_brown` und `button_red`, Kästen aus `panel_border_brown_detail`, der Vorrat in eigenen Fächern; rechts die neuen Kräuterbilder groß und darunter die vier Knöpfe von heute.
+
+**Vorschlag v0.47.0 (ein Schritt, die Probe):**
+1. **Jedes Kraut bekommt eine eigene Form** – in allen Fenstern, auf den Schildern und im Laden: **Flachs** hohe dünne Halme mit kleinen blauen Blüten; **Ringelblume** eine große runde orange Blüte mit braunem Knopf und breiten Blättern; **Schafgarbe** ein flacher weißer Schirm aus vielen Pünktchen über gefiederten Blättern; **Kamille** drei kleine Gänseblümchen mit dickem gelbem Knopf. **Samen:** eine Samentüte mit dem Bild der Pflanze darauf.
+2. **Knöpfe mit Namen und größerem Bild:** Erntebank „➕ Flachs“, „➕ Ringelblume“ … (2 × 2, Bild etwa 34 Pixel); Beet „Säen: …“ mit der Samentüte.
+3. **Beete in 3D:** Man sieht, was wächst – Keimlinge, die zur Pflanze in ihrer Form und Farbe heranwachsen (etwa drei Stufen), reif voll aufgeblüht. Wenige Teile, damit es flüssig bleibt (Belastungstest).
+4. **Probefenster im Kenney-Stil, schlicht:** das Infofenster der Gebäude (gilt für alle Gebäude) mit Rahmen, Kästen, Knöpfen, Schließen-Knopf und Fächern aus dem Adventure-Paket. Bauleiste, Laden, Level-Fenster, Menü und die Leiste oben folgen im nächsten Schritt (v0.48.0).
+5. Ins Projekt kommen nur die gebrauchten Bilder (`assets/kenney/ui-pack-adventure/`, mit Kenneys Lizenz), etwa 10–15 kleine Dateien.
+6. **Klänge (Frage):** ein leises Klicken aus Kenneys UI Audio beim Antippen von Knöpfen, mit einem Schalter im Menü ☰ (Klang an/aus) – schon in der Probe oder als eigener kleiner Schritt?
+
+Spielregeln und Spielstand-Format bleiben gleich.
+
+**Fragen an Tobias:** 1. Rahmen A oder B? 2. Passen die Kräuterbilder? 3. Beete in 3D mit wachsenden Pflanzen – so? 4. Klänge jetzt in der Probe oder später?
+
+### Vorbereitung für den nächsten Chat: Oberfläche mit Kenneys UI-Paketen (Chat 27, v0.46.1; in Chat 28 aufgegriffen – Entwurf v0.47.0 oben)
 
 **Tobias (Chat 27, nach v0.46.0):** „Ja, das sieht sehr gut aus. Das Einzige was mir optisch jetzt noch fehlt ist ein passendes Overlay bzw. ein UI, weil wenn ich z.b. die Kräuter auswählen will, fällt es mir schwer zu erkennen, welche kräuter ich gerade ausgewählt habe, deswegen würde ich im nächsten schritt evtl ein gutes oder mehrere Kenny UI herunterladen, die du wieder benutzen kannst, um das Game auch in diesem Schritt auf die nächste Stufe zu führen. Meine zwei nächsten großen Schritten wären ein gutes UI erstellen für das Game und der zweite schritt das Spiel auf die ebene führen mit Anfangsscreen, Namen eingeben und das es kurz die Spielregeln erklärt, aber das würde ich in einem neuen Chat machen, deswegen dokumentiere meine Schritte nur, sodass ich im nächsten Chat schreiben muss "bring dich auf den aktuellen stand" und dann sagst du mir direkt wie wir das mit den kenny UI's machen“
 
