@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 23.11.2026 – Chat 28: Oberfläche mit Kenneys UI-Paketen – Entwurf Probefenster (v0.46.2)
+### 23.11.2026 – Chat 28: Oberfläche mit Kenneys UI-Paketen – Probefenster (v0.46.2, v0.47.0)
 
 **Tobias:** „Bringe dich auf den aktuellsten Stand.“
 
@@ -15,6 +15,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat den Upload entpackt (UI Pack Adventure, Fantasy UI Borders, UI Pack, Pixel Adventure – verwechselt, UI Audio mit 50 Klängen), Bildschirmfotos von Erntebank, Beet und Beeten gemacht (die vier Pflanzen sind dieselbe Zeichnung in anderer Farbe, 20 Pixel ohne Namen; die Samen derselbe Beutel; das Beet in 3D ein leerer Kasten) und ein Musterbild geschickt: das Fenster der Erntebank in A (Holzrahmen schlicht) und B (mit Eisenbeschlägen), neue Kräuterbilder (Flachs: Halme mit blauen Blüten; Ringelblume: große orange Blüte; Schafgarbe: weißer Schirm aus Pünktchen; Kamille: Gänseblümchen mit gelbem Knopf; Samen: Tüte mit dem Bild der Pflanze). Entwurf v0.47.0 in `PLAENE.md`. Fragen: A oder B? Kräuterbilder? Beete mit wachsenden Pflanzen? Klänge jetzt oder später?
 
 **Umgesetzt:** v0.46.2 (nur Doku). Wartet auf Tobias' Antworten.
+
+**Tobias:** „Mir gefällt B besser und die neuen Kräuterbilder sind auch sehr gut. Die Idee, dass man die Kräuter auch aufwachsen sieht, finde ich auch super. Die Sounds machen wir erst bei dem Menu, dass wir auch einen Menüpunkt mit Audio haben, um das ganze zu steuern, aber der Stil des UI's gefällt mir“
+
+**Claude** hat v0.47.0 umgesetzt: die vier Kräuter mit eigener Form in allen Warenbildern (wie im Musterbild), Samen als Tüte in ihrer Farbe mit dem Bild der Pflanze; die Erntebank-Knöpfe mit großem Bild und Namen; im 3D-Test wachsen 3 × 3 Pflanzen im Beet in vier Stufen (Keimling, klein, Knospen ab 60 %, reif blühend); das Infofenster mit Kenneys Holzrahmen B, Holzknöpfen (grün aus dem roten Knopf umgefärbt), verzierten Kästen und runden Vorrat-Fächern. Klänge kommen mit dem Menü (v0.48.0).
+
+**Umgesetzt:** v0.47.0.
 
 ### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen, Rechenwerkzeug, Level 14, Waren auf dem Band, nächste große Schritte (v0.43.1 bis v0.46.1)
 

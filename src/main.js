@@ -648,6 +648,8 @@ window.__game = {
         landSigns: () => view3d.world.landSigns(),
         areaCounts: () => view3d.world.areaCounts(),
         buildingVisible: (id) => view3d.world.buildingVisible(id),
+        // v0.47.0: Pflanzen im Beet (Pflanze|Stufe)
+        crop: (id) => view3d.world.cropOf(id),
         tileAt: (x, y) => view3d.cam.tileAt(x, y),
         yaw: () => view3d.cam.yaw,
         distance: () => view3d.cam.distance,

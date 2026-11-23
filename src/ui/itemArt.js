@@ -48,6 +48,203 @@ function gear(ctx, x, y, outer, inner, teeth, color, s) {
   ctx.stroke();
 }
 
+// ---------- v0.47.0 (Tobias, Chat 28): Kräuter mit eigener Wuchsform ----------
+// „diese Kräuter sehen alle gleich aus unterscheiden sich nur in der Farbe“ –
+// jetzt hat jede Pflanze ihre Form (bloom in data/items.js), die Samen sind eine
+// Tüte mit dem Bild der Pflanze. Gezeichnet auf einem Raster von 40 Einheiten
+// (Mitte 20/20, wie im Musterbild); u = Pixel je Einheit, Ursprung in der Mitte.
+
+// Farbe heller (f > 0) oder dunkler (f < 0) machen, f zwischen -1 und 1.
+function shade(hex, f) {
+  const n = parseInt(hex.slice(1), 16);
+  const mix = (c) => Math.round(f >= 0 ? c + (255 - c) * f : c * (1 + f));
+  const r = mix(n >> 16);
+  const g = mix((n >> 8) & 255);
+  const b = mix(n & 255);
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+// Zeichnet path() mit dunklem Umriss nur außen herum: erst dick umranden, dann
+// füllen – so verschwinden die Linien zwischen überlappenden Blütenblättern.
+function silhouette(ctx, path, fill, u, outline = 1) {
+  ctx.beginPath();
+  path();
+  ctx.lineWidth = Math.max(1, u * 1.1 * outline);
+  ctx.strokeStyle = OUTLINE;
+  ctx.stroke();
+  ctx.fillStyle = fill;
+  ctx.fill();
+}
+
+// Stängel als Linie mit dunklem Rand (Punkte in Einheiten, Kurve mit 4 Punkten
+// als Bezier, sonst gerade Stücke).
+function stem(ctx, pts, u, width, color) {
+  const at = (v) => (v - 20) * u;
+  const trace = () => {
+    ctx.beginPath();
+    ctx.moveTo(at(pts[0][0]), at(pts[0][1]));
+    if (pts.length === 4) {
+      ctx.bezierCurveTo(at(pts[1][0]), at(pts[1][1]), at(pts[2][0]), at(pts[2][1]), at(pts[3][0]), at(pts[3][1]));
+    } else for (const [x, y] of pts.slice(1)) ctx.lineTo(at(x), at(y));
+  };
+  trace();
+  ctx.lineWidth = Math.max(1.4, u * (width + 1.1));
+  ctx.strokeStyle = OUTLINE;
+  ctx.stroke();
+  trace();
+  ctx.lineWidth = Math.max(0.8, u * width);
+  ctx.strokeStyle = color;
+  ctx.stroke();
+}
+
+// Blütenblätter rund um (x, y): count Ellipsen (rx, ry) im Abstand dist.
+function petalRing(ctx, x, y, count, rx, ry, dist, u, turn = 0) {
+  for (let k = 0; k < count; k++) {
+    const a = turn + (k / count) * Math.PI * 2;
+    const px = (x + Math.sin(a) * dist) * u;
+    const py = (y - Math.cos(a) * dist) * u;
+    // Anfangspunkt der Ellipse (Winkel 0, gedreht um a) – sonst zieht der Pfad einen Strich
+    ctx.moveTo(px + Math.cos(a) * rx * u, py + Math.sin(a) * rx * u);
+    ctx.ellipse(px, py, rx * u, ry * u, a, 0, Math.PI * 2);
+  }
+}
+
+function circlesPath(ctx, list, u) {
+  for (const [x, y, r] of list) {
+    ctx.moveTo((x + r) * u, y * u);
+    ctx.arc(x * u, y * u, r * u, 0, Math.PI * 2);
+  }
+}
+
+// Eine Pflanze mittig am Ursprung, Größe wie die übrigen Waren (s).
+function drawPlant(ctx, def, s) {
+  const u = s * 0.035;
+  const leaf = def.color;
+  const flower = def.flower ?? '#5b8ff9';
+  // Einheiten relativ zur Mitte (20/20)
+  const c = (list) => list.map(([x, y, r]) => [x - 20, y - 20, r]);
+  switch (def.bloom) {
+    case 'disc': {
+      // Ringelblume: eine große, runde orange Blüte mit braunem Knopf
+      stem(ctx, [[20, 39], [20, 22]], u, 2.2, leaf);
+      for (const side of [-1, 1]) {
+        silhouette(ctx, () => {
+          ctx.moveTo(0, 13 * u);
+          ctx.quadraticCurveTo(side * 6 * u, 13 * u, side * 12 * u, (side < 0 ? 5 : 2) * u);
+          ctx.quadraticCurveTo(side * 5 * u, (side < 0 ? 5 : 2) * u, 0, 11 * u);
+          ctx.closePath();
+        }, shade(leaf, -0.05), u);
+      }
+      silhouette(ctx, () => petalRing(ctx, 0, -5, 12, 2.7, 6.6, 6, u), flower, u);
+      ctx.beginPath();
+      petalRing(ctx, 0, -5, 6, 2, 4.4, 4, u, Math.PI / 6);
+      ctx.fillStyle = shade(flower, 0.3);
+      ctx.fill();
+      silhouette(ctx, () => circlesPath(ctx, [[0, -5, 3.6]], u), def.center ?? shade(flower, -0.45), u, 0.7);
+      break;
+    }
+    case 'umbel': {
+      // Schafgarbe: flacher weißer Schirm aus vielen Pünktchen, gefiederte Blätter
+      stem(ctx, [[20, 39], [20, 15]], u, 1.6, leaf);
+      for (const [x, y] of [[11, 11], [15, 9.5], [20, 9], [25, 9.5], [29, 11]]) stem(ctx, [[20, 15], [x, y]], u, 1, leaf);
+      for (const side of [-1, 1]) {
+        const y0 = side < 0 ? 34 : 27;
+        stem(ctx, [[20, y0], [20 + side * 8, y0 - 5]], u, 1.1, leaf);
+        for (const f of [0.35, 0.7]) {
+          const x = 20 + side * 8 * f;
+          const y = y0 - 5 * f;
+          stem(ctx, [[x, y], [x + side * 0.8, y - 3]], u, 0.9, leaf);
+          stem(ctx, [[x, y], [x + side * 2.6, y + 1.2]], u, 0.9, leaf);
+        }
+      }
+      const florets = c([
+        [8, 10, 2.1], [11.5, 8.4, 2.1], [15, 7.3, 2.1], [18.5, 6.8, 2.1], [22, 6.8, 2.1], [25.5, 7.3, 2.1], [29, 8.4, 2.1], [32, 10, 2.1],
+        [10, 11.4, 2.1], [13.5, 10.2, 2.1], [17, 9.6, 2.1], [20.5, 9.4, 2.1], [24, 9.7, 2.1], [27.5, 10.3, 2.1], [30.5, 11.5, 2.1],
+        [12, 5.8, 2], [15, 4.6, 2], [19, 3.9, 2], [23, 4.2, 2], [26.5, 5.2, 2],
+      ]);
+      silhouette(ctx, () => circlesPath(ctx, florets, u), flower, u);
+      // feine Pünktchen, damit man die vielen Einzelblüten ahnt
+      ctx.fillStyle = 'rgba(120, 110, 80, 0.35)';
+      ctx.beginPath();
+      circlesPath(ctx, florets.map(([x, y]) => [x, y, 0.7]), u);
+      ctx.fill();
+      break;
+    }
+    case 'daisies': {
+      // Kamille: drei kleine Gänseblümchen, weiß mit dickem gelbem Knopf
+      stem(ctx, [[12, 39], [12, 30], [11, 22], [10, 15]], u, 1.4, leaf);
+      stem(ctx, [[21, 39], [21, 28], [22, 18], [23, 9]], u, 1.4, leaf);
+      stem(ctx, [[29, 39], [29, 32], [30, 26], [31, 21]], u, 1.4, leaf);
+      for (const [x, y, k] of [[10, 14, 1], [31, 20, 0.9], [23, 9, 1.15]]) {
+        silhouette(ctx, () => petalRing(ctx, x - 20, y - 20, 12, 1.4 * k, 3.4 * k, 4.2 * k, u), flower, u, 0.8);
+        silhouette(ctx, () => circlesPath(ctx, [[x - 20, y - 20, 3 * k]], u), def.center ?? '#f2b705', u, 0.6);
+        ctx.fillStyle = 'rgba(255, 240, 160, 0.9)';
+        ctx.beginPath();
+        circlesPath(ctx, [[x - 20.9, y - 20.9, 1.2 * k]], u);
+        ctx.fill();
+      }
+      break;
+    }
+    default: {
+      // 'stars' – Flachs: hohe dünne Halme mit kleinen blauen Sternblüten
+      stem(ctx, [[14, 38], [14, 28], [13, 18], [12, 9]], u, 1.6, leaf);
+      stem(ctx, [[20, 38], [20, 26], [21, 16], [21, 6]], u, 1.6, leaf);
+      stem(ctx, [[26, 38], [26, 28], [27, 20], [29, 11]], u, 1.6, leaf);
+      for (const [x, y] of [[13.5, 26], [20.3, 22], [26.6, 26]]) stem(ctx, [[x, y], [x + (x < 20 ? -3 : 3), y - 2.5]], u, 1.2, leaf);
+      for (const [x, y] of [[12, 8], [21, 5.5], [29, 10]]) {
+        const petals = [[0, -2.2], [2.1, -0.6], [1.3, 1.8], [-1.3, 1.8], [-2.1, -0.6]].map(([dx, dy]) => [x - 20 + dx, y - 20 + dy, 2.2]);
+        silhouette(ctx, () => circlesPath(ctx, petals, u), flower, u, 0.8);
+        ctx.fillStyle = '#ffe066';
+        ctx.beginPath();
+        circlesPath(ctx, [[x - 20, y - 20, 1]], u);
+        ctx.fill();
+      }
+    }
+  }
+}
+
+// Samentüte mit dem Bild der Pflanze, die daraus wächst (def.grows).
+function drawSeedBag(ctx, def, s) {
+  const u = s * 0.035;
+  const at = (v) => (v - 20) * u;
+  const y = (v) => (v - 22.5) * u; // Tüte reicht von 8 bis 37 – mittig setzen
+  silhouette(ctx, () => {
+    ctx.moveTo(at(8), y(8));
+    ctx.lineTo(at(32), y(8));
+    ctx.lineTo(at(33), y(37));
+    ctx.lineTo(at(7), y(37));
+    ctx.closePath();
+  }, def.color, u, 1.2);
+  // umgeschlagener Rand oben
+  ctx.beginPath();
+  ctx.moveTo(at(8), y(8));
+  ctx.lineTo(at(32), y(8));
+  ctx.lineTo(at(31.8), y(12.5));
+  ctx.lineTo(at(8.2), y(12.5));
+  ctx.closePath();
+  ctx.fillStyle = shade(def.color, -0.18);
+  ctx.fill();
+  ctx.lineWidth = Math.max(1, u * 0.8);
+  ctx.strokeStyle = OUTLINE;
+  ctx.stroke();
+  // Etikett mit der Pflanze
+  roundRect(ctx, at(11), y(15), 18 * u, 19 * u, 2 * u);
+  ctx.fillStyle = '#fffaf0';
+  ctx.fill();
+  ctx.lineWidth = Math.max(1, u * 0.7);
+  ctx.strokeStyle = 'rgba(40, 26, 12, 0.5)';
+  ctx.stroke();
+  const plant = ITEMS[def.grows];
+  if (plant) {
+    ctx.save();
+    ctx.translate(0, y(24.5));
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    drawPlant(ctx, plant, s * 0.44);
+    ctx.restore();
+  }
+}
+
 // Zeichnet eine Ware mittig auf (cx, cy) in etwa der Größe size.
 export function drawItem(ctx, type, cx, cy, size) {
   const def = ITEMS[type];
@@ -368,65 +565,15 @@ export function drawItem(ctx, type, cx, cy, size) {
       ctx.stroke();
       break;
     }
-    // v0.16.0: Kräuter-Kapitel
+    // v0.16.0: Kräuter-Kapitel; v0.47.0: Samentüte und Pflanzen mit eigener Form
     case 'seeds': {
-      // Säckchen Leinsamen, oben zugebunden, ein paar Samen davor
-      ctx.beginPath();
-      ctx.moveTo(cx - s * 0.18, cy - s * 0.3);
-      ctx.quadraticCurveTo(cx - s * 0.48, cy + s * 0.05, cx - s * 0.36, cy + s * 0.44);
-      ctx.lineTo(cx + s * 0.36, cy + s * 0.44);
-      ctx.quadraticCurveTo(cx + s * 0.48, cy + s * 0.05, cx + s * 0.18, cy - s * 0.3);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-      // Zipfel über dem Band
-      ctx.beginPath();
-      ctx.moveTo(cx - s * 0.16, cy - s * 0.3);
-      ctx.lineTo(cx - s * 0.24, cy - s * 0.5);
-      ctx.lineTo(cx + s * 0.24, cy - s * 0.5);
-      ctx.lineTo(cx + s * 0.16, cy - s * 0.3);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-      ctx.strokeStyle = '#7a4f2a';
-      ctx.lineWidth = Math.max(1.5, s * 0.08);
-      ctx.beginPath();
-      ctx.moveTo(cx - s * 0.2, cy - s * 0.3);
-      ctx.lineTo(cx + s * 0.2, cy - s * 0.3);
-      ctx.stroke();
-      ctx.fillStyle = '#8a5a2b';
-      for (const [dx, dy] of [[-0.12, 0.12], [0.1, 0.2], [0.02, 0.0], [-0.04, 0.3]]) {
-        ctx.beginPath();
-        ctx.ellipse(cx + dx * s, cy + dy * s, s * 0.05, s * 0.03, 0.5, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      ctx.translate(cx, cy);
+      drawSeedBag(ctx, def, s);
       break;
     }
     case 'plant': {
-      // Pflanze aus dem Beet: Bündel grüner Stängel mit Blüten (v0.17.0:
-      // Farbe der Blüten aus der Tabelle – Flachs blau, Ringelblume orange).
-      // thickLine rechnet ab der Mitte, deshalb erst dorthin verschieben.
       ctx.translate(cx, cy);
-      const stems = [[-0.24, -0.3], [0, -0.4], [0.24, -0.3]];
-      for (const [dx, dy] of stems) thickLine(ctx, [[0, 0.5], [dx, dy]], s, 0.08, def.color);
-      ctx.fillStyle = def.flower ?? '#5b8ff9';
-      ctx.lineWidth = Math.max(1, s * 0.05);
-      for (const [dx, dy] of stems) {
-        for (let k = 0; k < 5; k++) {
-          const a = (k / 5) * Math.PI * 2;
-          ctx.beginPath();
-          ctx.arc((dx + Math.cos(a) * 0.1) * s, (dy + Math.sin(a) * 0.1) * s, s * 0.085, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-        }
-      }
-      // v0.29.0: Kamille – weiße Blüten mit kräftig gelber Mitte
-      ctx.fillStyle = def.center ?? '#f6e7a1';
-      for (const [dx, dy] of stems) {
-        ctx.beginPath();
-        ctx.arc(dx * s, dy * s, s * (def.center ? 0.075 : 0.06), 0, Math.PI * 2);
-        ctx.fill();
-      }
+      drawPlant(ctx, def, s);
       break;
     }
     case 'fiber': {

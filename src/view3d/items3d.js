@@ -54,12 +54,18 @@ function collect(parts, parent, out) {
   }
 }
 
-// Die Form einer Ware als ein Teil (Lage: auf y = 0, mitten im Feld)
-export function itemGeometry(type) {
+// Eine Form (Liste von Grundkörpern) als ein Teil – v0.47.0 auch für die
+// Pflanzen im Beet (plantForms.js)
+export function formGeometry(parts) {
   const out = [];
-  collect(itemForm(type, ITEMS[type]?.color), new THREE.Matrix4(), out);
+  collect(parts, new THREE.Matrix4(), out);
   const geo = mergeGeometries(out);
   for (const g of out) g.dispose();
   geo.computeBoundingBox();
   return geo;
+}
+
+// Die Form einer Ware als ein Teil (Lage: auf y = 0, mitten im Feld)
+export function itemGeometry(type) {
+  return formGeometry(itemForm(type, ITEMS[type]?.color));
 }

@@ -13,7 +13,7 @@
 | 🔨 Schmiede | Eisen | 2 × 2 | „Bleche“ oder „Stangen“: 5 Eisenbarren → 1; „Fläschchen“: 5 Glas → 1 (erst ab Level 13 wählbar) | 3 | 10 Steinplatten + 30 Eisenbarren |
 | ⚙️ Feinschmiede | Eisen | 2 × 2, 2 Eingänge | Scharnier · Schlüssel · Zirkel | 5 | 10 Eisenbleche + 2 Räderwerke |
 | 🔐 Schlosserei | Eisen | 2 × 2, 2 Eingänge | Gewichtstein · Uhrwerk · Vorhängeschloss | 6 | 1 Scharnier + 2 Verstärkte Holzplatten |
-| 🌱 Beet | Erde | 2 × 2, kein Band | 1 Samen → 1 Pflanze (30 min), säen und ernten von Hand | 7 | 10 Holzplatten + 10 Steinplatten |
+| 🌱 Beet | Erde | 2 × 2, kein Band | 1 Samen → 1 Pflanze (30 min), säen und ernten von Hand; in 3D wachsen 3 × 3 Pflanzen sichtbar | 7 | 10 Holzplatten + 10 Steinplatten |
 | 🪢 Erntebank | Erde | 2 × 2 | 1 Pflanze → 50 Flachsfasern, Ringelblüten, Schafgarbenblüten bzw. Kamillenblüten (10 min), Vorrat 3, auch gemischt | 7 | 10 Holzplatten + 2 Zahnradwellen |
 | 🧵 Webstube | Erde | 2 × 2 | 5 Flachsfasern → 1 Verband | 7 | 20 Holzstäbe + 2 Räderwerke |
 | 🌿 Kräuterstube | Erde | 2 × 2, 2 Eingänge | „Heilverbände“ · „Kompressen“ · „Wundverbände“ (erst ab Level 10 wählbar) | 8 | 10 Holzplatten + 5 Eisenbleche + 2 Zahnradwellen |

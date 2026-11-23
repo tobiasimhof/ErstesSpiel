@@ -81,6 +81,14 @@ function textSpan() {
   return span;
 }
 
+// v0.47.0: Name unter dem großen Bild einer Pflanze („➕ Ringelblume“)
+function herbName(text) {
+  const span = document.createElement('span');
+  span.className = 'herb-name';
+  span.textContent = text;
+  return span;
+}
+
 const TEXT = {
   place: (name, cost) => `${name} (kostet ${cost}): Vorschau mit dem Finger an die gewünschte Stelle schieben.`,
   move: (name) => `${name} verschieben: Vorschau an die neue Stelle schieben.`,
@@ -302,13 +310,16 @@ export function createController({
         });
         // v0.17.0: je Rohstoff ein Knopf „einlegen“ (die Erntebank nimmt mehrere Pflanzen)
         // v0.19.0: kleiner, mit dem Warenbild statt des Namens
+        // v0.47.0 (Tobias, Chat 28: „diese Kräuter sehen alle gleich aus“): bei
+        // Pflanzen ein großes Bild und der Name darunter
         for (const type of sourceInputTypes(b.type)) {
           const input = ITEMS[type];
+          const herb = Boolean(input.grown);
           actions.push({
             key: `load:${type}`,
-            label: ['➕ 1 ', createItemIcon(type, 20), ' einlegen'],
+            label: herb ? [createItemIcon(type, 34), herbName(`➕ ${input.name}`)] : ['➕ 1 ', createItemIcon(type, 20), ' einlegen'],
             title: `1 ${input.name} einlegen`,
-            size: 'half',
+            size: herb ? 'half herb' : 'half',
             onClick: () => {
               const machine = findBuilding(state, b.id);
               if (!machine) return;
@@ -354,7 +365,7 @@ export function createController({
         // v0.20.0: vorne das Bild des Samens, groß in einer eigenen Zeile
         for (const seed of gardenSeeds(b.type)) actions.push({
           key: `sow:${seed}`,
-          label: [createItemIcon(seed, 20), ' ', textSpan()],
+          label: [createItemIcon(seed, 30), ' ', textSpan()],
           title: `${ITEMS[seed].name} säen`,
           primary: true,
           size: 'wide',

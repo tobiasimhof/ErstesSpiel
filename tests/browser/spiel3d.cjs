@@ -524,6 +524,91 @@ async function run3d(browser, baseUrl, device) {
     }, goodsArea);
   }
 
+  // v0.47.0 (Tobias, Chat 28: „diese Kräuter sehen alle gleich aus“): Im Beet
+  // wachsen die Pflanzen sichtbar in ihrer eigenen Form (Keimling, klein,
+  // Knospen, reif); die Erntebank hat Knöpfe mit großem Bild und Namen, das
+  // Infofenster einen Rahmen aus Kenneys UI Pack Adventure.
+  const shopLevelBefore = await game(page, () => window.__game.state.shopLevel);
+  const beds = await game(page, () => {
+    const g = window.__game;
+    const p = g.state.plot;
+    const seeds = ['leinsamen', 'ringelblumensamen', 'schafgarbensamen', 'kamillensamen'];
+    const ids = [];
+    for (let y = p.y; y + 2 <= p.y + p.height && ids.length < 4; y += 2) {
+      for (let x = p.x + 4; x + 2 <= p.x + p.width && ids.length < 4; x += 2) {
+        if (![0, 1, 2, 3].every((i) => g.isFree(x + (i % 2), y + Math.floor(i / 2)))) continue;
+        const id = g.place('beet', x, y, 0);
+        if (id === null) continue;
+        Object.assign(g.state.buildings.find((b) => b.id === id).prod, { crop: seeds[ids.length], timer: 0 });
+        ids.push(id);
+      }
+    }
+    const first = g.state.buildings.find((b) => b.id === ids[0]);
+    const last = g.state.buildings.find((b) => b.id === ids[ids.length - 1]);
+    if (first && last) {
+      const x0 = Math.min(first.x, last.x);
+      const y0 = Math.min(first.y, last.y);
+      g.camera.fitRect({ x: x0, y: y0, width: Math.max(first.x, last.x) + 2 - x0, height: Math.max(first.y, last.y) + 2 - y0 });
+    }
+    g.simulate(0);
+    return ids;
+  });
+  check(beds.length === 4, `Vier Beete gesetzt (${beds.join(', ')})`);
+  const plants = ['flachspflanze', 'ringelblume', 'schafgarbe', 'kamille'];
+  // Die Beete werden etwa 8-mal pro Sekunde geprüft; im Test-Browser laufen nur
+  // wenige Bilder pro Sekunde – deshalb auf die erwartete Stufe warten.
+  const cropsAt = async (stage) => {
+    const want = plants.map((t) => `${t}|${stage}`).join();
+    await page
+      .waitForFunction(([ids, w]) => ids.map((id) => window.__game.view3d.crop(id)).join() === w, [beds, want], { timeout: 8000 })
+      .catch(() => {});
+    return game(page, (ids) => ids.map((id) => window.__game.view3d.crop(id)), beds);
+  };
+  const seedlings = await cropsAt(0);
+  check(seedlings.join() === plants.map((t) => `${t}|0`).join(), `Frisch gesät: Keimlinge im Beet (${seedlings.join(', ')})`);
+  await game(page, () => window.__game.simulate(1800 * 0.65));
+  const buds = await cropsAt(2);
+  check(buds.join() === plants.map((t) => `${t}|2`).join(), `Nach 65 % der Zeit: große Pflanzen mit Knospen (${buds.join(', ')})`);
+  await game(page, () => window.__game.simulate(1800));
+  const ripe = await cropsAt(3);
+  check(ripe.join() === plants.map((t) => `${t}|3`).join(), `Reif: jede Pflanze blüht in ihrer Form (${ripe.join(', ')})`);
+  await shot('3d-11d-beete');
+  // Erntebank: alle vier Pflanzen freigeschaltet (Level 13), Knöpfe mit Bild und Namen
+  const bench = houseIds[houseTypes.indexOf('flachsbreche')];
+  await game(page, (id) => {
+    const g = window.__game;
+    g.state.shopLevel = 13;
+    const b = g.state.buildings.find((item) => item.id === id);
+    g.camera.fitRect({ x: b.x - 3, y: b.y - 2, width: 8, height: 6 });
+    g.simulate(0);
+  }, bench);
+  await sleep(300);
+  const benchAt = await game(page, (id) => window.__game.view3d.building(id), bench);
+  await page.touchscreen.tap(benchAt.x, benchAt.y);
+  await sleep(400);
+  const herbButtons = await page.evaluate(() =>
+    [...document.querySelectorAll('#info-panel button.herb')].filter((b) => !b.hidden).map((b) => ({
+      text: b.textContent.trim(),
+      icon: b.querySelector('canvas.item-icon')?.dataset.size,
+    })),
+  );
+  check(
+    herbButtons.length === 4 && herbButtons.every((b) => b.icon === '34') && ['Flachspflanze', 'Ringelblume', 'Schafgarbe', 'Kamille'].every((n, i) => herbButtons[i].text.includes(n)),
+    `Erntebank: vier Knöpfe mit großem Bild und Namen (${herbButtons.map((b) => b.text).join(', ')})`,
+  );
+  const frame = await page.evaluate(() => getComputedStyle(document.getElementById('info-panel')).borderImageSource);
+  check(frame.includes('panel_brown_corners_a'), `Infofenster mit Kenneys Holzrahmen (${frame.slice(-40)})`);
+  const benchFit = await infoFits(page);
+  check(benchFit.length === 0, `Erntebank: nichts ragt aus dem Fenster (${benchFit.join(', ') || 'alles passt'})`);
+  await shot('3d-11e-erntebank');
+  await page.tap('#info-close');
+  await game(page, ([ids, level]) => {
+    const g = window.__game;
+    g.state.buildings = g.state.buildings.filter((b) => !ids.includes(b.id));
+    g.state.shopLevel = level;
+    g.simulate(0);
+  }, [beds, shopLevelBefore]);
+
   // Eigener Spielstand: der 3D-Test speichert getrennt, die echte Fabrik bleibt
   await game(page, () => window.__game.saveNow());
   const slots = await game(page, () => ({

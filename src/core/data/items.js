@@ -8,6 +8,11 @@
 // level:    Rohstoff: ab diesem Laden-Level beim Händler (v0.9.0)
 // price:    fester Wert/Verkaufspreis im Laden
 // shape/color: Aussehen auf dem Band und in Listen
+// bloom:    v0.47.0 (Tobias, Chat 28): Wuchsform einer Pflanze, damit sich die
+//           Kräuter nicht nur in der Farbe unterscheiden – 'stars' (Flachs: Halme
+//           mit kleinen Sternblüten), 'disc' (Ringelblume: eine große Blüte),
+//           'umbel' (Schafgarbe: flacher Schirm), 'daisies' (Kamille)
+// grows:    v0.47.0: Samen – welche Pflanze daraus wächst (Bild auf der Samentüte)
 //
 // Preise nach dem festgelegten Techbaum (docs/SPIEL.md, Abschnitt 7):
 // Blöcke bringen knapp mehr als der Rohstoff kostet (+9 %), jedes weitere Teil
@@ -58,8 +63,8 @@ export const ITEMS = {
   // Jede Stufe bringt mehr: 1.000 → 50 × 25 = 1.250 → 10 × 150 = 1.500.
   // v0.23.0 durch 3: 320 → 50 × 8 = 400 → 10 × 48 = 480 (Leinsamen 320 statt
   // 333, damit eine Faser ganze 8 Gold kostet und das Verhältnis bleibt).
-  leinsamen: { name: 'Leinsamen', plural: 'Leinsamen', raw: true, level: 7, buyPrice: 320, color: '#c9a66b', shape: 'seeds' },
-  flachspflanze: { name: 'Flachspflanze', plural: 'Flachspflanzen', raw: true, grown: true, level: 7, color: '#6f9a45', flower: '#5b8ff9', shape: 'plant' },
+  leinsamen: { name: 'Leinsamen', plural: 'Leinsamen', raw: true, level: 7, buyPrice: 320, color: '#c9a66b', shape: 'seeds', grows: 'flachspflanze' },
+  flachspflanze: { name: 'Flachspflanze', plural: 'Flachspflanzen', raw: true, grown: true, level: 7, color: '#6f9a45', flower: '#5b8ff9', shape: 'plant', bloom: 'stars' },
   flachsfaser: { name: 'Flachsfaser', plural: 'Flachsfasern', price: 8, color: '#e3d3a4', shape: 'fiber' },
   verband: { name: 'Verband', plural: 'Verbände', price: 48, color: '#f4f1e8', shape: 'bandage' },
 
@@ -67,8 +72,8 @@ export const ITEMS = {
   // wächst im selben Beet und kommt in dieselbe Maschine wie Flachs (Erntebank).
   // Teurer, bringt aber mehr: 1.500 → 50 × 36 = 1.800 → Heilverbände
   // (v0.23.0 durch 3: 500 → 50 × 12 = 600).
-  ringelblumensamen: { name: 'Ringelblumensamen', plural: 'Ringelblumensamen', raw: true, level: 8, buyPrice: 500, color: '#e8a33c', shape: 'seeds' },
-  ringelblume: { name: 'Ringelblume', plural: 'Ringelblumen', raw: true, grown: true, level: 8, color: '#5f8f3a', flower: '#f59f00', shape: 'plant' },
+  ringelblumensamen: { name: 'Ringelblumensamen', plural: 'Ringelblumensamen', raw: true, level: 8, buyPrice: 500, color: '#e8a33c', shape: 'seeds', grows: 'ringelblume' },
+  ringelblume: { name: 'Ringelblume', plural: 'Ringelblumen', raw: true, grown: true, level: 8, color: '#5f8f3a', flower: '#f59f00', shape: 'plant', bloom: 'disc' },
   ringelbluete: { name: 'Ringelblüte', plural: 'Ringelblüten', price: 12, color: '#f08c00', shape: 'petals' },
   // Kräuterstube: Verband (bzw. Fasern) + Kraut. Wert = Zutaten + 20 %.
   heilverband: { name: 'Heilverband', plural: 'Heilverbände', price: 130, color: '#f4f1e8', herb: '#f59f00', shape: 'bandage' },
@@ -88,8 +93,8 @@ export const ITEMS = {
   // läuft durch dieselbe Erntebank. Teurer, bringt aber mehr: 660 → 50 × 16 =
   // 800 (+21 %). In der Kräuterstube: Heilverband + 5 Blüten = Wundverband
   // (130 + 80 = 210, +20 % = 252), der Blut stillt.
-  schafgarbensamen: { name: 'Schafgarbensamen', plural: 'Schafgarbensamen', raw: true, level: 10, buyPrice: 660, color: '#a9bf7a', shape: 'seeds' },
-  schafgarbe: { name: 'Schafgarbe', plural: 'Schafgarben', raw: true, grown: true, level: 10, color: '#5c7f3a', flower: '#f8f5ea', shape: 'plant' },
+  schafgarbensamen: { name: 'Schafgarbensamen', plural: 'Schafgarbensamen', raw: true, level: 10, buyPrice: 660, color: '#a9bf7a', shape: 'seeds', grows: 'schafgarbe' },
+  schafgarbe: { name: 'Schafgarbe', plural: 'Schafgarben', raw: true, grown: true, level: 10, color: '#5c7f3a', flower: '#f8f5ea', shape: 'plant', bloom: 'umbel' },
   schafgarbenbluete: { name: 'Schafgarbenblüte', plural: 'Schafgarbenblüten', price: 16, color: '#f4efdc', center: '#d8c98a', shape: 'petals' },
   wundverband: { name: 'Wundverband', plural: 'Wundverbände', price: 252, color: '#f4f1e8', herb: '#f59f00', sprig: '#f8f5ea', shape: 'bandage' },
 
@@ -108,8 +113,8 @@ export const ITEMS = {
   // Apotheke: Kräutermischung (80 + 100 = 180 → 216), Kamillenkissen
   // (80 + 100 = 180 → 216), Heilpäckchen (252 + 168 = 420 → 504).
   // Schreibstube: Reißbrett = Zeichenbrett + Reißzeug (355 + 818 = 1.173 → 1.408).
-  kamillensamen: { name: 'Kamillensamen', plural: 'Kamillensamen', raw: true, level: 12, buyPrice: 830, color: '#e6cf6a', shape: 'seeds' },
-  kamille: { name: 'Kamille', plural: 'Kamillen', raw: true, grown: true, level: 12, color: '#6a9a3c', flower: '#ffffff', center: '#f2b705', shape: 'plant' },
+  kamillensamen: { name: 'Kamillensamen', plural: 'Kamillensamen', raw: true, level: 12, buyPrice: 830, color: '#e6cf6a', shape: 'seeds', grows: 'kamille' },
+  kamille: { name: 'Kamille', plural: 'Kamillen', raw: true, grown: true, level: 12, color: '#6a9a3c', flower: '#ffffff', center: '#f2b705', shape: 'plant', bloom: 'daisies' },
   kamillenbluete: { name: 'Kamillenblüte', plural: 'Kamillenblüten', price: 20, color: '#ffffff', center: '#f2b705', shape: 'daisies' },
   kraeutermischung: { name: 'Kräutermischung', plural: 'Kräutermischungen', price: 216, color: '#9a6a3c', shape: 'herbmix' },
   kamillenkissen: { name: 'Kamillenkissen', plural: 'Kamillenkissen', price: 216, color: '#e9dcc0', shape: 'pillow' },

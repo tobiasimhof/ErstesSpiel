@@ -20,14 +20,15 @@ import { buildingPorts, footprintSize } from '../core/geometry.js';
 import { selectionTiles } from '../core/area.js';
 import { beltLine, pathDirections } from '../core/belts.js';
 import { landOffer, landOffers } from '../core/land.js';
-import { buildingStatus, gardenCrop, growth, productionOf } from '../core/production.js';
+import { buildingStatus, gardenCrop, growth, isRipe, productionOf } from '../core/production.js';
 import { BELT_SPEED, TICK } from '../core/sim.js';
 import { beltAt, parseTileKey } from '../core/state.js';
 import { buildingFace } from '../ui/buildingFace.js';
 import { drawItem } from '../ui/itemArt.js';
 import { BELT_TOP, animateShimmer, buildBeltTile, buildKenneyBuilding } from './kenney3d.js';
 import { beltPieces, FACE } from './kenneyParts.js';
-import { ITEM_MAT, itemGeometry } from './items3d.js';
+import { ITEM_MAT, formGeometry, itemGeometry } from './items3d.js';
+import { bedForm, plantStage } from './plantForms.js';
 import { disposeMerged, flatRects, mergeMeshes, mergeStatic } from './merge.js';
 
 const COLORS = 'spiel';
@@ -491,6 +492,31 @@ export function createScene3d({ lib }) {
         views.delete(id);
       }
     }
+  }
+
+  // v0.47.0 (Tobias, Chat 28): Im Beet wachsen die Pflanzen sichtbar – je
+  // Pflanze und Stufe (Keimling, klein, Knospen, reif) ein Teil, das sich alle
+  // Beete teilen; neu gesetzt nur, wenn sich Pflanze oder Stufe ändert.
+  const cropGeos = new Map(); // 'ringelblume|2' → Geometrie
+  function updateCrop(view) {
+    const b = view.building;
+    if (productionOf(b.type)?.kind !== 'garden') return;
+    const crop = gardenCrop(b);
+    const key = crop ? `${crop.plant}|${plantStage(growth(b), isRipe(b))}` : '';
+    if (key === (view.cropKey ?? '')) return;
+    view.cropKey = key;
+    if (view.crop) {
+      view.group.remove(view.crop);
+      view.crop = null;
+    }
+    if (!key) return;
+    if (!cropGeos.has(key)) {
+      const [plant, stage] = key.split('|');
+      cropGeos.set(key, formGeometry(bedForm(plant, Number(stage))));
+    }
+    view.crop = new THREE.Mesh(cropGeos.get(key), ITEM_MAT);
+    view.crop.userData.cropKey = key;
+    view.group.add(view.crop);
   }
 
   function updateSign(state, view) {
@@ -1141,7 +1167,10 @@ export function createScene3d({ lib }) {
     signTimer -= dt;
     if (signTimer <= 0) {
       signTimer = 0.12;
-      for (const v of views.values()) updateSign(state, v);
+      for (const v of views.values()) {
+        updateSign(state, v);
+        updateCrop(v);
+      }
       syncDots(state);
     }
     animate(state, ui, dt);
@@ -1193,6 +1222,8 @@ export function createScene3d({ lib }) {
     hasGhost: () => Boolean(ghost),
     // v0.41.0: Beim Kopieren bleibt das Original zu sehen
     buildingVisible: (id) => views.get(id)?.group.visible ?? false,
+    // v0.47.0: was im Beet wächst und in welcher Stufe ('ringelblume|3'), '' wenn leer
+    cropOf: (id) => views.get(id)?.cropKey ?? null,
     overlayCount: () => overlay.children.length,
     // v0.35.0: Bereich und Fläche
     areaCounts: () => ({ marks: areaMarks.children.length, ghost: areaGhostRoot.children.length, tiles: areaTiles.children.length }),
