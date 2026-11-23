@@ -4,6 +4,22 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.43.1 – eigene Häuser getestet (23.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zu den eigenen Häusern (v0.42.0 und v0.43.0) festhalten (Regel „Nichts darf verloren gehen“).
+
+**Fragen, die wir uns gestellt haben:**
+- Erkennt man die Gebäude? → Ja: „Bis v43 sieht alles sehr gut aus und die einzelnen Gebäude wirken auch unterschiedlich genug, sodass man sie erkennt.“
+- Was fehlt? → Von hinten sieht man keine Unterschiede (Erkennungszeichen und bewegte Teile sitzen vorn); wer links und rechts einer Straße baut, sieht eine Seite immer von hinten – „nur eine kleine Anmerkung für später“.
+- Wie weiter? → Tobias spielt weiter bis Level 13, dann planen wir Level 14 (wie in Chat 26 vereinbart).
+
+**Gemacht:**
+- `STAND.md` (Status, Nächster Schritt, Nächste Schritte Punkt 2, offene Frage 15, letzte Arbeitsschritte), Archiv. Versionsnummer 0.43.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 423 von 423 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.43.0 – eigene Häuser für Level 7–12 (22.11.2026)
 
 **Vorgenommen:**
