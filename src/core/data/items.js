@@ -124,4 +124,11 @@ export const ITEMS = {
   sand: { name: 'Sand', plural: 'Sand', raw: true, level: 13, buyPrice: 1100, color: '#d9c08a', shape: 'sandsack' },
   glas: { name: 'Glas', plural: 'Glas', price: 12, color: '#a8dcd9', shape: 'glass' },
   flaeschchen: { name: 'Fläschchen', plural: 'Fläschchen', price: 72, color: '#bfe6e2', shape: 'vial' },
+
+  // v0.45.0: Level 14 „Die Tinktur“ (Entwurf v0.45.0, Tobias, Chat 27: „Ja,
+  // die Rezepte passen so“). Mörser: 1 Steinplatte + 3 Holzstäbe = 24 → 29
+  // (+20 %), Schale aus Stein, Stößel aus Holz. Tinktur: 1 Fläschchen + 1
+  // Kräutermischung = 288 → 346 (+20 %), die Grundzutat aller Tränke.
+  moerser: { name: 'Mörser', plural: 'Mörser', price: 29, color: '#a7adb5', shape: 'mortar' },
+  tinktur: { name: 'Tinktur', plural: 'Tinkturen', price: 346, color: '#7a4a24', herb: '#5f8f3a', shape: 'tincture' },
 };

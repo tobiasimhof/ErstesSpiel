@@ -51,7 +51,9 @@
 | Reißbrett | Schreibstube: 1 Zeichenbrett + 1 Reißzeug (das Arbeitsbrett des Baumeisters) | 60 s | 1.408 |
 | Sand | Händler (ab Level 13), ein Sack feiner Flusssand | – | 1.100 (Kauf) |
 | Glas | Ofen: 1 Sand → 100 (Glas gibt es nur dort) | 9 s je Stück | 12 |
-| Fläschchen | Schmiede: 5 Glas → 1 (das Gefäß für die späteren Tränke) | 30 s | 72 |
+| Fläschchen | Schmiede: 5 Glas → 1 (das Gefäß für die Tränke) | 30 s | 72 |
+| Mörser | Zimmerei: 1 Steinplatte + 3 Holzstäbe (Schale aus Stein, Stößel aus Holz) | 10 s | 29 |
+| Tinktur | Apotheke: 1 Fläschchen + 1 Kräutermischung (die Grundzutat aller Tränke) | 30 s | 346 |
 
 - Rohstoffe und Pflanzen kommen nicht aufs Band und nicht ins Lagerhaus; man legt sie direkt ins Gebäude. Pflanzen kann man nicht kaufen und nicht verkaufen.
 - **Rechenbeispiele:** 1 Holzstamm (183) → 200 Holzblöcke (200) → 40 Teile (240); im Ofen → 100 Holzkohle (200) → mit 10 Zirkeln 10 Reißzeuge (8.180). 1 Sand (1.100) → im Ofen 100 Glas (1.200) → 20 Fläschchen (1.440); ein Ofen mit Sand reicht für 80 Fläschchen pro Stunde, eine Schmiede (30 s je Fläschchen) verarbeitet das Glas von 1,5 Öfen. 1 Eisenerz (732) → 200 Eisenbarren (800) → 40 Teile (960). 1 Leinsamen (320) → 50 Fasern (400) → 10 Verbände (480). 1 Holzstamm + 1 Felsbrocken ergeben etwa 5 Zahnradwellen oder Räderwerke. 1 Beet Flachs + 1 Beet Ringelblumen = genau 10 Heilverbände; 10 Kräuterkompressen brauchen 2 Flachspflanzen und 1 Ringelblume. 3 Beete versorgen eine Erntebank (3 × 10 Minuten = eine Wachszeit). 1 Leinsamen + 1 Ringelblumensamen + 1 Schafgarbensamen (1.480) → 10 Wundverbände (2.520). 1 Schafgarbensamen + 1 Kamillensamen (1.490) → genau 10 Kräutermischungen (2.160).

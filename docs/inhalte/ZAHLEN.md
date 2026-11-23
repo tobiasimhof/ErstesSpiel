@@ -21,6 +21,7 @@
 | 11 Die Uhrmacherei | 4 Räderuhren + 2 Kastenschlösser + 1 Sternenuhr + 10 Wundverbände | 8.497 | 2.550 | 2,1 Holzstämme, 3,4 Felsbrocken, 2,5 Eisenerz, 1 Leinsamen, 1 Ringelblumensamen, 1 Schafgarbensamen | 4.317 | 3 | 3,4 h | 51 min (Steinbruch: Felsbrocken) | Gold ×1,2, Zeit ×1,7 |
 | 12 Die Apotheke | 50 Kamillenblüten + 10 Kräutermischungen + 5 Kamillenkissen + 4 Heilpäckchen + 2 Reißbretter | 9.072 | 2.722 | 0,7 Holzstämme, 1,3 Eisenerz, 2,6 Leinsamen, 0,8 Ringelblumensamen, 1,4 Schafgarbensamen, 2,5 Kamillensamen | 5.274 | 7,3 | 2,1 h | 1,3 h (Beet: Flachspflanze) | Gold ×1,1, Zeit ×0,6 |
 | 13 Die Glashütte | 150 Glas + 45 Fläschchen + 2 Sternenuhren + 15 Kräutermischungen | 10.490 | 3.147 | 0,75 Holzstämme, 0,75 Felsbrocken, 1 Eisenerz, 1,5 Schafgarbensamen, 1,5 Kamillensamen, 3,8 Sand | 7.367 | 3 | 2,8 h | 56 min (Ofen: Sand) | Gold ×1,2, Zeit ×1,3 |
+| 14 Die Tinktur | 35 Mörser + 25 Tinkturen + 10 Räderwerke + 8 Wundverbände | 12.761 | 3.829 | 3,9 Holzstämme, 3,4 Felsbrocken, 0,8 Leinsamen, 0,8 Ringelblumensamen, 3,3 Schafgarbensamen, 2,5 Kamillensamen, 1,3 Sand | 7.611 | 7,4 | 4,6 h | 1,7 h (Beet: Schafgarbe) | Gold ×1,2, Zeit ×1,7 |
 
 ## Aufstieg und Theken
 
@@ -40,7 +41,8 @@
 | 10 | 5.000 | 7.052 | 71 % | 69 | Reißzeug (818) | 112.183 / 280.457 Gold/h (5 Theken) | 8 Stück/h = 6.544 Gold/h |
 | 11 | 7.500 | 8.497 | 88 % | 69 | Kastenschloss (1.296) | 177.737 / 444.343 Gold/h (5 Theken) | 5,3 Stück/h = 6.912 Gold/h |
 | 12 | 10.000 | 9.072 | 110 % | 69 | Reißbrett (1.408) | 193.097 / 482.743 Gold/h (5 Theken) | 6,4 Stück/h = 9.011 Gold/h |
-| 13 | – (letztes Level) | 10.490 | – | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
+| 13 | 12.500 | 10.490 | 119 % | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
+| 14 | – (letztes Level) | 12.761 | – | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
 
 ## Wofür man Gold ausgibt
 
@@ -121,3 +123,5 @@ Neben Rohstoffen und Aufstiegen (Preise aus `data/shop.js` und `data/land.js`):
 | Reißbrett | 12 | 1.408 | 0,35 Holzstämme, 0,63 Eisenerz, 0,2 Leinsamen | 586 | +140 % | 1.352,5 s | 562,5 s | 9.011 |
 | Glas | 13 | 12 | 0,01 Sand | 11 | +9 % | 9 s | 9 s | 4.800 |
 | Fläschchen | 13 | 72 | 0,05 Sand | 55 | +31 % | 75 s | 45 s | 5.760 |
+| Mörser | 14 | 29 | 0,08 Holzstämme, 0,03 Felsbrocken | 18,3 | +58 % | 120 s | 67,5 s | 1.547 |
+| Tinktur | 14 | 346 | 0,1 Schafgarbensamen, 0,1 Kamillensamen, 0,05 Sand | 204 | +70 % | 245 s | 180 s | 6.920 |

@@ -61,7 +61,10 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.45.0 – Level 14 „Die Tinktur“ im Detail (Chat 27, v0.44.1; wartet auf Tobias' OK)
+### Entwurf v0.45.0 – Level 14 „Die Tinktur“ im Detail (Chat 27, v0.44.1; angenommen, umgesetzt in v0.45.0)
+
+**Tobias' OK:** „Ja, die Rezepte passen so und der aufstieg + aufträge auch.  Aussehen passt auch. Bisher arbeiten wir überwiegend mit kreisen, rechtecken auf den Bändern. Die Produkte haben bisher noch kein spezifisches aussehen, aber das könnten wir mit unseren kenny teilen evtl auch noch ändern in einem nächsten schritt“
+
 
 **Tobias (Chat 27, mit Bild seiner Fabrik, Level 13 abgeschlossen, 26.095 Gold):** „Das würde ich Tatsächlich mit Level 15 machen, wenn die Flächen dazu kommen, weil der Platz bei mir zu ca. 70% sinnvoll gefühlt ist. Größere Straßen zu bauen wird deshalb langsam schwierig und level 13 habe ich jetzt auch beendet. In vergangen Level wurde der Aufstieg dadurch gebremst, dass ich nicht einzelne rohstoffe hatte um gebäude zu bauen, deshalb war ich sehr lange bei den kräuter level beschäftigt. Plane gerne alles und stell es mir dann vor“
 

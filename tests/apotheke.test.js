@@ -38,8 +38,8 @@ const APOTHEKE = ['kraeutermischung', 'kamillenkissen', 'heilpaeckchen'];
 
 // ---------- Datentabellen ----------
 
-test('Level 12 gibt es (seit v0.31.0 ist Level 13 das höchste), der Laden bleibt wie auf Level 7 bis 11', () => {
-  assert.equal(MAX_LEVEL, 13);
+test('Level 12 gibt es, der Laden bleibt wie auf Level 7 bis 11', () => {
+  assert.ok(MAX_LEVEL >= 12);
   assert.deepEqual(SHOP_LEVELS[12], SHOP_LEVELS[11]);
 });
 
@@ -59,7 +59,8 @@ test('Apotheke: 2 × 2, zwei Eingänge, Kräutermischung, Kamillenkissen und Hei
   assert.deepEqual([def.level, def.size, def.color, def.name], [12, [2, 2], TAB_COLORS.werkstatt, 'Apotheke']);
   assert.equal(def.ports.filter((p) => p.kind === 'in').length, 2, 'höchstens 2 Eingänge (Tobias)');
   assert.equal(def.ports.filter((p) => p.kind === 'out').length, 1);
-  assert.deepEqual(def.production.recipes, APOTHEKE);
+  // v0.45.0: ab Level 14 als 4. Einstellung die Tinktur (tests/tinktur.test.js)
+  assert.deepEqual(def.production.recipes, [...APOTHEKE, 'tinktur']);
   assert.deepEqual(RECIPES.kraeutermischung.inputs, { schafgarbenbluete: 5, kamillenbluete: 5 });
   assert.deepEqual(RECIPES.kamillenkissen.inputs, { flachsfaser: 10, kamillenbluete: 5 });
   assert.deepEqual(RECIPES.heilpaeckchen.inputs, { wundverband: 1, kraeuterkompresse: 1 });
