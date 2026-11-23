@@ -4,7 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
-### v0.43.1 – eigene Häuser getestet (23.11.2026, nur Doku)
+### v0.43.2 – Kräuterstube passt, Analyse als Spielentwickler Teil 2 (23.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Urteil zur Kräuterstube mit 2 Eingängen festhalten (offene Frage 2 erledigt) und seine Frage beantworten, ob wir bis Level 13 warten oder schon am Techbaum weitermachen.
+
+**Fragen, die wir uns gestellt haben:**
+- Passt die Kräuterstube mit 2 Eingängen? → Ja: „finde ich auch gut“; man baut anders als bei den Baustoffen (zwei Kräuterstuben für Heil- und Wundverbände, mehrere Erntebänke schieben seitlich ein).
+- Warten bis Level 13? → Nein (Analyse in `PLAENE.md`): das Gerüst des Tränke-Kapitels jetzt planen, die Zahlen nach Tobias' Gefühl von Level 13.
+
+**Gemacht:**
+- `PLAENE.md`: Analyse als Spielentwickler, Teil 2. `STAND.md` (Status, Nächster Schritt, Tobias' 3D-Test, Nächste Schritte, offene Fragen neu nummeriert, letzte Arbeitsschritte), Archiv. Versionsnummer 0.43.2, Spiel unverändert.
+
+**Geprüft:**
+- `npm test` (nur Doku und Versionsnummer geändert).
+
 
 **Vorgenommen:**
 - Tobias' Rückmeldung zu den eigenen Häusern (v0.42.0 und v0.43.0) festhalten (Regel „Nichts darf verloren gehen“).

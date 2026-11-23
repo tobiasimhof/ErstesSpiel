@@ -4,13 +4,19 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 23.11.2026 – Chat 27: eigene Häuser getestet (v0.43.1)
+### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2 (v0.43.1, v0.43.2)
 
 **Tobias:** „Hey, bringe dich auf den aktuellen Stand der Dinge und berichte mir was die nächsten Schritte sind. Bis v43 sieht alles sehr gut aus und die einzelnen Gebäude wirken auch unterschiedlich genug, sodass man sie erkennt. Da wir die "karte" frei bewegen können, kann ich mir jedes Haus auch von hinten ansehen. Wenn ich z.b. einmal rechts und einmal links baue, dann ist die Produktion auf der anderen Seite immer von hinten zu sehen und da sieht man z.b. keine Unterschiede, aber das ist nur eine kleine Anmerkung für später. Ansonsten sieht es sehr gut aus“
 
 **Claude** hat `STAND.md` und `SPIEL.md` gelesen, die Rückmeldung als v0.43.1 festgehalten (nur Doku) und berichtet: Die vereinbarten Schritte aus Chat 26 sind alle erledigt (Belastungstest, 3D schneller, Bereich kopieren, eigene Häuser für alle Gebäude). Als Nächstes spielt Tobias den 3D-Test weiter bis Level 13; dann planen wir gemeinsam Level 14 (Mörser) und das Tränke-Kapitel. Die Rückseiten der Häuser stehen als Punkt für später unter „Nächste Schritte“.
 
 **Umgesetzt:** v0.43.1 (nur Doku).
+
+**Tobias:** „Die Kräuterstube mit 2 Eingängen finde ich auch gut. Man muss die Produktion anders bauen, als bei den "Baustoffen", weil man z.b. zuerst Heilverbände braucht bevor man Wundverbände herstellen kann und dafür brauch man 2x das gleiche Gebäude, aber das finde ich eigentlich recht gut. Ich hab das mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben. So ist die Produktion mehr davon abhängig, wie viel man eingepflanzt hat etc. Für mich klingt es so, als würden wir nur darauf warten, dass ich wieder auf Level 13 komme, damit wir weiter entwickeln können, weil der Grundrahmen soweit passt ? Kannst du aus sicht eines Spieleentwicklers mal schauen, was am sinnvollsten für die nächsten Schritte ist ? Was könnten wir noch machen bevor wir uns weiter an den Techbaum machen oder sagst du, das Spiel läuft, der Techbaum ist der nächste sinnige Schritt auch wenn ich noch nicht da bin ?“
+
+**Claude** (Analyse als Spielentwickler, Teil 2, in `PLAENE.md`): Ja, der Grundrahmen trägt; der wichtigste Hebel ist jetzt Inhalt, und warten lohnt sich nicht: Ein Kapitel zu planen dauert mehrere Chats, ein Level umzusetzen nur eine Version, und das Gefühl von Level 13 betrifft vor allem die Zahlen, nicht das Gerüst (Level 13 kennt Tobias zudem aus der echten Fabrik). Vorschlag: (1) Grobplan Tränke-Kapitel Level 14–18 ohne Zahlen, jetzt; (2) Rechenwerkzeug für die Zahlen (Rohstoffe, Maschinenzeit, Gold je Level, ändert nichts am Spiel); (3) Level 14, fertig bevor Tobias Level 13 abschließt, Zahlen nach seinem Gefühl; (4) Rückseiten zwischendurch, wenn er mag. Beobachtung: Eine Straße stellt etwa 13 Stück pro Minute her, alle 6 Theken verkaufen etwa 7 – Massenproduktion lohnt sich dort, wo Waren verbraucht werden; die Tränke-Rezepte sollten viel von den früheren Waren schlucken. Fragen: Reihenfolge? Bilder im Kopf für die Tränke? Rückseiten zwischendurch oder später?
+
+**Umgesetzt:** v0.43.2 (nur Doku). Wartet auf Tobias' Antworten.
 
 ### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren, eigene Häuser (v0.40.1 bis v0.43.0)
 
