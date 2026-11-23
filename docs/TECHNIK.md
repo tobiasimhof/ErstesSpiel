@@ -20,7 +20,7 @@ Wie das Spiel gebaut ist. Nur lesen, wenn programmiert wird; die Arbeitsregeln s
 |---|---|
 | `CLAUDE.md`, `README.md` | Arbeitsregeln für Claude; kurze Startseite mit Link zum Spielen |
 | `docs/STAND.md`, `docs/SPIEL.md` | Wo wir stehen; das Spiel kurz (zu Beginn jedes Chats) |
-| `docs/inhalte/` | Einzelheiten zum Spiel: `LEVEL.md`, `GEBAEUDE.md`, `WAREN.md`, `BEDIENUNG.md`, `AUSBLICK.md` |
+| `docs/inhalte/` | Einzelheiten zum Spiel: `LEVEL.md`, `GEBAEUDE.md`, `WAREN.md`, `BEDIENUNG.md`, `AUSBLICK.md`; `ZAHLEN.md` wird von `tools/zahlen.mjs` geschrieben |
 | `docs/TECHNIK.md` | Diese Datei |
 | `docs/archiv/` | Verlauf: Entscheidungen, Versionen, Gespräche, Pläne, Konzept, Langfassungen von Stand, Spiel und Technik bis v0.36.2 – nur durchsuchen |
 | `index.html` | Gerüst der Oberfläche, Import-Map (Spieldateien mit `?v=`, dazu three.js) |
@@ -55,10 +55,11 @@ Wie das Spiel gebaut ist. Nur lesen, wenn programmiert wird; die Arbeitsregeln s
 | **`src/view2d/` – 2D-Grafik (hinten angestellt)** | |
 | `view2d/renderer.js`, `camera.js` | Zeichnet die Draufsicht (nur, was im Bild ist; Warenbilder zwischengespeichert); 2D-Kamera (verschieben, zoomen, sichtbarer Ausschnitt; `TILE` nutzt auch die Steuerung) |
 | `tools/set-version.mjs` | Versionsnummer und Import-Map setzen (`THREE_IMPORTS` für three.js) |
+| `tools/zahlen.mjs` | Rechenwerkzeug: liest die Datentabellen und schreibt `docs/inhalte/ZAHLEN.md` (je Level Aufträge, Rohstoffe, Maschinenzeit, Engpass, Aufstieg, Theken, neue Gebäude; je Ware Wert, Rohstoffe, Aufschlag, Gold je Stunde). Nach jeder Änderung an Waren, Rezepten, Gebäuden, Leveln oder Laden: `node tools/zahlen.mjs` |
 
 ## Tests
 
-- **`npm test`** (node, `tests/*.test.js`): Spielregeln und Datentabellen je Bereich – Grundlagen (`state`, `buildings`, `belts`, `sim`, `area`, `kopieren`, `warehouse`, `market`, `combo`, `theken`, `lager`, `land`, `levels`, `quests`, `offline`, `save`, `sichern`), je Kapitel (`garden` Level 7, `kraeutergarten` 8, `schreibstube` 9, `spital` 10, `uhrmacherei` 11, `apotheke` 12, `glashuette` 13), Oberfläche ohne Browser (`bauleiste`, `camera`, `infofenster`, `karte`), 3D (`dreid`: eigener Spielstand, Menü, Burgtor; `modelle3d`: Kenneys Modelle, Farbtafeln, Band-Stücke, three.js nur im 3D-Test) `belastungstest` (volle Fläche, läuft, wird nie gespeichert) und `version` (Versionsnummer, Import-Map, Größe der Doku).
+- **`npm test`** (node, `tests/*.test.js`): Spielregeln und Datentabellen je Bereich – Grundlagen (`state`, `buildings`, `belts`, `sim`, `area`, `kopieren`, `warehouse`, `market`, `combo`, `theken`, `lager`, `land`, `levels`, `quests`, `offline`, `save`, `sichern`), je Kapitel (`garden` Level 7, `kraeutergarten` 8, `schreibstube` 9, `spital` 10, `uhrmacherei` 11, `apotheke` 12, `glashuette` 13), Oberfläche ohne Browser (`bauleiste`, `camera`, `infofenster`, `karte`), 3D (`dreid`: eigener Spielstand, Menü, Burgtor; `modelle3d`: Kenneys Modelle, Farbtafeln, Band-Stücke, three.js nur im 3D-Test), `zahlen` (Rechenwerkzeug an Beispielen, `ZAHLEN.md` passt zu den Tabellen), `belastungstest` (volle Fläche, läuft, wird nie gespeichert) und `version` (Versionsnummer, Import-Map, Größe der Doku).
 - **Browser-Test** (Playwright, Tablet 1280 × 800 und Handy 844 × 390 im Querformat): `tests/browser/smoke.cjs` startet `helpers.cjs` (Webserver, Geräte, `check`, Felder antippen und wischen, Infofenster auslesen), `spiel2d.cjs` (die echte Fabrik: Bauleiste, Bauen, Bänder, Fläche, Bereiche, Speichern, Laden, Theken, Aufträge und Aufstiege bis Level 13, Hochformat, schmales Handy 740 × 360) und `spiel3d.cjs` (der 3D-Test: eigener Spielstand, Modelle, Bauen, Bänder, Kamera, Abreißen, Bereich markieren und kopieren, Bauleiste schließt beim Antippen der Karte, die eigenen Häuser bis Level 12 mit bewegten Teilen (`__game.place`, `view3d.motion`), Fläche kaufen, Belastungstest mit Zeichenaufrufen und Statuslichtern von weitem, Bäume außerhalb der Welt, zurück zur echten Fabrik). Prüfungen nutzen `window.__game.simulate(sekunden)` statt echter Zeit; Gebäude in der Bauleiste über `tapBuild(page, typ)`.
 
 ## Prüfen vor jedem Merge
