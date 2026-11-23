@@ -1086,6 +1086,86 @@ export function drawItem(ctx, type, cx, cy, size) {
       ctx.stroke();
       break;
     }
+    case 'mortar': {
+      // v0.45.0 Mörser: Schale aus Stein, darin ein Stößel aus Holz
+      const w = s * 0.5;
+      const rim = cy - s * 0.04;
+      const rh = s * 0.15;
+      // Innen dunkel
+      ctx.fillStyle = '#5d636b';
+      ctx.beginPath();
+      ctx.ellipse(cx, rim, w, rh, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      // Stößel: steht schräg in der Schale
+      ctx.lineWidth = s * 0.2;
+      ctx.strokeStyle = OUTLINE;
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.04, rim + s * 0.02);
+      ctx.lineTo(cx + s * 0.3, cy - s * 0.5);
+      ctx.stroke();
+      ctx.lineWidth = s * 0.12;
+      ctx.strokeStyle = '#b07a45';
+      ctx.stroke();
+      ctx.lineWidth = Math.max(1, s * 0.09);
+      ctx.strokeStyle = OUTLINE;
+      // Schale vorn (deckt das untere Ende des Stößels ab)
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      ctx.ellipse(cx, rim, w, rh, 0, Math.PI, 0, true);
+      ctx.quadraticCurveTo(cx + w, cy + s * 0.46, cx, cy + s * 0.46);
+      ctx.quadraticCurveTo(cx - w, cy + s * 0.46, cx - w, rim);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      // Glanz auf dem Stein
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.55)';
+      ctx.lineWidth = Math.max(1, s * 0.06);
+      ctx.beginPath();
+      ctx.arc(cx, rim, w * 0.72, Math.PI * 0.62, Math.PI * 0.85);
+      ctx.stroke();
+      break;
+    }
+    case 'tincture': {
+      // v0.45.0 Tinktur: kleine braune Apothekerflasche mit Korken und
+      // einem Etikett mit grünem Kräuterblatt
+      ctx.fillStyle = def.color;
+      roundRect(ctx, cx - s * 0.3, cy - s * 0.16, s * 0.6, s * 0.62, s * 0.12);
+      ctx.fill();
+      ctx.stroke();
+      roundRect(ctx, cx - s * 0.13, cy - s * 0.32, s * 0.26, s * 0.2, s * 0.05);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#b07a45';
+      roundRect(ctx, cx - s * 0.11, cy - s * 0.5, s * 0.22, s * 0.2, s * 0.04);
+      ctx.fill();
+      ctx.stroke();
+      // Etikett
+      ctx.fillStyle = '#efe3c2';
+      ctx.lineWidth = Math.max(1, s * 0.05);
+      roundRect(ctx, cx - s * 0.22, cy, s * 0.44, s * 0.3, s * 0.04);
+      ctx.fill();
+      ctx.stroke();
+      // Kräuterblatt
+      ctx.fillStyle = def.herb ?? '#5f8f3a';
+      ctx.beginPath();
+      ctx.ellipse(cx, cy + s * 0.15, s * 0.14, s * 0.07, -0.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(40, 60, 25, 0.8)';
+      ctx.lineWidth = Math.max(1, s * 0.03);
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.12, cy + s * 0.22);
+      ctx.lineTo(cx + s * 0.1, cy + s * 0.09);
+      ctx.stroke();
+      // Glanz
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.lineWidth = Math.max(1.5, s * 0.06);
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.21, cy - s * 0.06);
+      ctx.lineTo(cx - s * 0.21, cy + s * 0.36);
+      ctx.stroke();
+      break;
+    }
     case 'log': {
       roundRect(ctx, cx - s * 0.6, cy - s * 0.3, s * 1.1, s * 0.6, s * 0.3);
       ctx.fill();

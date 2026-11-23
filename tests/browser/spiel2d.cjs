@@ -1,6 +1,6 @@
 // Browser-Test, 2D-Teil (die echte Fabrik, hinten angestellt): spielt in
 // Tablet- und Handygröße per Touch die Bauleiste, Bauen, Bänder, Fläche,
-// Bereiche, Speichern, Laden, Theken, Aufträge und Aufstiege bis Level 13,
+// Bereiche, Speichern, Laden, Theken, Aufträge und Aufstiege bis Level 14,
 // dazu Hochformat und ein schmales Handy. Gestartet von smoke.cjs.
 
 const {
@@ -2508,6 +2508,72 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await shot('24e-theken-level-13');
   await page.tap('#modal-close');
   await sleep(100);
+
+  // ---------- Level 14: Die Tinktur (v0.45.0) ----------
+  await page.tap('#btn-level');
+  await sleep(150);
+  for (let i = 0; i < 4; i++) {
+    await page.locator('#modal-content button', { hasText: '🧪 Test: Auftrag erledigen' }).tap();
+    await sleep(200);
+  }
+  const l13done = await page.textContent('#modal-content');
+  check(
+    l13done.includes('3.147 / 3.147') &&
+      l13done.includes('Nächstes Level: Level 14 · Die Tinktur') &&
+      l13done.includes('Zimmerei: Mörser') &&
+      l13done.includes('Apotheke: Tinktur') &&
+      !l13done.includes('🎁'),
+    'Level 13 erledigt; Level 14 kündigt Mörser (Zimmerei) und Tinktur (Apotheke) an, ohne Geschenk',
+  );
+  await game(page, () => (window.__game.state.gold += 12500));
+  await sleep(450);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 14 · 12.500' }).tap();
+  await sleep(150);
+  check((await game(page, () => window.__game.state.shopLevel)) === 14, 'Aufstieg auf Level 14 für 12.500 Gold');
+  const lvl14Text = await page.textContent('#modal-content');
+  check(
+    lvl14Text.includes('Level 14 erreicht!') && lvl14Text.includes('Die Tinktur') && lvl14Text.includes('15 Mörser') && lvl14Text.includes('0 / 3.829'),
+    'Level 14: Klara möchte 15 Mörser, Erfahrung 0 / 3.829',
+  );
+  await shot('25a-level-14');
+  await page.tap('#modal-close');
+  await sleep(120);
+  const toast14 = await page.textContent('#toast');
+  check(toast14.includes('Laden-Level 14!') && toast14.includes('Mörser') && toast14.includes('Tinktur'), `Meldung nach dem Aufstieg: Mörser und Tinktur (${toast14})`);
+  // Zimmerei und Apotheke haben jetzt 4 Einstellungen – die Liste passt ins Infofenster
+  for (const [type, title, recipe, label] of [
+    ['zimmerei', 'Zimmerei', 'moerser', 'Umstellen auf Mörser: 1 Steinplatte + 3 Holzstäbe'],
+    ['apotheke', 'Apotheke', 'tinktur', 'Umstellen auf Tinktur: 1 Fläschchen + 1 Kräutermischung'],
+  ]) {
+    const pos = await game(
+      page,
+      (t) => {
+        const { state, camera, TILE } = window.__game;
+        const b = state.buildings.find((x) => x.type === t);
+        camera.zoom = 1;
+        camera.x = (b.x + 1) * TILE - camera.viewWidth / camera.zoom / 2;
+        camera.y = (b.y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
+        return { x: b.x, y: b.y, recipe: b.prod.recipe };
+      },
+      type,
+    );
+    await sleep(150);
+    await tapTile(page, pos.x, pos.y);
+    check((await page.textContent('#info-title')) === title, `${title} antippen zeigt Infofenster`);
+    await sleep(450);
+    check((await recipeOption(page, recipe).getAttribute('aria-label')) === label, `Ab Level 14: ${label}`);
+    check((await page.locator('#info-body .recipe-option').count()) === 3, `${title}: 3 andere Einstellungen zur Auswahl`);
+    check((await infoFits(page)).length === 0, `Infofenster der ${title} mit 4 Einstellungen: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+    await recipeOption(page, recipe).tap();
+    await sleep(450);
+    const card = await infoCard(page);
+    check(card?.outputs.join() === `${recipe} ${recipe === 'moerser' ? 'Mörser' : 'Tinktur'}`, `${title} umgestellt (${JSON.stringify(card)})`);
+    check((await infoFits(page)).length === 0, `${title} nach dem Umstellen: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+    await shot(`25b-${type}-${recipe}`);
+    await recipeOption(page, pos.recipe).tap();
+    await sleep(300);
+    await page.tap('#info-close');
+  }
   await game(page, (c) => Object.assign(window.__game.camera, c), camLand);
   await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)
   await page.tap('#info-close').catch(() => {});

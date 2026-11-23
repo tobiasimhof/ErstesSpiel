@@ -206,6 +206,23 @@ export const LEVELS = {
       { from: 'Apothekerin Klara', text: 'Für meinen ersten Trank brauche ich viele Fläschchen und Kräutermischungen.', items: { flaeschchen: 20, kraeutermischung: 15 } },
     ],
   },
+  // v0.45.0: Level 14 (Entwurf v0.45.0, Tobias, Chat 27: „Ja, die Rezepte
+  // passen so und der aufstieg + aufträge auch.“) – keine neue Maschine, kein
+  // neuer Rohstoff: Mörser in der Zimmerei, Tinktur in der Apotheke. Aufträge
+  // zusammen 12.761 Gold (×1,2 gegenüber Level 13, Rechenwerkzeug). Aufstieg
+  // 12.500 Gold, kein Geschenk; die große Ausgabe kommt mit Level 15.
+  14: {
+    name: 'Die Tinktur',
+    story:
+      'Klara hat einen Weg gefunden, die Kraft der Kräuter in Fläschchen einzufangen: zerrieben im Mörser, angesetzt im Glas. Der Duft ihrer Tinkturen zieht durch den Ort – und bald weit darüber hinaus.',
+    cost: 12500,
+    quests: [
+      { from: 'Apothekerin Klara', text: 'Bevor ich Tinkturen ansetzen kann, muss ich die Kräuter fein zerreiben. Dafür brauche ich Mörser – Schale aus Stein, Stößel aus Holz.', items: { moerser: 15 } },
+      { from: 'Apothekerin Klara', text: 'Fläschchen, Kräutermischung und ein wenig Geduld: meine ersten Tinkturen! Bringst du mir welche für das Regal?', items: { tinktur: 10 } },
+      { from: 'Müllerin Grete', text: 'Klaras Mörser bringen mich auf eine Idee: Könnte man Kräuter nicht auch mit Wasserkraft mahlen? Ich will es ausprobieren.', items: { moerser: 20, raederwerk: 10 } },
+      { from: 'Heilerin Agnes', text: 'Im Spital wirken die Tinkturen Wunder. Für die Kranken im ganzen Tal brauche ich einen Vorrat – und Wundverbände dazu.', items: { tinktur: 15, wundverband: 8 } },
+    ],
+  },
 };
 
 export const MAX_LEVEL = Math.max(...Object.keys(LEVELS).map(Number));

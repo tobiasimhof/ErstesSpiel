@@ -78,5 +78,10 @@ export const RECIPES = {
   // v0.31.0: Level 13 „Die Glashütte“ – die Schmiede bläst aus 5 Glas ein
   // Fläschchen, das Gefäß für alle späteren Tränke (Tobias, Chat 22). Zeit
   // 30 s: „ich würde gerne die Zeit für die Fläschen von 10s auf 30s erhöhen“.
+  // v0.45.0: Level 14 „Die Tinktur“ – die Zimmerei macht Mörser (Schale aus
+  // Stein, Stößel aus Holz; Tobias: kein Verhältnis 1 : 1), die Apotheke füllt
+  // Kräutermischung in Fläschchen zur Tinktur, der Grundzutat aller Tränke.
+  moerser: { building: 'zimmerei', label: 'Mörser', inputs: { steinplatte: 1, holzstab: 3 }, output: 'moerser', amount: 1, time: 10, level: 14 },
+  tinktur: { building: 'apotheke', label: 'Tinkturen', inputs: { flaeschchen: 1, kraeutermischung: 1 }, output: 'tinktur', amount: 1, time: 30, level: 14 },
   flaeschchen: { building: 'schmiede', label: 'Fläschchen', inputs: { glas: 5 }, output: 'flaeschchen', amount: 1, time: 30, level: 13 },
 };

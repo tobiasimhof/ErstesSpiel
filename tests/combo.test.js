@@ -88,7 +88,7 @@ function comboLine(type, recipe, slotsA, slotsB) {
 
 // ---------- Datentabellen ----------
 
-test('3 Kombi-Maschinen: 2 × 2, zwei Eingänge links, Ausgang rechts oben, je 3 Einstellungen', () => {
+test('3 Kombi-Maschinen: 2 × 2, zwei Eingänge links, Ausgang rechts oben, je 3 Einstellungen (die Zimmerei ab Level 14 dazu den Mörser)', () => {
   for (const type of ['zimmerei', 'feinschmiede', 'schlosserei']) {
     const def = BUILDINGS[type];
     assert.deepEqual(def.size, [2, 2], type);
@@ -97,9 +97,9 @@ test('3 Kombi-Maschinen: 2 × 2, zwei Eingänge links, Ausgang rechts oben, je 3
       ['in:0,0:W', 'in:0,1:W', 'out:1,0:E'],
       type,
     );
-    assert.equal(def.production.recipes.length, 3, type);
+    assert.equal(def.production.recipes.filter((key) => !RECIPES[key].level).length, 3, type);
   }
-  assert.deepEqual(BUILDINGS.zimmerei.production.recipes, ['zahnradwelle', 'raederwerk', 'verstaerkteholzplatte']);
+  assert.deepEqual(BUILDINGS.zimmerei.production.recipes, ['zahnradwelle', 'raederwerk', 'verstaerkteholzplatte', 'moerser']);
   assert.deepEqual(BUILDINGS.feinschmiede.production.recipes, ['scharnier', 'schluessel', 'zirkel']);
   assert.deepEqual(BUILDINGS.schlosserei.production.recipes, ['gewichtstein', 'uhrwerk', 'vorhaengeschloss']);
 });

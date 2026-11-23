@@ -40,8 +40,8 @@ const worth = (items) => Object.entries(items).reduce((sum, [t, n]) => sum + ITE
 
 // ---------- Datentabellen ----------
 
-test('Level 9 gibt es (seit v0.31.0 ist Level 13 das höchste)', () => {
-  assert.equal(MAX_LEVEL, 13);
+test('Level 9 gibt es', () => {
+  assert.ok(MAX_LEVEL >= 9);
 });
 
 test('Kohlenmeiler (seit v0.31.0 „Ofen“): wie das Holzfällerlager – 1 Holzstamm → 100 Holzkohle in 15 Minuten, Vorrat 3', () => {

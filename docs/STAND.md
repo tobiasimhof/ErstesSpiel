@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.44.1 – Entwurf Level 14 „Die Tinktur“ (nur Doku; im Spiel seit v0.44.0 das Rechenwerkzeug) |
-| **Phase** | M2 – Produktionsketten (Level 1–13 im Spiel); Fokus jetzt auf dem 3D-Test |
+| **Aktuelle Version** | v0.45.0 – Level 14 „Die Tinktur“: Mörser (Zimmerei) und Tinktur (Apotheke), Aufstieg 12.500 Gold |
+| **Phase** | M2 – Produktionsketten (Level 1–14 im Spiel); Fokus jetzt auf dem 3D-Test |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ (3D-Test; die echte Fabrik: https://tobiasimhof.github.io/ErstesSpiel/?ansicht=2d) |
-| **Nächster Schritt** | **Tobias' OK zu Level 14 „Die Tinktur“** (Entwurf v0.45.0 in `PLAENE.md`, 4 Fragen), dann umsetzen. Danach Level 15 mit neuer Fläche als großer Ausgabe für Gold. |
+| **Nächster Schritt** | **Tobias spielt Level 14** und sagt, wie es sich anfühlt. Danach Level 15 „Der alte Magier“ planen (Zauberkessel, Traumtrank, mehr Fläche als große Ausgabe für Gold). Idee als möglicher eigener Schritt: Waren auf den Bändern mit Kenneys Teilen. |
 
 **Tobias' 3D-Test – Level 13 abgeschlossen** (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik). Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
 
@@ -25,9 +25,9 @@
 
 **Nächste Schritte** (jeder erst nach Tobias' OK):
 
-- **Reihenfolge (Tobias, Chat 25: „diese Reihenfolge passt mir“; Analyse in `PLAENE.md`):** Belastungstest (v0.39.0) → 3D schneller und lesbarer (v0.40.0: volle Fläche 730 statt 6.200 Zeichenaufrufe je Bild, Tablet 60–80 Bilder/s) → ~~Weiche~~ (zurückgestellt, Chat 26) → Bereich kopieren (v0.41.0) – alles erledigt. Eigene Häuser (v0.42.0, v0.43.0) – fertig. **Jetzt (Chat 27, Tobias: „Okay, lass uns damit anfangen“):** Grobplan Level 14–18 (angenommen) → Rechenwerkzeug (v0.44.0, fertig) → Level 14 mit Zahlen nach Tobias' Gefühl von Level 13.
+- **Reihenfolge (Tobias, Chat 25: „diese Reihenfolge passt mir“; Analyse in `PLAENE.md`):** Belastungstest (v0.39.0) → 3D schneller und lesbarer (v0.40.0: volle Fläche 730 statt 6.200 Zeichenaufrufe je Bild, Tablet 60–80 Bilder/s) → ~~Weiche~~ (zurückgestellt, Chat 26) → Bereich kopieren (v0.41.0) – alles erledigt. Eigene Häuser (v0.42.0, v0.43.0) – fertig. **Jetzt (Chat 27):** Grobplan Level 14–18 (angenommen) → Rechenwerkzeug (v0.44.0) → Level 14 (v0.45.0) – fertig. Als Nächstes Level 15 mit neuer Fläche.
 1. **Tränke-Kapitel** (angenommen, Chat 27; Tabelle in `docs/inhalte/AUSBLICK.md`): 14 Die Tinktur (Mörser, Tinktur), 15 Der alte Magier (Zauberkessel, Traumtrank), 16 Die Kräutermühle (Heilpuder, Heiltrank), 17 Die Sternwarte (Linse, Fernrohr, Sternensand), 18 Die Zauberei (Farn, Lebens- und Manatrank). Kein bestehendes Rezept ändert sich; Feuer im Kessel von Hand (A); mehr Fläche ab Level 15. Gemahlenes Glas: **Kristallsand** (Tobias), im Steinmetz. Leitlinie: alte Maschinen bekommen neue Funktionen, neue nur, wo es Sinn ergibt.
-2. **3D-Grafik:** eigene Häuser für alle Gebäude (fertig, Möglichkeit B: Mittelalter mit ein paar Technik-Teilen; Tobias, Chat 27: „sieht sehr gut aus“). **Für später – Rückseiten** (Tobias, Chat 27, „nur eine kleine Anmerkung für später“): Erkennungszeichen und bewegte Teile sitzen vorn; baut man links und rechts einer Straße, sieht man eine Seite immer von hinten, „und da sieht man z.b. keine Unterschiede“. Eine Stadt um die Fabrik, die mit dem Level wächst (Idee).
+2. **3D-Grafik:** eigene Häuser für alle Gebäude (fertig, Möglichkeit B: Mittelalter mit ein paar Technik-Teilen; Tobias, Chat 27: „sieht sehr gut aus“). **Idee (Tobias, Chat 27):** Waren auf den Bändern haben noch kein eigenes Aussehen (Kugeln, Quader) – „das könnten wir mit unseren kenny teilen evtl auch noch ändern in einem nächsten schritt“. **Für später – Rückseiten** (Tobias, Chat 27, „nur eine kleine Anmerkung für später“): Erkennungszeichen und bewegte Teile sitzen vorn; baut man links und rechts einer Straße, sieht man eine Seite immer von hinten, „und da sieht man z.b. keine Unterschiede“. Eine Stadt um die Fabrik, die mit dem Level wächst (Idee).
 3. **Nach hinten verschoben:** Was Tester brauchen (kurze Einführung, M4) – erst, wenn Tobias das Spiel anderen zeigen möchte (Chat 26); **Weiche** (Chat 26: eigene Straßen sind besser, siehe offene Frage 4).
 4. **Später:** Verbesserungen mit Erfahrung, gründliche Durchsicht des Codes.
 
@@ -54,18 +54,13 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.45.0 – Level 14 „Die Tinktur“ (23.11.2026)
+
+- **Warum (Tobias, Chat 27):** „Ja, die Rezepte passen so und der aufstieg + aufträge auch. Aussehen passt auch.“
+- **Umgesetzt:** Zimmerei: Mörser (1 Steinplatte + 3 Holzstäbe, 10 s, 29 Gold); Apotheke: Tinktur (1 Fläschchen + 1 Kräutermischung, 30 s, 346 Gold), je mit eigenem Warenbild. Aufträge von Klara, Grete und Agnes (12.761 Gold, 3.829 Erfahrung), Aufstieg 12.500 Gold. Beide Spielstände können aufsteigen; das Format bleibt.
+- **Offen:** Tobias' Test von Level 14.
+
 ### v0.44.1 – Entwurf Level 14 „Die Tinktur“ (23.11.2026, nur Doku)
 
 - **Tobias (Chat 27):** Level 13 beendet, Platz zu 70 % gefüllt; die neue Ausgabe für Gold erst mit Level 15 und der Fläche; „Plane gerne alles und stell es mir dann vor“.
 - **Claudes Entwurf** (`PLAENE.md`): Mörser (Zimmerei, 1 Steinplatte + 3 Holzstäbe, 10 s, 29 Gold), Tinktur (Apotheke, 1 Fläschchen + 1 Kräutermischung, 30 s, 346 Gold); Aufträge von Klara, Grete und Agnes (12.761 Gold, ×1,2); Aufstieg 12.500. Wartet auf Tobias' OK.
-
-### v0.44.0 – Rechenwerkzeug für die Zahlen (23.11.2026)
-
-- **Warum (Tobias, Chat 27):** „das Rechenwerkzeug hat mir noch gefehlt, damit wir alles im GLeichgewicht behalten können“; gemahlenes Glas heißt **Kristallsand**.
-- **Umgesetzt:** `node tools/zahlen.mjs` schreibt `docs/inhalte/ZAHLEN.md` – je Level Aufträge, Rohstoffe, Maschinenzeit, Engpass, Aufstieg, Theken, neue Gebäude; je Ware Wert, Aufschlag, Gold je Stunde; wofür man Gold ausgibt. Ein Test hält die Seite aktuell. Am Spiel ändert sich nichts.
-- **Wichtigste Stellen:** Aufstieg kaum eine Hürde; nach etwa 443.000 Gold gibt es nichts mehr zu kaufen; ab Level 9 je Level ×1,1–1,3; Engpass Beete bzw. Rohstoff-Gebäude; lange Ketten lohnen (Einzelheiten in `PLAENE.md`).
-
-### v0.43.5 – Techbaum angenommen, Entwurf Rechenwerkzeug (23.11.2026, nur Doku)
-
-- **Tobias (Chat 27):** „Mir gefällt der neue Plan viel besser können wir auch gerne so umsetzen.“ Feuer A („einfach aus dem Warenlager rausnehmen“), Namen „deutlich besser“, ohne Fermentieren; neuer Platz schon ab Level 15; „Sternensand“ gefällt ihm noch nicht ganz.
-- **Claude:** Techbaum in `AUSBLICK.md`; Glas mahlt besser der Steinmetz (Namen später); Entwurf Rechenwerkzeug v0.44.0 in `PLAENE.md`, wartet auf Tobias' OK.

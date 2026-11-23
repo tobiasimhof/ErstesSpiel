@@ -135,7 +135,7 @@ export const BUILDINGS = {
       { kind: 'in', x: 0, y: 1, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['zahnradwelle', 'raederwerk', 'verstaerkteholzplatte'] },
+    production: { kind: 'workshop', recipes: ['zahnradwelle', 'raederwerk', 'verstaerkteholzplatte', 'moerser'] },
   },
   feinschmiede: {
     level: 5,
@@ -320,7 +320,7 @@ export const BUILDINGS = {
       { kind: 'in', x: 0, y: 1, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['kraeutermischung', 'kamillenkissen', 'heilpaeckchen'] },
+    production: { kind: 'workshop', recipes: ['kraeutermischung', 'kamillenkissen', 'heilpaeckchen', 'tinktur'] },
   },
   lagerhaus: {
     level: 1,
