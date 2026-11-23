@@ -61,6 +61,20 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Vorbereitung für den nächsten Chat: Oberfläche mit Kenneys UI-Paketen (Chat 27, v0.46.1; noch kein Entwurf)
+
+**Tobias (Chat 27, nach v0.46.0):** „Ja, das sieht sehr gut aus. Das Einzige was mir optisch jetzt noch fehlt ist ein passendes Overlay bzw. ein UI, weil wenn ich z.b. die Kräuter auswählen will, fällt es mir schwer zu erkennen, welche kräuter ich gerade ausgewählt habe, deswegen würde ich im nächsten schritt evtl ein gutes oder mehrere Kenny UI herunterladen, die du wieder benutzen kannst, um das Game auch in diesem Schritt auf die nächste Stufe zu führen. Meine zwei nächsten großen Schritten wären ein gutes UI erstellen für das Game und der zweite schritt das Spiel auf die ebene führen mit Anfangsscreen, Namen eingeben und das es kurz die Spielregeln erklärt, aber das würde ich in einem neuen Chat machen, deswegen dokumentiere meine Schritte nur, sodass ich im nächsten Chat schreiben muss "bring dich auf den aktuellen stand" und dann sagst du mir direkt wie wir das mit den kenny UI's machen“
+
+**Tobias' Reihenfolge:** (1) eine gute Oberfläche (UI) mit Kenneys UI-Paketen, (2) Startbildschirm, Namen eingeben und eine kurze Erklärung der Spielregeln. Level 15 „Der alte Magier“ kommt danach (der Grobplan steht, Entwurf noch offen).
+
+**Was Claude im nächsten Chat direkt erklärt (auf „bring dich auf den aktuellen Stand“):**
+1. **Welche Pakete:** Kenney hat eigene UI-Pakete mit Knöpfen, Fenstern, Rahmen, Reitern, Häkchen und Symbolen als Bilder (PNG). Für unser Mittelalter passen vermutlich am besten Pakete im Holz- und Pergament-Stil (z. B. Kenneys „UI Pack – RPG Expansion“ oder „Fantasy UI Borders“), dazu evtl. das allgemeine „UI Pack“ und Symbole („Game Icons“). Die genauen Namen und Inhalte prüft Claude zu Beginn des Chats auf kenney.nl (die Seiten lassen sich lesen, nur Downloads nicht) und schlägt eine Auswahl vor.
+2. **Wie sie ins Spiel kommen:** wie bei den 3D-Paketen (Chat 23) – Tobias lädt die ZIP-Dateien auf GitHub hoch („Add files via upload“), Claude entpackt sie und übernimmt nur die gebrauchten Bilder nach `assets/kenney/<Paket>/` (mit Lizenz, CC0); das Spiel lädt nur wenig zusätzlich.
+3. **Was sich ändert:** Die Oberfläche ist heute HTML mit eigenem CSS (`src/style.css`, die Fenster in `src/ui/`). Kenneys Bilder werden zu Rahmen und Hintergründen von Fenstern, Knöpfen, Reitern, Bauleiste, Laden und Level-Fenster (CSS `border-image`, dehnbar ohne Verzerren); Farben passend zu den Häusern. Vor allem: **Ausgewähltes klar markieren** (Rahmen, Haken, Leuchten) – Tobias' Beispiel: „welche kräuter ich gerade ausgewählt habe“.
+4. **Erste Fragen an Tobias:** Wo genau war die Auswahl schwer zu erkennen (Samen im Beet, Pflanze in der Erntebank, „Umstellen auf“ in der Kräuterstube, Reiter der Bauleiste)? Welcher Stil gefällt ihm – Holz, Pergament, Stein? Erst ein Fenster als Probe (z. B. das Infofenster), dann der Rest?
+
+**Danach – Startbildschirm, Name, Spielregeln:** Startbildschirm mit Titel und „Spielen“, Namen eingeben (gespeichert im Spielstand – dafür steigt das Spielstand-Format, alte Spielstände werden umgewandelt), eine kurze Erklärung der Spielregeln in wenigen Schritten (die frühere „Einführung für neue Spieler“, M4, vorgezogen). Entwurf im übernächsten Schritt.
+
 ### Entwurf v0.46.0 – Waren auf dem Band mit eigenem Aussehen (Chat 27, v0.45.1; angenommen, umgesetzt in v0.46.0)
 
 **Tobias' Antwort:** „Die Probebilder haben mir sehr gut gefallen. Die sollen so groß bleiben wie sie sind, beim rauszoomen erkennt man sie sowieso nicht mehr, weshalb es mir nur ein die Ansicht geht, wenn man quasi so halb reinzoomt um einen genauerer überblick zu bekommen. Alles gerne auf einmal“

@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.46.1 – nächste große Schritte festgehalten (23.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zu v0.46.0 und seine nächsten großen Schritte festhalten, damit der nächste Chat mit „bring dich auf den aktuellen stand“ direkt bei den Kenney-UI-Paketen weitermachen kann.
+
+**Fragen, die wir uns gestellt haben:**
+- Was braucht der nächste Chat? → In `PLAENE.md`: welche Kenney-UI-Pakete in Frage kommen (Namen dort prüfen), wie sie ins Spiel kommen (Hochladen wie in Chat 23), was sich ändert (Fenster, Knöpfe, Reiter, Ausgewähltes markieren), erste Fragen an Tobias.
+- Wo steht die Einführung? → Vorgezogen: nach der Oberfläche Startbildschirm, Name, kurze Spielregeln (vorher „erst, wenn Tobias das Spiel anderen zeigt“).
+
+**Gemacht:**
+- `STAND.md` (Status, Nächster Schritt, Nächste Schritte, letzte Arbeitsschritte), `AUSBLICK.md`, `PLAENE.md`, Archiv. Versionsnummer 0.46.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 444 von 444 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.46.0 – Waren auf dem Band mit eigenem Aussehen (23.11.2026)
 
 **Vorgenommen:**
