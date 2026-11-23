@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen, Rechenwerkzeug, Level 14 (v0.43.1 bis v0.45.0)
+### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen, Rechenwerkzeug, Level 14, Entwurf Waren auf dem Band (v0.43.1 bis v0.45.1)
 
 **Tobias:** „Hey, bringe dich auf den aktuellen Stand der Dinge und berichte mir was die nächsten Schritte sind. Bis v43 sieht alles sehr gut aus und die einzelnen Gebäude wirken auch unterschiedlich genug, sodass man sie erkennt. Da wir die "karte" frei bewegen können, kann ich mir jedes Haus auch von hinten ansehen. Wenn ich z.b. einmal rechts und einmal links baue, dann ist die Produktion auf der anderen Seite immer von hinten zu sehen und da sieht man z.b. keine Unterschiede, aber das ist nur eine kleine Anmerkung für später. Ansonsten sieht es sehr gut aus“
 
@@ -49,6 +49,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Tobias:** „Ja, die Rezepte passen so und der aufstieg + aufträge auch.  Aussehen passt auch. Bisher arbeiten wir überwiegend mit kreisen, rechtecken auf den Bändern. Die Produkte haben bisher noch kein spezifisches aussehen, aber das könnten wir mit unseren kenny teilen evtl auch noch ändern in einem nächsten schritt“
 
 **Umgesetzt:** v0.45.0 – Level 14 „Die Tinktur“ wie im Entwurf: Mörser in der Zimmerei, Tinktur in der Apotheke (je mit eigenem Warenbild), vier Aufträge, Aufstieg 12.500 Gold. Die Idee, die Waren auf den Bändern mit Kenneys Teilen zu gestalten, steht als möglicher nächster Schritt in `STAND.md` und `AUSBLICK.md`.
+
+**Tobias:** „Alles klar ich teste es direkt. Kannst du in der zwischenzeit mal die Kenny assets anschauen und parallel dazu anschauen wie es mit unseren Produkten und einzelteilen aussieht ? Evtl. können wir als v46 diese änderung in angriff nehmen, damit man auch besser unterscheiden kann, was auf dem band liegt“
+
+**Claude** hat Tobias' Kenney-Upload aus der Versionsgeschichte entpackt und die Waren gezählt: 40 Waren können auf ein Band, 31 davon sind im 3D-Test Kugeln in ihrer Farbe (sechs fast weiß, sieben grau). Kenneys Pakete sind Bauteile für Gebäude – als Ware passen nur Zahnräder, Bretter, Stangen und Felsen. Entwurf v0.46.0 (`PLAENE.md`): eigene kleine 3D-Formen im Kenney-Stil für alle 31 Waren, nach Familien mit Erkennungszeichen (Verbände als Rollen mit farbigen Streifen, Blütenhäufchen, Zahnräder, Schlösser …), genauso schnell wie heute. Probebild mit 10 Waren geschickt. Fragen: Richtung? Größe? Alle auf einmal oder in zwei Schritten?
+
+**Umgesetzt:** v0.45.1 (nur Doku). Wartet auf Tobias' Antworten.
 
 ### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren, eigene Häuser (v0.40.1 bis v0.43.0)
 

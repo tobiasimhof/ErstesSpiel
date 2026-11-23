@@ -61,6 +61,36 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.46.0 – Waren auf dem Band mit eigenem Aussehen (Chat 27, v0.45.1; wartet auf Tobias' Antworten)
+
+**Tobias (Chat 27, nach dem Merge von Level 14):** „Alles klar ich teste es direkt. Kannst du in der zwischenzeit mal die Kenny assets anschauen und parallel dazu anschauen wie es mit unseren Produkten und einzelteilen aussieht ? Evtl. können wir als v46 diese änderung in angriff nehmen, damit man auch besser unterscheiden kann, was auf dem band liegt“
+
+**Befund:**
+- **40 Waren** können auf einem Band liegen. **9** haben im 3D-Test schon eine eigene Form (Holz- und Steinblock, Eisenbarren, Holz- und Steinplatte, Holzstab, Stein-Zahnrad, Eisenblech, Eisenstange). **31 sind Kugeln** in der Farbe der Ware – sechs davon fast weiß (Verband, Heilverband, Wundverband, Schafgarbenblüte, Kamillenblüte, Zeichenbrett/Reißbrett), sieben grau (Räderwerk, Scharnier, Zirkel, Gewichtstein, Vorhängeschloss, Kastenschloss, Mörser). Auf dem Band unterscheidet man sie kaum.
+- **Kenneys Pakete** (Tobias' Upload, Chat 23: Fantasy Town Kit 167, Castle Kit 76, Factory Kit 143 Modelle) sind Bauteile für Häuser, Burgen und Fabrikhallen. Als Ware passen nur wenige: Zahnräder (`cog-a` bis `cog-e`), Bretter (`planks`), Stangen (`poles`), kleine Felsen. Schlüssel, Schlösser, Uhren, Flaschen, Verbände oder Blüten gibt es dort nicht.
+
+**Vorschlag: eigene kleine 3D-Formen im Kenney-Stil** – kantig, flache Farben, dieselben Farben und Erkennungszeichen wie die Warenbilder auf den Schildern, aus wenigen einfachen Grundkörpern (Zylinder, Kugel, Quader, Ring); Zahnräder wie Kenneys. Probebild mit 10 Waren (Zahnradwelle, Räderwerk, Schlüssel, Vorhängeschloss, Verband, Heilverband, Kamillenblüte, Fläschchen, Tinktur, Mörser) an Tobias geschickt.
+
+**Alle 31 Kugel-Waren bekommen eine Form, nach Familien mit Erkennungszeichen:**
+- **Mechanik:** Zahnradwelle (Zahnrad auf Holzwelle), Räderwerk (zwei Zahnräder), Uhrwerk (Messing-Zahnrad im Rahmen); das Stein-Zahnrad bekommt Zähne.
+- **Metall:** Scharnier (zwei Bleche mit Stift), Schlüssel, Zirkel (zwei Beine), Vorhängeschloss (Bügel), Kastenschloss (Kasten mit Schlüsselloch), Gewichtstein (Stein mit Ring).
+- **Bretter:** Verstärkte Holzplatte (mit Eisenbändern), Zeichenbrett (helles Papier), Reißbrett (mit Lineal), Reißzeug (Etui).
+- **Uhren:** Räderuhr (Holzkasten mit Zifferblatt), Sternenuhr (dunkelblaue Scheibe mit Gold).
+- **Kräuter:** Flachsfaser (Bündel), Ringelblüte, Schafgarbenblüte, Kamillenblüte (kleine Blütenhäufchen in ihren Farben), Kräutermischung (Holzschale mit Kräutern).
+- **Verbände:** Verband (weiße Rolle), Heilverband (mit orangem Streifen), Wundverband (orange und weiß), Kräuterkompresse (gefaltetes Tuch), Heilpäckchen (verschnürtes Päckchen), Kamillenkissen (kleines Kissen).
+- **Glas und Tränke:** Glas (grünlicher Klumpen), Fläschchen, Tinktur, Mörser; Holzkohle (schwarze Brocken).
+
+**Schnell bleiben:** Jede Form wird beim Laden einmal zu einem Teil zusammengefügt (Farben in den Ecken, ein gemeinsames Material wie bei den einfachen Formen der Häuser); auf dem Band bleibt es je Ware ein „Stapel“ wie heute. Die Zahl der Zeichenaufrufe bleibt also gleich; die Formen bleiben klein (wenige Ecken). Prüfen mit dem Belastungstest (weiter unter 1.000).
+
+**Was sich sonst ändert:** nur die 3D-Ansicht (`view3d/scene3d.js` bzw. eine neue Datei für die Formen); die 2D-Ansicht zeigt schon die Warenbilder. Tests: jede Ware hat eine 3D-Form (keine Kugel mehr); Browser-Test 3D mit einem Band voller verschiedener Waren und Nahaufnahme. Vor dem Merge bekommt Tobias Nahaufnahmen aller Waren, wie bei den Häusern.
+
+**Andere Wege (Claude rät ab):** (a) nur Kenney-Modelle – reicht für höchstens 5 Waren; (b) flache Plättchen mit dem Warenbild – gut lesbar, aber sieht im 3D-Test wie aufgeklebt aus.
+
+**Fragen an Tobias:**
+1. Gefällt dir die Richtung im Probebild?
+2. Größe: so wie im Bild (etwa wie heute) oder etwas größer, damit man sie von weiter weg erkennt?
+3. Alle 31 auf einmal (v0.46.0) oder in zwei Schritten (erst Werkzeuge, dann Kräuter und Tränke)?
+
 ### Entwurf v0.45.0 – Level 14 „Die Tinktur“ im Detail (Chat 27, v0.44.1; angenommen, umgesetzt in v0.45.0)
 
 **Tobias' OK:** „Ja, die Rezepte passen so und der aufstieg + aufträge auch.  Aussehen passt auch. Bisher arbeiten wir überwiegend mit kreisen, rechtecken auf den Bändern. Die Produkte haben bisher noch kein spezifisches aussehen, aber das könnten wir mit unseren kenny teilen evtl auch noch ändern in einem nächsten schritt“
