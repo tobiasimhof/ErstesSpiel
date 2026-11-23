@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen, Rechenwerkzeug (v0.43.1 bis v0.44.0)
+### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen, Rechenwerkzeug, Entwurf Level 14 (v0.43.1 bis v0.44.1)
 
 **Tobias:** „Hey, bringe dich auf den aktuellen Stand der Dinge und berichte mir was die nächsten Schritte sind. Bis v43 sieht alles sehr gut aus und die einzelnen Gebäude wirken auch unterschiedlich genug, sodass man sie erkennt. Da wir die "karte" frei bewegen können, kann ich mir jedes Haus auch von hinten ansehen. Wenn ich z.b. einmal rechts und einmal links baue, dann ist die Produktion auf der anderen Seite immer von hinten zu sehen und da sieht man z.b. keine Unterschiede, aber das ist nur eine kleine Anmerkung für später. Ansonsten sieht es sehr gut aus“
 
@@ -38,7 +38,13 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Tobias:** „Da würde mir Kristallsand tatsächlich am besten gefallen. Ja, das Rechenwerkzeug hat mir noch gefehlt, damit wir alles im GLeichgewicht behalten können. Du kannst mir gern die wichtigsten Stellem im Chat zusammenfassen, wenn ich etwas genauer wissen will, werde ich nachfragen.“
 
-**Umgesetzt:** v0.44.0 – Rechenwerkzeug (`tools/zahlen.mjs` → `docs/inhalte/ZAHLEN.md`). **Claude** hat die wichtigsten Stellen zusammengefasst (`PLAENE.md`): Die Aufträge bezahlen den Aufstieg fast allein; nach etwa 443.000 Gold (Theken, Lager, Fläche) gibt es nichts mehr zu kaufen, deshalb häuft sich das Gold; ab Level 9 steigt es gleichmäßig um ×1,1–1,3 je Level; Engpass sind Beete bzw. Rohstoff-Gebäude; lange Ketten lohnen, die Glas-Kette erst mit den Tränken. Als Nächstes: Level 14 im Detail planen.
+**Umgesetzt:** v0.44.0 – Rechenwerkzeug (`tools/zahlen.mjs` → `docs/inhalte/ZAHLEN.md`). **Claude** hat die wichtigsten Stellen zusammengefasst (`PLAENE.md`): Die Aufträge bezahlen den Aufstieg fast allein; nach etwa 443.000 Gold (Theken, Lager, Fläche) gibt es nichts mehr zu kaufen, deshalb häuft sich das Gold; ab Level 9 steigt es gleichmäßig um ×1,1–1,3 je Level; Engpass sind Beete bzw. Rohstoff-Gebäude; lange Ketten lohnen, die Glas-Kette erst mit den Tränken. Als Nächstes: Level 14 im Detail planen. Frage: Soll Level 14 schon eine neue Ausgabe für Gold bringen?
+
+**Tobias** (mit einem Bild seiner Fabrik, Level 13 abgeschlossen, 26.095 Gold): „Das würde ich Tatsächlich mit Level 15 machen, wenn die Flächen dazu kommen, weil der Platz bei mir zu ca. 70% sinnvoll gefühlt ist. Größere Straßen zu bauen wird deshalb langsam schwierig und level 13 habe ich jetzt auch beendet. In vergangen Level wurde der Aufstieg dadurch gebremst, dass ich nicht einzelne rohstoffe hatte um gebäude zu bauen, deshalb war ich sehr lange bei den kräuter level beschäftigt. Plane gerne alles und stell es mir dann vor“
+
+**Claude** (Entwurf v0.45.0 in `PLAENE.md`, mit dem Rechenwerkzeug an einer Kopie gerechnet): Level 14 „Die Tinktur“ – Zimmerei: Mörser (1 Steinplatte + 3 Holzstäbe, 10 s, 29 Gold); Apotheke: Tinktur (1 Fläschchen + 1 Kräutermischung, 30 s, 346 Gold); Aufträge: Klara 15 Mörser, Klara 10 Tinkturen, Grete 20 Mörser + 10 Räderwerke (sie will Kräuter mit Wasserkraft mahlen – die Kräutermühle auf Level 16), Agnes 15 Tinkturen + 8 Wundverbände; zusammen 12.761 Gold (×1,2), 7,4 Pflanzen, Maschinenzeit 4,6 h; Aufstieg 12.500 Gold, die große Ausgabe kommt mit Level 15. Level 14 braucht kein neues Gebäude. Fragen: Rezepte und Zeiten? Aufträge? Aufstieg? Aussehen?
+
+**Umgesetzt:** v0.44.1 (nur Doku). Wartet auf Tobias' OK.
 
 ### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren, eigene Häuser (v0.40.1 bis v0.43.0)
 

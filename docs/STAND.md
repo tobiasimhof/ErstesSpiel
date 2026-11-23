@@ -4,12 +4,12 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.44.0 – Rechenwerkzeug für die Zahlen (`docs/inhalte/ZAHLEN.md`, am Spiel ändert sich nichts) |
+| **Aktuelle Version** | v0.44.1 – Entwurf Level 14 „Die Tinktur“ (nur Doku; im Spiel seit v0.44.0 das Rechenwerkzeug) |
 | **Phase** | M2 – Produktionsketten (Level 1–13 im Spiel); Fokus jetzt auf dem 3D-Test |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ (3D-Test; die echte Fabrik: https://tobiasimhof.github.io/ErstesSpiel/?ansicht=2d) |
-| **Nächster Schritt** | **Level 14 „Die Tinktur“ im Detail planen** (Aufträge, Mengen, Aufstiegspreis, Haus) mit den Zahlen aus `ZAHLEN.md`, dann nach Tobias' OK umsetzen. |
+| **Nächster Schritt** | **Tobias' OK zu Level 14 „Die Tinktur“** (Entwurf v0.45.0 in `PLAENE.md`, 4 Fragen), dann umsetzen. Danach Level 15 mit neuer Fläche als großer Ausgabe für Gold. |
 
-**Tobias' 3D-Test – Level 13, letzter Auftrag** (Chat 27; 60 Bilder/s bei voller Fabrik). Das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
+**Tobias' 3D-Test – Level 13 abgeschlossen** (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik). Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
 
 **Echte Fabrik (2D) – Level 13, hinten angestellt** (Chat 25). Frühere Stände (Level 8, 10, 11 mit Zitaten) in `docs/archiv/STAND-LANGFASSUNG.md`.
 
@@ -54,6 +54,11 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.44.1 – Entwurf Level 14 „Die Tinktur“ (23.11.2026, nur Doku)
+
+- **Tobias (Chat 27):** Level 13 beendet, Platz zu 70 % gefüllt; die neue Ausgabe für Gold erst mit Level 15 und der Fläche; „Plane gerne alles und stell es mir dann vor“.
+- **Claudes Entwurf** (`PLAENE.md`): Mörser (Zimmerei, 1 Steinplatte + 3 Holzstäbe, 10 s, 29 Gold), Tinktur (Apotheke, 1 Fläschchen + 1 Kräutermischung, 30 s, 346 Gold); Aufträge von Klara, Grete und Agnes (12.761 Gold, ×1,2); Aufstieg 12.500. Wartet auf Tobias' OK.
+
 ### v0.44.0 – Rechenwerkzeug für die Zahlen (23.11.2026)
 
 - **Warum (Tobias, Chat 27):** „das Rechenwerkzeug hat mir noch gefehlt, damit wir alles im GLeichgewicht behalten können“; gemahlenes Glas heißt **Kristallsand**.
@@ -64,8 +69,3 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 - **Tobias (Chat 27):** „Mir gefällt der neue Plan viel besser können wir auch gerne so umsetzen.“ Feuer A („einfach aus dem Warenlager rausnehmen“), Namen „deutlich besser“, ohne Fermentieren; neuer Platz schon ab Level 15; „Sternensand“ gefällt ihm noch nicht ganz.
 - **Claude:** Techbaum in `AUSBLICK.md`; Glas mahlt besser der Steinmetz (Namen später); Entwurf Rechenwerkzeug v0.44.0 in `PLAENE.md`, wartet auf Tobias' OK.
-
-### v0.43.4 – Grobplan, 2. Fassung (23.11.2026, nur Doku)
-
-- **Tobias (Chat 27):** „Das Gerüst passt für mich.“ Traumtrank erst auf Level 15, wenn sich ein alter Magier ansiedelt; Zauberkessel, Farn und mehr Stein-Maschinen gut; geschmeidigere Namen als „-staub“; Sorge, „zu viel umbauen“ zu müssen; Kessel mit Holzkohle befeuern.
-- **Claudes 2. Fassung** (`PLAENE.md`): 11 statt 16 neue Waren, Zauberkessel ab Level 15, Kräutermühle auf 16, beide im Reiter „Stein“; kein bestehendes Rezept ändert sich. Feuer im Kessel: A von Hand (Empfehlung, 2-Eingänge-Regel bleibt) oder B dritter Eingang. Wartet auf Tobias.
