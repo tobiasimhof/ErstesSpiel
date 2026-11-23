@@ -17,8 +17,9 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 - `PLAENE.md`: Analyse als Spielentwickler, Teil 2. `STAND.md` (Status, Nächster Schritt, Tobias' 3D-Test, Nächste Schritte, offene Fragen neu nummeriert, letzte Arbeitsschritte), Archiv. Versionsnummer 0.43.2, Spiel unverändert.
 
 **Geprüft:**
-- `npm test` (nur Doku und Versionsnummer geändert).
+- `npm test`: 423 von 423 bestanden (nur Doku und Versionsnummer geändert).
 
+### v0.43.1 – eigene Häuser getestet (23.11.2026, nur Doku)
 
 **Vorgenommen:**
 - Tobias' Rückmeldung zu den eigenen Häusern (v0.42.0 und v0.43.0) festhalten (Regel „Nichts darf verloren gehen“).
