@@ -61,7 +61,33 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Grobplan Tränke-Kapitel, 2. Fassung – Magier und Zauberkessel ab Level 15 (Chat 27, v0.43.4; wartet auf Tobias' Antworten)
+### Entwurf v0.44.0 – Rechenwerkzeug für die Zahlen (Chat 27; wartet auf Tobias' OK)
+
+**Tobias (Chat 27, zur 2. Fassung des Grobplans):** „Ich finde neuer Platz könnte schon mit Level 15 kommen, weil sich das Gold allmählich anhäuft mit den Produkten, die wir aktuell nicht weiterverarbeiten können. Ich bin aktuell Level 13 und an dem letzten Auftrag dran, aber keine hektik bzgl. programmieren. Mir gefällt der neue Plan viel besser können wir auch gerne so umsetzen. Mühle macht auch Glas sternensand gefällt mir noch nicht so hundertprozentig. Was ist mit Mühle gemeint ? Die Holzkohle Idee mit A finde ich sehr gut. So kann man einfach aus dem Warenlager rausnehmen. Die Namen gefallen mir auch deutlich besser. Wir lassen fermentieren weg.“
+
+**Ziel:** Bevor wir die Zahlen für Level 14–18 festlegen (Mengen, Zeiten, Aufstiegspreise, Baukosten), soll sichtbar sein, wie Level 1–13 heute aufgebaut sind – wo es gleichmäßig steigt und wo es springt. Dann passen die neuen Level in die Kurve, und Tobias' Gefühl beim Spielen und die Zahlen ergänzen sich. **Am Spiel ändert sich nichts.**
+
+**Was entsteht:** ein kleines Programm `tools/zahlen.mjs`, das die Datentabellen liest (Waren, Rezepte, Gebäude, Level, Laden, Fläche) und daraus eine Seite schreibt: `docs/inhalte/ZAHLEN.md`. Ein Test prüft, dass die Seite zu den Datentabellen passt – vergisst man nach einer Änderung das Neuschreiben, schlägt er an.
+
+**Was auf der Seite steht – je Level:**
+1. **Aufträge zusammen:** Warenwert (Gold beim Abgeben) und Erfahrung.
+2. **Rohstoffe, die drinstecken:** z. B. 3,2 Holzstämme, 1,5 Eisenerz, 2 Samen – und was sie beim Händler kosten.
+3. **Arbeitszeit:** wie viele Minuten die Maschinen für alle Aufträge zusammen arbeiten (mit je einer Maschine je Schritt) und die längste einzelne Kette.
+4. **Neue Gebäude:** Baukosten, umgerechnet in Rohstoffe und Gold.
+5. **Aufstieg:** Preis und wie viele Stunden die Theken dafür verkaufen müssen (mit 2, 4 und 6 Theken und der wertvollsten Ware des Levels).
+6. **Sprung zum Level davor:** wie viel mehr Rohstoffe, Zeit und Gold.
+
+**Dazu je Ware:** Wert, Rohstoffe, Zeit vom Rohstoff bis fertig, Gold pro Minute einer Maschine.
+
+**Danach:** Level 14 im Detail planen (Klaras Aufträge, Mengen, Aufstiegspreis, Bauabschnitt) mit den Zahlen aus dem Werkzeug – v0.44.1 (nur Doku), dann umsetzen.
+
+**Fragen an Tobias:**
+1. OK so?
+2. Reicht die Seite in der Doku (Claude fasst die Auffälligkeiten im Chat zusammen)?
+
+**Zum „gemahlenen Glas“ (Tobias: „Was ist mit Mühle gemeint?“):** „Mühle“ war kurz für die **Kräutermühle** aus Level 16 – sie sollte auf Level 17 zusätzlich Glas mahlen. Dass eine Kräutermühle Glas mahlt, passt nicht ganz. Vorschlag: Das Glas mahlt der **Steinmetz** (er schleift auf Level 17 ja auch die Linse), die Kräutermühle bleibt bei den Kräutern. Namen statt „Sternensand“: z. B. **Sternenglanz**, **Glitzersand**, **Kristallsand** – oder Tobias' eigener. Entscheidung, wenn wir Level 17 planen.
+
+### Grobplan Tränke-Kapitel, 2. Fassung – Magier und Zauberkessel ab Level 15 (Chat 27, v0.43.4; angenommen: „Mir gefällt der neue Plan viel besser“, Feuer A, Namen, ohne Fermentieren; dazu mehr Fläche ab Level 15; offen: das gemahlene Glas – siehe Entwurf v0.44.0 oben)
 
 **Tobias (Chat 27, zur 1. Fassung unten):** „Das Gerüst passt für mich. Bei den Namen müssen wir nochmal schauen, dass wir evtl. etwas geschmeidigeres finden als die enden "Staub". Den Traumtrank würde ich erst auf Level 15 kommen lassen dann kann man geschichtlich die Trinktur nutzen, damit sich ein alter magier oder ähnliches ansiedelt, der mit der Tixtur und alten Geheimnissen, diese Tränke herstellen kann. Ich finde gut, dass wir bei den maschinen mehr mit stein arbeiten, weil wir da noch nicht so viele maschinen haben. Ich würde evtl. irgendwas in richtung fementieren gehen, weil wir die einzelnen blüten trocknen müssen damit daraus wirklich "staub" wird. Ich finde die Reihenfolge gut, aber ich frage mich, ob man bei den ganzen neuen Sachen nicht evtl. zu viel umbauen muss, aber Level 14 finde ich schon mal sehr passend. Verarbeite die Informationen erstmal und schlage mir evtl einen neuen TechBaum mit ähnlicher Struktur vor. Zauberkessel finde ich eine gute Maschine für die Tränke. Da könnte man auch daran denken, dass man den Feuerkessel mit Holzkohle beheizen muss statt mit holzstämmen und dadurch könnte der ofen auch einen Eingang bekommen für Holzkohle und zwei für die Rohstoffe oder so ähnlich hatte ich gedacht. Farn finde ich gut, weil dann können wir die Pflanze weiter benutzen“
 

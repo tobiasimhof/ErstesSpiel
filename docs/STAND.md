@@ -4,12 +4,12 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.43.4 – Grobplan Tränke-Kapitel, 2. Fassung: alter Magier mit Zauberkessel ab Level 15 (nur Doku; im Spiel hat seit v0.43.0 jedes Gebäude ein eigenes Haus) |
+| **Aktuelle Version** | v0.43.5 – Techbaum Level 14–18 angenommen, Entwurf Rechenwerkzeug (nur Doku; im Spiel hat seit v0.43.0 jedes Gebäude ein eigenes Haus) |
 | **Phase** | M2 – Produktionsketten (Level 1–13 im Spiel); Fokus jetzt auf dem 3D-Test |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ (3D-Test; die echte Fabrik: https://tobiasimhof.github.io/ErstesSpiel/?ansicht=2d) |
-| **Nächster Schritt** | **Tobias antwortet auf die 2. Fassung des Grobplans** (`PLAENE.md`, 4 Fragen, u. a. Feuer im Zauberkessel von Hand oder über einen dritten Eingang). Danach Rechenwerkzeug für die Zahlen, dann Level 14 mit Zahlen nach seinem Gefühl von Level 13. |
+| **Nächster Schritt** | **Tobias' OK zum Rechenwerkzeug** (v0.44.0, Entwurf in `PLAENE.md`). Danach Level 14 im Detail planen und umsetzen – „keine hektik bzgl. programmieren“. |
 
-**Tobias' 3D-Test – Level 12** (Chat 27, Kamillen-Aufträge; 60 Bilder/s bei voller Fabrik): Hier spielt und testet Tobias jetzt alles neu. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“ Gleich aussehende Häuser stören ihn nicht: „Die Logik ist mir erstmal wichtiger.“
+**Tobias' 3D-Test – Level 13, letzter Auftrag** (Chat 27; 60 Bilder/s bei voller Fabrik). Das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
 
 **Echte Fabrik (2D) – Level 13, hinten angestellt** (Chat 25). Frühere Stände (Level 8, 10, 11 mit Zitaten) in `docs/archiv/STAND-LANGFASSUNG.md`.
 
@@ -25,8 +25,8 @@
 
 **Nächste Schritte** (jeder erst nach Tobias' OK):
 
-- **Reihenfolge (Tobias, Chat 25: „diese Reihenfolge passt mir“; Analyse in `PLAENE.md`):** Belastungstest (v0.39.0) → 3D schneller und lesbarer (v0.40.0: volle Fläche 730 statt 6.200 Zeichenaufrufe je Bild, Tablet 60–80 Bilder/s) → ~~Weiche~~ (zurückgestellt, Chat 26) → Bereich kopieren (v0.41.0) – alles erledigt. Eigene Häuser (v0.42.0, v0.43.0) – fertig. **Jetzt (Chat 27, Tobias: „Okay, lass uns damit anfangen“):** Grobplan Level 14–18 (Gerüst passt, 2. Fassung wartet auf Antworten) → Rechenwerkzeug → Level 14 mit Zahlen nach Tobias' Gefühl von Level 13.
-1. **Tränke-Kapitel** (Grobplan, 2. Fassung in `PLAENE.md`): 14 Die Tinktur (Mörser, Tinktur), 15 Der alte Magier (Zauberkessel, Traumtrank), 16 Die Kräutermühle (Heilpuder, Heiltrank), 17 Die Sternwarte (Linse, Fernrohr, Sternensand), 18 Die Zauberei (Farn, Lebens- und Manatrank). Kein bestehendes Rezept ändert sich. Leitlinie: alte Maschinen bekommen neue Funktionen, neue nur, wo es Sinn ergibt.
+- **Reihenfolge (Tobias, Chat 25: „diese Reihenfolge passt mir“; Analyse in `PLAENE.md`):** Belastungstest (v0.39.0) → 3D schneller und lesbarer (v0.40.0: volle Fläche 730 statt 6.200 Zeichenaufrufe je Bild, Tablet 60–80 Bilder/s) → ~~Weiche~~ (zurückgestellt, Chat 26) → Bereich kopieren (v0.41.0) – alles erledigt. Eigene Häuser (v0.42.0, v0.43.0) – fertig. **Jetzt (Chat 27, Tobias: „Okay, lass uns damit anfangen“):** Grobplan Level 14–18 (angenommen) → Rechenwerkzeug → Level 14 mit Zahlen nach Tobias' Gefühl von Level 13.
+1. **Tränke-Kapitel** (angenommen, Chat 27; Tabelle in `docs/inhalte/AUSBLICK.md`): 14 Die Tinktur (Mörser, Tinktur), 15 Der alte Magier (Zauberkessel, Traumtrank), 16 Die Kräutermühle (Heilpuder, Heiltrank), 17 Die Sternwarte (Linse, Fernrohr, Sternensand), 18 Die Zauberei (Farn, Lebens- und Manatrank). Kein bestehendes Rezept ändert sich; Feuer im Kessel von Hand (A); mehr Fläche ab Level 15. Offen: Name und Maschine für das gemahlene Glas. Leitlinie: alte Maschinen bekommen neue Funktionen, neue nur, wo es Sinn ergibt.
 2. **3D-Grafik:** eigene Häuser für alle Gebäude (fertig, Möglichkeit B: Mittelalter mit ein paar Technik-Teilen; Tobias, Chat 27: „sieht sehr gut aus“). **Für später – Rückseiten** (Tobias, Chat 27, „nur eine kleine Anmerkung für später“): Erkennungszeichen und bewegte Teile sitzen vorn; baut man links und rechts einer Straße, sieht man eine Seite immer von hinten, „und da sieht man z.b. keine Unterschiede“. Eine Stadt um die Fabrik, die mit dem Level wächst (Idee).
 3. **Nach hinten verschoben:** Was Tester brauchen (kurze Einführung, M4) – erst, wenn Tobias das Spiel anderen zeigen möchte (Chat 26); **Weiche** (Chat 26: eigene Straßen sind besser, siehe offene Frage 4).
 4. **Später:** Verbesserungen mit Erfahrung, gründliche Durchsicht des Codes.
@@ -54,6 +54,11 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.43.5 – Techbaum angenommen, Entwurf Rechenwerkzeug (23.11.2026, nur Doku)
+
+- **Tobias (Chat 27):** „Mir gefällt der neue Plan viel besser können wir auch gerne so umsetzen.“ Feuer A („einfach aus dem Warenlager rausnehmen“), Namen „deutlich besser“, ohne Fermentieren; neuer Platz schon ab Level 15; „Sternensand“ gefällt ihm noch nicht ganz.
+- **Claude:** Techbaum in `AUSBLICK.md`; Glas mahlt besser der Steinmetz (Namen später); Entwurf Rechenwerkzeug v0.44.0 in `PLAENE.md`, wartet auf Tobias' OK.
+
 ### v0.43.4 – Grobplan, 2. Fassung (23.11.2026, nur Doku)
 
 - **Tobias (Chat 27):** „Das Gerüst passt für mich.“ Traumtrank erst auf Level 15, wenn sich ein alter Magier ansiedelt; Zauberkessel, Farn und mehr Stein-Maschinen gut; geschmeidigere Namen als „-staub“; Sorge, „zu viel umbauen“ zu müssen; Kessel mit Holzkohle befeuern.
@@ -63,8 +68,3 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 - **Tobias (Chat 27):** „Okay, lass uns damit anfangen.“ Level 12 im 3D-Test, Gleichgewicht „passt mir … sehr gut“.
 - **Claudes Grobplan** (`PLAENE.md`): Level 14–18 ohne Zahlen, nur eine neue Maschine (Stampfmühle), sonst neue Einstellungen alter Maschinen; vielleicht ein Zauberkessel für Level 18. 5 Fragen an Tobias.
-
-### v0.43.2 – Kräuterstube passt, Analyse Teil 2 (23.11.2026, nur Doku)
-
-- **Tobias (Chat 27):** Kräuterstube mit 2 Eingängen „finde ich auch gut“. „Für mich klingt es so, als würden wir nur darauf warten, dass ich wieder auf Level 13 komme … Was könnten wir noch machen bevor wir uns weiter an den Techbaum machen?“
-- **Claudes Analyse** (`PLAENE.md`): Der Grundrahmen trägt, der wichtigste Hebel ist Inhalt. Nicht warten: Planen dauert länger als Umsetzen, und Level 13 bestimmt vor allem die Zahlen, nicht das Gerüst. Vorschlag: Grobplan Tränke-Kapitel → Rechenwerkzeug → Level 14; Rückseiten zwischendurch. Wartet auf Tobias' Antworten.

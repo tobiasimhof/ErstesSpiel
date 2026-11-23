@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen (v0.43.1 bis v0.43.4)
+### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen, Entwurf Rechenwerkzeug (v0.43.1 bis v0.43.5)
 
 **Tobias:** „Hey, bringe dich auf den aktuellen Stand der Dinge und berichte mir was die nächsten Schritte sind. Bis v43 sieht alles sehr gut aus und die einzelnen Gebäude wirken auch unterschiedlich genug, sodass man sie erkennt. Da wir die "karte" frei bewegen können, kann ich mir jedes Haus auch von hinten ansehen. Wenn ich z.b. einmal rechts und einmal links baue, dann ist die Produktion auf der anderen Seite immer von hinten zu sehen und da sieht man z.b. keine Unterschiede, aber das ist nur eine kleine Anmerkung für später. Ansonsten sieht es sehr gut aus“
 
@@ -29,6 +29,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** (2. Fassung in `PLAENE.md`): 14 Die Tinktur (Mörser, Tinktur), 15 Der alte Magier (Zauberkessel, Traumtrank), 16 Die Kräutermühle (Heilpuder, Heiltrank), 17 Die Sternwarte (Linse, Fernrohr, Sternensand), 18 Die Zauberei (Farn → Farnwedel, Lebens- und Manatrank); 11 statt 16 neue Waren, beide neuen Maschinen im Reiter „Stein“. Zu „zu viel umbauen“: kein bestehendes Rezept ändert sich, je Level höchstens 1 neue Maschine und 2–3 Waren aus Zutaten, die man schon herstellt. Trocknen: macht die Erntebank schon; Fermentieren wäre eine zusätzliche Stufe – Vorschlag: weglassen. Feuer im Kessel: Ein Holzkohle-Eingang wäre der dritte (Tobias' Regel: höchstens 2) – A Feuerfach von Hand (Empfehlung) oder B dritter Eingang nur für Holzkohle; der Ofen bleibt, sonst müssten alle Glas-Straßen umgebaut werden. Fragen: 2. Fassung? A oder B? Namen? Fermentieren weglassen?
 
 **Umgesetzt:** v0.43.4 (nur Doku). Wartet auf Tobias' Antworten.
+
+**Tobias:** „Ich finde neuer Platz könnte schon mit Level 15 kommen, weil sich das Gold allmählich anhäuft mit den Produkten, die wir aktuell nicht weiterverarbeiten können. Ich bin aktuell Level 13 und an dem letzten Auftrag dran, aber keine hektik bzgl. programmieren. Mir gefällt der neue Plan viel besser können wir auch gerne so umsetzen. Mühle macht auch Glas sternensand gefällt mir noch nicht so hundertprozentig. Was ist mit Mühle gemeint ? Die Holzkohle Idee mit A finde ich sehr gut. So kann man einfach aus dem Warenlager rausnehmen. Die Namen gefallen mir auch deutlich besser. Wir lassen fermentieren weg.“
+
+**Claude:** „Mühle“ war kurz für die Kräutermühle aus Level 16, die auf Level 17 auch Glas mahlen sollte – das passt nicht ganz; Vorschlag: Das Glas mahlt der Steinmetz (er schleift auch die Linse), Namen z. B. Sternenglanz, Glitzersand, Kristallsand – Entscheidung bei Level 17. Mehr Fläche kommt mit Level 15 (Preis bei der Planung von Level 15; vorher mit dem Belastungstest prüfen, dass die größere Fläche flüssig bleibt). Techbaum in `AUSBLICK.md` übernommen. Entwurf v0.44.0 Rechenwerkzeug (`PLAENE.md`): `tools/zahlen.mjs` schreibt `docs/inhalte/ZAHLEN.md` – je Level Warenwert, Erfahrung, Rohstoffe, Arbeitszeit, Baukosten, Aufstieg in Theken-Stunden, Sprung zum Vorlevel; am Spiel ändert sich nichts. Fragen: OK? Reicht die Seite in der Doku?
+
+**Umgesetzt:** v0.43.5 (nur Doku). Wartet auf Tobias' OK.
 
 ### 22.11.2026 – Chat 26: v0.40.0 gemessen, Weiche zurückgestellt, Bereich kopieren, eigene Häuser (v0.40.1 bis v0.43.0)
 
