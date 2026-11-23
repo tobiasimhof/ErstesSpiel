@@ -4,6 +4,22 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.46.2 – Entwurf Probefenster mit Kenneys UI-Paketen (23.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung (Kräuter schwer zu unterscheiden, schlichtes Probefenster) und seinen Upload festhalten; Entwurf v0.47.0 schreiben.
+
+**Fragen, die wir uns gestellt haben:**
+- Welche Pakete? → kenney.nl ist aus der Arbeitsumgebung nicht erreichbar; Namen über eine Websuche geprüft. Tobias hat fünf ZIP-Dateien hochgeladen (Commit `eeabe8a`); das Adventure-Paket (Holz und Pergament) passt am besten, Pixel Adventure wird nicht gebraucht.
+- Wo genau ist die Auswahl schwer? → Bildschirmfotos (Level 13): Erntebank mit vier Knöpfen „➕ 1 [Bild] einlegen“, die Pflanzen dieselbe Zeichnung in anderer Farbe; Samen derselbe Beutel; Beete in 3D ein leerer Kasten.
+- Wohin mit den ZIP-Dateien? → Aus dem Projekt genommen (sonst lägen 2,9 MB auf der Live-Seite); sie bleiben in der Versionsgeschichte (`git show eeabe8a:<Datei>`).
+
+**Gemacht:**
+- Musterbild (Erntebank in Rahmen A und B, neue Kräuterbilder) an Tobias geschickt; `PLAENE.md` (Entwurf v0.47.0), `STAND.md`, Archiv. Versionsnummer 0.46.2, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 444 von 444 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.46.1 – nächste große Schritte festgehalten (23.11.2026, nur Doku)
 
 **Vorgenommen:**

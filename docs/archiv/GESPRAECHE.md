@@ -4,6 +4,18 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 23.11.2026 – Chat 28: Oberfläche mit Kenneys UI-Paketen – Entwurf Probefenster (v0.46.2)
+
+**Tobias:** „Bringe dich auf den aktuellsten Stand.“
+
+**Claude** hat `STAND.md`, `SPIEL.md` und die Vorbereitung in `PLAENE.md` gelesen und direkt erklärt, wie wir es mit Kenneys UI-Paketen machen: Pakete (kenney.nl ist aus der Arbeitsumgebung nicht erreichbar, deshalb über eine Websuche geprüft) – UI Pack Adventure als Hauptpaket, Fantasy UI Borders für Rahmen, das allgemeine UI Pack als Ersatzteillager; Hochladen über einen Link auf den Arbeitsbranch; dann Musterbild, Probe an einem Fenster (v0.47.0), der Rest in v0.48.0. Fragen: Wo war die Auswahl der Kräuter schwer zu erkennen? Stil? Erst ein Fenster als Probe?
+
+**Tobias:** „Wenn ich auswählen muss, welche Kräuter ich nutzen möchte, damit daraus Blüten entstehen. Aktuell gibt es nur 4 Buttons bei dem ich auswählen kann, welche Kräuter und diese Kräuter sehen alle gleich aus unterscheiden sich nur in der Farbe, das finde ich sehr unübersichtlich. Außerdem die Bilder in den Kräuterbeeten kann man jetzt auch nicht wirklich gut erkenne, deswegen denke ich es wäre besser die Kräuter anders darzustellen, damit man da einen klaren Unterschied erkennen kann. Mir passt es, dass du erst ein probefenster baust. Ich möchte noch kein fertiges perfektes UI design, sondern eher was schlichtes, damit man einfach eine besseres Bild von dem Spiel bekommt als diese KI-HTML darstellung, weil wir über diesen level mit den assets ja schon hinaus sind. Ich hab dir noch Audio für UI hinzugefügt und noch ein weiteres Pack, weil ich das ausversehen verwechselt habe.“
+
+**Claude** hat den Upload entpackt (UI Pack Adventure, Fantasy UI Borders, UI Pack, Pixel Adventure – verwechselt, UI Audio mit 50 Klängen), Bildschirmfotos von Erntebank, Beet und Beeten gemacht (die vier Pflanzen sind dieselbe Zeichnung in anderer Farbe, 20 Pixel ohne Namen; die Samen derselbe Beutel; das Beet in 3D ein leerer Kasten) und ein Musterbild geschickt: das Fenster der Erntebank in A (Holzrahmen schlicht) und B (mit Eisenbeschlägen), neue Kräuterbilder (Flachs: Halme mit blauen Blüten; Ringelblume: große orange Blüte; Schafgarbe: weißer Schirm aus Pünktchen; Kamille: Gänseblümchen mit gelbem Knopf; Samen: Tüte mit dem Bild der Pflanze). Entwurf v0.47.0 in `PLAENE.md`. Fragen: A oder B? Kräuterbilder? Beete mit wachsenden Pflanzen? Klänge jetzt oder später?
+
+**Umgesetzt:** v0.46.2 (nur Doku). Wartet auf Tobias' Antworten.
+
 ### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen, Rechenwerkzeug, Level 14, Waren auf dem Band, nächste große Schritte (v0.43.1 bis v0.46.1)
 
 **Tobias:** „Hey, bringe dich auf den aktuellen Stand der Dinge und berichte mir was die nächsten Schritte sind. Bis v43 sieht alles sehr gut aus und die einzelnen Gebäude wirken auch unterschiedlich genug, sodass man sie erkennt. Da wir die "karte" frei bewegen können, kann ich mir jedes Haus auch von hinten ansehen. Wenn ich z.b. einmal rechts und einmal links baue, dann ist die Produktion auf der anderen Seite immer von hinten zu sehen und da sieht man z.b. keine Unterschiede, aber das ist nur eine kleine Anmerkung für später. Ansonsten sieht es sehr gut aus“
