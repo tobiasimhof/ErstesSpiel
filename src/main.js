@@ -269,10 +269,11 @@ hud.setTestMode(Boolean(settings.testMode), TEST_SPEED);
 // v0.18.0: Unten bekommt die Karte so viel Platz, wie die Bauleiste samt
 // Reitern hoch ist – so lässt sich auch die unterste Reihe darüber schieben.
 // v0.27.0 (Tobias): rechts so viel, wie das Infofenster breit ist (wie in
-// style.css: min(320px, 42vw) plus Rand) – so verdeckt es kein Gebäude am Rand.
+// style.css: min(340px, 44vw) plus Rand) – so verdeckt es kein Gebäude am Rand.
+// v0.47.0: das Infofenster im Kenney-Rahmen ist 340 statt 320 breit.
 function worldBounds() {
   const w = state.world;
-  const padRight = Math.min(320, 0.42 * canvas.clientWidth) + 24;
+  const padRight = Math.min(340, 0.44 * canvas.clientWidth) + 24;
   return { x: w.x * TILE, y: w.y * TILE, width: w.width * TILE, height: w.height * TILE, padBottom: buildBar.bottomCover(), padRight };
 }
 
