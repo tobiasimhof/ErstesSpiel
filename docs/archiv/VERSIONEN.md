@@ -23,7 +23,8 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
 **Geprüft:**
 - `npm test`: 453 von 453 bestanden.
-- Browser-Test: TESTERGEBNIS
+- Browser-Test (Tablet und Handy, 2D und 3D): erster voller Lauf 1.119 von 1.120 – nur das Menü im Testmodus auf dem Handy war zu hoch (410 statt ≤ 390), behoben. Zweiter voller Lauf wurde von außen gestoppt (bis dahin 1.040 von 1.040: der ganze 2D-Teil und 3D auf dem Tablet); danach der 3D-Teil noch einmal: 176 von 176 bestanden (Menü im Testmodus auf dem Handy 348 ≤ 390, Audio aus → an → aus).
+- Bildschirmfotos angesehen: Laden (Lager, Theken, Händler), Level-Fenster (Aufträge, Ort & Level), Menü, Audio, Rückfragen (Neues Spiel, Abreißen, Lager vergrößern), Lagerhaus befüllen, Menge wählen, Willkommen zurück, Sichern – Tablet und Handy.
 
 ### v0.47.1 – v0.47.0 läuft live, Entwurf Rest der Oberfläche mit Klängen (24.11.2026, nur Doku)
 
