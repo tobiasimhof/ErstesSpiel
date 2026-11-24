@@ -61,7 +61,7 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.51.0 und v0.52.0 – Neuigkeiten als Schriftrolle, Einführung mit Hilde (Chat 29, v0.50.1; wartet auf Tobias' Antworten)
+### Entwurf v0.51.0 und v0.52.0 – Neuigkeiten als Schriftrolle, Einführung mit Hilde (Chat 29, v0.50.1; angenommen – v0.51.0 umgesetzt, v0.52.0 folgt)
 
 **Tobias (Chat 29, nach v0.50.0):** „Ich habs mir angeschaut. Sieht für den ersten Versuch sehr gut aus. Das können wir erstmal so stehen . Die klänge sind leider gar nicht gut, aber das liegt eher am Soundpack als an der Programmierung. Ich lasse den Sound daher auf 0. Lass uns als nächstes die Einführung mit Hilde planen. Außerdem ist mir aufgefallen, dass Neuerungen die unten im Spielfeld angezeigt leicht verloren gehen. Da würde ich mir auch nochmal ein Fenster wünschen das aufploppt und die Nachricht dann so übermittelt wird, quasi als Brief oder Nachricht zum aufrollen, wie man das aus dem Mittelalter kennt - ohne Zeit, selbst zum wegklicken, damit man alles lesen kann.“
 
@@ -98,6 +98,12 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 2. Gefällt die Schriftrolle (Musterbild A)?
 3. Die Erinnerungen „Auftrag bereit“, „Genug für den Aufstieg“ und „Beet reif“ kommen oft – bleiben sie kurz unten (Empfehlung; oben gibt es dafür schon ❗ und ⬆), oder auch als Schriftrolle?
 4. Hildes Fenster (Musterbild B): Jeder Schritt wartet, bis man ihn getan hat, ✕ klappt das Fenster weg – so?
+
+**Tobias' Antwort:** „Ja, mir gefallen beide Musterbilder gut. Schlicht und einfach. Aktuell sollen diese Schritte den Prototypen nur etwas verfeinern, damit wir diese kleinen Schritte schon mal im Spiel haben. Ich würde vorschlagen, dass man die Schritte überspringen kann oder ganz beenden, so kann man sich durch die Tipps klicken, alles in Ruhe lesen und danach alles machen oder man macht sie und durch das erledigen, springt der Schritt zum nächsten Schritt, quasi als interaktive Anleitung. Zu Frage 3: Die würde ich sogar ganz entfernen, weil man in der Regel weiß, ob und wann diese Sachen fertig sind.“
+
+**Umgesetzt in v0.51.0** wie in Punkt 1–7, dazu: die Erinnerungen „Auftrag bereit“, „Genug Erfahrung und Gold“ und „Beet reif“ sind entfernt (Frage 3). Siegel: H (Hilde), ⚖ (Händler), ★ (Neues im Spiel). Auch der Hinweis „Die Theken fassen jetzt …“ beim Öffnen kommt als Schriftrolle; „Spielstand geladen“ bleibt kurz unten (Rückmeldung aufs eigene Tippen). Das Pergament rollt sich über die Zeilenhöhe des Rasters auf (0fr → 1fr, 0,55 s), die Rolle liegt über den Fenstern (z. B. über dem Level-Fenster beim Aufstieg).
+
+**Für v0.52.0 festgehalten (Tobias):** Jeder Schritt lässt sich **überspringen** („Weiter ›“), die Einführung lässt sich **ganz beenden**; wer den Schritt erledigt, springt ebenfalls zum nächsten – „so kann man sich durch die Tipps klicken, alles in Ruhe lesen und danach alles machen oder man macht sie … quasi als interaktive Anleitung“. Damit braucht das Ansehen im Level-Fenster keinen eigenen Ablauf.
 
 ### Entwurf v0.50.0 und v0.51.0 – Ladebildschirm bei jedem Start, Name, geführte Einführung (Chat 29, v0.49.2; angenommen – v0.50.0 umgesetzt, die Einführung im Entwurf oben weitergeplant)
 

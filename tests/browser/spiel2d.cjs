@@ -28,6 +28,7 @@ const {
   beltOuts,
   mode,
   waitForGame,
+  readLetter,
   setDevice,
 } = require('./helpers.cjs');
 
@@ -788,6 +789,30 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const goldBeforeUp = await game(page, () => window.__game.state.gold);
   await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 2 · 30' }).tap();
   await sleep(150);
+  // v0.51.0 (Tobias, Chat 29): Der Aufstieg kommt als Schriftrolle von Hilde – ohne Zeit, bis „✓ Gelesen“
+  await page.waitForFunction(() => document.getElementById('letter')?.classList.contains('open'), null, { timeout: 5000 });
+  await sleep(1500);
+  const letter2 = await page.evaluate(() => ({
+    open: document.getElementById('letter').classList.contains('open'),
+    banner: document.getElementById('letter-banner').textContent,
+    text: document.getElementById('letter').textContent,
+    ok: document.getElementById('letter-ok').textContent,
+    box: document.querySelector('#letter .letter-scroll').getBoundingClientRect().toJSON(),
+    okBottom: document.getElementById('letter-ok').getBoundingClientRect().bottom,
+  }));
+  check(
+    letter2.open && letter2.banner === 'Laden-Level 2!' && letter2.text.includes('Bürgermeisterin Hilde') && letter2.text.includes('1 Felsbrocken liegt im Laden-Lager') && letter2.text.includes('Steinmetzin Berta') && letter2.ok === '✓ Gelesen',
+    `Aufstieg: Schriftrolle „Laden-Level 2!“ von Hilde mit Geschenk und erstem Auftrag, bleibt offen (${letter2.text.slice(0, 160)})`,
+  );
+  const vp2 = device.viewport;
+  check(
+    letter2.box.top >= 0 && letter2.box.bottom <= vp2.height && letter2.box.left >= 0 && letter2.box.right <= vp2.width && letter2.okBottom <= letter2.box.bottom - 20,
+    `Schriftrolle passt auf den Bildschirm, „✓ Gelesen“ zu sehen (${Math.round(letter2.box.top)}–${Math.round(letter2.box.bottom)} von ${vp2.height}, Knopf bis ${Math.round(letter2.okBottom)})`,
+  );
+  await shot('10d-schriftrolle');
+  await page.tap('#letter-ok');
+  await sleep(700);
+  check(!(await page.isVisible('#letter')), '„✓ Gelesen“ rollt die Schriftrolle zu');
   const lvl2 = await game(page, () => ({ level: window.__game.state.shopLevel, rocks: window.__game.state.storage.felsbrocken ?? 0, gold: window.__game.state.gold }));
   check(lvl2.level === 2 && lvl2.rocks === 1, `Aufgestiegen auf Level 2, Gratis-Felsbrocken im Lager (${JSON.stringify(lvl2)})`);
   check(lvl2.gold >= goldBeforeUp - 30 && lvl2.gold <= goldBeforeUp - 30 + 70, `Der Aufstieg kostet 30 Gold (${goldBeforeUp} → ${lvl2.gold})`);
@@ -804,6 +829,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(enabled3, 'Level-Fenster aktualisiert sich: Aufstieg auf Level 3 möglich');
   await upButton3.tap();
   await sleep(150);
+  await readLetter(page); // v0.51.0: Schriftrolle zum Aufstieg
   const lvl3 = await game(page, () => ({ level: window.__game.state.shopLevel, ore: window.__game.state.storage.eisenerz ?? 0 }));
   check(lvl3.level === 3 && lvl3.ore === 1, `Aufgestiegen auf Level 3, Gratis-Eisenerz im Lager (${JSON.stringify(lvl3)})`);
   const next4 = await page.textContent('#modal-content');
@@ -941,6 +967,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(120);
   await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 4' }).tap();
   await sleep(150);
+  await readLetter(page); // v0.51.0: Schriftrolle zum Aufstieg
   const lvl4 = await game(page, () => ({ level: window.__game.state.shopLevel, counters: window.__game.state.counters.length }));
   check(lvl4.level === 4 && lvl4.counters === 2, `Level 4: keine neue Theke – die kauft man mit Gold (${JSON.stringify(lvl4)})`);
   await page.tap('#modal-close');
@@ -1283,6 +1310,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     await sleep(450);
     await page.locator('#modal-content button', { hasText: `Aufsteigen auf Level ${level}` }).tap();
     await sleep(150);
+    await readLetter(page); // v0.51.0: Schriftrolle zum Aufstieg
   };
   await page.tap('#btn-level');
   await sleep(120);
@@ -1338,6 +1366,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(450);
   await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 7 · 1.000' }).tap();
   await sleep(150);
+  await readLetter(page); // v0.51.0: Schriftrolle zum Aufstieg
   const lvl7 = await game(page, () => ({
     level: window.__game.state.shopLevel,
     seeds: window.__game.state.storage.leinsamen ?? 0,
@@ -1530,7 +1559,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(500);
   const ripeText = await infoText(page);
   check(ripeText.includes('Reif – Flachspflanze ernten'), `Nach 30 Minuten reif (${ripeText.slice(0, 80)})`);
-  check(await page.locator('#toast', { hasText: 'Ein Beet ist reif' }).isVisible(), 'Meldung: „Ein Beet ist reif“');
+  // v0.51.0 (Tobias, Chat 29): keine Erinnerung mehr, wenn ein Beet reif ist
+  check(!(await page.locator('#toast', { hasText: 'Beet ist reif' }).isVisible()), `Keine Meldung „Ein Beet ist reif“ mehr (${(await page.textContent('#toast')) ?? ''})`);
   check(await reapButton.isEnabled(), 'Reif: „🌾 Ernten: 1 Flachspflanze“');
   const ripeCard = await infoCard(page);
   check(
@@ -1621,6 +1651,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(450);
   await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 8 · 1.330' }).tap();
   await sleep(150);
+  await readLetter(page); // v0.51.0: Schriftrolle zum Aufstieg
   const lvl8 = await game(page, () => ({ level: window.__game.state.shopLevel, seeds: window.__game.state.storage.ringelblumensamen ?? 0 }));
   check(lvl8.level === 8 && lvl8.seeds === 1, `Level 8: 1 Ringelblumensamen gratis (${JSON.stringify(lvl8)})`);
   const lvl8Text = await page.textContent('#modal-content');
@@ -1756,6 +1787,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(450);
   await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 9 · 1.670' }).tap();
   await sleep(150);
+  await readLetter(page); // v0.51.0: Schriftrolle zum Aufstieg
   const lvl9 = await game(page, () => ({ level: window.__game.state.shopLevel, logs: window.__game.state.storage.holzstamm ?? 0 }));
   check(lvl9.level === 9 && lvl9.logs === logsBefore9 + 1, `Level 9: 1 Holzstamm gratis (${JSON.stringify(lvl9)})`);
   const lvl9Text = await page.textContent('#modal-content');
@@ -1887,6 +1919,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(450);
   await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 10 · 2.000' }).tap();
   await sleep(150);
+  const letter10 = await readLetter(page); // v0.51.0: Schriftrolle zum Aufstieg
   const lvl10 = await game(page, () => ({
     level: window.__game.state.shopLevel,
     seeds: window.__game.state.storage.schafgarbensamen ?? 0,
@@ -1904,7 +1937,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await shot('19i-level-10');
   await page.tap('#modal-close');
   await sleep(150);
-  check((await page.textContent('#toast')).includes('Tippe auf die ＋-Schilder am Rand'), 'Meldung nach dem Aufstieg: neue Fläche an den Schildern');
+  check(letter10.includes('Mehr Fläche') && letter10.includes('Tippe auf die ＋-Schilder am Rand'), 'Schriftrolle nach dem Aufstieg: neue Fläche an den Schildern');
   // Nach dem Aufstieg zeigt die Karte die ganze Welt
   const fitsWorld = () =>
     game(page, () => {
@@ -2057,6 +2090,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(450);
   await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 11 · 5.000' }).tap();
   await sleep(150);
+  const letter11 = await readLetter(page); // v0.51.0: Schriftrolle zum Aufstieg
   const lvl11 = { level: await game(page, () => window.__game.state.shopLevel), storage: await raws11() };
   check(lvl11.level === 11, `Aufstieg auf Level 11 für 5.000 Gold (${lvl11.level})`);
   check(lvl11.storage === storageBefore11, `Kein Geschenk mehr: kein Rohstoff dazu (${lvl11.storage})`);
@@ -2068,8 +2102,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await shot('19q-level-11');
   await page.tap('#modal-close');
   await sleep(120);
-  const toast11 = await page.textContent('#toast');
-  check(toast11.includes('Laden-Level 11!') && toast11.includes('Uhrmacherei') && !toast11.includes('Gratis'), `Meldung nach dem Aufstieg ohne Geschenk (${toast11})`);
+  check(letter11.includes('Laden-Level 11!') && letter11.includes('Uhrmacherei') && !letter11.includes('Geschenk'), `Schriftrolle nach dem Aufstieg ohne Geschenk (${letter11.slice(0, 200)})`);
   // Uhrmacherei auf einem freien Platz bauen (Reiter „Werkstatt“)
   const spot11 = await game(page, ([x0, y0]) => {
     const { state } = window.__game;
@@ -2175,6 +2208,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(450);
   await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 12 · 7.500' }).tap();
   await sleep(150);
+  const letter12 = await readLetter(page); // v0.51.0: Schriftrolle zum Aufstieg
   const lvl12 = { level: await game(page, () => window.__game.state.shopLevel), storage: await raws11() };
   check(lvl12.level === 12, `Aufstieg auf Level 12 für 7.500 Gold (${lvl12.level})`);
   check(lvl12.storage === storageBefore12, `Kein Geschenk: kein Rohstoff dazu (${lvl12.storage})`);
@@ -2186,10 +2220,9 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await shot('19t-level-12');
   await page.tap('#modal-close');
   await sleep(120);
-  const toast12 = await page.textContent('#toast');
   check(
-    toast12.includes('Laden-Level 12!') && toast12.includes('Apotheke') && toast12.includes('Kamillensamen') && toast12.includes('Reißbrett') && !toast12.includes('Gratis'),
-    `Meldung nach dem Aufstieg: Apotheke, Kamillensamen, Reißbrett (${toast12})`,
+    letter12.includes('Laden-Level 12!') && letter12.includes('Apotheke') && letter12.includes('Kamillensamen') && letter12.includes('Reißbrett') && !letter12.includes('Geschenk'),
+    `Schriftrolle nach dem Aufstieg: Apotheke, Kamillensamen, Reißbrett (${letter12.slice(0, 200)})`,
   );
   // Apotheke auf einem freien Platz bauen (Reiter „Werkstatt“)
   const spot12 = await game(page, ([x0, y0]) => {
@@ -2415,6 +2448,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(450);
   await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 13 · 10.000' }).tap();
   await sleep(150);
+  const letter13 = await readLetter(page); // v0.51.0: Schriftrolle zum Aufstieg
   check((await game(page, () => window.__game.state.shopLevel)) === 13, 'Aufstieg auf Level 13 für 10.000 Gold');
   const lvl13Text = await page.textContent('#modal-content');
   check(
@@ -2424,10 +2458,9 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await shot('24a-level-13');
   await page.tap('#modal-close');
   await sleep(120);
-  const toast13 = await page.textContent('#toast');
   check(
-    toast13.includes('Laden-Level 13!') && toast13.includes('Ofen: Glas aus Sand') && toast13.includes('Fläschchen') && toast13.includes('Theke 6'),
-    `Meldung nach dem Aufstieg: Glas aus Sand, Fläschchen, Theke 6 (${toast13})`,
+    letter13.includes('Laden-Level 13!') && letter13.includes('Ofen: Glas aus Sand') && letter13.includes('Fläschchen') && letter13.includes('Theke 6'),
+    `Schriftrolle nach dem Aufstieg: Glas aus Sand, Fläschchen, Theke 6 (${letter13.slice(0, 200)})`,
   );
   // Ofen: jetzt mit Sand – leer zeigt er beide Rohstoffe
   const ofen13 = await game(page, () => {
@@ -2532,6 +2565,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(450);
   await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 14 · 12.500' }).tap();
   await sleep(150);
+  const letter14 = await readLetter(page); // v0.51.0: Schriftrolle zum Aufstieg
   check((await game(page, () => window.__game.state.shopLevel)) === 14, 'Aufstieg auf Level 14 für 12.500 Gold');
   const lvl14Text = await page.textContent('#modal-content');
   check(
@@ -2541,8 +2575,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await shot('25a-level-14');
   await page.tap('#modal-close');
   await sleep(120);
-  const toast14 = await page.textContent('#toast');
-  check(toast14.includes('Laden-Level 14!') && toast14.includes('Mörser') && toast14.includes('Tinktur'), `Meldung nach dem Aufstieg: Mörser und Tinktur (${toast14})`);
+  check(letter14.includes('Laden-Level 14!') && letter14.includes('Mörser') && letter14.includes('Tinktur'), `Schriftrolle nach dem Aufstieg: Mörser und Tinktur (${letter14.slice(0, 200)})`);
   // Zimmerei und Apotheke haben jetzt 4 Einstellungen – die Liste passt ins Infofenster
   for (const [type, title, recipe, label] of [
     ['zimmerei', 'Zimmerei', 'moerser', 'Umstellen auf Mörser: 1 Steinplatte + 3 Holzstäbe'],

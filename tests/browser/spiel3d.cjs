@@ -26,6 +26,7 @@ const {
   beltOuts,
   mode,
   waitForGame,
+  readLetter,
   setDevice,
 } = require('./helpers.cjs');
 
@@ -811,6 +812,33 @@ async function run3d(browser, baseUrl, device) {
   await page.tap('#btn-menu');
   await sleep(100);
   await page.tap('#menu-test-mode');
+  await sleep(150);
+
+  // v0.51.0 (Tobias, Chat 29): Aufstieg im 3D-Test – die Schriftrolle rollt sich
+  // über dem Spiel auf und bleibt, bis man „✓ Gelesen“ tippt
+  await game(page, () => {
+    window.__game.state.quest.xp = window.__game.xpNeeded();
+    window.__game.state.gold += 100;
+  });
+  await page.tap('#btn-level');
+  await sleep(300);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 2' }).tap();
+  await page.waitForFunction(() => document.getElementById('letter')?.classList.contains('open'), null, { timeout: 5000 });
+  await sleep(900);
+  const roll = await page.evaluate(() => ({
+    banner: document.getElementById('letter-banner').textContent,
+    rows: document.querySelectorAll('#letter .letter-row').length,
+    box: document.querySelector('#letter .letter-scroll').getBoundingClientRect().toJSON(),
+    ok: document.getElementById('letter-ok').getBoundingClientRect().toJSON(),
+  }));
+  check(
+    roll.banner === 'Laden-Level 2!' && roll.rows >= 3 && roll.box.top >= 0 && roll.box.bottom <= vp.height && roll.ok.bottom <= roll.box.bottom - 20,
+    `3D: Schriftrolle zum Aufstieg passt auf den Bildschirm, „✓ Gelesen“ zu sehen (${Math.round(roll.box.top)}–${Math.round(roll.box.bottom)} von ${vp.height}, Knopf bis ${Math.round(roll.ok.bottom)}, ${roll.rows} Zeilen)`,
+  );
+  await shot('3d-14-schriftrolle');
+  await readLetter(page);
+  check(!(await page.isVisible('#letter')) && (await game(page, () => window.__game.state.shopLevel)) === 2, '„✓ Gelesen“ schließt sie, Level 2');
+  await page.tap('#modal-close');
   await sleep(150);
 
   // Zurück zur echten Fabrik

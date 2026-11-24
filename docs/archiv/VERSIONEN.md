@@ -4,6 +4,28 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.51.0 – Neuigkeiten als Schriftrolle, keine Erinnerungen mehr (24.11.2026)
+
+**Vorgenommen:**
+- Den ersten Teil des Entwurfs umsetzen (Tobias: „Ja, mir gefallen beide Musterbilder gut. Schlicht und einfach.“) und die Erinnerungen entfernen („Die würde ich sogar ganz entfernen, weil man in der Regel weiß, ob und wann diese Sachen fertig sind.“).
+
+**Fragen, die wir uns gestellt haben:**
+- Wie rollt sie sich auf? → Das Pergament ist ein Raster mit einer Zeile, deren Höhe von 0fr auf 1fr wächst (0,55 s); der untere Stab sitzt darunter und wandert mit. Zum Schließen umgekehrt (0,45 s), dann der nächste Brief.
+- Was bleibt unten? → Nur Rückmeldungen auf das eigene Tippen. „Spielstand geladen“ bleibt kurz; „Die Theken fassen jetzt …“ ist eine Neuigkeit und kommt als Rolle.
+- Passt sie aufs Handy? → Der erste Browser-Lauf zeigte: Auf dem Handy (390 hoch) lag „✓ Gelesen“ unter dem Text und war erst nach dem Schieben zu sehen. Jetzt steht der Knopf immer unten in der Rolle, nur der Text darüber lässt sich schieben; das Pergament hat auf dem Handy einen schmaleren Rand.
+- Über oder unter den Fenstern? → Darüber (z-index 70): Der Aufstieg passiert im Level-Fenster, die Rolle liegt darauf. Unter dem Ladebildschirm (80) – Neuigkeiten beim Öffnen kommen ohnehin erst danach.
+
+**Gemacht:**
+- Neu: `ui/letter.js` (Schriftrolle), `ui/letters.js` (Briefe: Aufstieg, Neuigkeiten, beschädigter Spielstand, Geschenk des Händlers), Kenneys `panel_brown_damaged.png` und `banner_classic_curtain.png` (doppelt groß).
+- `main.js`: Aufstieg, Start-Meldungen und Pleiteschutz als Schriftrolle; Erinnerungen „Auftrag bereit“, „Genug Erfahrung und Gold“, „Beet reif“ entfernt. `style.css` (Block v0.51.0).
+- Tests: neu `tests/schriftrolle.test.js`. Browser-Test: `readLetter`; jeder Aufstieg im 2D-Test liest die Rolle (Level 2 genau: Hilde, Geschenk, erster Auftrag, bleibt offen, passt auf den Bildschirm, „✓ Gelesen“ rollt sie zu; Level 10–14: Inhalte statt der alten Meldungen); „Beet reif“ erscheint nicht mehr; 3D: Aufstieg auf Level 2 mit Rolle und Bildschirmfoto.
+- Doku: `STAND.md`, `SPIEL.md`, `BEDIENUNG.md`, `LEVEL.md`, `TECHNIK.md`, Archiv. Versionsnummer 0.51.0.
+
+**Geprüft:**
+- `npm test`: 466 von 466 bestanden (neu: `schriftrolle.test.js`).
+- Browser-Test (Tablet und Handy, 2D und 3D): 1.156 von 1.156 bestanden. Vorher fand er drei Dinge: einen Tippfehler im Test, eine zu strenge Prüfung (das Wort „reif“ steht auch in der Säen-Meldung – jetzt „Beet ist reif“) und auf dem Handy den versteckten Knopf „✓ Gelesen“ (behoben, siehe oben).
+- Bildschirmfotos angesehen: Schriftrolle zum Aufstieg auf Level 2 im Level-Fenster (2D) und in 3D, Tablet und Handy, auch halb aufgerollt.
+
 ### v0.50.1 – Tobias' Test von v0.50.0, Entwurf Schriftrolle und Einführung (24.11.2026, nur Doku)
 
 **Vorgenommen:**

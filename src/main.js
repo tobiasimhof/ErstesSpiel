@@ -20,12 +20,10 @@ import { applyTestPack } from './core/market.js';
 import { COUNTERS, TEST_PACK } from './core/data/shop.js';
 import { ITEMS } from './core/data/items.js';
 import { LAND } from './core/data/land.js';
-import { canLevelUp } from './core/levels.js';
-import { canDeliver, currentQuest, xpNeeded } from './core/quests.js';
+import { currentQuest, xpNeeded } from './core/quests.js';
 import { storageCapacity } from './core/shop.js';
-import { isRipe, productionOf } from './core/production.js';
-import { createLevelView, unlockText } from './ui/levels.js';
-import { costText, numberFormat } from './ui/format.js';
+import { createLevelView } from './ui/levels.js';
+import { numberFormat } from './ui/format.js';
 import { redrawItemIcons } from './ui/itemArt.js';
 import {
   STRESS_SLOT,
@@ -46,6 +44,8 @@ import { catchUpProgress, extendCatchUp, offlineReport, runCatchUp, startCatchUp
 import { createOfflineView } from './ui/offline.js';
 import { onPress } from './ui/press.js';
 import { createLoadingScreen } from './ui/loading.js';
+import { createLetterView } from './ui/letter.js';
+import { bailoutLetter, brokenSaveLetter, levelUpLetter, newsLetter } from './ui/letters.js';
 import { openNameWindow } from './ui/name.js';
 import { hasPlayerName, setPlayerName } from './core/player.js';
 
@@ -79,6 +79,8 @@ const view3d = VIEW_3D ? await start3d() : null;
 if (!view3d) loading.setProgress(0.85, 'Lädt die Fabrik …');
 const renderer = view3d ?? createRenderer(canvas);
 const panels = createPanels();
+// v0.51.0: Neuigkeiten als Schriftrolle (Aufstieg, Neues nach Updates, Geschenk des Händlers)
+const letters = createLetterView();
 
 // v0.34.0: Lädt three.js und Kenneys Modelle (nur im 3D-Test) – seit v0.50.0
 // mit dem Balken des Ladebildschirms. Klappt das nicht, bleibt eine Meldung
@@ -117,9 +119,6 @@ let resetting = false;
 // sonst stünde im Spielstand eine neue Uhrzeit zu einer alten Fabrik. Der
 // alte Spielstand bleibt; beim nächsten Öffnen wird von dort nachgerechnet.
 let catchUpJob = null;
-// v0.16.0: einmal Bescheid sagen, wenn ein Beet reif wird
-const ripeCount = () => state.buildings.filter((b) => productionOf(b.type)?.kind === 'garden' && isRipe(b)).length;
-let lastRipe = ripeCount();
 function saveNow() {
   clearTimeout(saveTimer);
   saveTimer = null;
@@ -218,19 +217,16 @@ function testPack() {
 
 // ---------- Laden-Level (v0.9.0) ----------
 
-let levelReady = canLevelUp(state);
 function onLevelUp({ level, gift, moreLand }) {
-  levelReady = false;
   // v0.27.0: Bringt das Level mehr Fläche, zeigt die Karte die ganze Welt –
   // so sieht man die neuen Schilder „＋ Fläche kaufen“ am Rand.
   if (moreLand && view3d) view3d.cam.fitRect(state.world, { padBottom: buildBar.bottomCover() });
   else if (moreLand) fitRect(camera, worldRect(), 36, worldBounds());
   onChange();
   buildBar.updateCosts(state);
-  const tip = moreLand ? ' Tippe auf die ＋-Schilder am Rand.' : '';
-  // v0.28.0: Ab Level 11 gibt es kein Geschenk mehr (Tobias).
-  const giftText = costText(gift) ? ` Gratis im Laden-Lager: ${costText(gift)}.` : '';
-  panels.toast(`Laden-Level ${level}! Neu: ${unlockText(level)}.${giftText}${tip}`, moreLand ? 9000 : 6000);
+  // v0.51.0: als Schriftrolle von Hilde (Bauabschnitt, Neues, Geschenk – ab
+  // Level 11 keins mehr –, mehr Fläche, erster Auftrag) statt als Meldung unten
+  letters.show(levelUpLetter(state, { level, gift, moreLand }));
 }
 // v0.13.0: Auftrag abgegeben
 // v0.15.0: oder mit dem Test-Knopf als erledigt gewertet (skipped)
@@ -490,7 +486,6 @@ function showStartToasts() {
   if (loaded.status === 'ok' && loaded.migratedFrom) {
     const from = loaded.migratedFrom;
     const notes = [
-      'Spielstand übernommen.',
       from < 5 ? 'Neu: Handel! Im Laden gibt es jetzt Theken und den Händler; Bauen kostet Waren aus dem Laden-Lager.' : '',
       from === 5 ? 'Neu: Die Schmiede macht Eisenstangen statt Nägel.' : '',
       from < 7 ? 'Neu: Fläche kaufen – tippe auf die ＋-Schilder am Rand. Deine Fabrik hat Laden-Level 3, alles bleibt freigeschaltet.' : '',
@@ -515,13 +510,12 @@ function showStartToasts() {
       ...(loaded.notes ?? []),
       loaded.counterNote ?? '',
     ].filter(Boolean);
-    const text = [loadedFile ? `Spielstand „${loadedFile}“ geladen.` : '', ...notes].filter(Boolean).join(' ');
-    // v0.24.0: Lange Hinweise bleiben länger stehen (etwa 20 Zeichen pro Sekunde).
-    panels.toast(text, Math.max(9000, text.length * 50));
-  } else if (loadedFile) panels.toast(`Spielstand „${loadedFile}“ geladen.${loaded.counterNote ? ` ${loaded.counterNote}` : ''}`, 5000);
-  else if (loaded.status === 'ok' && loaded.counterNote) panels.toast(`Spielstand geladen. ${loaded.counterNote}`, 6000);
+    // v0.51.0: Neues nach einem Update als Schriftrolle – bleibt, bis man es gelesen hat
+    letters.show(newsLetter({ notes, loadedFile, migrated: true }));
+  } else if (loaded.status === 'ok' && loaded.counterNote) letters.show(newsLetter({ notes: [loaded.counterNote], loadedFile }));
+  else if (loadedFile) panels.toast(`Spielstand „${loadedFile}“ geladen.`, 5000);
   else if (loaded.status === 'ok') panels.toast('Spielstand geladen.', 1600);
-  else if (loaded.status === 'invalid') panels.toast('Spielstand war beschädigt – neues Spiel gestartet.', 3500);
+  else if (loaded.status === 'invalid') letters.show(brokenSaveLetter());
 }
 
 // ---------- Spiel im Hintergrund (v0.14.0) ----------
@@ -551,7 +545,6 @@ function continueCatchUp() {
   }
   const report = offlineReport(catchUpJob);
   catchUpJob = null;
-  lastRipe = ripeCount(); // reife Beete nennt schon der Bericht
   offlineView.hideProgress();
   if (report.seconds >= OFFLINE.toastSeconds) {
     controller.closeInfo();
@@ -581,9 +574,6 @@ let lastWall = Date.now(); // Uhrzeit des letzten Bildes – erkennt Pausen im H
 let accumulator = 0;
 let lastRefresh = 0;
 let lastGifts = state.market.gifts;
-// v0.13.0: einmal Bescheid sagen, wenn der aktuelle Auftrag abgegeben werden kann
-const questKey = () => `${state.shopLevel}|${state.quest.index}`;
-let questReadyKey = canDeliver(state) ? questKey() : null;
 
 // v0.21.0 (Belastungstest): Bilder pro Sekunde zählen – im Testmodus oben zu sehen,
 // damit Tobias auf dem Tablet selbst sieht, wie flüssig es läuft.
@@ -628,26 +618,12 @@ function frame(now) {
     controller.refresh();
     levelView.refresh();
     hud.update(state); // Gold ändert sich, wenn Kunden kaufen
-    // Genug Erfahrung und Gold fürs nächste Level: einmal Bescheid sagen
-    const ready = canLevelUp(state);
-    if (ready && !levelReady) {
-      panels.toast(`Genug Erfahrung und Gold! Tippe oben auf „Laden-Level“, um auf Level ${state.shopLevel + 1} aufzusteigen.`, 5000);
-    }
-    levelReady = ready;
-    if (canDeliver(state)) {
-      if (questReadyKey !== questKey() && !levelView.isOpen()) {
-        panels.toast(`Auftrag bereit: ${currentQuest(state).from} wartet. Tippe oben auf „Laden-Level“, um abzugeben.`, 5000);
-      }
-      questReadyKey = questKey();
-    }
-    const ripe = ripeCount();
-    if (ripe > lastRipe) {
-      panels.toast(`🌾 ${ripe === 1 ? 'Ein Beet ist reif – tippe es' : `${ripe} Beete sind reif – tippe sie`} an und ernte, dann neu säen.`, 5000);
-    }
-    lastRipe = ripe;
+    // v0.51.0 (Tobias, Chat 29): keine Erinnerungen mehr („Auftrag bereit“,
+    // „Genug Erfahrung und Gold“, „Beet reif“) – „weil man in der Regel weiß,
+    // ob und wann diese Sachen fertig sind“; oben bleiben ❗ und ⬆.
     if (state.market.gifts !== lastGifts) {
       if (state.market.gifts > lastGifts) {
-        panels.toast('Der Händler hat Mitleid: Du bekommst einen Holzstamm geschenkt. Er liegt im Laden-Lager.', 5000);
+        letters.show(bailoutLetter()); // v0.51.0: als Schriftrolle vom Händler
         scheduleSave();
       }
       lastGifts = state.market.gifts;
