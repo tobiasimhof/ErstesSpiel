@@ -34,8 +34,8 @@ test('Name setzen: gekürzt, ohne Steuerzeichen, höchstens 16 Zeichen, nie leer
   assert.equal(cleanPlayerName(42), '');
 });
 
-test('Spielstand Format 19: der Name bleibt nach Speichern und Laden', () => {
-  assert.equal(SAVE_VERSION, 19);
+test('Spielstand (seit Format 19): der Name bleibt nach Speichern und Laden', () => {
+  assert.ok(SAVE_VERSION >= 19);
   const state = createNewGame(1);
   setPlayerName(state, 'Tobias');
   const loaded = deserializeGame(serializeGame(state));

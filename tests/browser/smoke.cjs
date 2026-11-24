@@ -3,8 +3,9 @@
 // wichtigsten Funktionen per Touch durch. Screenshots landen im Ordner aus
 // SCREENSHOT_DIR (Standard: test-output/).
 //
-// Aufruf: node tests/browser/smoke.cjs (ONLY=3d davor: nur der 3D-Test, ONLY=2d: nur die echte Fabrik)
-// Teile: helpers.cjs (gemeinsame Hilfen), spiel2d.cjs (2D), spiel3d.cjs (3D).
+// Aufruf: node tests/browser/smoke.cjs (ONLY=3d davor: nur der 3D-Test, ONLY=2d: nur die echte Fabrik,
+// ONLY=einfuehrung: nur Hildes Einführung)
+// Teile: helpers.cjs (gemeinsame Hilfen), spiel2d.cjs (2D), spiel3d.cjs (3D), einfuehrung.cjs (Hilde).
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -13,6 +14,7 @@ const { chromium } = require('playwright');
 const { DEVICES, OUT, ROOT, startServer, summary } = require('./helpers.cjs');
 const { runDevice, runPortrait, runNarrowPhone } = require('./spiel2d.cjs');
 const { run3d } = require('./spiel3d.cjs');
+const { runTutorial } = require('./einfuehrung.cjs');
 
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
@@ -24,13 +26,15 @@ const { run3d } = require('./spiel3d.cjs');
   const browser = await chromium.launch();
   try {
     // v0.34.0: ONLY=3d prüft nur den 3D-Test (schneller beim Entwickeln)
-    if (process.env.ONLY !== '3d') {
+    if (process.env.ONLY !== '3d' && process.env.ONLY !== 'einfuehrung') {
       for (const device of DEVICES) await runDevice(browser, baseUrl, device, expectedVersion);
       await runPortrait(browser, baseUrl);
       await runNarrowPhone(browser, baseUrl);
     }
     // v0.41.0: ONLY=2d prüft nur die echte Fabrik
-    if (process.env.ONLY !== '2d') for (const device of DEVICES) await run3d(browser, baseUrl, device);
+    if (process.env.ONLY !== '2d' && process.env.ONLY !== 'einfuehrung') for (const device of DEVICES) await run3d(browser, baseUrl, device);
+    // v0.52.0: Einführung mit Hilde (ONLY=einfuehrung: nur sie)
+    if (process.env.ONLY !== '2d') for (const device of DEVICES) await runTutorial(browser, baseUrl, device);
   } finally {
     await browser.close();
     server.close();

@@ -6,7 +6,7 @@ import { beltAt, buildingAt, createNewGame, isOwned } from './core/state.js';
 import { placeBuilding } from './core/buildings.js';
 import { createStressFactory } from './core/belastungstest.js';
 import { TICK, simulate, tick } from './core/sim.js';
-import { TILE, createCamera, setViewSize, zoomAt, panBy, fitRect, clampCamera } from './view2d/camera.js';
+import { TILE, createCamera, setViewSize, zoomAt, panBy, fitRect, clampCamera, worldToScreen } from './view2d/camera.js';
 import { createRenderer } from './view2d/renderer.js';
 import { attachInput } from './ui/input.js';
 import { createHud } from './ui/hud.js';
@@ -48,6 +48,8 @@ import { createLetterView } from './ui/letter.js';
 import { bailoutLetter, brokenSaveLetter, levelUpLetter, newsLetter } from './ui/letters.js';
 import { openNameWindow } from './ui/name.js';
 import { hasPlayerName, setPlayerName } from './core/player.js';
+import { createTutorialView } from './ui/tutorial.js';
+import { tutorialStep } from './core/tutorial.js';
 
 // v0.34.0: 3D-Test (Tobias, Chat 24) – das Spiel in 3D mit einem eigenen
 // Spielstand ab Level 1; die echte Fabrik (2D) bleibt unberührt. Spielregeln,
@@ -239,10 +241,11 @@ function onQuestDone({ gold, xp, skipped }) {
     3000,
   );
 }
-const levelView = createLevelView({ state, panels, onLevelUp, onQuestDone });
+const levelView = createLevelView({ state, panels, onLevelUp, onQuestDone, onTutorial: () => tutorial.restart() });
 function openLevel() {
   controller.closeInfo();
   levelView.open();
+  tutorial.note('level'); // v0.52.0: letzter Schritt der Einführung
 }
 
 const audioWindow = createAudioWindow({ panels });
@@ -357,6 +360,7 @@ const shopView = createShopView({
   state,
   panels,
   onChange,
+  onEvent: (event) => tutorial.note(event),
   // v0.50.0: „✏️“ neben „Tobias' Laden“ – danach wieder in den Laden
   onRename(tab) {
     openNameWindow({
@@ -385,8 +389,41 @@ controller = createController({
   worldBounds,
   // v0.34.0: im 3D-Test fragt die Steuerung die 3D-Kamera
   ...(view3d ? { tileAt: (x, y) => view3d.cam.tileAt(x, y), panScreen: (dx, dy) => view3d.cam.panBy(dx, dy) } : {}),
+  onEvent: (event) => tutorial.note(event),
 });
 buildBar.setMode('normal');
+
+// v0.52.0: Einführung mit Bürgermeisterin Hilde – Fenster, Pfeil und Ring
+const tutorial = createTutorialView({ state, ui, panels, letters, buildingRect, onChange });
+
+// Wo ein Gebäude (oder ein Feld) auf dem Bildschirm liegt (Seite) – für Hildes
+// Pfeil und Ring. In 3D: die Ecken am Boden und in Haushöhe; null, wenn es
+// nicht im Bild ist.
+const HOUSE_HEIGHT = 1.3;
+function buildingRect(b, { width, height }, lift = HOUSE_HEIGHT) {
+  const r = canvas.getBoundingClientRect();
+  const points = [];
+  for (const [x, y] of [
+    [b.x, b.y],
+    [b.x + width, b.y],
+    [b.x, b.y + height],
+    [b.x + width, b.y + height],
+  ]) {
+    if (view3d) {
+      for (const h of [0, lift]) {
+        const p = view3d.cam.screenOf(x, h, y);
+        if (!p.visible) return null;
+        points.push(p);
+      }
+    } else points.push(worldToScreen(camera, x * TILE, y * TILE));
+  }
+  const left = Math.max(0, Math.min(...points.map((p) => p.x)));
+  const right = Math.min(r.width, Math.max(...points.map((p) => p.x)));
+  const top = Math.max(0, Math.min(...points.map((p) => p.y)));
+  const bottom = Math.min(r.height, Math.max(...points.map((p) => p.y)));
+  if (right - left < 4 || bottom - top < 4) return null;
+  return { left: r.left + left, top: r.top + top, right: r.left + right, bottom: r.top + bottom };
+}
 panels.setInfoCloseHandler(() => controller.closeInfo());
 
 attachInput(canvas, {
@@ -605,6 +642,7 @@ function frame(now) {
 
   renderer.draw(state, camera, ui);
   needsDraw = false;
+  tutorial.frame(); // v0.52.0: Hildes Pfeil folgt dem Ziel
   fps.frames++;
   if (now - fps.since >= 1000) {
     fps.value = (fps.frames * 1000) / (now - fps.since);
@@ -618,6 +656,7 @@ function frame(now) {
     controller.refresh();
     levelView.refresh();
     hud.update(state); // Gold ändert sich, wenn Kunden kaufen
+    if (!catchUpJob) tutorial.check(); // v0.52.0: angekommen? verkauft?
     // v0.51.0 (Tobias, Chat 29): keine Erinnerungen mehr („Auftrag bereit“,
     // „Genug Erfahrung und Gold“, „Beet reif“) – „weil man in der Regel weiß,
     // ob und wann diese Sachen fertig sind“; oben bleiben ❗ und ⬆.
@@ -644,6 +683,8 @@ async function boot() {
   }
   await loading.finish();
   showStartToasts();
+  // v0.52.0: bei einem neuen Spiel Hildes Begrüßungsbrief (oder der Schritt, bei dem man war)
+  if (!STRESS_TEST) tutorial.start();
 }
 boot();
 
@@ -732,4 +773,6 @@ window.__game = {
   storageCapacity: () => storageCapacity(state),
   // v0.21.0: für den Browser-Test – zuletzt gemessene Bilder pro Sekunde
   fps: () => fps.value,
+  // v0.52.0: für den Browser-Test – wie weit die Einführung ist (null = keine)
+  tutorial: () => (state.tutorial ? { ...state.tutorial, seen: [...state.tutorial.seen], id: tutorialStep(state)?.id ?? null } : null),
 };

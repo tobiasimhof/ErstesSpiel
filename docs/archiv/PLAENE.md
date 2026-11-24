@@ -61,7 +61,7 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.51.0 und v0.52.0 – Neuigkeiten als Schriftrolle, Einführung mit Hilde (Chat 29, v0.50.1; angenommen – v0.51.0 umgesetzt, v0.52.0 folgt)
+### Entwurf v0.51.0 und v0.52.0 – Neuigkeiten als Schriftrolle, Einführung mit Hilde (Chat 29, v0.50.1; angenommen – umgesetzt in v0.51.0 und v0.52.0)
 
 **Tobias (Chat 29, nach v0.50.0):** „Ich habs mir angeschaut. Sieht für den ersten Versuch sehr gut aus. Das können wir erstmal so stehen . Die klänge sind leider gar nicht gut, aber das liegt eher am Soundpack als an der Programmierung. Ich lasse den Sound daher auf 0. Lass uns als nächstes die Einführung mit Hilde planen. Außerdem ist mir aufgefallen, dass Neuerungen die unten im Spielfeld angezeigt leicht verloren gehen. Da würde ich mir auch nochmal ein Fenster wünschen das aufploppt und die Nachricht dann so übermittelt wird, quasi als Brief oder Nachricht zum aufrollen, wie man das aus dem Mittelalter kennt - ohne Zeit, selbst zum wegklicken, damit man alles lesen kann.“
 
@@ -104,6 +104,16 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 **Umgesetzt in v0.51.0** wie in Punkt 1–7, dazu: die Erinnerungen „Auftrag bereit“, „Genug Erfahrung und Gold“ und „Beet reif“ sind entfernt (Frage 3). Siegel: H (Hilde), ⚖ (Händler), ★ (Neues im Spiel). Auch der Hinweis „Die Theken fassen jetzt …“ beim Öffnen kommt als Schriftrolle; „Spielstand geladen“ bleibt kurz unten (Rückmeldung aufs eigene Tippen). Das Pergament rollt sich über die Zeilenhöhe des Rasters auf (0fr → 1fr, 0,55 s), die Rolle liegt über den Fenstern (z. B. über dem Level-Fenster beim Aufstieg).
 
 **Für v0.52.0 festgehalten (Tobias):** Jeder Schritt lässt sich **überspringen** („Weiter ›“), die Einführung lässt sich **ganz beenden**; wer den Schritt erledigt, springt ebenfalls zum nächsten – „so kann man sich durch die Tipps klicken, alles in Ruhe lesen und danach alles machen oder man macht sie … quasi als interaktive Anleitung“. Damit braucht das Ansehen im Level-Fenster keinen eigenen Ablauf.
+
+**Umgesetzt in v0.52.0** (Chat 30, Tobias: „Bringe dich auf den aktuellen stand und beginne mit v52“) wie in Punkt 1–7 und mit Tobias' Ergänzung (Überspringen, Beenden, Erledigen springt weiter). Claudes Lesarten, die Tobias jederzeit ändern kann:
+- **Hilde zeigt je nach Lage woandershin** (Musterbild B zeigte nur den Anfang): z. B. Schritt 2 erst aufs Holzfällerlager, bei offenem Infofenster auf „➕ 1 einlegen“, bei einem anderen offenen Fenster auf ✕. Die Texte und Ziele je Lage stehen in der Datentabelle `core/data/tutorial.js`.
+- **Wann ein Schritt erledigt ist:** Schritt 4 (Band), sobald Holzblöcke im Laden-Lager ankommen (auch wenn das Portal direkt am Ausgang steht – deshalb rät Hilde, 2–3 Felder Platz zu lassen); Schritt 6 (Theke) beim ersten Kauf eines Kunden; Schritt 7 auch beim Kaufen über das Infofenster.
+- **„Beenden“ fragt nach** („Einführung beenden?“) – ein versehentliches Tippen beendet sie nicht. „Weiter ›“ fragt nicht.
+- **✕ klappt Hilde an den linken Rand** (rotes Siegel „H“ mit 💬), Pfeil und Ring bleiben. Ein neuer Schritt klappt sie wieder auf.
+- **Ansehen in einer laufenden Fabrik** (Tobias' 3D-Test, Level 13): Lieferungen und Verkäufe zählen dort nicht, sonst wären Schritt 4 und 6 sofort vorbei; Handgriffe (einlegen, verschieben, Laden öffnen, kaufen, Level-Fenster) zählen weiter. In einem frischen Spiel ist „Ansehen“ eine ganz normale Einführung.
+- **Das Fenster sucht sich eine Ecke** (oben/unten/Mitte, links/rechts), die das Ziel samt Pfeil nie verdeckt und die Gebäude des Schritts, die Vorschau beim Verschieben, Infofenster, Leisten und große Fenster möglichst frei lässt; es wechselt nur, wenn das Ziel darunter rutscht.
+- **Hildes Bild:** das rote Wachssiegel „H“ wie auf ihren Briefen.
+- **Abschlussbrief** „Jetzt bist du dran!“ mit dem ersten Auftrag, der Maschine dazu samt Kosten (aus den Datentabellen) und dem Hinweis auf „🎓 Einführung ansehen“; Knopf „✓ Danke, Hilde!“.
 
 ### Entwurf v0.50.0 und v0.51.0 – Ladebildschirm bei jedem Start, Name, geführte Einführung (Chat 29, v0.49.2; angenommen – v0.50.0 umgesetzt, die Einführung im Entwurf oben weitergeplant)
 

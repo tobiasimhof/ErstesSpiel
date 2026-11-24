@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 24.11.2026 – Chat 30: Einführung mit Hilde (v0.52.0)
+
+**Tobias:** „Bringe dich auf den aktuellen stand und beginne mit v52“
+
+**Claude** hat `STAND.md`, `SPIEL.md`, `TECHNIK.md` und den angenommenen Entwurf in `PLAENE.md` gelesen und v0.52.0 umgesetzt: Bei jedem neuen Spiel kommt nach „Wie heißt du?“ Hildes Begrüßungsbrief („▶ Los geht’s“), dann 7 Schritte in einem kleinen Fenster mit hüpfendem gelbem Pfeil und leuchtendem Ring (Holzstamm einlegen, Portal verschieben, Förderband, Laden-Lager, Theke, Händler, Aufträge), zum Schluss ein Brief mit dem ersten Auftrag und dem Tipp zum Sägewerk. Erledigen springt weiter, wer vorauseilt, wird nicht aufgehalten; „Weiter ›“ überspringt, ✕ klappt Hilde an den Rand, „Beenden“ beendet nach einer Rückfrage. Noch einmal ansehen im Level-Fenster („🏘️ Ort & Level“ → „🎓 Einführung ansehen“). Spielstand-Format 20; Tobias' Fabriken starten sie nicht von selbst. Claudes Lesarten in `PLAENE.md`.
+
+**Umgesetzt:** v0.52.0. Wartet auf Tobias' Test.
+
 ### 24.11.2026 – Chat 29: Ladebildschirm, Name und Einführung (ab v0.49.2)
 
 **Tobias:** „Bring dich auf den aktuellen Stand. Das sind meine antworten zu deinen Fragen: Einen Titel gibt es noch nicht, aber ich hatte irgendwas in richtung factory gedacht. Der Startbildschirm soll immer kommen, ähnlich wie bei ClashofClans, damit man immer quasi einen "ladescreen" hat und wenn man sich das erste mal regisitriert kurz ein Startbildschirm, gib deinen Namen ein und dann gehts schon los. In den ersten Minuten wäre es cool, wenn man gezeigt bekommt wie das Spielfunktioniert und was man machen muss. Ganz kurz erklärt, wie man baut, wie man umplatziert, man kann beim Händler kaufen, bei der Theke verkaufen, alles landet im Lager durch das Portal“

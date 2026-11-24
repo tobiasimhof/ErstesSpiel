@@ -54,6 +54,10 @@
 //  19 (v0.50.0): Name des Spielers (playerName). Bestehende Spielstände
 //               bekommen einen leeren Namen – der Ladebildschirm fragt beim
 //               nächsten Start einmal danach; sonst bleibt alles gleich.
+//  20 (v0.52.0): Einführung mit Hilde (tutorial: Schritt, erledigte
+//               Ereignisse, ansehen). Bestehende Spielstände bekommen keine
+//               (null) – die Einführung kommt nur bei einem neuen Spiel von
+//               selbst; sonst bleibt alles gleich.
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
@@ -70,8 +74,9 @@ import { addAllToStorage, counterSizeFor, fitCounters } from './shop.js';
 import { fitWorldToLevel } from './land.js';
 import { START_PLOT, WORLD, parseTileKey } from './state.js';
 import { isValidPlayerName } from './player.js';
+import { isValidTutorial } from './tutorial.js';
 
-export const SAVE_VERSION = 19;
+export const SAVE_VERSION = 20;
 
 // v0.13.0 (Tobias): Namen, die zu den Zutaten passen. Rezepte und Werte bleiben.
 const RENAMED_V11 = {
@@ -247,6 +252,8 @@ function migrate(state, from, notes = []) {
   if (from < 18 && isObj(state)) state.storageUpgrades = 0;
   // v0.49 → v0.50: noch kein Name – der Ladebildschirm fragt einmal danach
   if (from < 19 && isObj(state)) state.playerName = '';
+  // v0.51 → v0.52: Tobias' Fabrik startet die Einführung nicht von selbst
+  if (from < 20 && isObj(state)) state.tutorial = null;
   return state;
 }
 
@@ -556,6 +563,8 @@ export function isValidState(s) {
   if (!isCount(s.storageUpgrades) || s.storageUpgrades > STORAGE_UPGRADE.max) return false;
   // v0.50.0: Name des Spielers (leer = noch nicht gefragt)
   if (!isValidPlayerName(s.playerName)) return false;
+  // v0.52.0: Einführung (null = keine)
+  if (!isValidTutorial(s.tutorial)) return false;
   // v0.13.0: Aufträge
   if (!isObj(s.quest) || !isCount(s.quest.index) || !isCount(s.quest.xp) || !isCount(s.xpTotal)) return false;
 

@@ -26,6 +26,7 @@ const {
   beltOuts,
   mode,
   waitForGame,
+  skipTutorial,
   readLetter,
   setDevice,
 } = require('./helpers.cjs');
@@ -97,6 +98,8 @@ async function run3d(browser, baseUrl, device) {
   check(!(await page.isDisabled('#name-ok')), 'Mit Namen ist der Knopf „▶ Los geht\'s“ an');
   await page.tap('#name-ok');
   await page.waitForFunction(() => document.getElementById('loading').hidden, null, { timeout: 10000 });
+  // v0.52.0: Hildes Einführung prüft tests/browser/einfuehrung.cjs – hier gleich beenden
+  await skipTutorial(page);
   const named = await game(page, () => ({ name: window.__game.state.playerName, stored: JSON.parse(localStorage.getItem('erstesspiel-spielstand-3d-test')).state.playerName }));
   check(named.name === 'Tobias' && named.stored === 'Tobias', `Der Name steht im Spielstand (${JSON.stringify(named)})`);
   // so hat die echte Fabrik beim Wechsel gespeichert – der 3D-Test darf daran nichts ändern

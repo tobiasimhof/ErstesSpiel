@@ -10,6 +10,7 @@ import { occupies } from './geometry.js';
 import { createCounters, createMarket } from './market.js';
 import { createProductionState } from './production.js';
 import { createQuestState } from './quests.js';
+import { createTutorial } from './tutorial.js';
 
 // v0.6.1: Grundstück 22 × 14 (vorher 16 × 10).
 export const START_PLOT = { x: 8, y: 5, width: 22, height: 14 };
@@ -64,6 +65,8 @@ export function createNewGame(seed) {
     storageUpgrades: 0,
     // v0.50.0: Name des Spielers – leer, bis der Ladebildschirm danach gefragt hat
     playerName: '',
+    // v0.52.0: Einführung mit Hilde – bei einem neuen Spiel von Anfang an
+    tutorial: createTutorial(),
   };
   for (const start of START_BUILDINGS) {
     state.buildings.push({

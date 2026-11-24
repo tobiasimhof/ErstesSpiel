@@ -2815,3 +2815,267 @@ button.quest-skip:active {
     font-size: 20px;
   }
 }
+
+/* ---------- v0.52.0: Einführung mit Bürgermeisterin Hilde ----------
+   Tobias, Chat 29: „so kleine Fenster, die man … einfach wegklicken kann, aber
+   man die Grundlagen dadurch gezeigt bekommt“. Ein kleines Fenster im Holzrahmen
+   wie das Infofenster (src/ui/tutorial.js setzt es in eine Ecke, die das Ziel
+   nicht verdeckt), ein hüpfender gelber Pfeil und ein leuchtender Ring.
+   Über den Fenstern (50), unter den Rückfragen (58), der Schriftrolle (70) und
+   dem Ladebildschirm (80). Pfeil und Ring lassen jedes Tippen durch. */
+#dialog.modal {
+  z-index: 58;
+}
+
+.hilde {
+  position: fixed;
+  left: 8px;
+  top: 60px;
+  z-index: 55;
+  width: min(330px, 42vw);
+  padding: 2px 4px 4px;
+  background: #fff1d2;
+  background-clip: padding-box;
+  border: 16px solid transparent;
+  border-image: url('../assets/kenney-ui/ui-pack-adventure/panel_brown_corners_a.png') 40 / 16px stretch;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.35;
+  transition:
+    left 0.25s ease,
+    top 0.25s ease;
+}
+
+.hilde-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -6px -6px 4px 0;
+}
+
+.hilde-seal {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #e05050, #a31d1d 60%, #7a1010);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  color: #ffd9c8;
+  font: 800 18px Georgia, 'Times New Roman', serif;
+}
+
+.hilde-who {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.hilde-who b {
+  font-size: 14px;
+}
+
+.hilde-step {
+  color: #7a5a35;
+  font-weight: 600;
+}
+
+.hilde-text {
+  margin: 0 0 8px;
+}
+
+.hilde-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.hilde button {
+  min-height: 34px;
+  padding: 0 10px;
+  border: 5px solid transparent;
+  border-image: url('../assets/kenney-ui/ui-pack-adventure/button_brown.png') 10 fill / 5px stretch;
+  border-radius: 0;
+  background: none;
+  font-weight: 700;
+}
+
+.hilde button:active {
+  background: none;
+  filter: brightness(0.9);
+}
+
+.hilde .hilde-next {
+  padding: 0 16px;
+  border-image-source: url('../assets/kenney-ui/ui-pack-adventure/button_green.png');
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.hilde .hilde-close {
+  flex: 0 0 auto;
+  width: 34px;
+  padding: 0;
+  border-image-source: url('../assets/kenney-ui/ui-pack-adventure/button_red.png');
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.hilde .hilde-end {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* weggeklappt: Hilde wartet klein am linken Rand */
+.hilde-mini {
+  position: fixed;
+  left: max(8px, var(--safe-left));
+  top: 50%;
+  z-index: 55;
+  width: 56px;
+  height: 56px;
+  min-height: 0;
+  padding: 0;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-image: url('../assets/kenney-ui/ui-pack-adventure/button_brown.png') 10 fill / 5px stretch;
+  border-radius: 0;
+  background: none;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+.hilde-mini:active {
+  background: none;
+  filter: brightness(0.9);
+}
+
+.hilde-mini-bubble {
+  position: absolute;
+  right: -10px;
+  top: -12px;
+  font-size: 18px;
+  animation: hilde-nod 1.6s ease-in-out infinite;
+}
+
+.hilde-ring {
+  position: fixed;
+  z-index: 55;
+  pointer-events: none;
+  border: 3px solid #ffd23f;
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 2px rgba(90, 58, 18, 0.65),
+    0 0 18px 6px rgba(255, 210, 63, 0.75);
+  animation: hilde-glow 1.2s ease-in-out infinite;
+}
+
+.hilde-ring.round {
+  border-radius: 50%;
+}
+
+.hilde-arrow {
+  position: fixed;
+  z-index: 56;
+  width: 36px;
+  height: 46px;
+  pointer-events: none;
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.45));
+}
+
+.hilde-arrow.up {
+  transform: rotate(180deg);
+}
+
+.hilde-arrow svg {
+  display: block;
+  animation: hilde-bounce 0.9s ease-in-out infinite;
+}
+
+@keyframes hilde-bounce {
+  0%,
+  100% {
+    transform: translateY(-8px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes hilde-glow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes hilde-nod {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* Level-Fenster, Reiter „Ort & Level“: „🎓 Einführung ansehen“ */
+.tutorial-again {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin: 0 0 10px;
+}
+
+.tutorial-again .modal-meta {
+  flex: 1 1 220px;
+  margin: 0;
+}
+
+@media (max-height: 420px) {
+  .hilde {
+    width: min(300px, 40vw);
+    padding: 0 2px 2px;
+    border-width: 12px;
+    border-image-width: 12px;
+    font-size: 13.5px;
+    line-height: 1.3;
+  }
+
+  .hilde-seal {
+    width: 30px;
+    height: 30px;
+    font-size: 15px;
+  }
+
+  .hilde-head {
+    margin: -4px -4px 2px 0;
+  }
+
+  .hilde-text {
+    margin-bottom: 6px;
+  }
+
+  .hilde button {
+    min-height: 30px;
+  }
+
+  .hilde .hilde-close {
+    width: 30px;
+  }
+
+  .hilde-mini {
+    width: 48px;
+    height: 48px;
+  }
+}

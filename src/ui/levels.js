@@ -93,7 +93,8 @@ const TABS = [
   { key: 'town', label: '🏘️ Ort & Level' },
 ];
 
-export function createLevelView({ state, panels, onLevelUp, onQuestDone }) {
+// v0.52.0: onTutorial – „🎓 Einführung ansehen“ im Reiter „Ort & Level“
+export function createLevelView({ state, panels, onLevelUp, onQuestDone, onTutorial = null }) {
   let open = false;
   let tab = 'quests';
   let refs = null;
@@ -276,7 +277,17 @@ export function createLevelView({ state, panels, onLevelUp, onQuestDone }) {
 
   // ---------- Reiter „Ort & Level“ ----------
 
-  function buildTown(body) {
+  function buildTown(body, { makeButton }) {
+    // v0.52.0 (Tobias, Chat 29): Hildes Einführung noch einmal ansehen – jeder
+    // Schritt lässt sich mit „Weiter ›“ überspringen, an der Fabrik muss also
+    // nichts umgebaut werden
+    if (onTutorial) {
+      const box = el('div', 'tutorial-again');
+      const button = makeButton({ label: '🎓 Einführung ansehen', onClick: onTutorial });
+      button.id = 'level-tutorial';
+      box.append(button, el('span', 'modal-meta', 'Hilde zeigt dir die Grundlagen noch einmal – jeden Schritt kannst du mit „Weiter ›“ überspringen.'));
+      body.append(box);
+    }
     body.append(
       el(
         'p',
