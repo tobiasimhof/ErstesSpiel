@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 23.11.2026 – Chat 28: Oberfläche mit Kenneys UI-Paketen – Probefenster (v0.46.2, v0.47.0)
+### 23.11.2026 – Chat 28: Oberfläche mit Kenneys UI-Paketen – Probefenster, Entwurf für den Rest (v0.46.2 bis v0.47.1)
 
 **Tobias:** „Bringe dich auf den aktuellsten Stand.“
 
@@ -21,6 +21,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat v0.47.0 umgesetzt: die vier Kräuter mit eigener Form in allen Warenbildern (wie im Musterbild), Samen als Tüte in ihrer Farbe mit dem Bild der Pflanze; die Erntebank-Knöpfe mit großem Bild und Namen; im 3D-Test wachsen 3 × 3 Pflanzen im Beet in vier Stufen (Keimling, klein, Knospen ab 60 %, reif blühend); das Infofenster mit Kenneys Holzrahmen B, Holzknöpfen (grün aus dem roten Knopf umgefärbt), verzierten Kästen und runden Vorrat-Fächern. Klänge kommen mit dem Menü (v0.48.0).
 
 **Umgesetzt:** v0.47.0.
+
+**Tobias:** „Perfek, das hat funktioniert. Lass uns weitermachen“
+
+**Claude** hat den Entwurf für die nächsten Schritte geschrieben (`PLAENE.md`): v0.48.0 – die großen Fenster (Laden, Level, Befüllen, Willkommen zurück) und Rückfragen im Stil B, Reiter klar markiert (gewählter Reiter dunkles Holz), das Menü ☰ als Holztafel mit neuem Eintrag „🔊 Audio“ (Klänge an/aus, Lautstärke; gespeichert auf dem Gerät, nicht im Spielstand), Klänge aus Kenneys UI Audio (Klicken beim Antippen, ein anderes Geräusch beim Reiterwechsel); v0.49.0 – Bauleiste, Leiste oben, Knöpfe unten, ⟲ ⟳ und die Schilder „＋ Preis“. Fragen: zwei Schritte so? Klänge beim Start an oder aus, Regler oder nur an/aus? Welche Klänge (Tobias kann sie im Paket anhören)? Später Fabrik-Geräusche?
+
+**Umgesetzt:** v0.47.1 (nur Doku). Wartet auf Tobias' Antworten.
 
 ### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen, Rechenwerkzeug, Level 14, Waren auf dem Band, nächste große Schritte (v0.43.1 bis v0.46.1)
 

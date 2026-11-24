@@ -61,6 +61,32 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.48.0 und v0.49.0 – der Rest der Oberfläche im Kenney-Stil, Klänge mit Menüpunkt „Audio“ (Chat 28, v0.47.1; wartet auf Tobias' OK)
+
+**Tobias (Chat 28, nach v0.47.0):** „Perfekt, das hat funktioniert. Lass uns weitermachen“ – vorher: „Die Sounds machen wir erst bei dem Menu, dass wir auch einen Menüpunkt mit Audio haben, um das ganze zu steuern, aber der Stil des UI's gefällt mir“.
+
+**Was noch im alten Aussehen ist:** die großen Fenster (Laden mit Lager, Theken, Händler; Level-Fenster mit Aufträgen und Ort & Level; Lagerhaus befüllen; „Willkommen zurück“), die Rückfragen (z. B. „Wirklich abreißen?“), das Menü ☰, die Bauleiste mit ihren Reitern, die Leiste oben (Gold, Laden-Level, Vollbild, ☰), die großen Knöpfe unten (Laden, Bauen), ⟲ ⟳ und die Schilder „＋ 170 🪙“.
+
+**Vorschlag – zwei Schritte (lieber kleine Schritte):**
+
+**v0.48.0 – Fenster, Menü und Klänge**
+1. **Große Fenster und Rückfragen** im Stil B wie das Infofenster: Holzrahmen mit Eisenbeschlägen, Holzknöpfe (grün = Hauptknopf wie „Kaufen“, „Abgeben“, „Aufsteigen“; rot = Abreißen, Neues Spiel), Zeilen und Kästen mit verziertem Holzrahmen, rotes ✕.
+2. **Reiter klar markiert** (Lager / Theken / Händler, Aufträge / Ort & Level): der gewählte Reiter dunkles Holz mit heller Schrift, die anderen helles Holz – so sieht man sofort, wo man ist (Tobias' Wunsch aus Chat 27: „welche … ich gerade ausgewählt habe“).
+3. **Menü ☰** als Holztafel, dazu ein neuer Eintrag **„🔊 Audio“**: Klänge an/aus und Lautstärke (Regler). Die Einstellung gilt für das Gerät (im Browser gespeichert, nicht im Spielstand – das Spielstand-Format bleibt gleich).
+4. **Klänge aus Kenneys UI Audio** (`.ogg`, je wenige KB): ein leises Klicken beim Antippen von Knöpfen, ein anderes Geräusch beim Wechseln von Reitern und Schaltern. Fabrik-Geräusche (Säge, Kasse …) gehören nicht zu diesem Paket – vielleicht später mit einem anderen Kenney-Paket.
+
+**v0.49.0 – Bauleiste und Leisten**
+5. **Bauleiste** als Holzleiste, die Reiter (Holz, Stein, Eisen, Erde, Werkstatt) als Holzreiter, der offene klar markiert; die Gebäude-Kacheln mit Holzrahmen.
+6. **Leiste oben** (Gold, Laden-Level, Vollbild, ☰), **Knöpfe unten** (Laden, Bauen), **⟲ ⟳** und die **Schilder „＋ Preis“** im selben Stil.
+
+Spielregeln und Spielstand-Format bleiben in beiden Schritten gleich.
+
+**Fragen an Tobias:**
+1. Zwei Schritte so (erst Fenster, Menü und Klänge, dann Bauleiste und Leisten)?
+2. Klänge beim ersten Start **an oder aus**? Lautstärke als Regler oder nur „an/aus“?
+3. Welche Klänge? Tobias kann sie im heruntergeladenen Paket anhören (Ordner `Audio`: `click1`–`click5`, `switch1`–`switch38`, `rollover1`–`rollover6`) und Namen nennen – sonst wählt Claude zwei passende aus.
+4. Soll es später auch Fabrik-Geräusche geben (eigener Schritt, anderes Paket)?
+
 ### Entwurf v0.47.0 – Probefenster: Kräuter klar unterscheidbar, schlichte Oberfläche mit Kenney (Chat 28, v0.46.2; angenommen mit Rahmen B, umgesetzt in v0.47.0 – Klänge erst mit dem Menü)
 
 **Tobias (Chat 28):** „Wenn ich auswählen muss, welche Kräuter ich nutzen möchte, damit daraus Blüten entstehen. Aktuell gibt es nur 4 Buttons bei dem ich auswählen kann, welche Kräuter und diese Kräuter sehen alle gleich aus unterscheiden sich nur in der Farbe, das finde ich sehr unübersichtlich. Außerdem die Bilder in den Kräuterbeeten kann man jetzt auch nicht wirklich gut erkenne, deswegen denke ich es wäre besser die Kräuter anders darzustellen, damit man da einen klaren Unterschied erkennen kann. Mir passt es, dass du erst ein probefenster baust. Ich möchte noch kein fertiges perfektes UI design, sondern eher was schlichtes, damit man einfach eine besseres Bild von dem Spiel bekommt als diese KI-HTML darstellung, weil wir über diesen level mit den assets ja schon hinaus sind. Ich hab dir noch Audio für UI hinzugefügt und noch ein weiteres Pack, weil ich das ausversehen verwechselt habe.“

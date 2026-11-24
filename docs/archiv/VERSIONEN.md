@@ -4,6 +4,22 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.47.1 – v0.47.0 läuft live, Entwurf Rest der Oberfläche mit Klängen (24.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung festhalten („Perfek, das hat funktioniert. Lass uns weitermachen“) und den nächsten Schritt planen.
+
+**Fragen, die wir uns gestellt haben:**
+- Was ist noch im alten Aussehen? → Große Fenster, Rückfragen, Menü, Bauleiste, Leiste oben, Knöpfe unten, ⟲ ⟳, Schilder „＋ Preis“ (Bildschirmfotos aus dem Browser-Test angesehen).
+- Wie viel auf einmal? → Zwei Schritte: v0.48.0 Fenster, Menü und Klänge (Tobias wollte die Klänge zusammen mit dem Menü), v0.49.0 Bauleiste und Leisten.
+- Wo wird die Audio-Einstellung gespeichert? → Im Browser des Geräts, nicht im Spielstand – das Spielstand-Format bleibt gleich.
+
+**Gemacht:**
+- Entwurf in `PLAENE.md`, `STAND.md`, Archiv. Versionsnummer 0.47.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 449 von 449 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.47.0 – Probefenster: Kräuter klar unterscheidbar, Infofenster im Kenney-Stil (23.11.2026)
 
 **Vorgenommen:**

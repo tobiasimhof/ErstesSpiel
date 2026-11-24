@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.47.0 – Probefenster: Kräuter mit eigener Form, Pflanzen wachsen im Beet, Infofenster im Kenney-Stil (Holzrahmen mit Eisenbeschlägen) |
+| **Aktuelle Version** | v0.47.1 – Entwurf Rest der Oberfläche mit Klängen (nur Doku; im Spiel seit v0.47.0: Kräuter mit eigener Form, Pflanzen wachsen im Beet, Infofenster im Kenney-Stil) |
 | **Phase** | M2 – Produktionsketten (Level 1–14 im Spiel); Fokus jetzt auf dem 3D-Test |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ (3D-Test; die echte Fabrik: https://tobiasimhof.github.io/ErstesSpiel/?ansicht=2d) |
-| **Nächster Schritt** | **Tobias testet v0.47.0** (Kräuter, Beete, Infofenster). Danach **v0.48.0: der Rest der Oberfläche** im selben Stil (Bauleiste, Laden, Level-Fenster, Menü, Leiste oben) mit **Klängen** und einem Menüpunkt „Audio“ (Tobias: „Die Sounds machen wir erst bei dem Menu“); dann Startbildschirm, Name, kurze Spielregeln; dann Level 15. |
+| **Nächster Schritt** | **Entwurf in `PLAENE.md`, wartet auf Tobias' OK:** v0.48.0 – große Fenster, Rückfragen und Menü im Kenney-Stil, Reiter klar markiert, Menüpunkt „🔊 Audio“ mit Klängen; v0.49.0 – Bauleiste, Leiste oben, Knöpfe unten. Fragen: zwei Schritte? Klänge beim Start an/aus, Regler? Welche Klänge? Dann Startbildschirm, Name, Spielregeln; dann Level 15. |
 
 **Tobias' 3D-Test – Level 13 abgeschlossen** (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik). Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
 
@@ -54,6 +54,11 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.47.1 – Entwurf Rest der Oberfläche mit Klängen (24.11.2026, nur Doku)
+
+- **Tobias:** v0.47.0 läuft live – „Perfek, das hat funktioniert. Lass uns weitermachen“.
+- **Claude:** Entwurf v0.48.0 (Fenster, Menü, „🔊 Audio“, Klänge) und v0.49.0 (Bauleiste, Leisten) in `PLAENE.md`. Offen: Tobias' Antworten.
+
 ### v0.47.0 – Probefenster: Kräuter klar unterscheidbar, Infofenster im Kenney-Stil (23.11.2026)
 
 - **Warum (Tobias, Chat 28):** Die Kräuter-Knöpfe „sehen alle gleich aus unterscheiden sich nur in der Farbe“, die Beete sind schwer zu erkennen; „eher was schlichtes“ statt der KI-HTML-Darstellung. Zum Musterbild: „Mir gefällt B besser und die neuen Kräuterbilder sind auch sehr gut … dass man die Kräuter auch aufwachsen sieht, finde ich auch super“.
@@ -64,8 +69,3 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 - **Tobias (Chat 28):** Die vier Kräuter-Knöpfe der Erntebank „sehen alle gleich aus unterscheiden sich nur in der Farbe“, auch die Bilder in den Beeten sind schwer zu erkennen. „Mir passt es, dass du erst ein probefenster baust“ – schlicht, kein fertiges Design. Upload: UI Pack Adventure, Fantasy UI Borders, UI Pack, Pixel Adventure (verwechselt), UI Audio.
 - **Claude:** Pakete angesehen, Musterbild geschickt (Rahmen A / B, neue Kräuterbilder), Entwurf v0.47.0 in `PLAENE.md`.
-
-### v0.46.1 – nächste große Schritte festgehalten (23.11.2026, nur Doku)
-
-- **Tobias (Chat 27):** Die Waren sehen „sehr gut aus“. Es fehlt eine passende Oberfläche – ausgewählte Kräuter sind schwer zu erkennen; er lädt Kenneys UI-Pakete herunter. Danach Startbildschirm, Name, kurze Spielregeln. „das würde ich in einem neuen Chat machen“.
-- **Claude:** Reihenfolge und Vorbereitung für den nächsten Chat in `PLAENE.md` (Pakete, Hochladen, was sich ändert, erste Fragen).
