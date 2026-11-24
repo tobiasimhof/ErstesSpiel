@@ -661,6 +661,29 @@ async function run3d(browser, baseUrl, device) {
   check(JSON.parse(await game(page, () => localStorage.getItem('erstesspiel-audio'))).on === false, 'Audio: wieder aus');
   await page.tap('#modal-close');
   await sleep(150);
+  // v0.49.0: Bauleiste und Leisten im selben Stil – offener Reiter dunkles Holz,
+  // Knöpfe oben und unten Holzknöpfe, alle Reiter auf dem Bildschirm
+  await page.tap('#btn-build');
+  await sleep(300);
+  const barLook = await page.evaluate(() => {
+    const src = (sel) => getComputedStyle(document.querySelector(sel)).borderImageSource.split('/').pop().replace(/["')]/g, '');
+    const tabs = [...document.querySelectorAll('#build-tabs .build-tab')].map((t) => t.getBoundingClientRect());
+    return {
+      active: src('#build-tabs .build-tab.active'),
+      other: src('#build-tabs .build-tab:not(.active)'),
+      close: src('#build-close'),
+      menu: src('#btn-menu'),
+      shop: src('#btn-shop'),
+      tabsFit: tabs.every((r) => r.left >= 0 && r.right <= innerWidth),
+    };
+  });
+  check(
+    barLook.active === 'button_dark.png' && barLook.other === 'button_brown.png' && barLook.close === 'button_red.png' && barLook.menu === 'button_brown.png' && barLook.shop === 'button_brown.png' && barLook.tabsFit,
+    `Bauleiste und Leisten: offener Reiter dunkel, Holzknöpfe, ✕ rot, alle Reiter passen (${JSON.stringify(barLook)})`,
+  );
+  await shot('3d-11g-bauleiste');
+  await page.tap('#build-close');
+  await sleep(200);
 
   // Eigener Spielstand: der 3D-Test speichert getrennt, die echte Fabrik bleibt
   await game(page, () => window.__game.saveNow());

@@ -245,23 +245,27 @@ const LAND_SIGN = { w: 256, h: 88 };
 function drawLandSign(ctx, price, affordable) {
   const { w, h } = LAND_SIGN;
   ctx.clearRect(0, 0, w, h);
-  const r = 34;
-  ctx.beginPath();
-  ctx.moveTo(8 + r, 8);
-  ctx.arcTo(w - 8, 8, w - 8, h - 8, r);
-  ctx.arcTo(w - 8, h - 8, 8, h - 8, r);
-  ctx.arcTo(8, h - 8, 8, 8, r);
-  ctx.arcTo(8, 8, w - 8, 8, r);
-  ctx.closePath();
-  ctx.fillStyle = 'rgba(36, 26, 16, 0.86)';
-  ctx.fill();
-  ctx.lineWidth = 4;
-  ctx.strokeStyle = '#f3e6c4';
-  ctx.stroke();
+  // v0.49.0: Holzschild in Kenneys Farben wie die Knöpfe der Oberfläche –
+  // außen dunkler Umriss, dann Holzrand, innen Pergament; reicht das Gold
+  // nicht, ist es blasser
+  const plate = (inset, radius, color) => {
+    ctx.beginPath();
+    ctx.moveTo(inset + radius, inset);
+    ctx.arcTo(w - inset, inset, w - inset, h - inset, radius);
+    ctx.arcTo(w - inset, h - inset, inset, h - inset, radius);
+    ctx.arcTo(inset, h - inset, inset, inset, radius);
+    ctx.arcTo(inset, inset, w - inset, inset, radius);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+  };
+  plate(8, 22, '#6d4b27');
+  plate(12, 18, '#b47b41');
+  plate(20, 12, affordable ? '#fff1d2' : '#e9dcc0');
   ctx.font = '700 40px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif, "Noto Color Emoji"';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = affordable ? '#ffe066' : 'rgba(243, 230, 196, 0.6)';
+  ctx.fillStyle = affordable ? '#3b2a1a' : 'rgba(59, 42, 26, 0.45)';
   ctx.fillText(`＋ ${price.toLocaleString('de-DE')} 🪙`, w / 2, h / 2 + 2);
 }
 
