@@ -62,6 +62,8 @@ export function createNewGame(seed) {
     xpTotal: 0,
     // v0.30.0: So oft wurde das Laden-Lager vergrößert (je +100 Plätze)
     storageUpgrades: 0,
+    // v0.50.0: Name des Spielers – leer, bis der Ladebildschirm danach gefragt hat
+    playerName: '',
   };
   for (const start of START_BUILDINGS) {
     state.buildings.push({

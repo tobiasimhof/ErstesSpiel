@@ -26,7 +26,7 @@ import {
   skipQuest,
   xpNeeded,
 } from '../core/quests.js';
-import { costText, itemCount, numberFormat } from './format.js';
+import { costText, fillName, itemCount, numberFormat } from './format.js';
 import { createItemIcon } from './itemArt.js';
 
 function el(tag, className, text) {
@@ -142,7 +142,7 @@ export function createLevelView({ state, panels, onLevelUp, onQuestDone }) {
       const card = el('div', 'quest-card');
       const head = el('div', 'quest-head');
       head.append(el('span', 'quest-from', `🧑 ${quest.from}`), el('span', 'quest-number', `Auftrag ${number} von ${total}`));
-      card.append(head, el('p', 'quest-text', `„${quest.text}“`));
+      card.append(head, el('p', 'quest-text', `„${fillName(quest.text, state.playerName)}“`));
       const list = el('div', 'goal-list');
       for (const [type, need] of Object.entries(quest.items)) {
         const row = el('div', 'goal-row');

@@ -126,8 +126,8 @@ test('Das Versandportal schickt Waren, bis auch das größere Lager voll ist', (
 
 // ---------- Spielstand ----------
 
-test('Spielstand: Format 18, die Ausbauten bleiben nach Speichern und Laden erhalten', () => {
-  assert.equal(SAVE_VERSION, 18);
+test('Spielstand: ab Format 18 bleiben die Ausbauten nach Speichern und Laden erhalten', () => {
+  assert.ok(SAVE_VERSION >= 18);
   const state = levelGame(11, 20000);
   buyStorageUpgrade(state);
   buyStorageUpgrade(state);

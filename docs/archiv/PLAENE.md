@@ -61,7 +61,7 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.50.0 und v0.51.0 – Ladebildschirm bei jedem Start, Name, geführte Einführung (Chat 29, v0.49.2; wartet auf Tobias' Antworten)
+### Entwurf v0.50.0 und v0.51.0 – Ladebildschirm bei jedem Start, Name, geführte Einführung (Chat 29, v0.49.2; angenommen – v0.50.0 umgesetzt, v0.51.0 folgt)
 
 **Tobias (Chat 29, Antwort auf die Fragen der Vorbereitung unten):** „Einen Titel gibt es noch nicht, aber ich hatte irgendwas in richtung factory gedacht. Der Startbildschirm soll immer kommen, ähnlich wie bei ClashofClans, damit man immer quasi einen "ladescreen" hat und wenn man sich das erste mal regisitriert kurz ein Startbildschirm, gib deinen Namen ein und dann gehts schon los. In den ersten Minuten wäre es cool, wenn man gezeigt bekommt wie das Spielfunktioniert und was man machen muss. Ganz kurz erklärt, wie man baut, wie man umplatziert, man kann beim Händler kaufen, bei der Theke verkaufen, alles landet im Lager durch das Portal“
 
@@ -104,6 +104,14 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 2. Ladebildschirm: automatisch weiter wie bei Clash of Clans (Empfehlung) – oder am Ende „▶ Antippen zum Spielen“, das dabei gleich auf Vollbild schaltet (der Browser erlaubt Vollbild nur nach einem Antippen)?
 3. Einführung: Passen die 8 Schritte und ihre Reihenfolge? Soll Bürgermeisterin Hilde führen?
 4. Zwei Schritte so – v0.50.0 Ladebildschirm und Name, v0.51.0 Einführung?
+
+**Tobias' Antwort:** „Ladebildschirm gefällt mir. Immerhin ist es auch Mobile-Game, deswegen sollte man quasi direkt starten können. Erster Start finde ich auch gut. Titel gefallen mir alle noch nicht wirklich. Beim Ladebildschirm würde ich deine Empfehlung nehmen. Ja, Hilde kann führen und die 8 Schritte passen auch. Finde es cool, wenn das so kleine Fenster sind, die man, wie du schon sagst, dann einfach wegklicken kann, aber man die Grundlagen dadurch gezeigt bekommt. Wir können das auch gerne in zwei Schritte machen“
+
+**Umgesetzt in v0.50.0** wie in Punkt 1–5, mit diesen Abweichungen: **Titel** bleibt ein Platzhalter („Factory“, darunter „Arbeitstitel · ein Fabrikspiel im Mittelalter“), nur auf dem Ladebildschirm – Browser-Reiter und App-Name bleiben „ErstesSpiel“, bis es einen Titel gibt. **„✏️ Name ändern“** sitzt im Laden-Fenster neben „Tobias' Laden“ statt im Menü ☰: Im Testmodus hat das Menü schon 8 Einträge, ein neunter hätte auf dem Handy (390 Bildpunkte hoch) nicht mehr gepasst. Der Ladebildschirm geht ohne Antippen weiter (Empfehlung); das Namensfenster steht oben unter dem Titel, damit die Bildschirmtastatur das Feld nicht verdeckt. Das Titelbild ist eine Aufnahme aus dem Belastungstest (Schilder ausgeblendet). Meldungen beim Start (z. B. „Spielstand geladen“) kommen erst nach dem Ladebildschirm.
+
+**Neue Titel-Ideen** (mit v0.50.0 an Tobias, per Websuche kein Spiel dieses Namens gefunden): **„Faktorei“** (so hießen die Handelshäuser der Kaufleute im Mittelalter – Handel und Fabrik in einem Wort), **„Werkstadt“** (Werkstatt + Stadt: der Ort wächst mit der Werkstatt), **„Zahnradtal“**.
+
+**Für v0.51.0 festgehalten (Tobias):** kleine Fenster, die man „einfach wegklicken kann, aber man die Grundlagen dadurch gezeigt bekommt“ – also jede Sprechblase mit Hilde lässt sich wegklicken; beim Planen klären, ob ein Schritt trotzdem auf das Tun wartet oder ob „Weiter“ reicht.
 
 ### Vorbereitung für den nächsten Chat: Startbildschirm, Name, kurze Spielregeln (Chat 28, v0.49.1; in Chat 29 beantwortet – Entwurf v0.50.0/v0.51.0 oben)
 

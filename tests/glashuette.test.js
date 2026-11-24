@@ -283,8 +283,8 @@ test('Testpaket auf Level 13: Glas und Fläschchen (kein Sand); auf Level 12 noc
   for (const type of ['glas', 'flaeschchen']) assert.equal(storageCount(twelve, type), 0, type);
 });
 
-test('Spielstand: Ofen mit Sand und Holzstamm, Schmiede auf Fläschchen und 6 Theken bleiben nach Speichern und Laden – das Format bleibt 18', () => {
-  assert.equal(SAVE_VERSION, 18, 'kein neues Spielstand-Format nötig');
+test('Spielstand: Ofen mit Sand und Holzstamm, Schmiede auf Fläschchen und 6 Theken bleiben nach Speichern und Laden – kein eigenes Format nötig', () => {
+  assert.ok(SAVE_VERSION >= 18, 'kein neues Spielstand-Format nötig');
   const state = levelGame(13, 400000);
   state.storage = { sand: 2, holzstamm: 1 };
   const ofen = placeBuilding(state, 'kohlenmeiler', 10, 6, 0);

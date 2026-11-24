@@ -24,3 +24,15 @@ export function costText(cost) {
     .map(([type, n]) => itemCount(type, n))
     .join(' + ');
 }
+
+// v0.50.0: „Tobias' Laden“, „Annas Laden“ – endet der Name auf s, ß, x oder z,
+// nur ein Apostroph (deutsche Rechtschreibung), sonst ein angehängtes s.
+export function possessive(name) {
+  return /[sßxz]$/i.test(name) ? `${name}'` : `${name}s`;
+}
+
+// v0.50.0: Texte mit „{name}“ (z. B. „Willkommen im Ort, {name}!“) – ohne
+// Namen fällt der Platzhalter samt Komma davor weg („Willkommen im Ort!“).
+export function fillName(text, name) {
+  return name ? text.replaceAll('{name}', name) : text.replace(/,?\s*\{name\}/g, '');
+}

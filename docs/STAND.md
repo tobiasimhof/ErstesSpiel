@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.49.2 – Tobias' Antworten zu Ladebildschirm, Name und Einführung, Entwurf v0.50.0/v0.51.0 (nur Doku; im Spiel seit v0.49.0 die Oberfläche schlicht in Holz, Kenney-Stil) |
+| **Aktuelle Version** | v0.50.0 – Ladebildschirm bei jedem Start und Name (Spielstand-Format 19) |
 | **Phase** | M2 – Produktionsketten (Level 1–14 im Spiel); Fokus jetzt auf dem 3D-Test |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ (3D-Test; die echte Fabrik: https://tobiasimhof.github.io/ErstesSpiel/?ansicht=2d) |
-| **Nächster Schritt** | **Tobias' Antworten auf den Entwurf** (`PLAENE.md`, Chat 29): Titel („Flussfactory“?), Ladebildschirm automatisch weiter oder „▶ Antippen“, die 8 Schritte der Einführung mit Hilde. Dann v0.50.0 Ladebildschirm und Name, v0.51.0 Einführung, danach Level 15. Offen: Klänge „noch ausbaufähig“. |
+| **Nächster Schritt** | Tobias testet v0.50.0. Dann **v0.51.0 Einführung**: Hilde führt in 8 Schritten, kleine Fenster zum Wegklicken (Entwurf in `PLAENE.md`, Chat 29). Danach Level 15. Offen: Titel (Platzhalter „Factory“), Klänge „noch ausbaufähig“. |
 
 **Tobias' 3D-Test – Level 13 abgeschlossen** (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik). Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
 
@@ -48,11 +48,18 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 9. **Einstieg:** am Anfang vor allem die Massenproduktion ausbauen – später austesten.
 10. **Pleiteschutz:** Ein Rohstoff ohne passendes Gebäude verhindert das Geschenk – beobachten.
 11. **Vor v1.0:** Test-Knopf entfernen (`QUEST_TEST_SKIP = false`). Später: Schwarzmarkt, verbundene Läden, Arbeitstitel.
-12. **Anderen das Spiel zeigen:** geht seit v0.22.0 (eigene Geräte oder sichern → neues Spiel → laden); die geführte Einführung kommt mit v0.51.0.
+12. **Anderen das Spiel zeigen:** geht seit v0.22.0 (eigene Geräte oder sichern → neues Spiel → laden; seit v0.50.0 mit eigenem Namen); die geführte Einführung kommt mit v0.51.0.
 13. **Techbaum:** Werkzeuge, Kräuter und Tränke wachsen parallel; höchstens 2 Eingänge je Maschine; jedes Produkt entsteht logisch aus seinen Zutaten.
 14. **Grafik:** entschieden – frei drehbar, Mittelalter, Spiel-Farben, eigene Häuser je Gebäude; von weitem nur Statuslichter (Vorschlag A, Chat 25). Mix aus Modern und Mittelalter: entschieden – Möglichkeit B, Mittelalter mit ein paar Technik-Teilen (Zahnräder in Messing und Stahl, später Glasrohre), sparsam, ohne Greifarm (Chat 26). Offen für später: Rückseiten der Häuser unterscheidbar machen (Chat 27). Oberfläche: Kenneys UI Pack Adventure, Rahmen B mit Eisenbeschlägen, schlicht (Chat 28). Klänge „noch ausbaufähig“ (Tobias) – andere aussuchen oder Fabrik-Geräusche, später.
+15. **Titel:** Richtung „Factory“; „Flussfactory“, „Zunft-Factory“, „Medieval Factory“ gefallen Tobias nicht – bis dahin Platzhalter „Factory“ auf dem Ladebildschirm.
 
 ## Die letzten 3 Arbeitsschritte
+
+### v0.50.0 – Ladebildschirm bei jedem Start und Name (24.11.2026)
+
+- **Warum (Tobias, Chat 29):** „Ladebildschirm gefällt mir. Immerhin ist es auch Mobile-Game, deswegen sollte man quasi direkt starten können. Erster Start finde ich auch gut.“ Titel: „gefallen mir alle noch nicht wirklich“.
+- **Umgesetzt:** Ladebildschirm mit Bild aus der 3D-Welt, Titel-Platzhalter „Factory“, Balken (Modelle, Zeit nachholen) und Tipp, nach mindestens 2 Sekunden von selbst weiter; beim ersten Start „Wie heißt du?“; Name im Spielstand (Format 19), „Tobias' Laden“ mit ✏️ zum Ändern, Hilde, „Willkommen zurück“, Dateiname.
+- **Offen:** Tobias' Test; v0.51.0 Einführung; Titel.
 
 ### v0.49.2 – Antworten zu Ladebildschirm, Name und Einführung (24.11.2026, nur Doku)
 
@@ -63,9 +70,3 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 - **Tobias:** „Ja, gefällt mir alles sehr gut. Lass uns die nächsten Schritte in einem neuen Chat machen“ – dort schlägt Claude direkt die Richtung vor.
 - **Claude:** Vorbereitung in `PLAENE.md`: Startbildschirm, Name (Spielstand-Format 19), Spielregeln (Fenster mit Seiten oder geführte Einführung), erste Fragen.
-
-### v0.49.0 – Bauleiste, Leisten, Knöpfe und Schilder im Kenney-Stil (24.11.2026)
-
-- **Tobias zu v0.48.0:** „das ganze sieht sehr gut aus“; schlichtes Design „sehr passend für den ersten Entwurf“, „Die Fenster sind gut, die Klänge noch ausbaufähig, aber lass uns gerne weitermachen, damit wir das Design abrunden können“.
-- **Umgesetzt:** Leiste oben und Bauleiste dunkles Holz, alle Knöpfe Holzknöpfe, offener Reiter dunkel, ✕ rot, Schilder „＋ Preis“ als Holzschild.
-- **Offen:** Tobias' Test; Klänge; dann Startbildschirm, Name, Spielregeln.

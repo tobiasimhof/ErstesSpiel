@@ -133,7 +133,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.tap('#btn-shop');
   await sleep(80);
   const shopText = await page.textContent('#modal-content');
-  check(shopText.includes('Dein Laden') && shopText.includes('Holzstamm') && shopText.includes('Holzblock'), 'Laden-Fenster zeigt Laden-Lager mit Startvorrat');
+  check(shopText.includes('Testers Laden') && shopText.includes('Holzstamm') && shopText.includes('Holzblock'), 'Laden-Fenster zeigt Laden-Lager mit Startvorrat');
   check((await page.locator('#modal-content .tab').count()) === 3, 'Laden-Fenster hat drei Reiter');
   // v0.30.0: Laden-Lager vergrößern erst ab Level 7
   const upgrade1 = await page.textContent('#modal-content .storage-upgrade');
@@ -2363,7 +2363,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(150);
   const upgradeAsk = await page.textContent('#dialog');
   check(
-    upgradeAsk.includes('Laden-Lager vergrößern?') && upgradeAsk.includes('1.000 → 1.100') && upgradeAsk.includes('Danach hast du noch 3.000 Gold'),
+    // v0.50.0: Die Fabrik läuft weiter – kauft gerade ein Kunde, sind es ein paar Gold mehr als 3.000
+    upgradeAsk.includes('Laden-Lager vergrößern?') && upgradeAsk.includes('1.000 → 1.100') && /Danach hast du noch 3\.0\d\d Gold/.test(upgradeAsk),
     `Rückfrage vor dem Ausbau („${upgradeAsk}“)`,
   );
   await shot('23b-lager-frage');
@@ -2682,7 +2683,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await game(page, () => window.__game.away(20 * 60));
   await page.waitForFunction(() => !window.__game.isCatchingUp(), null, { timeout: 15000 });
   await sleep(150);
-  check((await page.textContent('#modal-content h2')) === '👋 Willkommen zurück!', 'Nach 20 Minuten: Fenster „Willkommen zurück“');
+  check((await page.textContent('#modal-content h2')) === '👋 Willkommen zurück, Tester!', 'Nach 20 Minuten: Fenster „Willkommen zurück, Tester!“ (v0.50.0: mit Namen)');
   const awayText = await page.textContent('#modal-content');
   check(awayText.includes('Du warst 20 Min. weg') && awayText.includes('Kunden haben'), `Bericht nennt Zeit und Verkäufe (${awayText.slice(0, 160)})`);
   const awayAfter = await game(page, () => ({
@@ -2731,14 +2732,14 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     localStorage.setItem(key, JSON.stringify(data));
     return data.saveVersion;
   });
-  check(backdated === 18, `Spielstand-Version 18 (${backdated})`);
+  check(backdated === 19, `Spielstand-Version 19 (${backdated})`);
   await page2.goto(`${baseUrl}?ansicht=2d`);
   await waitForGame(page2);
   await page2.waitForFunction(() => !window.__game.isCatchingUp(), null, { timeout: 20000 });
   await sleep(200);
   const loadText = await page2.textContent('#modal-content');
   check(
-    (await page2.textContent('#modal-content h2')) === '👋 Willkommen zurück!' && loadText.includes('Du warst 2 Std. weg') && loadText.includes('Leer gelaufen: 1× Holzfällerlager'),
+    (await page2.textContent('#modal-content h2')) === '👋 Willkommen zurück, Tester!' && loadText.includes('Du warst 2 Std. weg') && loadText.includes('Leer gelaufen: 1× Holzfällerlager'),
     `Nach 2 Stunden: Bericht beim Öffnen, Holzfällerlager leer gelaufen (${loadText.slice(0, 200)})`,
   );
   const woodAfter = await game(page2, () => {
@@ -2791,12 +2792,12 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const saved = await factory();
   const [download] = await Promise.all([page2.waitForEvent('download'), page2.tap('#dialog-ok')]);
   const backupName = download.suggestedFilename();
-  check(/^Fabrik Level \d+ - \d\d\.\d\d\.\d{4} \d\d-\d\d\.txt$/.test(backupName), `Dateiname „${backupName}“`);
+  check(/^Tester - Fabrik Level \d+ - \d\d\.\d\d\.\d{4} \d\d-\d\d\.txt$/.test(backupName), `Dateiname mit Namen „${backupName}“`);
   const backupPath = path.join(OUT, `${device.name}-sicherung.txt`);
   await download.saveAs(backupPath);
   const backupData = JSON.parse(fs.readFileSync(backupPath, 'utf8'));
   check(
-    backupData.saveVersion === 18 && backupData.state.buildings.length === saved.buildings && Math.abs(Date.now() - backupData.savedAt) < 60000,
+    backupData.saveVersion === 19 && backupData.state.buildings.length === saved.buildings && Math.abs(Date.now() - backupData.savedAt) < 60000,
     `Datei enthält den Spielstand (Format ${backupData.saveVersion}, ${backupData.state.buildings.length} Gebäude)`,
   );
   await sleep(100);
@@ -2932,7 +2933,7 @@ async function runNarrowPhone(browser, baseUrl) {
   });
   const page = await context.newPage();
   await page.goto(`${baseUrl}?ansicht=2d`); // v0.38.0: die echte Fabrik
-  await page.waitForFunction(() => window.__game);
+  await waitForGame(page);
   const tabsFit = () =>
     page.evaluate(() =>
       [...document.querySelectorAll('.build-tab')]
@@ -2954,7 +2955,7 @@ async function runNarrowPhone(browser, baseUrl) {
     window.__game.saveNow();
   });
   await page.reload();
-  await page.waitForFunction(() => window.__game);
+  await waitForGame(page);
   await page.tap('#btn-build');
   await sleep(150);
   for (const tab of ['holz', 'stein', 'eisen', 'kraeuter', 'werkstatt']) {

@@ -14,6 +14,7 @@ const TYPES = {
   '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.png': 'image/png',
+  '.jpg': 'image/jpeg',
   '.webmanifest': 'application/manifest+json',
   '.json': 'application/json',
 };
@@ -200,8 +201,16 @@ const infoFits = (page) =>
 const beltOuts = (page, x, y) => game(page, ([bx, by]) => window.__game.state.belts[`${bx},${by}`]?.outs ?? null, [x, y]);
 const mode = (page) => game(page, () => window.__game.ui.mode);
 
-async function waitForGame(page) {
-  await page.waitForFunction(() => window.__game && window.__game.camera.viewWidth > 0);
+// v0.50.0: Wartet, bis das Spiel läuft und der Ladebildschirm weg ist. Fragt
+// er nach dem Namen (erster Start, neues Spiel), trägt es name ein.
+async function waitForGame(page, { timeout = 30000, name = 'Tester' } = {}) {
+  await page.waitForFunction(() => window.__game && window.__game.camera.viewWidth > 0, null, { timeout });
+  await page.waitForFunction(() => document.getElementById('loading').hidden || !document.getElementById('loading-name').hidden, null, { timeout });
+  if (await page.isVisible('#loading-name')) {
+    await page.fill('#name-input', name);
+    await page.tap('#name-ok');
+  }
+  await page.waitForFunction(() => document.getElementById('loading').hidden, null, { timeout });
   await sleep(150);
 }
 

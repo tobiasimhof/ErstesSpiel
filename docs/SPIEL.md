@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt kurz, wie das Spiel **jetzt** ist (Stand v0.49.0). Einzelheiten stehen in **`docs/inhalte/`** und werden nur gelesen, wenn wir daran arbeiten: `LEVEL.md` (Level, Aufträge, Aufstiege), `GEBAEUDE.md` (Gebäude, Baukosten), `WAREN.md` (Waren, Rezepte, Preise), `BEDIENUNG.md` (Bedienung im Einzelnen), `AUSBLICK.md` (Techbaum, Ideen), `ZAHLEN.md` (Rohstoffe, Zeit und Gold je Level und Ware, automatisch aus den Datentabellen). Bei jeder Änderung wird der Text **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt kurz, wie das Spiel **jetzt** ist (Stand v0.50.0). Einzelheiten stehen in **`docs/inhalte/`** und werden nur gelesen, wenn wir daran arbeiten: `LEVEL.md` (Level, Aufträge, Aufstiege), `GEBAEUDE.md` (Gebäude, Baukosten), `WAREN.md` (Waren, Rezepte, Preise), `BEDIENUNG.md` (Bedienung im Einzelnen), `AUSBLICK.md` (Techbaum, Ideen), `ZAHLEN.md` (Rohstoffe, Zeit und Gold je Level und Ware, automatisch aus den Datentabellen). Bei jeder Änderung wird der Text **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
@@ -22,6 +22,8 @@
 - Spielregeln, Fenster und Steuerung sind in beiden gleich; neue Inhalte gibt es in beiden.
 
 ## 3. Kernschleife und Zeit
+
+- **Start:** bei jedem Start ein Ladebildschirm wie bei Clash of Clans (Bild aus der eigenen 3D-Welt, Titel – noch Platzhalter „Factory“ –, Ladebalken, Tipp), nach mindestens 2 Sekunden geht es von selbst los. Beim ersten Start fragt er „Wie heißt du?“; der Name steht im Spielstand und im Spiel („Tobias' Laden“, Hilde begrüßt mit Namen, „Willkommen zurück, Tobias!“, Dateiname beim Sichern), ändern mit ✏️ im Laden. Eine geführte Einführung mit Bürgermeisterin Hilde folgt (v0.51.0).
 
 Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeiten → Versandportal → Laden-Lager → Theken → Kunden zahlen Gold → neue Rohstoffe, Fläche, Theken, größeres Lager, Aufstieg. Waren sind zugleich Baumaterial: verkaufen oder damit bauen?
 

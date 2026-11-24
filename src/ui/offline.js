@@ -25,7 +25,7 @@ export function durationText(seconds) {
 
 const sum = (counts) => Object.values(counts).reduce((a, b) => a + b, 0);
 
-export function createOfflineView({ panels }) {
+export function createOfflineView({ panels, getName = () => '' }) {
   const overlay = document.getElementById('catchup');
   const overlayText = document.getElementById('catchup-text');
   const overlayFill = document.getElementById('catchup-fill');
@@ -63,7 +63,9 @@ export function createOfflineView({ panels }) {
 
   function showReport(report, fromFile) {
     panels.showModal((box, { makeButton }) => {
-      box.append(el('h2', null, fromFile ? '📂 Spielstand geladen' : '👋 Willkommen zurück!'));
+      // v0.50.0: „👋 Willkommen zurück, Tobias!“
+      const name = getName();
+      box.append(el('h2', null, fromFile ? '📂 Spielstand geladen' : `👋 Willkommen zurück${name ? `, ${name}` : ''}!`));
       box.append(el('p', null, `${awayText(report.seconds, fromFile)}. Deine Fabrik lief weiter, bis etwas leer war:`));
       const rows = el('div', 'away-rows');
       const row = (icon, text, extra) => {
@@ -100,6 +102,8 @@ export function createOfflineView({ panels }) {
 
   return {
     // Während des Nachrechnens: dunkler Hinweis mit Fortschritt
+    // v0.50.0: derselbe Text auch auf dem Ladebildschirm
+    progressText: (seconds, fromFile = false) => `${awayText(seconds, fromFile)}. Die Fabrik holt die Zeit nach …`,
     showProgress(seconds, progress, fromFile = false) {
       overlayText.textContent = `${awayText(seconds, fromFile)}. Die Fabrik holt die Zeit nach …`;
       overlayFill.style.width = `${Math.round(progress * 100)}%`;

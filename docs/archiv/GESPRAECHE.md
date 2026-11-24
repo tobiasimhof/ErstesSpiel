@@ -12,6 +12,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Umgesetzt:** v0.49.2 (nur Doku). Wartet auf Tobias' Antworten.
 
+**Tobias:** „Ladebildschirm gefällt mir. Immerhin ist es auch Mobile-Game, deswegen sollte man quasi direkt starten können. Erster Start finde ich auch gut. Titel gefallen mir alle noch nicht wirklich. Beim Ladebildschirm würde ich deine Empfehlung nehmen. Ja, Hilde kann führen und die 8 Schritte passen auch. Finde es cool, wenn das so kleine Fenster sind, die man, wie du schon sagst, dann einfach wegklicken kann, aber man die Grundlagen dadurch gezeigt bekommt. Wir können das auch gerne in zwei Schritte machen“
+
+**Claude** hat v0.50.0 umgesetzt: Ladebildschirm bei jedem Start mit einem Bild aus der eigenen 3D-Welt, Titel-Platzhalter „Factory“ auf einem Holzschild, Ladebalken (Modelle, dann Nachholen der Zeit) und wechselndem Tipp, nach mindestens 2 Sekunden von selbst weiter; beim ersten Start „👋 Willkommen! Wie heißt du?“; der Name im Spielstand (Format 19, Tobias' Fabrik fragt einmal), im Laden („Tobias' Laden“, ✏️ zum Ändern – im Menü war auf dem Handy kein Platz mehr), bei Hilde, in „Willkommen zurück“ und im Dateinamen. Neue Titel-Ideen mitgeschickt.
+
+**Umgesetzt:** v0.50.0.
+
 ### 23.11.2026 – Chat 28: Oberfläche mit Kenneys UI-Paketen – die ganze Oberfläche im Kenney-Stil, Klänge, nächster Chat vorbereitet (v0.46.2 bis v0.49.1)
 
 **Tobias:** „Bringe dich auf den aktuellsten Stand.“
