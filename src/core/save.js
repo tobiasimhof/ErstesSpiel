@@ -51,6 +51,9 @@
 //  18 (v0.30.0): Laden-Lager vergrößern – der Spielstand zählt die gekauften
 //               Ausbauten (storageUpgrades, je +100 Plätze). Bestehende
 //               Spielstände beginnen mit 0; sonst bleibt alles gleich.
+//  19 (v0.50.0): Name des Spielers (playerName). Bestehende Spielstände
+//               bekommen einen leeren Namen – der Ladebildschirm fragt beim
+//               nächsten Start einmal danach; sonst bleibt alles gleich.
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
@@ -66,8 +69,9 @@ import { createQuestState } from './quests.js';
 import { addAllToStorage, counterSizeFor, fitCounters } from './shop.js';
 import { fitWorldToLevel } from './land.js';
 import { START_PLOT, WORLD, parseTileKey } from './state.js';
+import { isValidPlayerName } from './player.js';
 
-export const SAVE_VERSION = 18;
+export const SAVE_VERSION = 19;
 
 // v0.13.0 (Tobias): Namen, die zu den Zutaten passen. Rezepte und Werte bleiben.
 const RENAMED_V11 = {
@@ -241,6 +245,8 @@ function migrate(state, from, notes = []) {
   if (from < 17) shrinkCounters(state, notes);
   // v0.29 → v0.30: noch kein Ausbau des Laden-Lagers
   if (from < 18 && isObj(state)) state.storageUpgrades = 0;
+  // v0.49 → v0.50: noch kein Name – der Ladebildschirm fragt einmal danach
+  if (from < 19 && isObj(state)) state.playerName = '';
   return state;
 }
 
@@ -548,6 +554,8 @@ export function isValidState(s) {
   if (!isCount(s.landBought)) return false;
   // v0.30.0: Ausbauten des Laden-Lagers
   if (!isCount(s.storageUpgrades) || s.storageUpgrades > STORAGE_UPGRADE.max) return false;
+  // v0.50.0: Name des Spielers (leer = noch nicht gefragt)
+  if (!isValidPlayerName(s.playerName)) return false;
   // v0.13.0: Aufträge
   if (!isObj(s.quest) || !isCount(s.quest.index) || !isCount(s.quest.xp) || !isCount(s.xpTotal)) return false;
 

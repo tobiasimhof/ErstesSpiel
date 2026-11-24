@@ -4,6 +4,29 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.50.0 – Ladebildschirm bei jedem Start und Name (24.11.2026)
+
+**Vorgenommen:**
+- Den ersten Teil des Entwurfs umsetzen (Tobias: „Ladebildschirm gefällt mir. Immerhin ist es auch Mobile-Game, deswegen sollte man quasi direkt starten können. Erster Start finde ich auch gut.“).
+
+**Fragen, die wir uns gestellt haben:**
+- Titel? → Tobias gefallen die Vorschläge noch nicht – Platzhalter „Factory“ (Arbeitstitel) nur auf dem Ladebildschirm; Browser-Reiter und App-Name bleiben, bis es einen Titel gibt.
+- Wann erscheint der Ladebildschirm? → Er steht in `index.html`, ist also da, bevor die Programmdateien geladen sind. Der Balken zeigt die Modelle (bis 85 %), dann das Nachholen der verpassten Zeit; danach (beim ersten Start) „Wie heißt du?“, dann blendet er aus – mindestens 2 Sekunden seit dem Öffnen, ohne Antippen. Meldungen beim Start kommen erst danach, „Willkommen zurück“ liegt schon darunter bereit.
+- Wo „Name ändern“? → Im Laden-Fenster (✏️ neben „Tobias' Laden“), weil das Menü auf dem Handy im Testmodus keinen neunten Eintrag mehr fasst.
+- Spielstand? → Format 19 mit `playerName` (leer = noch nicht gefragt); alte Spielstände bekommen einen leeren Namen und fragen einmal. Das Gerät merkt sich den zuletzt eingegebenen Namen (`settings.lastName`) und schreibt ihn bei „Neues Spiel“ und in der echten Fabrik schon ins Feld.
+- Titelbild? → Aufnahme aus dem Belastungstest (1920 × 1080, Schilder ausgeblendet, 193 KB JPEG), darüber ein leichter dunkler Verlauf, damit Schild und Kasten gut lesbar sind.
+
+**Gemacht:**
+- Neu: `core/player.js` (Name bereinigen, setzen), `ui/loading.js` (Ladebildschirm, Tipps), `ui/name.js` (Namensfeld, Fenster „✏️ Name ändern“), `assets/titel/ladebild.jpg`.
+- Geändert: `index.html` (`#loading`), `style.css` (Block v0.50.0), `main.js` (`boot()`, `applyName`, Start-Meldungen nach dem Ladebildschirm, Nachholen auf dem Balken), `core/save.js` (Format 19), `core/state.js`, `data/levels.js` (Hilde: „Willkommen im Ort, {name}!“), `ui/levels.js`, `ui/shop.js` (Titel, ✏️), `ui/offline.js` („Willkommen zurück, Tobias!“), `ui/backup.js` (Dateiname und Vorschau), `ui/format.js` (`possessive`, `fillName`).
+- Tests: neu `tests/spieler.test.js`; Tests, die auf Format 18 festgelegt waren, prüfen „mindestens 18“. Browser-Test: `waitForGame` wartet auf den Ladebildschirm und trägt beim ersten Start „Tester“ ein; 3D: Ladebildschirm, erster Start mit vorausgefülltem Namen, leerer Name geht nicht, ✏️ im Laden mit Enter, neu laden ohne Namensfrage, Belastungstest ohne Frage; 2D: „Willkommen zurück, Tester!“, Dateiname mit Namen, Format 19.
+- Doku: `STAND.md`, `SPIEL.md`, `BEDIENUNG.md`, `TECHNIK.md`, Archiv. Versionsnummer 0.50.0.
+
+**Geprüft:**
+- `npm test`: 461 von 461 bestanden (neu: `spieler.test.js`).
+- Browser-Test (Tablet und Handy, 2D und 3D): 3D-Teil 202 von 202 bestanden; der 2D-Teil fand im ersten Lauf 3 Fehler in den Test-Erwartungen (2× „Tester' Laden“ statt richtig „Testers Laden“; „Danach hast du noch 3.000 Gold“, während ein Kunde gerade für 1 Gold kaufte – jetzt 3.0xx erlaubt), danach 944 von 944. Eine Prüfung des Ladebildschirms hing anfangs von der Zeit ab (der Test sah erst nach dem Laden der Seite hin) – jetzt gleich nach dem Seitenwechsel.
+- Bildschirmfotos angesehen: Ladebildschirm mit Balken und Tipp, „Wie heißt du?“ (Tablet und Handy), „Annas Laden“ mit ✏️.
+
 ### v0.49.2 – Antworten zu Ladebildschirm, Name und Einführung, Entwurf v0.50.0/v0.51.0 (24.11.2026, nur Doku)
 
 **Vorgenommen:**

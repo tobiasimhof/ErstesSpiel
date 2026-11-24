@@ -176,8 +176,8 @@ test('Testpaket auf Level 14: Mörser und Tinkturen; auf Level 13 noch nicht', (
   for (const type of ['moerser', 'tinktur']) assert.equal(storageCount(thirteen, type), 0, type);
 });
 
-test('Spielstand: Zimmerei auf Mörser und Apotheke auf Tinktur bleiben nach Speichern und Laden – das Format bleibt 18', () => {
-  assert.equal(SAVE_VERSION, 18, 'kein neues Spielstand-Format nötig');
+test('Spielstand: Zimmerei auf Mörser und Apotheke auf Tinktur bleiben nach Speichern und Laden – kein eigenes Format nötig', () => {
+  assert.ok(SAVE_VERSION >= 18, 'kein neues Spielstand-Format nötig');
   const state = levelGame(14);
   state.storage = { moerser: 4, tinktur: 2 };
   const zimmerei = placeBuilding(state, 'zimmerei', 10, 6, 0);

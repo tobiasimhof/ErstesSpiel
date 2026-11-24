@@ -40,7 +40,7 @@ import {
   storageUpgrades,
 } from '../core/shop.js';
 import { createItemIcon } from './itemArt.js';
-import { itemCount, numberFormat } from './format.js';
+import { itemCount, numberFormat, possessive } from './format.js';
 
 // v0.36.0: „alle 15 Sekunden“ (Level 1–3) bzw. „etwa alle 25–45 Sekunden“
 function secondsText(min, max) {
@@ -56,7 +56,7 @@ const TABS = [
 // v0.16.0: nur was es beim Händler gibt (die Flachspflanze wächst im Beet)
 const RAWS = Object.keys(ITEMS).filter((type) => ITEMS[type].raw && ITEMS[type].buyPrice > 0);
 
-export function createShopView({ state, panels, onChange }) {
+export function createShopView({ state, panels, onChange, onRename }) {
   let open = false;
   let tab = 'lager';
   let picking = null; // Index der Theke, für die gerade eine Ware gewählt wird
@@ -550,6 +550,9 @@ export function createShopView({ state, panels, onChange }) {
     renderSection(true);
   }
 
+  // v0.50.0: „Tobias' Laden“ (ohne Namen „Dein Laden“)
+  const shopTitle = () => (state.playerName ? `${possessive(state.playerName)} Laden` : 'Dein Laden');
+
   function refresh() {
     if (!open) return;
     if (!panels.isModalOpen() || !refs.body.isConnected) {
@@ -578,7 +581,15 @@ export function createShopView({ state, panels, onChange }) {
           tabsRow.append(button);
         }
         const body = el('div', 'tab-body');
-        box.append(el('h2', null, '⚖️ Dein Laden'), meta, tabsRow, body);
+        // v0.50.0: „⚖️ Tobias' Laden“ – mit ✏️ den Namen ändern
+        const title = el('h2', null, `⚖️ ${shopTitle()}`);
+        if (onRename) {
+          const edit = helpers.makeButton({ label: '✏️', title: 'Name ändern', onClick: () => onRename(tab) });
+          edit.classList.add('name-edit');
+          edit.id = 'shop-rename';
+          title.append(edit);
+        }
+        box.append(title, meta, tabsRow, body);
         refs = { box, meta, tabs, body, helpers };
       });
       open = true;
@@ -587,5 +598,6 @@ export function createShopView({ state, panels, onChange }) {
     },
     refresh,
     isOpen: () => open,
+    title: shopTitle,
   };
 }

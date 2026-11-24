@@ -68,7 +68,36 @@ async function run3d(browser, baseUrl, device) {
   await page.tap('#menu-3d');
   // v0.38.0: Der 3D-Test ist der Start – der Link ohne Zusatz
   await page.waitForURL((u) => !u.search.includes('ansicht'));
-  await page.waitForFunction(() => window.__game?.view3d && window.__game.camera.viewWidth > 0, null, { timeout: 30000 });
+  // v0.50.0 (Tobias, Chat 29): Ladebildschirm bei jedem Start – „ähnlich wie bei
+  // ClashofClans“. Der 3D-Test hat noch keinen Spielstand: erster Start, also
+  // „Wie heißt du?“; der Name aus der echten Fabrik steht schon im Feld.
+  const firstLook = await page.evaluate(() => ({
+    shown: !document.getElementById('loading').hidden,
+    title: document.getElementById('loading-title').textContent,
+    image: getComputedStyle(document.getElementById('loading')).backgroundImage,
+  }));
+  check(firstLook.shown && firstLook.title === 'Factory' && firstLook.image.includes('ladebild.jpg'), `Ladebildschirm beim Start: Titel und Bild aus der 3D-Welt (${firstLook.title})`);
+  await page.waitForSelector('#loading-name:not([hidden])', { timeout: 30000 });
+  await sleep(200);
+  const askLook = await page.evaluate(() => ({
+    title: document.querySelector('#loading-name h2').textContent,
+    value: document.getElementById('name-input').value,
+    bar: !document.getElementById('loading-progress').hidden,
+    input: document.getElementById('name-input').getBoundingClientRect().bottom,
+  }));
+  check(
+    askLook.title === '👋 Willkommen!' && askLook.value === 'Tester' && !askLook.bar && askLook.input < vp.height * 0.7,
+    `Erster Start: „Willkommen! Wie heißt du?“ oben (Feld endet bei ${Math.round(askLook.input)} von ${vp.height}), der Name vom Gerät steht schon drin (${askLook.value})`,
+  );
+  await shot('3d-0a-name');
+  await page.fill('#name-input', '   ');
+  check(await page.isDisabled('#name-ok'), 'Ohne Namen geht es nicht los (Knopf aus)');
+  await page.fill('#name-input', 'Tobias');
+  check(!(await page.isDisabled('#name-ok')), 'Mit Namen ist der Knopf „▶ Los geht\'s“ an');
+  await page.tap('#name-ok');
+  await page.waitForFunction(() => document.getElementById('loading').hidden, null, { timeout: 10000 });
+  const named = await game(page, () => ({ name: window.__game.state.playerName, stored: JSON.parse(localStorage.getItem('erstesspiel-spielstand-3d-test')).state.playerName }));
+  check(named.name === 'Tobias' && named.stored === 'Tobias', `Der Name steht im Spielstand (${JSON.stringify(named)})`);
   // so hat die echte Fabrik beim Wechsel gespeichert – der 3D-Test darf daran nichts ändern
   const real = await game(page, () => localStorage.getItem('erstesspiel-spielstand'));
   await sleep(1500);
@@ -614,6 +643,24 @@ async function run3d(browser, baseUrl, device) {
   // Start aus, Einstellung im Browser des Geräts (nicht im Spielstand)
   await page.tap('#btn-shop');
   await sleep(300);
+  // v0.50.0: „⚖️ Tobias' Laden“ mit ✏️ zum Ändern
+  check((await page.textContent('#modal-content h2')).startsWith("⚖️ Tobias' Laden"), `Laden-Fenster mit Namen (${await page.textContent('#modal-content h2')})`);
+  await page.tap('#shop-rename');
+  await sleep(250);
+  check((await page.textContent('#modal-content h2')) === '✏️ Name ändern' && (await page.inputValue('#name-input')) === 'Tobias', '✏️ öffnet „Name ändern“ mit dem jetzigen Namen');
+  await page.fill('#name-input', 'Anna');
+  await page.keyboard.press('Enter');
+  await sleep(300);
+  check(
+    (await page.textContent('#modal-content h2')).startsWith('⚖️ Annas Laden') && (await game(page, () => window.__game.state.playerName)) === 'Anna',
+    `Enter speichert, zurück im Laden: „${(await page.textContent('#modal-content h2')).replace('✏️', '').trim()}“`,
+  );
+  await shot('3d-0c-laden-name');
+  await page.tap('#shop-rename');
+  await sleep(250);
+  await page.fill('#name-input', 'Tobias');
+  await page.tap('#name-ok');
+  await sleep(300);
   const shopLook = await page.evaluate(() => ({
     frame: getComputedStyle(document.querySelector('#modal .modal-box')).borderImageSource,
     tab: getComputedStyle(document.querySelector('#modal .tabs .tab.active')).borderImageSource,
@@ -707,7 +754,9 @@ async function run3d(browser, baseUrl, device) {
   const ownBuildings = await game(page, () => window.__game.state.buildings.length);
   await page.tap('#menu-stress');
   await page.waitForURL(/belastungstest=1/);
-  await page.waitForFunction(() => window.__game?.view3d && window.__game.camera.viewWidth > 0, null, { timeout: 60000 });
+  await waitForGame(page, { timeout: 60000 });
+  // v0.50.0: Der Belastungstest fragt nicht nach dem Namen (er wird nie gespeichert)
+  check((await game(page, () => window.__game.state.playerName)) === '', 'Belastungstest: kein „Wie heißt du?“');
   // vor dem Wechsel hat das 3D-Spiel gespeichert – ab hier darf sich nichts mehr ändern
   const before3d = await game(page, () => localStorage.getItem('erstesspiel-spielstand-3d-test'));
   await sleep(1500);
@@ -738,8 +787,24 @@ async function run3d(browser, baseUrl, device) {
   const stressSlots = await game(page, () => ({ test: localStorage.getItem('erstesspiel-spielstand-3d-test'), own: localStorage.getItem('erstesspiel-spielstand-belastungstest') }));
   check(stressSlots.test === before3d && stressSlots.own === null, 'Der Belastungstest speichert nichts – der 3D-Spielstand bleibt, wie er war');
   await page.tap('#stress-exit');
-  await page.waitForURL((u) => !u.search.includes('belastungstest'));
-  await page.waitForFunction(() => window.__game?.view3d && window.__game.camera.viewWidth > 0, null, { timeout: 60000 });
+  // v0.50.0: Ladebildschirm mit Balken und Tipp – mindestens 2 Sekunden, ohne Antippen weiter
+  // (gleich nach dem Seitenwechsel nachsehen, nicht erst nach dem Laden der Seite)
+  await page.waitForURL((u) => !u.search.includes('belastungstest'), { waitUntil: 'commit' });
+  await page.waitForFunction(() => document.getElementById('loading-tip')?.textContent || document.getElementById('loading')?.hidden, null, { timeout: 30000 });
+  const bootLook = await page.evaluate(() => ({
+    shown: !document.getElementById('loading').hidden,
+    bar: !document.getElementById('loading-progress').hidden,
+    ask: !document.getElementById('loading-name').hidden,
+    tip: document.getElementById('loading-tip').textContent,
+    text: document.getElementById('loading-text').textContent,
+    box: document.getElementById('loading-progress').getBoundingClientRect().toJSON(),
+  }));
+  check(bootLook.shown && bootLook.bar && !bootLook.ask && bootLook.tip.length > 10, `Neu laden: Ladebildschirm mit Balken und Tipp, ohne Namensfrage (${bootLook.text} · ${bootLook.tip})`);
+  const bootBox = bootLook.box;
+  await shot('3d-0b-ladebildschirm');
+  check(bootBox.x >= 0 && bootBox.x + bootBox.width <= vp.width && bootBox.y + bootBox.height <= vp.height, `Ladebalken passt auf den Bildschirm (${Math.round(bootBox.y + bootBox.height)} ≤ ${vp.height})`);
+  await waitForGame(page, { timeout: 60000 });
+  check((await game(page, () => window.__game.state.playerName)) === 'Tobias', 'Danach geht es von selbst ins Spiel, der Name bleibt');
   const after = await game(page, () => ({ level: window.__game.state.shopLevel, buildings: window.__game.state.buildings.length }));
   check(after.level === 1 && after.buildings === ownBuildings, `„↩ Beenden“ führt zurück ins eigene 3D-Spiel (Level ${after.level}, ${after.buildings} Gebäude wie vorher)`);
   // Testmodus wieder aus

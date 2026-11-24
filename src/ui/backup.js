@@ -18,15 +18,19 @@ export const MAX_BACKUP_BYTES = 5 * 1024 * 1024;
 
 const pad = (n) => String(n).padStart(2, '0');
 
-// „Fabrik Level 8 - 11.11.2026 21-45.txt“ (Ortszeit; ohne „:“, das Dateinamen nicht mögen)
+// „Tobias - Fabrik Level 8 - 11.11.2026 21-45.txt“ (Ortszeit; ohne „:“, das
+// Dateinamen nicht mögen). v0.50.0: vorn der Name des Spielers, falls es einen
+// gibt – Zeichen, die Dateinamen nicht mögen, werden zu „-“.
 export function backupFileName(state, date = new Date()) {
   const day = `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${date.getFullYear()}`;
-  return `Fabrik Level ${state.shopLevel} - ${day} ${pad(date.getHours())}-${pad(date.getMinutes())}.txt`;
+  const name = state.playerName ? `${state.playerName.replace(/[\\/:*?"<>|]/g, '-')} - ` : '';
+  return `${name}Fabrik Level ${state.shopLevel} - ${day} ${pad(date.getHours())}-${pad(date.getMinutes())}.txt`;
 }
 
-// „Level 8 · 14.623 Gold · 70 Gebäude“
+// „Tobias · Level 8 · 14.623 Gold · 70 Gebäude“
 export function backupSummary(state) {
-  return `Level ${state.shopLevel} · ${numberFormat.format(state.gold)} Gold · ${state.buildings.length} Gebäude`;
+  const name = state.playerName ? `${state.playerName} · ` : '';
+  return `${name}Level ${state.shopLevel} · ${numberFormat.format(state.gold)} Gold · ${state.buildings.length} Gebäude`;
 }
 
 // „am 11.11.2026 um 21:45 Uhr“ (oder leer, wenn die Zeit fehlt)

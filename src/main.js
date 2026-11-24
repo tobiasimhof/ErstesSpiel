@@ -45,6 +45,9 @@ import { OFFLINE } from './core/data/offline.js';
 import { catchUpProgress, extendCatchUp, offlineReport, runCatchUp, startCatchUp } from './core/offline.js';
 import { createOfflineView } from './ui/offline.js';
 import { onPress } from './ui/press.js';
+import { createLoadingScreen } from './ui/loading.js';
+import { openNameWindow } from './ui/name.js';
+import { hasPlayerName, setPlayerName } from './core/player.js';
 
 // v0.34.0: 3D-Test (Tobias, Chat 24) – das Spiel in 3D mit einem eigenen
 // Spielstand ab Level 1; die echte Fabrik (2D) bleibt unberührt. Spielregeln,
@@ -69,36 +72,32 @@ const ui = { mode: 'normal', selected: null, ghost: null, beltPreview: null, sim
 const settings = loadSettings();
 const TEST_SPEED = 10;
 const camera = createCamera();
+// v0.50.0: Ladebildschirm (steht schon in index.html) – der Balken zeigt erst
+// die Modelle, dann das Nachholen der verpassten Zeit (siehe boot() unten).
+const loading = createLoadingScreen();
 const view3d = VIEW_3D ? await start3d() : null;
+if (!view3d) loading.setProgress(0.85, 'Lädt die Fabrik …');
 const renderer = view3d ?? createRenderer(canvas);
 const panels = createPanels();
 
-// v0.34.0: Lädt three.js und Kenneys Modelle (nur im 3D-Test) und zeigt so
-// lange „Lädt die 3D-Ansicht …“. Klappt das nicht, bleibt eine Meldung mit
-// dem Weg zurück zur echten Fabrik stehen.
+// v0.34.0: Lädt three.js und Kenneys Modelle (nur im 3D-Test) – seit v0.50.0
+// mit dem Balken des Ladebildschirms. Klappt das nicht, bleibt eine Meldung
+// mit dem Weg zurück zur echten Fabrik stehen.
 async function start3d() {
   window.__loading3d = true;
-  const box = document.getElementById('catchup');
-  const text = document.getElementById('catchup-text');
-  const fill = document.getElementById('catchup-fill');
-  box.querySelector('.catchup-icon').textContent = '🧊';
-  text.textContent = '3D-Test: Lädt die Modelle …';
-  fill.style.width = '0%';
-  box.hidden = false;
+  loading.setProgress(0.02, 'Lädt die Werkstätten …');
   try {
     const { createView3d } = await import('./view3d/view3d.js');
     const view = await createView3d({
       canvas,
       onProgress(done, total) {
-        text.textContent = `3D-Test: Lädt die Modelle … ${done} / ${total}`;
-        fill.style.width = `${Math.round((done / total) * 100)}%`;
+        loading.setProgress(0.05 + 0.8 * (done / total), 'Lädt die Werkstätten …');
       },
     });
-    box.hidden = true;
-    box.querySelector('.catchup-icon').textContent = '⏩';
+    loading.setProgress(0.85, 'Baut die Fabrik auf …');
     return view;
   } catch (err) {
-    text.textContent = '⚠️ Die 3D-Ansicht konnte nicht laden. Bitte neu laden – die echte Fabrik (2D) öffnet index.html?ansicht=2d.';
+    loading.setProgress(0, '⚠️ Die 3D-Ansicht konnte nicht laden. Bitte neu laden – die echte Fabrik (2D) öffnet index.html?ansicht=2d.');
     throw err;
   } finally {
     window.__loading3d = false;
@@ -165,7 +164,17 @@ async function newGame() {
   resetting = true;
   clearTimeout(saveTimer);
   clearGame();
-  location.reload();
+  location.reload(); // v0.50.0: der Ladebildschirm fragt dann nach dem Namen (der bisherige steht schon drin)
+}
+
+// v0.50.0: Name setzen – im Spielstand und für das Gerät gemerkt (damit ihn
+// „Neues Spiel“ und die echte Fabrik schon ins Feld schreiben)
+function applyName(name) {
+  if (!setPlayerName(state, name)) return;
+  settings.lastName = state.playerName;
+  saveSettings(settings);
+  onChange();
+  saveNow();
 }
 
 // v0.22.0: Spielstand als Datei sichern und laden. Beim Laden ersetzt die
@@ -348,8 +357,24 @@ const buildBar = createBuildBar({
     saveSettings(settings);
   },
 });
-const shopView = createShopView({ state, panels, onChange });
-const offlineView = createOfflineView({ panels });
+const shopView = createShopView({
+  state,
+  panels,
+  onChange,
+  // v0.50.0: „✏️“ neben „Tobias' Laden“ – danach wieder in den Laden
+  onRename(tab) {
+    openNameWindow({
+      panels,
+      initial: state.playerName,
+      onDone(name) {
+        applyName(name);
+        shopView.open(tab);
+        panels.toast(`Dein Laden heißt jetzt „${shopView.title()}“.`, 3000);
+      },
+    });
+  },
+});
+const offlineView = createOfflineView({ panels, getName: () => state.playerName });
 const warehouseView = createWarehouseView({ state, panels, onChange });
 controller = createController({
   state,
@@ -460,40 +485,44 @@ hud.update(state);
 const loadedFile = loaded.status === 'ok' ? takeLoadedFile() : null;
 let catchUpFromFile = Boolean(loadedFile);
 
-if (loaded.status === 'ok' && loaded.migratedFrom) {
-  const from = loaded.migratedFrom;
-  const notes = [
-    'Spielstand übernommen.',
-    from < 5 ? 'Neu: Handel! Im Laden gibt es jetzt Theken und den Händler; Bauen kostet Waren aus dem Laden-Lager.' : '',
-    from === 5 ? 'Neu: Die Schmiede macht Eisenstangen statt Nägel.' : '',
-    from < 7 ? 'Neu: Fläche kaufen – tippe auf die ＋-Schilder am Rand. Deine Fabrik hat Laden-Level 3, alles bleibt freigeschaltet.' : '',
-    from < 8 ? 'Neu: Startkapital – du bekommst es einmalig nachgezahlt.' : '',
-    from < 9 ? `Neu: Fläche gibt es jetzt in Streifen von ${LAND.depth} Reihen ab ${numberFormat.format(LAND.prices[0])} Gold; jede Seite lässt sich ${LAND.perSide}× erweitern.` : '',
-    from < 10 ? 'Neu: Lagerhäuser lassen sich aus dem Laden-Lager befüllen, Bänder lassen sich leeren.' : '',
-    from < 11 ? 'Neu: Aufträge der Bewohner – tippe oben auf „Laden-Level“. Einige Waren heißen jetzt anders, z. B. Mechanischer Schalter → Räderwerk, Mini-Schloss → Vorhängeschloss.' : '',
-    from < 12
-      ? 'Neu: Deine Fabrik läuft weiter, wenn das Spiel zu ist – bis Rohstoffe, Zutaten oder Theken leer sind. In Holzfällerlager, Steinbruch und Schmelzhütte passen jetzt 3 Rohstoffe („⏫ Auffüllen“). Lagerhäuser befüllst du von Hand.'
-      : '',
-    from < 13 ? 'Neu: Level 7 „Die Heilstube“ – Beet, Erntebank und Webstube. Aus Leinsamen wachsen Flachspflanzen, daraus werden Fasern und Verbände.' : '',
-    from < 14
-      ? 'Neu: Level 8 „Der Kräutergarten“ – Ringelblumen im Beet und die Kräuterstube für Heilverbände und Kräuterkompressen. Die Flachsbreche heißt jetzt Erntebank und verarbeitet alle Pflanzen.'
-      : '',
-    from < 16
-      ? `Neu: Alle Preise sind durch 3 geteilt – ein Holzblock kostet ${ITEMS.holzblock.price} Gold, ein Zirkel ${numberFormat.format(ITEMS.zirkel.price)}. Dein Gold ist mit umgerechnet und genauso viel wert wie vorher.`
-      : '',
-    from < 17
-      ? `Neu: Jede Theke hat ihre eigenen Kunden, und ab Level 4 kaufen sie langsamer. Jeder Laden beginnt mit ${COUNTERS.start} Theken – weitere kaufst du mit Gold im Laden, Reiter „Theken“ (die ${COUNTERS.start + 1}. für ${numberFormat.format(COUNTERS.prices[0])} Gold).`
-      : '',
-    ...(loaded.notes ?? []),
-    loaded.counterNote ?? '',
-  ].filter(Boolean);
-  const text = [loadedFile ? `Spielstand „${loadedFile}“ geladen.` : '', ...notes].filter(Boolean).join(' ');
-  // v0.24.0: Lange Hinweise bleiben länger stehen (etwa 20 Zeichen pro Sekunde).
-  panels.toast(text, Math.max(9000, text.length * 50));
-} else if (loadedFile) panels.toast(`Spielstand „${loadedFile}“ geladen.${loaded.counterNote ? ` ${loaded.counterNote}` : ''}`, 5000);
-else if (loaded.status === 'ok' && loaded.counterNote) panels.toast(`Spielstand geladen. ${loaded.counterNote}`, 6000);
-else if (loaded.status === 'ok') panels.toast('Spielstand geladen.', 1600);
-else if (loaded.status === 'invalid') panels.toast('Spielstand war beschädigt – neues Spiel gestartet.', 3500);
+// v0.50.0: Diese Meldungen kommen erst, wenn der Ladebildschirm weg ist.
+function showStartToasts() {
+  if (loaded.status === 'ok' && loaded.migratedFrom) {
+    const from = loaded.migratedFrom;
+    const notes = [
+      'Spielstand übernommen.',
+      from < 5 ? 'Neu: Handel! Im Laden gibt es jetzt Theken und den Händler; Bauen kostet Waren aus dem Laden-Lager.' : '',
+      from === 5 ? 'Neu: Die Schmiede macht Eisenstangen statt Nägel.' : '',
+      from < 7 ? 'Neu: Fläche kaufen – tippe auf die ＋-Schilder am Rand. Deine Fabrik hat Laden-Level 3, alles bleibt freigeschaltet.' : '',
+      from < 8 ? 'Neu: Startkapital – du bekommst es einmalig nachgezahlt.' : '',
+      from < 9 ? `Neu: Fläche gibt es jetzt in Streifen von ${LAND.depth} Reihen ab ${numberFormat.format(LAND.prices[0])} Gold; jede Seite lässt sich ${LAND.perSide}× erweitern.` : '',
+      from < 10 ? 'Neu: Lagerhäuser lassen sich aus dem Laden-Lager befüllen, Bänder lassen sich leeren.' : '',
+      from < 11 ? 'Neu: Aufträge der Bewohner – tippe oben auf „Laden-Level“. Einige Waren heißen jetzt anders, z. B. Mechanischer Schalter → Räderwerk, Mini-Schloss → Vorhängeschloss.' : '',
+      from < 12
+        ? 'Neu: Deine Fabrik läuft weiter, wenn das Spiel zu ist – bis Rohstoffe, Zutaten oder Theken leer sind. In Holzfällerlager, Steinbruch und Schmelzhütte passen jetzt 3 Rohstoffe („⏫ Auffüllen“). Lagerhäuser befüllst du von Hand.'
+        : '',
+      from < 13 ? 'Neu: Level 7 „Die Heilstube“ – Beet, Erntebank und Webstube. Aus Leinsamen wachsen Flachspflanzen, daraus werden Fasern und Verbände.' : '',
+      from < 14
+        ? 'Neu: Level 8 „Der Kräutergarten“ – Ringelblumen im Beet und die Kräuterstube für Heilverbände und Kräuterkompressen. Die Flachsbreche heißt jetzt Erntebank und verarbeitet alle Pflanzen.'
+        : '',
+      from < 16
+        ? `Neu: Alle Preise sind durch 3 geteilt – ein Holzblock kostet ${ITEMS.holzblock.price} Gold, ein Zirkel ${numberFormat.format(ITEMS.zirkel.price)}. Dein Gold ist mit umgerechnet und genauso viel wert wie vorher.`
+        : '',
+      from < 17
+        ? `Neu: Jede Theke hat ihre eigenen Kunden, und ab Level 4 kaufen sie langsamer. Jeder Laden beginnt mit ${COUNTERS.start} Theken – weitere kaufst du mit Gold im Laden, Reiter „Theken“ (die ${COUNTERS.start + 1}. für ${numberFormat.format(COUNTERS.prices[0])} Gold).`
+        : '',
+      from < 19 ? 'Neu: Dein Name steht über deinem Laden – ändern kannst du ihn im Laden mit ✏️.' : '',
+      ...(loaded.notes ?? []),
+      loaded.counterNote ?? '',
+    ].filter(Boolean);
+    const text = [loadedFile ? `Spielstand „${loadedFile}“ geladen.` : '', ...notes].filter(Boolean).join(' ');
+    // v0.24.0: Lange Hinweise bleiben länger stehen (etwa 20 Zeichen pro Sekunde).
+    panels.toast(text, Math.max(9000, text.length * 50));
+  } else if (loadedFile) panels.toast(`Spielstand „${loadedFile}“ geladen.${loaded.counterNote ? ` ${loaded.counterNote}` : ''}`, 5000);
+  else if (loaded.status === 'ok' && loaded.counterNote) panels.toast(`Spielstand geladen. ${loaded.counterNote}`, 6000);
+  else if (loaded.status === 'ok') panels.toast('Spielstand geladen.', 1600);
+  else if (loaded.status === 'invalid') panels.toast('Spielstand war beschädigt – neues Spiel gestartet.', 3500);
+}
 
 // ---------- Spiel im Hintergrund (v0.14.0) ----------
 // War das Spiel zu oder die App im Hintergrund, wird die verpasste Zeit
@@ -515,7 +544,9 @@ function continueCatchUp() {
   do finished = runCatchUp(catchUpJob, 200);
   while (!finished && performance.now() - start < CATCH_UP_MS);
   if (!finished) {
-    offlineView.showProgress(catchUpJob.seconds, catchUpProgress(catchUpJob), catchUpFromFile);
+    // v0.50.0: beim Öffnen auf dem Ladebildschirm, später im eigenen Kasten
+    if (loading.isOpen()) loading.setProgress(0.85 + 0.15 * catchUpProgress(catchUpJob), offlineView.progressText(catchUpJob.seconds, catchUpFromFile));
+    else offlineView.showProgress(catchUpJob.seconds, catchUpProgress(catchUpJob), catchUpFromFile);
     return false;
   }
   const report = offlineReport(catchUpJob);
@@ -529,8 +560,12 @@ function continueCatchUp() {
   catchUpFromFile = false;
   onChange();
   saveNow();
+  onCatchUpDone?.();
+  onCatchUpDone = null;
   return true;
 }
+// v0.50.0: Der Ladebildschirm wartet, bis die Zeit beim Öffnen nachgeholt ist.
+let onCatchUpDone = null;
 
 // Beim Öffnen: Zeit seit dem letzten Speichern nachrechnen
 if (loaded.status === 'ok' && loaded.savedAt > 0) beginCatchUp((Date.now() - loaded.savedAt) / 1000);
@@ -621,6 +656,20 @@ function frame(now) {
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
+
+// ---------- Ladebildschirm (v0.50.0) ----------
+// Erst die verpasste Zeit nachholen (der Balken läuft weiter), dann beim ersten
+// Start – oder bei einem Spielstand von früher ohne Namen – „Wie heißt du?“,
+// dann ausblenden. „Willkommen zurück“ liegt schon darunter bereit.
+async function boot() {
+  if (catchUpJob) await new Promise((resolve) => (onCatchUpDone = resolve));
+  if (!STRESS_TEST && !hasPlayerName(state)) {
+    applyName(await loading.askName({ initial: settings.lastName ?? '' }));
+  }
+  await loading.finish();
+  showStartToasts();
+}
+boot();
 
 // Für automatische Browser-Tests und zur Fehlersuche.
 window.__game = {

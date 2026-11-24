@@ -18,6 +18,7 @@
 // quests: Aufträge, die man AUF diesem Level erledigt. Ihre Erfahrung reicht
 //         zusammen genau für den Aufstieg auf das nächste Level.
 //         from: wer bestellt, text: wofür, items: was abgegeben wird.
+//         „{name}“ im Text wird zum Namen des Spielers (v0.50.0).
 // Mengen sind Platzhalter (Tobias: Man soll für die Stückzahl schon ein wenig
 // in die Masse gehen müssen).
 // v0.23.0: Aufstiegspreise durch 3 wie alle Preise, auf 10 gerundet
@@ -30,7 +31,7 @@ export const LEVELS = {
     quests: [
       { from: 'Zimmermann Jakob', text: 'Ich baue die erste Hütte am Fluss. Für die Wände brauche ich Holzplatten.', items: { holzplatte: 5 } },
       { from: 'Zimmermann Jakob', text: 'Das Dach ruht auf Holzstäben. Bringst du mir welche?', items: { holzstab: 10 } },
-      { from: 'Bürgermeisterin Hilde', text: 'Willkommen im Ort! Die Weide braucht einen Zaun, bevor uns die Ziegen davonlaufen.', items: { holzstab: 20, holzplatte: 10 } },
+      { from: 'Bürgermeisterin Hilde', text: 'Willkommen im Ort, {name}! Die Weide braucht einen Zaun, bevor uns die Ziegen davonlaufen.', items: { holzstab: 20, holzplatte: 10 } },
     ],
   },
   2: {
