@@ -2328,6 +2328,15 @@ button.quest-skip:active {
   background: none;
 }
 
+/* Auf dem Handy sind die Werkzeug-Kacheln nur 72 px breit – mit dem vollen
+   Holzrahmen passte „Verschieben“ nicht mehr hinein */
+@media (max-height: 420px) {
+  .bar .build-tools .build-item {
+    border-width: 3px;
+    border-image-width: 3px;
+  }
+}
+
 /* ---------- Schmale Handys (quer) ---------- */
 
 /* v0.29.0: Unter 820 px Breite (z. B. 740) ragten die 5 Reiter über den Rand.

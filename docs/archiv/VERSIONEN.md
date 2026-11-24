@@ -12,7 +12,7 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 **Fragen, die wir uns gestellt haben:**
 - Wie werden die Leisten zu Holz? → Mit Kenneys Holzfarben in CSS statt mit einem Bild (ein Bild über die ganze Breite hätte sich verzerrt): dunkles Holz #7a512d, Holzrand #b47b41, Umriss #6d4b27 – oben die Leiste mit Rand unten, die Bauleiste mit Rand oben.
 - Welche Knöpfe? → Alle auf den Leisten wie in den Fenstern (`button_brown`, grün, rot): Vollbild, ☰, Laden, Bauen, ⟲ ⟳ (mit 6 statt 5 Bildpunkten Rahmen), Gebäude, Werkzeuge, Werkzeugleiste; der offene Reiter `button_dark` mit heller Schrift; gesperrte Gebäude nur blass (ihr alter Hintergrund schimmerte in den runden Ecken durch).
-- Passt alles auf das Handy? → Die Reiter hatten durch den 3 Bildpunkte dickeren Rahmen kaum noch Platz („Werkstatt“ bis an den Rand); ihr Innenabstand ist deshalb überall 3 Bildpunkte kleiner. Die Größen der Handy-Regeln bleiben, der neue Block setzt nur Farben und Rahmen.
+- Passt alles auf das Handy? → Die Reiter hatten durch den 3 Bildpunkte dickeren Rahmen kaum noch Platz („Werkstatt“ bis an den Rand); ihr Innenabstand ist deshalb überall 3 Bildpunkte kleiner. Die Größen der Handy-Regeln bleiben, der neue Block setzt nur Farben und Rahmen. Auf dem Handy haben die nur 72 Bildpunkte breiten Werkzeug-Kacheln einen 3 statt 5 Bildpunkte dicken Rahmen – sonst passte „Verschieben“ nicht hinein (Browser-Test).
 - Schilder „＋ Preis“? → In 3D (`drawLandSign` in `scene3d.js`) als Holzschild: dunkler Umriss, Holzrand, Pergament, dunkle Schrift; reicht das Gold nicht, blasser. Die 2D-Karte bleibt (hinten angestellt).
 
 **Gemacht:**
