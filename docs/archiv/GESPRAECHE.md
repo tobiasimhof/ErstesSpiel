@@ -34,6 +34,10 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Umgesetzt:** v0.48.0.
 
+**Tobias** (nach dem Test von v0.48.0): „Alles klar, das ganze sieht sehr gut aus. Die Klänge haben mir jetzt nicht 100% gefallen, aber damit hat das Game ein wenig mehr Leben, was ich gut finde. Ansonsten finde ich dieses schlichte Design auch sehr passend für den ersten Entwurf, weil wir uns immernoch im Prototypen befinden und ich erstmal Wert auf ein klares und übersichtliches Design lege. Die Fenster sind gut, die Klänge noch ausbaufähig, aber lass uns gerne weitermachen, damit wir das Design abrunden können“
+
+**Claude** setzt v0.49.0 um wie im Entwurf (Bauleiste, Leiste oben, Knöpfe unten, ⟲ ⟳, Schilder „＋ Preis“); die Klänge bleiben ein offener Punkt.
+
 ### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen, Rechenwerkzeug, Level 14, Waren auf dem Band, nächste große Schritte (v0.43.1 bis v0.46.1)
 
 **Tobias:** „Hey, bringe dich auf den aktuellen Stand der Dinge und berichte mir was die nächsten Schritte sind. Bis v43 sieht alles sehr gut aus und die einzelnen Gebäude wirken auch unterschiedlich genug, sodass man sie erkennt. Da wir die "karte" frei bewegen können, kann ich mir jedes Haus auch von hinten ansehen. Wenn ich z.b. einmal rechts und einmal links baue, dann ist die Produktion auf der anderen Seite immer von hinten zu sehen und da sieht man z.b. keine Unterschiede, aber das ist nur eine kleine Anmerkung für später. Ansonsten sieht es sehr gut aus“
