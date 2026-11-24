@@ -4,6 +4,20 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.49.1 – Oberfläche fertig, nächster Chat vorbereitet (24.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zu v0.49.0 festhalten („Ja, gefällt mir alles sehr gut“) und den nächsten Chat so vorbereiten, dass Claude auf „bring dich auf den aktuellen Stand“ direkt eine Richtung für Startbildschirm, Name und Spielregeln vorschlägt.
+
+**Fragen, die wir uns gestellt haben:**
+- Was braucht der nächste Chat? → In `PLAENE.md`: wie es heute ist (Start direkt in der Fabrik, kein Titel, kein Name, keine Erklärung; Spielstand-Format 18), Claudes Vorschlag (Startbildschirm, Name im Spielstand mit Format 19, Spielregeln als Fenster mit Seiten oder geführte Einführung, zwei Versionen) und erste Fragen.
+
+**Gemacht:**
+- `PLAENE.md`, `STAND.md`, Archiv. Versionsnummer 0.49.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 453 von 453 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.49.0 – Bauleiste, Leisten, Knöpfe und Schilder im Kenney-Stil (24.11.2026)
 
 **Vorgenommen:**

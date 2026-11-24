@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.49.0 – Bauleiste, Leisten, Knöpfe und Schilder „＋ Preis“ im Kenney-Stil: die ganze Oberfläche schlicht in Holz (seit v0.48.0: Fenster, Menü, „🔊 Audio“) |
+| **Aktuelle Version** | v0.49.1 – Oberfläche fertig, nächster Chat vorbereitet (nur Doku; im Spiel seit v0.49.0 die ganze Oberfläche schlicht in Holz, Kenney-Stil, Menü „🔊 Audio“) |
 | **Phase** | M2 – Produktionsketten (Level 1–14 im Spiel); Fokus jetzt auf dem 3D-Test |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ (3D-Test; die echte Fabrik: https://tobiasimhof.github.io/ErstesSpiel/?ansicht=2d) |
-| **Nächster Schritt** | **Tobias testet v0.49.0** – die Oberfläche ist damit rund (schlicht, Prototyp). Danach Tobias' zweiter großer Schritt: **Startbildschirm, Namen eingeben, kurze Erklärung der Spielregeln** (Entwurf folgt); dann Level 15. Offen: Klänge „noch ausbaufähig“, Fabrik-Geräusche später. |
+| **Nächster Schritt** | **Neuer Chat (Tobias): Startbildschirm, Namen eingeben, kurze Spielregeln.** Auf „bring dich auf den aktuellen Stand“ schlägt Claude direkt die Richtung vor – Vorbereitung in `PLAENE.md` (Vorschlag, Aufteilung v0.50.0/v0.51.0, erste Fragen). Danach Level 15. Offen: Klänge „noch ausbaufähig“, Fabrik-Geräusche später. |
 
 **Tobias' 3D-Test – Level 13 abgeschlossen** (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik). Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
 
@@ -48,11 +48,16 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 9. **Einstieg:** am Anfang vor allem die Massenproduktion ausbauen – später austesten.
 10. **Pleiteschutz:** Ein Rohstoff ohne passendes Gebäude verhindert das Geschenk – beobachten.
 11. **Vor v1.0:** Test-Knopf entfernen (`QUEST_TEST_SKIP = false`). Später: Schwarzmarkt, verbundene Läden, Arbeitstitel.
-12. **Anderen das Spiel zeigen:** geht seit v0.22.0 (eigene Geräte oder sichern → neues Spiel → laden); offen: eine kurze Einführung?
+12. **Anderen das Spiel zeigen:** geht seit v0.22.0 (eigene Geräte oder sichern → neues Spiel → laden); die kurze Erklärung der Spielregeln kommt mit dem Startbildschirm (nächster Chat).
 13. **Techbaum:** Werkzeuge, Kräuter und Tränke wachsen parallel; höchstens 2 Eingänge je Maschine; jedes Produkt entsteht logisch aus seinen Zutaten.
 14. **Grafik:** entschieden – frei drehbar, Mittelalter, Spiel-Farben, eigene Häuser je Gebäude; von weitem nur Statuslichter (Vorschlag A, Chat 25). Mix aus Modern und Mittelalter: entschieden – Möglichkeit B, Mittelalter mit ein paar Technik-Teilen (Zahnräder in Messing und Stahl, später Glasrohre), sparsam, ohne Greifarm (Chat 26). Offen für später: Rückseiten der Häuser unterscheidbar machen (Chat 27). Oberfläche: Kenneys UI Pack Adventure, Rahmen B mit Eisenbeschlägen, schlicht (Chat 28). Klänge „noch ausbaufähig“ (Tobias) – andere aussuchen oder Fabrik-Geräusche, später.
 
 ## Die letzten 3 Arbeitsschritte
+
+### v0.49.1 – Oberfläche fertig, nächster Chat vorbereitet (24.11.2026, nur Doku)
+
+- **Tobias:** „Ja, gefällt mir alles sehr gut. Lass uns die nächsten Schritte in einem neuen Chat machen“ – dort schlägt Claude direkt die Richtung vor.
+- **Claude:** Vorbereitung in `PLAENE.md`: Startbildschirm, Name (Spielstand-Format 19), Spielregeln (Fenster mit Seiten oder geführte Einführung), erste Fragen.
 
 ### v0.49.0 – Bauleiste, Leisten, Knöpfe und Schilder im Kenney-Stil (24.11.2026)
 
@@ -65,8 +70,3 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 - **Warum (Tobias, Chat 28):** „Ja, passt so“ zu zwei Schritten; „Die Klänge sollen erstmal aus sein und du kannst die Klänge gerne aussuchen“; Fabrik-Geräusche erst, wenn die Oberfläche abgerundet ist.
 - **Umgesetzt:** Laden, Level-Fenster, Befüllen, Willkommen zurück, Rückfragen und Menü im Stil B; gewählter Reiter dunkles Holz; Menü „🔊 Audio“ (an/aus, Lautstärke, auf dem Gerät gemerkt); Klänge `click2` (Knöpfe) und `switch20` (Reiter), beim Start aus.
 - **Offen:** Tobias' Test; v0.49.0 Bauleiste und Leisten.
-
-### v0.47.1 – Entwurf Rest der Oberfläche mit Klängen (24.11.2026, nur Doku)
-
-- **Tobias:** v0.47.0 läuft live – „Perfek, das hat funktioniert. Lass uns weitermachen“.
-- **Claude:** Entwurf v0.48.0 (Fenster, Menü, „🔊 Audio“, Klänge) und v0.49.0 (Bauleiste, Leisten) in `PLAENE.md`. Offen: Tobias' Antworten.

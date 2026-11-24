@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 23.11.2026 – Chat 28: Oberfläche mit Kenneys UI-Paketen – die ganze Oberfläche im Kenney-Stil, Klänge (v0.46.2 bis v0.49.0)
+### 23.11.2026 – Chat 28: Oberfläche mit Kenneys UI-Paketen – die ganze Oberfläche im Kenney-Stil, Klänge, nächster Chat vorbereitet (v0.46.2 bis v0.49.1)
 
 **Tobias:** „Bringe dich auf den aktuellsten Stand.“
 
@@ -39,6 +39,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat v0.49.0 umgesetzt wie im Entwurf: Leiste oben und Bauleiste dunkles Holz in Kenneys Farben, alle Knöpfe darauf Holzknöpfe, der offene Reiter der Bauleiste dunkles Holz mit heller Schrift, ✕ rot, die Schilder „＋ Preis“ als Holzschild. Die Klänge bleiben ein offener Punkt.
 
 **Umgesetzt:** v0.49.0.
+
+**Tobias:** „Ja, gefällt mir alles sehr gut. Lass uns die nächsten Schritte in einem neuen Chat machen. Lege dafür kurz die Doku an, damit ich im neuen Chat nur schreiben muss, bringe dich auf den aktuellen Stand und du schlägst mir direkt die Richtung vor.“
+
+**Claude** hat die Vorbereitung für den nächsten Chat in `PLAENE.md` geschrieben: Startbildschirm mit Titel, kreisender Kamera über der eigenen Fabrik und „Weiterspielen / Neues Spiel / Spielstand laden / Spielregeln / Audio“; Namen eingeben (im Spielstand, Format 19, alte Spielstände fragen einmal nach); Spielregeln als Fenster mit Seiten (A, Empfehlung) oder geführte Einführung (B, später); v0.50.0 Start und Name, v0.51.0 Spielregeln; erste Fragen (Spielname, wann der Startbildschirm kommt, Name für Laden/Ort, A oder B, was ein neuer Spieler zuerst verstehen muss).
+
+**Umgesetzt:** v0.49.1 (nur Doku).
 
 ### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen, Rechenwerkzeug, Level 14, Waren auf dem Band, nächste große Schritte (v0.43.1 bis v0.46.1)
 
