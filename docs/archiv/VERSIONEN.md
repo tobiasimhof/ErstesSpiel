@@ -24,7 +24,9 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 - Doku: `STAND.md`, `SPIEL.md`, `BEDIENUNG.md`, `TECHNIK.md` (gekürzt, damit sie unter der Grenze bleibt), Archiv. Versionsnummer 0.52.0.
 
 **Geprüft:**
-- (folgt)
+- `npm test`: 474 von 474 bestanden (neu: `einfuehrung.test.js` mit 8 Prüfungen).
+- Browser-Test (Tablet und Handy): 2D 950, 3D mit Einführung 306 – zusammen 1.256 von 1.256 bestanden. Unterwegs gefunden und behoben: Nach „✓ Fertig“ beim Band zeigt Hilde auf ✕ der Bauleiste (der Test erwartete den Laden-Knopf); auf dem Handy lag „➕ 1 einlegen“ unterhalb des sichtbaren Teils des Infofensters – Hilde schiebt das Ziel jetzt ins Bild und zeigt nur auf sichtbare Knöpfe; beim Band-Ziehen zeigen Pfeil und Ring jetzt auf das Feld vor dem orangen Ausgang statt aufs ganze Haus; zwei Stellen im 2D-Test erwarteten noch Format 19.
+- Bildschirmfotos angesehen: Begrüßungsbrief, jeder Schritt auf Tablet und Handy (Fenster verdeckt das Ziel nicht), weggeklappte Hilde am Rand, Abschlussbrief, Rückfrage „Einführung beenden?“, 2D mit Ring ums Holzfällerlager; Start und Aufstieg in 3D ohne Einführung unverändert.
 
 ### v0.51.0 – Neuigkeiten als Schriftrolle, keine Erinnerungen mehr (24.11.2026)
 
