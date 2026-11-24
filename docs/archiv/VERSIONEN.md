@@ -4,6 +4,28 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.52.0 – Einführung mit Bürgermeisterin Hilde (24.11.2026)
+
+**Vorgenommen:**
+- Den zweiten Teil des Entwurfs aus Chat 29 umsetzen (Tobias, Chat 30: „Bringe dich auf den aktuellen stand und beginne mit v52“): Hildes Einführung in 8 Schritten, jeder überspringbar, ganz beendbar, Erledigen springt weiter.
+
+**Fragen, die wir uns gestellt haben:**
+- Woher weiß Hilde, dass ein Schritt erledigt ist? → Handgriffe meldet die Oberfläche als Ereignis („einlegen:holzfaeller“, „verschieben:versandportal“, „laden:lager“, „kaufen:holzstamm“, „level“); was die Fabrik tut, prüft die Logik am Spielstand (ein Portal hat etwas geliefert, ein Kunde hat gekauft). Ereignisse werden gemerkt – wer vorauseilt, wird nicht aufgehalten.
+- Was passiert beim Ansehen in Tobias' Fabrik? → Lieferungen und Verkäufe laufen dort ständig; sie zählen beim Ansehen nicht (sonst wären Schritt 4 und 6 sofort vorbei). Ob es ein Ansehen ist, merkt das Spiel daran, dass schon etwas geliefert oder verkauft wurde.
+- Worauf zeigt der Pfeil, wenn gerade etwas anderes offen ist? → Je Schritt mehrere Hinweise mit Bedingung („Infofenster des Holzfällerlagers offen“, „Laden mit Reiter Theken“, „Bauleiste offen“ …), der erste passende gilt – alles in der Datentabelle. Ein Browser-Lauf fand dabei: Nach „✓ Fertig“ beim Band ist man in der Bauleiste – Hilde zeigt dann auf ✕.
+- Wo steht das Fenster? → In der Ecke, die Ziel und Pfeil nie verdeckt und die Gebäude des Schritts, die Vorschau beim Verschieben und andere Bedienelemente möglichst frei lässt; es gleitet nur weiter, wenn das Ziel darunter rutscht.
+- Das Portal direkt an den Ausgang? → Geht (Gebäude geben direkt weiter), dann käme Schritt 4 ohne Band aus. Hilde rät deshalb, 2–3 Felder Platz fürs Band zu lassen; Schritt 4 ist trotzdem erledigt, sobald etwas ankommt.
+
+**Gemacht:**
+- Neu: `core/data/tutorial.js` (die Schritte als Daten), `core/tutorial.js` (Stand, Ereignisse, Überspringen, Beenden, von vorn), `ui/tutorial.js` (Fenster, Pfeil als SVG, Ring, Wegklappen), Briefe `tutorialWelcomeLetter` und `tutorialEndLetter` in `ui/letters.js`.
+- Spielstand-Format 20 (`state.tutorial`; neue Spiele mit, alte Spielstände ohne, Belastungstest ohne).
+- `ui/letter.js`: eigener Knopftext (`okLabel`) und `onRead`. `ui/controller.js`, `ui/shop.js`: `onEvent` (eingelegt, verschoben – auch als Bereich –, Laden-Reiter, gekauft – auch über das Infofenster); Ziele für den Pfeil (`data-item`, `data-buy`, `data-counter-action`). `ui/levels.js`: „🎓 Einführung ansehen“ im Reiter „Ort & Level“. `main.js`: `buildingRect` (2D und 3D), `tutorial.frame()` in jedem Bild, `tutorial.check()` alle 0,4 s, Start nach dem Ladebildschirm. `style.css` (Block v0.52.0; Rückfragen liegen jetzt über Hildes Fenster).
+- Tests: neu `tests/einfuehrung.test.js`; Browser: neu `tests/browser/einfuehrung.cjs`, `skipTutorial` in `waitForGame` (beendet die Einführung in allen übrigen Tests), `ONLY=einfuehrung`.
+- Doku: `STAND.md`, `SPIEL.md`, `BEDIENUNG.md`, `TECHNIK.md` (gekürzt, damit sie unter der Grenze bleibt), Archiv. Versionsnummer 0.52.0.
+
+**Geprüft:**
+- (folgt)
+
 ### v0.51.0 – Neuigkeiten als Schriftrolle, keine Erinnerungen mehr (24.11.2026)
 
 **Vorgenommen:**

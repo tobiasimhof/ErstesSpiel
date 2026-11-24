@@ -220,9 +220,25 @@ async function readLetter(page) {
   return text;
 }
 
+// v0.52.0: Hildes Einführung (neues Spiel) gleich beenden – Begrüßungsbrief
+// „▶ Los geht’s“, dann „Beenden“ und die Rückfrage bestätigen. Ohne
+// Einführung passiert nichts.
+async function skipTutorial(page) {
+  if (!(await game(page, () => window.__game.tutorial()))) return;
+  if ((await game(page, () => window.__game.tutorial().step)) === 0) await readLetter(page);
+  await page.waitForSelector('#hilde:not([hidden])', { timeout: 5000 });
+  await page.tap('#hilde-end');
+  await page.waitForSelector('#dialog:not([hidden])', { timeout: 5000 });
+  await page.tap('#dialog-ok');
+  await page.waitForFunction(() => window.__game.tutorial() === null, null, { timeout: 5000 });
+  await sleep(100);
+}
+
 // v0.50.0: Wartet, bis das Spiel läuft und der Ladebildschirm weg ist. Fragt
 // er nach dem Namen (erster Start, neues Spiel), trägt es name ein.
-async function waitForGame(page, { timeout = 30000, name = 'Tester' } = {}) {
+// v0.52.0: Beginnt Hildes Einführung (neues Spiel), wird sie beendet – außer
+// mit tutorial: 'keep'.
+async function waitForGame(page, { timeout = 30000, name = 'Tester', tutorial = 'end' } = {}) {
   await page.waitForFunction(() => window.__game && window.__game.camera.viewWidth > 0, null, { timeout });
   await page.waitForFunction(() => document.getElementById('loading').hidden || !document.getElementById('loading-name').hidden, null, { timeout });
   if (await page.isVisible('#loading-name')) {
@@ -231,6 +247,7 @@ async function waitForGame(page, { timeout = 30000, name = 'Tester' } = {}) {
   }
   await page.waitForFunction(() => document.getElementById('loading').hidden, null, { timeout });
   await sleep(150);
+  if (tutorial === 'end') await skipTutorial(page);
 }
 
 module.exports = {
@@ -258,6 +275,7 @@ module.exports = {
   beltOuts,
   mode,
   waitForGame,
+  skipTutorial,
   readLetter,
   setDevice,
   summary,

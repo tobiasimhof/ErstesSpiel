@@ -80,7 +80,8 @@ export function createLetterView() {
     );
     rows.hidden = !(letter.rows ?? []).length;
     seal.textContent = letter.seal ?? '';
-    ok.textContent = queue.length > 0 ? `Weiter · noch ${queue.length} ${queue.length === 1 ? 'Brief' : 'Briefe'}` : '✓ Gelesen';
+    // v0.52.0: eigener Knopftext (Hildes Einführung: „▶ Los geht’s“)
+    ok.textContent = queue.length > 0 ? `Weiter · noch ${queue.length} ${queue.length === 1 ? 'Brief' : 'Briefe'}` : (letter.okLabel ?? '✓ Gelesen');
     content.scrollTop = 0;
   }
 
@@ -110,14 +111,17 @@ export function createLetterView() {
     if (!current || closing) return;
     closing = true;
     root.classList.remove('open');
+    const read = current.onRead;
     setTimeout(() => {
       closing = false;
       next();
+      read?.(); // v0.52.0: z. B. Hildes Begrüßungsbrief → erster Schritt der Einführung
     }, ROLL_MS);
   });
 
   return {
-    // Brief zeigen – oder hinten anstellen, wenn gerade einer offen ist
+    // Brief zeigen – oder hinten anstellen, wenn gerade einer offen ist.
+    // letter.onRead (v0.52.0): wird nach „✓ Gelesen“ aufgerufen.
     show(letter) {
       queue.push(letter);
       if (!current && !closing) next();

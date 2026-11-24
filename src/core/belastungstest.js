@@ -26,6 +26,7 @@ export const STRESS_LINES = [
 export function createStressFactory(seed = 7) {
   const state = createNewGame(seed);
   state.shopLevel = 13;
+  state.tutorial = null; // v0.52.0: ohne Einführung
   fitWorldToLevel(state);
   state.plot = { ...state.world };
   state.buildings = [];

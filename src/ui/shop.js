@@ -56,7 +56,8 @@ const TABS = [
 // v0.16.0: nur was es beim Händler gibt (die Flachspflanze wächst im Beet)
 const RAWS = Object.keys(ITEMS).filter((type) => ITEMS[type].raw && ITEMS[type].buyPrice > 0);
 
-export function createShopView({ state, panels, onChange, onRename }) {
+// v0.52.0: onEvent meldet Hildes Einführung, was getan wurde („laden:lager“, „kaufen:holzstamm“)
+export function createShopView({ state, panels, onChange, onRename, onEvent = () => {} }) {
   let open = false;
   let tab = 'lager';
   let picking = null; // Index der Theke, für die gerade eine Ware gewählt wird
@@ -239,6 +240,7 @@ export function createShopView({ state, panels, onChange, onRename }) {
           onClick: () => startAmount(index, type),
         });
         button.classList.add('item-row', 'pick-row');
+        button.dataset.item = type; // v0.52.0: Ziel für Hildes Pfeil
         const count = el('span', 'item-count');
         counts.set(type, count);
         button.append(createItemIcon(type, 30), el('span', 'item-name', def.name), el('span', 'item-note', `je ${numberFormat.format(def.price)} 🪙`), count);
@@ -402,6 +404,7 @@ export function createShopView({ state, panels, onChange, onRename }) {
         refresh();
       },
     });
+    pick.dataset.counterAction = counter.type ? 'wechseln' : 'ware'; // v0.52.0: Ziel für Hildes Pfeil
     const fill = (n) => () => {
       if (fillCounter(state, index, n) > 0) changed();
       else panels.toast(`Kein ${ITEMS[counter.type].name} mehr im Laden-Lager.`);
@@ -495,12 +498,14 @@ export function createShopView({ state, panels, onChange, onRename }) {
           if (result === 'ok') {
             changed();
             panels.toast(`${def.name} gekauft. Er liegt im Laden-Lager.`);
+            onEvent(`kaufen:${type}`);
           } else if (result === 'gold') panels.toast('Dafür reicht dein Gold nicht.');
           else if (result === 'full') panels.toast('Dein Laden-Lager ist voll.');
           else if (result === 'locked') panels.toast(`${def.name} gibt es erst ab Level ${itemLevel(type)}.`);
         },
       });
       button.classList.add('item-count');
+      button.dataset.buy = type; // v0.52.0: Ziel für Hildes Pfeil
       if (!isItemUnlocked(state, type)) {
         button.textContent = `🔒 ab Level ${itemLevel(type)}`;
         button.classList.remove('primary');
@@ -548,6 +553,7 @@ export function createShopView({ state, panels, onChange, onRename }) {
     amountFor = null;
     updateHeader();
     renderSection(true);
+    onEvent(`laden:${tab}`);
   }
 
   // v0.50.0: „Tobias' Laden“ (ohne Namen „Dein Laden“)
@@ -595,6 +601,7 @@ export function createShopView({ state, panels, onChange, onRename }) {
       open = true;
       updateHeader();
       renderSection(true);
+      onEvent(`laden:${tab}`);
     },
     refresh,
     isOpen: () => open,

@@ -137,6 +137,9 @@ export function createController({
   // liegt, und verschiebt selbst.
   tileAt = null,
   panScreen = null,
+  // v0.52.0: meldet Hildes Einführung, was getan wurde („einlegen:holzfaeller“,
+  // „verschieben:versandportal“, „kaufen:holzstamm“)
+  onEvent = () => {},
 }) {
   let mode = 'normal';
   let drag = null;
@@ -300,6 +303,8 @@ export function createController({
             const n = done.fromStorage + done.buy;
             if (n > 0) {
               changed();
+              if (done.buy > 0) onEvent(`kaufen:${done.input}`);
+              onEvent(`einlegen:${machine.type}`);
               const bought = done.buy > 0 ? ` (${done.buy} gekauft für ${numberFormat.format(done.cost)} Gold)` : '';
               panels.toast(`${n} ${n === 1 ? input.name : input.plural} eingelegt${bought}.`);
             } else if (done.room === 0) panels.toast('Der Vorrat ist schon voll.');
@@ -326,6 +331,7 @@ export function createController({
               if (loadInput(state, machine, type)) {
                 changed();
                 panels.toast(`${input.name} eingelegt.`);
+                onEvent(`einlegen:${machine.type}`);
               } else if (sourceRoom(machine) < 1) panels.toast('Der Vorrat ist voll.');
               else panels.toast(none(input));
               infoRefresh?.();
@@ -351,6 +357,7 @@ export function createController({
               if (result === 'ok') {
                 changed();
                 panels.toast(`${input.name} gekauft. Jetzt einlegen.`);
+                onEvent(`kaufen:${type}`);
               } else if (result === 'gold') panels.toast('Dafür reicht dein Gold nicht.');
               else if (result === 'full') panels.toast('Dein Laden-Lager ist voll.');
               else if (result === 'locked') panels.toast(`${input.name} gibt es erst ab Level ${itemLevel(type)}.`);
@@ -727,6 +734,7 @@ export function createController({
       changed();
       setMode('normal');
       select({ kind: 'building', id });
+      onEvent(`verschieben:${g.type}`);
     } else {
       const result = buyBuilding(state, g.type, g.x, g.y, g.rot);
       if (result === 'locked') return toastLocked(g.type);
@@ -916,6 +924,7 @@ export function createController({
     area.ghost = null;
     updateAreaBar();
     panels.toast(`Verschoben: ${areaSummary(moved)}.`, 2000);
+    for (const type of new Set(moved.buildings.map((id) => findBuilding(state, id)?.type))) if (type) onEvent(`verschieben:${type}`);
   }
 
   function cancelAreaMove() {
