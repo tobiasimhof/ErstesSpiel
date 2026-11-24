@@ -22,7 +22,8 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
 **Geprüft:**
 - `npm test`: 453 von 453 bestanden.
-- Browser-Test: TESTERGEBNIS
+- Browser-Test (Tablet und Handy, 2D und 3D): 1.122 von 1.122 bestanden. Ein erster Lauf fand auf dem Handy „Verschieben“ zu breit für die Werkzeug-Kachel (behoben, dann neu gestartet). Eigenes Prüfskript: alle Reiter und Kacheln auf Tablet und Handy im Bild; auf dem sehr schmalen Handy (740) liegt die 4. Gebäude-Kachel wie schon in v0.48.0 hinter dem Rand und lässt sich wischen – geprüft werden dort wie bisher die Reiter.
+- Bildschirmfotos angesehen: Bauleiste (Holz, Erde, Werkstatt), Werkzeugleiste, Leiste oben, Laden/Bauen, ⟲ ⟳, Schilder „＋ 170“ – Tablet, Handy, schmales Handy.
 
 ### v0.48.0 – Fenster, Menü und Klänge im Kenney-Stil (24.11.2026)
 
