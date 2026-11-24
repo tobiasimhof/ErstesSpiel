@@ -609,6 +609,59 @@ async function run3d(browser, baseUrl, device) {
     g.simulate(0);
   }, [beds, shopLevelBefore]);
 
+  // v0.48.0 (Tobias, Chat 28): große Fenster und Menü im Kenney-Stil, der
+  // gewählte Reiter dunkles Holz; Menü ☰ → „🔊 Audio“ – Klänge beim ersten
+  // Start aus, Einstellung im Browser des Geräts (nicht im Spielstand)
+  await page.tap('#btn-shop');
+  await sleep(300);
+  const shopLook = await page.evaluate(() => ({
+    frame: getComputedStyle(document.querySelector('#modal .modal-box')).borderImageSource,
+    tab: getComputedStyle(document.querySelector('#modal .tabs .tab.active')).borderImageSource,
+    other: getComputedStyle(document.querySelector('#modal .tabs .tab:not(.active)')).borderImageSource,
+  }));
+  check(
+    shopLook.frame.includes('panel_brown_corners_a') && shopLook.tab.includes('button_dark') && shopLook.other.includes('button_brown'),
+    `Laden: Holzrahmen, gewählter Reiter dunkles Holz, die anderen hell (${[shopLook.frame, shopLook.tab, shopLook.other].map((u) => u.split('/').pop()).join(', ')})`,
+  );
+  await page.tap('#modal-close');
+  await sleep(200);
+  await page.tap('#btn-menu');
+  await sleep(150);
+  const audioMenu = await page.locator('#menu').boundingBox();
+  check(
+    (await page.isVisible('#menu-audio')) && (await page.textContent('#menu-audio')).includes('Audio') && audioMenu.y + audioMenu.height <= vp.height,
+    `Menü: Eintrag „🔊 Audio“, Menü passt (${Math.round(audioMenu.y + audioMenu.height)} ≤ ${vp.height})`,
+  );
+  await page.tap('#menu-audio');
+  await sleep(250);
+  const audioStart = { text: await page.textContent('#audio-toggle'), stored: await game(page, () => localStorage.getItem('erstesspiel-audio')) };
+  check(audioStart.text.includes('aus') && audioStart.stored === null, `Audio: beim ersten Start aus (${audioStart.text}, gespeichert: ${audioStart.stored})`);
+  await page.tap('#audio-toggle');
+  await sleep(200);
+  await game(page, () => {
+    const slider = document.getElementById('audio-volume');
+    slider.value = '30';
+    slider.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await sleep(150);
+  const audioOn = {
+    text: await page.textContent('#audio-toggle'),
+    volume: await page.textContent('.audio-volume-text'),
+    stored: JSON.parse(await game(page, () => localStorage.getItem('erstesspiel-audio'))),
+    box: await page.locator('#modal .modal-box').boundingBox(),
+  };
+  check(
+    audioOn.text.includes('an') && audioOn.volume.trim() === '30 %' && audioOn.stored.on === true && audioOn.stored.volume === 0.3,
+    `Audio: an, Lautstärke 30 %, auf dem Gerät gemerkt (${JSON.stringify(audioOn.stored)})`,
+  );
+  check(audioOn.box.y >= 0 && audioOn.box.y + audioOn.box.height <= vp.height && audioOn.box.x + audioOn.box.width <= vp.width, 'Fenster „Audio“ passt auf den Bildschirm');
+  await shot('3d-11f-audio');
+  await page.tap('#audio-toggle');
+  await sleep(150);
+  check(JSON.parse(await game(page, () => localStorage.getItem('erstesspiel-audio'))).on === false, 'Audio: wieder aus');
+  await page.tap('#modal-close');
+  await sleep(150);
+
   // Eigener Spielstand: der 3D-Test speichert getrennt, die echte Fabrik bleibt
   await game(page, () => window.__game.saveNow());
   const slots = await game(page, () => ({

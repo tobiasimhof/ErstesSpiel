@@ -4,6 +4,27 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.48.0 – Fenster, Menü und Klänge im Kenney-Stil (24.11.2026)
+
+**Vorgenommen:**
+- Den Entwurf v0.48.0 umsetzen (Tobias: „1. Ja, passt so. 2. Die Klänge sollen erstmal aus sein und du kannst die Klänge gerne aussuchen“).
+
+**Fragen, die wir uns gestellt haben:**
+- Welche Klänge? → Alle 50 Klänge von Kenneys UI Audio nach Länge, Lautstärke und Klangfarbe gemessen (`ffmpeg`): `click2` (0,06 s, die wärmste Klick-Datei) für Knöpfe, `switch20` (der tiefste, weichste Schalter) für Reiter. Als MP3 (1 und 3 KB) – Ogg spielen nicht alle iPhones.
+- Wie klingen alle Knöpfe, ohne jede Stelle anzufassen? → `onPress` (`ui/press.js`) ruft vor jedem Antippen `pressSound` (`ui/sound.js`); Reiter (`.tab`, `.build-tab`) klingen anders. Web Audio, der Ton entsteht erst nach dem ersten Antippen (so verlangen es die Browser); die Dateien laden erst, wenn die Klänge an sind.
+- Wo steht die Einstellung? → Im Browser des Geräts (`erstesspiel-audio`: an/aus, Lautstärke), nicht im Spielstand – das Format bleibt gleich. Unsinn oder nichts gespeichert = aus.
+- Wie bekommt der gewählte Reiter dunkles Holz? → Das Paket hat keinen dunklen Knopf: `button_dark.png` ist `button_brown.png` nach Helligkeit dunkel umgefärbt; helle Schrift.
+- Was ändert sich am Aussehen? → Nur `style.css` (ein Block hinter den Grundregeln): `.modal-box`, `.catchup-box`, `.menu` mit Rahmen B; Knöpfe, Zeilen (`item-row`, `level-row`, `goal-row` …) wie Holzschilder; Kästen (Theken, Aufträge, Lager vergrößern, nächstes Level) mit verziertem Rahmen; der Test-Knopf bleibt lila. Rückfragen 460 statt 400 breit.
+
+**Gemacht:**
+- `ui/sound.js` und `ui/audio.js` (neu), `ui/press.js` (Klang beim Antippen), `ui/hud.js` und `index.html` (Menüeintrag „🔊 Audio“), `main.js` (Fenster öffnen), `style.css`, `assets/kenney-ui/ui-audio/` (2 Klänge, Lizenz), `assets/kenney-ui/ui-pack-adventure/button_dark.png`.
+- Neuer Test `tests/audio.test.js` (beim Start aus, Einstellung prüfen, Dateien und Lizenz, Reiter klingen anders); Browser-Test: Laden mit Holzrahmen und dunklem Reiter, Menü „🔊 Audio“ aus → an, Lautstärke 30 % gemerkt, Fenster passt (`3d-11f-audio`).
+- Doku: `STAND.md`, `SPIEL.md`, `BEDIENUNG.md`, `TECHNIK.md`, Archiv. Versionsnummer 0.48.0.
+
+**Geprüft:**
+- `npm test`: 453 von 453 bestanden.
+- Browser-Test: TESTERGEBNIS
+
 ### v0.47.1 – v0.47.0 läuft live, Entwurf Rest der Oberfläche mit Klängen (24.11.2026, nur Doku)
 
 **Vorgenommen:**

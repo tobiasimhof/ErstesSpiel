@@ -3,6 +3,8 @@
 // Wischbewegung tippt (z. B. Band ziehen und sofort „Fertig“ tippen).
 // Tastatur (Enter/Leertaste) löst weiterhin über "click" aus.
 
+import { pressSound } from './sound.js';
+
 export function onPress(element, handler) {
   let pressedId = null;
   element.addEventListener('pointerdown', (event) => {
@@ -18,11 +20,15 @@ export function onPress(element, handler) {
     if (element.disabled) return;
     const r = element.getBoundingClientRect();
     if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) return;
+    pressSound(element); // v0.48.0: Klang (nur, wenn im Menü „🔊 Audio“ an)
     handler(event);
   });
   element.addEventListener('click', (event) => {
     // detail === 0: Klick per Tastatur
-    if (event.detail === 0 && !element.disabled) handler(event);
+    if (event.detail === 0 && !element.disabled) {
+      pressSound(element);
+      handler(event);
+    }
   });
 }
 

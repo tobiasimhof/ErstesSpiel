@@ -2074,6 +2074,168 @@ button.quest-skip:active {
   opacity: 0.65;
 }
 
+/* ---------- v0.48.0: große Fenster, Rückfragen und Menü im Kenney-Stil ----------
+   Wie das Infofenster (v0.47.0): Rahmen B (Holz mit Eisenbeschlägen), Holzknöpfe,
+   Zeilen und Kästen mit Holzrahmen. Der gewählte Reiter ist dunkles Holz mit
+   heller Schrift (button_dark.png, aus Kenneys button_brown umgefärbt) – so sieht
+   man sofort, wo man ist. Steht hinter den Grundregeln, damit es sie überschreibt. */
+.modal-box,
+.catchup-box,
+.menu {
+  background: #fff1d2;
+  background-clip: padding-box;
+  border: 16px solid transparent;
+  border-image: url('../assets/kenney-ui/ui-pack-adventure/panel_brown_corners_a.png') 40 / 16px stretch;
+  border-radius: 0;
+}
+
+.modal-box,
+.catchup-box {
+  padding: 4px 8px;
+}
+
+.menu {
+  padding: 2px;
+}
+
+.modal-box button,
+.menu button {
+  border: 5px solid transparent;
+  border-image: url('../assets/kenney-ui/ui-pack-adventure/button_brown.png') 10 fill / 5px stretch;
+  border-radius: 0;
+  background: none;
+  font-weight: 700;
+}
+
+.modal-box button:active,
+.menu button:active {
+  background: none;
+  filter: brightness(0.9);
+}
+
+.modal-box button.primary {
+  border-image-source: url('../assets/kenney-ui/ui-pack-adventure/button_green.png');
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.modal-box button.danger,
+.modal-box .modal-close {
+  border-image-source: url('../assets/kenney-ui/ui-pack-adventure/button_red.png');
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.modal-box .modal-close {
+  top: 0;
+  right: 0;
+  width: 38px;
+  min-height: 38px;
+}
+
+/* Rückfragen etwas breiter, damit drei Knöpfe („Abbrechen“, „Erst sichern“,
+   „Neues Spiel“) in eine Zeile passen */
+.modal-box.dialog-box {
+  width: min(460px, 100%);
+}
+
+/* Reiter (Lager / Theken / Händler, Aufträge / Ort & Level) */
+.modal-box .tabs .tab {
+  background: none;
+  color: var(--ink);
+}
+
+.modal-box .tabs .tab.active {
+  border-image-source: url('../assets/kenney-ui/ui-pack-adventure/button_dark.png');
+  color: #fff1d2;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+}
+
+/* Zeilen: helles Holzschild */
+.modal-box .item-row,
+.modal-box .level-row,
+.modal-box .goal-row,
+.modal-box .empty-note,
+.modal-box .stat,
+.modal-box .amount-display,
+.modal-box .away-row,
+.modal-box .sale-line {
+  border: 5px solid transparent;
+  border-image: url('../assets/kenney-ui/ui-pack-adventure/button_brown.png') 10 / 5px stretch;
+  border-radius: 0;
+  background: #fff7e6;
+  background-clip: padding-box;
+}
+
+.modal-box .goal-row.done,
+.modal-box .sale-line {
+  background-color: #e5f2d9;
+}
+
+.modal-box .level-row.current {
+  background-color: #fde9a8;
+}
+
+/* Kästen: Holzrahmen mit Verzierung (wie „Stellt her“ im Infofenster) */
+.modal-box .counter-card,
+.modal-box .storage-upgrade,
+.modal-box .quest-card,
+.modal-box .level-reward {
+  border: 10px solid transparent;
+  border-image: url('../assets/kenney-ui/ui-pack-adventure/panel_border_brown_detail.png') 30 / 10px stretch;
+  border-radius: 0;
+  background: rgba(246, 226, 184, 0.7);
+  background-clip: padding-box;
+}
+
+.modal-box .counter-slot {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Der Test-Knopf bleibt bewusst anders (lila, gestrichelt) */
+.modal-box button.quest-skip {
+  border: 2px solid #6a4c93;
+  border-image: none;
+  border-radius: 8px;
+  background: #ece3f6;
+  text-shadow: none;
+}
+
+/* v0.48.0: Fenster „🔊 Audio“ */
+.audio-volume {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 6px;
+  font-weight: 700;
+}
+
+.audio-volume.off {
+  opacity: 0.55;
+}
+
+.audio-volume input[type='range'] {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  accent-color: #8a5a2b;
+}
+
+.audio-volume-text {
+  min-width: 46px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-height: 420px) {
+  .modal-box,
+  .catchup-box {
+    padding: 2px 4px;
+    border-width: 14px;
+    border-image-width: 14px;
+  }
+}
+
 /* ---------- Schmale Handys (quer) ---------- */
 
 /* v0.29.0: Unter 820 px Breite (z. B. 740) ragten die 5 Reiter über den Rand.

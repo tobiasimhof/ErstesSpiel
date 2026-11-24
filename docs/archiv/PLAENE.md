@@ -61,7 +61,7 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.48.0 und v0.49.0 – der Rest der Oberfläche im Kenney-Stil, Klänge mit Menüpunkt „Audio“ (Chat 28, v0.47.1; wartet auf Tobias' OK)
+### Entwurf v0.48.0 und v0.49.0 – der Rest der Oberfläche im Kenney-Stil, Klänge mit Menüpunkt „Audio“ (Chat 28, v0.47.1; angenommen – v0.48.0 umgesetzt, v0.49.0 als Nächstes)
 
 **Tobias (Chat 28, nach v0.47.0):** „Perfekt, das hat funktioniert. Lass uns weitermachen“ – vorher: „Die Sounds machen wir erst bei dem Menu, dass wir auch einen Menüpunkt mit Audio haben, um das ganze zu steuern, aber der Stil des UI's gefällt mir“.
 
@@ -86,6 +86,8 @@ Spielregeln und Spielstand-Format bleiben in beiden Schritten gleich.
 2. Klänge beim ersten Start **an oder aus**? Lautstärke als Regler oder nur „an/aus“?
 3. Welche Klänge? Tobias kann sie im heruntergeladenen Paket anhören (Ordner `Audio`: `click1`–`click5`, `switch1`–`switch38`, `rollover1`–`rollover6`) und Namen nennen – sonst wählt Claude zwei passende aus.
 4. Soll es später auch Fabrik-Geräusche geben (eigener Schritt, anderes Paket)?
+
+**Tobias' Antwort:** „1. Ja, passt so. 2. Die Klänge sollen erstmal aus sein und du kannst die Klänge gerne aussuchen. Das mit den Geräuschen hatte ich auch schon gedacht, aber erstmal wollte ich UI abrunden“ **Umgesetzt in v0.48.0** wie in Punkt 1–4, mit Lautstärke-Regler. Klänge: `click2` (0,06 s, warm) für Knöpfe, `switch20` (weich, tief) für Reiter, ausgesucht nach Länge und Klangfarbe; als MP3 (Ogg spielen nicht alle iPhones). Der gewählte Reiter nutzt `button_dark.png` (Kenneys heller Knopf, dunkel umgefärbt). Rückfragen sind 460 statt 400 Bildpunkte breit, damit „Abbrechen“, „Erst sichern“ und „Neues Spiel“ in eine Zeile passen.
 
 ### Entwurf v0.47.0 – Probefenster: Kräuter klar unterscheidbar, schlichte Oberfläche mit Kenney (Chat 28, v0.46.2; angenommen mit Rahmen B, umgesetzt in v0.47.0 – Klänge erst mit dem Menü)
 

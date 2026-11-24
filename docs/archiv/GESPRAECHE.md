@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 23.11.2026 – Chat 28: Oberfläche mit Kenneys UI-Paketen – Probefenster, Entwurf für den Rest (v0.46.2 bis v0.47.1)
+### 23.11.2026 – Chat 28: Oberfläche mit Kenneys UI-Paketen – Probefenster, Fenster, Menü und Klänge (v0.46.2 bis v0.48.0)
 
 **Tobias:** „Bringe dich auf den aktuellsten Stand.“
 
@@ -27,6 +27,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat den Entwurf für die nächsten Schritte geschrieben (`PLAENE.md`): v0.48.0 – die großen Fenster (Laden, Level, Befüllen, Willkommen zurück) und Rückfragen im Stil B, Reiter klar markiert (gewählter Reiter dunkles Holz), das Menü ☰ als Holztafel mit neuem Eintrag „🔊 Audio“ (Klänge an/aus, Lautstärke; gespeichert auf dem Gerät, nicht im Spielstand), Klänge aus Kenneys UI Audio (Klicken beim Antippen, ein anderes Geräusch beim Reiterwechsel); v0.49.0 – Bauleiste, Leiste oben, Knöpfe unten, ⟲ ⟳ und die Schilder „＋ Preis“. Fragen: zwei Schritte so? Klänge beim Start an oder aus, Regler oder nur an/aus? Welche Klänge (Tobias kann sie im Paket anhören)? Später Fabrik-Geräusche?
 
 **Umgesetzt:** v0.47.1 (nur Doku). Wartet auf Tobias' Antworten.
+
+**Tobias:** „1. Ja, passt so. 2. Die Klänge sollen erstmal aus sein und du kannst die Klänge gerne aussuchen. Das mit den Geräuschen hatte ich auch schon gedacht, aber erstmal wollte ich UI abrunden, damit die Oberfläche einfach besser aussieht“
+
+**Claude** hat v0.48.0 umgesetzt: Laden, Level-Fenster, Lagerhaus befüllen, „Willkommen zurück“, Rückfragen und das Menü im Stil B (Holzrahmen mit Eisenbeschlägen, Holzknöpfe, Zeilen wie Holzschilder, Kästen mit verziertem Rahmen); der gewählte Reiter ist dunkles Holz (Kenneys heller Knopf, dunkel umgefärbt); Menü ☰ → „🔊 Audio“ mit Schalter und Lautstärke-Regler, gemerkt im Browser des Geräts; Klänge ausgesucht nach Länge und Klangfarbe: `click2` (kurzes, warmes Klicken) für Knöpfe, `switch20` (weicher, tiefer Schalter) für Reiter – als MP3, damit sie auch auf iPhones laufen; beim ersten Start aus.
+
+**Umgesetzt:** v0.48.0.
 
 ### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen, Rechenwerkzeug, Level 14, Waren auf dem Band, nächste große Schritte (v0.43.1 bis v0.46.1)
 

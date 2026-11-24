@@ -10,6 +10,7 @@ import { TILE, createCamera, setViewSize, zoomAt, panBy, fitRect, clampCamera } 
 import { createRenderer } from './view2d/renderer.js';
 import { attachInput } from './ui/input.js';
 import { createHud } from './ui/hud.js';
+import { createAudioWindow } from './ui/audio.js';
 import { createPanels } from './ui/panels.js';
 import { createBuildBar } from './ui/buildbar.js';
 import { createController } from './ui/controller.js';
@@ -239,8 +240,14 @@ function openLevel() {
   levelView.open();
 }
 
+const audioWindow = createAudioWindow({ panels });
 const hud = createHud({
   version: VERSION,
+  // v0.48.0: Menü ☰ → „🔊 Audio“
+  onAudio: () => {
+    controller.closeInfo();
+    audioWindow.open();
+  },
   onNewGame: newGame,
   onToggleTestMode: toggleTestMode,
   onTestPack: testPack,
