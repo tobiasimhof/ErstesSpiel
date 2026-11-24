@@ -901,7 +901,7 @@ button.danger {
   align-items: center;
   gap: 6px;
   min-height: 38px;
-  padding: 0 14px;
+  padding: 0 11px; /* v0.49.0: 3 px weniger, der Holzrahmen ist 3 px dicker */
   border: 2px solid var(--wood-dark);
   border-bottom: none;
   border-radius: 10px 10px 0 0;
@@ -1826,7 +1826,7 @@ button.level-up {
   .build-tab {
     gap: 4px;
     min-height: 32px;
-    padding: 0 9px;
+    padding: 0 6px;
     font-size: 12.5px;
   }
 
@@ -2249,6 +2249,94 @@ button.quest-skip:active {
   }
 }
 
+/* ---------- v0.49.0: Bauleiste, Leisten und Knöpfe im Kenney-Stil ----------
+   Rundet die Oberfläche ab (Tobias, Chat 28: „lass uns gerne weitermachen, damit
+   wir das Design abrunden können“). Die Leisten oben und unten sind dunkles Holz
+   in Kenneys Farben (Rand #b47b41, Umriss #6d4b27), alle Knöpfe darauf Holzknöpfe
+   wie in den Fenstern; der offene Reiter der Bauleiste ist dunkles Holz mit
+   heller Schrift. Hier stehen nur Farben und Rahmen – die Größen für Handys
+   bleiben bei den Regeln weiter oben. */
+#hud {
+  background: #7a512d;
+  border-bottom: 4px solid #b47b41;
+  box-shadow: 0 2px 0 #6d4b27, 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.bar {
+  background: #7a512d;
+  border-top: 4px solid #b47b41;
+  box-shadow: 0 -2px 0 #6d4b27, 0 -4px 14px rgba(0, 0, 0, 0.35);
+}
+
+#hud button:not(.hud-level),
+.bar button,
+#bottom-bar button,
+.turn-buttons button {
+  border: 5px solid transparent;
+  border-image: url('../assets/kenney-ui/ui-pack-adventure/button_brown.png') 10 fill / 5px stretch;
+  border-radius: 0;
+  background: none;
+  color: var(--ink);
+}
+
+#hud button:not(.hud-level):active,
+.bar button:active,
+#bottom-bar button:active,
+.turn-buttons button:active {
+  background: none;
+  filter: brightness(0.9);
+}
+
+.bar button.primary {
+  border-image-source: url('../assets/kenney-ui/ui-pack-adventure/button_green.png');
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.bar button.danger,
+#build-close {
+  border-image-source: url('../assets/kenney-ui/ui-pack-adventure/button_red.png');
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+/* Große Knöpfe „Laden“, „Bauen“ und ⟲ ⟳: etwas dickerer Rahmen */
+#bottom-bar .big-button,
+.turn-buttons button {
+  border-width: 6px;
+  border-image-width: 6px;
+}
+
+/* Reiter der Bauleiste: hell, der offene dunkles Holz mit heller Schrift */
+.bar .build-tab {
+  color: var(--ink);
+}
+
+.bar .build-tab.active {
+  border-image-source: url('../assets/kenney-ui/ui-pack-adventure/button_dark.png');
+  color: #fff1d2;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+}
+
+.bar .build-tab.locked:not(.active) {
+  opacity: 0.75;
+}
+
+/* gesperrte Gebäude: nur blass, ohne eigenen Hintergrund (er schimmerte in
+   den runden Ecken des Holzrahmens durch) */
+.bar .build-item.locked {
+  background: none;
+}
+
+/* Auf dem Handy sind die Werkzeug-Kacheln nur 72 px breit – mit dem vollen
+   Holzrahmen passte „Verschieben“ nicht mehr hinein */
+@media (max-height: 420px) {
+  .bar .build-tools .build-item {
+    border-width: 3px;
+    border-image-width: 3px;
+  }
+}
+
 /* ---------- Schmale Handys (quer) ---------- */
 
 /* v0.29.0: Unter 820 px Breite (z. B. 740) ragten die 5 Reiter über den Rand.
@@ -2262,7 +2350,7 @@ button.quest-skip:active {
 
   .build-tab {
     gap: 5px;
-    padding: 0 7px;
+    padding: 0 4px;
   }
 
   .build-tab:not(.active) .build-tab-name,
