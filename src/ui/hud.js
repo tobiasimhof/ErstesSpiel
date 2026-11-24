@@ -6,7 +6,7 @@ import { onPress } from './press.js';
 
 const numberFormat = new Intl.NumberFormat('de-DE');
 
-export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, onLevel, onSaveFile, onLoadFile, onSwitch3d, onStressTest, is3d = false, stressTest = false }) {
+export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, onLevel, onSaveFile, onLoadFile, onSwitch3d, onStressTest, onAudio, is3d = false, stressTest = false }) {
   const gold = document.getElementById('hud-gold');
   const goldGain = document.getElementById('hud-gold-gain');
   const testPackButton = document.getElementById('menu-test-pack');
@@ -56,6 +56,12 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
   document.getElementById('stress-banner').hidden = !stressTest;
   onPress(document.getElementById('stress-exit'), () => {
     location.href = 'index.html';
+  });
+  // v0.48.0: Klänge an/aus und Lautstärke (Tobias: „dass wir auch einen
+  // Menüpunkt mit Audio haben, um das ganze zu steuern“)
+  onPress(document.getElementById('menu-audio'), () => {
+    closeMenu();
+    onAudio?.();
   });
   // v0.22.0: Spielstand als Datei sichern und laden
   onPress(document.getElementById('menu-save-file'), () => {
