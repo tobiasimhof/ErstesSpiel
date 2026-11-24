@@ -61,6 +61,23 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Vorbereitung für den nächsten Chat: Startbildschirm, Name, kurze Spielregeln (Chat 28, v0.49.1; noch kein Entwurf)
+
+**Tobias (Chat 28, nach v0.49.0):** „Ja, gefällt mir alles sehr gut. Lass uns die nächsten Schritte in einem neuen Chat machen. Lege dafür kurz die Doku an, damit ich im neuen Chat nur schreiben muss, bringe dich auf den aktuellen Stand und du schlägst mir direkt die Richtung vor.“
+
+**Stand:** Die Oberfläche ist rund (v0.47.0–v0.49.0, schlicht im Holz-Stil aus Kenneys UI Pack Adventure). Tobias' zweiter großer Schritt aus Chat 27: „das Spiel auf die ebene führen mit Anfangsscreen, Namen eingeben und das es kurz die Spielregeln erklärt“. Danach Level 15 „Der alte Magier“. Offen nebenbei: Klänge „noch ausbaufähig“, Fabrik-Geräusche später.
+
+**Wie es heute ist:** Das Spiel startet sofort in der Fabrik (3D-Test mit eigenem Spielstand; ohne Spielstand ein neues Spiel ab Level 1). Es gibt keinen Titel, keinen Namen und keine Erklärung; „Neues Spiel“, „Spielstand laden“ und „🔊 Audio“ stehen im Menü ☰. Nach mehr als 10 Minuten Pause kommt „👋 Willkommen zurück!“. Spielstand-Format 18 (`src/core/save.js`).
+
+**Was Claude im nächsten Chat direkt vorschlägt (auf „bring dich auf den aktuellen Stand“):**
+1. **Startbildschirm** (im selben Holz-Stil): oben der Spieltitel, im Hintergrund die eigene Fabrik in 3D, über die die Kamera langsam kreist; Knöpfe „▶ Weiterspielen“ (mit Name, Level und Gold des Spielstands) bzw. „▶ Neues Spiel“ beim ersten Mal, dazu „📂 Spielstand laden“, „❓ Spielregeln“ und „🔊 Audio“. „Willkommen zurück“ kommt erst nach „Weiterspielen“.
+2. **Namen eingeben** beim ersten Start und bei „Neues Spiel“: der Name des Spielers (und vielleicht der Name des Ladens). Er erscheint im Laden-Fenster („Tobias' Laden“), in den Aufträgen der Bewohner und im Dateinamen beim Sichern. Er steht im Spielstand → `SAVE_VERSION` 19; alte Spielstände bekommen keinen Namen und fragen beim nächsten Start einmal danach – Tobias' Fabrik bleibt erhalten.
+3. **Kurze Spielregeln** – zwei Wege: **A (Empfehlung für jetzt)** ein Fenster mit 5–6 Seiten und Bildern (Rohstoff einlegen → Bänder → Maschinen → Versandportal → Laden und Theken → Aufträge und Level), beim ersten Start nach dem Namen, jederzeit wieder über „❓ Spielregeln“ (Startbildschirm und Menü); **B (später)** eine geführte Einführung im Spiel, die Schritt für Schritt auf Gebäude zeigt („Tippe das Holzfällerlager an …“) – deutlich mehr Arbeit, passt eher zu M4.
+4. **Aufteilung:** v0.50.0 Startbildschirm und Name (Spielstand-Format ändert sich), v0.51.0 Spielregeln.
+5. **Nur im 3D-Test** – die echte Fabrik (2D) ist hinten angestellt.
+
+**Erste Fragen an Tobias:** (1) Hat das Spiel schon einen Namen für den Titel (Arbeitstitel offen) – oder erst einmal ein Platzhalter? (2) Startbildschirm bei jedem Start oder nur beim ersten? (3) Nur der Name des Spielers oder auch ein Name für Laden oder Ort? (4) Spielregeln als Fenster mit Seiten (A) oder gleich die geführte Einführung (B)? (5) Was soll ein neuer Spieler in den ersten Minuten unbedingt verstehen?
+
 ### Entwurf v0.48.0 und v0.49.0 – der Rest der Oberfläche im Kenney-Stil, Klänge mit Menüpunkt „Audio“ (Chat 28, v0.47.1; angenommen – umgesetzt in v0.48.0 und v0.49.0)
 
 **Tobias (Chat 28, nach v0.47.0):** „Perfekt, das hat funktioniert. Lass uns weitermachen“ – vorher: „Die Sounds machen wir erst bei dem Menu, dass wir auch einen Menüpunkt mit Audio haben, um das ganze zu steuern, aber der Stil des UI's gefällt mir“.
