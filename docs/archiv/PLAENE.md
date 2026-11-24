@@ -61,7 +61,7 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.48.0 und v0.49.0 – der Rest der Oberfläche im Kenney-Stil, Klänge mit Menüpunkt „Audio“ (Chat 28, v0.47.1; angenommen – v0.48.0 umgesetzt, v0.49.0 als Nächstes)
+### Entwurf v0.48.0 und v0.49.0 – der Rest der Oberfläche im Kenney-Stil, Klänge mit Menüpunkt „Audio“ (Chat 28, v0.47.1; angenommen – umgesetzt in v0.48.0 und v0.49.0)
 
 **Tobias (Chat 28, nach v0.47.0):** „Perfekt, das hat funktioniert. Lass uns weitermachen“ – vorher: „Die Sounds machen wir erst bei dem Menu, dass wir auch einen Menüpunkt mit Audio haben, um das ganze zu steuern, aber der Stil des UI's gefällt mir“.
 
@@ -88,6 +88,8 @@ Spielregeln und Spielstand-Format bleiben in beiden Schritten gleich.
 4. Soll es später auch Fabrik-Geräusche geben (eigener Schritt, anderes Paket)?
 
 **Tobias' Antwort:** „1. Ja, passt so. 2. Die Klänge sollen erstmal aus sein und du kannst die Klänge gerne aussuchen. Das mit den Geräuschen hatte ich auch schon gedacht, aber erstmal wollte ich UI abrunden“ **Umgesetzt in v0.48.0** wie in Punkt 1–4, mit Lautstärke-Regler. Klänge: `click2` (0,06 s, warm) für Knöpfe, `switch20` (weich, tief) für Reiter, ausgesucht nach Länge und Klangfarbe; als MP3 (Ogg spielen nicht alle iPhones). Der gewählte Reiter nutzt `button_dark.png` (Kenneys heller Knopf, dunkel umgefärbt). Rückfragen sind 460 statt 400 Bildpunkte breit, damit „Abbrechen“, „Erst sichern“ und „Neues Spiel“ in eine Zeile passen.
+
+**Tobias zu v0.48.0:** „das ganze sieht sehr gut aus … Die Fenster sind gut, die Klänge noch ausbaufähig, aber lass uns gerne weitermachen, damit wir das Design abrunden können“ **Umgesetzt in v0.49.0** wie in Punkt 5–6. Abweichungen: Die Leisten sind kein Bild, sondern Kenneys Holzfarben in CSS (dunkles Holz #7a512d, Rand #b47b41, Umriss #6d4b27) – ein Bild über die ganze Breite hätte sich verzerrt; die Reiter haben 3 Bildpunkte weniger Innenabstand, weil der Holzrahmen 3 Bildpunkte dicker ist (sonst reichte „Werkstatt“ auf dem Handy bis an den Rand); die Schilder „＋ Preis“ zeichnet die 3D-Ansicht als Holzschild (die 2D-Karte bleibt, sie ist hinten angestellt).
 
 ### Entwurf v0.47.0 – Probefenster: Kräuter klar unterscheidbar, schlichte Oberfläche mit Kenney (Chat 28, v0.46.2; angenommen mit Rahmen B, umgesetzt in v0.47.0 – Klänge erst mit dem Menü)
 

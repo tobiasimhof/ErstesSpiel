@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 23.11.2026 – Chat 28: Oberfläche mit Kenneys UI-Paketen – Probefenster, Fenster, Menü und Klänge (v0.46.2 bis v0.48.0)
+### 23.11.2026 – Chat 28: Oberfläche mit Kenneys UI-Paketen – die ganze Oberfläche im Kenney-Stil, Klänge (v0.46.2 bis v0.49.0)
 
 **Tobias:** „Bringe dich auf den aktuellsten Stand.“
 
@@ -36,7 +36,9 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Tobias** (nach dem Test von v0.48.0): „Alles klar, das ganze sieht sehr gut aus. Die Klänge haben mir jetzt nicht 100% gefallen, aber damit hat das Game ein wenig mehr Leben, was ich gut finde. Ansonsten finde ich dieses schlichte Design auch sehr passend für den ersten Entwurf, weil wir uns immernoch im Prototypen befinden und ich erstmal Wert auf ein klares und übersichtliches Design lege. Die Fenster sind gut, die Klänge noch ausbaufähig, aber lass uns gerne weitermachen, damit wir das Design abrunden können“
 
-**Claude** setzt v0.49.0 um wie im Entwurf (Bauleiste, Leiste oben, Knöpfe unten, ⟲ ⟳, Schilder „＋ Preis“); die Klänge bleiben ein offener Punkt.
+**Claude** hat v0.49.0 umgesetzt wie im Entwurf: Leiste oben und Bauleiste dunkles Holz in Kenneys Farben, alle Knöpfe darauf Holzknöpfe, der offene Reiter der Bauleiste dunkles Holz mit heller Schrift, ✕ rot, die Schilder „＋ Preis“ als Holzschild. Die Klänge bleiben ein offener Punkt.
+
+**Umgesetzt:** v0.49.0.
 
 ### 23.11.2026 – Chat 27: eigene Häuser getestet, Kräuterstube passt, Analyse Teil 2, Grobplan Tränke-Kapitel in zwei Fassungen, Rechenwerkzeug, Level 14, Waren auf dem Band, nächste große Schritte (v0.43.1 bis v0.46.1)
 
