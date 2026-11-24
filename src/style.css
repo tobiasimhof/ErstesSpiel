@@ -2234,6 +2234,19 @@ button.quest-skip:active {
     border-width: 14px;
     border-image-width: 14px;
   }
+
+  /* Im Testmodus hat das Menü 8 Einträge – auf dem Handy flacher, damit alle passen */
+  .menu {
+    gap: 4px;
+    border-width: 12px;
+    border-image-width: 12px;
+  }
+
+  .menu button {
+    min-height: 31px;
+    padding: 0 8px;
+    font-size: 13.5px;
+  }
 }
 
 /* ---------- Schmale Handys (quer) ---------- */
