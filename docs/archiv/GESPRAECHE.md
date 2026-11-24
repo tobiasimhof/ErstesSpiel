@@ -18,6 +18,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Umgesetzt:** v0.50.0.
 
+**Tobias:** „Ich habs mir angeschaut. Sieht für den ersten Versuch sehr gut aus. Das können wir erstmal so stehen . Die klänge sind leider gar nicht gut, aber das liegt eher am Soundpack als an der Programmierung. Ich lasse den Sound daher auf 0. Lass uns als nächstes die Einführung mit Hilde planen. Außerdem ist mir aufgefallen, dass Neuerungen die unten im Spielfeld angezeigt leicht verloren gehen. Da würde ich mir auch nochmal ein Fenster wünschen das aufploppt und die Nachricht dann so übermittelt wird, quasi als Brief oder Nachricht zum aufrollen, wie man das aus dem Mittelalter kennt - ohne Zeit, selbst zum wegklicken, damit man alles lesen kann.“
+
+**Claude** hat nachgesehen, welche Meldungen heute unten erscheinen (alle, auch Aufstieg, Neues nach einem Update, Geschenk des Händlers), im Kenney-Paket passende Teile gefunden (Pergament mit ausgefranstem Rand, rotes Band) und zwei Musterbilder geschickt: A – Schriftrolle zum Aufstieg auf Level 2 (Holzstäbe, rotes Band, Wachssiegel, „✓ Gelesen“), B – Hildes kleines Fenster mit Pfeil und Ring über dem Holzfällerlager, ✕ klappt es weg. Vorschlag: v0.51.0 Schriftrolle, v0.52.0 Einführung (Hildes Begrüßung und Abschluss als Brief). Fragen: Reihenfolge? Schriftrolle so? Erinnerungen („Auftrag bereit“, „Beet reif“) unten lassen? Schritt wartet aufs Tun, ✕ klappt weg?
+
+**Umgesetzt:** v0.50.1 (nur Doku). Wartet auf Tobias' Antworten.
+
 ### 23.11.2026 – Chat 28: Oberfläche mit Kenneys UI-Paketen – die ganze Oberfläche im Kenney-Stil, Klänge, nächster Chat vorbereitet (v0.46.2 bis v0.49.1)
 
 **Tobias:** „Bringe dich auf den aktuellsten Stand.“

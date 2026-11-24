@@ -61,7 +61,45 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.50.0 und v0.51.0 – Ladebildschirm bei jedem Start, Name, geführte Einführung (Chat 29, v0.49.2; angenommen – v0.50.0 umgesetzt, v0.51.0 folgt)
+### Entwurf v0.51.0 und v0.52.0 – Neuigkeiten als Schriftrolle, Einführung mit Hilde (Chat 29, v0.50.1; wartet auf Tobias' Antworten)
+
+**Tobias (Chat 29, nach v0.50.0):** „Ich habs mir angeschaut. Sieht für den ersten Versuch sehr gut aus. Das können wir erstmal so stehen . Die klänge sind leider gar nicht gut, aber das liegt eher am Soundpack als an der Programmierung. Ich lasse den Sound daher auf 0. Lass uns als nächstes die Einführung mit Hilde planen. Außerdem ist mir aufgefallen, dass Neuerungen die unten im Spielfeld angezeigt leicht verloren gehen. Da würde ich mir auch nochmal ein Fenster wünschen das aufploppt und die Nachricht dann so übermittelt wird, quasi als Brief oder Nachricht zum aufrollen, wie man das aus dem Mittelalter kennt - ohne Zeit, selbst zum wegklicken, damit man alles lesen kann.“
+
+**Wie es heute ist:** Alle Meldungen erscheinen unten als kurzer Streifen und verschwinden nach 1–9 Sekunden – auch die wichtigen: der Aufstieg („Laden-Level 5! Neu: …“), was nach einem Update neu ist („Spielstand übernommen. Neu: Dein Name …“), das Geschenk des Händlers. Im Kenney-Paket gibt es keine fertige Schriftrolle, aber passende Teile: Pergament mit ausgefranstem Rand (`panel_brown_damaged`) und ein rotes Band (`banner_classic_curtain`).
+
+**Musterbilder** (an Tobias geschickt, noch nicht im Spiel): **A** – eine Schriftrolle zum Aufstieg auf Level 2 über dem abgedunkelten Spiel; **B** – Hildes kleines Fenster in der Einführung mit Pfeil und Ring über dem Holzfällerlager.
+
+**Vorschlag – Reihenfolge:** erst die Schriftrolle (v0.51.0, kleiner Schritt, hilft sofort bei allen Neuigkeiten), dann die Einführung (v0.52.0) – sie nutzt die Schriftrolle für Hildes Begrüßungsbrief und den Abschluss.
+
+**v0.51.0 – Neuigkeiten als Schriftrolle**
+1. **Aussehen (Musterbild A):** Pergament mit ausgefranstem Rand zwischen zwei Holzstäben, oben das rote Band mit der Überschrift, unten ein rotes Wachssiegel. Sie rollt sich beim Öffnen von oben nach unten auf und beim Schließen wieder zusammen; das Spielfeld dahinter ist abgedunkelt.
+2. **Ohne Zeit:** Sie bleibt, bis man „✓ Gelesen“ tippt. Mehrere Nachrichten kommen nacheinander („Weiter · 1 von 2“).
+3. **Absender** oben: Bürgermeisterin Hilde, der Händler oder „Neues im Spiel“.
+4. **Als Schriftrolle kommen:**
+   - **Aufstieg:** Name und kurze Geschichte des neuen Bauabschnitts, was freigeschaltet ist (mit Warenbildern), Geschenk, mehr Fläche, der erste Auftrag des Levels.
+   - **Neues nach einem Update** („Spielstand übernommen. Neu: …“) – künftig jede Neuerung, die man wissen sollte.
+   - **Geschenk des Händlers** (Pleiteschutz).
+   - **Spielstand beschädigt** – neues Spiel gestartet.
+5. **Unten bleiben** die kurzen Rückmeldungen direkt auf das eigene Tippen (gebaut, gekauft, eingelegt, „Dir fehlen …“, Fläche gekauft, Testmodus …) – sie sieht man ja gerade.
+6. **Auf dem Handy** ist die Rolle etwas kleiner; langer Text lässt sich in ihr schieben.
+7. Spielstand-Format bleibt gleich.
+
+**v0.52.0 – Einführung mit Hilde (Spielstand-Format 20)**
+1. **Beginn:** Bei einem neuen Spiel kommt direkt nach „Wie heißt du?“ Hildes Begrüßungsbrief als Schriftrolle („Willkommen im Ort, Tobias! …“).
+2. **Kleine Fenster (Musterbild B):** Hilde mit Bild, „Schritt 2 von 8“, 1–2 Sätze. Ein hüpfender gelber Pfeil und ein leuchtender Ring zeigen auf das Ziel (Knopf oder Gebäude). Das Fenster steht dort, wo es das Ziel nicht verdeckt.
+3. **Wegklicken:** ✕ klappt das Fenster weg, Hilde wartet klein am Rand (antippen holt es zurück), der Pfeil bleibt. Ist der Schritt erledigt, kommt der nächste Hinweis von selbst. „Einführung beenden“ beendet sie ganz.
+4. **Die 8 Schritte** (wie besprochen) und wann sie erledigt sind: 1 Begrüßungsbrief („✓ Los geht's“) · 2 Holzstamm ins Holzfällerlager (ein Rohstoff liegt drin) · 3 Versandportal näher heranschieben (es wurde verschoben) · 4 Förderband vom Holzfällerlager zum Portal (die ersten Holzblöcke kommen im Laden-Lager an) · 5 Laden öffnen, Reiter Lager („alles aus dem Portal landet hier“) · 6 Holzblöcke auf eine Theke (der erste Kunde kauft) · 7 beim Händler einen Holzstamm kaufen · 8 „Laden-Level“ antippen: Jakobs erster Auftrag – dann Hildes Abschlussbrief als Schriftrolle („Sobald 40 Holzblöcke im Lager sind, baust du ein Sägewerk … Viel Erfolg!“).
+5. **Wer vorauseilt, wird nicht aufgehalten:** Ist ein Schritt schon erledigt, kommt gleich der nächste.
+6. **Nur bei einem neuen Spiel**; Tobias' Fabrik startet sie nicht. **Ansehen:** im Level-Fenster, Reiter „🏘️ Ort & Level“, „🎓 Einführung ansehen“ (im Menü ☰ ist auf dem Handy kein Platz) – dort mit „Weiter“, damit an der großen Fabrik nichts umgebaut werden muss.
+7. Der Spielstand merkt sich, wie weit man ist (Format 20).
+
+**Fragen an Tobias:**
+1. Reihenfolge so – erst die Schriftrolle (v0.51.0), dann die Einführung (v0.52.0)?
+2. Gefällt die Schriftrolle (Musterbild A)?
+3. Die Erinnerungen „Auftrag bereit“, „Genug für den Aufstieg“ und „Beet reif“ kommen oft – bleiben sie kurz unten (Empfehlung; oben gibt es dafür schon ❗ und ⬆), oder auch als Schriftrolle?
+4. Hildes Fenster (Musterbild B): Jeder Schritt wartet, bis man ihn getan hat, ✕ klappt das Fenster weg – so?
+
+### Entwurf v0.50.0 und v0.51.0 – Ladebildschirm bei jedem Start, Name, geführte Einführung (Chat 29, v0.49.2; angenommen – v0.50.0 umgesetzt, die Einführung im Entwurf oben weitergeplant)
 
 **Tobias (Chat 29, Antwort auf die Fragen der Vorbereitung unten):** „Einen Titel gibt es noch nicht, aber ich hatte irgendwas in richtung factory gedacht. Der Startbildschirm soll immer kommen, ähnlich wie bei ClashofClans, damit man immer quasi einen "ladescreen" hat und wenn man sich das erste mal regisitriert kurz ein Startbildschirm, gib deinen Namen ein und dann gehts schon los. In den ersten Minuten wäre es cool, wenn man gezeigt bekommt wie das Spielfunktioniert und was man machen muss. Ganz kurz erklärt, wie man baut, wie man umplatziert, man kann beim Händler kaufen, bei der Theke verkaufen, alles landet im Lager durch das Portal“
 

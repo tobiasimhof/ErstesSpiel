@@ -4,6 +4,22 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.50.1 – Tobias' Test von v0.50.0, Entwurf Schriftrolle und Einführung (24.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zu v0.50.0 festhalten und die nächsten zwei Schritte vorschlagen: Neuigkeiten als Schriftrolle und die Einführung mit Hilde.
+
+**Fragen, die wir uns gestellt haben:**
+- Welche Meldungen gehen verloren? → Alle erscheinen unten als kurzer Streifen (1–9 Sekunden), auch Aufstieg, Neues nach einem Update und das Geschenk des Händlers. Vorschlag: diese als Schriftrolle ohne Zeit, kurze Rückmeldungen auf das eigene Tippen bleiben unten.
+- Wie sieht eine Schriftrolle aus? → Kein fertiges Teil bei Kenney; Musterbild aus `panel_brown_damaged` (Pergament mit ausgefranstem Rand), `banner_classic_curtain` (rotes Band), Holzstäben und Wachssiegel.
+- Reihenfolge? → Erst die Schriftrolle (v0.51.0), dann die Einführung (v0.52.0), die Hildes Briefe als Schriftrolle zeigt.
+
+**Gemacht:**
+- Entwurf und Musterbilder (A Schriftrolle, B Hildes Fenster) in `PLAENE.md`, `STAND.md`, Archiv. Versionsnummer 0.50.1, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 461 von 461 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.50.0 – Ladebildschirm bei jedem Start und Name (24.11.2026)
 
 **Vorgenommen:**
