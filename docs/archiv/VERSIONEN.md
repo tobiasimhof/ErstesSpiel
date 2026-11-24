@@ -4,6 +4,22 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.49.2 – Antworten zu Ladebildschirm, Name und Einführung, Entwurf v0.50.0/v0.51.0 (24.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Antworten auf die Fragen der Vorbereitung festhalten und den Entwurf für die nächsten zwei Schritte vorschlagen.
+
+**Fragen, die wir uns gestellt haben:**
+- Startbildschirm mit Knöpfen oder Ladebildschirm? → Ladebildschirm bei jedem Start wie bei Clash of Clans (Tobias), mit echtem Ladebalken (Modelle laden, Zeit nachholen) und wechselndem Tipp; nur beim ersten Mal danach „Wie heißt du?“.
+- Fenster mit Seiten (A) oder geführte Einführung (B)? → Tobias: „wenn man gezeigt bekommt wie das Spiel funktioniert“ – Claudes Lesart B: Bürgermeisterin Hilde führt in 8 kurzen Schritten (einlegen, umplatzieren, Band bauen, Portal → Laden-Lager, Theke, Händler, erster Auftrag), jeder Schritt wartet aufs Tun.
+- Welcher Titel? → Noch keiner, „irgendwas in richtung factory“ (Tobias); Claude schlägt „Flussfactory“, „Zunft-Factory“ und „Medieval Factory“ vor (per Websuche geprüft, „Factory Town“ gibt es schon).
+
+**Gemacht:**
+- Entwurf in `PLAENE.md`, `STAND.md`, Archiv. Versionsnummer 0.49.2, Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 453 von 453 bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.49.1 – Oberfläche fertig, nächster Chat vorbereitet (24.11.2026, nur Doku)
 
 **Vorgenommen:**

@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 24.11.2026 – Chat 29: Ladebildschirm, Name und Einführung (ab v0.49.2)
+
+**Tobias:** „Bring dich auf den aktuellen Stand. Das sind meine antworten zu deinen Fragen: Einen Titel gibt es noch nicht, aber ich hatte irgendwas in richtung factory gedacht. Der Startbildschirm soll immer kommen, ähnlich wie bei ClashofClans, damit man immer quasi einen "ladescreen" hat und wenn man sich das erste mal regisitriert kurz ein Startbildschirm, gib deinen Namen ein und dann gehts schon los. In den ersten Minuten wäre es cool, wenn man gezeigt bekommt wie das Spielfunktioniert und was man machen muss. Ganz kurz erklärt, wie man baut, wie man umplatziert, man kann beim Händler kaufen, bei der Theke verkaufen, alles landet im Lager durch das Portal“
+
+**Claude** hat `STAND.md`, `SPIEL.md`, die Vorbereitung in `PLAENE.md`, die Bedienung, Level 1 und den Spielstart im Code gelesen (heute: Kasten „3D-Test: Lädt die Modelle …“, Start mit 1 Holzstamm, 20 Holzblöcken, 500 Gold, Holzfällerlager und Portal unverbunden, Sägewerk kostet 40 Holzblöcke) und den Entwurf geschrieben: v0.50.0 – Ladebildschirm bei jedem Start (Bild aus der eigenen 3D-Welt, Titel auf Holzschild, Ladebalken, Tipp, mindestens etwa 2 Sekunden), beim ersten Start „Willkommen! Wie heißt du?“, Name im Spielstand (Format 19; alte Spielstände fragen einmal), im Laden-Fenster, bei Hilde, in „Willkommen zurück“ und im Dateinamen, „✏️ Name ändern“ im Menü; v0.51.0 – geführte Einführung mit Bürgermeisterin Hilde in 8 Schritten, Pfeil auf den nächsten Knopf, jeder Schritt wartet aufs Tun, wiederholbar über „🎓 Einführung“. Titel-Vorschläge: „Flussfactory“ (Empfehlung), „Zunft-Factory“, „Medieval Factory“. Fragen: Titel? Ladebildschirm automatisch weiter oder „▶ Antippen“ mit Vollbild? Schritte und Hilde? Zwei Schritte so?
+
+**Umgesetzt:** v0.49.2 (nur Doku). Wartet auf Tobias' Antworten.
+
 ### 23.11.2026 – Chat 28: Oberfläche mit Kenneys UI-Paketen – die ganze Oberfläche im Kenney-Stil, Klänge, nächster Chat vorbereitet (v0.46.2 bis v0.49.1)
 
 **Tobias:** „Bringe dich auf den aktuellsten Stand.“
