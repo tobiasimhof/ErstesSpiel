@@ -61,7 +61,51 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Vorbereitung für den nächsten Chat: Startbildschirm, Name, kurze Spielregeln (Chat 28, v0.49.1; noch kein Entwurf)
+### Entwurf v0.50.0 und v0.51.0 – Ladebildschirm bei jedem Start, Name, geführte Einführung (Chat 29, v0.49.2; wartet auf Tobias' Antworten)
+
+**Tobias (Chat 29, Antwort auf die Fragen der Vorbereitung unten):** „Einen Titel gibt es noch nicht, aber ich hatte irgendwas in richtung factory gedacht. Der Startbildschirm soll immer kommen, ähnlich wie bei ClashofClans, damit man immer quasi einen "ladescreen" hat und wenn man sich das erste mal regisitriert kurz ein Startbildschirm, gib deinen Namen ein und dann gehts schon los. In den ersten Minuten wäre es cool, wenn man gezeigt bekommt wie das Spielfunktioniert und was man machen muss. Ganz kurz erklärt, wie man baut, wie man umplatziert, man kann beim Händler kaufen, bei der Theke verkaufen, alles landet im Lager durch das Portal“
+
+**Claudes Lesart:**
+- Kein Startbildschirm mit Knöpfen, sondern ein **Ladebildschirm wie bei Clash of Clans** bei jedem Start; nur beim ersten Mal kommt danach „Gib deinen Namen ein“, dann geht es los.
+- „Registrieren“: Ein Spielerkonto gibt es erst mit dem Online-Teil (M5); bis dahin steht der Name im Spielstand auf dem Gerät.
+- Nur der Name des Spielers (kein eigener Name für Laden oder Ort).
+- „gezeigt bekommt“ → **Weg B, eine kurze geführte Einführung im Spiel** statt eines Fensters mit Seiten (Weg A).
+- Wie heute nur im Spiel selbst; die echte Fabrik (2D) bekommt dasselbe, weil Fenster und Steuerung in beiden gleich sind.
+
+**v0.50.0 – Ladebildschirm und Name (Spielstand-Format 19)**
+1. **Ladebildschirm bei jedem Start** statt des Kastens „3D-Test: Lädt die Modelle … 12 / 40“: der ganze Bildschirm mit einem Bild aus unserer eigenen 3D-Welt (einmal von Claude aufgenommen: Häuser, Bänder, Burgtor), darauf der Titel auf einem Holzschild, unten ein Ladebalken im Holz-Stil („Lädt die Werkstätten …“, danach „Die Fabrik holt die Zeit nach …“ – das Nachrechnen der verpassten Zeit läuft mit im Ladebildschirm) und darunter ein wechselnder kurzer Tipp (z. B. „Tipp: Ein Lagerhaus puffert eine Straße“). Er bleibt mindestens etwa 2 Sekunden, damit man den Titel sieht. Danach geht es in die Fabrik; „👋 Willkommen zurück!“ kommt wie heute danach.
+2. **Erster Start:** Gibt es noch keinen Spielstand, endet der Ladebildschirm mit einem Holzfenster „Willkommen! Wie heißt du?“ – ein Feld für den Namen (höchstens 16 Zeichen) und „▶ Los geht's“. Bei „🔄 Neues Spiel“ kommt dasselbe Fenster wieder, der bisherige Name steht schon drin.
+3. **Tobias' Fabrik bleibt:** Alte Spielstände haben noch keinen Namen; sie fragen beim nächsten Start einmal danach (3D-Test und echte Fabrik je einmal).
+4. **Wo der Name steht:** im Laden-Fenster („⚖️ Tobias' Laden“), Bürgermeisterin Hilde begrüßt mit Namen („Willkommen im Ort, Tobias!“), „👋 Willkommen zurück, Tobias!“, im Dateinamen beim Sichern („Tobias – Fabrik Level 13 – ….txt“) und in der Vorschau beim Laden. Ändern über ☰ → „✏️ Name ändern“.
+5. **Titel** auf dem Ladebildschirm, im Browser-Reiter und als Name beim „Zum Startbildschirm hinzufügen“ – ein Platzhalter, den eine Zeile ändert.
+
+**v0.51.0 – Einführung in den ersten Minuten (geführt, Spielstand-Format 20)**
+6. **Bürgermeisterin Hilde führt** (sie begrüßt im Spiel ohnehin die Neuen): eine kurze Sprechblase im Holz-Stil (1–2 Sätze), ein hüpfender Pfeil zeigt auf den Knopf oder das Gebäude, das man antippen soll (in 3D ein Pfeil über dem Gebäude). Jeder Schritt wartet, bis man es selbst getan hat – man lernt durch Tun; klein „Einführung überspringen“.
+7. **Die Schritte** passen zum Start (1 Holzstamm, 20 Holzblöcke, 500 Gold; Holzfällerlager und Versandportal stehen schon, sind aber nicht verbunden; das Sägewerk kostet 40 Holzblöcke, deshalb kommen erst die Blöcke):
+   1. **Begrüßung:** „Willkommen im Ort, Tobias! Aus Rohstoffen machst du Waren, verkaufst sie in deinem Laden und baust mit dem Gold deine Fabrik aus.“ – „Weiter“.
+   2. **Rohstoff einlegen:** Holzfällerlager antippen → Holzstamm einlegen. „Aus einem Holzstamm werden 200 Holzblöcke.“
+   3. **Umplatzieren:** Versandportal antippen → „↔ Verschieben“ → näher ans Holzfällerlager. „Verschieben und Drehen kosten nichts.“
+   4. **Bauen:** „🔨 Bauen“ → Förderband → vom orangen Pfeil des Holzfällerlagers zum blauen Pfeil des Portals ziehen. „Bauen kostet Waren aus dem Laden-Lager, ein Band 1 Holzblock je Feld.“
+   5. **Portal → Laden-Lager:** wartet, bis die ersten Holzblöcke ankommen. „Alles, was ins Versandportal läuft, landet in deinem Laden-Lager.“ (Pfeil auf „⚖️ Laden“ → Lager)
+   6. **Verkaufen an der Theke:** Laden → Theken → Holzblöcke auf die Theke legen; wartet auf den ersten Kunden. „Die Kunden kaufen von der Theke – das bringt Gold.“
+   7. **Kaufen beim Händler:** Laden → Händler → einen Holzstamm kaufen. „Beim Händler kaufst du Rohstoffe; auch sie kommen ins Laden-Lager.“
+   8. **Erster Auftrag:** Pfeil auf „Laden-Level“: „Zimmermann Jakob braucht 5 Holzplatten. Sobald 40 Holzblöcke im Lager sind, baust du dafür ein Sägewerk (🔨 Bauen → Holz). Jetzt bist du dran!“ – Ende.
+   Zusammen etwa 3–5 Minuten.
+8. **Von selbst nur bei einem neuen Spiel** – Tobias' Fabrik startet sie nicht. Wiederholen über ☰ → „🎓 Einführung“; dort lässt sich jeder Schritt auch mit „Weiter“ überspringen, damit an einer großen Fabrik nichts umgebaut werden muss (so kann Tobias sie ausprobieren, ohne seine Fabrik zu verlieren).
+9. Die Schritte stehen in einer Datentabelle (Text, worauf der Pfeil zeigt, wann der Schritt erledigt ist) – neue Schritte sind neue Zeilen. Der Spielstand merkt sich, wie weit man ist.
+
+**Titel – Vorschläge** (per Websuche geprüft: „Factory Town“ gibt es schon als Spiel, die drei hier nicht):
+- **„Flussfactory“** (Empfehlung) – der Laden liegt in einem Ort am Fluss (roter Faden).
+- **„Zunft-Factory“** – die Zünfte waren die Handwerker im Mittelalter.
+- **„Medieval Factory“** – international, aber allgemein.
+
+**Fragen an Tobias:**
+1. Titel: einer der drei oder ein eigener?
+2. Ladebildschirm: automatisch weiter wie bei Clash of Clans (Empfehlung) – oder am Ende „▶ Antippen zum Spielen“, das dabei gleich auf Vollbild schaltet (der Browser erlaubt Vollbild nur nach einem Antippen)?
+3. Einführung: Passen die 8 Schritte und ihre Reihenfolge? Soll Bürgermeisterin Hilde führen?
+4. Zwei Schritte so – v0.50.0 Ladebildschirm und Name, v0.51.0 Einführung?
+
+### Vorbereitung für den nächsten Chat: Startbildschirm, Name, kurze Spielregeln (Chat 28, v0.49.1; in Chat 29 beantwortet – Entwurf v0.50.0/v0.51.0 oben)
 
 **Tobias (Chat 28, nach v0.49.0):** „Ja, gefällt mir alles sehr gut. Lass uns die nächsten Schritte in einem neuen Chat machen. Lege dafür kurz die Doku an, damit ich im neuen Chat nur schreiben muss, bringe dich auf den aktuellen Stand und du schlägst mir direkt die Richtung vor.“
 
