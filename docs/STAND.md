@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.50.1 – Tobias' Test von v0.50.0, Entwurf Schriftrolle und Einführung (nur Doku; im Spiel seit v0.50.0 Ladebildschirm und Name) |
+| **Aktuelle Version** | v0.51.0 – Neuigkeiten als Schriftrolle, keine Erinnerungen mehr |
 | **Phase** | M2 – Produktionsketten (Level 1–14 im Spiel); Fokus jetzt auf dem 3D-Test |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ (3D-Test; die echte Fabrik: https://tobiasimhof.github.io/ErstesSpiel/?ansicht=2d) |
-| **Nächster Schritt** | **Tobias' Antworten auf den Entwurf** (`PLAENE.md`, Chat 29): v0.51.0 Neuigkeiten als Schriftrolle, v0.52.0 Einführung mit Hilde. Danach Level 15. Offen: Titel (Platzhalter „Factory“), andere Klänge. |
+| **Nächster Schritt** | Tobias testet v0.51.0. Dann **v0.52.0 Einführung mit Hilde** (Entwurf in `PLAENE.md`, Chat 29: 8 Schritte, jeder überspringbar, ganz beendbar, Erledigen springt weiter). Danach Level 15. Offen: Titel (Platzhalter „Factory“), andere Klänge. |
 
 **Tobias' 3D-Test – Level 13 abgeschlossen** (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik). Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
 
@@ -25,7 +25,7 @@
 
 **Nächste Schritte** (jeder erst nach Tobias' OK):
 
-- **Erledigt seit Chat 25** (Einzelheiten in `PLAENE.md`): Belastungstest, 3D schneller, Bereich kopieren, eigene Häuser, Rechenwerkzeug, Level 14, Waren auf dem Band (v0.39.0–v0.46.0); Oberfläche im Kenney-Stil (v0.47.0–v0.49.0); Ladebildschirm und Name (v0.50.0). **Jetzt (Chat 29):** Schriftrolle für Neuigkeiten, Einführung mit Hilde; danach Level 15.
+- **Erledigt seit Chat 25** (Einzelheiten in `PLAENE.md`): Belastungstest, 3D schneller, Bereich kopieren, eigene Häuser, Rechenwerkzeug, Level 14, Waren auf dem Band (v0.39.0–v0.46.0); Oberfläche im Kenney-Stil (v0.47.0–v0.49.0); Ladebildschirm und Name (v0.50.0). Schriftrolle (v0.51.0). **Jetzt (Chat 29):** Einführung mit Hilde; danach Level 15.
 1. **Tränke-Kapitel** (angenommen, Chat 27; Tabelle in `docs/inhalte/AUSBLICK.md`): 14 Die Tinktur (Mörser, Tinktur), 15 Der alte Magier (Zauberkessel, Traumtrank), 16 Die Kräutermühle (Heilpuder, Heiltrank), 17 Die Sternwarte (Linse, Fernrohr, Sternensand), 18 Die Zauberei (Farn, Lebens- und Manatrank). Kein bestehendes Rezept ändert sich; Feuer im Kessel von Hand (A); mehr Fläche ab Level 15. Gemahlenes Glas: **Kristallsand** (Tobias), im Steinmetz. Leitlinie: alte Maschinen bekommen neue Funktionen, neue nur, wo es Sinn ergibt.
 2. **3D-Grafik:** eigene Häuser für alle Gebäude (fertig, Möglichkeit B: Mittelalter mit ein paar Technik-Teilen; Tobias, Chat 27: „sieht sehr gut aus“). **Waren auf dem Band** (v0.46.0): jede der 40 Waren mit eigener kleiner 3D-Form, Tobias: „Ja, das sieht sehr gut aus.“ **Für später – Rückseiten** (Tobias, Chat 27, „nur eine kleine Anmerkung für später“): Erkennungszeichen und bewegte Teile sitzen vorn; baut man links und rechts einer Straße, sieht man eine Seite immer von hinten, „und da sieht man z.b. keine Unterschiede“. Eine Stadt um die Fabrik, die mit dem Level wächst (Idee).
 3. **Nach hinten verschoben:** **Weiche** (Chat 26: eigene Straßen sind besser, siehe offene Frage 4).
@@ -55,6 +55,12 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.51.0 – Neuigkeiten als Schriftrolle, keine Erinnerungen mehr (24.11.2026)
+
+- **Warum (Tobias, Chat 29):** Musterbilder „schlicht und einfach“, gefallen; die Erinnerungen „würde ich sogar ganz entfernen“. Für die Einführung: Schritte überspringen oder ganz beenden, Erledigen springt weiter.
+- **Umgesetzt:** Aufstieg (Brief von Hilde), Neues nach Updates und Geschenk des Händlers als Schriftrolle, die sich aufrollt und bis „✓ Gelesen“ bleibt; „Auftrag bereit“, „Genug Erfahrung und Gold“, „Beet reif“ entfernt.
+- **Offen:** Tobias' Test; v0.52.0 Einführung.
+
 ### v0.50.1 – Tobias' Test von v0.50.0, Entwurf Schriftrolle und Einführung (24.11.2026, nur Doku)
 
 - **Tobias:** v0.50.0 „sieht für den ersten Versuch sehr gut aus“; Klänge „gar nicht gut“ (das Paket), Sound auf 0. Neuigkeiten unten „gehen leicht verloren“ – lieber ein Fenster „als Brief oder Nachricht zum aufrollen … ohne Zeit, selbst zum wegklicken“. Als Nächstes die Einführung mit Hilde planen.
@@ -65,8 +71,3 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 - **Warum (Tobias, Chat 29):** „Ladebildschirm gefällt mir. Immerhin ist es auch Mobile-Game, deswegen sollte man quasi direkt starten können. Erster Start finde ich auch gut.“ Titel: „gefallen mir alle noch nicht wirklich“.
 - **Umgesetzt:** Ladebildschirm mit Bild aus der 3D-Welt, Titel-Platzhalter „Factory“, Balken (Modelle, Zeit nachholen) und Tipp, nach mindestens 2 Sekunden von selbst weiter; beim ersten Start „Wie heißt du?“; Name im Spielstand (Format 19), „Tobias' Laden“ mit ✏️ zum Ändern, Hilde, „Willkommen zurück“, Dateiname.
 - **Offen:** Tobias' Test; v0.51.0 Einführung; Titel.
-
-### v0.49.2 – Antworten zu Ladebildschirm, Name und Einführung (24.11.2026, nur Doku)
-
-- **Tobias:** Titel „irgendwas in richtung factory“; der Startbildschirm „soll immer kommen, ähnlich wie bei ClashofClans“, beim ersten Mal „gib deinen Namen ein und dann gehts schon los“; in den ersten Minuten kurz gezeigt: bauen, umplatzieren, Händler, Theke, „alles landet im Lager durch das Portal“.
-- **Claude:** Entwurf in `PLAENE.md` – v0.50.0 Ladebildschirm und Name (Format 19), v0.51.0 geführte Einführung mit Hilde in 8 Schritten; Titel-Vorschläge; 4 Fragen.

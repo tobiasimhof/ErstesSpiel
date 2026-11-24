@@ -201,6 +201,25 @@ const infoFits = (page) =>
 const beltOuts = (page, x, y) => game(page, ([bx, by]) => window.__game.state.belts[`${bx},${by}`]?.outs ?? null, [x, y]);
 const mode = (page) => game(page, () => window.__game.ui.mode);
 
+// v0.51.0: Schriftrolle lesen (wartet, bis sie aufgerollt ist), mit „✓ Gelesen“
+// schließen und ihren Text zurückgeben. Kommt danach noch ein Brief, bleibt sie offen.
+async function readLetter(page) {
+  await page.waitForFunction(() => document.getElementById('letter')?.classList.contains('open'), null, { timeout: 5000 });
+  await sleep(600); // aufrollen
+  const n = await page.evaluate(() => document.getElementById('letter').dataset.n);
+  const text = await page.textContent('#letter');
+  await page.tap('#letter-ok');
+  await page.waitForFunction(
+    (before) => {
+      const letter = document.getElementById('letter');
+      return letter.hidden || (letter.dataset.n !== before && letter.classList.contains('open'));
+    },
+    n,
+    { timeout: 5000 },
+  );
+  return text;
+}
+
 // v0.50.0: Wartet, bis das Spiel läuft und der Ladebildschirm weg ist. Fragt
 // er nach dem Namen (erster Start, neues Spiel), trägt es name ein.
 async function waitForGame(page, { timeout = 30000, name = 'Tester' } = {}) {
@@ -239,6 +258,7 @@ module.exports = {
   beltOuts,
   mode,
   waitForGame,
+  readLetter,
   setDevice,
   summary,
 };

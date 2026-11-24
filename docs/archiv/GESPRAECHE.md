@@ -24,6 +24,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Umgesetzt:** v0.50.1 (nur Doku). Wartet auf Tobias' Antworten.
 
+**Tobias:** „Ja, mir gefallen beide Musterbilder gut. Schlicht und einfach. Aktuell sollen diese Schritte den Prototypen nur etwas verfeinern, damit wir diese kleinen Schritte schon mal im Spiel haben. Ich würde vorschlagen, dass man die Schritte überspringen kann oder ganz beenden, so kann man sich durch die Tipps klicken, alles in Ruhe lesen und danach alles machen oder man macht sie und durch das erledigen, springt der Schritt zum nächsten Schritt, quasi als interaktive Anleitung. Zu Frage 3: Die würde ich sogar ganz entfernen, weil man in der Regel weiß, ob und wann diese Sachen fertig sind.“
+
+**Claude** hat v0.51.0 umgesetzt: Aufstieg (Brief von Hilde mit Bauabschnitt, Neuem, Geschenk, erstem Auftrag), Neues nach Updates und das Geschenk des Händlers als Schriftrolle, die sich aufrollt und bis „✓ Gelesen“ bleibt; die Erinnerungen „Auftrag bereit“, „Genug Erfahrung und Gold“ und „Beet reif“ sind weg. Für v0.52.0 festgehalten: jeder Schritt überspringbar, Einführung ganz beendbar, erledigte Schritte springen von selbst weiter.
+
+**Umgesetzt:** v0.51.0.
+
 ### 23.11.2026 – Chat 28: Oberfläche mit Kenneys UI-Paketen – die ganze Oberfläche im Kenney-Stil, Klänge, nächster Chat vorbereitet (v0.46.2 bis v0.49.1)
 
 **Tobias:** „Bringe dich auf den aktuellsten Stand.“
