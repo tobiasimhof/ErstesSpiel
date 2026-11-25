@@ -2659,6 +2659,26 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(120);
   await tapBuild(page, 'zauberkessel');
   await sleep(150);
+  // Liegt die Mitte des Bilds außerhalb des Grundstücks (Handy, ganz herausgezoomt),
+  // steht die Vorschau auf gesperrter Fläche – dann wie ein Spieler auf freie Fläche ziehen
+  if (!(await game(page, () => window.__game.ui.ghost?.valid === true))) {
+    const spot = await game(page, () => {
+      const g = window.__game;
+      const p = g.state.plot;
+      for (let y = p.y; y < p.y + p.height - 1; y++) {
+        for (let x = p.x; x < p.x + p.width - 1; x++) {
+          if ([0, 1].every((dx) => [0, 1].every((dy) => g.isFree(x + dx, y + dy)))) return [x, y];
+        }
+      }
+      return null;
+    });
+    const ghostAt = await game(page, () => ({ ...window.__game.ui.ghost }));
+    if (spot) {
+      await showTiles(page, [[ghostAt.x, ghostAt.y], spot], 2);
+      await touchDragTiles(page, cdp, [[ghostAt.x, ghostAt.y], spot]);
+      await sleep(150);
+    }
+  }
   check((await mode(page)) === 'place' && (await game(page, () => window.__game.ui.ghost?.valid === true)), 'Zauberkessel wählen: Vorschau auf freier Fläche');
   await page.tap('#tool-confirm');
   await sleep(150);

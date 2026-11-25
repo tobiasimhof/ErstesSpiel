@@ -513,7 +513,8 @@ function medievalBuilding(lib, building) {
       const hz = 0.4;
       g.add(plain(new THREE.BoxGeometry(0.86, 0.3, 0.76), '#8f877b', { x: hx, y: 0.15, z: hz }));
       g.add(plain(new THREE.BoxGeometry(0.94, 0.05, 0.84), '#a39a8c', { x: hx, y: 0.325, z: hz }));
-      const fireMat = mat('#ff8a2a', { emissive: '#ff6a00', emissiveIntensity: 1.2 });
+      // dunkle Grundfarben: ohne Feuer wirken Glut und Trank kalt, beim Brauen leuchten sie
+      const fireMat = mat('#3a2a22', { emissive: '#ff6a00', emissiveIntensity: 1.2 });
       g.add(simpleMesh(new THREE.BoxGeometry(0.36, 0.16, 0.04), fireMat, { x: hx, y: 0.12, z: hz + 0.385, shadow: false }));
       // Kessel aus Eisen (gedrehte Form), Rand, darin der Trank
       const profile = [
@@ -528,7 +529,7 @@ function medievalBuilding(lib, building) {
       const rim = plain(new THREE.TorusGeometry(0.275, 0.028, 6, 18), '#2a2e34', { x: hx, y: 0.7, z: hz });
       rim.rotation.x = Math.PI / 2;
       g.add(rim);
-      const brewMat = mat('#9b6ee0', { emissive: '#7b3fe0', emissiveIntensity: 1.2 });
+      const brewMat = mat('#4a3d5c', { emissive: '#8a4cf0', emissiveIntensity: 1.2 });
       const brew = simpleMesh(new THREE.CircleGeometry(0.25, 18), brewMat, { x: hx, y: 0.66, z: hz, shadow: false });
       brew.rotation.x = -Math.PI / 2;
       g.add(brew);
