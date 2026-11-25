@@ -62,16 +62,7 @@ async function run3d(browser, baseUrl, device, expectedVersion) {
   await game(page, () => {
     window.__game.state.gold = 4321;
     window.__game.saveNow();
-    const old2d = localStorage.getItem('erstesspiel-spielstand-3d-test');
-    const swap = () => {
-      localStorage.setItem('erstesspiel-spielstand', old2d);
-      localStorage.removeItem('erstesspiel-spielstand-3d-test');
-    };
-    swap();
-    // Das Spiel speichert beim Verlassen der Seite – danach noch einmal tauschen
-    window.addEventListener('pagehide', swap);
   });
-  const real = await game(page, () => localStorage.getItem('erstesspiel-spielstand'));
   await page.tap('#btn-menu');
   await sleep(100);
   const menuBox = await page.locator('#menu').boundingBox();
@@ -79,6 +70,14 @@ async function run3d(browser, baseUrl, device, expectedVersion) {
     !(await page.isVisible('#menu-3d')) && !(await page.textContent('#menu')).includes('2D') && menuBox.y + menuBox.height <= vp.height,
     `Menü ☰ ohne Wechsel zur 2D-Welt, passt auf den Bildschirm (${Math.round(menuBox.y + menuBox.height)} ≤ ${vp.height})`,
   );
+  // Die Spielstände auf einer Seite ohne Spiel tauschen (das Spiel speichert beim Verlassen)
+  await page.goto(`${baseUrl}manifest.webmanifest`);
+  const real = await page.evaluate(() => {
+    localStorage.setItem('erstesspiel-spielstand', localStorage.getItem('erstesspiel-spielstand-3d-test'));
+    localStorage.removeItem('erstesspiel-spielstand-3d-test');
+    return localStorage.getItem('erstesspiel-spielstand');
+  });
+  check(JSON.parse(real).state.gold === 4321, 'Alter 2D-Spielstand mit 4321 Gold angelegt');
   // Ein alter Link auf die 2D-Welt öffnet einfach das Spiel – hier ohne Spielstand
   await page.goto(`${baseUrl}?ansicht=2d`);
   // v0.50.0 (Tobias, Chat 29): Ladebildschirm bei jedem Start – „ähnlich wie bei
