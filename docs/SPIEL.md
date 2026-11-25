@@ -17,7 +17,7 @@
 
 ## 2. Zwei Spielstände: 3D-Test und echte Fabrik
 
-- **3D-Test** – der Start (der Link ohne Zusatz): das Spiel in 3D mit eigenem Spielstand ab Level 1. **Hier spielt und testet Tobias jetzt** (Chat 25: Level 7). Sichern, Laden und „Neues Spiel“ betreffen dort nur den 3D-Test.
+- **3D-Test** – der Start (der Link ohne Zusatz): das Spiel in 3D mit eigenem Spielstand ab Level 1. **Hier spielt und testet Tobias jetzt** (Chat 31: Level 14, alle Aufträge erledigt). Sichern, Laden und „Neues Spiel“ betreffen dort nur den 3D-Test.
 - **Echte Fabrik (2D)** – hinten angestellt (Tobias, Chat 25): Tobias' Fabrik (Level 13, kann auf Level 14 aufsteigen) in der Draufsicht mit Platzhalter-Grafik, über ☰ → „🗺️ Zur echten Fabrik (2D)“ (Adresse `?ansicht=2d`), zurück mit „🧊 Zurück zum 3D-Test“. Sie läuft weiter und holt beim Öffnen die Zeit nach.
 - Spielregeln, Fenster und Steuerung sind in beiden gleich; neue Inhalte gibt es in beiden.
 

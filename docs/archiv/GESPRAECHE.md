@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 25.11.2026 – Chat 31: Beratung – zurück zu Logik und Leveln (v0.52.2)
+
+**Tobias:** „Lies dir den aktuellen Stand durch. "Logik und Leveln. Vorneweg ein kleiner Feinschliff: die Theke in der Einführung und die Anzeigen oben. Dann Level 15 zusammen mit neuen Ausgaben fürs Gold. " Das war dein Vorschlag für den nächsten Schritt. Ich finde den Schritt gut. Lass uns zuerst den Schritt der Einführung so ändern, dass man sobald man einen Block in die Theke legt, es 5 sekunden dauert bis der Block verkauft wird, damit man das ganze auch sieht. Dann können oben gerne die Buttons weg, die du vorgeschlagen hast und wir könnten uns überlegen, die 2D Welt komplett zu löschen, weil ich sie gar nicht mehr spiele und das 3D game, das eigentliche Game geworden ist und ich da auch schon auf lvl 14 alle Missionen abgeschlossen habe“
+
+**Claude** hat `STAND.md`, `SPIEL.md` und die vorbereitete Beratung gelesen und die Stellen im Code nachgesehen. Entwurf in `PLAENE.md`: **v0.53.0** – in Hildes Schritt 6 kommt der Kunde genau 5 Sekunden nach dem Hinlegen (Herunterzählen auf der Theke, nur in der Einführung eines neuen Spiels, nur bis zum ersten Verkauf; B jetzt nicht mehr empfohlen); Bilder/s nur im Testmodus, Versionsnummer und „Vollbild“ ins Menü. **v0.54.0** – die 2D-Welt fällt weg (Claudes Meinung: ja – ein Spiel, ein Spielstand, alles nur noch einmal bauen und prüfen; dagegen: kein Ersatz für Geräte ohne 3D); Tobias' 3D-Fabrik bleibt, wie sie ist, seine 2D-Fabrik bleibt unsichtbar im Browser liegen. Danach der Entwurf für Level 15 mit neuen Ausgaben fürs Gold. 3 Fragen.
+
+**Umgesetzt:** v0.52.2 (nur Doku). Wartet auf Tobias' OK.
+
 ### 24.11.2026 – Chat 30: Einführung mit Hilde (v0.52.0)
 
 **Tobias:** „Bringe dich auf den aktuellen stand und beginne mit v52“

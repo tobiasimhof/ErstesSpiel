@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.52.2 – Antworten zur Beratung, Entwurf v0.53.0 und v0.54.0 (25.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Antworten aus der Beratung festhalten (Chat 31): Weg 1 – zurück zu Logik und Leveln mit dem Feinschliff vorneweg; Theke in der Einführung mit 5 Sekunden; die Anzeigen oben kommen weg; Überlegung, die 2D-Welt ganz zu löschen. Seine 3D-Fabrik steht auf Level 14, alle Aufträge erledigt.
+
+**Fragen, die wir uns gestellt haben:**
+- Braucht es neben A (5 Sekunden) noch B (erst zeigen, dann „Weiter ›“)? → Claude empfiehlt jetzt: nein – das Herunterzählen zeigt den Verkauf, Hilde beginnt danach mit „Dein erstes Gold!“. Frage an Tobias.
+- 2D-Welt löschen? → Claude: ja, in einer eigenen Version; Tobias' 3D-Fabrik bleibt unverändert, seine 2D-Fabrik bleibt unsichtbar im Browser liegen; was der Browser-Test nur in 2D prüft, zieht ins 3D-Spiel um.
+
+**Gemacht:**
+- `PLAENE.md`: „Entwurf v0.53.0 und v0.54.0 …“ mit 3 Fragen; die Beratung darunter als beantwortet markiert. `STAND.md`, `SPIEL.md` (Tobias' Level), `GESPRAECHE.md`, `ENTSCHEIDUNGEN.md`. Versionsnummer 0.52.2. Das Spiel ist unverändert.
+
+**Geprüft:**
+- `npm test` (Versionsnummer, Import-Map, Größe der Doku).
+
 ### v0.52.1 – Tobias' Test von v0.52.0, Durchsicht und Beratung vorbereitet (25.11.2026, nur Doku)
 
 **Vorgenommen:**
