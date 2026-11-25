@@ -80,8 +80,8 @@ async function tilePos(page, tx, ty) {
 // Dazu groß genug: Nachbarfelder mindestens 18 Pixel auseinander – sonst
 // träfe ein Tippen leicht das Nachbarfeld, und ein Wisch über ein Feld bliebe
 // unter der Grenze fürs Tippen (10 Pixel, ui/input.js) (Handy, ganzes Grundstück im Bild).
-async function tilesFree(page, tiles) {
-  return page.evaluate((list) => {
+async function tilesFree(page, tiles, minGap = 18) {
+  return page.evaluate(([list, gap]) => {
     const canvas = document.getElementById('game');
     const tile = (x, y) => window.__game.view3d.tile(x, y);
     return list.every(([x, y]) => {
@@ -89,9 +89,9 @@ async function tilesFree(page, tiles) {
       if (!(Number.isFinite(p.x) && Number.isFinite(p.y) && document.elementFromPoint(p.x, p.y) === canvas)) return false;
       const east = tile(x + 1, y);
       const south = tile(x, y + 1);
-      return Math.hypot(east.x - p.x, east.y - p.y) >= 18 && Math.hypot(south.x - p.x, south.y - p.y) >= 18;
+      return Math.hypot(east.x - p.x, east.y - p.y) >= gap && Math.hypot(south.x - p.x, south.y - p.y) >= gap;
     });
-  }, tiles);
+  }, [tiles, minGap]);
 }
 
 // v0.54.0: Holt Felder in die Mitte des Bilds (Rechteck um sie herum, mit

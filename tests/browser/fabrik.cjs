@@ -88,10 +88,14 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   });
   // v0.54.0: In 3D zeigt der Start die Gebäude mit Platz drumherum (nicht das ganze Grundstück)
   check(
-    await tilesFree(page, [
-      [10, 6],
-      [11, 7],
-    ]),
+    await tilesFree(
+      page,
+      [
+        [10, 6],
+        [11, 7],
+      ],
+      0,
+    ),
     'Holzfällerlager beim Start frei im Bild',
   );
   await shot('1-start');
