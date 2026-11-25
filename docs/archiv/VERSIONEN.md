@@ -23,7 +23,8 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 - Doku: `CLAUDE.md` (Technische Regeln ohne `src/view2d/`), `README.md`, `SPIEL.md` (Abschnitt 2 „Ein Spiel in 3D“), `BEDIENUNG.md` (Kamera, Schild über jedem Gebäude), `TECHNIK.md`, `STAND.md`, Archiv. Versionsnummer 0.54.0.
 
 **Geprüft:**
-- PRUEFUNG_FOLGT
+- `npm test`: 464 Tests bestanden (12 Tests der 2D-Kamera entfallen).
+- Browser-Test, alle Teile bestanden: Durchspielen (`fabrik.cjs`) 950 Prüfungen – Tablet und Handy je 471 wie vorher in 2D, Hochformat, schmales Handy; 3D-Ansicht 208; Einführung 100. Unterwegs gefunden und behoben: die Kamera nach dem Aufstieg auf Level 10 (siehe oben); im Test selbst zu kleine Felder auf dem Handy (die Hilfe zoomt jetzt heran), echte Zeit (Holzfällerlager, Beet, Band) und das Speichern beim Verlassen der Seite. Screenshots angesehen: Menü ohne 2D und mit „Version 0.54.0“, nach dem Aufstieg auf Level 10 alle vier Schilder im Bild, Fabrik auf Level 14 nah und weit.
 
 ### v0.53.0 – Feinschliff: Theke in der Einführung, Leiste oben (25.11.2026)
 
