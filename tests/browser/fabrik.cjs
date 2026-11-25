@@ -2607,15 +2607,34 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await sleep(150);
   await shot('21-karte-weit');
 
+  // v0.54.0: Der Test dauert in 3D länger, das Holzfällerlager kann bis hier
+  // leer gelaufen sein – vorher auffüllen, damit es sicher arbeitet
+  const hfTest = await game(page, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'holzfaeller');
+    return { x: b.x, y: b.y };
+  });
+  await tapTile(page, hfTest.x, hfTest.y);
+  await sleep(300);
+  if (await infoButton(page, 'refill').isEnabled().catch(() => false)) await infoButton(page, 'refill').tap();
+  await sleep(150);
+  await page.tap('#info-close').catch(() => {});
   await page.tap('#btn-menu');
   await page.tap('#menu-test-mode');
   await sleep(80);
   check(await page.isVisible('#hud-speed'), 'Testmodus zeigt ⏩ ×10');
-  const tBefore = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'holzfaeller').prod.remaining);
+  const hfProd = () =>
+    game(page, () => {
+      const b = window.__game.state.buildings.find((x) => x.type === 'holzfaeller');
+      return { remaining: b.prod.remaining, queued: b.prod.queued, blocked: b.prod.blocked };
+    });
+  const tBefore = await hfProd();
   // Bei ×10 entstehen in 3 s etwa 6–7 Holzblöcke, bei normaler Zeit unter 1.
   await sleep(3000);
-  const tAfter = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'holzfaeller').prod.remaining);
-  check(tBefore - tAfter >= 3, `Im Testmodus läuft die Zeit schneller (${tBefore - tAfter} Blöcke in 3 s)`);
+  const tAfter = await hfProd();
+  check(
+    tBefore.remaining - tAfter.remaining >= 3,
+    `Im Testmodus läuft die Zeit schneller (${tBefore.remaining - tAfter.remaining} Blöcke in 3 s; vorher ${JSON.stringify(tBefore)}, nachher ${JSON.stringify(tAfter)})`,
+  );
   // v0.21.0: Bilder pro Sekunde im Testmodus
   const fpsText = (await page.isVisible('#hud-fps')) ? await page.textContent('#hud-fps') : '';
   const fpsValue = Number(/(\d+) Bilder\/s/.exec(fpsText)?.[1] ?? 0);
@@ -2733,6 +2752,10 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     const key = 'erstesspiel-spielstand-3d-test'; // v0.54.0: der Platz des einen Spiels
     const data = JSON.parse(localStorage.getItem(key));
     data.savedAt -= 2 * 3600 * 1000;
+    // v0.54.0: In 3D dauert der Test länger – das Beet wäre schon vorher reif.
+    // Frisch gesät wird es sicher erst in den 2 Stunden reif.
+    const beet = data.state.buildings.find((b) => b.type === 'beet' && b.prod.crop === 'leinsamen');
+    if (beet) beet.prod.timer = 0;
     localStorage.setItem(key, JSON.stringify(data));
     return data.saveVersion;
   });
