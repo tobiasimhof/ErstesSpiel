@@ -4,12 +4,12 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.54.1 – Entwurf Level 15 „Der alte Magier“ (nur Doku; Spiel wie v0.54.0) |
+| **Aktuelle Version** | v0.54.2 – Tobias' Antworten zum Entwurf Level 15 (nur Doku; Spiel wie v0.54.0) |
 | **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–14 im Spiel, 15–18 als Gerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | **v0.55.0 – Level 15 „Der alte Magier“**: Entwurf in `PLAENE.md` (oben) – Zauberkessel mit Feuerfach, Traumtrank, Aufträge, 4. Flächenstreifen, Herauszoomen; dazu die Frage nach neuen Ausgaben fürs Gold („Zauber des Magiers“). 5 Fragen; erst nach Tobias' OK programmieren. |
+| **Nächster Schritt** | **v0.55.0 – Level 15 „Der alte Magier“** (angenommen mit Änderungen, Chat 31; Entwurf und Antworten in `PLAENE.md` oben): Zauberkessel mit Feuerfach, Traumtrank aus 1 Tinktur + 5 Kamillenblüten, Mörser aus 5 Holzstäben, Aufträge, Aufstieg 15.000, 4. Flächenstreifen für 10.000; Herauszoomen nur, wenn es einfach geht. |
 
-**Tobias' Fabrik (3D) – Level 14, alle Aufträge erledigt** (Chat 31) – danach gibt es keinen Inhalt mehr. Die 2D-Welt ist seit v0.54.0 entfernt (Tobias: „das 3D game, das eigentliche Game“). Level 13 (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik): Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
+**Tobias' Fabrik (3D) – Level 14, alle Aufträge erledigt** (Chat 31, Bild: 36.904 Gold, Laden-Lager 1.109 / 1.100 nach 1 von 10 Ausbauten, viele rote Lichter) – danach gibt es keinen Inhalt mehr. Die 2D-Welt ist seit v0.54.0 entfernt (Tobias: „das 3D game, das eigentliche Game“). Level 13 (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik): Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
 
 Frühere Stände der 2D-Fabrik (Level 8, 10, 11 mit Zitaten; zuletzt Level 13) in `docs/archiv/STAND-LANGFASSUNG.md`.
 
@@ -25,9 +25,9 @@ Frühere Stände der 2D-Fabrik (Level 8, 10, 11 mit Zitaten; zuletzt Level 13) i
 
 **Nächste Schritte** (jeder erst nach Tobias' OK):
 
-- **Erledigt seit Chat 25** (Einzelheiten in `PLAENE.md`): v0.39.0–v0.46.0 (Belastungstest bis Waren auf dem Band, Level 14), v0.47.0–v0.52.0 (Kenney-Oberfläche, Ladebildschirm, Name, Schriftrolle, Einführung). **Jetzt** (Chat 31): v0.53.0 Feinschliff und v0.54.0 ein Spiel ohne 2D-Welt erledigt; als Nächstes Level 15 mit neuen Ausgaben fürs Gold.
-1. **Tränke-Kapitel** (angenommen, Chat 27; Tabelle in `docs/inhalte/AUSBLICK.md`): 14 Die Tinktur (Mörser, Tinktur), 15 Der alte Magier (Zauberkessel, Traumtrank), 16 Die Kräutermühle (Heilpuder, Heiltrank), 17 Die Sternwarte (Linse, Fernrohr, Sternensand), 18 Die Zauberei (Farn, Lebens- und Manatrank). Kein bestehendes Rezept ändert sich; Feuer im Kessel von Hand (A); mehr Fläche ab Level 15. Gemahlenes Glas: **Kristallsand** (Tobias), im Steinmetz. Leitlinie: alte Maschinen bekommen neue Funktionen, neue nur, wo es Sinn ergibt.
-2. **3D-Grafik:** eigene Häuser für alle Gebäude (fertig, Möglichkeit B: Mittelalter mit ein paar Technik-Teilen; Tobias, Chat 27: „sieht sehr gut aus“). **Waren auf dem Band** (v0.46.0): jede der 40 Waren mit eigener kleiner 3D-Form, Tobias: „Ja, das sieht sehr gut aus.“ **Für später – Rückseiten** (Tobias, Chat 27, „nur eine kleine Anmerkung für später“): Erkennungszeichen und bewegte Teile sitzen vorn; baut man links und rechts einer Straße, sieht man eine Seite immer von hinten, „und da sieht man z.b. keine Unterschiede“. Eine Stadt um die Fabrik, die mit dem Level wächst (Idee).
+- **Erledigt seit Chat 25** (Einzelheiten in `PLAENE.md`): v0.39.0–v0.54.0 (Belastungstest, Level 14, Kenney-Oberfläche, Ladebildschirm, Schriftrolle, Einführung, Feinschliff, ein Spiel ohne 2D-Welt). **Jetzt:** Level 15.
+1. **Tränke-Kapitel** (angenommen, Chat 27; Tabelle in `docs/inhalte/AUSBLICK.md`): 14 Die Tinktur (Mörser, Tinktur), 15 Der alte Magier (Zauberkessel, Traumtrank), 16 Die Kräutermühle (Heilpuder, Heiltrank), 17 Die Sternwarte (Linse, Fernrohr, Sternensand), 18 Die Zauberei (Farn, Lebens- und Manatrank). Feuer im Kessel von Hand (A); mehr Fläche ab Level 15; einzige Rezeptänderung: Mörser aus 5 Holzstäben (Tobias, Chat 31). Gemahlenes Glas: **Kristallsand** (Tobias), im Steinmetz. Leitlinie: alte Maschinen bekommen neue Funktionen, neue nur, wo es Sinn ergibt.
+2. **3D-Grafik:** eigene Häuser für alle Gebäude (fertig, Möglichkeit B: Mittelalter mit ein paar Technik-Teilen; Tobias, Chat 27: „sieht sehr gut aus“). **Waren auf dem Band** (v0.46.0): eigene kleine 3D-Formen. **Für später – Rückseiten** (Tobias, Chat 27, „nur eine kleine Anmerkung für später“): Erkennungszeichen und bewegte Teile sitzen vorn; baut man links und rechts einer Straße, sieht man eine Seite immer von hinten, „und da sieht man z.b. keine Unterschiede“. Eine Stadt um die Fabrik, die mit dem Level wächst (Idee).
 3. **Nach hinten verschoben:** **Weiche** (Chat 26: eigene Straßen sind besser, siehe offene Frage 4).
 4. **Später:** Verbesserungen mit Erfahrung, gründliche Durchsicht des Codes.
 
@@ -52,17 +52,18 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 13. **Techbaum:** Werkzeuge, Kräuter und Tränke wachsen parallel; höchstens 2 Eingänge je Maschine; jedes Produkt entsteht logisch aus seinen Zutaten.
 14. **Grafik:** entschieden – frei drehbar, Mittelalter, Spiel-Farben, eigene Häuser je Gebäude; von weitem nur Statuslichter (Vorschlag A, Chat 25). Mix aus Modern und Mittelalter: entschieden – Möglichkeit B, Mittelalter mit ein paar Technik-Teilen (Zahnräder in Messing und Stahl, später Glasrohre), sparsam, ohne Greifarm (Chat 26). Offen für später: Rückseiten der Häuser unterscheidbar machen (Chat 27). Oberfläche: Kenneys UI Pack Adventure, Rahmen B mit Eisenbeschlägen, schlicht (Chat 28). Klänge: Das Paket gefällt Tobias nicht, er spielt mit Sound auf 0 (Chat 29) – andere Klänge oder Fabrik-Geräusche, später.
 15. **Titel:** Richtung „Factory“; „Flussfactory“, „Zunft-Factory“, „Medieval Factory“ gefallen Tobias nicht – bis dahin Platzhalter „Factory“ auf dem Ladebildschirm.
-16. **Herauszoomen in 3D** (v0.54.0): Die größte Welt (46 × 38) passt auch ganz herausgezoomt nicht ganz aufs Tablet, oben fehlt ein schmaler Rand (Grenze: das 1,35-Fache der Weltgröße). Tobias: „bisher okay“, mit Level 15 (neue Fläche) wieder prüfen – Vorschlag im Entwurf v0.55.0.
+16. **Herauszoomen in 3D** (v0.54.0): Die größte Welt passt ganz herausgezoomt nicht ganz aufs Tablet. Tobias: Die ganze Welt soll draufpassen, „steht aber jetzt nicht an oberster Stelle“ – mit v0.55.0, wenn es einfach geht.
+17. **Neue Ausgaben fürs Gold:** „Zauber des Magiers“ festgehalten (`AUSBLICK.md`), später genauer durchdenken (Tobias, Chat 31).
+18. **Dunkle Fenster auf Tobias' Tablet** (Bild, Chat 31): Fenster und Leisten erscheinen dunkel statt hell – vermutlich der Dunkelmodus des Browsers. Immer hell anzeigen? – Tobias fragen. Dazu: Laden-Lager übervoll, viele rote Lichter (blockiert) – Hinweis an Tobias.
 
 ## Die letzten 3 Arbeitsschritte
+
+### v0.54.2 – Tobias' Antworten zum Entwurf Level 15 (25.11.2026, nur Doku)
+
+- **Tobias:** Kessel und Feuerfach passen, Namen passen, 4. Streifen für 10.000 „ist super“; Traumtrank aus 1 Tinktur + 5 Blüten, Mörser aus 5 Holzstäben („damit wir irgendwo dieses Gleichgewicht behalten“); ganze Welt aufs Tablet „nicht an oberster Stelle“; Zauber fürs Gold festhalten. Bild: Level 14, 36.904 Gold.
+- **Claude:** neu gerechnet (Traumtrank 547, Mörser 43, Aufträge Level 15: 16.066 Gold) in `PLAENE.md`; Zauber in `AUSBLICK.md`; Hinweise: dunkle Fenster, Laden-Lager voll. **Offen:** Umsetzung v0.55.0.
 
 ### v0.54.1 – Entwurf Level 15 „Der alte Magier“ (25.11.2026, nur Doku)
 
 - **Tobias:** Herauszoomen „bisher okay“, mit Level 15 wieder prüfen; „deswegen können wir gerne mit level 15 anfangen“.
 - **Claude:** Entwurf v0.55.0 in `PLAENE.md` mit Zahlen aus dem Rechenwerkzeug: Zauberkessel (Reiter Stein, Feuerfach 100 Holzkohle, 5 je Trank), Traumtrank (Tinktur + 3 Kamillenblüten, 499 Gold), Magier Ambrosius und Wirt Hannes, 4 Aufträge (15.202 Gold), Aufstieg 15.000, 4. Flächenstreifen für 10.000 (bis 54 × 46), Herauszoomen; Idee „Zauber des Magiers“ als neue Ausgabe fürs Gold. **Offen:** 5 Fragen.
-
-### v0.54.0 – Ein Spiel: die 2D-Welt ist entfernt (25.11.2026)
-
-- **Warum (Tobias, Chat 31):** „die 2D Welt komplett zu löschen, weil ich sie gar nicht mehr spiele“; Andenken nicht nötig, „Die 3D welt ist deutlich produktiver und besser“.
-- **Umgesetzt:** nur noch das 3D-Spiel mit einem Spielstand (Platz des früheren 3D-Tests, Tobias' Fabrik bleibt); kein Menüpunkt zur 2D-Welt, kein „3D-Test“ mehr; `src/view2d/` gelöscht; `?ansicht=2d` öffnet das Spiel; der Durchspiel-Test bis Level 14 läuft jetzt in 3D. Er fand: Nach dem Aufstieg auf Level 10 zoomte die Kamera nur so weit wie in der alten Welt (behoben).
-- **Offen:** Tobias' Test; offene Frage 16 (Herauszoomen); Entwurf Level 15.

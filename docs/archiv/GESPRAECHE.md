@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 25.11.2026 – Chat 31: Beratung – zurück zu Logik und Leveln (v0.52.2, v0.53.0, v0.54.0, v0.54.1)
+### 25.11.2026 – Chat 31: Beratung – zurück zu Logik und Leveln (v0.52.2, v0.53.0, v0.54.0, v0.54.1, v0.54.2)
 
 **Tobias:** „Lies dir den aktuellen Stand durch. "Logik und Leveln. Vorneweg ein kleiner Feinschliff: die Theke in der Einführung und die Anzeigen oben. Dann Level 15 zusammen mit neuen Ausgaben fürs Gold. " Das war dein Vorschlag für den nächsten Schritt. Ich finde den Schritt gut. Lass uns zuerst den Schritt der Einführung so ändern, dass man sobald man einen Block in die Theke legt, es 5 sekunden dauert bis der Block verkauft wird, damit man das ganze auch sieht. Dann können oben gerne die Buttons weg, die du vorgeschlagen hast und wir könnten uns überlegen, die 2D Welt komplett zu löschen, weil ich sie gar nicht mehr spiele und das 3D game, das eigentliche Game geworden ist und ich da auch schon auf lvl 14 alle Missionen abgeschlossen habe“
 
@@ -28,7 +28,13 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Claude** hat den Entwurf v0.55.0 in `PLAENE.md` geschrieben und mit dem Rechenwerkzeug an einer Kopie der Daten nachgerechnet: Magier Ambrosius bringt den Zauberkessel (Reiter Stein, 30 Steinplatten + 10 Eisenbleche, Feuerfach für 100 Holzkohle, 5 je Trank, von Hand auffüllen); Traumtrank aus 1 Tinktur + 3 Kamillenblüten in 60 s (499 Gold); 4 Aufträge (Ambrosius, Wirt Hannes, Klara; 15.202 Gold, ×1,2); Aufstieg 15.000; je Seite ein 4. Flächenstreifen für 10.000 (bis 54 × 46) und so weit herauszoomen, dass die ganze Welt aufs Tablet passt; als neue Ausgabe fürs Gold die Idee „Zauber des Magiers“ für einen eigenen Schritt danach. 5 Fragen.
 
-**Umgesetzt:** v0.54.1 (nur Doku). Wartet auf Tobias' OK.
+**Umgesetzt:** v0.54.1 (nur Doku).
+
+**Tobias** (mit zwei Bildern: seine Fabrik auf Level 14 mit 36.904 Gold, das Laden-Lager 1.109 / 1.100 nach 1 von 10 Ausbauten): „Die sachen mit den Zaubern für Gold können wir gerne festhalten und uns nochmal genauer Gedanken darüber machen. 1. Passt so für mich. 2. Ich würde gerne 1 Trinktur und 5 Blüten machen und den Mörser auch nochmal auf 5 Stäbe umstellen, damit wir irgendwo dieses Gleichgewicht behalten. 3. Die Namen passen auch für mich. 4. 10.000 Gold ist super. Die ganze Welt sollte auch aufs Tablet passen, steht aber jetzt nicht an oberster Stelle. Ich zeig dir in Screenshot wie es aktuell aussieht.“
+
+**Claude** hat neu gerechnet (Traumtrank 547 Gold, Mörser 43 Gold, Aufträge Level 15: 16.066 Gold) und die Zauber in `AUSBLICK.md` festgehalten. Auf den Bildern aufgefallen: viele rote Lichter (blockiert) – vermutlich, weil das Laden-Lager übervoll ist und die Portale nichts mehr abgeben; und die Fenster sind dunkel statt hell (vermutlich der Dunkelmodus des Browsers) – beides als Hinweis bzw. Frage an Tobias.
+
+**Umgesetzt:** v0.54.2 (nur Doku). Als Nächstes v0.55.0 (Level 15).
 
 ### 24.11.2026 – Chat 30: Einführung mit Hilde (v0.52.0)
 
