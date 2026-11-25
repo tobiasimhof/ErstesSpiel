@@ -4,6 +4,22 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.54.1 – Entwurf Level 15 „Der alte Magier“ (25.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zu v0.54.0 festhalten (Herauszoomen „bisher okay“, mit Level 15 wieder prüfen) und, wie vereinbart, Level 15 zuerst als Entwurf mit Zahlen vorlegen („deswegen können wir gerne mit level 15 anfangen“).
+
+**Fragen, die wir uns gestellt haben:**
+- Wie viel Holzkohle frisst das Feuer? → 5 je Trank, das Feuerfach fasst 100 (20 Tränke); ein Ofen macht 400 Holzkohle pro Stunde, genug für etwa 80 Tränke.
+- Wie viele Kamillenblüten im Traumtrank? → 3: Mit 5 wäre die Kamille ein noch stärkerer Engpass, und eine Straße brächte weniger als die Tinktur.
+- Reichen die neuen Ausgaben fürs Gold? → Level 15 bringt 55.000 Gold neue Ausgaben (Fläche, Aufstieg); ob mehr nötig ist, hängt von Tobias' Stand ab – Idee „Zauber des Magiers“ als eigener Schritt.
+
+**Gemacht:**
+- `PLAENE.md`: „Entwurf v0.55.0 – Level 15 …“ mit Zahlen aus dem Rechenwerkzeug (an einer Kopie der Daten gerechnet, das Feuer als dritte Zutat). `STAND.md` (Version, nächster Schritt, offene Frage 16, letzte 3 Arbeitsschritte), `GESPRAECHE.md`, `ENTSCHEIDUNGEN.md`. Versionsnummer 0.54.1. Das Spiel ist unverändert.
+
+**Geprüft:**
+- `npm test` (Versionsnummer, Import-Map, Größe der Doku).
+
 ### v0.54.0 – Ein Spiel: die 2D-Welt ist entfernt (25.11.2026)
 
 **Vorgenommen:**

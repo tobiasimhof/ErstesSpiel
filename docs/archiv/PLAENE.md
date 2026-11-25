@@ -61,6 +61,50 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.55.0 – Level 15 „Der alte Magier“: Zauberkessel mit Feuer, Traumtrank, mehr Fläche (Chat 31, v0.54.1; wartet auf Tobias' OK)
+
+**Tobias (Chat 31, nach v0.54.0):** „Das herauszoomen finde ich bisher okay und mit level 15 können wir das ja nochmal überprüfenm weil dort die neuen Felder dazu kommen. Bisher finde ich sieht alles gut, deswegen können wir gerne mit level 15 anfangen“
+
+**Ziel:** Das Tränke-Kapitel geht weiter, wie im Grobplan (2. Fassung, angenommen): Ein alter Magier zieht wegen Klaras Tinkturen in den Ort, bringt den **Zauberkessel** mit (neue Maschine, Reiter „Stein“, 2 Eingänge, dazu ein **Feuerfach** für Holzkohle, das man von Hand nachlegt – Feuer A) und braut den ersten Trank: den **Traumtrank**. Dazu **mehr Fläche** (Tobias, Chat 27: „mit Level 15 …, wenn die Flächen dazu kommen“). Kein bestehendes Rezept ändert sich.
+
+**Geschichte:** „Der Duft von Klaras Tinkturen hat einen Fremden angelockt: Ambrosius, ein alter Magier, bezieht den leeren Turm am Fluss. Er bringt einen Zauberkessel mit – und alte Rezepte, für die man Tinktur, Kräuter und ein gutes Feuer braucht.“
+
+**Zauberkessel** (neue Maschine, Reiter „Stein“ – dort stehen erst 2 Gebäude):
+
+| | |
+|---|---|
+| Größe, Anschlüsse | 2 × 2 wie die Apotheke: 2 Eingänge links (jede Zutat am besten über ihren eigenen), Ausgang rechts |
+| Einstellung | Traumtränke (auf Level 16 und 18 kommen weitere Tränke dazu) |
+| **Feuerfach** | fasst **100 Holzkohle**; jeder Trank verbraucht **5** (also 20 Tränke je Füllung). Nachlegen von Hand im Infofenster: „🔥 Auffüllen“ nimmt die Holzkohle aus dem Laden-Lager (beim Händler gibt es keine – sie kommt aus dem Ofen übers Portal). Ist das Feuer aus, wartet der Kessel (gelbes Licht, „Feuer aus – Holzkohle nachlegen“); auch bei geschlossenem Spiel braut er, bis Feuer oder Zutaten leer sind |
+| Baukosten | **30 Steinplatten + 10 Eisenbleche** (gemauerter Herd, Kessel aus Eisenblech; 420 Gold Warenwert, beides läuft bei Tobias automatisch) |
+| Aussehen | gemauerter Steinherd mit dickem Eisenkessel; beim Brauen glüht das Feuer darunter, im Kessel blubbert es lila, Dampf steigt auf; ohne Feuer kalt und grau |
+
+**Traumtrank:** 1 Tinktur + 3 Kamillenblüten, Feuer 5 Holzkohle, **60 s**, Wert **499 Gold** ((346 + 3 × 20 + 5 × 2) × 1,2). Aussehen: bauchiges Fläschchen mit lila Trank und Korken. Rechenwerkzeug: +90 % gegenüber seinen Rohstoffen (Tinktur +70 %), eine Straße etwa 6.200 Gold/h; Engpass ist die Kamille (mehrere Beete helfen). Holzkohle: Tobias' Ofen macht gerade Glas – für das Feuer braucht es einen zweiten Ofen (20 Steinplatten + 2 Verstärkte Holzplatten) oder abwechselnd Holzstämme; ein Ofen macht 400 Holzkohle pro Stunde, genug für etwa 80 Tränke.
+
+**Aufträge** (zusammen 15.202 Gold und 4.561 Erfahrung – ×1,2 gegenüber Level 14, wie die Kurve seit Level 9):
+
+| # | Wer | Was | Wert |
+|---|---|---|---|
+| 1 | Magier Ambrosius | 300 Holzkohle – „Ohne Feuer kein Trank. Mein Kessel frisst Holzkohle – bring mir einen ordentlichen Vorrat.“ | 600 |
+| 2 | Magier Ambrosius | 10 Traumtränke – „Tinktur, Kamille und ein gutes Feuer: Das ist der Traumtrank. Zeig mir, dass du ihn brauen kannst.“ | 4.990 |
+| 3 | Wirt Hannes (neu, das Gasthaus) | 8 Traumtränke + 10 Kamillenkissen – „Seit sich Klaras Tinkturen herumsprechen, ist mein Gasthaus voll – und meine Gäste schlafen schlecht.“ | 6.152 |
+| 4 | Apothekerin Klara | 10 Tinkturen – „Der alte Ambrosius kauft mir alle Tinkturen weg! Ich brauche Nachschub für mein Regal.“ | 3.460 |
+
+**Aufstieg auf Level 15:** 15.000 Gold (die Reihe 7.500 → 10.000 → 12.500 → 15.000), kein Geschenk. Rechenwerkzeug: Rohstoffe für alle Aufträge 8.792 Gold (3,9 Holzstämme, 2 Leinsamen, 2,8 Schafgarbensamen, 4,9 Kamillensamen, 1,4 Sand), 9,7 Pflanzen, Maschinenzeit 3,9 h, Engpass mit je einem Beet die Kamille (2,4 h).
+
+**Mehr Fläche:** ab Level 15 je Seite ein **4. Streifen für 10.000 Gold** (zusammen 40.000) – das Grundstück wächst bis **54 × 46**, beim Aufstieg rückt der Rand der Welt an jeder Seite 4 Felder nach außen (wie auf Level 10). **Herauszoomen** (offene Frage 16, Tobias: „mit level 15 … nochmal überprüfen“): Schon die Welt von heute (46 × 38) passt in 3D nicht ganz aufs Tablet; mit 54 × 46 fehlt mehr. Vorschlag: die Grenze so weit anheben, dass die ganze Welt aufs Tablet passt, und mit dem Belastungstest die Bilder pro Sekunde prüfen.
+
+**Neue Ausgaben fürs Gold:** Level 15 bringt 55.000 Gold neue Ausgaben (Fläche 40.000, Aufstieg 15.000) zu den 443.000 von heute (Theken, Laden-Lager, Fläche). Ob das reicht, hängt davon ab, was Tobias schon gekauft hat. Idee für einen eigenen Schritt danach (v0.56.0): **„Zauber des Magiers“** – Ambrosius verzaubert die Fabrik gegen Gold, z. B. „Fleißige Werkstätten“ (Maschinen schneller), „Volle Gassen“ (Kunden kommen öfter), „Großer Vorrat“ (Rohstoff-Gebäude fassen mehr, die Fabrik läuft länger allein), je 3 Stufen für etwa 25.000 / 60.000 / 120.000 Gold – eine Ausgabe, die man auch auf späteren Leveln noch hat.
+
+**Was sich im Spiel ändert (v0.55.0):** neue Maschine mit Feuerfach (neue Spielregel in `src/core/`: Brauen nur mit Feuer; Spielstand-Format 21, alte Spielstände bleiben), 3D-Haus des Kessels, Ware Traumtrank mit eigener Form, Level 15 mit Geschichte und Aufträgen, Laden auf Level 15 wie auf Level 14, 4. Flächenstreifen, Zoom-Grenze; Tests (neue Datei für Level 15, Feuerfach, Durchspiel-Test bis Level 15), Doku (`LEVEL.md`, `WAREN.md`, `GEBAEUDE.md`, `AUSBLICK.md`, `SPIEL.md`, `ZAHLEN.md`).
+
+**Fragen an Tobias:**
+1. Passen Zauberkessel (Reiter Stein, 30 Steinplatten + 10 Eisenbleche) und das Feuerfach (100 Holzkohle, 5 je Trank, von Hand auffüllen)?
+2. Passt der Traumtrank (1 Tinktur + 3 Kamillenblüten, 60 s, 499 Gold) und sein Aussehen?
+3. Passen die Namen (Magier Ambrosius, Wirt Hannes), die vier Aufträge und der Aufstieg für 15.000 Gold?
+4. Mehr Fläche: 4. Streifen je Seite für 10.000 Gold (bis 54 × 46) – und so weit herauszoomen, dass die ganze Welt aufs Tablet passt?
+5. Gold: Wie viel hast du gerade, und welche Theken und Lager-Ausbauten hast du schon gekauft? Sollen die „Zauber des Magiers“ ein eigener Schritt nach Level 15 werden?
+
 ### Entwurf v0.53.0 und v0.54.0 – Feinschliff (Theke, Leiste oben), ein Spiel ohne 2D-Welt (Chat 31, v0.52.2; angenommen ohne B: „Für die Einführung reicht es, wenn bei diesem Schritt einfach 5 sekunden herunterlaufen“, 2D-Fabrik ohne Andenken, Reihenfolge passt – umgesetzt in v0.53.0 und v0.54.0; als Nächstes der Entwurf Level 15)
 
 **Tobias (Chat 31):** „Lies dir den aktuellen Stand durch. "Logik und Leveln. Vorneweg ein kleiner Feinschliff: die Theke in der Einführung und die Anzeigen oben. Dann Level 15 zusammen mit neuen Ausgaben fürs Gold. " Das war dein Vorschlag für den nächsten Schritt. Ich finde den Schritt gut. Lass uns zuerst den Schritt der Einführung so ändern, dass man sobald man einen Block in die Theke legt, es 5 sekunden dauert bis der Block verkauft wird, damit man das ganze auch sieht. Dann können oben gerne die Buttons weg, die du vorgeschlagen hast und wir könnten uns überlegen, die 2D Welt komplett zu löschen, weil ich sie gar nicht mehr spiele und das 3D game, das eigentliche Game geworden ist und ich da auch schon auf lvl 14 alle Missionen abgeschlossen habe“

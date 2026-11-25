@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 25.11.2026 – Chat 31: Beratung – zurück zu Logik und Leveln (v0.52.2, v0.53.0, v0.54.0)
+### 25.11.2026 – Chat 31: Beratung – zurück zu Logik und Leveln (v0.52.2, v0.53.0, v0.54.0, v0.54.1)
 
 **Tobias:** „Lies dir den aktuellen Stand durch. "Logik und Leveln. Vorneweg ein kleiner Feinschliff: die Theke in der Einführung und die Anzeigen oben. Dann Level 15 zusammen mit neuen Ausgaben fürs Gold. " Das war dein Vorschlag für den nächsten Schritt. Ich finde den Schritt gut. Lass uns zuerst den Schritt der Einführung so ändern, dass man sobald man einen Block in die Theke legt, es 5 sekunden dauert bis der Block verkauft wird, damit man das ganze auch sieht. Dann können oben gerne die Buttons weg, die du vorgeschlagen hast und wir könnten uns überlegen, die 2D Welt komplett zu löschen, weil ich sie gar nicht mehr spiele und das 3D game, das eigentliche Game geworden ist und ich da auch schon auf lvl 14 alle Missionen abgeschlossen habe“
 
@@ -23,6 +23,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat v0.54.0 umgesetzt: nur noch das Spiel in 3D mit einem Spielstand (auf dem Platz des früheren 3D-Tests, Tobias' Fabrik bleibt unverändert); der Menüpunkt zur 2D-Welt und „3D-Test“ sind weg, `src/view2d/` ist gelöscht, alte Links mit `?ansicht=2d` öffnen das Spiel; der alte 2D-Spielstand bleibt unberührt im Browser. Der lange Browser-Test (Durchspielen bis Level 14) läuft jetzt im 3D-Spiel. Er fand dabei: Nach dem Aufstieg auf Level 10 zoomte die 3D-Kamera nur so weit heraus wie in der alten, kleineren Welt (behoben); und die größte Welt (46 × 38) passt in 3D auch ganz herausgezoomt nicht ganz aufs Tablet – offene Frage an Tobias, ob man weiter herauszoomen können soll.
 
 **Umgesetzt:** v0.54.0. Als Nächstes der Entwurf für Level 15 mit neuen Ausgaben fürs Gold.
+
+**Tobias:** „Das herauszoomen finde ich bisher okay und mit level 15 können wir das ja nochmal überprüfenm weil dort die neuen Felder dazu kommen. Bisher finde ich sieht alles gut, deswegen können wir gerne mit level 15 anfangen“
+
+**Claude** hat den Entwurf v0.55.0 in `PLAENE.md` geschrieben und mit dem Rechenwerkzeug an einer Kopie der Daten nachgerechnet: Magier Ambrosius bringt den Zauberkessel (Reiter Stein, 30 Steinplatten + 10 Eisenbleche, Feuerfach für 100 Holzkohle, 5 je Trank, von Hand auffüllen); Traumtrank aus 1 Tinktur + 3 Kamillenblüten in 60 s (499 Gold); 4 Aufträge (Ambrosius, Wirt Hannes, Klara; 15.202 Gold, ×1,2); Aufstieg 15.000; je Seite ein 4. Flächenstreifen für 10.000 (bis 54 × 46) und so weit herauszoomen, dass die ganze Welt aufs Tablet passt; als neue Ausgabe fürs Gold die Idee „Zauber des Magiers“ für einen eigenen Schritt danach. 5 Fragen.
+
+**Umgesetzt:** v0.54.1 (nur Doku). Wartet auf Tobias' OK.
 
 ### 24.11.2026 – Chat 30: Einführung mit Hilde (v0.52.0)
 
