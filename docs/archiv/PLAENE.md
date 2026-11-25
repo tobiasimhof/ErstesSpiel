@@ -61,6 +61,80 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Vorbereitung für den nächsten Chat: Beratung – weiter Design und Grafik oder zurück zu Logik und Leveln? (Chat 30, v0.52.1; im neuen Chat besprechen)
+
+**Tobias (Chat 30, nach v0.52.0):** „Hi, ich habs mir angeschaut und alles sieht sehr gut aus. Mir ist nur aufgefallen, dass eine Mission wurde irgendwie zu schnell erledigt als ich die theke geöffnet hatte, aber da konnte ich nicht sehen, welche Mission das war. Glaube es war als ich irgendetwas in die Theke legen musste. Es wurde innerhalb von 1 sekunde verkauft, weshalb ich denke, dass es da etwas zu schnell geht, aber ansonsten gefällt mir dieses update und ich finde es erklärt optimal und kurz das Spielprinzip. Ich denke damit hätten wir erstmal ein ansprechendes und abschließendes Meilenstein im Bezug auf Grafik und Design. Fällt dir noch was auf was wir ändern könnten oder gehen wir wieder zurück zu unseren level ? Schau bitte einmal alles durch und lege deine gedanken und antworten in die Doku. Ich würde gerne in einem neuen Chat weitermachen mit "Lies dir den aktuellen Stand durch" und dann möchte ich im neuen Chat eine Beratung haben, ob wir weiter in die Design/Grafik Richtung gehen oder wieder zurück kehren zur Logik und den Level.“
+
+**Für den neuen Chat:** Claude liest `STAND.md`, `SPIEL.md` und diesen Abschnitt, fasst die Punkte 1–5 kurz zusammen und berät Tobias (Fragen am Ende). Programmiert wird erst nach seinem OK.
+
+#### 1. Die Theke in der Einführung – warum es so schnell ging
+
+- **Es war Schritt 6** („Holzblöcke auf eine Theke legen“). Er ist erledigt, sobald der erste Kunde kauft; dann springt Hilde sofort zu Schritt 7 („Dein erstes Gold! … Händler“).
+- **Warum in 1 Sekunde:** Jede Theke hat ihren eigenen Kunden-Takt, auf Level 1 kommt alle 15 Sekunden einer – **auch wenn die Theke leer ist** (dann geht er ohne Kauf). Legt man die Holzblöcke hin, kommt der nächste Kunde also irgendwann zwischen 0 und 15 Sekunden. Bei Tobias war der Takt fast um – der Kunde kam nach 1 Sekunde, Hilde sprang weiter, und man sah weder den Verkauf noch, welcher Schritt erledigt war.
+- **Im normalen Spiel ist das in Ordnung** (die Kunden kommen gleichmäßig, egal wann man nachlegt). Nur in der Einführung soll man den ersten Verkauf **sehen**.
+- **Vorschlag (klein, eine Version):**
+  - **A – Erster Kunde mit Ansage:** Legt man in Schritt 6 zum ersten Mal Waren auf eine Theke, kommt deren nächster Kunde frühestens nach 5 Sekunden. Hildes Ring liegt auf der Theke, dort zählt „🧑 Nächster Kunde in etwa 5 s“ herunter – man sieht ihn kommen. Nur in der Einführung eines neuen Spiels; danach wie immer.
+  - **B – Erst zeigen, dann weiter:** Schritte, die die Fabrik von selbst erledigt (4: „die ersten Holzblöcke sind angekommen“, 6: „der erste Kunde hat gekauft“), springen nicht sofort weiter. Hilde sagt erst, was passiert ist („✓ Verkauft! Ein Kunde hat 1 Holzblock gekauft – +1 Gold. Jeden Verkauf siehst du unten bei ‚Letzte Verkäufe‘.“), der Ring zeigt auf das Gold oben, und es geht mit „Weiter ›“ weiter. Schritte, die man selbst tippt (einlegen, verschieben, kaufen …), springen wie gewünscht sofort weiter.
+  - Claudes Empfehlung: A und B zusammen.
+
+#### 2. Wo wir stehen
+
+- **Design und Grafik (M4 „Optik & Gefühl“) – ein abgeschlossener Abschnitt** (Tobias: „ansprechendes und abschließendes Meilenstein“): 3D mit frei drehbarer Kamera, eigene Häuser für alle Gebäude mit bewegten Teilen, jede Ware mit eigener Form, wachsende Pflanzen, Oberfläche im Kenney-Stil, Ladebildschirm mit Namen, Neuigkeiten als Schriftrolle, Einführung mit Hilde; 60 Bilder/s bei voller Fabrik. Offen geblieben: Klänge (Tobias spielt mit 0), Rückseiten der Häuser, Titel, Stadt um die Fabrik.
+- **Inhalt (M2 „Produktionsketten“):** Level 1–14 im Spiel. Tobias' 3D-Fabrik steht auf Level 13 – **nach Level 14 gibt es keinen neuen Inhalt mehr.** Level 15–18 (Tränke-Kapitel) sind als Gerüst angenommen (`docs/inhalte/AUSBLICK.md`), aber noch nicht im Detail geplant.
+- **Wirtschaft (M3):** Das Rechenwerkzeug zeigt: Ab etwa Level 11 bezahlen die Aufträge die Aufstiege fast allein, Gold häuft sich (Tobias, Chat 27: „das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann“), nach etwa 443.000 Gold gibt es nichts mehr zu kaufen. Level 14–18 brauchen neue Ausgaben.
+
+#### 3. Durchsicht – was Claude noch auffällt
+
+**Design und Oberfläche** (Aufwand: klein = eine kleine Version, mittel = eine bis zwei Versionen, groß = mehrere Versionen):
+
+| | Was | Warum | Aufwand |
+|---|---|---|---|
+| D1 | **Theke in der Einführung** (Punkt 1) | Tobias' Test | klein |
+| D2 | **Prototyp-Anzeigen oben aufräumen:** „🎞️ Bilder/s“ steht im 3D-Spiel immer da, dazu „v0.52.0 · 3D-Test“ und der Knopf „Vollbild“ | Für neue Spieler verwirrend; Bilder/s nur im Testmodus, Versionsnummer ins Menü, „Vollbild“ evtl. ins Menü | klein |
+| D3 | **Aus dem „3D-Test“ wird das Spiel** | Das 3D-Spiel ist längst das Hauptspiel, heißt aber noch „3D-Test“; im Menü steht „🗺️ Zur echten Fabrik (2D)“ mit einem zweiten Spielstand – für neue Spieler unverständlich. Möglichkeiten: (a) nur noch ein Spielstand in 3D, die 2D-Ansicht fällt weg; (b) die 2D-Draufsicht bleibt als „Karte“ derselben Fabrik (zum Planen); dazu: Was wird aus Tobias' 2D-Fabrik (Level 13)? | mittel |
+| D4 | **Titel** statt „Factory“ (Ladebildschirm, Browser-Reiter, App-Name „ErstesSpiel“) | Spätestens bevor andere das Spiel sehen | Entscheidung Tobias, Umsetzung klein |
+| D5 | **Klänge**: andere Klänge oder leise Fabrik-Geräusche (Säge, Hammer, Wasserrad – lauter, je näher man heranzoomt) | Das jetzige Paket gefällt nicht | mittel |
+| D6 | **Gefühl beim Spielen**: Münze fliegt beim Verkauf zum Gold, kleiner Staub beim Bauen, Funken beim Aufstieg | Belohnt das Tun, macht das Spiel lebendiger | mittel |
+| D7 | **Rückseiten der Häuser** unterscheidbar (Tobias, Chat 27) | Links und rechts einer Straße sieht man eine Seite immer von hinten | mittel |
+| D8 | **Eine Stadt um die Fabrik, die mit dem Level wächst** (Idee, Chat 24) | Die stärkste sichtbare Belohnung fürs Aufsteigen; passt zum roten Faden (der Ort wächst) | groß |
+
+**Logik und Level:**
+
+| | Was | Warum | Aufwand |
+|---|---|---|---|
+| L1 | **Level 15 „Der alte Magier“**: Zauberkessel mit Feuerfach (neue Spielidee: Holzkohle von Hand nachlegen), Traumtrank, mehr Fläche | Tobias steht auf Level 13 – ohne neue Level ist bald Schluss | mittel (Planung im Detail, dann Umsetzung) |
+| L2 | **Level 16–18** (Kräutermühle, Sternwarte, Zauberei) | Schließt das Tränke-Kapitel ab | je eine Version |
+| L3 | **Neue Ausgaben fürs Gold** – mit Level 15 zusammen planen: z. B. Verbesserungen (schneller verarbeiten, schnellere Bänder, mehr Kunden), teurere Aufstiege, Fläche, Ausbauten | Gold häuft sich ab Level 11 | mittel |
+| L4 | **Verbesserungen mit Erfahrung** (`xpTotal` zählt schon mit) | Ein Ziel über die Level hinaus | mittel bis groß |
+| L5 | Nachfrage und Trends („Die Stadt baut eine Mauer: Steinblöcke +50 %“) | Mehr Abwechslung beim Verkaufen | groß, später |
+
+**Aufräumen (unsichtbar):**
+
+| | Was | Warum | Aufwand |
+|---|---|---|---|
+| A1 | **Durchsicht des Codes** (vorgemerkt „später“) | Einige Dateien sind sehr groß geworden (Steuerung etwa 1.200 Zeilen, Warenbilder etwa 1.400, Aussehen etwa 3.100) – vor dem nächsten großen Inhalt wäre Aufräumen billig und macht spätere Schritte sicherer | mittel, ohne sichtbare Änderung |
+| A2 | Test-Knopf „🧪 Test: Auftrag erledigen“ vor v1.0 entfernen | steht in den offenen Fragen | klein |
+
+#### 4. Zwei Wege
+
+- **Weg 1 – zurück zu Logik und Leveln** (Claudes Empfehlung): erst ein kleiner **Feinschliff** (D1 Theke, D2 Anzeigen oben, dazu die Entscheidung zu D3), dann **Level 15** zusammen mit neuen Ausgaben fürs Gold (L1 + L3), danach Level 16–18.
+  - Dafür: Tobias' Fabrik steht kurz vor dem Ende des Inhalts; der Kern des Spiels ist die Massenproduktion (Chat 17); das Gold-Problem wächst mit jedem Level; neue Level testen auch das neue Design (Häuser, Einführung, Briefe) im echten Spiel.
+  - Dagegen: Die großen Design-Ideen (Stadt, Klänge) warten länger.
+- **Weg 2 – weiter Design und Grafik:** D3 (ein Spiel statt 3D-Test), D5 Klänge, D6 Gefühl, D7 Rückseiten, D8 die wachsende Stadt.
+  - Dafür: Der Eindruck wird noch runder, bevor andere das Spiel sehen; die Stadt wäre eine große Belohnung.
+  - Dagegen: Ohne neue Level gibt es nach Level 14 nichts mehr zu tun, und die Stadt braucht ohnehin neue Bauabschnitte (Level), um zu wachsen.
+- **Mischform:** abwechselnd – nach jedem neuen Level ein kleiner Design-Schritt (z. B. Level 15 → Klänge, Level 16 → Rückseiten, Level 18 → die Stadt wächst mit allen Bauabschnitten).
+
+**Claudes Empfehlung:** Weg 1 mit dem Feinschliff vorneweg, die Design-Punkte in der Mischform dazwischen. Vorschlag für die Reihenfolge: v0.53.0 Feinschliff (D1, D2, evtl. D3) → Planung Level 15 mit Gold-Ausgaben → v0.54.0 Level 15 → Level 16–18, dazwischen je ein Design-Punkt. Danach wäre **v1.0** in Reichweite – Vorschlag, was v1.0 („erste rund spielbare Version“) heißen könnte: Level 1–18 mit dem ganzen Tränke-Kapitel, ein Spielstand, ein Titel, Gold-Gleichgewicht bis Level 18 nachgerechnet, ohne Test-Knopf und Prototyp-Anzeigen.
+
+#### 5. Fragen an Tobias (im neuen Chat)
+
+1. **Welcher Weg:** zurück zu Logik und Leveln (Empfehlung), weiter Design und Grafik oder die Mischform?
+2. **Theke in der Einführung:** Vorschlag A (erster Kunde frühestens nach 5 Sekunden) und B (bei Lieferung und Verkauf erst zeigen, dann „Weiter ›“) – so?
+3. **Anzeigen oben:** Bilder/s nur im Testmodus, Versionsnummer und „Vollbild“ ins Menü?
+4. **3D-Test → das Spiel:** nur noch ein Spielstand in 3D? Die 2D-Draufsicht ganz weg oder als Karte behalten? Was wird aus deiner 2D-Fabrik (Level 13)?
+5. **Was soll v1.0 sein** – passt der Vorschlag oben?
+
 ### Entwurf v0.51.0 und v0.52.0 – Neuigkeiten als Schriftrolle, Einführung mit Hilde (Chat 29, v0.50.1; angenommen – umgesetzt in v0.51.0 und v0.52.0)
 
 **Tobias (Chat 29, nach v0.50.0):** „Ich habs mir angeschaut. Sieht für den ersten Versuch sehr gut aus. Das können wir erstmal so stehen . Die klänge sind leider gar nicht gut, aber das liegt eher am Soundpack als an der Programmierung. Ich lasse den Sound daher auf 0. Lass uns als nächstes die Einführung mit Hilde planen. Außerdem ist mir aufgefallen, dass Neuerungen die unten im Spielfeld angezeigt leicht verloren gehen. Da würde ich mir auch nochmal ein Fenster wünschen das aufploppt und die Nachricht dann so übermittelt wird, quasi als Brief oder Nachricht zum aufrollen, wie man das aus dem Mittelalter kennt - ohne Zeit, selbst zum wegklicken, damit man alles lesen kann.“

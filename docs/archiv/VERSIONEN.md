@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.52.1 – Tobias' Test von v0.52.0, Durchsicht und Beratung vorbereitet (25.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zu v0.52.0 festhalten und seine Bitte erfüllen: „Schau bitte einmal alles durch und lege deine gedanken und antworten in die Doku“ – für eine Beratung im neuen Chat (Design und Grafik oder Logik und Level).
+
+**Fragen, die wir uns gestellt haben:**
+- Welcher Schritt war „zu schnell“? → Schritt 6 (Theke): erledigt beim ersten Kauf; der Kunden-Takt jeder Theke (Level 1: 15 Sekunden) läuft auch bei leerer Theke, also kommt der erste Kunde nach 0–15 Sekunden – bei Tobias nach 1. Vorschlag A + B in `PLAENE.md`.
+- Was ist noch offen? → Durchsicht von Design (D1–D8), Level (L1–L5) und Aufräumen (A1–A2) mit Aufwand, zwei Wege, Empfehlung, Vorschlag für v1.0, 5 Fragen.
+
+**Gemacht:**
+- `PLAENE.md`: „Vorbereitung für den nächsten Chat: Beratung …“. `STAND.md` (Version, Phase, Fahrplan M4, nächster Schritt, letzte 3 Arbeitsschritte), `GESPRAECHE.md`, `ENTSCHEIDUNGEN.md`. Versionsnummer 0.52.1. Das Spiel ist unverändert.
+
+**Geprüft:**
+- `npm test` (Versionsnummer, Import-Map, Größe der Doku).
+
 ### v0.52.0 – Einführung mit Bürgermeisterin Hilde (24.11.2026)
 
 **Vorgenommen:**
