@@ -4,6 +4,27 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.53.0 – Feinschliff: Theke in der Einführung, Leiste oben (25.11.2026)
+
+**Vorgenommen:**
+- Den Feinschliff aus dem Entwurf umsetzen (Tobias, Chat 31: „Für die Einführung reicht es, wenn bei diesem Schritt einfach 5 sekunden herunterlaufen“; „Dann können oben gerne die Buttons weg, die du vorgeschlagen hast“).
+
+**Fragen, die wir uns gestellt haben:**
+- Genau 5 Sekunden oder „frühestens nach 5“? → Genau 5 (Tobias: „es 5 sekunden dauert bis der Block verkauft wird“): Der Kunden-Takt der Theke wird beim Hinlegen auf 5 gesetzt, auch wenn er fast um oder noch lang war.
+- Wann gilt das? → Nur in der Einführung eines neuen Spiels (nicht beim Ansehen) und nur bis zum ersten Verkauf; nur beim Hinlegen auf eine leere Theke (Nachlegen verzögert nichts); auch wer vorauseilt und schon vor Schritt 6 etwas hinlegt. Danach kommen die Kunden in ihrem Takt.
+- Wie sieht man es? → Hilde: „Der nächste Kunde kommt in 4 s …“ (zählt in ihrem Fenster herunter, „{sekunden}“ in der Datentabelle), auf der Theke „🧑 Nächster Kunde in etwa 4 s“; beim Verkauf „+1“ oben, dann „Dein erstes Gold! …“.
+- Wohin mit Version und Vollbild? → Ins Menü ☰: „⛶ Vollbild“ (bzw. „⛶ Vollbild beenden“) nach „🔊 Audio“, ganz unten klein „Version 0.53.0“. Damit das Menü im Testmodus auch auf niedrigen Handys passt, lässt es sich wischen, wenn es nicht ganz aufs Bild passt.
+
+**Gemacht:**
+- `core/data/tutorial.js`: `TUTORIAL_FIRST_CUSTOMER_SECONDS = 5`, Hildes Satz mit „{sekunden}“. `core/tutorial.js`: `tutorialFirstCustomer` (5 oder null), `nextStockedCustomerIn` (Sekunden bis zum nächsten Kunden einer bestückten Theke). `core/market.js`: `fillCounter` setzt beim Hinlegen auf eine leere Theke den Takt. `ui/tutorial.js`: Hildes Text zählt in jedem Bild mit.
+- `index.html`, `ui/hud.js`, `style.css`: „Vollbild“ und die Versionsnummer aus der Leiste ins Menü, Bilder/s nur im Testmodus und im Belastungstest (`main.js`), Menü mit Höchsthöhe und Wischen.
+- Tests: `einfuehrung.test.js` (genau 5 s bei Takt 0,3 und 14, Nachlegen ändert nichts, nach dem ersten Verkauf normal, ohne Einführung und beim Ansehen nichts, Abräumen und neu hinlegen wieder 5 s); Browser: Einführung (Hilde und Theke zählen herunter, nach 2 s noch kein Verkauf, dann Schritt 7), 3D-Test (oben nur Gold, Laden-Level, ☰; Vollbild und Version im Menü), 2D (Version im Menü).
+- Doku: `SPIEL.md`, `BEDIENUNG.md`, `TECHNIK.md`, `STAND.md`, Archiv. Versionsnummer 0.53.0. Spielstand-Format bleibt 20.
+
+**Geprüft:**
+- `npm test`: 476 Tests bestanden (2 neue zur Theke).
+- Browser-Test (Tablet 1280 × 800, Handy 844 × 390, Hochformat, schmales Handy): 1.262 Prüfungen bestanden. Screenshots angesehen: Leiste oben nur Gold, Laden-Level, ☰; Menü mit „⛶ Vollbild“ und „Version 0.53.0“ passt auch auf dem Handy im Testmodus; Hilde und die Theke zählen herunter („Der nächste Kunde kommt in 1 s …“). Danach „5 s“ mit festem Leerzeichen, damit das „s“ nicht allein in die nächste Zeile rutscht – Einführung noch einmal geprüft.
+
 ### v0.52.2 – Antworten zur Beratung, Entwurf v0.53.0 und v0.54.0 (25.11.2026, nur Doku)
 
 **Vorgenommen:**

@@ -6,7 +6,7 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { TUTORIAL } from '../src/core/data/tutorial.js';
+import { TUTORIAL, TUTORIAL_FIRST_CUSTOMER_SECONDS } from '../src/core/data/tutorial.js';
 import { BUILDINGS } from '../src/core/data/buildings.js';
 import { ITEMS } from '../src/core/data/items.js';
 import {
@@ -14,6 +14,7 @@ import {
   advanceTutorial,
   endTutorial,
   isValidTutorial,
+  nextStockedCustomerIn,
   noteTutorial,
   skipTutorialStep,
   startTutorial,
@@ -22,7 +23,7 @@ import {
 import { createNewGame, findBuilding } from '../src/core/state.js';
 import { SAVE_VERSION, deserializeGame, isValidState, serializeGame } from '../src/core/save.js';
 import { createStressFactory } from '../src/core/belastungstest.js';
-import { fillCounter, setCounterItem } from '../src/core/market.js';
+import { fillCounter, setCounterAmount, setCounterItem } from '../src/core/market.js';
 import { loadInput } from '../src/core/production.js';
 import { buildBeltPath, applyBeltPath, extendTrace } from '../src/core/belts.js';
 import { moveBuilding } from '../src/core/buildings.js';
@@ -203,4 +204,62 @@ test('Hildes Briefe: Begrüßung mit Namen und „▶ Los geht’s“, Abschluss
   assert.ok(text.includes('Zimmermann Jakob') && text.includes('5 Holzplatten'), text);
   assert.ok(text.includes('Sägewerk') && text.includes(`${BUILDINGS.saegewerk.cost.holzblock} Holzblöcke`), text);
   assert.ok(text.includes('Ort & Level'), 'wo man sie wieder ansieht');
+});
+
+// v0.53.0 (Tobias, Chat 31: „dass man sobald man einen Block in die Theke legt,
+// es 5 sekunden dauert bis der Block verkauft wird, damit man das ganze auch sieht“)
+test('Theke in der Einführung: der erste Kunde kommt genau 5 Sekunden nach dem Hinlegen', () => {
+  assert.equal(TUTORIAL_FIRST_CUSTOMER_SECONDS, 5);
+  const theke = TUTORIAL.find((s) => s.id === 'theke');
+  assert.ok(theke.hints.find((h) => h.when === 'stocked').text.includes('{sekunden}'), 'Hilde zählt herunter');
+  for (const wasLeft of [0.3, 14]) {
+    const state = createNewGame(21);
+    state.market.timers[0] = wasLeft; // Kunden-Takt der leeren Theke fast um bzw. noch lang
+    assert.equal(nextStockedCustomerIn(state), null, 'noch liegt nichts auf einer Theke');
+    setCounterItem(state, 0, 'holzblock');
+    assert.ok(fillCounter(state, 0, 5) > 0);
+    assert.equal(state.market.timers[0], 5, `Takt ${wasLeft} s → genau 5 s`);
+    assert.equal(nextStockedCustomerIn(state), 5);
+    // Nachlegen auf eine Theke, auf der schon etwas liegt, ändert den Takt nicht
+    simulate(state, 2);
+    fillCounter(state, 0, 3);
+    assert.ok(Math.abs(state.market.timers[0] - 3) < 0.01, `noch etwa 3 s (${state.market.timers[0]})`);
+    simulate(state, 2.8);
+    assert.equal(state.market.nextSaleId, 1, 'nach 4,8 s noch kein Verkauf');
+    simulate(state, 0.4);
+    assert.equal(state.market.nextSaleId, 2, 'nach 5 s hat der erste Kunde gekauft');
+    // danach wie immer: eine zweite Theke bekommt keine 5 Sekunden
+    state.market.timers[1] = 12;
+    setCounterItem(state, 1, 'holzblock');
+    setCounterAmount(state, 1, 4);
+    assert.equal(state.market.timers[1], 12, 'nach dem ersten Verkauf normaler Kunden-Takt');
+  }
+});
+
+test('Theke: die 5 Sekunden gelten nur in der Einführung eines neuen Spiels', () => {
+  // ohne Einführung (beendet)
+  const ended = createNewGame(22);
+  endTutorial(ended);
+  ended.market.timers[0] = 0.3;
+  setCounterItem(ended, 0, 'holzblock');
+  setCounterAmount(ended, 0, 5);
+  assert.equal(ended.market.timers[0], 0.3);
+  // beim Ansehen in einer laufenden Fabrik
+  const review = createNewGame(23);
+  review.market.nextSaleId = 300;
+  startTutorial(review);
+  assert.equal(review.tutorial.review, true);
+  review.market.timers[0] = 9;
+  setCounterItem(review, 0, 'holzblock');
+  fillCounter(review, 0, 5);
+  assert.equal(review.market.timers[0], 9);
+  // Abräumen und neu hinlegen vor dem ersten Verkauf: wieder 5 Sekunden
+  const again = createNewGame(24);
+  setCounterItem(again, 0, 'holzblock');
+  fillCounter(again, 0, 5);
+  simulate(again, 3);
+  setCounterAmount(again, 0, 0);
+  setCounterAmount(again, 0, 2);
+  assert.equal(again.market.timers[0], 5);
+  assert.equal(again.market.nextSaleId, 1);
 });

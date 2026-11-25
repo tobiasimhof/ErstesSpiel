@@ -35,7 +35,7 @@ const {
 // eigenem Spielstand. Spielt per Touch: Holzstamm einlegen, Band ziehen,
 // Sägewerk bauen, antippen, Kamera drehen und zoomen, abreißen; seit v0.35.0
 // auch Bereich markieren, verschieben, drehen und Fläche kaufen.
-async function run3d(browser, baseUrl, device) {
+async function run3d(browser, baseUrl, device, expectedVersion) {
   setDevice(`${device.name}-3d`);
   console.log(`\n${device.name} – 3D-Test`);
   const context = await browser.newContext({
@@ -112,7 +112,7 @@ async function run3d(browser, baseUrl, device) {
     counts: window.__game.view3d.counts(),
     models: window.__game.view3d.models(),
     loading: !document.getElementById('catchup').hidden,
-    version: document.getElementById('hud-version').textContent,
+    version: document.getElementById('menu-version').textContent,
     turn: !document.getElementById('turn-buttons').hidden,
     fps: !document.getElementById('hud-fps').hidden,
   }));
@@ -124,9 +124,13 @@ async function run3d(browser, baseUrl, device) {
   // v0.40.0: keine Bäume mehr auf der Welt (sie ragten aus Häusern, Tobias, Chat 25)
   check((await game(page, () => window.__game.view3d.treesInWorld())) === 0, 'Bäume und Felsen stehen nur außerhalb der Welt');
   check(start.models >= 30 && !start.loading && start.counts.buildings === 2, `Kenneys Modelle geladen (${start.models}), beide Gebäude in 3D`);
-  check(start.version.includes('3D-Test') && start.turn, `Oben „3D-Test“, Dreh-Knöpfe ⟲ ⟳ sichtbar (${start.version})`);
-  // v0.36.0: Bilder pro Sekunde im 3D-Test immer sichtbar, auch ohne Testmodus
-  check(start.fps && !(await page.isVisible('#hud-speed')), `Bilder pro Sekunde oben sichtbar, ohne Testmodus (${await page.textContent('#hud-fps')})`);
+  check(start.version === `Version ${expectedVersion}` && start.turn, `Versionsnummer im Menü, Dreh-Knöpfe ⟲ ⟳ sichtbar (${start.version})`);
+  // v0.53.0: Leiste oben aufgeräumt – Bilder/s nur im Testmodus, Vollbild und Version im Menü
+  const top = await game(page, () => [...document.querySelectorAll('#hud > *:not(.menu)')].filter((el) => !el.hidden).map((el) => el.id || el.className));
+  check(
+    !start.fps && !(await page.isVisible('#hud-speed')) && JSON.stringify(top) === '["hud-item","btn-level","hud-spacer","btn-menu"]',
+    `Oben nur Gold, Laden-Level und ☰ – ohne Bilder/s, Version und Vollbild (${JSON.stringify(top)})`,
+  );
   await shot('3d-1-start');
 
   // Holzstamm einlegen (Holzfällerlager antippen)
@@ -749,6 +753,16 @@ async function run3d(browser, baseUrl, device) {
   await page.tap('#btn-menu');
   await sleep(100);
   check(!(await page.isVisible('#menu-stress')), 'Ohne Testmodus kein Belastungstest im Menü');
+  // v0.53.0: Vollbild und Versionsnummer stehen im Menü
+  const menuExtras = await page.evaluate(() => {
+    const shown = (id) => {
+      const r = document.getElementById(id).getBoundingClientRect();
+      return r.width > 0 && r.height > 0 && r.bottom <= window.innerHeight;
+    };
+    return { full: shown('menu-fullscreen'), fullText: document.getElementById('menu-fullscreen').textContent, version: shown('menu-version') };
+  });
+  check(menuExtras.full && menuExtras.fullText.includes('Vollbild') && menuExtras.version, `Menü: „⛶ Vollbild“ und Versionsnummer sichtbar (${JSON.stringify(menuExtras)})`);
+  await shot('3d-menu');
   await page.tap('#menu-test-mode');
   await sleep(150);
   await page.tap('#btn-menu');

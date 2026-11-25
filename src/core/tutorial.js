@@ -11,7 +11,7 @@
 //                                laufenden Fabrik: Ereignisse aus der Fabrik
 //                                zählen dann nicht (sie liefert ja schon)
 
-import { TUTORIAL, TUTORIAL_FACTORY_EVENTS } from './data/tutorial.js';
+import { TUTORIAL, TUTORIAL_FACTORY_EVENTS, TUTORIAL_FIRST_CUSTOMER_SECONDS } from './data/tutorial.js';
 import { productionOf } from './production.js';
 
 export const TUTORIAL_STEPS = TUTORIAL.length;
@@ -79,6 +79,29 @@ export function skipTutorialStep(state) {
     return 'finished';
   }
   return advanceTutorial(state) ?? 'next';
+}
+
+// v0.53.0: In der Einführung eines neuen Spiels kommt der Kunde einer Theke
+// genau so viele Sekunden nach dem Hinlegen – bis zum ersten Verkauf (sonst
+// käme er irgendwann in seinem Takt, bei Tobias nach 1 Sekunde). Ergebnis:
+// Sekunden oder null (keine Einführung, nur Ansehen, schon verkauft).
+export function tutorialFirstCustomer(state) {
+  const t = state.tutorial;
+  if (!t || t.review || state.market.nextSaleId > 1) return null;
+  return TUTORIAL_FIRST_CUSTOMER_SECONDS;
+}
+
+// v0.53.0: Für Hildes „{sekunden}“: so viele Sekunden (aufgerundet, mindestens
+// 1), bis an einer Theke, auf der etwas liegt, der nächste Kunde kommt – oder
+// null, wenn auf keiner Theke etwas liegt.
+export function nextStockedCustomerIn(state) {
+  let best = null;
+  state.counters.forEach((counter, index) => {
+    if (!counter.type || counter.count <= 0) return;
+    const wait = state.market.timers[index] ?? 0;
+    if (best === null || wait < best) best = wait;
+  });
+  return best === null ? null : Math.max(1, Math.ceil(best));
 }
 
 // „Einführung beenden“

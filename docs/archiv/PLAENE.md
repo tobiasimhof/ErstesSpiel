@@ -61,7 +61,7 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.53.0 und v0.54.0 – Feinschliff (Theke, Leiste oben), ein Spiel ohne 2D-Welt (Chat 31, v0.52.2; wartet auf Tobias' OK)
+### Entwurf v0.53.0 und v0.54.0 – Feinschliff (Theke, Leiste oben), ein Spiel ohne 2D-Welt (Chat 31, v0.52.2; angenommen ohne B: „Für die Einführung reicht es, wenn bei diesem Schritt einfach 5 sekunden herunterlaufen“, 2D-Fabrik ohne Andenken, Reihenfolge passt – v0.53.0 umgesetzt, v0.54.0 als Nächstes)
 
 **Tobias (Chat 31):** „Lies dir den aktuellen Stand durch. "Logik und Leveln. Vorneweg ein kleiner Feinschliff: die Theke in der Einführung und die Anzeigen oben. Dann Level 15 zusammen mit neuen Ausgaben fürs Gold. " Das war dein Vorschlag für den nächsten Schritt. Ich finde den Schritt gut. Lass uns zuerst den Schritt der Einführung so ändern, dass man sobald man einen Block in die Theke legt, es 5 sekunden dauert bis der Block verkauft wird, damit man das ganze auch sieht. Dann können oben gerne die Buttons weg, die du vorgeschlagen hast und wir könnten uns überlegen, die 2D Welt komplett zu löschen, weil ich sie gar nicht mehr spiele und das 3D game, das eigentliche Game geworden ist und ich da auch schon auf lvl 14 alle Missionen abgeschlossen habe“
 

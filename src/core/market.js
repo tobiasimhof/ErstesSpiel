@@ -17,6 +17,7 @@
 import { ITEMS } from './data/items.js';
 import { BAILOUT_ITEM, COUNTERS, CUSTOMERS, SALES_LOG_SIZE, SHOP_LEVELS, TEST_PACK } from './data/shop.js';
 import { isItemUnlocked, itemLevel } from './levels.js';
+import { tutorialFirstCustomer } from './tutorial.js';
 import {
   addRawToSource,
   buildingContents,
@@ -223,8 +224,16 @@ export function fillCounter(state, index, n = Infinity) {
   if (!counter?.type) return 0;
   const moved = Math.max(0, Math.min(n, counterSize(state) - counter.count, storageCount(state, counter.type)));
   if (moved > 0) {
+    const wasEmpty = counter.count === 0;
     takeFromStorage(state, counter.type, moved);
     counter.count += moved;
+    // v0.53.0: In Hildes Einführung kommt der erste Kunde genau 5 Sekunden
+    // nach dem Hinlegen, damit man den Verkauf sieht (Tobias, Chat 31).
+    const wait = wasEmpty ? tutorialFirstCustomer(state) : null;
+    if (wait !== null) {
+      syncCustomerTimers(state);
+      state.market.timers[index] = wait;
+    }
   }
   return moved;
 }

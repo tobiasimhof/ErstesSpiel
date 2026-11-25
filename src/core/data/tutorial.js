@@ -40,7 +40,9 @@
 //             'counter:ware'     „➕ Ware wählen“ der ersten leeren Theke
 //             'counter:stocked'  die erste Theke, auf der etwas liegt
 //             'pick:<Ware>', 'amount:ok', 'buy:<Ware>'  Knöpfe im Laden
-//           Ohne „target“ zeigt kein Pfeil. „{name}“ wird zum Namen des Spielers.
+//           Ohne „target“ zeigt kein Pfeil. „{name}“ wird zum Namen des Spielers,
+//           „{sekunden}“ zu den Sekunden bis zum nächsten Kunden einer Theke,
+//           auf der etwas liegt (zählt im Fenster herunter, v0.53.0).
 
 import { BELT_COST, BUILDINGS } from './buildings.js';
 import { ITEMS } from './items.js';
@@ -49,6 +51,13 @@ const LOG = ITEMS.holzstamm.name;
 const BLOCKS = ITEMS.holzblock.plural;
 const LOG_AMOUNT = BUILDINGS.holzfaeller.production.amount;
 const BELT_BLOCKS = BELT_COST.holzblock;
+
+// v0.53.0: Legt man in der Einführung eines neuen Spiels Waren auf eine leere
+// Theke, kommt deren Kunde genau nach so vielen Sekunden – bis zum ersten
+// Verkauf (Tobias, Chat 31: „dass man sobald man einen Block in die Theke
+// legt, es 5 sekunden dauert bis der Block verkauft wird, damit man das ganze
+// auch sieht“). Vorher kam er nach 0–15 Sekunden, bei Tobias nach 1.
+export const TUTORIAL_FIRST_CUSTOMER_SECONDS = 5;
 
 export const TUTORIAL = [
   { id: 'willkommen', letter: true, done: 'brief' },
@@ -113,7 +122,7 @@ export const TUTORIAL = [
     hints: [
       { when: 'amount', target: 'amount:ok', text: 'Wähle die Menge – „Alle“ legt so viele hin, wie passen – und tippe auf „✓ Auf die Theke“.' },
       { when: 'picker', target: 'pick:holzblock', text: 'Wähle den Holzblock.' },
-      { when: 'stocked', target: 'counter:stocked', text: 'Gut! Jeder Kunde kauft 1 Stück und zahlt mit Gold. Gleich kommt der erste …' },
+      { when: 'stocked', target: 'counter:stocked', text: 'Gut! Jeder Kunde kauft 1 Stück und zahlt mit Gold. Der nächste Kunde kommt in {sekunden}\u00a0s …' }, // festes Leerzeichen: „5 s“ bleibt zusammen
       { when: 'shop:theken', target: 'counter:ware', text: 'Tippe bei einer leeren Theke auf „➕ Ware wählen“.' },
       { when: 'shop', target: 'tab:theken', text: `Hier im Lager liegen deine ${BLOCKS}. Verkaufen kannst du sie an einer Theke: Tippe auf „🛒 Theken“.` },
       { when: 'modal', target: '#modal-close', text: 'Schließ dieses Fenster mit ✕.' },

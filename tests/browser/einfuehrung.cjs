@@ -198,8 +198,29 @@ async function runTutorial(browser, baseUrl, device) {
   await tapRing();
   l = await expectHint('counter:stocked', 'Schritt 6, Holzblöcke liegen auf der Theke');
   check((await game(page, () => window.__game.state.counters[0].count)) > 0, 'Holzblöcke liegen auf Theke 1');
+  // v0.53.0: Der erste Kunde kommt genau 5 Sekunden nach dem Hinlegen, Hilde und die Theke zählen
+  // herunter. Die Fabrik läuft im Browser weiter – deshalb Zeit, Text und Verkäufe in einem Zug lesen.
+  const readWait = (advance) =>
+    page.evaluate(async (sec) => {
+      if (sec > 0) window.__game.simulate(sec);
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      return {
+        left: window.__game.state.market.timers[0],
+        sales: window.__game.state.market.nextSaleId - 1,
+        hilde: document.getElementById('hilde-text').textContent,
+        counter: document.querySelector('#modal-content .counter-card[data-counter="0"] .counter-next')?.textContent ?? '',
+      };
+    }, advance);
+  const shownSeconds = (text) => Number(/kommt in (\d+)\ss/.exec(text)?.[1] ?? 0);
+  const w1 = await readWait(0);
+  check(
+    w1.sales === 0 && w1.left > 1.5 && w1.left <= 5 && shownSeconds(w1.hilde) === Math.max(1, Math.ceil(w1.left)) && /Nächster Kunde in etwa [1-5] s/.test(w1.counter),
+    `Erster Kunde in 5 s: Hilde „${w1.hilde}“, Theke „${w1.counter}“ (noch ${w1.left.toFixed(2)} s)`,
+  );
+  const w2 = await readWait(1);
+  check(w2.sales === 0 && shownSeconds(w2.hilde) < shownSeconds(w1.hilde), `Hilde zählt herunter, noch kein Verkauf („${w2.hilde}“, noch ${w2.left.toFixed(2)} s)`);
   await shot('6c-warten');
-  await game(page, () => window.__game.simulate(20));
+  await game(page, () => window.__game.simulate(5));
 
   // 7 Händler
   l = await expectHint('tab:haendler', 'Schritt 7');

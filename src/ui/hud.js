@@ -1,4 +1,7 @@
-// Obere Leiste: Gold, Laden-Level, Vollbild, Menü und Versionsnummer.
+// Obere Leiste: Gold, Laden-Level und Menü ☰ (mit Vollbild und Versionsnummer).
+// v0.53.0: aufgeräumt – Bilder pro Sekunde nur im Testmodus, Vollbild und
+// Versionsnummer im Menü (Tobias, Chat 31: „Dann können oben gerne die
+// Buttons weg, die du vorgeschlagen hast“).
 
 import { canLevelUp } from '../core/levels.js';
 import { canDeliver, levelXp, xpNeeded } from '../core/quests.js';
@@ -23,7 +26,8 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
   const fpsBadge = document.getElementById('hud-fps');
   const testModeButton = document.getElementById('menu-test-mode');
 
-  document.getElementById('hud-version').textContent = is3d ? `v${version} · 3D-Test` : `v${version}`;
+  // v0.53.0: klein unten im Menü – so sieht man weiter, welche Version live ist
+  document.getElementById('menu-version').textContent = `Version ${version}`;
 
   function closeMenu() {
     menu.hidden = true;
@@ -85,10 +89,17 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
     onSwitch3d();
   });
 
-  // Vollbild (Android/PC). Ohne Vollbild-Funktion wird der Knopf ausgeblendet.
-  const fullscreenButton = document.getElementById('btn-fullscreen');
+  // Vollbild (Android/PC), seit v0.53.0 im Menü. Ohne Vollbild-Funktion wird
+  // der Knopf ausgeblendet.
+  const fullscreenButton = document.getElementById('menu-fullscreen');
   if (document.fullscreenEnabled) {
+    const label = () => {
+      fullscreenButton.textContent = document.fullscreenElement ? '⛶ Vollbild beenden' : '⛶ Vollbild';
+    };
+    label();
+    document.addEventListener('fullscreenchange', label);
     onPress(fullscreenButton, async () => {
+      closeMenu();
       try {
         if (document.fullscreenElement) {
           await document.exitFullscreen();
@@ -135,11 +146,11 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
       testModeButton.textContent = `⏩ Testmodus: ${on ? 'an' : 'aus'} (Zeit ×${factor})`;
       speedBadge.textContent = `⏩ ×${factor}`;
       speedBadge.hidden = !on;
-      fpsBadge.hidden = !on && !is3d; // v0.36.0: im 3D-Test immer sichtbar
+      fpsBadge.hidden = !on && !stressTest; // v0.53.0: nur im Testmodus (und im Belastungstest)
       testPackButton.hidden = !on;
       stressButton.hidden = !on || !is3d || stressTest;
     },
-    // v0.21.0 (Belastungstest): Bilder pro Sekunde, nur im Testmodus zu sehen
+    // v0.21.0 (Belastungstest): Bilder pro Sekunde, nur im Testmodus und im Belastungstest zu sehen
     setFps(fps) {
       fpsBadge.textContent = `🎞️ ${Math.round(fps)} Bilder/s`;
     },
