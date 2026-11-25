@@ -61,7 +61,51 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Vorbereitung für den nächsten Chat: Beratung – weiter Design und Grafik oder zurück zu Logik und Leveln? (Chat 30, v0.52.1; im neuen Chat besprechen)
+### Entwurf v0.53.0 und v0.54.0 – Feinschliff (Theke, Leiste oben), ein Spiel ohne 2D-Welt (Chat 31, v0.52.2; wartet auf Tobias' OK)
+
+**Tobias (Chat 31):** „Lies dir den aktuellen Stand durch. "Logik und Leveln. Vorneweg ein kleiner Feinschliff: die Theke in der Einführung und die Anzeigen oben. Dann Level 15 zusammen mit neuen Ausgaben fürs Gold. " Das war dein Vorschlag für den nächsten Schritt. Ich finde den Schritt gut. Lass uns zuerst den Schritt der Einführung so ändern, dass man sobald man einen Block in die Theke legt, es 5 sekunden dauert bis der Block verkauft wird, damit man das ganze auch sieht. Dann können oben gerne die Buttons weg, die du vorgeschlagen hast und wir könnten uns überlegen, die 2D Welt komplett zu löschen, weil ich sie gar nicht mehr spiele und das 3D game, das eigentliche Game geworden ist und ich da auch schon auf lvl 14 alle Missionen abgeschlossen habe“
+
+**Damit beantwortet** (Fragen aus der Beratung unten): 1 – Weg 1, zurück zu Logik und Leveln mit dem Feinschliff vorneweg; 2 – Vorschlag A (5 Sekunden), zu B nichts gesagt; 3 – die Anzeigen oben kommen weg; 4 – Tobias überlegt, die 2D-Welt ganz zu löschen (D3 a); 5 (v1.0) – noch offen. Neu: Tobias' 3D-Fabrik steht auf Level 14, alle Aufträge erledigt – nach Level 14 gibt es keinen Inhalt mehr, Level 15 ist dringend.
+
+#### v0.53.0 – Feinschliff: Theke in der Einführung, Leiste oben
+
+**1. Theke in der Einführung (Vorschlag A):**
+- Legt man in Hildes Schritt 6 Waren auf eine Theke, kommt deren Kunde **genau nach 5 Sekunden** (egal, wie weit ihr Kunden-Takt gerade war). Auf der Theke zählt „🧑 Nächster Kunde in etwa 5 s“ herunter, der Ring liegt auf der Theke, Hilde sagt: „Gut! Jeder Kunde kauft 1 Stück und zahlt mit Gold. In 5 Sekunden kommt der erste …“. Beim Verkauf erscheint oben „+1“ neben dem Gold, und Hilde macht mit „Dein erstes Gold! …“ (Händler) weiter.
+- Gilt nur in der Einführung eines neuen Spiels und nur bis zum ersten Verkauf; danach kommen die Kunden wie immer (Level 1 alle 15 Sekunden). Beim „🎓 Einführung ansehen“ in einer laufenden Fabrik ändert sich nichts. Die 5 Sekunden stehen in der Datentabelle der Einführung.
+- **B** (bei Lieferung und Verkauf erst zeigen, dann „Weiter ›“) – Claudes Empfehlung jetzt: weglassen. Mit dem Herunterzählen sieht man den Verkauf kommen, und Hildes nächster Satz beginnt ohnehin mit „Dein erstes Gold!“. Frage an Tobias.
+
+**2. Leiste oben aufräumen (D2, angenommen):**
+- „🎞️ Bilder/s“ nur noch im Testmodus (also auch im Belastungstest, der dort startet).
+- „v0.52.0 · 3D-Test“ verschwindet von der Leiste; die Versionsnummer steht klein unten im Menü ☰ – so sieht man weiter, welche Version live ist.
+- „Vollbild“ wandert ins Menü ☰ („⛶ Vollbild“ bzw. „⛶ Vollbild beenden“).
+- Oben bleiben Gold, Laden-Level und ☰ (im Testmodus dazu „⏩ ×10“ und die Bilder/s).
+
+Spielstand-Format bleibt gleich (der Kunden-Takt steht schon im Spielstand). Prüfen: `npm test` (5 Sekunden nur in der Einführung, nur beim ersten Mal), Browser-Test der Einführung (Herunterzählen, Verkauf nach 5 s über `simulate`), Leiste oben in Tablet- und Handygröße.
+
+#### v0.54.0 – Ein Spiel: die 2D-Welt fällt weg (D3 a)
+
+**Claudes Meinung: ja, löschen.**
+- **Dafür:** Neue Spieler sehen nur noch ein Spiel mit einem Spielstand – kein „🗺️ Zur echten Fabrik (2D)“ im Menü, nirgends mehr „3D-Test“. Jede neue Sache (Level 15–18, Zauberkessel mit Feuerfach …) wird nur noch einmal gebaut und geprüft: Die 2D-Zeichnung (etwa 1.100 Zeilen) und ihr Browser-Test (etwa 3.000 Zeilen) fallen weg, der Browser-Test wird schneller.
+- **Dagegen:** Ein Gerät ohne 3D (sehr alte Handys oder Browser) hätte keinen Ersatz mehr – heute zeigt die Fehlermeldung dann den Weg in die 2D-Welt. Für das Galaxy Tab und heutige Handys kein Problem.
+
+**Was sich ändert:**
+- Der Link öffnet wie heute das 3D-Spiel – Tobias' Fabrik (Level 14) bleibt genau, wie sie ist (gleicher Speicherplatz im Browser, keine Umwandlung). Alte Links mit `?ansicht=2d` öffnen einfach das Spiel.
+- Menü ☰: „🗺️ Zur echten Fabrik (2D)“ fällt weg; Audio, Sichern, Laden, Testmodus, Neues Spiel bleiben. „3D-Test“ verschwindet aus allen Texten (Leiste, Menü, Meldungen, Doku).
+- **Tobias' 2D-Fabrik (Level 13)** wird nicht gelöscht, sie bleibt unsichtbar im Browser liegen: Ginge man auf eine ältere Version zurück, wäre sie wieder da. Wer sie als Andenken behalten will: vorher ☰ → „🗺️ Zur echten Fabrik (2D)“ → „💾 Spielstand sichern“. Die Datei ließe sich später mit „📂 Spielstand laden“ ins Spiel holen (sie ersetzt dann die 3D-Fabrik).
+- **Unsichtbar:** Was der Browser-Test heute nur in der 2D-Welt prüft (Speichern und Laden, Theken, Aufträge und Aufstiege bis Level 14, Hochformat, schmales Handy …), zieht ins 3D-Spiel um, damit nichts ungeprüft bleibt. Die Teile der 2D-Kamera, die auch die 3D-Steuerung braucht, bleiben (umgezogen nach `src/ui/`). In `CLAUDE.md` und `TECHNIK.md` fällt die 2D-Regel weg („2D-Grafik … in `src/view2d/`“).
+- Eigene Version, damit man bei einem Fehler leicht zurückgehen kann.
+
+#### Danach
+
+- **Entwurf Level 15 „Der alte Magier“ mit neuen Ausgaben fürs Gold** (L1 + L3): Zauberkessel mit Feuerfach, Traumtrank, mehr Fläche, dazu wofür man das angehäufte Gold ausgibt – erst als Entwurf im Detail mit Zahlen aus dem Rechenwerkzeug, dann v0.55.0.
+
+#### Fragen an Tobias
+
+1. Theke: A wie oben (genau 5 Sekunden, Herunterzählen auf der Theke) und **B weglassen** – einverstanden?
+2. 2D-Welt in einer eigenen Version v0.54.0 löschen – einverstanden? Willst du deine 2D-Fabrik vorher als Datei sichern?
+3. Reihenfolge v0.53.0 → v0.54.0 → Entwurf Level 15 mit Gold-Ausgaben – so?
+
+### Vorbereitung für den nächsten Chat: Beratung – weiter Design und Grafik oder zurück zu Logik und Leveln? (Chat 30, v0.52.1; in Chat 31 beantwortet – Entwurf v0.53.0/v0.54.0 oben)
 
 **Tobias (Chat 30, nach v0.52.0):** „Hi, ich habs mir angeschaut und alles sieht sehr gut aus. Mir ist nur aufgefallen, dass eine Mission wurde irgendwie zu schnell erledigt als ich die theke geöffnet hatte, aber da konnte ich nicht sehen, welche Mission das war. Glaube es war als ich irgendetwas in die Theke legen musste. Es wurde innerhalb von 1 sekunde verkauft, weshalb ich denke, dass es da etwas zu schnell geht, aber ansonsten gefällt mir dieses update und ich finde es erklärt optimal und kurz das Spielprinzip. Ich denke damit hätten wir erstmal ein ansprechendes und abschließendes Meilenstein im Bezug auf Grafik und Design. Fällt dir noch was auf was wir ändern könnten oder gehen wir wieder zurück zu unseren level ? Schau bitte einmal alles durch und lege deine gedanken und antworten in die Doku. Ich würde gerne in einem neuen Chat weitermachen mit "Lies dir den aktuellen Stand durch" und dann möchte ich im neuen Chat eine Beratung haben, ob wir weiter in die Design/Grafik Richtung gehen oder wieder zurück kehren zur Logik und den Level.“
 
