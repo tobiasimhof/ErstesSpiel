@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.52.0 – Einführung mit Bürgermeisterin Hilde |
-| **Phase** | M2 – Produktionsketten (Level 1–14 im Spiel); Fokus jetzt auf dem 3D-Test |
+| **Aktuelle Version** | v0.52.1 – Tobias' Test von v0.52.0, Durchsicht und Beratung vorbereitet (nur Doku; Spiel wie v0.52.0) |
+| **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–14 im Spiel, 15–18 als Gerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ (3D-Test; die echte Fabrik: https://tobiasimhof.github.io/ErstesSpiel/?ansicht=2d) |
-| **Nächster Schritt** | Tobias testet v0.51.0 (Schriftrolle) und v0.52.0 (Einführung: ☰ → „🔄 Neues Spiel“ oder im Level-Fenster „🎓 Einführung ansehen“). Danach **Level 15** (Tränke-Kapitel). Offen: Titel (Platzhalter „Factory“), andere Klänge. |
+| **Nächster Schritt** | **Neuer Chat: Beratung** – weiter Design und Grafik oder zurück zu Logik und Leveln? Vorbereitet in `PLAENE.md` (oben: Theke in der Einführung, Durchsicht, zwei Wege, Claudes Empfehlung, 5 Fragen). Erst nach Tobias' Antworten programmieren. |
 
 **Tobias' 3D-Test – Level 13 abgeschlossen** (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik). Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
 
@@ -20,12 +20,12 @@
 | M0, M1 | Planung, Fabrik-Grundgerüst | erledigt |
 | **M2** | **Produktionsketten** | **jetzt:** Werkzeuge (1–6) und Kräuter (7–12) fertig, Tränke ab Level 13 |
 | M3 | Wirtschaft & Fortschritt | Nachfrage und Trends, Laden-Ausbau mit Waren, evtl. Freischaltpunkte |
-| M4 | Optik & Gefühl | 3D-Grafik (vorgezogen, im 3D-Test), Animationen, Sound (später), Einführung für neue Spieler |
+| M4 | Optik & Gefühl | vorerst abgeschlossen (Chat 30): 3D, Häuser, Waren, Oberfläche, Ladebildschirm, Schriftrolle, Einführung; offen: Klänge, Animationen, Rückseiten, Stadt |
 | M5–M7 | Online, Clans & Handel, App | Spielerkonto, Schwarzmarkt, Clans, Android und iOS |
 
 **Nächste Schritte** (jeder erst nach Tobias' OK):
 
-- **Erledigt seit Chat 25** (Einzelheiten in `PLAENE.md`): Belastungstest, 3D schneller, Bereich kopieren, eigene Häuser, Rechenwerkzeug, Level 14, Waren auf dem Band (v0.39.0–v0.46.0); Oberfläche im Kenney-Stil (v0.47.0–v0.49.0); Ladebildschirm und Name (v0.50.0). Schriftrolle (v0.51.0), Einführung mit Hilde (v0.52.0). **Jetzt:** Tobias testet; danach Level 15.
+- **Erledigt seit Chat 25** (Einzelheiten in `PLAENE.md`): v0.39.0–v0.46.0 (Belastungstest bis Waren auf dem Band, Level 14), v0.47.0–v0.52.0 (Kenney-Oberfläche, Ladebildschirm, Name, Schriftrolle, Einführung). **Jetzt:** Beratung im neuen Chat; Claudes Empfehlung: Feinschliff, dann Level 15 mit neuen Ausgaben fürs Gold.
 1. **Tränke-Kapitel** (angenommen, Chat 27; Tabelle in `docs/inhalte/AUSBLICK.md`): 14 Die Tinktur (Mörser, Tinktur), 15 Der alte Magier (Zauberkessel, Traumtrank), 16 Die Kräutermühle (Heilpuder, Heiltrank), 17 Die Sternwarte (Linse, Fernrohr, Sternensand), 18 Die Zauberei (Farn, Lebens- und Manatrank). Kein bestehendes Rezept ändert sich; Feuer im Kessel von Hand (A); mehr Fläche ab Level 15. Gemahlenes Glas: **Kristallsand** (Tobias), im Steinmetz. Leitlinie: alte Maschinen bekommen neue Funktionen, neue nur, wo es Sinn ergibt.
 2. **3D-Grafik:** eigene Häuser für alle Gebäude (fertig, Möglichkeit B: Mittelalter mit ein paar Technik-Teilen; Tobias, Chat 27: „sieht sehr gut aus“). **Waren auf dem Band** (v0.46.0): jede der 40 Waren mit eigener kleiner 3D-Form, Tobias: „Ja, das sieht sehr gut aus.“ **Für später – Rückseiten** (Tobias, Chat 27, „nur eine kleine Anmerkung für später“): Erkennungszeichen und bewegte Teile sitzen vorn; baut man links und rechts einer Straße, sieht man eine Seite immer von hinten, „und da sieht man z.b. keine Unterschiede“. Eine Stadt um die Fabrik, die mit dem Level wächst (Idee).
 3. **Nach hinten verschoben:** **Weiche** (Chat 26: eigene Straßen sind besser, siehe offene Frage 4).
@@ -55,6 +55,11 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.52.1 – Tobias' Test von v0.52.0, Durchsicht und Beratung vorbereitet (25.11.2026, nur Doku)
+
+- **Tobias:** v0.52.0 „erklärt optimal und kurz das Spielprinzip“; Grafik und Design sind für ihn erstmal ein „abschließendes Meilenstein“. Aufgefallen: Ein Schritt war „innerhalb von 1 sekunde verkauft“ – zu schnell. Frage: noch etwas ändern oder zurück zu den Leveln? Beratung im neuen Chat.
+- **Claude:** Ursache (Schritt 6: Der Kunden-Takt läuft auch bei leerer Theke) und Vorschlag A + B; Durchsicht Design, Level, Aufräumen; zwei Wege; Empfehlung und 5 Fragen in `PLAENE.md`.
+
 ### v0.52.0 – Einführung mit Bürgermeisterin Hilde (24.11.2026)
 
 - **Warum (Tobias, Chat 29/30):** „wenn man gezeigt bekommt wie das Spielfunktioniert“ – kleine Fenster, die man wegklicken kann; Schritte überspringen oder ganz beenden, Erledigen springt weiter. Chat 30: „beginne mit v52“.
@@ -66,8 +71,3 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 - **Warum (Tobias, Chat 29):** Musterbilder „schlicht und einfach“, gefallen; die Erinnerungen „würde ich sogar ganz entfernen“. Für die Einführung: Schritte überspringen oder ganz beenden, Erledigen springt weiter.
 - **Umgesetzt:** Aufstieg (Brief von Hilde), Neues nach Updates und Geschenk des Händlers als Schriftrolle, die sich aufrollt und bis „✓ Gelesen“ bleibt; „Auftrag bereit“, „Genug Erfahrung und Gold“, „Beet reif“ entfernt.
 - **Offen:** Tobias' Test; v0.52.0 Einführung.
-
-### v0.50.1 – Tobias' Test von v0.50.0, Entwurf Schriftrolle und Einführung (24.11.2026, nur Doku)
-
-- **Tobias:** v0.50.0 „sieht für den ersten Versuch sehr gut aus“; Klänge „gar nicht gut“ (das Paket), Sound auf 0. Neuigkeiten unten „gehen leicht verloren“ – lieber ein Fenster „als Brief oder Nachricht zum aufrollen … ohne Zeit, selbst zum wegklicken“. Als Nächstes die Einführung mit Hilde planen.
-- **Claude:** Entwurf in `PLAENE.md` mit Musterbildern – v0.51.0 Schriftrolle (Aufstieg, Neues nach Updates, Geschenk des Händlers), v0.52.0 Einführung mit Hilde; 4 Fragen.
