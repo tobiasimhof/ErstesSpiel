@@ -22,7 +22,8 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 - Doku: `SPIEL.md`, `BEDIENUNG.md`, `TECHNIK.md`, `STAND.md`, Archiv. Versionsnummer 0.53.0. Spielstand-Format bleibt 20.
 
 **Geprüft:**
-- PRUEFUNG_FOLGT
+- `npm test`: 476 Tests bestanden (2 neue zur Theke).
+- Browser-Test (Tablet 1280 × 800, Handy 844 × 390, Hochformat, schmales Handy): 1.262 Prüfungen bestanden. Screenshots angesehen: Leiste oben nur Gold, Laden-Level, ☰; Menü mit „⛶ Vollbild“ und „Version 0.53.0“ passt auch auf dem Handy im Testmodus; Hilde und die Theke zählen herunter („Der nächste Kunde kommt in 1 s …“). Danach „5 s“ mit festem Leerzeichen, damit das „s“ nicht allein in die nächste Zeile rutscht – Einführung noch einmal geprüft.
 
 ### v0.52.2 – Antworten zur Beratung, Entwurf v0.53.0 und v0.54.0 (25.11.2026, nur Doku)
 

@@ -122,7 +122,7 @@ export const TUTORIAL = [
     hints: [
       { when: 'amount', target: 'amount:ok', text: 'Wähle die Menge – „Alle“ legt so viele hin, wie passen – und tippe auf „✓ Auf die Theke“.' },
       { when: 'picker', target: 'pick:holzblock', text: 'Wähle den Holzblock.' },
-      { when: 'stocked', target: 'counter:stocked', text: 'Gut! Jeder Kunde kauft 1 Stück und zahlt mit Gold. Der nächste Kunde kommt in {sekunden} s …' },
+      { when: 'stocked', target: 'counter:stocked', text: 'Gut! Jeder Kunde kauft 1 Stück und zahlt mit Gold. Der nächste Kunde kommt in {sekunden}\u00a0s …' }, // festes Leerzeichen: „5 s“ bleibt zusammen
       { when: 'shop:theken', target: 'counter:ware', text: 'Tippe bei einer leeren Theke auf „➕ Ware wählen“.' },
       { when: 'shop', target: 'tab:theken', text: `Hier im Lager liegen deine ${BLOCKS}. Verkaufen kannst du sie an einer Theke: Tippe auf „🛒 Theken“.` },
       { when: 'modal', target: '#modal-close', text: 'Schließ dieses Fenster mit ✕.' },

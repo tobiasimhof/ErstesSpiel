@@ -211,7 +211,7 @@ async function runTutorial(browser, baseUrl, device) {
         counter: document.querySelector('#modal-content .counter-card[data-counter="0"] .counter-next')?.textContent ?? '',
       };
     }, advance);
-  const shownSeconds = (text) => Number(/kommt in (\d+) s/.exec(text)?.[1] ?? 0);
+  const shownSeconds = (text) => Number(/kommt in (\d+)\ss/.exec(text)?.[1] ?? 0);
   const w1 = await readWait(0);
   check(
     w1.sales === 0 && w1.left > 1.5 && w1.left <= 5 && shownSeconds(w1.hilde) === Math.max(1, Math.ceil(w1.left)) && /Nächster Kunde in etwa [1-5] s/.test(w1.counter),
