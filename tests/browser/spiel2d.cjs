@@ -52,7 +52,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await waitForGame(page);
 
   // ---------- Start ----------
-  check((await page.textContent('#hud-version')) === `v${expectedVersion}`, `Versionsnummer v${expectedVersion} sichtbar`);
+  check((await page.textContent('#menu-version')) === `Version ${expectedVersion}`, `Versionsnummer ${expectedVersion} im Menü`); // v0.53.0: aus der Leiste ins Menü
   check(!(await page.isVisible('#rotate-overlay')), 'Kein Dreh-Hinweis im Querformat');
   check(!(await page.isVisible('#boot-error')), 'Keine Meldung „Spiel konnte nicht starten“');
   const versioned = await page.evaluate(() =>

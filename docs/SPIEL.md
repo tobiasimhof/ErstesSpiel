@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt kurz, wie das Spiel **jetzt** ist (Stand v0.52.0). Einzelheiten stehen in **`docs/inhalte/`** und werden nur gelesen, wenn wir daran arbeiten: `LEVEL.md` (Level, Aufträge, Aufstiege), `GEBAEUDE.md` (Gebäude, Baukosten), `WAREN.md` (Waren, Rezepte, Preise), `BEDIENUNG.md` (Bedienung im Einzelnen), `AUSBLICK.md` (Techbaum, Ideen), `ZAHLEN.md` (Rohstoffe, Zeit und Gold je Level und Ware, automatisch aus den Datentabellen). Bei jeder Änderung wird der Text **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt kurz, wie das Spiel **jetzt** ist (Stand v0.53.0). Einzelheiten stehen in **`docs/inhalte/`** und werden nur gelesen, wenn wir daran arbeiten: `LEVEL.md` (Level, Aufträge, Aufstiege), `GEBAEUDE.md` (Gebäude, Baukosten), `WAREN.md` (Waren, Rezepte, Preise), `BEDIENUNG.md` (Bedienung im Einzelnen), `AUSBLICK.md` (Techbaum, Ideen), `ZAHLEN.md` (Rohstoffe, Zeit und Gold je Level und Ware, automatisch aus den Datentabellen). Bei jeder Änderung wird der Text **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
@@ -24,13 +24,14 @@
 ## 3. Kernschleife und Zeit
 
 - **Start:** bei jedem Start ein Ladebildschirm wie bei Clash of Clans (Bild aus der eigenen 3D-Welt, Titel – noch Platzhalter „Factory“ –, Ladebalken, Tipp), nach mindestens 2 Sekunden geht es von selbst los. Beim ersten Start fragt er „Wie heißt du?“; der Name steht im Spielstand und im Spiel („Tobias' Laden“, Hilde begrüßt mit Namen, „Willkommen zurück, Tobias!“, Dateiname beim Sichern), ändern mit ✏️ im Laden.
-- **Einführung mit Bürgermeisterin Hilde** (bei jedem neuen Spiel): erst ihr Begrüßungsbrief, dann 7 kleine Schritte in einem kleinen Fenster – Holzstamm einlegen, Versandportal verschieben, Förderband bauen, Laden-Lager, Theke, Händler, Aufträge. Ein hüpfender gelber Pfeil und ein leuchtender Ring zeigen, wo man tippt. Wer den Schritt tut, kommt von selbst weiter; „Weiter ›“ überspringt, ✕ klappt Hilde an den Rand, „Beenden“ beendet. Zum Schluss ein Brief mit dem ersten Auftrag. Noch einmal: Level-Fenster → „🏘️ Ort & Level“ → „🎓 Einführung ansehen“.
+- **Einführung mit Bürgermeisterin Hilde** (bei jedem neuen Spiel): erst ihr Begrüßungsbrief, dann 7 kleine Schritte in einem kleinen Fenster – Holzstamm einlegen, Versandportal verschieben, Förderband bauen, Laden-Lager, Theke, Händler, Aufträge. Ein hüpfender gelber Pfeil und ein leuchtender Ring zeigen, wo man tippt. Wer den Schritt tut, kommt von selbst weiter (an der Theke kommt der erste Kunde genau 5 Sekunden nach dem Hinlegen, Hilde zählt herunter); „Weiter ›“ überspringt, ✕ klappt Hilde an den Rand, „Beenden“ beendet. Zum Schluss ein Brief mit dem ersten Auftrag. Noch einmal: Level-Fenster → „🏘️ Ort & Level“ → „🎓 Einführung ansehen“.
 - **Neuigkeiten als Schriftrolle:** Aufstieg (Brief von Hilde), Neues nach einem Update, Geschenk des Händlers – sie rollt sich auf und bleibt, bis man „✓ Gelesen“ tippt. Unten nur noch kurze Rückmeldungen auf das eigene Tippen; keine Erinnerungen mehr („Auftrag bereit“, „Beet reif“).
 
 Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeiten → Versandportal → Laden-Lager → Theken → Kunden zahlen Gold → neue Rohstoffe, Fläche, Theken, größeres Lager, Aufstieg. Waren sind zugleich Baumaterial: verkaufen oder damit bauen?
 
 - **Echtzeit:** Die Fabrik läuft auch bei geschlossenem Spiel weiter, **bis etwas leer ist** (Rohstoff, Zutaten, Lagerhaus; Laden-Lager voll; Theken leer; Beete reif). Nachlegen ist Handarbeit („wie Clash of Clans, nur umgekehrt“). Beim Zurückkommen wird nachgerechnet; nach mehr als 10 Minuten erscheint „👋 Willkommen zurück!“.
-- **Menü ☰:** „🔊 Audio“ (Klänge an/aus, Lautstärke; gilt für das Gerät, nicht für den Spielstand), Spielstand als Datei sichern und laden (auch zum Teilen), Testmodus (Zeit ×10, Testpaket, im 3D-Spiel der Belastungstest: eine voll bebaute Fläche zum Ablesen der Bilder pro Sekunde, wird nie gespeichert), 3D-Test ↔ echte Fabrik, Neues Spiel. Oben stehen im 3D-Test immer die Bilder pro Sekunde.
+- **Leiste oben:** nur Gold, Laden-Level und ☰ (im Testmodus dazu „⏩ ×10“ und die Bilder pro Sekunde).
+- **Menü ☰:** „🔊 Audio“ (Klänge an/aus, Lautstärke; gilt für das Gerät, nicht für den Spielstand), „⛶ Vollbild“, Spielstand als Datei sichern und laden (auch zum Teilen), Testmodus (Zeit ×10, Testpaket, im 3D-Spiel der Belastungstest: eine voll bebaute Fläche zum Ablesen der Bilder pro Sekunde, wird nie gespeichert), 3D-Test ↔ echte Fabrik, Neues Spiel; ganz unten klein die Versionsnummer.
 
 ## 4. Die Fabrik
 

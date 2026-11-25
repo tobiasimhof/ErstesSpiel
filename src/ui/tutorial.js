@@ -17,7 +17,16 @@
 
 import { BUILDINGS } from '../core/data/buildings.js';
 import { buildingPorts, footprintSize } from '../core/geometry.js';
-import { TUTORIAL_STEPS, advanceTutorial, endTutorial, noteTutorial, skipTutorialStep, startTutorial, tutorialStep } from '../core/tutorial.js';
+import {
+  TUTORIAL_STEPS,
+  advanceTutorial,
+  endTutorial,
+  nextStockedCustomerIn,
+  noteTutorial,
+  skipTutorialStep,
+  startTutorial,
+  tutorialStep,
+} from '../core/tutorial.js';
 import { fillName } from './format.js';
 import { tutorialEndLetter, tutorialWelcomeLetter } from './letters.js';
 import { onPress } from './press.js';
@@ -329,6 +338,12 @@ export function createTutorialView({ state, ui, panels, letters, buildingRect, o
     if (!ring.hidden || !arrow.hidden) hidePointer();
   }
 
+  function hintText(raw) {
+    const words = fillName(raw, state.playerName);
+    if (!words.includes('{sekunden}')) return words;
+    return words.replaceAll('{sekunden}', String(nextStockedCustomerIn(state) ?? '–'));
+  }
+
   // Wird in jedem Bild aufgerufen: Pfeil und Ring folgen dem Ziel (die Karte
   // lässt sich verschieben), das Fenster bleibt in seiner Ecke, solange es
   // das Ziel nicht verdeckt.
@@ -341,11 +356,13 @@ export function createTutorialView({ state, ui, panels, letters, buildingRect, o
     if (changed) {
       shownKey = key;
       stepText.textContent = `Schritt ${state.tutorial.step + 1} von ${TUTORIAL_STEPS}`;
-      text.textContent = fillName(hint.text, state.playerName);
       box.dataset.step = step.id;
       box.dataset.target = hint.target ?? '';
       lastTargetNode = null;
     }
+    // v0.53.0: „{sekunden}“ zählt bis zum nächsten Kunden herunter
+    const words = hintText(hint.text);
+    if (text.textContent !== words) text.textContent = words;
     const found = dialogOpen() ? null : findTarget(hint.target);
     const pointerRect = found ? showPointer(found) : null;
     if (!found) hidePointer();

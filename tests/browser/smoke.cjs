@@ -32,7 +32,7 @@ const { runTutorial } = require('./einfuehrung.cjs');
       await runNarrowPhone(browser, baseUrl);
     }
     // v0.41.0: ONLY=2d prüft nur die echte Fabrik
-    if (process.env.ONLY !== '2d' && process.env.ONLY !== 'einfuehrung') for (const device of DEVICES) await run3d(browser, baseUrl, device);
+    if (process.env.ONLY !== '2d' && process.env.ONLY !== 'einfuehrung') for (const device of DEVICES) await run3d(browser, baseUrl, device, expectedVersion);
     // v0.52.0: Einführung mit Hilde (ONLY=einfuehrung: nur sie)
     if (process.env.ONLY !== '2d') for (const device of DEVICES) await runTutorial(browser, baseUrl, device);
   } finally {
