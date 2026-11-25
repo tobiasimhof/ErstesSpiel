@@ -25,7 +25,8 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 - Doku: `SPIEL.md`, `LEVEL.md`, `GEBAEUDE.md`, `WAREN.md`, `BEDIENUNG.md`, `AUSBLICK.md`, `ZAHLEN.md`, `TECHNIK.md`, `STAND.md`, Archiv. Versionsnummer 0.55.0.
 
 **Geprüft:**
-- PRUEFUNG_FOLGT
+- `npm test`: 477 Tests bestanden (13 neue in `magier.test.js`).
+- Browser-Test, alle Teile bestanden: Durchspielen 982 Prüfungen (Tablet und Handy bis Level 15 – Aufstieg, ganze Welt 54 × 46 auf dem Tablet im Bild, auf dem Handy fast; Kessel bauen, Feuer auffüllen, brauen), 3D-Ansicht 210 (Haus des Kessels, 41 Waren auf dem Band, herausgezoomt 825 Zeichenaufrufe je Bild – unter 1.000), Einführung 100. Unterwegs im Test selbst behoben: Theken-Auffüllen und Zeit seit dem Sichern hingen an echter Zeit, die Vorschau des Kessels stand auf dem Handy außerhalb des Grundstücks (der Test zieht sie jetzt wie ein Spieler auf freie Fläche). Screenshots angesehen; danach Glut und Trank ohne Feuer dunkler (kalter und brauender Kessel im Vergleichsbild deutlich verschieden).
 
 ### v0.54.2 – Tobias' Antworten zum Entwurf Level 15 (25.11.2026, nur Doku)
 
