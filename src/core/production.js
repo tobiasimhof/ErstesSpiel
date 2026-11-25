@@ -36,7 +36,8 @@ export function createProductionState(type) {
       // Pflanzen, auch gemischt.
       return { loaded: false, input: null, remaining: 0, queued: 0, queue: [], timer: 0, out: null, blocked: false };
     case 'workshop':
-      return { recipe: p.recipes[0], stock: {}, busy: false, timer: 0, out: null, blocked: false };
+      // v0.55.0: Maschinen mit Feuerfach (Zauberkessel) beginnen mit kaltem Feuer
+      return { recipe: p.recipes[0], stock: {}, busy: false, timer: 0, out: null, blocked: false, ...(p.fuel ? { fuel: 0 } : {}) };
     case 'storage':
       return { slots: [], blocked: false };
     case 'shipping':
@@ -157,8 +158,11 @@ export function updateProduction(state, building, dt) {
     }
   } else if (p?.kind === 'workshop') {
     const recipe = RECIPES[prod.recipe];
-    if (!prod.busy && !prod.out && hasInputs(prod, recipe)) {
+    // v0.55.0: Mit Feuerfach beginnt ein Durchgang nur, wenn das Feuer reicht;
+    // die Holzkohle verbrennt beim Anfangen.
+    if (!prod.busy && !prod.out && hasInputs(prod, recipe) && fuelReady(p, prod, recipe)) {
       for (const [type, n] of Object.entries(recipe.inputs)) prod.stock[type] -= n;
+      if (p.fuel && recipe.fuel) prod.fuel -= recipe.fuel;
       prod.busy = true;
       prod.timer = 0;
     }
@@ -252,6 +256,50 @@ function hasInputs(prod, recipe) {
   return Object.entries(recipe.inputs).every(([type, n]) => (prod.stock[type] ?? 0) >= n);
 }
 
+// ---------- Feuerfach (v0.55.0, Zauberkessel) ----------
+// Tobias' Idee (Chat 27): Der Kessel wird mit Holzkohle befeuert. Feuer A: kein
+// dritter Eingang, sondern ein Fach, das man von Hand aus dem Laden-Lager
+// nachlegt („🔥 Auffüllen“). Jeder Durchgang verbrennt recipe.fuel Stück.
+
+function fuelReady(p, prod, recipe) {
+  return !p.fuel || !recipe.fuel || (prod.fuel ?? 0) >= recipe.fuel;
+}
+
+// Das Feuerfach eines Gebäudes oder null: { item, capacity, have, perCraft }
+export function fuelSlot(building) {
+  const p = productionOf(building.type);
+  if (p?.kind !== 'workshop' || !p.fuel) return null;
+  return {
+    item: p.fuel.item,
+    capacity: p.fuel.capacity,
+    have: building.prod.fuel ?? 0,
+    perCraft: RECIPES[building.prod.recipe]?.fuel ?? 0,
+  };
+}
+
+// Brennt das Feuer für den nächsten Durchgang? (true ohne Feuerfach)
+export function hasFuel(building) {
+  const fuel = fuelSlot(building);
+  return !fuel || fuel.have >= fuel.perCraft;
+}
+
+// So viel passt noch ins Feuerfach.
+export function fuelRoom(building) {
+  const fuel = fuelSlot(building);
+  return fuel ? Math.max(0, fuel.capacity - fuel.have) : 0;
+}
+
+// „🔥 Auffüllen“: legt aus dem Laden-Lager nach, so viel passt und da ist.
+// Ergebnis: wie viele Stück nachgelegt wurden.
+export function refuel(state, building) {
+  const fuel = fuelSlot(building);
+  if (!fuel) return 0;
+  const n = Math.min(fuelRoom(building), storageCount(state, fuel.item));
+  if (n <= 0 || !takeFromStorage(state, fuel.item, n)) return 0;
+  building.prod.fuel = fuel.have + n;
+  return n;
+}
+
 // ---------- Zutaten einer Werkstatt (v0.10.0) ----------
 
 // Zutaten des eingestellten Rezepts: [{ type, need, have, done }]
@@ -274,7 +322,11 @@ export function missingInputs(building) {
   if (p?.kind !== 'workshop' || prod.busy || prod.out) return [];
   const inputs = workshopInputs(building);
   if (inputs.length < 2) return [];
-  return inputs.filter((i) => !i.done).map((i) => i.type);
+  const missing = inputs.filter((i) => !i.done).map((i) => i.type);
+  // v0.55.0: Ist das Feuer aus, zeigt das Schild auch die Holzkohle
+  const fuel = fuelSlot(building);
+  if (fuel && fuel.have < fuel.perCraft) missing.push(fuel.item);
+  return missing;
 }
 
 // Stau am Eingang: Die Werkstatt wartet, und an jedem angeschlossenen
@@ -395,9 +447,11 @@ export function setRecipe(building, recipeKey) {
   if (p?.kind !== 'workshop' || !p.recipes.includes(recipeKey)) return false;
   const prod = building.prod;
   if (prod.recipe === recipeKey) return true;
-  // Ein angefangener Durchgang wird abgebrochen, die Zutaten kommen zurück.
+  // Ein angefangener Durchgang wird abgebrochen, die Zutaten kommen zurück
+  // (v0.55.0: auch die Holzkohle ins Feuerfach).
   if (prod.busy) {
     for (const [type, n] of Object.entries(RECIPES[prod.recipe].inputs)) prod.stock[type] = (prod.stock[type] ?? 0) + n;
+    if (p.fuel && RECIPES[prod.recipe].fuel) prod.fuel = Math.min(p.fuel.capacity, (prod.fuel ?? 0) + RECIPES[prod.recipe].fuel);
     prod.busy = false;
     prod.timer = 0;
   }
@@ -422,6 +476,11 @@ export function buildingContents(building) {
     for (const [type, n] of Object.entries(prod.stock)) add(type, n);
     if (prod.out) add(prod.out.type, prod.out.count);
     if (prod.busy) for (const [type, n] of Object.entries(RECIPES[prod.recipe].inputs)) add(type, n);
+    // v0.55.0: die Holzkohle im Feuerfach (und die eines angefangenen Tranks) kommt zurück
+    if (p.fuel) {
+      add(p.fuel.item, prod.fuel ?? 0);
+      if (prod.busy) add(p.fuel.item, RECIPES[prod.recipe].fuel ?? 0);
+    }
   } else if (p?.kind === 'storage') {
     for (const slot of prod.slots) add(slot.type, slot.count);
   } else if (p?.kind === 'garden') {
@@ -476,6 +535,11 @@ export function buildingStatus(state, building) {
           ? `Eingang blockiert: Am Band staut sich ${ITEMS[jam].name}, es fehlt ${missing.join(' und ')}.`
           : `Eingang blockiert: ${ITEMS[jam].name} wird hier nicht gebraucht.`,
       };
+    }
+    // v0.55.0: Feuer aus – das muss man von Hand tun, deshalb zuerst
+    const fuel = fuelSlot(building);
+    if (fuel && fuel.have < fuel.perCraft) {
+      return { level: 'idle', text: `Feuer aus – Holzkohle nachlegen (${fuel.have} / ${fuel.capacity}).` };
     }
     if (inputs.length === 1) {
       const [{ have, need }] = inputs;

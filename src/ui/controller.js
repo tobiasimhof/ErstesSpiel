@@ -51,6 +51,8 @@ import { buildingLevel, isBuildingUnlocked, isItemUnlocked, itemLevel } from '..
 import { buyRaw, isBuyable, refillPlan, refillSource, sowPlan, sowSeed } from '../core/market.js';
 import {
   buildingStatus,
+  fuelRoom,
+  fuelSlot,
   gardenCrop,
   gardenSeeds,
   growthLeft,
@@ -61,6 +63,7 @@ import {
   sourceInputTypes,
   losesWorkOnRemove,
   productionOf,
+  refuel,
   returnUnusedStock,
   setRecipe,
   sourceRoom,
@@ -242,6 +245,19 @@ export function createController({
       reap.classList.toggle('primary', isRipe(b));
       reap.textContent = isRipe(b) ? `🌾 Ernten: 1 ${ITEMS[crop.plant].name}` : '🌾 Ernten – noch nicht reif';
     } else if (p?.kind === 'workshop') {
+      // v0.55.0: Feuerfach – Holzkohle aus dem Laden-Lager nachlegen
+      const fuel = fuelSlot(b);
+      const refuelButton = info.buttons.get('refuel');
+      if (fuel && refuelButton) {
+        const room = fuelRoom(b);
+        const have = storageCount(state, fuel.item);
+        const n = Math.min(room, have);
+        const item = ITEMS[fuel.item];
+        refuelButton.textContent =
+          room === 0 ? '🔥 Feuer voll' : have === 0 ? `🔥 Keine ${item.plural} im Laden-Lager` : `🔥 Auffüllen: ${n} ${n === 1 ? item.name : item.plural}`;
+        refuelButton.disabled = n === 0;
+        refuelButton.classList.toggle('primary', n > 0 && fuel.have < fuel.perCraft);
+      }
       // Reste für eine andere Einstellung zurückholen (der Hinweis steht im Inhalt)
       const restButton = info.buttons.get('leftovers');
       if (restButton) restButton.hidden = Object.keys(unusedStock(b)).length === 0;
@@ -399,6 +415,26 @@ export function createController({
               panels.toast(`${ITEMS[crop.plant].name} geerntet – sie liegt im Laden-Lager. Jetzt das Beet neu säen.`, 4000);
             } else if (result === 'full') panels.toast('Dein Laden-Lager ist voll – erst Platz schaffen, dann ernten.');
             else if (result === 'unripe') panels.toast(`Noch nicht reif – in etwa ${formatDuration(growthLeft(beet))}.`);
+            infoRefresh?.();
+          },
+        });
+      }
+      if (p?.kind === 'workshop' && p.fuel) {
+        // v0.55.0 (Tobias' Idee, Feuer A): Holzkohle von Hand aus dem Laden-Lager
+        actions.push({
+          key: 'refuel',
+          label: '',
+          size: 'wide',
+          onClick: () => {
+            const machine = findBuilding(state, b.id);
+            if (!machine) return;
+            const n = refuel(state, machine);
+            const item = ITEMS[p.fuel.item];
+            if (n > 0) {
+              changed();
+              panels.toast(`${n} ${n === 1 ? item.name : item.plural} ins Feuer gelegt.`);
+            } else if (fuelRoom(machine) === 0) panels.toast('Das Feuerfach ist voll.');
+            else panels.toast(`Keine ${item.plural} im Laden-Lager – der Ofen macht sie aus Holzstämmen.`);
             infoRefresh?.();
           },
         });

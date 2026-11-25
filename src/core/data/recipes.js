@@ -81,7 +81,14 @@ export const RECIPES = {
   // v0.45.0: Level 14 „Die Tinktur“ – die Zimmerei macht Mörser (Schale aus
   // Stein, Stößel aus Holz; Tobias: kein Verhältnis 1 : 1), die Apotheke füllt
   // Kräutermischung in Fläschchen zur Tinktur, der Grundzutat aller Tränke.
-  moerser: { building: 'zimmerei', label: 'Mörser', inputs: { steinplatte: 1, holzstab: 3 }, output: 'moerser', amount: 1, time: 10, level: 14 },
+  // v0.55.0: 5 statt 3 Holzstäbe (Tobias, Chat 31: „den Mörser auch nochmal auf
+  // 5 Stäbe umstellen, damit wir irgendwo dieses Gleichgewicht behalten“)
+  moerser: { building: 'zimmerei', label: 'Mörser', inputs: { steinplatte: 1, holzstab: 5 }, output: 'moerser', amount: 1, time: 10, level: 14 },
   tinktur: { building: 'apotheke', label: 'Tinkturen', inputs: { flaeschchen: 1, kraeutermischung: 1 }, output: 'tinktur', amount: 1, time: 30, level: 14 },
   flaeschchen: { building: 'schmiede', label: 'Fläschchen', inputs: { glas: 5 }, output: 'flaeschchen', amount: 1, time: 30, level: 13 },
+  // v0.55.0: Level 15 „Der alte Magier“ – der Zauberkessel braut aus Tinktur und
+  // Kamillenblüten den Traumtrank (Tobias, Chat 31: „1 Trinktur und 5 Blüten“).
+  // fuel: so viel Holzkohle verbrennt das Feuer je Trank (Feuerfach des Kessels,
+  // von Hand nachgelegt – Feuer A, Chat 27).
+  traumtrank: { building: 'zauberkessel', label: 'Traumtränke', inputs: { tinktur: 1, kamillenbluete: 5 }, fuel: 5, output: 'traumtrank', amount: 1, time: 60, level: 15 },
 };

@@ -1313,6 +1313,44 @@ export function drawItem(ctx, type, cx, cy, size) {
       ctx.stroke();
       break;
     }
+    case 'potion': {
+      // v0.55.0 Traumtrank: bauchiges Fläschchen mit lila Trank, Korken und
+      // einem kleinen Glanz – der Trank leuchtet von innen heller
+      const r = s * 0.34;
+      const by = cy + s * 0.14;
+      ctx.fillStyle = '#cfe9ee';
+      roundRect(ctx, cx - s * 0.11, cy - s * 0.36, s * 0.22, s * 0.22, s * 0.04);
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(cx, by, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      // der Trank: lila, oben eine gerade Kante
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, by, r - Math.max(1, s * 0.04), 0, Math.PI * 2);
+      ctx.clip();
+      ctx.fillStyle = def.color;
+      ctx.fillRect(cx - r, by - r * 0.35, r * 2, r * 1.5);
+      ctx.fillStyle = def.glow ?? '#c9a7ff';
+      ctx.beginPath();
+      ctx.arc(cx + r * 0.15, by + r * 0.25, r * 0.38, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+      // Korken
+      ctx.fillStyle = '#b07a45';
+      roundRect(ctx, cx - s * 0.1, cy - s * 0.52, s * 0.2, s * 0.18, s * 0.04);
+      ctx.fill();
+      ctx.stroke();
+      // Glanz
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.lineWidth = Math.max(1.5, s * 0.06);
+      ctx.beginPath();
+      ctx.arc(cx, by, r * 0.72, Math.PI * 1.1, Math.PI * 1.4);
+      ctx.stroke();
+      break;
+    }
     case 'log': {
       roundRect(ctx, cx - s * 0.6, cy - s * 0.3, s * 1.1, s * 0.6, s * 0.3);
       ctx.fill();

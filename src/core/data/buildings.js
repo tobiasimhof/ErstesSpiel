@@ -322,6 +322,27 @@ export const BUILDINGS = {
     ],
     production: { kind: 'workshop', recipes: ['kraeutermischung', 'kamillenkissen', 'heilpaeckchen', 'tinktur'] },
   },
+  // v0.55.0: Level 15 „Der alte Magier“ – Magier Ambrosius bringt den
+  // Zauberkessel mit (Entwurf v0.55.0, Tobias, Chat 31: „Passt so für mich“).
+  // Reiter „Stein“ (Tobias, Chat 27: „mehr mit stein arbeiten“): ein gemauerter
+  // Herd (Steinplatten) mit einem Kessel aus Eisenblech. Zwei Eingänge für die
+  // Zutaten, dazu ein Feuerfach für Holzkohle, das man von Hand aus dem
+  // Laden-Lager nachlegt (Feuer A) – je Trank verbrennt das Rezept `fuel` Stück.
+  zauberkessel: {
+    level: 15,
+    name: 'Zauberkessel',
+    cost: { steinplatte: 30, eisenblech: 10 },
+    icon: '🔮',
+    size: [2, 2],
+    color: TAB_COLORS.stein,
+    tip: 'Zwei Eingänge links für die Zutaten. Das Feuer braucht Holzkohle – nachlegen mit „🔥 Auffüllen“.',
+    ports: [
+      { kind: 'in', x: 0, y: 0, side: 'W' },
+      { kind: 'in', x: 0, y: 1, side: 'W' },
+      { kind: 'out', x: 1, y: 0, side: 'E' },
+    ],
+    production: { kind: 'workshop', recipes: ['traumtrank'], fuel: { item: 'holzkohle', capacity: 100 } },
+  },
   lagerhaus: {
     level: 1,
     name: 'Lagerhaus',
@@ -358,7 +379,8 @@ export const BUILD_TABS = [
   // v0.26.0: der Kohlenmeiler (Level 9) macht aus Holzstämmen Holzkohle;
   // v0.31.0 heißt er „Ofen“ und bleibt hier (Tobias, Chat 22)
   { id: 'holz', name: 'Holz', item: 'holzstamm', color: TAB_COLORS.holz, buildings: ['holzfaeller', 'saegewerk', 'zimmerei', 'kohlenmeiler'] },
-  { id: 'stein', name: 'Stein', item: 'felsbrocken', color: TAB_COLORS.stein, buildings: ['steinbruch', 'steinmetz'] },
+  // v0.55.0: dazu der Zauberkessel (Level 15)
+  { id: 'stein', name: 'Stein', item: 'felsbrocken', color: TAB_COLORS.stein, buildings: ['steinbruch', 'steinmetz', 'zauberkessel'] },
   { id: 'eisen', name: 'Eisen', item: 'eisenerz', color: TAB_COLORS.eisen, buildings: ['schmelzhuette', 'schmiede', 'feinschmiede', 'schlosserei'] },
   // v0.19.0 (Tobias): Der Reiter heißt „Erde“ – Holz, Stein, Eisen, Erde. Die
   // id bleibt, damit der gemerkte Reiter in den Einstellungen weiter passt.

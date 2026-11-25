@@ -2566,8 +2566,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await game(page, () => window.__game.state.shopLevel)) === 14, 'Aufstieg auf Level 14 für 12.500 Gold');
   const lvl14Text = await page.textContent('#modal-content');
   check(
-    lvl14Text.includes('Level 14 erreicht!') && lvl14Text.includes('Die Tinktur') && lvl14Text.includes('15 Mörser') && lvl14Text.includes('0 / 3.829'),
-    'Level 14: Klara möchte 15 Mörser, Erfahrung 0 / 3.829',
+    lvl14Text.includes('Level 14 erreicht!') && lvl14Text.includes('Die Tinktur') && lvl14Text.includes('15 Mörser') && lvl14Text.includes('0 / 3.976'),
+    'Level 14: Klara möchte 15 Mörser, Erfahrung 0 / 3.976 (v0.55.0: Mörser aus 5 Holzstäben)',
   );
   await shot('25a-level-14');
   await page.tap('#modal-close');
@@ -2575,7 +2575,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(letter14.includes('Laden-Level 14!') && letter14.includes('Mörser') && letter14.includes('Tinktur'), `Schriftrolle nach dem Aufstieg: Mörser und Tinktur (${letter14.slice(0, 200)})`);
   // Zimmerei und Apotheke haben jetzt 4 Einstellungen – die Liste passt ins Infofenster
   for (const [type, title, recipe, label] of [
-    ['zimmerei', 'Zimmerei', 'moerser', 'Umstellen auf Mörser: 1 Steinplatte + 3 Holzstäbe'],
+    ['zimmerei', 'Zimmerei', 'moerser', 'Umstellen auf Mörser: 1 Steinplatte + 5 Holzstäbe'],
     ['apotheke', 'Apotheke', 'tinktur', 'Umstellen auf Tinktur: 1 Fläschchen + 1 Kräutermischung'],
   ]) {
     const pos = await game(
@@ -2603,6 +2603,92 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     await sleep(300);
     await page.tap('#info-close');
   }
+  // ---------- Level 15: Der alte Magier (v0.55.0) ----------
+  await page.tap('#btn-level');
+  await sleep(150);
+  for (let i = 0; i < 4; i++) {
+    await page.locator('#modal-content button', { hasText: '🧪 Test: Auftrag erledigen' }).tap();
+    await sleep(200);
+  }
+  const l14done = await page.textContent('#modal-content');
+  check(
+    l14done.includes('3.976 / 3.976') && l14done.includes('Nächstes Level: Level 15 · Der alte Magier') && l14done.includes('Zauberkessel') && !l14done.includes('🎁'),
+    'Level 14 erledigt; Level 15 kündigt den Zauberkessel an, ohne Geschenk',
+  );
+  await game(page, () => (window.__game.state.gold += 15000));
+  await sleep(450);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 15 · 15.000' }).tap();
+  await sleep(150);
+  const letter15 = await readLetter(page);
+  const lvl15 = await game(page, () => ({ level: window.__game.state.shopLevel, world: { ...window.__game.state.world } }));
+  check(lvl15.level === 15 && lvl15.world.width === 54 && lvl15.world.height === 46, `Aufstieg auf Level 15 für 15.000 Gold, die Welt wächst auf 54 × 46 (${lvl15.world.width} × ${lvl15.world.height})`);
+  // v0.55.0 (Tobias: „Die ganze Welt sollte auch aufs Tablet passen“): nach dem Aufstieg die ganze Welt im Bild
+  await sleep(300);
+  const fit15 = await fitsWorld();
+  check(
+    fit15.ok || device.viewport.width < 1000,
+    `Nach dem Aufstieg auf Level 15: ganze Welt ${fit15.ok ? 'im Bild' : 'fast im Bild (Handy)'} (Abstand ${fit15.distance}, Ecken ${fit15.box} auf ${fit15.view})`,
+  );
+  const lvl15Text = await page.textContent('#modal-content');
+  check(
+    lvl15Text.includes('Level 15 erreicht!') && lvl15Text.includes('Der alte Magier') && lvl15Text.includes('300 Holzkohle') && lvl15Text.includes('0 / 4.820'),
+    'Level 15: Ambrosius möchte 300 Holzkohle, Erfahrung 0 / 4.820',
+  );
+  check(letter15.includes('Laden-Level 15!') && letter15.includes('Zauberkessel') && letter15.includes('Ambrosius'), `Schriftrolle: Ambrosius und der Zauberkessel (${letter15.slice(0, 200)})`);
+  await shot('26a-level-15');
+  await page.tap('#modal-close');
+  await sleep(120);
+  // Zauberkessel bauen: aus der Bauleiste (Reiter „Stein“), Vorschau dort lassen, wo sie Platz hat
+  await game(page, () => {
+    const st = window.__game.state.storage;
+    st.steinplatte = (st.steinplatte ?? 0) + 30;
+    st.eisenblech = (st.eisenblech ?? 0) + 10;
+  });
+  await page.tap('#btn-build');
+  await sleep(120);
+  await tapBuild(page, 'zauberkessel');
+  await sleep(150);
+  check((await mode(page)) === 'place' && (await game(page, () => window.__game.ui.ghost?.valid === true)), 'Zauberkessel wählen: Vorschau auf freier Fläche');
+  await page.tap('#tool-confirm');
+  await sleep(150);
+  await page.tap('#build-close').catch(() => {});
+  await sleep(100);
+  const kessel = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'zauberkessel'));
+  check(Boolean(kessel) && kessel.prod.fuel === 0, 'Zauberkessel gebaut, das Feuer ist kalt');
+  await tapTile(page, kessel.x, kessel.y);
+  await sleep(450);
+  check((await page.textContent('#info-title')) === 'Zauberkessel', 'Zauberkessel antippen zeigt Infofenster');
+  const coldText = await infoText(page);
+  check(coldText.includes('Feuer aus') && coldText.includes('0 / 100'), `Infofenster: Feuer aus, 0 / 100 Holzkohle (${coldText.slice(0, 160)})`);
+  check((await infoButton(page, 'refuel').textContent()) === '🔥 Keine Holzkohle im Laden-Lager' && (await infoButton(page, 'refuel').isDisabled()), 'Ohne Holzkohle im Laden-Lager: „🔥 Keine Holzkohle im Laden-Lager“');
+  await game(page, () => (window.__game.state.storage.holzkohle = 130));
+  await sleep(500);
+  check((await infoButton(page, 'refuel').textContent()) === '🔥 Auffüllen: 100 Holzkohle', `„🔥 Auffüllen: 100 Holzkohle“ (${await infoButton(page, 'refuel').textContent()})`);
+  await shot('26b-zauberkessel-kalt');
+  await infoButton(page, 'refuel').tap();
+  await sleep(450);
+  const fired = await game(page, () => ({
+    fuel: window.__game.state.buildings.find((b) => b.type === 'zauberkessel').prod.fuel,
+    coal: window.__game.state.storage.holzkohle ?? 0,
+  }));
+  check(fired.fuel === 100 && fired.coal === 30, `Auffüllen legt 100 Holzkohle aus dem Laden-Lager ins Feuer (${JSON.stringify(fired)})`);
+  check((await infoText(page)).includes('reicht für 20 Traumtränke'), 'Infofenster: 5 Holzkohle je Traumtrank, reicht für 20');
+  check((await infoFits(page)).length === 0, `Infofenster des Zauberkessels: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+  // Brauen: Zutaten in den Kessel, nach 60 s ist der Traumtrank fertig
+  await game(page, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'zauberkessel');
+    b.prod.stock = { tinktur: 1, kamillenbluete: 5 };
+    window.__game.simulate(1);
+  });
+  await sleep(450);
+  check((await page.textContent('#info-meta')).includes('Arbeitet') && (await game(page, () => window.__game.state.buildings.find((b) => b.type === 'zauberkessel').prod.fuel)) === 95, 'Der Kessel braut, 5 Holzkohle verbrannt');
+  await shot('26c-zauberkessel-braut');
+  await game(page, () => window.__game.simulate(60));
+  const brewed = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'zauberkessel').prod.out);
+  check(brewed?.type === 'traumtrank', `Nach 60 s ist ein Traumtrank fertig (${JSON.stringify(brewed)})`);
+  await page.tap('#info-close');
+  await sleep(100);
+
   await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)
   await page.tap('#info-close').catch(() => {});
   await shot('17-fabrik');

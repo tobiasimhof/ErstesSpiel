@@ -496,6 +496,53 @@ function medievalBuilding(lib, building) {
       parts.glow = [glowMat];
       break;
     }
+    case 'zauberkessel': {
+      // v0.55.0: Magier Ambrosius' Zauberkessel (Level 15) – hinten ein kleiner
+      // sechseckiger Turm, vorn ein gemauerter Herd mit dickem Eisenkessel und
+      // einem Häufchen Holzkohle. Beim Brauen glüht das Feuer im Herd, der Trank
+      // im Kessel leuchtet lila und Dampf steigt auf; ohne Feuer bleibt er kalt.
+      const tx = -0.45;
+      const tz = -0.42;
+      const s = 0.9;
+      put(lib, g, CK, 'tower-hexagon-base', { x: tx, z: tz, scale: s, variant: 'turm', color });
+      put(lib, g, CK, 'tower-hexagon-roof', { x: tx, y: 1.31 * s, z: tz, scale: s, variant: 'turm', color });
+      put(lib, g, CK, 'flag-pennant', { x: tx, y: (1.31 + 0.8) * s, z: tz, rot: -0.6, scale: 0.6, variant: 'turm', color });
+      g.add(plain(new THREE.BoxGeometry(0.24, 0.38, 0.04), '#5a3b25', { x: tx, y: 0.19, z: tz + 0.39 * s + 0.005 }));
+      // Herd aus Stein mit hellerem Rand und Feuerloch vorn
+      const hx = 0.3;
+      const hz = 0.4;
+      g.add(plain(new THREE.BoxGeometry(0.86, 0.3, 0.76), '#8f877b', { x: hx, y: 0.15, z: hz }));
+      g.add(plain(new THREE.BoxGeometry(0.94, 0.05, 0.84), '#a39a8c', { x: hx, y: 0.325, z: hz }));
+      const fireMat = mat('#ff8a2a', { emissive: '#ff6a00', emissiveIntensity: 1.2 });
+      g.add(simpleMesh(new THREE.BoxGeometry(0.36, 0.16, 0.04), fireMat, { x: hx, y: 0.12, z: hz + 0.385, shadow: false }));
+      // Kessel aus Eisen (gedrehte Form), Rand, darin der Trank
+      const profile = [
+        [0.02, 0],
+        [0.17, 0.02],
+        [0.29, 0.11],
+        [0.32, 0.23],
+        [0.29, 0.33],
+        [0.27, 0.35],
+      ].map(([r, y]) => new THREE.Vector2(r, y));
+      g.add(plain(new THREE.LatheGeometry(profile, 16), '#3b3f46', { x: hx, y: 0.35, z: hz }));
+      const rim = plain(new THREE.TorusGeometry(0.275, 0.028, 6, 18), '#2a2e34', { x: hx, y: 0.7, z: hz });
+      rim.rotation.x = Math.PI / 2;
+      g.add(rim);
+      const brewMat = mat('#9b6ee0', { emissive: '#7b3fe0', emissiveIntensity: 1.2 });
+      const brew = simpleMesh(new THREE.CircleGeometry(0.25, 18), brewMat, { x: hx, y: 0.66, z: hz, shadow: false });
+      brew.rotation.x = -Math.PI / 2;
+      g.add(brew);
+      parts.glow = [fireMat, brewMat];
+      parts.chimneyTop = new THREE.Vector3(hx, 0.85, hz); // Dampf über dem Kessel
+      // Holzkohle neben dem Herd
+      stones(g, '#2b2b2e', [
+        [0.86, 0.05, 0.86],
+        [0.95, 0.05, 0.72],
+        [0.88, 0.1, 0.77, 0.9],
+        [0.78, 0.05, 0.92, 0.8],
+      ], 0.075);
+      break;
+    }
     case 'lagerhaus': {
       // offener Schuppen auf vier Pfosten, darunter Bretter und ein Karren
       for (const [x, z] of [[-0.88, -0.4], [0.88, -0.4], [-0.88, 0.4], [0.88, 0.4]]) {

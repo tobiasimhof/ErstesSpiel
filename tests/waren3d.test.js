@@ -13,7 +13,7 @@ const goods = Object.keys(ITEMS).filter((t) => !ITEMS[t].raw && ITEMS[t].price);
 const KINDS = { box: 3, cyl: 4, ball: 3, ring: 5 };
 
 test('Jede Ware, die auf ein Band kann, hat eine eigene 3D-Form – keine Kugel mehr', () => {
-  assert.equal(goods.length, 40, '40 Waren (ohne Rohstoffe, Samen und Pflanzen)');
+  assert.equal(goods.length, 41, '41 Waren (ohne Rohstoffe, Samen und Pflanzen; v0.55.0 mit dem Traumtrank)');
   for (const type of goods) assert.ok(ITEM_FORMS[type], `${type} hat eine Form`);
   for (const type of Object.keys(ITEM_FORMS)) assert.ok(goods.includes(type), `${type} ist eine Ware`);
   for (const type of goods) {

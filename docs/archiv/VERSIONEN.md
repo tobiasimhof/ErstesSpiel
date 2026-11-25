@@ -4,6 +4,29 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.55.0 – Level 15 „Der alte Magier“: Zauberkessel mit Feuerfach, Traumtrank, mehr Fläche (25.11.2026)
+
+**Vorgenommen:**
+- Den Entwurf v0.55.0 mit Tobias' Änderungen umsetzen (Chat 31: „Passt so für mich“; Traumtrank aus „1 Trinktur und 5 Blüten“; Mörser „auf 5 Stäbe umstellen“; „10.000 Gold ist super“; „Die ganze Welt sollte auch aufs Tablet passen“).
+
+**Fragen, die wir uns gestellt haben:**
+- Wie passt das Feuer in die Werkstatt-Regeln? → Das Rezept nennt, wie viel Holzkohle ein Durchgang verbrennt (`fuel: 5`), das Gebäude sein Feuerfach (`production.fuel: { item: 'holzkohle', capacity: 100 }`); `prod.fuel` zählt die Holzkohle (Spielstand-Format 21). Ein Durchgang beginnt nur mit Zutaten **und** Feuer, die Holzkohle verbrennt beim Anfangen. So bleibt es bei 2 Eingängen (Tobias' Regel).
+- Was sieht man, wenn das Feuer aus ist? → gelbes Licht „Feuer aus – Holzkohle nachlegen (2 / 100)“ (vor fehlenden Zutaten, weil man es von Hand tun muss), das Schild zeigt „?“ mit der Holzkohle, das Infofenster einen Kasten „🔥 Feuer“ mit Füllbalken, der Knopf „🔥 Auffüllen“ wird grün; im Bericht „Willkommen zurück“ „🔥 Feuer aus: 1× Zauberkessel“.
+- Was passiert beim Abreißen? → Die Holzkohle kommt zurück ins Laden-Lager, auch die eines angefangenen Tranks (wie dessen Zutaten).
+- Wie weit muss man für 54 × 46 herauszoomen? → Gemessen: auf dem Tablet (1280 × 800) etwa 97 – Grenze jetzt das 1,85-Fache der längeren Weltseite, höchstens 100 (vorher 1,35 und 70); der Nebel beginnt etwas weiter weg. Auf dem Handy passt die Welt fast (1 Pixel fehlt).
+- Was ändert der Mörser aus 5 Holzstäben? → Wert 43 statt 29; die Aufträge auf Level 14 geben 3.976 statt 3.829 Erfahrung und 13.251 statt 12.761 Gold. Mörser, die schon da sind, bleiben; eine Zimmerei auf „Mörser“ wartet nun auf 5 Holzstäbe.
+
+**Gemacht:**
+- Daten: `items.js` (Traumtrank, Mörser 43), `recipes.js` (Traumtrank mit `fuel`, Mörser 5 Holzstäbe), `buildings.js` (Zauberkessel im Reiter Stein), `levels.js` (Level 15), `shop.js` (Laden auf Level 15), `land.js` (Level 15: 4. Streifen für 10.000).
+- Regeln: `production.js` (Feuerfach: `fuelSlot`, `hasFuel`, `fuelRoom`, `refuel`; Brauen nur mit Feuer; Status; Schild; Abreißen), `save.js` (Format 21), `offline.js` (`fireOut`).
+- Oberfläche: `buildingInfo.js` (Kasten „🔥 Feuer“), `controller.js` (Knopf „🔥 Auffüllen“), `offline.js` (Zeile „Feuer aus“), `itemArt.js` (Warenbild „potion“).
+- 3D: `kenney3d.js` (Haus des Zauberkessels: sechseckiger Turm, Steinherd, Eisenkessel, Holzkohle; Feuer und Trank leuchten beim Brauen, Dampf), `itemForms.js` (Traumtrank), `camera3d.js` (weiter herauszoomen), `scene3d.js` (Nebel).
+- Tests: neu `magier.test.js` (13 Tests: Daten, Aufträge, Aufstieg mit Fläche, Feuerfach, Brauen, Bänder, Abreißen, Spielstand, Willkommen zurück); angepasst `levels`, `quests`, `save`, `spital`, `tinktur`, `bauleiste`, `einfuehrung`, `waren3d`. Browser: `fabrik.cjs` bis Level 15 (Aufstieg, Welt 54 × 46 im Bild, Kessel bauen, Feuer auffüllen, brauen), `spiel3d.cjs` (Haus des Kessels, 41 Waren auf dem Band).
+- Doku: `SPIEL.md`, `LEVEL.md`, `GEBAEUDE.md`, `WAREN.md`, `BEDIENUNG.md`, `AUSBLICK.md`, `ZAHLEN.md`, `TECHNIK.md`, `STAND.md`, Archiv. Versionsnummer 0.55.0.
+
+**Geprüft:**
+- PRUEFUNG_FOLGT
+
 ### v0.54.2 – Tobias' Antworten zum Entwurf Level 15 (25.11.2026, nur Doku)
 
 **Vorgenommen:**

@@ -17,7 +17,12 @@
 import * as THREE from 'three';
 
 export const MIN_DISTANCE = 6;
-export const MAX_DISTANCE = 70;
+// v0.55.0: weiter heraus (70 → 100), damit auch die Welt von Level 15 (bis
+// 54 × 46) ganz aufs Tablet passt (Tobias, Chat 31: „Die ganze Welt sollte auch
+// aufs Tablet passen“; gemessen: 54 × 46 braucht auf 1280 × 800 etwa 97)
+export const MAX_DISTANCE = 100;
+// So weit darf man je nach Weltgröße heraus (das Wievielfache der längeren Seite)
+const ZOOM_OUT = 1.85;
 const NEAR_PITCH = 0.74; // Neigung ganz nah (etwa 42°)
 const FAR_PITCH = 1.08; // ganz weit weg (etwa 62°)
 export const TURN_STEP = Math.PI / 4; // Knöpfe ⟲ ⟳ und Tasten Q/E: je 45°
@@ -124,7 +129,7 @@ export function createCamera3d() {
   // nötig, um die ganze Welt zu sehen, geht es nicht.
   function setBounds(world) {
     bounds = { ...world };
-    maxDistance = Math.min(MAX_DISTANCE, Math.max(30, Math.max(world.width, world.height) * 1.35));
+    maxDistance = Math.min(MAX_DISTANCE, Math.max(30, Math.max(world.width, world.height) * ZOOM_OUT));
     clamp();
   }
 

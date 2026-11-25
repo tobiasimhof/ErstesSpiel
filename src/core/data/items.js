@@ -134,6 +134,10 @@ export const ITEMS = {
   // die Rezepte passen so“). Mörser: 1 Steinplatte + 3 Holzstäbe = 24 → 29
   // (+20 %), Schale aus Stein, Stößel aus Holz. Tinktur: 1 Fläschchen + 1
   // Kräutermischung = 288 → 346 (+20 %), die Grundzutat aller Tränke.
-  moerser: { name: 'Mörser', plural: 'Mörser', price: 29, color: '#a7adb5', shape: 'mortar' },
+  // v0.55.0: Mörser aus 5 statt 3 Holzstäben (Tobias, Chat 31) – Wert 43 statt 29
+  moerser: { name: 'Mörser', plural: 'Mörser', price: 43, color: '#a7adb5', shape: 'mortar' },
   tinktur: { name: 'Tinktur', plural: 'Tinkturen', price: 346, color: '#7a4a24', herb: '#5f8f3a', shape: 'tincture' },
+  // v0.55.0: Level 15 „Der alte Magier“ – der erste Trank: bauchiges Fläschchen
+  // mit lila Trank und Korken. Wert (346 + 5 × 20 + 5 × 2 Holzkohle) × 1,2 = 547.
+  traumtrank: { name: 'Traumtrank', plural: 'Traumtränke', price: 547, color: '#7b4fc9', glow: '#c9a7ff', shape: 'potion' },
 };

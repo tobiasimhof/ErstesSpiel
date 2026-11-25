@@ -140,9 +140,13 @@ test('Aufträge auf Level 10: 4 Stück aus beiden Bereichen, zusammen 2.116 Erfa
 
 test('Datentabelle: ab Level 10 je Seite ein Streifen mehr für 2.000 Gold; davor 170 und 500 (v0.42.0)', () => {
   assert.deepEqual(LAND, { depth: 4, perSide: 2, prices: [170, 500], roundTo: 10 });
-  assert.deepEqual(LAND_MORE, [{ level: 10, strips: 1, price: 2000 }]);
-  assert.deepEqual([1, 9, 10, 12].map(stripsPerSide), [2, 2, 3, 3]);
-  assert.deepEqual([0, 1, 2].map(stripPrice), [170, 500, 2000]);
+  // v0.55.0: ab Level 15 ein 4. Streifen je Seite für 10.000 Gold (Tobias, Chat 31)
+  assert.deepEqual(LAND_MORE, [
+    { level: 10, strips: 1, price: 2000 },
+    { level: 15, strips: 1, price: 10000 },
+  ]);
+  assert.deepEqual([1, 9, 10, 12, 14, 15].map(stripsPerSide), [2, 2, 3, 3, 3, 4]);
+  assert.deepEqual([0, 1, 2, 3].map(stripPrice), [170, 500, 2000, 10000]);
 });
 
 test('Die Welt wächst mit dem Level: bis Level 9 38 × 30, ab Level 10 46 × 38', () => {

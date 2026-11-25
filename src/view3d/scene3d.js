@@ -284,7 +284,8 @@ function signFace(building) {
 export function createScene3d({ lib }) {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(COLOR.sky);
-  scene.fog = new THREE.Fog(COLOR.sky, 90, 220);
+  // v0.55.0: Nebel etwas weiter weg – man kann weiter herauszoomen (camera3d.js)
+  scene.fog = new THREE.Fog(COLOR.sky, 130, 300);
 
   // Licht
   const hemi = new THREE.HemisphereLight('#e8f4ff', '#6f8f4f', 1.4);

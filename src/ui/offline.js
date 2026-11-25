@@ -85,6 +85,10 @@ export function createOfflineView({ panels, getName = () => '' }) {
       if (Object.keys(report.emptied).length > 0) {
         row('🪵', `Leer gelaufen: ${buildingsText(report.emptied)}. Tippe sie an und lege mit „⏫ Auffüllen“ nach.`);
       }
+      // v0.55.0: Feuer im Zauberkessel ausgegangen
+      if (Object.keys(report.fireOut ?? {}).length > 0) {
+        row('🔥', `Feuer aus: ${buildingsText(report.fireOut)}. Tippe ihn an und lege mit „🔥 Auffüllen“ Holzkohle nach.`);
+      }
       // v0.16.0: reife Beete warten aufs Ernten
       if (report.ripe > 0) row('🌾', `Reif zum Ernten: ${report.ripe}× Beet. ${report.ripe === 1 ? 'Tippe es' : 'Tippe sie'} an und ernte – dann neu säen.`);
       if (report.storageFull) row('⚠️', 'Das Laden-Lager ist voll – die Fabrik staut sich. Verkaufe oder verbaue Waren.');
@@ -128,6 +132,8 @@ export function createOfflineView({ panels, getName = () => '' }) {
       const emptied = sum(report.emptied);
       if (emptied > 0) parts.push(`${emptied} ${emptied === 1 ? 'Rohstoff-Gebäude ist' : 'Rohstoff-Gebäude sind'} leer`);
       if (report.ripe > 0) parts.push(`${report.ripe} ${report.ripe === 1 ? 'Beet ist' : 'Beete sind'} reif`);
+      const fires = sum(report.fireOut ?? {});
+      if (fires > 0) parts.push(`${fires} ${fires === 1 ? 'Feuer ist' : 'Feuer sind'} aus`);
       if (parts.length === 0) return null;
       panels.toast(`${awayText(report.seconds, fromFile)} – deine Fabrik lief weiter: ${parts.join(', ')}.`, 5000);
       return 'toast';
