@@ -2874,7 +2874,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     localStorage.setItem(key, JSON.stringify(data));
     return data.saveVersion;
   });
-  check(backdated === 20, `Spielstand-Version 20 (${backdated})`);
+  check(backdated === 21, `Spielstand-Version 21 (${backdated})`); // v0.55.0: Feuerfach
   await page2.goto(baseUrl);
   await waitForGame(page2);
   await page2.waitForFunction(() => !window.__game.isCatchingUp(), null, { timeout: 20000 });
@@ -2939,7 +2939,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await download.saveAs(backupPath);
   const backupData = JSON.parse(fs.readFileSync(backupPath, 'utf8'));
   check(
-    backupData.saveVersion === 20 && backupData.state.buildings.length === saved.buildings && Math.abs(Date.now() - backupData.savedAt) < 60000,
+    backupData.saveVersion === 21 && backupData.state.buildings.length === saved.buildings && Math.abs(Date.now() - backupData.savedAt) < 60000,
     `Datei enthält den Spielstand (Format ${backupData.saveVersion}, ${backupData.state.buildings.length} Gebäude)`,
   );
   await sleep(100);
