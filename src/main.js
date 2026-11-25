@@ -214,7 +214,12 @@ function testPack() {
 function onLevelUp({ level, gift, moreLand }) {
   // v0.27.0: Bringt das Level mehr Fläche, zeigt die Karte die ganze Welt –
   // so sieht man die neuen Schilder „＋ Fläche kaufen“ am Rand.
-  if (moreLand) view3d.cam.fitRect(state.world, { padBottom: buildBar.bottomCover() });
+  // v0.54.0: erst die neue Weltgröße an die Kamera geben – sonst begrenzt sie
+  // das Herauszoomen noch auf die alte Welt (der Browser-Test fand das in 3D)
+  if (moreLand) {
+    view3d.cam.setBounds(state.world);
+    view3d.cam.fitRect(state.world, { padBottom: buildBar.bottomCover() });
+  }
   onChange();
   buildBar.updateCosts(state);
   // v0.51.0: als Schriftrolle von Hilde (Bauabschnitt, Neues, Geschenk – ab
