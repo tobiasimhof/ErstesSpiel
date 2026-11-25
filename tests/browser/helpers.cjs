@@ -77,12 +77,19 @@ async function tilePos(page, tx, ty) {
 // v0.54.0: Liegen die Felder frei im Bild – nicht unter der Leiste oben, der
 // Bauleiste, dem Infofenster oder außerhalb? (In 2D passte das Grundstück
 // immer ganz ins Bild; in 3D zeigt die Kamera oft nur einen Ausschnitt.)
+// Dazu groß genug: Nachbarfelder mindestens 18 Pixel auseinander – sonst
+// träfe ein Tippen leicht das Nachbarfeld, und ein Wisch über ein Feld bliebe
+// unter der Grenze fürs Tippen (10 Pixel, ui/input.js) (Handy, ganzes Grundstück im Bild).
 async function tilesFree(page, tiles) {
   return page.evaluate((list) => {
     const canvas = document.getElementById('game');
+    const tile = (x, y) => window.__game.view3d.tile(x, y);
     return list.every(([x, y]) => {
-      const p = window.__game.view3d.tile(x, y);
-      return Number.isFinite(p.x) && Number.isFinite(p.y) && document.elementFromPoint(p.x, p.y) === canvas;
+      const p = tile(x, y);
+      if (!(Number.isFinite(p.x) && Number.isFinite(p.y) && document.elementFromPoint(p.x, p.y) === canvas)) return false;
+      const east = tile(x + 1, y);
+      const south = tile(x, y + 1);
+      return Math.hypot(east.x - p.x, east.y - p.y) >= 18 && Math.hypot(south.x - p.x, south.y - p.y) >= 18;
     });
   }, tiles);
 }
