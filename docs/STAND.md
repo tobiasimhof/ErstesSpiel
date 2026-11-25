@@ -59,8 +59,8 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 ### v0.54.0 – Ein Spiel: die 2D-Welt ist entfernt (25.11.2026)
 
 - **Warum (Tobias, Chat 31):** „die 2D Welt komplett zu löschen, weil ich sie gar nicht mehr spiele“; Andenken nicht nötig, „Die 3D welt ist deutlich produktiver und besser“.
-- **Umgesetzt:** nur noch das 3D-Spiel mit einem Spielstand (Platz des früheren 3D-Tests, Tobias' Fabrik bleibt); kein Menüpunkt zur 2D-Welt, kein „3D-Test“ mehr; `src/view2d/` gelöscht; `?ansicht=2d` öffnet das Spiel; der Durchspiel-Test bis Level 14 läuft jetzt in 3D.
-- **Offen:** Tobias' Test; Entwurf Level 15.
+- **Umgesetzt:** nur noch das 3D-Spiel mit einem Spielstand (Platz des früheren 3D-Tests, Tobias' Fabrik bleibt); kein Menüpunkt zur 2D-Welt, kein „3D-Test“ mehr; `src/view2d/` gelöscht; `?ansicht=2d` öffnet das Spiel; der Durchspiel-Test bis Level 14 läuft jetzt in 3D. Er fand: Nach dem Aufstieg auf Level 10 zoomte die Kamera nur so weit wie in der alten Welt (behoben).
+- **Offen:** Tobias' Test; offene Frage 16 (Herauszoomen); Entwurf Level 15.
 
 ### v0.53.0 – Feinschliff: Theke in der Einführung, Leiste oben (25.11.2026)
 

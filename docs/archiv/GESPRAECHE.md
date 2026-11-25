@@ -20,7 +20,7 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Tobias:** „Okay, sag Bescheid wenn es live ist“ – nach v0.53.0: „Ja, hat alles funktioniert. Du kannst gerne mit dem nächsten Schritt anfangen“
 
-**Claude** hat v0.54.0 umgesetzt: nur noch das Spiel in 3D mit einem Spielstand (auf dem Platz des früheren 3D-Tests, Tobias' Fabrik bleibt unverändert); der Menüpunkt zur 2D-Welt und „3D-Test“ sind weg, `src/view2d/` ist gelöscht, alte Links mit `?ansicht=2d` öffnen das Spiel; der alte 2D-Spielstand bleibt unberührt im Browser. Der lange Browser-Test (Durchspielen bis Level 14) läuft jetzt im 3D-Spiel.
+**Claude** hat v0.54.0 umgesetzt: nur noch das Spiel in 3D mit einem Spielstand (auf dem Platz des früheren 3D-Tests, Tobias' Fabrik bleibt unverändert); der Menüpunkt zur 2D-Welt und „3D-Test“ sind weg, `src/view2d/` ist gelöscht, alte Links mit `?ansicht=2d` öffnen das Spiel; der alte 2D-Spielstand bleibt unberührt im Browser. Der lange Browser-Test (Durchspielen bis Level 14) läuft jetzt im 3D-Spiel. Er fand dabei: Nach dem Aufstieg auf Level 10 zoomte die 3D-Kamera nur so weit heraus wie in der alten, kleineren Welt (behoben); und die größte Welt (46 × 38) passt in 3D auch ganz herausgezoomt nicht ganz aufs Tablet – offene Frage an Tobias, ob man weiter herauszoomen können soll.
 
 **Umgesetzt:** v0.54.0. Als Nächstes der Entwurf für Level 15 mit neuen Ausgaben fürs Gold.
 
