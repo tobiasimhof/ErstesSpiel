@@ -752,9 +752,20 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     .then(() => true, () => false);
   check(hudSynced, 'Gold oben aktualisiert sich');
   check((await page.textContent('#modal-content')).includes('kaufte'), 'Letzte Verkäufe werden angezeigt');
+  // v0.54.0: Kunden kaufen live weiter – Verkäufe nach dem Antippen mitzählen
+  const saleIdRefill = await game(page, () => window.__game.state.market.nextSaleId);
   await page.locator('#modal-content .counter-buttons button', { hasText: 'Auffüllen' }).first().tap();
   await sleep(80);
-  check((await game(page, () => window.__game.state.counters[0].count)) === 20, 'Auffüllen füllt die Theke wieder auf 20');
+  const counterRefilled = await game(
+    page,
+    (since) => {
+      const s = window.__game.state;
+      const sold = s.market.sales.filter((sale) => sale.id >= since).reduce((n, sale) => n + (sale.items.holzblock ?? 0), 0);
+      return { count: s.counters[0].count, sold };
+    },
+    saleIdRefill,
+  );
+  check(counterRefilled.count + counterRefilled.sold === 20, `Auffüllen füllt die Theke wieder auf 20 (${JSON.stringify(counterRefilled)})`);
   await shot('10-verkauf');
 
   await page.tap('#modal-close');
