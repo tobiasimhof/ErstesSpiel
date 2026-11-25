@@ -61,7 +61,18 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.55.0 – Level 15 „Der alte Magier“: Zauberkessel mit Feuer, Traumtrank, mehr Fläche (Chat 31, v0.54.1; wartet auf Tobias' OK)
+### Entwurf v0.55.0 – Level 15 „Der alte Magier“: Zauberkessel mit Feuer, Traumtrank, mehr Fläche (Chat 31, v0.54.1; angenommen mit Änderungen in v0.54.2 – siehe gleich unten)
+
+**Tobias' Antworten (Chat 31, v0.54.2), mit einem Bild seiner Fabrik (Level 14, 36.904 Gold, Laden-Lager 1.109 / 1.100 nach 1 von 10 Ausbauten):** „Die sachen mit den Zaubern für Gold können wir gerne festhalten und uns nochmal genauer Gedanken darüber machen. 1. Passt so für mich. 2. Ich würde gerne 1 Trinktur und 5 Blüten machen und den Mörser auch nochmal auf 5 Stäbe umstellen, damit wir irgendwo dieses Gleichgewicht behalten. 3. Die Namen passen auch für mich. 4. 10.000 Gold ist super. Die ganze Welt sollte auch aufs Tablet passen, steht aber jetzt nicht an oberster Stelle. Ich zeig dir in Screenshot wie es aktuell aussieht.“
+
+**Damit gilt für v0.55.0 (neu gerechnet mit dem Rechenwerkzeug):**
+- **Traumtrank:** 1 Tinktur + **5 Kamillenblüten**, Feuer 5 Holzkohle, 60 s, Wert **547 Gold** ((346 + 5 × 20 + 5 × 2) × 1,2); +85 % gegenüber seinen Rohstoffen, eine Straße etwa 5.500 Gold/h, Engpass die Kamille.
+- **Mörser (Level 14) ändert sich:** 1 Steinplatte + **5 Holzstäbe** statt 3, Wert **43** statt 29 Gold. Tobias' Mörser-Straßen brauchen dann mehr Holzstäbe; Mörser, die schon da sind, bleiben. Die Aufträge auf Level 14 bringen dadurch 13.251 statt 12.761 Gold.
+- **Aufträge Level 15:** wie oben (300 Holzkohle; 10 Traumtränke; 8 Traumtränke + 10 Kamillenkissen; 10 Tinkturen), zusammen **16.066 Gold** und 4.820 Erfahrung (×1,2); Rohstoffe 9.390 Gold, 10,4 Pflanzen, Maschinenzeit 4 h, Engpass mit je einem Beet die Kamille (2,8 h). Aufstieg 15.000 Gold (113 % der Aufträge von Level 14).
+- **Zauberkessel, Feuerfach, Namen, 4. Flächenstreifen für 10.000:** wie oben, angenommen.
+- **Herauszoomen:** Die ganze Welt soll aufs Tablet passen, „steht aber jetzt nicht an oberster Stelle“ – in v0.55.0 nur, wenn es einfach geht und flüssig bleibt.
+- **„Zauber des Magiers“:** festgehalten, später genauer durchdenken (`AUSBLICK.md`).
+
 
 **Tobias (Chat 31, nach v0.54.0):** „Das herauszoomen finde ich bisher okay und mit level 15 können wir das ja nochmal überprüfenm weil dort die neuen Felder dazu kommen. Bisher finde ich sieht alles gut, deswegen können wir gerne mit level 15 anfangen“
 

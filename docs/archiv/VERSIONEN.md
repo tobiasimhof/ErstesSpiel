@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.54.2 – Tobias' Antworten zum Entwurf Level 15 (25.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Antworten zum Entwurf v0.55.0 festhalten (Chat 31, mit Bildern seiner Fabrik): angenommen, mit 5 Kamillenblüten im Traumtrank und 5 Holzstäben im Mörser; Zauber fürs Gold festhalten.
+
+**Fragen, die wir uns gestellt haben:**
+- Was ändern 5 Blüten und 5 Stäbe? → Traumtrank 547 statt 499 Gold, Mörser 43 statt 29 Gold; Aufträge Level 14 13.251 statt 12.761 Gold, Level 15 16.066 Gold (×1,2); Aufstieg 15.000 bleibt (113 %).
+- Was zeigen die Bilder? → Level 14, 36.904 Gold, 1 von 10 Lager-Ausbauten; Laden-Lager übervoll und viele rote Lichter (blockiert); dunkle Fenster (vermutlich Dunkelmodus des Browsers).
+
+**Gemacht:**
+- `PLAENE.md` (Antworten und neue Zahlen unter dem Entwurf v0.55.0), `AUSBLICK.md` (Level 15, Zauber des Magiers), `STAND.md`, `GESPRAECHE.md`, `ENTSCHEIDUNGEN.md`. Versionsnummer 0.54.2. Das Spiel ist unverändert.
+
+**Geprüft:**
+- `npm test` (Versionsnummer, Import-Map, Größe der Doku).
+
 ### v0.54.1 – Entwurf Level 15 „Der alte Magier“ (25.11.2026, nur Doku)
 
 **Vorgenommen:**
