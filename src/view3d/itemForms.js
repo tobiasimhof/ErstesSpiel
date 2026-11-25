@@ -265,6 +265,13 @@ export const ITEM_FORMS = {
   ),
   // Steinschale mit Holzstößel
   moerser: big(...bowl('#a7adb5', '#5d636b', 0.11), cyl('#b07a45', 0.022, 0.032, 0.25, [0.04, 0.2, 0], [0, 0, -0.5], 8)),
+  // v0.55.0: Traumtrank – bauchiges Fläschchen mit lila Trank und Korken
+  traumtrank: big(
+    ball('#7b4fc9', 0.105, [0, 0.105, 0], 14, 10),
+    ball('#c9a7ff', 0.05, [0.03, 0.08, 0.06], 8, 6),
+    cyl('#cfe9ee', 0.034, 0.042, 0.08, [0, 0.235, 0], null, 10),
+    cyl('#b07a45', 0.03, 0.032, 0.05, [0, 0.295, 0], null, 10),
+  ),
 };
 
 // Die Form einer Ware (fehlt eine, eine Kugel in ihrer Farbe)

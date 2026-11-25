@@ -51,12 +51,13 @@ test('Level 14 gibt es, der Laden bleibt wie auf Level 7 bis 13', () => {
   assert.deepEqual(SHOP_LEVELS[14], SHOP_LEVELS[13]);
 });
 
-test('Mörser: 4. Einstellung der Zimmerei, 1 Steinplatte + 3 Holzstäbe → 1 Mörser, 10 s, 29 Gold, erst ab Level 14', () => {
+// v0.55.0: 5 statt 3 Holzstäbe (Tobias, Chat 31: „damit wir irgendwo dieses Gleichgewicht behalten“)
+test('Mörser: 4. Einstellung der Zimmerei, 1 Steinplatte + 5 Holzstäbe → 1 Mörser, 10 s, 43 Gold, erst ab Level 14', () => {
   assert.deepEqual(BUILDINGS.zimmerei.production.recipes, ['zahnradwelle', 'raederwerk', 'verstaerkteholzplatte', 'moerser']);
   const r = RECIPES.moerser;
-  assert.deepEqual([r.building, r.label, r.inputs, r.output, r.amount, r.time], ['zimmerei', 'Mörser', { steinplatte: 1, holzstab: 3 }, 'moerser', 1, 10]);
+  assert.deepEqual([r.building, r.label, r.inputs, r.output, r.amount, r.time], ['zimmerei', 'Mörser', { steinplatte: 1, holzstab: 5 }, 'moerser', 1, 10]);
   assert.equal(ITEMS.moerser.price, Math.round(worth(r.inputs) * 1.2));
-  assert.equal(ITEMS.moerser.price, 29);
+  assert.equal(ITEMS.moerser.price, 43);
   assert.equal(recipeLevel('moerser'), 14);
   assert.equal(isRecipeUnlocked(levelGame(13), 'moerser'), false);
   assert.equal(isRecipeUnlocked(levelGame(14), 'moerser'), true);
@@ -113,7 +114,8 @@ test('Ohne genug Gold kein Aufstieg auf Level 14', () => {
   assert.equal(state.shopLevel, 13);
 });
 
-test('Aufträge auf Level 14: 4 Stück, zusammen 3.829 Erfahrung und 12.761 Gold (×1,2 gegenüber Level 13)', () => {
+// v0.55.0: mit dem Mörser für 43 Gold 3.976 Erfahrung und 13.251 Gold (vorher 3.829 und 12.761)
+test('Aufträge auf Level 14: 4 Stück, zusammen 3.976 Erfahrung und 13.251 Gold (×1,26 gegenüber Level 13)', () => {
   const quests = levelQuests(14);
   assert.deepEqual(
     quests.map((q) => [q.from, q.items]),
@@ -125,22 +127,22 @@ test('Aufträge auf Level 14: 4 Stück, zusammen 3.829 Erfahrung und 12.761 Gold
     ],
   );
   const rewards = quests.map((q) => questReward(q));
-  assert.equal(xpNeeded(14), 3829);
+  assert.equal(xpNeeded(14), 3976);
   assert.equal(
     rewards.reduce((sum, r) => sum + r.gold, 0),
-    12761,
+    13251,
   );
-  const ratio = 12761 / 10490;
+  const ratio = 13251 / 10490;
   assert.ok(ratio > 1.15 && ratio < 1.3, `Sprung zu Level 13: ×${ratio.toFixed(2)}`);
 });
 
 // ---------- Herstellen ----------
 
-test('Zimmerei auf Mörser: 1 Steinplatte + 3 Holzstäbe → 1 Mörser in 10 Sekunden', () => {
+test('Zimmerei auf Mörser: 1 Steinplatte + 5 Holzstäbe → 1 Mörser in 10 Sekunden', () => {
   const state = levelGame(14);
   const zimmerei = placeBuilding(state, 'zimmerei', 16, 6, 0);
   assert.ok(setRecipe(zimmerei, 'moerser'));
-  zimmerei.prod.stock = { steinplatte: 1, holzstab: 3 };
+  zimmerei.prod.stock = { steinplatte: 1, holzstab: 5 };
   simulate(state, 9);
   assert.equal(zimmerei.prod.out, null, 'nach 9 s noch nicht fertig');
   simulate(state, 2);

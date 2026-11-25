@@ -34,4 +34,9 @@ export const LAND = {
 // jeder dieser Streifen kostet price. Beim Aufstieg rückt der Rand der Welt
 // an jeder Seite nach außen. Weitere Zeilen (z. B. Level 12) gehen genauso.
 // Level 10: bis 46 × 38 Felder.
-export const LAND_MORE = [{ level: 10, strips: 1, price: 2000 }];
+// v0.55.0: Ab Level 15 je Seite ein 4. Streifen für 10.000 Gold (Tobias, Chat 31:
+// „10.000 Gold ist super“) – das Grundstück wächst bis 54 × 46.
+export const LAND_MORE = [
+  { level: 10, strips: 1, price: 2000 },
+  { level: 15, strips: 1, price: 10000 },
+];

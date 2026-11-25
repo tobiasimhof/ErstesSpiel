@@ -58,7 +58,7 @@ test('Die Einführung hat die 8 besprochenen Schritte, jeder mit Ereignis und Hi
 });
 
 test('Neues Spiel: die Einführung beginnt mit dem Brief, alte Spielstände bekommen keine (Format 20)', () => {
-  assert.equal(SAVE_VERSION, 20);
+  assert.ok(SAVE_VERSION >= 20); // v0.55.0: Format 21 (Feuerfach)
   const state = createNewGame(1);
   assert.deepEqual(state.tutorial, { step: 0, seen: [], review: false });
   assert.equal(tutorialStep(state).id, 'willkommen');

@@ -61,7 +61,7 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.55.0 – Level 15 „Der alte Magier“: Zauberkessel mit Feuer, Traumtrank, mehr Fläche (Chat 31, v0.54.1; angenommen mit Änderungen in v0.54.2 – siehe gleich unten)
+### Entwurf v0.55.0 – Level 15 „Der alte Magier“: Zauberkessel mit Feuer, Traumtrank, mehr Fläche (Chat 31, v0.54.1; angenommen mit Änderungen in v0.54.2 – siehe gleich unten; umgesetzt in v0.55.0)
 
 **Tobias' Antworten (Chat 31, v0.54.2), mit einem Bild seiner Fabrik (Level 14, 36.904 Gold, Laden-Lager 1.109 / 1.100 nach 1 von 10 Ausbauten):** „Die sachen mit den Zaubern für Gold können wir gerne festhalten und uns nochmal genauer Gedanken darüber machen. 1. Passt so für mich. 2. Ich würde gerne 1 Trinktur und 5 Blüten machen und den Mörser auch nochmal auf 5 Stäbe umstellen, damit wir irgendwo dieses Gleichgewicht behalten. 3. Die Namen passen auch für mich. 4. 10.000 Gold ist super. Die ganze Welt sollte auch aufs Tablet passen, steht aber jetzt nicht an oberster Stelle. Ich zeig dir in Screenshot wie es aktuell aussieht.“
 

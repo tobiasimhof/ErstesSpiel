@@ -13,7 +13,7 @@
 
 import { OFFLINE } from './data/offline.js';
 import { updateMarket } from './market.js';
-import { isRipe, productionOf, sourceCount } from './production.js';
+import { fuelSlot, hasFuel, isRipe, productionOf, sourceCount } from './production.js';
 import { storageFree } from './shop.js';
 import { TICK, tick } from './sim.js';
 
@@ -96,11 +96,14 @@ export function offlineSnapshot(state) {
     counters: state.counters.map((c) => ({ type: c.type, count: c.count })),
     sources: Object.fromEntries(state.buildings.filter(isSource).map((b) => [b.id, sourceCount(b)])),
     ripe: state.buildings.filter((b) => isGarden(b) && isRipe(b)).length,
+    // v0.55.0: Kessel, deren Feuer noch für einen Trank reicht
+    fires: state.buildings.filter((b) => fuelSlot(b) && hasFuel(b)).map((b) => b.id),
   };
 }
 
 // Was in der Zeit passiert ist:
 // { seconds, gold, sold: { Ware: n }, stored: { Ware: n }, emptied: { Gebäudeart: n },
+//   fireOut: { Gebäudeart: n } (v0.55.0: Feuer während der Pause ausgegangen),
 //   empty: Anzahl leerer Rohstoff-Gebäude, ripe: Beete, die reif geworden sind
 //   (v0.16.0), storageFull, countersEmpty, running }
 export function offlineReport(job) {
@@ -123,6 +126,11 @@ export function offlineReport(job) {
     empty++;
     if ((before.sources[b.id] ?? 0) > 0) emptied[b.type] = (emptied[b.type] ?? 0) + 1;
   }
+  // v0.55.0: Feuer, die während der Pause ausgegangen sind
+  const fireOut = {};
+  for (const b of state.buildings) {
+    if (fuelSlot(b) && !hasFuel(b) && (before.fires ?? []).includes(b.id)) fireOut[b.type] = (fireOut[b.type] ?? 0) + 1;
+  }
   // v0.16.0: Beete, die während der Pause reif geworden sind
   const ripe = Math.max(0, state.buildings.filter((b) => isGarden(b) && isRipe(b)).length - (before.ripe ?? 0));
   const hadGoods = before.counters.some((c) => c.type && c.count > 0);
@@ -132,6 +140,7 @@ export function offlineReport(job) {
     sold,
     stored,
     emptied,
+    fireOut,
     empty,
     ripe,
     storageFull: storageFree(state) <= 0,

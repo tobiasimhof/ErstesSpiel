@@ -32,7 +32,8 @@ test('Immer sichtbar: Lagerhaus und Versandportal', () => {
 test('Einteilung der Reiter (Tobias): Kombi-Maschinen beim Stoff, zu dem sie passen', () => {
   const tabOf = Object.fromEntries(BUILD_TABS.flatMap((t) => t.buildings.map((b) => [b, t.id])));
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'holz').buildings, ['holzfaeller', 'saegewerk', 'zimmerei', 'kohlenmeiler']);
-  assert.deepEqual(BUILD_TABS.find((t) => t.id === 'stein').buildings, ['steinbruch', 'steinmetz']);
+  // v0.55.0: der Zauberkessel (Level 15) im Reiter „Stein“ (Tobias, Chat 27: „mehr mit stein arbeiten“)
+  assert.deepEqual(BUILD_TABS.find((t) => t.id === 'stein').buildings, ['steinbruch', 'steinmetz', 'zauberkessel']);
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'eisen').buildings, ['schmelzhuette', 'schmiede', 'feinschmiede', 'schlosserei']);
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'kraeuter').buildings, ['beet', 'flachsbreche', 'webstube', 'kraeuterstube']);
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'werkstatt').buildings, ['schreibstube', 'uhrmacherei', 'apotheke']);

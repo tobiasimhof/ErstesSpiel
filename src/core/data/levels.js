@@ -224,6 +224,23 @@ export const LEVELS = {
       { from: 'Heilerin Agnes', text: 'Im Spital wirken die Tinkturen Wunder. Für die Kranken im ganzen Tal brauche ich einen Vorrat – und Wundverbände dazu.', items: { tinktur: 15, wundverband: 8 } },
     ],
   },
+  // v0.55.0: Level 15 (Entwurf v0.55.0, Tobias, Chat 31: „Passt so für mich“,
+  // „Die Namen passen auch für mich“) – Magier Ambrosius mit dem Zauberkessel,
+  // der Traumtrank, Wirt Hannes mit dem Gasthaus. Aufträge zusammen 16.066 Gold
+  // (×1,2 gegenüber Level 14, Rechenwerkzeug). Aufstieg 15.000 Gold, kein
+  // Geschenk; dazu je Seite ein 4. Flächenstreifen (data/land.js).
+  15: {
+    name: 'Der alte Magier',
+    story:
+      'Der Duft von Klaras Tinkturen hat einen Fremden angelockt: Ambrosius, ein alter Magier, bezieht den leeren Turm am Fluss. Er bringt einen Zauberkessel mit – und alte Rezepte, für die man Tinktur, Kräuter und ein gutes Feuer braucht.',
+    cost: 15000,
+    quests: [
+      { from: 'Magier Ambrosius', text: 'Ohne Feuer kein Trank. Mein Kessel frisst Holzkohle – bring mir einen ordentlichen Vorrat, dann zeige ich dir, wie man ihn anheizt.', items: { holzkohle: 300 } },
+      { from: 'Magier Ambrosius', text: 'Tinktur, Kamille und ein gutes Feuer: Das ist der Traumtrank. Zeig mir, dass du ihn brauen kannst.', items: { traumtrank: 10 } },
+      { from: 'Wirt Hannes', text: 'Seit sich Klaras Tinkturen herumsprechen, ist mein Gasthaus voll – und meine Gäste schlafen schlecht. Traumtränke und Kamillenkissen, bitte!', items: { traumtrank: 8, kamillenkissen: 10 } },
+      { from: 'Apothekerin Klara', text: 'Der alte Ambrosius kauft mir alle Tinkturen weg! Ich brauche Nachschub für mein Regal.', items: { tinktur: 10 } },
+    ],
+  },
 };
 
 export const MAX_LEVEL = Math.max(...Object.keys(LEVELS).map(Number));

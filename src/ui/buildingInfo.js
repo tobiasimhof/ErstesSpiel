@@ -19,6 +19,7 @@ import { ITEMS } from '../core/data/items.js';
 import { RECIPES } from '../core/data/recipes.js';
 import { isItemUnlocked, isRecipeUnlocked } from '../core/levels.js';
 import {
+  fuelSlot,
   gardenCrop,
   gardenSeeds,
   growth,
@@ -126,6 +127,21 @@ function workshopBody(state, building, { onRecipe }) {
     const sub = el('div', 'info-sub');
     main.node.append(flow, sub);
     root.replaceChildren(main.node);
+    // v0.55.0: Feuerfach (Zauberkessel) – Holzkohle mit Füllbalken
+    let fire = null;
+    const fuel = fuelSlot(b);
+    if (fuel) {
+      const fireCard = card('🔥 Feuer');
+      fireCard.node.classList.add('fire-card');
+      const row = el('div', 'recipe-flow');
+      const coal = stackedItem(fuel.item, s.input, '');
+      const bar = fillBar();
+      row.append(coal.box, bar.node);
+      const fireSub = el('div', 'info-sub');
+      fireCard.node.append(row, fireSub);
+      root.append(fireCard.node);
+      fire = { coal, bar, sub: fireSub };
+    }
     // Die anderen Einstellungen, je ein Knopf: Antippen stellt um.
     // v0.27.0: Einstellungen späterer Level (Wundverband ab Level 10) noch nicht.
     const others = p.recipes.filter((key) => key !== b.prod.recipe && isRecipeUnlocked(state, key));
@@ -155,7 +171,7 @@ function workshopBody(state, building, { onRecipe }) {
     // Zutaten für eine andere Einstellung bleiben in der Maschine.
     const note = el('div', 'info-note');
     root.append(note);
-    parts = { counts, sub, note };
+    parts = { counts, sub, note, fire };
   }
 
   function update(b) {
@@ -177,6 +193,18 @@ function workshopBody(state, building, { onRecipe }) {
     const hasRest = Object.keys(rest).length > 0;
     parts.note.textContent = hasRest ? `Liegt noch in der Maschine: ${costText(rest)} – für eine andere Einstellung.` : '';
     parts.note.hidden = !hasRest;
+    // v0.55.0: Feuerfach
+    const fuel = fuelSlot(b);
+    if (fuel && parts.fire) {
+      const out = fuel.have < fuel.perCraft;
+      parts.fire.coal.count.textContent = `${fuel.have} / ${fuel.capacity}`;
+      parts.fire.coal.box.classList.toggle('lack', out);
+      parts.fire.bar.set(fuel.have / fuel.capacity, out ? 'bad' : '');
+      const brews = fuel.perCraft > 0 ? Math.floor(fuel.have / fuel.perCraft) : 0;
+      parts.fire.sub.textContent = out
+        ? `Feuer aus – „🔥 Auffüllen“ legt ${ITEMS[fuel.item].plural} aus dem Laden-Lager nach.`
+        : `${fuel.perCraft} ${ITEMS[fuel.item].plural} je ${ITEMS[recipe.output].name} · reicht für ${brews} ${brews === 1 ? ITEMS[recipe.output].name : ITEMS[recipe.output].plural}`;
+    }
   }
 
   render(building);

@@ -58,6 +58,9 @@
 //               Ereignisse, ansehen). Bestehende Spielstände bekommen keine
 //               (null) – die Einführung kommt nur bei einem neuen Spiel von
 //               selbst; sonst bleibt alles gleich.
+//  21 (v0.55.0): Level 15 – Maschinen mit Feuerfach (Zauberkessel) merken
+//               sich ihre Holzkohle (prod.fuel). Ältere Spielstände haben
+//               noch keinen Kessel; sonst bleibt alles gleich.
 
 import { BUILDINGS } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
@@ -76,7 +79,7 @@ import { START_PLOT, WORLD, parseTileKey } from './state.js';
 import { isValidPlayerName } from './player.js';
 import { isValidTutorial } from './tutorial.js';
 
-export const SAVE_VERSION = 20;
+export const SAVE_VERSION = 21;
 
 // v0.13.0 (Tobias): Namen, die zu den Zutaten passen. Rezepte und Werte bleiben.
 const RENAMED_V11 = {
@@ -254,6 +257,12 @@ function migrate(state, from, notes = []) {
   if (from < 19 && isObj(state)) state.playerName = '';
   // v0.51 → v0.52: Tobias' Fabrik startet die Einführung nicht von selbst
   if (from < 20 && isObj(state)) state.tutorial = null;
+  // v0.54 → v0.55: Feuerfach – ein Kessel ohne Angabe beginnt mit kaltem Feuer
+  if (from < 21 && Array.isArray(state.buildings)) {
+    for (const b of state.buildings) {
+      if (isObj(b?.prod) && productionOf(b.type)?.fuel && b.prod.fuel === undefined) b.prod.fuel = 0;
+    }
+  }
   return state;
 }
 
@@ -500,7 +509,9 @@ function isValidProduction(b) {
         Object.entries(prod.stock).every(([t, n]) => isItem(t) && isCount(n)) &&
         typeof prod.busy === 'boolean' &&
         isNum(prod.timer) &&
-        isValidStack(prod.out)
+        isValidStack(prod.out) &&
+        // v0.55.0: Holzkohle im Feuerfach – nur bei Maschinen mit Feuerfach
+        (p.fuel ? isCount(prod.fuel) && prod.fuel <= p.fuel.capacity : prod.fuel === undefined)
       );
     case 'storage':
       return (

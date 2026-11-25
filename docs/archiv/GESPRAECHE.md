@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 25.11.2026 – Chat 31: Beratung – zurück zu Logik und Leveln (v0.52.2, v0.53.0, v0.54.0, v0.54.1, v0.54.2)
+### 25.11.2026 – Chat 31: Beratung – zurück zu Logik und Leveln (v0.52.2, v0.53.0, v0.54.0, v0.54.1, v0.54.2, v0.55.0)
 
 **Tobias:** „Lies dir den aktuellen Stand durch. "Logik und Leveln. Vorneweg ein kleiner Feinschliff: die Theke in der Einführung und die Anzeigen oben. Dann Level 15 zusammen mit neuen Ausgaben fürs Gold. " Das war dein Vorschlag für den nächsten Schritt. Ich finde den Schritt gut. Lass uns zuerst den Schritt der Einführung so ändern, dass man sobald man einen Block in die Theke legt, es 5 sekunden dauert bis der Block verkauft wird, damit man das ganze auch sieht. Dann können oben gerne die Buttons weg, die du vorgeschlagen hast und wir könnten uns überlegen, die 2D Welt komplett zu löschen, weil ich sie gar nicht mehr spiele und das 3D game, das eigentliche Game geworden ist und ich da auch schon auf lvl 14 alle Missionen abgeschlossen habe“
 
@@ -35,6 +35,10 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat neu gerechnet (Traumtrank 547 Gold, Mörser 43 Gold, Aufträge Level 15: 16.066 Gold) und die Zauber in `AUSBLICK.md` festgehalten. Auf den Bildern aufgefallen: viele rote Lichter (blockiert) – vermutlich, weil das Laden-Lager übervoll ist und die Portale nichts mehr abgeben; und die Fenster sind dunkel statt hell (vermutlich der Dunkelmodus des Browsers) – beides als Hinweis bzw. Frage an Tobias.
 
 **Umgesetzt:** v0.54.2 (nur Doku). Als Nächstes v0.55.0 (Level 15).
+
+**Claude** hat v0.55.0 umgesetzt: Zauberkessel (Reiter Stein, 30 Steinplatten + 10 Eisenbleche) mit Feuerfach für 100 Holzkohle (5 je Trank, „🔥 Auffüllen“ aus dem Laden-Lager, „Feuer aus“ als gelbes Licht, im Schild und im Bericht „Willkommen zurück“), Traumtrank aus 1 Tinktur + 5 Kamillenblüten (547 Gold, bauchiges Fläschchen mit lila Trank), Magier Ambrosius und Wirt Hannes mit 4 Aufträgen, Aufstieg 15.000, je Seite ein 4. Flächenstreifen für 10.000 (bis 54 × 46), Mörser aus 5 Holzstäben (43 Gold), weiter herauszoomen (die ganze Welt von Level 15 passt aufs Tablet); 3D-Haus mit Turm, Steinherd und Eisenkessel. Spielstand-Format 21.
+
+**Umgesetzt:** v0.55.0. Wartet auf Tobias' Test.
 
 ### 24.11.2026 – Chat 30: Einführung mit Hilde (v0.52.0)
 
