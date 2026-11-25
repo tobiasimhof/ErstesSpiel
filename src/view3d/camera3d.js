@@ -10,7 +10,7 @@
 // Koordinaten wie im Spiel: 1 Feld = 1 Einheit, x nach Osten, z = Feld-y
 // nach Süden, y nach oben. Feld (x, y) liegt zwischen x … x+1 und z = y … y+1.
 //
-// Liefert für die Steuerung (controller.js) dasselbe wie die 2D-Kamera:
+// Liefert der Steuerung (controller.js), was sie braucht:
 // welches Feld unter einem Bildschirmpunkt liegt (tileAt), Verschieben in
 // Bildschirm-Pixeln (panBy) und die Größe der Ansicht (viewWidth, viewHeight).
 

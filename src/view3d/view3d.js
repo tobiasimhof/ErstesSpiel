@@ -1,8 +1,7 @@
 // v0.34.0: 3D-Test (Tobias, Chat 24) – verbindet die 3D-Welt (scene3d.js),
 // die Kamera (camera3d.js) und three.js mit dem Spiel (main.js).
 //
-// Wird nur im 3D-Test geladen (seit v0.38.0 der Start; die echte Fabrik
-// unter index.html?ansicht=2d lädt weder diese Datei noch three.js). Die Spielregeln, die
+// Seit v0.54.0 die einzige Ansicht (die 2D-Welt ist weg). Die Spielregeln, die
 // Steuerung und alle Fenster bleiben dieselben – nur gezeichnet wird anders.
 
 import * as THREE from 'three';
@@ -41,7 +40,7 @@ export async function createView3d({ canvas, onProgress = () => {} }) {
   }
 
   // Ein Bild: Kamera weich weiterdrehen, Welt abgleichen, zeichnen.
-  // (gleiche Form wie der 2D-Zeichner: draw(state, camera, ui))
+  // (draw(state, camera, ui))
   function draw(state, _camera, ui) {
     const now = performance.now();
     const dt = Math.min(0.1, Math.max(0, (now - last) / 1000));

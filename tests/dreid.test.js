@@ -1,9 +1,9 @@
 // v0.34.0: 3D-Test (Tobias, Chat 24) – Level 1 in der neuen Grafik mit
-// eigenem Spielstand. Geprüft wird hier, was ohne Browser geht: der eigene
-// Spielstand, der Menü-Eintrag, die Knöpfe zum Drehen, das neue Versandportal
-// (Burgtor) und dass das 2D-Spiel three.js nicht lädt; seit v0.35.0 auch, dass
-// Bereich markieren und Fläche kaufen in 3D freigegeben sind und das Tor
-// richtig steht. Bedienung und Aussehen prüft der Browser-Test
+// eigenem Spielstand; seit v0.54.0 das einzige Spiel (die 2D-Welt ist weg).
+// Geprüft wird hier, was ohne Browser geht: der Spielstand auf dem alten Platz
+// des 3D-Tests, die Knöpfe zum Drehen und das neue Versandportal (Burgtor);
+// seit v0.35.0 auch, dass Bereich markieren und Fläche kaufen in 3D
+// freigegeben sind und das Tor richtig steht. Bedienung und Aussehen prüft der Browser-Test
 // (tests/browser/smoke.cjs, run3d).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -11,7 +11,7 @@ import { readFileSync } from 'node:fs';
 
 import { createNewGame } from '../src/core/state.js';
 import { MODELS, PALETTES } from '../src/view3d/kenneyParts.js';
-import { TEST_3D_SLOT, clearGame, loadGame, saveGame, useSaveSlot } from '../src/ui/storage.js';
+import { GAME_SLOT, clearGame, loadGame, saveGame, useSaveSlot } from '../src/ui/storage.js';
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
@@ -26,7 +26,10 @@ function fakeStorage() {
   };
 }
 
-test('3D-Test: eigener Spielstand – die echte Fabrik bleibt unberührt', () => {
+// v0.54.0: Der Spielstand bleibt auf dem Platz des früheren 3D-Tests (Tobias'
+// Fabrik bleibt); der Spielstand der früheren 2D-Welt wird nicht angerührt.
+test('Ein Spiel: Spielstand auf dem Platz des früheren 3D-Tests, die alte 2D-Fabrik bleibt unberührt', () => {
+  assert.equal(GAME_SLOT, '3d-test', 'der Schlüssel heißt weiter erstesspiel-spielstand-3d-test');
   const storage = fakeStorage();
   globalThis.localStorage = storage;
   try {
@@ -36,16 +39,16 @@ test('3D-Test: eigener Spielstand – die echte Fabrik bleibt unberührt', () =>
     assert.ok(saveGame(real));
     const realText = storage.getItem('erstesspiel-spielstand');
 
-    useSaveSlot(TEST_3D_SLOT);
-    assert.equal(loadGame().status, 'none', 'der 3D-Test beginnt mit einem neuen Spiel');
+    useSaveSlot(GAME_SLOT);
+    assert.equal(loadGame().status, 'none', 'die alte 2D-Fabrik wird nicht geladen');
     const test3d = createNewGame(2);
     test3d.gold = 99;
     assert.ok(saveGame(test3d));
     assert.ok(storage.getItem('erstesspiel-spielstand-3d-test'), 'eigener Schlüssel');
     assert.equal(loadGame().state.gold, 99);
-    clearGame(); // „Neues Spiel“ im 3D-Test
+    clearGame(); // „Neues Spiel“
     assert.equal(storage.getItem('erstesspiel-spielstand-3d-test'), null);
-    assert.equal(storage.getItem('erstesspiel-spielstand'), realText, 'die echte Fabrik ist unverändert');
+    assert.equal(storage.getItem('erstesspiel-spielstand'), realText, 'die alte 2D-Fabrik ist unverändert');
 
     useSaveSlot(null);
     assert.equal(loadGame().state.gold, 4321);
@@ -55,18 +58,18 @@ test('3D-Test: eigener Spielstand – die echte Fabrik bleibt unberührt', () =>
   }
 });
 
-test('3D-Test: Menü-Eintrag, Knöpfe ⟲ ⟳ und Wechsel mit Speichern', () => {
+// v0.54.0: ohne 2D-Welt – kein Wechsel, kein ?ansicht=2d, die Knöpfe ⟲ ⟳ immer
+test('Ein Spiel: kein Wechsel zur 2D-Welt, Knöpfe ⟲ ⟳ immer da, Spielstand vor dem ersten Laden', () => {
   const html = read('index.html');
-  assert.ok(html.includes('id="menu-3d"') && html.includes('🧊 Zurück zum 3D-Test'));
+  assert.ok(!html.includes('id="menu-3d"') && !html.includes('3D-Test') && !html.includes('view2d'), 'kein Menüpunkt, keine 2D-Dateien');
   assert.ok(html.includes('id="btn-turn-left"') && html.includes('id="btn-turn-right"'));
+  assert.ok(/<div id="turn-buttons" class="turn-buttons">/.test(html), 'Dreh-Knöpfe ohne hidden');
   const main = read('src/main.js');
-  // v0.38.0: Der Link öffnet den 3D-Test, die echte Fabrik ist ?ansicht=2d
-  assert.ok(main.includes("get('ansicht') !== '2d'"), 'ohne Zusatz der 3D-Test, ?ansicht=2d die echte Fabrik');
-  assert.ok(main.includes("location.href = VIEW_3D ? 'index.html?ansicht=2d' : 'index.html';"), 'Wechsel zwischen beiden');
-  assert.ok(read('src/ui/hud.js').includes("'🗺️ Zur echten Fabrik (2D)'"));
-  assert.ok(main.includes('if (VIEW_3D) useSaveSlot(TEST_3D_SLOT);'), 'eigener Spielstand vor dem ersten Laden');
-  assert.ok(main.indexOf('useSaveSlot(TEST_3D_SLOT)') < main.indexOf('const loaded = '));
-  assert.ok(/onSwitch3d: \(\) => \{\s*saveNow\(\);/.test(main), 'vor dem Wechsel wird gespeichert');
+  assert.ok(!main.includes("get('ansicht')") && !main.includes('VIEW_3D') && !main.includes('view2d'), 'keine 2D-Ansicht mehr');
+  assert.ok(main.includes('useSaveSlot(GAME_SLOT);'));
+  assert.ok(main.indexOf('useSaveSlot(GAME_SLOT)') < main.indexOf('const loaded = '), 'Spielstand-Platz vor dem ersten Laden');
+  const hud = read('src/ui/hud.js');
+  assert.ok(!hud.includes('echten Fabrik') && !hud.includes('menu-3d'));
 });
 
 test('Versandportal im Mittelalter: Burgtor aus dem Castle Kit in warmem Steingrau', () => {

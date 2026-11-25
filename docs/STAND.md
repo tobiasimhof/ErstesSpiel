@@ -4,14 +4,14 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.53.0 – Feinschliff: Theke in der Einführung (5 Sekunden), Leiste oben aufgeräumt |
+| **Aktuelle Version** | v0.54.0 – Ein Spiel: die 2D-Welt ist entfernt |
 | **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–14 im Spiel, 15–18 als Gerüst |
-| **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ (3D-Test; die echte Fabrik: https://tobiasimhof.github.io/ErstesSpiel/?ansicht=2d) |
-| **Nächster Schritt** | **v0.54.0 – ein Spiel: die 2D-Welt fällt weg** (angenommen, Chat 31; Entwurf in `PLAENE.md` oben; Tobias' 3D-Fabrik bleibt, seine 2D-Fabrik ohne Andenken). Danach Entwurf Level 15 mit neuen Ausgaben fürs Gold. |
+| **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
+| **Nächster Schritt** | **Entwurf Level 15 „Der alte Magier“ mit neuen Ausgaben fürs Gold** (Reihenfolge angenommen, Chat 31): erst als Entwurf mit Zahlen aus dem Rechenwerkzeug, Tobias' OK abwarten, dann programmieren. |
 
-**Tobias' 3D-Fabrik – Level 14, alle Aufträge erledigt** (Chat 31) – danach gibt es keinen Inhalt mehr. Die 2D-Welt spielt er nicht mehr, das 3D-Spiel ist „das eigentliche Game“. Level 13 (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik): Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
+**Tobias' Fabrik (3D) – Level 14, alle Aufträge erledigt** (Chat 31) – danach gibt es keinen Inhalt mehr. Die 2D-Welt ist seit v0.54.0 entfernt (Tobias: „das 3D game, das eigentliche Game“). Level 13 (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik): Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
 
-**Echte Fabrik (2D) – Level 13, hinten angestellt** (Chat 25). Frühere Stände (Level 8, 10, 11 mit Zitaten) in `docs/archiv/STAND-LANGFASSUNG.md`.
+Frühere Stände der 2D-Fabrik (Level 8, 10, 11 mit Zitaten; zuletzt Level 13) in `docs/archiv/STAND-LANGFASSUNG.md`.
 
 ## Fahrplan
 
@@ -25,7 +25,7 @@
 
 **Nächste Schritte** (jeder erst nach Tobias' OK):
 
-- **Erledigt seit Chat 25** (Einzelheiten in `PLAENE.md`): v0.39.0–v0.46.0 (Belastungstest bis Waren auf dem Band, Level 14), v0.47.0–v0.52.0 (Kenney-Oberfläche, Ladebildschirm, Name, Schriftrolle, Einführung). **Jetzt** (Chat 31): v0.53.0 Feinschliff erledigt; v0.54.0 2D-Welt weg, dann Level 15 mit neuen Ausgaben fürs Gold.
+- **Erledigt seit Chat 25** (Einzelheiten in `PLAENE.md`): v0.39.0–v0.46.0 (Belastungstest bis Waren auf dem Band, Level 14), v0.47.0–v0.52.0 (Kenney-Oberfläche, Ladebildschirm, Name, Schriftrolle, Einführung). **Jetzt** (Chat 31): v0.53.0 Feinschliff und v0.54.0 ein Spiel ohne 2D-Welt erledigt; als Nächstes Level 15 mit neuen Ausgaben fürs Gold.
 1. **Tränke-Kapitel** (angenommen, Chat 27; Tabelle in `docs/inhalte/AUSBLICK.md`): 14 Die Tinktur (Mörser, Tinktur), 15 Der alte Magier (Zauberkessel, Traumtrank), 16 Die Kräutermühle (Heilpuder, Heiltrank), 17 Die Sternwarte (Linse, Fernrohr, Sternensand), 18 Die Zauberei (Farn, Lebens- und Manatrank). Kein bestehendes Rezept ändert sich; Feuer im Kessel von Hand (A); mehr Fläche ab Level 15. Gemahlenes Glas: **Kristallsand** (Tobias), im Steinmetz. Leitlinie: alte Maschinen bekommen neue Funktionen, neue nur, wo es Sinn ergibt.
 2. **3D-Grafik:** eigene Häuser für alle Gebäude (fertig, Möglichkeit B: Mittelalter mit ein paar Technik-Teilen; Tobias, Chat 27: „sieht sehr gut aus“). **Waren auf dem Band** (v0.46.0): jede der 40 Waren mit eigener kleiner 3D-Form, Tobias: „Ja, das sieht sehr gut aus.“ **Für später – Rückseiten** (Tobias, Chat 27, „nur eine kleine Anmerkung für später“): Erkennungszeichen und bewegte Teile sitzen vorn; baut man links und rechts einer Straße, sieht man eine Seite immer von hinten, „und da sieht man z.b. keine Unterschiede“. Eine Stadt um die Fabrik, die mit dem Level wächst (Idee).
 3. **Nach hinten verschoben:** **Weiche** (Chat 26: eigene Straßen sind besser, siehe offene Frage 4).
@@ -52,21 +52,18 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 13. **Techbaum:** Werkzeuge, Kräuter und Tränke wachsen parallel; höchstens 2 Eingänge je Maschine; jedes Produkt entsteht logisch aus seinen Zutaten.
 14. **Grafik:** entschieden – frei drehbar, Mittelalter, Spiel-Farben, eigene Häuser je Gebäude; von weitem nur Statuslichter (Vorschlag A, Chat 25). Mix aus Modern und Mittelalter: entschieden – Möglichkeit B, Mittelalter mit ein paar Technik-Teilen (Zahnräder in Messing und Stahl, später Glasrohre), sparsam, ohne Greifarm (Chat 26). Offen für später: Rückseiten der Häuser unterscheidbar machen (Chat 27). Oberfläche: Kenneys UI Pack Adventure, Rahmen B mit Eisenbeschlägen, schlicht (Chat 28). Klänge: Das Paket gefällt Tobias nicht, er spielt mit Sound auf 0 (Chat 29) – andere Klänge oder Fabrik-Geräusche, später.
 15. **Titel:** Richtung „Factory“; „Flussfactory“, „Zunft-Factory“, „Medieval Factory“ gefallen Tobias nicht – bis dahin Platzhalter „Factory“ auf dem Ladebildschirm.
+16. **Herauszoomen in 3D** (v0.54.0): Die größte Welt (46 × 38) passt auch ganz herausgezoomt nicht ganz aufs Tablet, oben fehlt ein schmaler Rand (Grenze: das 1,35-Fache der Weltgröße). Weiter herauszoomen erlauben? – Tobias fragen.
 
 ## Die letzten 3 Arbeitsschritte
+
+### v0.54.0 – Ein Spiel: die 2D-Welt ist entfernt (25.11.2026)
+
+- **Warum (Tobias, Chat 31):** „die 2D Welt komplett zu löschen, weil ich sie gar nicht mehr spiele“; Andenken nicht nötig, „Die 3D welt ist deutlich produktiver und besser“.
+- **Umgesetzt:** nur noch das 3D-Spiel mit einem Spielstand (Platz des früheren 3D-Tests, Tobias' Fabrik bleibt); kein Menüpunkt zur 2D-Welt, kein „3D-Test“ mehr; `src/view2d/` gelöscht; `?ansicht=2d` öffnet das Spiel; der Durchspiel-Test bis Level 14 läuft jetzt in 3D. Er fand: Nach dem Aufstieg auf Level 10 zoomte die Kamera nur so weit wie in der alten Welt (behoben).
+- **Offen:** Tobias' Test; offene Frage 16 (Herauszoomen); Entwurf Level 15.
 
 ### v0.53.0 – Feinschliff: Theke in der Einführung, Leiste oben (25.11.2026)
 
 - **Warum (Tobias, Chat 31):** „Für die Einführung reicht es, wenn bei diesem Schritt einfach 5 sekunden herunterlaufen“; die Anzeigen oben „können gerne weg“.
 - **Umgesetzt:** In Hildes Schritt 6 kommt der erste Kunde genau 5 Sekunden nach dem Hinlegen, Hilde und die Theke zählen herunter (nur neues Spiel, bis zum ersten Verkauf). Oben nur Gold, Laden-Level, ☰; Bilder/s nur im Testmodus; „⛶ Vollbild“ und Versionsnummer im Menü.
 - **Offen:** Tobias' Test; v0.54.0.
-
-### v0.52.2 – Antworten zur Beratung, Entwurf v0.53.0 und v0.54.0 (25.11.2026, nur Doku)
-
-- **Tobias:** „Ich finde den Schritt gut“ (Weg 1); in der Einführung 5 Sekunden bis zum Verkauf, „damit man das ganze auch sieht“; die Anzeigen oben „können gerne weg“; die 2D-Welt evtl. ganz löschen – Level 14 im 3D-Spiel ist fertig.
-- **Claude:** Entwurf v0.53.0 (Theke A ohne B, Leiste oben) und v0.54.0 (2D weg, Fabrik bleibt) in `PLAENE.md`, 3 Fragen. **Antwort:** A ohne B, 2D-Welt löschen ohne Andenken, Reihenfolge passt.
-
-### v0.52.1 – Tobias' Test von v0.52.0, Durchsicht und Beratung vorbereitet (25.11.2026, nur Doku)
-
-- **Tobias:** v0.52.0 „erklärt optimal und kurz das Spielprinzip“; Grafik und Design sind für ihn erstmal ein „abschließendes Meilenstein“. Aufgefallen: Ein Schritt war „innerhalb von 1 sekunde verkauft“ – zu schnell. Frage: noch etwas ändern oder zurück zu den Leveln? Beratung im neuen Chat.
-- **Claude:** Ursache (Schritt 6: Der Kunden-Takt läuft auch bei leerer Theke) und Vorschlag A + B; Durchsicht Design, Level, Aufräumen; zwei Wege; Empfehlung und 5 Fragen in `PLAENE.md`.

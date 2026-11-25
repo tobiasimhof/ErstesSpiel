@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 25.11.2026 – Chat 31: Beratung – zurück zu Logik und Leveln (v0.52.2, v0.53.0)
+### 25.11.2026 – Chat 31: Beratung – zurück zu Logik und Leveln (v0.52.2, v0.53.0, v0.54.0)
 
 **Tobias:** „Lies dir den aktuellen Stand durch. "Logik und Leveln. Vorneweg ein kleiner Feinschliff: die Theke in der Einführung und die Anzeigen oben. Dann Level 15 zusammen mit neuen Ausgaben fürs Gold. " Das war dein Vorschlag für den nächsten Schritt. Ich finde den Schritt gut. Lass uns zuerst den Schritt der Einführung so ändern, dass man sobald man einen Block in die Theke legt, es 5 sekunden dauert bis der Block verkauft wird, damit man das ganze auch sieht. Dann können oben gerne die Buttons weg, die du vorgeschlagen hast und wir könnten uns überlegen, die 2D Welt komplett zu löschen, weil ich sie gar nicht mehr spiele und das 3D game, das eigentliche Game geworden ist und ich da auch schon auf lvl 14 alle Missionen abgeschlossen habe“
 
@@ -17,6 +17,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat v0.53.0 umgesetzt: In der Einführung eines neuen Spiels kommt der Kunde einer Theke genau 5 Sekunden nach dem Hinlegen (bis zum ersten Verkauf); Hilde („Der nächste Kunde kommt in 4 s …“) und die Theke zählen herunter; B weggelassen. Oben nur noch Gold, Laden-Level und ☰ – Bilder/s nur im Testmodus, „⛶ Vollbild“ und die Versionsnummer im Menü.
 
 **Umgesetzt:** v0.53.0. Als Nächstes v0.54.0 (die 2D-Welt fällt weg).
+
+**Tobias:** „Okay, sag Bescheid wenn es live ist“ – nach v0.53.0: „Ja, hat alles funktioniert. Du kannst gerne mit dem nächsten Schritt anfangen“
+
+**Claude** hat v0.54.0 umgesetzt: nur noch das Spiel in 3D mit einem Spielstand (auf dem Platz des früheren 3D-Tests, Tobias' Fabrik bleibt unverändert); der Menüpunkt zur 2D-Welt und „3D-Test“ sind weg, `src/view2d/` ist gelöscht, alte Links mit `?ansicht=2d` öffnen das Spiel; der alte 2D-Spielstand bleibt unberührt im Browser. Der lange Browser-Test (Durchspielen bis Level 14) läuft jetzt im 3D-Spiel. Er fand dabei: Nach dem Aufstieg auf Level 10 zoomte die 3D-Kamera nur so weit heraus wie in der alten, kleineren Welt (behoben); und die größte Welt (46 × 38) passt in 3D auch ganz herausgezoomt nicht ganz aufs Tablet – offene Frage an Tobias, ob man weiter herauszoomen können soll.
+
+**Umgesetzt:** v0.54.0. Als Nächstes der Entwurf für Level 15 mit neuen Ausgaben fürs Gold.
 
 ### 24.11.2026 – Chat 30: Einführung mit Hilde (v0.52.0)
 

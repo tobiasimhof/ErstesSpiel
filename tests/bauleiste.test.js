@@ -1,12 +1,11 @@
-// v0.18.0: Bauleiste mit Reitern (Holz, Stein, Eisen, Kräuter) und Platz unter
-// der Karte, damit die unterste Reihe über die Bauleiste geschoben werden kann.
+// v0.18.0: Bauleiste mit Reitern (Holz, Stein, Eisen, Kräuter). Den Platz unter
+// der Karte für die Bauleiste (2D-Kamera) gibt es seit v0.54.0 nur noch in 3D.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { BUILDINGS, BUILD_ALWAYS, BUILD_MENU, BUILD_TABS } from '../src/core/data/buildings.js';
 import { ITEMS } from '../src/core/data/items.js';
 import { unlocksOf } from '../src/core/levels.js';
-import { clampCamera, createCamera, panBy, setViewSize } from '../src/view2d/camera.js';
 
 // v0.19.0 (Tobias): Der Reiter „Kräuter“ heißt „Erde“.
 // v0.26.0: dazu „Werkstatt“ für die Werkzeug-Maschinen ab Level 9.
@@ -49,37 +48,4 @@ test('Level-Fenster nennt die freigeschalteten Gebäude weiter wie bisher', () =
   assert.deepEqual(unlocksOf(1).buildings.sort(), ['holzfaeller', 'lagerhaus', 'saegewerk', 'versandportal']);
   assert.deepEqual(unlocksOf(7).buildings, ['beet', 'flachsbreche', 'webstube']);
   assert.deepEqual(unlocksOf(8).buildings, ['kraeuterstube']);
-});
-
-function camera(width, height) {
-  const cam = createCamera();
-  setViewSize(cam, width, height);
-  return cam;
-}
-
-test('Kamera: Mit Platz unten lässt sich die unterste Reihe über die Bauleiste schieben', () => {
-  const world = { x: 0, y: 0, width: 2000, height: 2000 };
-  for (const zoom of [0.5, 1, 2]) {
-    const cam = camera(1280, 756);
-    cam.zoom = zoom;
-    const bounds = { ...world, padBottom: 158 };
-    panBy(cam, 0, -1e7, bounds); // ganz nach unten schieben
-    const worldBottomOnScreen = (world.y + world.height - cam.y) * cam.zoom;
-    assert.ok(Math.abs(worldBottomOnScreen - (756 - 158)) < 1e-6, `Zoom ${zoom}: Weltrand bei ${worldBottomOnScreen}`);
-    // Ohne Platz endet die Karte am Bildschirmrand (wie bisher).
-    panBy(cam, 0, -1e7, world);
-    assert.ok(Math.abs((world.y + world.height - cam.y) * cam.zoom - 756) < 1e-6);
-  }
-});
-
-test('Kamera: Der Platz gilt nur unten – oben und an den Seiten bleibt alles wie bisher', () => {
-  const world = { x: 0, y: 0, width: 2000, height: 2000 };
-  const cam = camera(800, 400);
-  panBy(cam, 1e7, 1e7, { ...world, padBottom: 120 });
-  assert.equal(cam.x, 0);
-  assert.equal(cam.y, 0);
-  panBy(cam, -1e7, 0, { ...world, padBottom: 120 });
-  assert.equal(cam.x, 2000 - 800);
-  clampCamera(cam, { ...world, padBottom: 0 });
-  assert.equal(cam.y, 0);
 });

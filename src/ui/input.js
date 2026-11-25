@@ -8,7 +8,7 @@
 // - onDragCancel():           ... abgebrochen (z. B. zweiter Finger kommt dazu)
 // - onPan(dx, dy):            Karte verschieben (zwei Finger, rechte/mittlere Maustaste)
 // - onZoom(x, y, factor):     zoomen (zwei Finger, Mausrad)
-// - onRotate(angle):          v0.34.0, nur im 3D-Test: zwei Finger umeinander
+// - onRotate(angle):          v0.34.0: zwei Finger umeinander
 //                             drehen (Bogenmaß seit dem letzten Aufruf)
 // - onInteract():             irgendeine Berührung (z. B. um Hinweise auszublenden)
 // Alle Koordinaten sind CSS-Pixel relativ zum Element.

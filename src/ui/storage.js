@@ -6,11 +6,13 @@ import { deserializeGame, serializeGame } from '../core/save.js';
 let KEY = 'erstesspiel-spielstand';
 const SETTINGS_KEY = 'erstesspiel-einstellungen';
 
-// v0.34.0: Der 3D-Test hat seinen eigenen Spielstand (Tobias, Chat 24: „Ich
-// will es erstmal testen, bevor wir die ganze Spielwelt in die "Neue Grafik"
-// holen.“). Muss vor dem ersten Laden gesetzt werden; Sichern, Laden aus einer
+// Der Spielplatz wird vor dem ersten Laden gesetzt; Sichern, Laden aus einer
 // Datei und „Neues Spiel“ betreffen dann nur diesen Spielstand.
-export const TEST_3D_SLOT = '3d-test';
+// v0.34.0 bekam der 3D-Test einen eigenen Platz (Tobias, Chat 24); seit v0.54.0
+// ist er das einzige Spiel – der Platz behält seinen Namen, damit Tobias'
+// Fabrik bleibt. Der Spielstand der früheren 2D-Welt liegt unberührt unter
+// „erstesspiel-spielstand“ (wird nicht mehr geladen).
+export const GAME_SLOT = '3d-test';
 // v0.39.0: Belastungstest – eigener Platz, in den aber nie gespeichert wird
 export const STRESS_SLOT = 'belastungstest';
 export function useSaveSlot(slot) {
