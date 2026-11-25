@@ -2608,16 +2608,21 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await shot('21-karte-weit');
 
   // v0.54.0: Der Test dauert in 3D länger, das Holzfällerlager kann bis hier
-  // leer gelaufen sein – vorher auffüllen, damit es sicher arbeitet
+  // leer gelaufen sein – dann einen Holzstamm kaufen und einlegen (wie im
+  // 2D-Ablauf arbeitet es danach mit einem Stamm; weiter unten wird aufgefüllt)
   const hfTest = await game(page, () => {
     const b = window.__game.state.buildings.find((x) => x.type === 'holzfaeller');
-    return { x: b.x, y: b.y };
+    return { x: b.x, y: b.y, inside: (b.prod.loaded ? 1 : 0) + b.prod.queued };
   });
-  await tapTile(page, hfTest.x, hfTest.y);
-  await sleep(300);
-  if (await infoButton(page, 'refill').isEnabled().catch(() => false)) await infoButton(page, 'refill').tap();
-  await sleep(150);
-  await page.tap('#info-close').catch(() => {});
+  if (hfTest.inside === 0) {
+    await tapTile(page, hfTest.x, hfTest.y);
+    await sleep(300);
+    await infoButton(page, 'buy:holzstamm').tap();
+    await sleep(150);
+    await infoButton(page, 'load:holzstamm').tap();
+    await sleep(150);
+    await page.tap('#info-close').catch(() => {});
+  }
   await page.tap('#btn-menu');
   await page.tap('#menu-test-mode');
   await sleep(80);
