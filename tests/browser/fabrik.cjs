@@ -664,10 +664,19 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   );
   await page.tap('#info-close');
 
-  await game(page, () => window.__game.simulate(14));
+  // v0.54.0: über die 14 Sekunden nachsehen statt nur am Ende – ein Block kommt
+  // etwa alle 4,5 s, ob gerade einer auf dem Band liegt, hängt davon ab, wie viel
+  // echte Zeit vorher verging (in 3D auf dem Handy mehr)
+  const onBelt = await game(page, () => {
+    let most = 0;
+    for (let i = 0; i < 28; i++) {
+      window.__game.simulate(0.5);
+      most = Math.max(most, Object.values(window.__game.state.belts).filter((b) => b.item).length);
+    }
+    return most;
+  });
   await sleep(120);
-  const onBelt = await game(page, () => Object.values(window.__game.state.belts).filter((b) => b.item).length);
-  check(onBelt >= 1, `Waren laufen über das Band (${onBelt} unterwegs)`);
+  check(onBelt >= 1, `Waren laufen über das Band (bis zu ${onBelt} gleichzeitig unterwegs)`);
   await shot('8-produktion');
 
   await game(page, () => window.__game.simulate(90));
