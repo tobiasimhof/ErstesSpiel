@@ -3018,7 +3018,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await toastText()).includes('-sicherung.txt“ geladen'), `Meldung: Spielstand geladen (${await toastText()})`);
   check(
     (await page2.textContent('#modal-content h2')) === '📂 Spielstand geladen' &&
-      (await page2.textContent('#modal-content')).includes('Seit dem Sichern sind 2 Std. vergangen'),
+      // zwischen Sichern und Laden kann gut eine Minute vergehen („2 Std. 1 Min.“)
+      (await page2.textContent('#modal-content')).includes('Seit dem Sichern sind 2 Std.'),
     'Nach dem Laden holt die Fabrik die 2 Stunden seit dem Sichern nach („Seit dem Sichern sind 2 Std. vergangen“)',
   );
   const keptCopy = await game(page2, () => JSON.parse(localStorage.getItem('erstesspiel-spielstand-3d-test-vor-dem-laden')).state.buildings.length);
