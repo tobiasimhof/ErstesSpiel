@@ -1,5 +1,6 @@
-// Browser-Test, 3D-Teil (der 3D-Test mit eigenem Spielstand). Gestartet von
-// smoke.cjs; ONLY=3d prüft nur diesen Teil.
+// Browser-Test, 3D-Teil: Start, Ladebildschirm, Modelle, Kamera, Häuser, Waren,
+// Beete, Oberfläche, Belastungstest. Gestartet von smoke.cjs; ONLY=3d prüft nur
+// diesen Teil (das Durchspielen bis Level 14 steht in fabrik.cjs).
 
 const {
   fs,
@@ -11,7 +12,6 @@ const {
   check,
   sleep,
   tilePos,
-  worldPos,
   tapTile,
   touchDragTiles,
   game,
@@ -31,13 +31,13 @@ const {
   setDevice,
 } = require('./helpers.cjs');
 
-// v0.34.0: 3D-Test (Tobias, Chat 24) – Level 1 in der neuen Grafik mit
-// eigenem Spielstand. Spielt per Touch: Holzstamm einlegen, Band ziehen,
+// v0.34.0: 3D-Test (Tobias, Chat 24) – Level 1 in der neuen Grafik; seit
+// v0.54.0 das einzige Spiel. Spielt per Touch: Holzstamm einlegen, Band ziehen,
 // Sägewerk bauen, antippen, Kamera drehen und zoomen, abreißen; seit v0.35.0
 // auch Bereich markieren, verschieben, drehen und Fläche kaufen.
 async function run3d(browser, baseUrl, device, expectedVersion) {
   setDevice(`${device.name}-3d`);
-  console.log(`\n${device.name} – 3D-Test`);
+  console.log(`\n${device.name} – 3D-Ansicht`);
   const context = await browser.newContext({
     viewport: device.viewport,
     deviceScaleFactor: device.deviceScaleFactor,
@@ -52,27 +52,38 @@ async function run3d(browser, baseUrl, device, expectedVersion) {
   const shot = (name) => page.screenshot({ path: path.join(OUT, `${device.name}-${name}.png`) });
   const vp = device.viewport;
 
-  // Die echte Fabrik (2D, seit v0.38.0 ?ansicht=2d) mit etwas Gold – sie darf
-  // sich durch den 3D-Test nicht ändern
-  await page.goto(`${baseUrl}?ansicht=2d`);
+  // v0.54.0: Die 2D-Welt ist weg. Ein Spielstand der früheren 2D-Welt (unter
+  // „erstesspiel-spielstand“, hier mit 4321 Gold) bleibt unberührt und wird
+  // nicht geladen. Erst ein Spiel anlegen (der Name „Tester“ bleibt auf dem
+  // Gerät gemerkt), dann seinen Spielstand als alte 2D-Fabrik ablegen und neu
+  // beginnen.
+  await page.goto(baseUrl);
   await waitForGame(page);
   await game(page, () => {
     window.__game.state.gold = 4321;
     window.__game.saveNow();
+    const old2d = localStorage.getItem('erstesspiel-spielstand-3d-test');
+    const swap = () => {
+      localStorage.setItem('erstesspiel-spielstand', old2d);
+      localStorage.removeItem('erstesspiel-spielstand-3d-test');
+    };
+    swap();
+    // Das Spiel speichert beim Verlassen der Seite – danach noch einmal tauschen
+    window.addEventListener('pagehide', swap);
   });
+  const real = await game(page, () => localStorage.getItem('erstesspiel-spielstand'));
   await page.tap('#btn-menu');
   await sleep(100);
   const menuBox = await page.locator('#menu').boundingBox();
   check(
-    (await page.textContent('#menu-3d')).includes('3D-Test') && menuBox.y + menuBox.height <= vp.height,
-    `Menü ☰ zeigt „🧊 Zurück zum 3D-Test“ und passt auf den Bildschirm (${Math.round(menuBox.y + menuBox.height)} ≤ ${vp.height})`,
+    !(await page.isVisible('#menu-3d')) && !(await page.textContent('#menu')).includes('2D') && menuBox.y + menuBox.height <= vp.height,
+    `Menü ☰ ohne Wechsel zur 2D-Welt, passt auf den Bildschirm (${Math.round(menuBox.y + menuBox.height)} ≤ ${vp.height})`,
   );
-  await page.tap('#menu-3d');
-  // v0.38.0: Der 3D-Test ist der Start – der Link ohne Zusatz
-  await page.waitForURL((u) => !u.search.includes('ansicht'));
+  // Ein alter Link auf die 2D-Welt öffnet einfach das Spiel – hier ohne Spielstand
+  await page.goto(`${baseUrl}?ansicht=2d`);
   // v0.50.0 (Tobias, Chat 29): Ladebildschirm bei jedem Start – „ähnlich wie bei
-  // ClashofClans“. Der 3D-Test hat noch keinen Spielstand: erster Start, also
-  // „Wie heißt du?“; der Name aus der echten Fabrik steht schon im Feld.
+  // ClashofClans“. Noch kein Spielstand: erster Start, also „Wie heißt du?“;
+  // der Name vom Gerät steht schon im Feld.
   const firstLook = await page.evaluate(() => ({
     shown: !document.getElementById('loading').hidden,
     title: document.getElementById('loading-title').textContent,
@@ -102,8 +113,6 @@ async function run3d(browser, baseUrl, device, expectedVersion) {
   await skipTutorial(page);
   const named = await game(page, () => ({ name: window.__game.state.playerName, stored: JSON.parse(localStorage.getItem('erstesspiel-spielstand-3d-test')).state.playerName }));
   check(named.name === 'Tobias' && named.stored === 'Tobias', `Der Name steht im Spielstand (${JSON.stringify(named)})`);
-  // so hat die echte Fabrik beim Wechsel gespeichert – der 3D-Test darf daran nichts ändern
-  const real = await game(page, () => localStorage.getItem('erstesspiel-spielstand'));
   await sleep(1500);
   const start = await game(page, () => ({
     level: window.__game.state.shopLevel,
@@ -740,14 +749,14 @@ async function run3d(browser, baseUrl, device, expectedVersion) {
   await page.tap('#build-close');
   await sleep(200);
 
-  // Eigener Spielstand: der 3D-Test speichert getrennt, die echte Fabrik bleibt
+  // v0.54.0: Gespeichert wird auf dem Platz des früheren 3D-Tests, die alte 2D-Fabrik bleibt
   await game(page, () => window.__game.saveNow());
   const slots = await game(page, () => ({
     test: localStorage.getItem('erstesspiel-spielstand-3d-test'),
     real: localStorage.getItem('erstesspiel-spielstand'),
   }));
-  check(Boolean(slots.test) && slots.real === real, '3D-Test hat einen eigenen Spielstand, die echte Fabrik bleibt unverändert');
-  check(errors.length === 0, `Keine Fehler in der Konsole des 3D-Tests${errors.length ? ': ' + errors.join(' | ') : ''}`);
+  check(Boolean(slots.test) && slots.real === real, 'Spielstand unter „erstesspiel-spielstand-3d-test“, der alte 2D-Spielstand bleibt unverändert');
+  check(errors.length === 0, `Keine Fehler in der Konsole${errors.length ? ': ' + errors.join(' | ') : ''}`);
 
   // v0.39.0: Belastungstest – im Testmodus aus dem Menü, volle Fabrik, wird nie gespeichert
   await page.tap('#btn-menu');
@@ -858,17 +867,12 @@ async function run3d(browser, baseUrl, device, expectedVersion) {
   await page.tap('#modal-close');
   await sleep(150);
 
-  // Zurück zur echten Fabrik
-  await page.tap('#btn-menu');
-  await sleep(100);
-  check((await page.textContent('#menu-3d')).includes('Zur echten Fabrik'), 'Menü im 3D-Test: „🗺️ Zur echten Fabrik (2D)“');
-  await page.tap('#menu-3d');
-  await page.waitForURL(/ansicht=2d/);
+  // v0.54.0: Ein alter Link auf die 2D-Welt öffnet dasselbe Spiel (Level 2, nicht die 4321 Gold der alten 2D-Fabrik)
+  await game(page, () => window.__game.saveNow());
+  await page.goto(`${baseUrl}?ansicht=2d`);
   await waitForGame(page);
-  const back = await game(page, () => ({ gold: window.__game.state.gold, view3d: window.__game.view3d }));
-  check(back.gold === 4321 && back.view3d === null, `Zurück in der echten Fabrik (2D, ${back.gold} Gold)`);
-  // aufräumen: der nächste Durchlauf beginnt mit einem neuen 3D-Test
-  await game(page, () => localStorage.removeItem('erstesspiel-spielstand-3d-test'));
+  const back = await game(page, () => ({ gold: window.__game.state.gold, level: window.__game.state.shopLevel, view3d: Boolean(window.__game.view3d), real: localStorage.getItem('erstesspiel-spielstand') }));
+  check(back.view3d && back.level === 2 && back.gold !== 4321 && back.real === real, `„?ansicht=2d“ öffnet das Spiel in 3D mit demselben Spielstand (Level ${back.level}, ${back.gold} Gold)`);
   await context.close();
 }
 

@@ -73,8 +73,6 @@
         "./src/ui/tutorial.js": "./src/ui/tutorial.js?v=0.53.0",
         "./src/ui/warehouse.js": "./src/ui/warehouse.js?v=0.53.0",
         "./src/version.js": "./src/version.js?v=0.53.0",
-        "./src/view2d/camera.js": "./src/view2d/camera.js?v=0.53.0",
-        "./src/view2d/renderer.js": "./src/view2d/renderer.js?v=0.53.0",
         "./src/view3d/camera3d.js": "./src/view3d/camera3d.js?v=0.53.0",
         "./src/view3d/itemForms.js": "./src/view3d/itemForms.js?v=0.53.0",
         "./src/view3d/items3d.js": "./src/view3d/items3d.js?v=0.53.0",
@@ -133,7 +131,6 @@
           <button id="menu-test-mode" type="button">⏩ Testmodus: aus</button>
           <button id="menu-test-pack" type="button" hidden>🎁 Testpaket: 1.000 Gold + je 50 Waren</button>
           <button id="menu-stress" type="button" hidden>🏭 Belastungstest (volle Fabrik)</button>
-          <button id="menu-3d" type="button">🧊 Zurück zum 3D-Test</button>
           <button id="menu-new-game" type="button">🔄 Neues Spiel</button>
           <div id="menu-version" class="menu-version">Version</div>
         </div>
@@ -160,14 +157,14 @@
           <p id="info-hint" class="info-hint"></p>
         </aside>
 
-        <div id="hint">Ziehen: verschieben · Zwei Finger: zoomen · Gebäude antippen</div>
+        <div id="hint">Ziehen: verschieben · Zwei Finger: zoomen und drehen · Gebäude antippen</div>
 
-        <!-- v0.34.0: 3D-Test – Kamera drehen (nur dort sichtbar) -->
+        <!-- v0.34.0: Kamera drehen -->
         <div id="stress-banner" class="stress-banner" hidden>
           <span>🏭 Belastungstest: volle Fabrik, wird nicht gespeichert. Zoome heraus und wieder heran und lies oben die Bilder/s ab.</span>
           <button id="stress-exit" type="button">↩ Beenden</button>
         </div>
-        <div id="turn-buttons" class="turn-buttons" hidden>
+        <div id="turn-buttons" class="turn-buttons">
           <button id="btn-turn-left" type="button" title="Taste Q" aria-label="Links herum drehen">⟲</button>
           <button id="btn-turn-right" type="button" title="Taste E" aria-label="Rechts herum drehen">⟳</button>
         </div>
@@ -255,7 +252,7 @@
       (function () {
         var messages = [];
         function show() {
-          // v0.34.0: Der 3D-Test lädt erst seine Modelle und meldet Fehler selbst.
+          // v0.34.0: Die 3D-Ansicht lädt erst ihre Modelle und meldet Fehler selbst.
           if (window.__game || window.__loading3d) return;
           document.getElementById('boot-error-text').textContent =
             messages.join(' · ') || 'Das Spiel hat nicht rechtzeitig geladen.';

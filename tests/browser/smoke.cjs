@@ -3,16 +3,17 @@
 // wichtigsten Funktionen per Touch durch. Screenshots landen im Ordner aus
 // SCREENSHOT_DIR (Standard: test-output/).
 //
-// Aufruf: node tests/browser/smoke.cjs (ONLY=3d davor: nur der 3D-Test, ONLY=2d: nur die echte Fabrik,
-// ONLY=einfuehrung: nur Hildes Einführung)
-// Teile: helpers.cjs (gemeinsame Hilfen), spiel2d.cjs (2D), spiel3d.cjs (3D), einfuehrung.cjs (Hilde).
+// Aufruf: node tests/browser/smoke.cjs (ONLY=fabrik davor: nur das Durchspielen bis Level 14,
+// ONLY=3d: nur die 3D-Ansicht, ONLY=einfuehrung: nur Hildes Einführung)
+// Teile: helpers.cjs (gemeinsame Hilfen), fabrik.cjs (Durchspielen, Hochformat, schmales Handy),
+// spiel3d.cjs (3D-Ansicht), einfuehrung.cjs (Hilde). Seit v0.54.0 alles im 3D-Spiel.
 
 const fs = require('node:fs');
 const path = require('node:path');
 const { chromium } = require('playwright');
 
 const { DEVICES, OUT, ROOT, startServer, summary } = require('./helpers.cjs');
-const { runDevice, runPortrait, runNarrowPhone } = require('./spiel2d.cjs');
+const { runDevice, runPortrait, runNarrowPhone } = require('./fabrik.cjs');
 const { run3d } = require('./spiel3d.cjs');
 const { runTutorial } = require('./einfuehrung.cjs');
 
@@ -25,16 +26,16 @@ const { runTutorial } = require('./einfuehrung.cjs');
   const baseUrl = `http://127.0.0.1:${server.address().port}/`;
   const browser = await chromium.launch();
   try {
-    // v0.34.0: ONLY=3d prüft nur den 3D-Test (schneller beim Entwickeln)
-    if (process.env.ONLY !== '3d' && process.env.ONLY !== 'einfuehrung') {
+    const only = process.env.ONLY;
+    // ONLY=fabrik | 3d | einfuehrung prüft nur diesen Teil (schneller beim Entwickeln)
+    if (!only || only === 'fabrik') {
       for (const device of DEVICES) await runDevice(browser, baseUrl, device, expectedVersion);
       await runPortrait(browser, baseUrl);
       await runNarrowPhone(browser, baseUrl);
     }
-    // v0.41.0: ONLY=2d prüft nur die echte Fabrik
-    if (process.env.ONLY !== '2d' && process.env.ONLY !== 'einfuehrung') for (const device of DEVICES) await run3d(browser, baseUrl, device, expectedVersion);
-    // v0.52.0: Einführung mit Hilde (ONLY=einfuehrung: nur sie)
-    if (process.env.ONLY !== '2d') for (const device of DEVICES) await runTutorial(browser, baseUrl, device);
+    if (!only || only === '3d') for (const device of DEVICES) await run3d(browser, baseUrl, device, expectedVersion);
+    // v0.52.0: Einführung mit Hilde
+    if (!only || only === 'einfuehrung') for (const device of DEVICES) await runTutorial(browser, baseUrl, device);
   } finally {
     await browser.close();
     server.close();

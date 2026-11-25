@@ -1,7 +1,7 @@
 // v0.21.0: Maschinen zeigen auf der Karte, was sie herstellen (Tobias, Chat 15/16:
 // „Variante B“, ohne Gebäudebild, Farbe je Reiter). Wie es aussieht, prüft der
-// Browser-Test mit Screenshots; hier, WAS ein Gebäude zeigt, die Farben und
-// der sichtbare Ausschnitt (nur zeichnen, was im Bild ist).
+// Browser-Test mit Screenshots; hier, WAS ein Gebäude zeigt (die 3D-Schilder
+// nutzen buildingFace), und die Farben.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
@@ -11,7 +11,6 @@ import { RECIPES } from '../src/core/data/recipes.js';
 import { addRawToSource, productionOf, setRecipe, updateProduction } from '../src/core/production.js';
 import { createNewGame } from '../src/core/state.js';
 import { buildingFace } from '../src/ui/buildingFace.js';
-import { createCamera, intersects, setViewSize, visibleRect } from '../src/view2d/camera.js';
 
 function level8() {
   const state = createNewGame(21);
@@ -160,19 +159,4 @@ test('Farbe je Reiter (Tobias): alle Gebäude eines Reiters gleich, die Reiter v
     assert.ok(!tabColors.includes(BUILDINGS[type].color.toLowerCase()), `${type} hat eine eigene Farbe`);
   }
   for (const [type, def] of Object.entries(BUILDINGS)) assert.match(def.color, /^#[0-9a-f]{6}$/i, type);
-});
-
-test('Sichtbarer Ausschnitt: nur zeichnen, was hineinragt', () => {
-  const cam = createCamera();
-  setViewSize(cam, 800, 400);
-  cam.x = 100;
-  cam.y = 50;
-  cam.zoom = 2; // 400 × 200 Welteinheiten zu sehen
-  assert.deepEqual(visibleRect(cam), { x0: 100, y0: 50, x1: 500, y1: 250 });
-  assert.deepEqual(visibleRect(cam, 10), { x0: 90, y0: 40, x1: 510, y1: 260 });
-  const view = visibleRect(cam);
-  assert.equal(intersects(view, 0, 0, 96, 96), false, 'ganz links oben außerhalb');
-  assert.equal(intersects(view, 60, 20, 48, 48), true, 'ragt ein Stück hinein');
-  assert.equal(intersects(view, 500, 100, 48, 48), false, 'beginnt genau am rechten Rand');
-  assert.equal(intersects(view, 200, 100, 48, 48), true, 'mittendrin');
 });

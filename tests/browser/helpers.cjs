@@ -68,33 +68,53 @@ function check(condition, message) {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-// Bildschirmposition (Seite) der Mitte eines Feldes
+// Bildschirmposition (Seite) der Mitte eines Feldes am Boden (seit v0.54.0
+// nur noch in 3D)
 async function tilePos(page, tx, ty) {
-  return page.evaluate(
-    ([x, y]) => {
-      const { camera, TILE } = window.__game;
-      const rect = document.getElementById('game').getBoundingClientRect();
-      return {
-        x: rect.left + ((x + 0.5) * TILE - camera.x) * camera.zoom,
-        y: rect.top + ((y + 0.5) * TILE - camera.y) * camera.zoom,
-      };
-    },
-    [tx, ty],
-  );
+  return page.evaluate(([x, y]) => window.__game.view3d.tile(x, y), [tx, ty]);
 }
 
-async function worldPos(page, wx, wy) {
-  return page.evaluate(
-    ([x, y]) => {
-      const { camera } = window.__game;
-      const rect = document.getElementById('game').getBoundingClientRect();
-      return { x: rect.left + (x - camera.x) * camera.zoom, y: rect.top + (y - camera.y) * camera.zoom };
+// v0.54.0: Liegen die Felder frei im Bild – nicht unter der Leiste oben, der
+// Bauleiste, dem Infofenster oder außerhalb? (In 2D passte das Grundstück
+// immer ganz ins Bild; in 3D zeigt die Kamera oft nur einen Ausschnitt.)
+async function tilesFree(page, tiles) {
+  return page.evaluate((list) => {
+    const canvas = document.getElementById('game');
+    return list.every(([x, y]) => {
+      const p = window.__game.view3d.tile(x, y);
+      return Number.isFinite(p.x) && Number.isFinite(p.y) && document.elementFromPoint(p.x, p.y) === canvas;
+    });
+  }, tiles);
+}
+
+// v0.54.0: Holt Felder in die Mitte des Bilds (Rechteck um sie herum, mit
+// Platz für die Bauleiste unten und das Infofenster rechts).
+async function showTiles(page, tiles, margin = 3) {
+  await page.evaluate(
+    ([list, m]) => {
+      const xs = list.map((t) => t[0]);
+      const ys = list.map((t) => t[1]);
+      const x0 = Math.min(...xs) - m;
+      const y0 = Math.min(...ys) - m;
+      const rect = { x: x0, y: y0, width: Math.max(...xs) + 1 + m - x0, height: Math.max(...ys) + 1 + m - y0 };
+      const bars = [...document.querySelectorAll('#bottom-bar, #build-bar, #tool-bar')]
+        .filter((n) => n.offsetParent)
+        .map((n) => n.getBoundingClientRect().top);
+      const padBottom = bars.length ? Math.max(0, innerHeight - Math.min(...bars)) : 80;
+      window.__game.camera.fitRect(rect, { padding: 48, padBottom });
     },
-    [wx, wy],
+    [tiles, margin],
   );
+  await sleep(60);
+}
+
+// Holt ein Feld ins Bild, falls es verdeckt oder draußen ist
+async function centerOn(page, tx, ty, margin = 3) {
+  await showTiles(page, [[tx, ty]], margin);
 }
 
 async function tapTile(page, tx, ty) {
+  if (!(await tilesFree(page, [[tx, ty]]))) await centerOn(page, tx, ty);
   const p = await tilePos(page, tx, ty);
   await page.touchscreen.tap(p.x, p.y);
   await sleep(80);
@@ -103,6 +123,7 @@ async function tapTile(page, tx, ty) {
 // Echte Touch-Ereignisse über die Chrome-Schnittstelle: ein Finger zieht
 // über die angegebenen Felder.
 async function touchDragTiles(page, cdp, tiles) {
+  if (!(await tilesFree(page, tiles))) await showTiles(page, tiles, 1);
   const points = [];
   for (const [x, y] of tiles) points.push(await tilePos(page, x, y));
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ ...points[0], id: 7 }] });
@@ -260,7 +281,9 @@ module.exports = {
   check,
   sleep,
   tilePos,
-  worldPos,
+  tilesFree,
+  showTiles,
+  centerOn,
   tapTile,
   touchDragTiles,
   game,

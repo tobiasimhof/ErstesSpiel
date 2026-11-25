@@ -6,8 +6,6 @@ import { beltAt, buildingAt, createNewGame, isOwned } from './core/state.js';
 import { placeBuilding } from './core/buildings.js';
 import { createStressFactory } from './core/belastungstest.js';
 import { TICK, simulate, tick } from './core/sim.js';
-import { TILE, createCamera, setViewSize, zoomAt, panBy, fitRect, clampCamera, worldToScreen } from './view2d/camera.js';
-import { createRenderer } from './view2d/renderer.js';
 import { attachInput } from './ui/input.js';
 import { createHud } from './ui/hud.js';
 import { createAudioWindow } from './ui/audio.js';
@@ -26,8 +24,8 @@ import { createLevelView } from './ui/levels.js';
 import { numberFormat } from './ui/format.js';
 import { redrawItemIcons } from './ui/itemArt.js';
 import {
+  GAME_SLOT,
   STRESS_SLOT,
-  TEST_3D_SLOT,
   clearGame,
   loadGame,
   loadSettings,
@@ -51,13 +49,11 @@ import { hasPlayerName, setPlayerName } from './core/player.js';
 import { createTutorialView } from './ui/tutorial.js';
 import { tutorialStep } from './core/tutorial.js';
 
-// v0.34.0: 3D-Test (Tobias, Chat 24) – das Spiel in 3D mit einem eigenen
-// Spielstand ab Level 1; die echte Fabrik (2D) bleibt unberührt. Spielregeln,
-// Steuerung und Fenster sind dieselben. Seit v0.38.0 öffnet der Link den
-// 3D-Test (Tobias, Chat 25: „Ja, jetzt das 3D Spiel fokussieren“); die echte
-// Fabrik zeigt index.html?ansicht=2d (alte Links mit ?ansicht=3d gehen weiter).
-const VIEW_3D = new URLSearchParams(location.search).get('ansicht') !== '2d';
-if (VIEW_3D) useSaveSlot(TEST_3D_SLOT);
+// v0.54.0: ein Spiel in 3D – die 2D-Welt ist weg (Tobias, Chat 31: „die 2D
+// Welt komplett zu löschen, weil ich sie gar nicht mehr spiele und das 3D game,
+// das eigentliche Game geworden ist“). Der Spielstand bleibt auf dem Platz des
+// früheren 3D-Tests (GAME_SLOT); alte Links mit ?ansicht=2d öffnen das Spiel.
+useSaveSlot(GAME_SLOT);
 
 // v0.39.0: Belastungstest (Tobias, Chat 25) – index.html?belastungstest=1
 // zeigt eine voll bebaute Fabrik (Level 13, 46 × 38), um die Bilder pro
@@ -73,20 +69,16 @@ const canvas = document.getElementById('game');
 const ui = { mode: 'normal', selected: null, ghost: null, beltPreview: null, simAlpha: 0 };
 const settings = loadSettings();
 const TEST_SPEED = 10;
-const camera = createCamera();
 // v0.50.0: Ladebildschirm (steht schon in index.html) – der Balken zeigt erst
 // die Modelle, dann das Nachholen der verpassten Zeit (siehe boot() unten).
 const loading = createLoadingScreen();
-const view3d = VIEW_3D ? await start3d() : null;
-if (!view3d) loading.setProgress(0.85, 'Lädt die Fabrik …');
-const renderer = view3d ?? createRenderer(canvas);
+const view3d = await start3d();
 const panels = createPanels();
 // v0.51.0: Neuigkeiten als Schriftrolle (Aufstieg, Neues nach Updates, Geschenk des Händlers)
 const letters = createLetterView();
 
-// v0.34.0: Lädt three.js und Kenneys Modelle (nur im 3D-Test) – seit v0.50.0
-// mit dem Balken des Ladebildschirms. Klappt das nicht, bleibt eine Meldung
-// mit dem Weg zurück zur echten Fabrik stehen.
+// v0.34.0: Lädt three.js und Kenneys Modelle – seit v0.50.0 mit dem Balken
+// des Ladebildschirms. Klappt das nicht, bleibt eine Meldung stehen.
 async function start3d() {
   window.__loading3d = true;
   loading.setProgress(0.02, 'Lädt die Werkstätten …');
@@ -101,7 +93,7 @@ async function start3d() {
     loading.setProgress(0.85, 'Baut die Fabrik auf …');
     return view;
   } catch (err) {
-    loading.setProgress(0, '⚠️ Die 3D-Ansicht konnte nicht laden. Bitte neu laden – die echte Fabrik (2D) öffnet index.html?ansicht=2d.');
+    loading.setProgress(0, '⚠️ Das Spiel konnte nicht laden. Bitte neu laden.');
     throw err;
   } finally {
     window.__loading3d = false;
@@ -169,7 +161,7 @@ async function newGame() {
 }
 
 // v0.50.0: Name setzen – im Spielstand und für das Gerät gemerkt (damit ihn
-// „Neues Spiel“ und die echte Fabrik schon ins Feld schreiben)
+// „Neues Spiel“ schon ins Feld schreibt)
 function applyName(name) {
   if (!setPlayerName(state, name)) return;
   settings.lastName = state.playerName;
@@ -222,8 +214,7 @@ function testPack() {
 function onLevelUp({ level, gift, moreLand }) {
   // v0.27.0: Bringt das Level mehr Fläche, zeigt die Karte die ganze Welt –
   // so sieht man die neuen Schilder „＋ Fläche kaufen“ am Rand.
-  if (moreLand && view3d) view3d.cam.fitRect(state.world, { padBottom: buildBar.bottomCover() });
-  else if (moreLand) fitRect(camera, worldRect(), 36, worldBounds());
+  if (moreLand) view3d.cam.fitRect(state.world, { padBottom: buildBar.bottomCover() });
   onChange();
   buildBar.updateCosts(state);
   // v0.51.0: als Schriftrolle von Hilde (Bauabschnitt, Neues, Geschenk – ab
@@ -270,29 +261,11 @@ const hud = createHud({
     saveNow();
     location.href = 'index.html?belastungstest=1';
   },
-  // v0.34.0: 3D-Test (eigener Spielstand) – erst speichern, dann wechseln
-  // (seit v0.38.0 ist der 3D-Test der Start, die echte Fabrik ?ansicht=2d)
-  is3d: VIEW_3D,
   stressTest: STRESS_TEST,
-  onSwitch3d: () => {
-    saveNow();
-    location.href = VIEW_3D ? 'index.html?ansicht=2d' : 'index.html';
-  },
 });
 hud.setTestMode(Boolean(settings.testMode), TEST_SPEED);
 
-// v0.18.0: Unten bekommt die Karte so viel Platz, wie die Bauleiste samt
-// Reitern hoch ist – so lässt sich auch die unterste Reihe darüber schieben.
-// v0.27.0 (Tobias): rechts so viel, wie das Infofenster breit ist (wie in
-// style.css: min(340px, 44vw) plus Rand) – so verdeckt es kein Gebäude am Rand.
-// v0.47.0: das Infofenster im Kenney-Rahmen ist 340 statt 320 breit.
-function worldBounds() {
-  const w = state.world;
-  const padRight = Math.min(340, 0.44 * canvas.clientWidth) + 24;
-  return { x: w.x * TILE, y: w.y * TILE, width: w.width * TILE, height: w.height * TILE, padBottom: buildBar.bottomCover(), padRight };
-}
-
-// v0.34.0: Ausschnitt beim Öffnen des 3D-Tests – die Gebäude in der Mitte,
+// v0.34.0: Ausschnitt beim Öffnen – die Gebäude in der Mitte,
 // mit Platz drumherum (mindestens 16 × 10 Felder, höchstens die Welt)
 function startRect3d() {
   const p = state.plot;
@@ -323,16 +296,6 @@ function startRect3d() {
   const [rx0, rx1] = grow(x0, x1, 16, w.x, w.x + w.width);
   const [ry0, ry1] = grow(y0, y1, 10, w.y, w.y + w.height);
   return { x: rx0, y: ry0, width: rx1 - rx0, height: ry1 - ry0 };
-}
-
-function plotRect() {
-  const p = state.plot;
-  return { x: p.x * TILE, y: p.y * TILE, width: p.width * TILE, height: p.height * TILE };
-}
-
-function worldRect() {
-  const w = state.world;
-  return { x: w.x * TILE, y: w.y * TILE, width: w.width * TILE, height: w.height * TILE };
 }
 
 // Die Knöpfe rufen den Controller erst beim Antippen auf, daher darf er
@@ -378,7 +341,7 @@ const offlineView = createOfflineView({ panels, getName: () => state.playerName 
 const warehouseView = createWarehouseView({ state, panels, onChange });
 controller = createController({
   state,
-  camera: view3d ? view3d.cam : camera,
+  camera: view3d.cam,
   ui,
   panels,
   buildBar,
@@ -386,9 +349,9 @@ controller = createController({
   warehouseView,
   onChange,
   requestDraw,
-  worldBounds,
-  // v0.34.0: im 3D-Test fragt die Steuerung die 3D-Kamera
-  ...(view3d ? { tileAt: (x, y) => view3d.cam.tileAt(x, y), panScreen: (dx, dy) => view3d.cam.panBy(dx, dy) } : {}),
+  // v0.34.0: Die Steuerung fragt die 3D-Kamera, welches Feld unter dem Finger liegt
+  tileAt: (x, y) => view3d.cam.tileAt(x, y),
+  panScreen: (dx, dy) => view3d.cam.panBy(dx, dy),
   onEvent: (event) => tutorial.note(event),
 });
 buildBar.setMode('normal');
@@ -397,8 +360,8 @@ buildBar.setMode('normal');
 const tutorial = createTutorialView({ state, ui, panels, letters, buildingRect, onChange });
 
 // Wo ein Gebäude (oder ein Feld) auf dem Bildschirm liegt (Seite) – für Hildes
-// Pfeil und Ring. In 3D: die Ecken am Boden und in Haushöhe; null, wenn es
-// nicht im Bild ist.
+// Pfeil und Ring: die Ecken am Boden und in Haushöhe; null, wenn es nicht im
+// Bild ist.
 const HOUSE_HEIGHT = 1.3;
 function buildingRect(b, { width, height }, lift = HOUSE_HEIGHT) {
   const r = canvas.getBoundingClientRect();
@@ -409,13 +372,11 @@ function buildingRect(b, { width, height }, lift = HOUSE_HEIGHT) {
     [b.x, b.y + height],
     [b.x + width, b.y + height],
   ]) {
-    if (view3d) {
-      for (const h of [0, lift]) {
-        const p = view3d.cam.screenOf(x, h, y);
-        if (!p.visible) return null;
-        points.push(p);
-      }
-    } else points.push(worldToScreen(camera, x * TILE, y * TILE));
+    for (const h of [0, lift]) {
+      const p = view3d.cam.screenOf(x, h, y);
+      if (!p.visible) return null;
+      points.push(p);
+    }
   }
   const left = Math.max(0, Math.min(...points.map((p) => p.x)));
   const right = Math.min(r.width, Math.max(...points.map((p) => p.x)));
@@ -433,28 +394,21 @@ attachInput(canvas, {
   onDragEnd: (x, y) => controller.onDragEnd(x, y),
   onDragCancel: () => controller.onDragCancel(),
   onPan(dx, dy) {
-    if (view3d) view3d.cam.panBy(dx, dy);
-    else panBy(camera, dx, dy, worldBounds());
+    view3d.cam.panBy(dx, dy);
     requestDraw();
   },
   onZoom(x, y, factor) {
-    if (view3d) view3d.cam.zoomAt(x, y, factor);
-    else zoomAt(camera, x, y, factor, worldBounds());
+    view3d.cam.zoomAt(x, y, factor);
     requestDraw();
   },
-  // v0.34.0: zwei Finger umeinander drehen die 3D-Kamera
-  ...(view3d ? { onRotate: (angle) => view3d.cam.rotate(angle) } : {}),
+  // v0.34.0: zwei Finger umeinander drehen die Kamera
+  onRotate: (angle) => view3d.cam.rotate(angle),
   onInteract: () => hud.hideHint(),
 });
 
-// v0.34.0: 3D-Test – Knöpfe ⟲ ⟳ (oben links) und Tasten Q/E drehen um 45°.
-if (view3d) {
-  document.body.classList.add('view-3d');
-  document.getElementById('turn-buttons').hidden = false;
-  onPress(document.getElementById('btn-turn-left'), () => view3d.turn(-1));
-  onPress(document.getElementById('btn-turn-right'), () => view3d.turn(1));
-  document.getElementById('hint').textContent = 'Ziehen: verschieben · Zwei Finger: zoomen und drehen · Gebäude antippen';
-}
+// v0.34.0: Knöpfe ⟲ ⟳ (oben links) und Tasten Q/E drehen die Kamera um 45°.
+onPress(document.getElementById('btn-turn-left'), () => view3d.turn(-1));
+onPress(document.getElementById('btn-turn-right'), () => view3d.turn(1));
 
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') controller.back();
@@ -465,9 +419,9 @@ document.addEventListener('keydown', (event) => {
   if (event.key.toLowerCase() === 'r' && !event.ctrlKey && !event.metaKey && !event.altKey && !event.repeat && !typing) {
     if (controller.rotateKey()) event.preventDefault();
   }
-  // v0.34.0: Q/E drehen die 3D-Kamera
+  // v0.34.0: Q/E drehen die Kamera
   const key = event.key.toLowerCase();
-  if (view3d && (key === 'q' || key === 'e') && !event.ctrlKey && !event.metaKey && !event.altKey && !typing) {
+  if ((key === 'q' || key === 'e') && !event.ctrlKey && !event.metaKey && !event.altKey && !typing) {
     view3d.turn(key === 'q' ? -1 : 1);
     event.preventDefault();
   }
@@ -479,33 +433,24 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') {
     redrawItemIcons();
-    renderer.clearCache();
+    view3d.clearCache();
   }
 });
 window.addEventListener('pageshow', () => {
   redrawItemIcons();
-  renderer.clearCache();
+  view3d.clearCache();
 });
 
 function handleResize() {
-  const size = renderer.resize();
+  const size = view3d.resize();
   buildBar.resize();
-  if (view3d) {
-    // v0.34.0: Beim ersten Mal die Gebäude mit etwas Platz drumherum ins Bild
-    // holen (mindestens 16 × 10 Felder, höchstens das Grundstück)
-    if (!view3d.fitted && size.width > 0) {
-      view3d.fitted = true;
-      view3d.cam.setBounds(state.world);
-      view3d.cam.fitRect(startRect3d(), { padding: 16, padBottom: buildBar.bottomCover() });
-    }
-    requestDraw();
-    return;
+  // v0.34.0: Beim ersten Mal die Gebäude mit etwas Platz drumherum ins Bild
+  // holen (mindestens 16 × 10 Felder, höchstens das Grundstück)
+  if (!view3d.fitted && size.width > 0) {
+    view3d.fitted = true;
+    view3d.cam.setBounds(state.world);
+    view3d.cam.fitRect(startRect3d(), { padding: 16, padBottom: buildBar.bottomCover() });
   }
-  const firstLayout = camera.viewWidth === 0;
-  setViewSize(camera, size.width, size.height);
-  // Rand von 36 px: Die Schilder zum Flächenkauf über und unter dem Grundstück bleiben sichtbar.
-  if (firstLayout) fitRect(camera, plotRect(), 36, worldBounds());
-  else clampCamera(camera, worldBounds());
   requestDraw();
 }
 
@@ -640,7 +585,7 @@ function frame(now) {
   }
   ui.simAlpha = accumulator / TICK;
 
-  renderer.draw(state, camera, ui);
+  view3d.draw(state, view3d.cam, ui);
   needsDraw = false;
   tutorial.frame(); // v0.52.0: Hildes Pfeil folgt dem Ziel
   fps.frames++;
@@ -692,59 +637,56 @@ boot();
 window.__game = {
   VERSION,
   state,
-  camera: view3d ? view3d.cam : camera,
+  camera: view3d.cam,
   ui,
-  // v0.34.0: für den Browser-Test des 3D-Tests
-  view3d: view3d
-    ? {
-        // Bildschirmpunkt (Seite) der Mitte eines Felds am Boden bzw. über einem Gebäude
-        tile(x, y) {
-          const r = canvas.getBoundingClientRect();
-          const p = view3d.cam.screenOf(x + 0.5, 0, y + 0.5);
-          return { x: r.left + p.x, y: r.top + p.y };
-        },
-        building(id, height = 0.4) {
-          const b = state.buildings.find((item) => item.id === id);
-          if (!b) return null;
-          const r = canvas.getBoundingClientRect();
-          const c = view3d.world.buildingTop(id);
-          const p = view3d.cam.screenOf(c.x, height, c.z);
-          return { x: r.left + p.x, y: r.top + p.y };
-        },
-        // v0.35.0: Bildschirmpunkt (Seite) eines Schilds „＋ Fläche“
-        landSign(side) {
-          const sign = view3d.world.landSigns().find((item) => item.side === side);
-          if (!sign) return null;
-          const r = canvas.getBoundingClientRect();
-          const p = view3d.cam.screenOf(sign.x, sign.y, sign.z);
-          return { x: r.left + p.x, y: r.top + p.y };
-        },
-        landSigns: () => view3d.world.landSigns(),
-        areaCounts: () => view3d.world.areaCounts(),
-        buildingVisible: (id) => view3d.world.buildingVisible(id),
-        // v0.47.0: Pflanzen im Beet (Pflanze|Stufe)
-        crop: (id) => view3d.world.cropOf(id),
-        tileAt: (x, y) => view3d.cam.tileAt(x, y),
-        yaw: () => view3d.cam.yaw,
-        distance: () => view3d.cam.distance,
-        target: () => [view3d.cam.target.x, view3d.cam.target.z],
-        isTurning: () => view3d.isTurning(),
-        counts: () => view3d.world.counts(),
-        // v0.40.0: Zeichenaufrufe je Bild und Statuslichter von weitem
-        drawCalls: () => view3d.drawCalls(),
-        farSigns: () => view3d.world.farSigns(),
-        treesInWorld: () => view3d.world.treesInWorld(state),
-        sign: (id) => view3d.world.signOf(id),
-        shimmer: (id) => view3d.world.shimmerOf(id),
-        wheel: (id) => view3d.world.wheelOf(id),
-        motion: (id) => view3d.world.motionOf(id),
-        itemShapes: () => view3d.world.itemShapes(),
-        hasGhost: () => view3d.world.hasGhost(),
-        overlayCount: () => view3d.world.overlayCount(),
-        models: () => view3d.models(),
-      }
-    : null,
-  TILE,
+  // v0.34.0: für den Browser-Test der 3D-Ansicht
+  view3d: {
+    // Bildschirmpunkt (Seite) der Mitte eines Felds am Boden bzw. über einem Gebäude
+    tile(x, y) {
+      const r = canvas.getBoundingClientRect();
+      const p = view3d.cam.screenOf(x + 0.5, 0, y + 0.5);
+      return { x: r.left + p.x, y: r.top + p.y };
+    },
+    building(id, height = 0.4) {
+      const b = state.buildings.find((item) => item.id === id);
+      if (!b) return null;
+      const r = canvas.getBoundingClientRect();
+      const c = view3d.world.buildingTop(id);
+      const p = view3d.cam.screenOf(c.x, height, c.z);
+      return { x: r.left + p.x, y: r.top + p.y };
+    },
+    // v0.35.0: Bildschirmpunkt (Seite) eines Schilds „＋ Fläche“
+    landSign(side) {
+      const sign = view3d.world.landSigns().find((item) => item.side === side);
+      if (!sign) return null;
+      const r = canvas.getBoundingClientRect();
+      const p = view3d.cam.screenOf(sign.x, sign.y, sign.z);
+      return { x: r.left + p.x, y: r.top + p.y };
+    },
+    landSigns: () => view3d.world.landSigns(),
+    areaCounts: () => view3d.world.areaCounts(),
+    buildingVisible: (id) => view3d.world.buildingVisible(id),
+    // v0.47.0: Pflanzen im Beet (Pflanze|Stufe)
+    crop: (id) => view3d.world.cropOf(id),
+    tileAt: (x, y) => view3d.cam.tileAt(x, y),
+    yaw: () => view3d.cam.yaw,
+    distance: () => view3d.cam.distance,
+    target: () => [view3d.cam.target.x, view3d.cam.target.z],
+    isTurning: () => view3d.isTurning(),
+    counts: () => view3d.world.counts(),
+    // v0.40.0: Zeichenaufrufe je Bild und Statuslichter von weitem
+    drawCalls: () => view3d.drawCalls(),
+    farSigns: () => view3d.world.farSigns(),
+    treesInWorld: () => view3d.world.treesInWorld(state),
+    sign: (id) => view3d.world.signOf(id),
+    shimmer: (id) => view3d.world.shimmerOf(id),
+    wheel: (id) => view3d.world.wheelOf(id),
+    motion: (id) => view3d.world.motionOf(id),
+    itemShapes: () => view3d.world.itemShapes(),
+    hasGhost: () => view3d.world.hasGhost(),
+    overlayCount: () => view3d.world.overlayCount(),
+    models: () => view3d.models(),
+  },
   saveNow,
   openLevel,
   simulate(seconds) {

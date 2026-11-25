@@ -1,7 +1,9 @@
-// Browser-Test, 2D-Teil (die echte Fabrik, hinten angestellt): spielt in
-// Tablet- und Handygröße per Touch die Bauleiste, Bauen, Bänder, Fläche,
-// Bereiche, Speichern, Laden, Theken, Aufträge und Aufstiege bis Level 14,
-// dazu Hochformat und ein schmales Handy. Gestartet von smoke.cjs.
+// Browser-Test „Fabrik“: spielt in Tablet- und Handygröße per Touch die
+// Bauleiste, Bauen, Bänder, Fläche, Bereiche, Speichern, Laden, Theken,
+// Aufträge und Aufstiege bis Level 14, dazu Hochformat und ein schmales Handy.
+// Gestartet von smoke.cjs (ONLY=fabrik: nur dieser Teil). Bis v0.53.0 lief er
+// in der 2D-Welt; seit v0.54.0 im 3D-Spiel – Felder, die verdeckt oder nicht
+// im Bild sind, holt tapTile vorher in die Mitte (helpers.cjs).
 
 const {
   fs,
@@ -13,7 +15,9 @@ const {
   check,
   sleep,
   tilePos,
-  worldPos,
+  tilesFree,
+  showTiles,
+  centerOn,
   tapTile,
   touchDragTiles,
   game,
@@ -37,7 +41,9 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   setDevice(device.name);
   const context = await browser.newContext({
     viewport: device.viewport,
-    deviceScaleFactor: device.deviceScaleFactor,
+    // v0.54.0: in 3D einfache Pixeldichte – ohne Grafikkarte rechnet der Browser
+    // jedes Bild selbst, in doppelter Auflösung wäre das Durchspielen stundenlang
+    deviceScaleFactor: 1,
     hasTouch: true,
     isMobile: true,
   });
@@ -48,7 +54,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
   const shot = (name) => page.screenshot({ path: path.join(OUT, `${device.name}-${name}.png`) });
 
-  await page.goto(`${baseUrl}?ansicht=2d`); // v0.38.0: die echte Fabrik
+  await page.goto(baseUrl);
   await waitForGame(page);
 
   // ---------- Start ----------
@@ -77,16 +83,16 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(await page.isVisible('#btn-build'), 'Knopf „Bauen“ sichtbar');
 
   const plot = await game(page, () => {
-    const { state, TILE } = window.__game;
-    const p = state.plot;
-    return { x: p.x * TILE, y: p.y * TILE, w: p.width * TILE, h: p.height * TILE, px: p.x, py: p.y };
+    const p = window.__game.state.plot;
+    return { px: p.x, py: p.y, width: p.width, height: p.height };
   });
-  const tl = await worldPos(page, plot.x, plot.y);
-  const br = await worldPos(page, plot.x + plot.w, plot.y + plot.h);
-  const canvasBox = await page.locator('#game').boundingBox();
+  // v0.54.0: In 3D zeigt der Start die Gebäude mit Platz drumherum (nicht das ganze Grundstück)
   check(
-    tl.x >= canvasBox.x - 1 && tl.y >= canvasBox.y - 1 && br.x <= canvasBox.x + canvasBox.width + 1 && br.y <= canvasBox.y + canvasBox.height + 1,
-    'Ganzes Grundstück beim Start sichtbar',
+    await tilesFree(page, [
+      [10, 6],
+      [11, 7],
+    ]),
+    'Holzfällerlager beim Start frei im Bild',
   );
   await shot('1-start');
 
@@ -262,8 +268,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     await page.evaluate(() => getComputedStyle(document.getElementById('hint')).opacity === '0'),
     'Hinweis „Ziehen: verschieben …“ liegt nicht über der Bauleiste',
   );
-  // Ganz nach unten schieben: Der untere Rand der Welt liegt über Leiste und Reitern.
-  const savedCam = await game(page, () => ({ ...window.__game.camera }));
+  // Ganz nach unten schieben: Die unterste Reihe der Welt liegt über Leiste und Reitern.
   const stageBox = await page.locator('#game').boundingBox();
   for (let i = 0; i < 8; i++) {
     const x = stageBox.x + stageBox.width / 2;
@@ -275,23 +280,24 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
   }
   await sleep(80);
+  // v0.54.0: in 3D – die Mitte der untersten Reihe liegt über den Reitern
   const edge = await page.evaluate(() => {
-    const { state, camera, TILE } = window.__game;
-    const cv = document.getElementById('game').getBoundingClientRect();
+    const { state, view3d } = window.__game;
+    const w = state.world;
     return {
-      worldBottom: cv.top + ((state.world.y + state.world.height) * TILE - camera.y) * camera.zoom,
+      worldBottom: view3d.tile(Math.floor(w.x + w.width / 2), w.y + w.height - 1).y,
       tabsTop: document.getElementById('build-tabs').getBoundingClientRect().top,
     };
   });
   check(
-    edge.worldBottom <= edge.tabsTop && edge.worldBottom >= edge.tabsTop - 20,
-    `Ganz nach unten geschoben: Die unterste Reihe liegt über der Bauleiste samt Reitern (Rand ${Math.round(edge.worldBottom)}, Reiter ${Math.round(edge.tabsTop)})`,
+    edge.worldBottom <= edge.tabsTop,
+    `Ganz nach unten geschoben: Die unterste Reihe liegt über der Bauleiste samt Reitern (Reihe ${Math.round(edge.worldBottom)}, Reiter ${Math.round(edge.tabsTop)})`,
   );
   await shot('4c-ganz-unten');
-  await game(page, (cam) => {
-    Object.assign(window.__game.camera, { x: cam.x, y: cam.y, zoom: cam.zoom });
-    window.__game.simulate(0);
-  }, savedCam);
+  await showTiles(page, [
+    [plot.px, plot.py],
+    [plot.px + plot.width - 1, plot.py + plot.height - 1],
+  ], 0);
 
   await tapBuild(page, 'steinbruch');
   await sleep(80);
@@ -387,10 +393,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(!(await page.isVisible('#info-panel')), 'Antippen freier Fläche schließt Infofenster');
 
   // ---------- Fläche kaufen ----------
-  // Karte etwas nach unten schieben, damit auch die Ecke über dem Grundstück zu sehen ist
-  await game(page, () => {
-    window.__game.camera.y -= 2 * window.__game.TILE;
-  });
+  // (die Felder außerhalb holt tapTile ins Bild)
   await tapTile(page, plot.px - 1, plot.py - 1);
   check((await page.textContent('#info-title')) === 'Gesperrte Fläche', 'Ecke der gesperrten Fläche zeigt Hinweis');
   await tapTile(page, plot.px - 1, plot.py + 4);
@@ -409,9 +412,15 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await shot('6c-flaeche-gekauft');
 
   // ---------- Zoomen & Verschieben ----------
+  // v0.54.0: in 3D – Zoomen ändert den Abstand der Kamera, Verschieben ihr Ziel
+  const canvasBox = await page.locator('#game').boundingBox();
   const cx = canvasBox.x + canvasBox.width / 2;
   const cy = canvasBox.y + canvasBox.height / 2;
-  const zoomBefore = await game(page, () => window.__game.camera.zoom);
+  await showTiles(page, [
+    [plot.px, plot.py],
+    [plot.px + plot.width - 1, plot.py + plot.height - 1],
+  ], 0);
+  const zoomBefore = await game(page, () => window.__game.camera.distance);
   await cdp.send('Input.dispatchTouchEvent', {
     type: 'touchStart',
     touchPoints: [
@@ -430,22 +439,24 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
   await sleep(80);
-  const zoomAfter = await game(page, () => window.__game.camera.zoom);
-  check(zoomAfter > zoomBefore * 1.3, `Zwei-Finger-Zoom vergrößert (${zoomBefore.toFixed(2)} → ${zoomAfter.toFixed(2)})`);
+  const zoomAfter = await game(page, () => window.__game.camera.distance);
+  check(zoomAfter < zoomBefore * 0.8, `Zwei-Finger-Zoom holt heran (Abstand ${zoomBefore.toFixed(1)} → ${zoomAfter.toFixed(1)})`);
 
-  const camBefore = await game(page, () => window.__game.camera.x);
+  const camTarget = () => game(page, () => window.__game.view3d.target());
+  const camBefore = await camTarget();
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: cx, y: cy, id: 3 }] });
   for (let s = 1; s <= 8; s++) {
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: cx - s * 15, y: cy, id: 3 }] });
   }
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
   await sleep(80);
-  check((await game(page, () => window.__game.camera.x)) > camBefore, 'Ein-Finger-Ziehen verschiebt die Karte');
+  const camMoved = await camTarget();
+  check(Math.hypot(camMoved[0] - camBefore[0], camMoved[1] - camBefore[1]) > 0.5, `Ein-Finger-Ziehen verschiebt die Karte (${camBefore.map((v) => v.toFixed(1))} → ${camMoved.map((v) => v.toFixed(1))})`);
   const beltCountBefore = await game(page, () => Object.keys(window.__game.state.belts).length);
   await page.mouse.move(cx, cy);
   await page.mouse.wheel(0, 300);
   await sleep(80);
-  check((await game(page, () => window.__game.camera.zoom)) < zoomAfter, 'Mausrad zoomt heraus');
+  check((await game(page, () => window.__game.camera.distance)) > zoomAfter, 'Mausrad zoomt heraus');
 
   // ---------- Speichern & Laden ----------
   await game(page, () => window.__game.saveNow());
@@ -1456,12 +1467,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const goldRight = await game(page, () => (window.__game.state.gold += 670));
   await page.locator('#info-actions button', { hasText: 'Kaufen · 170' }).tap();
   await sleep(120);
-  // Karte so schieben, dass der nächste Streifen rechts zu sehen ist (danach zurück)
-  const camLand = await game(page, () => ({ x: window.__game.camera.x, y: window.__game.camera.y }));
-  await game(page, (tx) => {
-    const { camera, TILE } = window.__game;
-    camera.x = (tx + 0.5) * TILE - camera.viewWidth / camera.zoom / 2;
-  }, plotNow.x + plotNow.width + 4);
+  // (den nächsten Streifen rechts holt tapTile ins Bild)
   await tapTile(page, plotNow.x + plotNow.width + 4, plotNow.y + 3);
   check((await page.textContent('#info-text')).includes('letzte Kauf'), `Zweiter Streifen rechts ist der letzte an dieser Seite (Gold ${goldRight})`);
   await page.locator('#info-actions button', { hasText: 'Kaufen · 500' }).tap();
@@ -1484,11 +1490,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   // (zwei Schritte), Pflanze in die Flachsbreche einlegen.
   const bx = plotNow.x + plotNow.width + 1;
   const by = plotNow.y + 1;
-  await game(page, ([x, y]) => {
-    const { camera, TILE } = window.__game;
-    camera.x = (x + 0.5) * TILE - camera.viewWidth / camera.zoom / 2;
-    camera.y = (y + 0.5) * TILE - camera.viewHeight / camera.zoom / 2;
-  }, [bx + 3, by + 2]);
+  await centerOn(page, bx + 3, by + 2, 4);
   await game(page, () => {
     const s = window.__game.state.storage;
     s.holzplatte = (s.holzplatte ?? 0) + 20;
@@ -1658,11 +1660,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(lvl8Text.includes('Der Kräutergarten') && lvl8Text.includes('50 Ringelblüten') && lvl8Text.includes('0 / 1.305'), 'Level 8: Agnes möchte 50 Ringelblüten, Erfahrung 0 / 1.305');
   await shot('19-level-8');
   await page.tap('#modal-close');
-  await game(page, ([x, y]) => {
-    const { camera, TILE } = window.__game;
-    camera.x = (x + 0.5) * TILE - camera.viewWidth / camera.zoom / 2;
-    camera.y = (y + 0.5) * TILE - camera.viewHeight / camera.zoom / 2;
-  }, [bx + 3, by + 4]);
+  await centerOn(page, bx + 3, by + 4, 4);
   await game(page, () => {
     const s = window.__game.state.storage;
     s.holzplatte = (s.holzplatte ?? 0) + 20;
@@ -1821,11 +1819,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }, [bx + 3, by + 3]);
   check(spots9.length === 2, `Zwei freie Plätze für Level 9 gefunden (${JSON.stringify(spots9)})`);
   const [[mx, my], [sx, sy]] = spots9;
-  await game(page, ([x, y]) => {
-    const { camera, TILE } = window.__game;
-    camera.x = (x + 1) * TILE - camera.viewWidth / camera.zoom / 2;
-    camera.y = (y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
-  }, [Math.round((mx + sx) / 2), Math.round((my + sy) / 2)]);
+  await centerOn(page, Math.round((mx + sx) / 2), Math.round((my + sy) / 2), 4);
   await game(page, () => {
     const s = window.__game.state.storage;
     s.steinplatte = (s.steinplatte ?? 0) + 20;
@@ -1938,39 +1932,40 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.tap('#modal-close');
   await sleep(150);
   check(letter10.includes('Mehr Fläche') && letter10.includes('Tippe auf die ＋-Schilder am Rand'), 'Schriftrolle nach dem Aufstieg: neue Fläche an den Schildern');
-  // Nach dem Aufstieg zeigt die Karte die ganze Welt
+  // Nach dem Aufstieg zeigt die Karte die ganze Welt (v0.54.0: in 3D – alle
+  // vier Ecken der Welt liegen im Bild)
   const fitsWorld = () =>
     game(page, () => {
-      const { camera, state, TILE } = window.__game;
+      const { camera, state } = window.__game;
       const w = state.world;
-      const x0 = (w.x * TILE - camera.x) * camera.zoom;
-      const y0 = (w.y * TILE - camera.y) * camera.zoom;
-      const x1 = ((w.x + w.width) * TILE - camera.x) * camera.zoom;
-      const y1 = ((w.y + w.height) * TILE - camera.y) * camera.zoom;
+      const corners = [
+        [w.x, w.y],
+        [w.x + w.width, w.y],
+        [w.x, w.y + w.height],
+        [w.x + w.width, w.y + w.height],
+      ].map(([x, z]) => camera.screenOf(x, 0, z));
       return {
-        ok: x0 >= -1 && y0 >= -1 && x1 <= camera.viewWidth + 1 && y1 <= camera.viewHeight + 1,
-        // passt die Welt der Größe nach (dann lässt sie sich ganz ins Bild schieben)?
-        size: x1 - x0 <= camera.viewWidth && y1 - y0 <= camera.viewHeight,
-        zoom: Math.round(camera.zoom * 1000) / 1000,
-        box: [x0, y0, x1, y1].map(Math.round).join(','),
+        ok: corners.every((p) => p.visible && p.x >= -1 && p.y >= -1 && p.x <= camera.viewWidth + 1 && p.y <= camera.viewHeight + 1),
+        distance: Math.round(camera.distance * 10) / 10,
+        box: corners.map((p) => `${Math.round(p.x)}/${Math.round(p.y)}`).join(' '),
         view: `${camera.viewWidth} × ${camera.viewHeight}`,
       };
     });
   const fit10 = await fitsWorld();
-  check(fit10.ok, `Nach dem Aufstieg ist die ganze Welt im Bild (Zoom ${fit10.zoom})`);
+  check(fit10.ok, `Nach dem Aufstieg ist die ganze Welt im Bild (Abstand ${fit10.distance}, Ecken ${fit10.box} auf ${fit10.view})`);
   await shot('19j-mehr-flaeche');
   // Ganz hineinzoomen und wieder ganz heraus (Mausrad): die ganze Welt passt aufs Bild
   const box = await page.locator('#game').boundingBox();
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
   for (let i = 0; i < 6; i++) await page.mouse.wheel(0, -400);
   await sleep(100);
-  const zoomedIn = await game(page, () => window.__game.camera.zoom);
+  const zoomedIn = await game(page, () => window.__game.camera.distance);
   for (let i = 0; i < 20; i++) await page.mouse.wheel(0, 400);
   await sleep(150);
   const fitOut = await fitsWorld();
   check(
-    zoomedIn > 2 * fitOut.zoom && fitOut.size && fitOut.zoom <= 0.35,
-    `Ganz herausgezoomt passt die ganze Welt ins Bild (Zoom ${zoomedIn.toFixed(2)} → ${fitOut.zoom}, Welt ${fitOut.box} auf ${fitOut.view})`,
+    fitOut.distance > 2 * zoomedIn && fitOut.ok,
+    `Ganz herausgezoomt passt die ganze Welt ins Bild (Abstand ${zoomedIn.toFixed(1)} → ${fitOut.distance}, Ecken ${fitOut.box} auf ${fitOut.view})`,
   );
   await shot('19k-ganz-herausgezoomt');
   // Der 3. Streifen rechts kostet 2.000 Gold
@@ -1992,12 +1987,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   );
   await shot('19l-flaeche-level10');
   // Schafgarbe säen, reif werden lassen, ernten; Erntebank; Kräuterstube: Wundverband
-  await game(page, ([x, y]) => {
-    const { camera, TILE } = window.__game;
-    camera.zoom = 1;
-    camera.x = (x + 2) * TILE - camera.viewWidth / camera.zoom / 2;
-    camera.y = (y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
-  }, [bx, by + 3]);
+  await centerOn(page, bx + 1, by + 3, 4);
   await sleep(100);
   await tapTile(page, bx, by + 3);
   await sleep(450);
@@ -2054,10 +2044,13 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     await page.mouse.up({ button: 'right' });
     await sleep(60);
   }
+  // v0.54.0: in 3D – der rechte Rand der Welt in der Reihe, auf die die Kamera blickt
   const infoEdge = await game(page, () => {
-    const { camera, state, TILE } = window.__game;
+    const { camera, state } = window.__game;
+    const w = state.world;
     const rect = document.getElementById('game').getBoundingClientRect();
-    const right = rect.left + ((state.world.x + state.world.width) * TILE - camera.x) * camera.zoom;
+    const z = Math.min(w.y + w.height, Math.max(w.y, camera.target.z));
+    const right = rect.left + camera.screenOf(w.x + w.width, 0, z).x;
     return { right: Math.round(right), panel: Math.round(document.getElementById('info-panel').getBoundingClientRect().left) };
   });
   check(
@@ -2126,12 +2119,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }, [bx + 3, by + 6]);
   check(Boolean(spot11), `Freier Platz für die Uhrmacherei (${JSON.stringify(spot11)})`);
   const [ux, uy] = spot11;
-  await game(page, ([x, y]) => {
-    const { camera, TILE } = window.__game;
-    camera.zoom = 1;
-    camera.x = (x + 1) * TILE - camera.viewWidth / camera.zoom / 2;
-    camera.y = (y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
-  }, [ux, uy]);
+  await centerOn(page, ux, uy, 4);
   await game(page, () => {
     const s = window.__game.state.storage;
     s.zirkel = (s.zirkel ?? 0) + 1;
@@ -2247,12 +2235,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }, [ux + 3, uy]);
   check(Boolean(spot12), `Freier Platz für die Apotheke (${JSON.stringify(spot12)})`);
   const [ax, ay] = spot12;
-  await game(page, ([x, y]) => {
-    const { camera, TILE } = window.__game;
-    camera.zoom = 1;
-    camera.x = (x + 1) * TILE - camera.viewWidth / camera.zoom / 2;
-    camera.y = (y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
-  }, [ax, ay]);
+  await centerOn(page, ax, ay, 4);
   await game(page, () => {
     const s = window.__game.state.storage;
     s.verstaerkteholzplatte = (s.verstaerkteholzplatte ?? 0) + 1;
@@ -2312,11 +2295,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     const b = window.__game.state.buildings.find((x) => x.type === 'schreibstube');
     return [b.x, b.y];
   });
-  await game(page, ([x, y]) => {
-    const { camera, TILE } = window.__game;
-    camera.x = (x + 1) * TILE - camera.viewWidth / camera.zoom / 2;
-    camera.y = (y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
-  }, stube12);
+  await centerOn(page, stube12[0], stube12[1], 4);
   await sleep(100);
   await tapTile(page, stube12[0], stube12[1]);
   check((await page.textContent('#info-title')) === 'Schreibstube', 'Schreibstube antippen zeigt Infofenster');
@@ -2337,11 +2316,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await shot('19w-reissbrett');
   await page.tap('#info-close');
   // Beet: vier Samen, Kamille säen; Erntebank nimmt Kamille
-  await game(page, ([x, y]) => {
-    const { camera, TILE } = window.__game;
-    camera.x = (x + 2) * TILE - camera.viewWidth / camera.zoom / 2;
-    camera.y = (y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
-  }, [bx, by + 3]);
+  await centerOn(page, bx + 1, by + 3, 4);
   await sleep(100);
   await game(page, () => {
     const s = window.__game.state.storage;
@@ -2464,15 +2439,13 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   );
   // Ofen: jetzt mit Sand – leer zeigt er beide Rohstoffe
   const ofen13 = await game(page, () => {
-    const { state, camera, TILE } = window.__game;
+    const { state } = window.__game;
     const b = state.buildings.find((x) => x.type === 'kohlenmeiler');
     Object.assign(b.prod, { loaded: false, input: null, remaining: 0, queued: 0, queue: [], timer: 0, out: null, blocked: false });
     state.storage.sand = 1;
-    camera.zoom = 1;
-    camera.x = (b.x + 1) * TILE - camera.viewWidth / camera.zoom / 2;
-    camera.y = (b.y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
     return [b.x, b.y];
   });
+  await centerOn(page, ofen13[0], ofen13[1], 4);
   await sleep(150);
   await tapTile(page, ofen13[0], ofen13[1]);
   check((await page.textContent('#info-title')) === 'Ofen', 'Ofen antippen zeigt Infofenster');
@@ -2500,12 +2473,10 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.tap('#info-close');
   // Schmiede: 3. Einstellung Fläschchen (30 s)
   const schmiede13 = await game(page, () => {
-    const { state, camera, TILE } = window.__game;
-    const b = state.buildings.find((x) => x.type === 'schmiede');
-    camera.x = (b.x + 1) * TILE - camera.viewWidth / camera.zoom / 2;
-    camera.y = (b.y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
+    const b = window.__game.state.buildings.find((x) => x.type === 'schmiede');
     return { x: b.x, y: b.y, recipe: b.prod.recipe };
   });
+  await centerOn(page, schmiede13.x, schmiede13.y, 4);
   await sleep(150);
   await tapTile(page, schmiede13.x, schmiede13.y);
   check((await page.textContent('#info-title')) === 'Schmiede', 'Schmiede antippen zeigt Infofenster');
@@ -2584,11 +2555,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     const pos = await game(
       page,
       (t) => {
-        const { state, camera, TILE } = window.__game;
-        const b = state.buildings.find((x) => x.type === t);
-        camera.zoom = 1;
-        camera.x = (b.x + 1) * TILE - camera.viewWidth / camera.zoom / 2;
-        camera.y = (b.y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
+        const b = window.__game.state.buildings.find((x) => x.type === t);
         return { x: b.x, y: b.y, recipe: b.prod.recipe };
       },
       type,
@@ -2610,31 +2577,22 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     await sleep(300);
     await page.tap('#info-close');
   }
-  await game(page, (c) => Object.assign(window.__game.camera, c), camLand);
   await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)
   await page.tap('#info-close').catch(() => {});
   await shot('17-fabrik');
 
   // v0.21.0: Maschinen zeigen auf der Karte, was sie herstellen – nah und weit
-  const camFactory = await game(page, () => ({ ...window.__game.camera }));
-  await game(page, () => {
-    const { camera, state, TILE } = window.__game;
-    const z = state.buildings.find((b) => b.type === 'zimmerei');
-    camera.zoom = 1.6;
-    camera.x = (z.x + 1) * TILE - camera.viewWidth / camera.zoom / 2;
-    camera.y = (z.y + 1) * TILE - camera.viewHeight / camera.zoom / 2;
-  });
+  const zimNah = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'zimmerei'));
+  await centerOn(page, zimNah.x, zimNah.y, 2);
   await sleep(150);
   await shot('21-karte-nah');
-  await game(page, () => {
-    const { camera, state, TILE } = window.__game;
-    camera.zoom = 0.35;
-    camera.x = (state.plot.x + state.plot.width / 2) * TILE - camera.viewWidth / camera.zoom / 2;
-    camera.y = (state.plot.y + state.plot.height / 2) * TILE - camera.viewHeight / camera.zoom / 2;
-  });
+  const plotAll = await game(page, () => ({ ...window.__game.state.plot }));
+  await showTiles(page, [
+    [plotAll.x, plotAll.y],
+    [plotAll.x + plotAll.width - 1, plotAll.y + plotAll.height - 1],
+  ], 0);
   await sleep(150);
   await shot('21-karte-weit');
-  await game(page, (c) => Object.assign(window.__game.camera, c), camFactory);
 
   await page.tap('#btn-menu');
   await page.tap('#menu-test-mode');
@@ -2759,14 +2717,14 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   page2.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
   await page2.goto(`${baseUrl}manifest.webmanifest`);
   const backdated = await page2.evaluate(() => {
-    const key = 'erstesspiel-spielstand';
+    const key = 'erstesspiel-spielstand-3d-test'; // v0.54.0: der Platz des einen Spiels
     const data = JSON.parse(localStorage.getItem(key));
     data.savedAt -= 2 * 3600 * 1000;
     localStorage.setItem(key, JSON.stringify(data));
     return data.saveVersion;
   });
   check(backdated === 20, `Spielstand-Version 20 (${backdated})`);
-  await page2.goto(`${baseUrl}?ansicht=2d`);
+  await page2.goto(baseUrl);
   await waitForGame(page2);
   await page2.waitForFunction(() => !window.__game.isCatchingUp(), null, { timeout: 20000 });
   await sleep(200);
@@ -2912,7 +2870,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
       (await page2.textContent('#modal-content')).includes('Seit dem Sichern sind 2 Std. vergangen'),
     'Nach dem Laden holt die Fabrik die 2 Stunden seit dem Sichern nach („Seit dem Sichern sind 2 Std. vergangen“)',
   );
-  const keptCopy = await game(page2, () => JSON.parse(localStorage.getItem('erstesspiel-spielstand-vor-dem-laden')).state.buildings.length);
+  const keptCopy = await game(page2, () => JSON.parse(localStorage.getItem('erstesspiel-spielstand-3d-test-vor-dem-laden')).state.buildings.length);
   check(keptCopy === 2, 'Der vorige Spielstand bleibt als Sicherheitskopie im Browser');
   await shot2('22f-geladen');
   await page2.locator('#modal-content button', { hasText: 'Weiter' }).tap();
@@ -2945,7 +2903,7 @@ async function runPortrait(browser, baseUrl) {
     isMobile: true,
   });
   const page = await context.newPage();
-  await page.goto(`${baseUrl}?ansicht=2d`); // v0.38.0: die echte Fabrik
+  await page.goto(baseUrl);
   await page.waitForFunction(() => window.__game);
   check(await page.isVisible('#rotate-overlay'), 'Hochformat zeigt „Bitte drehen“');
   await page.screenshot({ path: path.join(OUT, 'handy-hoch.png') });
@@ -2965,7 +2923,7 @@ async function runNarrowPhone(browser, baseUrl) {
     isMobile: true,
   });
   const page = await context.newPage();
-  await page.goto(`${baseUrl}?ansicht=2d`); // v0.38.0: die echte Fabrik
+  await page.goto(baseUrl);
   await waitForGame(page);
   const tabsFit = () =>
     page.evaluate(() =>

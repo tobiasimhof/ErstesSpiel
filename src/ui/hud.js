@@ -9,7 +9,7 @@ import { onPress } from './press.js';
 
 const numberFormat = new Intl.NumberFormat('de-DE');
 
-export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, onLevel, onSaveFile, onLoadFile, onSwitch3d, onStressTest, onAudio, is3d = false, stressTest = false }) {
+export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, onLevel, onSaveFile, onLoadFile, onStressTest, onAudio, stressTest = false }) {
   const gold = document.getElementById('hud-gold');
   const goldGain = document.getElementById('hud-gold-gain');
   const testPackButton = document.getElementById('menu-test-pack');
@@ -51,7 +51,7 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
     closeMenu();
     onTestPack();
   });
-  // v0.39.0: Belastungstest (nur im Testmodus des 3D-Spiels) – mit Hinweis und „Beenden“
+  // v0.39.0: Belastungstest (nur im Testmodus) – mit Hinweis und „Beenden“
   const stressButton = document.getElementById('menu-stress');
   onPress(stressButton, () => {
     closeMenu();
@@ -80,15 +80,6 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
     closeMenu();
     onNewGame();
   });
-  // v0.34.0: 3D-Test mit eigenem Spielstand (Tobias, Chat 24) – und zurück;
-  // seit v0.38.0 ist der 3D-Test der Start, die echte Fabrik hinten angestellt
-  const switch3d = document.getElementById('menu-3d');
-  if (is3d) switch3d.textContent = '🗺️ Zur echten Fabrik (2D)';
-  onPress(switch3d, () => {
-    closeMenu();
-    onSwitch3d();
-  });
-
   // Vollbild (Android/PC), seit v0.53.0 im Menü. Ohne Vollbild-Funktion wird
   // der Knopf ausgeblendet.
   const fullscreenButton = document.getElementById('menu-fullscreen');
@@ -148,7 +139,7 @@ export function createHud({ version, onNewGame, onToggleTestMode, onTestPack, on
       speedBadge.hidden = !on;
       fpsBadge.hidden = !on && !stressTest; // v0.53.0: nur im Testmodus (und im Belastungstest)
       testPackButton.hidden = !on;
-      stressButton.hidden = !on || !is3d || stressTest;
+      stressButton.hidden = !on || stressTest;
     },
     // v0.21.0 (Belastungstest): Bilder pro Sekunde, nur im Testmodus und im Belastungstest zu sehen
     setFps(fps) {

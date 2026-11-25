@@ -4,6 +4,26 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.54.0 – Ein Spiel: die 2D-Welt ist entfernt (25.11.2026)
+
+**Vorgenommen:**
+- Die 2D-Welt löschen (Tobias, Chat 31: „weil ich sie gar nicht mehr spiele und das 3D game, das eigentliche Game geworden ist“; kein Andenken nötig; nach v0.53.0: „Du kannst gerne mit dem nächsten Schritt anfangen“).
+
+**Fragen, die wir uns gestellt haben:**
+- Wo liegt der Spielstand? → Weiter auf dem Platz des früheren 3D-Tests (`erstesspiel-spielstand-3d-test`, jetzt `GAME_SLOT`) – so bleibt Tobias' Fabrik ohne Umwandlung; Spielstand-Format bleibt 20.
+- Was wird aus dem alten 2D-Spielstand? → Er bleibt unberührt unter `erstesspiel-spielstand` liegen und wird nicht mehr geladen. Ginge man auf eine ältere Version zurück, wäre die 2D-Fabrik wieder da.
+- Was passiert mit alten Links (`?ansicht=2d`)? → Sie öffnen einfach das Spiel.
+- Braucht die 3D-Steuerung noch etwas aus `src/view2d/`? → Nein: Sie fragt die 3D-Kamera (`tileAt`, `panScreen`); `view2d/renderer.js` und `view2d/camera.js` sind gelöscht, ebenso `tests/camera.test.js` und die 2D-Kamera-Prüfungen in `bauleiste.test.js` und `karte.test.js`.
+- Wie bleibt geprüft, was nur der 2D-Browser-Test prüfte (Bauleiste, Bauen, Bänder, Fläche, Bereiche, Speichern, Laden, Theken, Aufträge und Aufstiege bis Level 14, Hochformat, schmales Handy)? → Der Test heißt jetzt `fabrik.cjs` und läuft im 3D-Spiel. `tapTile` und `touchDragTiles` (helpers.cjs) tippen über die 3D-Kamera; liegt ein Feld unter einer Leiste, dem Infofenster oder außerhalb, holen sie es erst in die Mitte (`tilesFree`, `showTiles`, `centerOn`). Die 2D-Kamera-Prüfungen sind in 3D nachgebaut (Zoomen = Abstand, Verschieben = Blickpunkt, ganze Welt im Bild = alle vier Ecken, unterste Reihe über der Bauleiste, rechter Rand neben dem Infofenster).
+
+**Gemacht:**
+- `main.js`: immer 3D (`useSaveSlot(GAME_SLOT)`), ohne 2D-Zweige; `hud.js`: kein Menüpunkt „🗺️ Zur echten Fabrik (2D)“; `controller.js`: nur noch 3D-Kamera; `index.html`: Dreh-Knöpfe immer sichtbar, Hinweis „zoomen und drehen“, ohne `menu-3d`; `style.css`: ohne `.view-3d`; `storage.js`: `GAME_SLOT`; Kommentare ohne „3D-Test“. `src/view2d/` gelöscht, Import-Map neu (62 Dateien).
+- Tests: `dreid.test.js` (ein Spiel, alter Spielstand unberührt, kein Wechsel), `belastungstest.test.js`; Browser: `spiel2d.cjs` → `fabrik.cjs` (in 3D), `spiel3d.cjs` (alter 2D-Spielstand unberührt, Menü ohne 2D, `?ansicht=2d` öffnet das Spiel), `einfuehrung.cjs` (ohne 2D-Teil), `smoke.cjs` (`ONLY=fabrik | 3d | einfuehrung`).
+- Doku: `CLAUDE.md` (Technische Regeln ohne `src/view2d/`), `README.md`, `SPIEL.md` (Abschnitt 2 „Ein Spiel in 3D“), `BEDIENUNG.md` (Kamera, Schild über jedem Gebäude), `TECHNIK.md`, `STAND.md`, Archiv. Versionsnummer 0.54.0.
+
+**Geprüft:**
+- PRUEFUNG_FOLGT
+
 ### v0.53.0 – Feinschliff: Theke in der Einführung, Leiste oben (25.11.2026)
 
 **Vorgenommen:**

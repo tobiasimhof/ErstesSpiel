@@ -1,6 +1,6 @@
 # Das Spiel
 
-> Beschreibt kurz, wie das Spiel **jetzt** ist (Stand v0.53.0). Einzelheiten stehen in **`docs/inhalte/`** und werden nur gelesen, wenn wir daran arbeiten: `LEVEL.md` (Level, Aufträge, Aufstiege), `GEBAEUDE.md` (Gebäude, Baukosten), `WAREN.md` (Waren, Rezepte, Preise), `BEDIENUNG.md` (Bedienung im Einzelnen), `AUSBLICK.md` (Techbaum, Ideen), `ZAHLEN.md` (Rohstoffe, Zeit und Gold je Level und Ware, automatisch aus den Datentabellen). Bei jeder Änderung wird der Text **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
+> Beschreibt kurz, wie das Spiel **jetzt** ist (Stand v0.54.0). Einzelheiten stehen in **`docs/inhalte/`** und werden nur gelesen, wenn wir daran arbeiten: `LEVEL.md` (Level, Aufträge, Aufstiege), `GEBAEUDE.md` (Gebäude, Baukosten), `WAREN.md` (Waren, Rezepte, Preise), `BEDIENUNG.md` (Bedienung im Einzelnen), `AUSBLICK.md` (Techbaum, Ideen), `ZAHLEN.md` (Rohstoffe, Zeit und Gold je Level und Ware, automatisch aus den Datentabellen). Bei jeder Änderung wird der Text **ersetzt**, nicht ergänzt; wie es dazu kam, steht im Archiv (`docs/archiv/`). Alle Zahlen sind Platzhalter – maßgeblich sind die Datentabellen in `src/core/data/`.
 
 ## 1. Idee
 
@@ -15,11 +15,10 @@
 - **Grafik:** 3D mit Kenneys Modellen (CC0, www.kenney.nl) – Mittelalter in den Farben des Spiels, Kamera frei drehbar (Tobias' Wahl, Chat 23). Jedes Gebäude hat ein eigenes Haus (Bauart je Reiter, Dach in Reiterfarbe, ein Erkennungszeichen davor, Türme für Schreibstube und Uhrmacherei); ein Teil bewegt sich oder leuchtet nur beim Arbeiten (Wasserrad, Zahnrad, Kran, Rad, Stoffbahnen, Glut, Rauch, Staub, leuchtende Fenster und Fläschchen). Mittelalter mit ein paar Technik-Teilen in Messing, Stahl und Glas (Möglichkeit B, Chat 26). Jede Ware auf dem Band hat eine eigene kleine 3D-Form im Kenney-Stil (Zahnräder, Schlüssel, Verbandsrollen mit farbigen Streifen, Blütenhäufchen, Fläschchen …). Die vier Kräuter haben eine eigene Wuchsform (Flachs: Halme mit blauen Blüten, Ringelblume: große orange Blüte, Schafgarbe: weißer Schirm, Kamille: Gänseblümchen), die Samen eine Tüte mit dem Bild der Pflanze; im Beet wachsen die Pflanzen sichtbar (Keimling, klein, Knospen, reif). **Oberfläche** aus Kenneys UI Pack Adventure, schlicht und übersichtlich (Tobias: „sehr passend für den ersten Entwurf“): Fenster, Rückfragen und Menü haben einen Holzrahmen mit Eisenbeschlägen, alle Knöpfe sind Holzknöpfe (grün = Hauptknopf, rot = Abreißen/✕), Zeilen wie Holzschilder; Leiste oben und Bauleiste dunkles Holz; der gewählte bzw. offene Reiter ist dunkles Holz mit heller Schrift; die Schilder „＋ Preis“ zum Flächenkauf sind Holzschilder. **Klänge** (Kenneys UI Audio): Klicken beim Antippen, ein weicher Schalter beim Reiterwechsel – beim ersten Start aus. Über jedem Gebäude ein Schild (Ware, Ring, Statuslicht); von weitem nur ein kleines Statuslicht (grün arbeitet, gelb wartet, rot blockiert).
 - **Vorbilder nur für Mechaniken** (Alchemy Factory, Clash of Clans, Hay Day) – eigene Namen, Rezepte und Grafik. Geschäftsmodell später: kostenlos, Season Pass und Skins, kein Pay2Win.
 
-## 2. Zwei Spielstände: 3D-Test und echte Fabrik
+## 2. Ein Spiel in 3D
 
-- **3D-Test** – der Start (der Link ohne Zusatz): das Spiel in 3D mit eigenem Spielstand ab Level 1. **Hier spielt und testet Tobias jetzt** (Chat 31: Level 14, alle Aufträge erledigt). Sichern, Laden und „Neues Spiel“ betreffen dort nur den 3D-Test.
-- **Echte Fabrik (2D)** – hinten angestellt (Tobias, Chat 25): Tobias' Fabrik (Level 13, kann auf Level 14 aufsteigen) in der Draufsicht mit Platzhalter-Grafik, über ☰ → „🗺️ Zur echten Fabrik (2D)“ (Adresse `?ansicht=2d`), zurück mit „🧊 Zurück zum 3D-Test“. Sie läuft weiter und holt beim Öffnen die Zeit nach.
-- Spielregeln, Fenster und Steuerung sind in beiden gleich; neue Inhalte gibt es in beiden.
+- Es gibt **ein Spiel mit einem Spielstand**, in 3D (seit v0.54.0; Tobias, Chat 31: „das 3D game, das eigentliche Game geworden ist“). **Tobias' Fabrik:** Level 14, alle Aufträge erledigt (Chat 31).
+- Die frühere 2D-Welt (Draufsicht mit Platzhalter-Grafik und eigenem Spielstand) ist entfernt; ihr alter Spielstand liegt unberührt im Browser, alte Links mit `?ansicht=2d` öffnen einfach das Spiel.
 
 ## 3. Kernschleife und Zeit
 
@@ -31,7 +30,7 @@ Rohstoff kaufen → ins Gebäude legen → über Bänder und Maschinen verarbeit
 
 - **Echtzeit:** Die Fabrik läuft auch bei geschlossenem Spiel weiter, **bis etwas leer ist** (Rohstoff, Zutaten, Lagerhaus; Laden-Lager voll; Theken leer; Beete reif). Nachlegen ist Handarbeit („wie Clash of Clans, nur umgekehrt“). Beim Zurückkommen wird nachgerechnet; nach mehr als 10 Minuten erscheint „👋 Willkommen zurück!“.
 - **Leiste oben:** nur Gold, Laden-Level und ☰ (im Testmodus dazu „⏩ ×10“ und die Bilder pro Sekunde).
-- **Menü ☰:** „🔊 Audio“ (Klänge an/aus, Lautstärke; gilt für das Gerät, nicht für den Spielstand), „⛶ Vollbild“, Spielstand als Datei sichern und laden (auch zum Teilen), Testmodus (Zeit ×10, Testpaket, im 3D-Spiel der Belastungstest: eine voll bebaute Fläche zum Ablesen der Bilder pro Sekunde, wird nie gespeichert), 3D-Test ↔ echte Fabrik, Neues Spiel; ganz unten klein die Versionsnummer.
+- **Menü ☰:** „🔊 Audio“ (Klänge an/aus, Lautstärke; gilt für das Gerät, nicht für den Spielstand), „⛶ Vollbild“, Spielstand als Datei sichern und laden (auch zum Teilen), Testmodus (Zeit ×10, Testpaket, Belastungstest: eine voll bebaute Fläche zum Ablesen der Bilder pro Sekunde, wird nie gespeichert), Neues Spiel; ganz unten klein die Versionsnummer.
 
 ## 4. Die Fabrik
 

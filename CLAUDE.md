@@ -50,7 +50,7 @@
 
 ## Technische Regeln
 
-- Spielregeln (Simulation, `src/core/`) strikt getrennt von der Darstellung halten – Oberfläche für 2D und 3D in `src/ui/`, 3D-Grafik in `src/view3d/`, 2D-Grafik (hinten angestellt) in `src/view2d/`; Waren, Rezepte, Gebäude, Preise, Zeiten und Mengen stehen nur in den Datentabellen (`src/core/data/`). Die Simulation läuft in festen Takten (`src/core/sim.js`).
+- Spielregeln (Simulation, `src/core/`) strikt getrennt von der Darstellung halten – Oberfläche in `src/ui/`, 3D-Grafik in `src/view3d/` (die 2D-Welt ist seit v0.54.0 entfernt); Waren, Rezepte, Gebäude, Preise, Zeiten und Mengen stehen nur in den Datentabellen (`src/core/data/`). Die Simulation läuft in festen Takten (`src/core/sim.js`).
 - Nach dem Anlegen einer neuen Programmdatei `node tools/set-version.mjs` aufrufen – sonst lädt der Browser alte und neue Dateien gemischt (ein Test prüft das).
 - Knöpfe immer mit `onPress` aus `src/ui/press.js` verbinden, nicht mit `click` (Chrome verschluckt Klicks direkt nach schnellem Wischen).
 - Browser-Tests nicht von echter Zeit abhängig machen: `window.__game.simulate(sekunden)` nutzen. Die Fabrik läuft im Browser ständig weiter – Prüfungen müssen das aushalten. Gebäude in der Bauleiste im Browser-Test über `tapBuild(page, typ)` antippen (öffnet den passenden Reiter).

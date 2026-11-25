@@ -8,7 +8,7 @@ import { readFileSync } from 'node:fs';
 
 import { createStressFactory, STRESS_LINES } from '../src/core/belastungstest.js';
 import { footprintTiles } from '../src/core/geometry.js';
-import { STRESS_SLOT, TEST_3D_SLOT } from '../src/ui/storage.js';
+import { STRESS_SLOT, GAME_SLOT } from '../src/ui/storage.js';
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
@@ -35,7 +35,7 @@ test('Belastungstest: die Fabrik läuft – Waren auf den Bändern und im Laden-
 });
 
 test('Belastungstest: wird nie gespeichert und nutzt einen eigenen Speicherplatz', () => {
-  assert.notEqual(STRESS_SLOT, TEST_3D_SLOT);
+  assert.notEqual(STRESS_SLOT, GAME_SLOT);
   const main = read('src/main.js');
   assert.ok(main.includes("const STRESS_TEST = new URLSearchParams(location.search).has('belastungstest');"));
   assert.ok(main.includes('if (STRESS_TEST) useSaveSlot(STRESS_SLOT);'));

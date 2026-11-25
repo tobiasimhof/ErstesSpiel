@@ -69,7 +69,6 @@ import {
 import { affordableCount, canAfford, missingFor, storageCount } from '../core/shop.js';
 import { beltAt, buildingAt, findBuilding, isInWorld, isOwned } from '../core/state.js';
 import { emptyWarehouse, warehouseTotal } from '../core/warehouse.js';
-import { TILE, panBy, screenToWorld } from '../view2d/camera.js';
 import { createBuildingBody } from './buildingInfo.js';
 import { costText, formatDuration, numberFormat } from './format.js';
 import { createItemIcon } from './itemArt.js';
@@ -132,11 +131,10 @@ export function createController({
   warehouseView,
   onChange,
   requestDraw,
-  worldBounds,
-  // v0.34.0: 3D-Test – die 3D-Kamera sagt, welches Feld unter dem Finger
-  // liegt, und verschiebt selbst.
-  tileAt = null,
-  panScreen = null,
+  // v0.34.0: Die 3D-Kamera sagt, welches Feld unter dem Finger liegt, und
+  // verschiebt selbst (seit v0.54.0 gibt es nur noch sie).
+  tileAt,
+  panScreen,
   // v0.52.0: meldet Hildes Einführung, was getan wurde („einlegen:holzfaeller“,
   // „verschieben:versandportal“, „kaufen:holzstamm“)
   onEvent = () => {},
@@ -149,11 +147,7 @@ export function createController({
 
   const changed = () => onChange();
 
-  function tileAtScreen(sx, sy) {
-    if (tileAt) return tileAt(sx, sy);
-    const w = screenToWorld(camera, sx, sy);
-    return { x: Math.floor(w.x / TILE), y: Math.floor(w.y / TILE) };
-  }
+  const tileAtScreen = (sx, sy) => tileAt(sx, sy);
 
   function setMode(next, options) {
     mode = next;
@@ -1099,8 +1093,7 @@ export function createController({
     onDragMove(sx, sy, dx, dy) {
       if (!drag) return;
       if (drag.kind === 'pan') {
-        if (panScreen) panScreen(dx, dy);
-        else panBy(camera, dx, dy, worldBounds());
+        panScreen(dx, dy);
         requestDraw();
         return;
       }

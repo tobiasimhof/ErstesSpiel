@@ -788,7 +788,7 @@ button.danger {
   border-radius: 10px;
 }
 
-/* v0.34.0: 3D-Test – Knöpfe zum Drehen der Kamera, oben links */
+/* v0.34.0: Knöpfe zum Drehen der Kamera, oben links */
 .turn-buttons {
   position: absolute;
   top: 12px;
@@ -815,7 +815,7 @@ button.danger {
 /* v0.34.0: Über der 3D-Ansicht hält Chrome das scrollbare Infofenster für
    größer, als es ist, und zeichnet darunter die 3D-Welt nicht (schwarzer
    Kasten auf dem Handy). Ein Hauch Durchsichtigkeit verhindert das. */
-.view-3d #info-panel {
+#info-panel {
   background-color: rgba(255, 241, 210, 0.985);
 }
 

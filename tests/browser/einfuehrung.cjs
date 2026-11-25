@@ -1,9 +1,9 @@
 // Browser-Test v0.52.0: Einführung mit Bürgermeisterin Hilde (Tobias, Chat 29).
-// Ein neues Spiel im 3D-Test: Begrüßungsbrief, dann alle Schritte – getippt
+// Ein neues Spiel: Begrüßungsbrief, dann alle Schritte – getippt
 // wird immer dorthin, wohin Hildes Pfeil und Ring zeigen. Geprüft wird, dass
 // das Fenster das Ziel nicht verdeckt, dass Neuladen den Schritt behält, der
 // Abschlussbrief, „🎓 Einführung ansehen“, Wegklappen, „Weiter ›“ und
-// „Beenden“. Dazu kurz die echte Fabrik (2D): der Ring sitzt am Gebäude.
+// „Beenden“.
 
 const path = require('node:path');
 const { OUT, check, sleep, game, waitForGame, readLetter, setDevice, tilePos } = require('./helpers.cjs');
@@ -294,15 +294,6 @@ async function runTutorial(browser, baseUrl, device) {
 
   check(errors.length === 0, `Keine Fehler im Browser${errors.length ? `: ${errors.join(' | ')}` : ''}`);
 
-  // Die echte Fabrik (2D): neues Spiel, der Ring sitzt am Holzfällerlager
-  await page.goto(`${baseUrl}?ansicht=2d`);
-  await waitForGame(page, { name: 'Tobias', tutorial: 'keep' });
-  await readLetter(page);
-  l = await expectHint('building:holzfaeller', '2D: Schritt 2');
-  const hf2 = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'holzfaeller'));
-  const mid = await tilePos(page, hf2.x + 0.5, hf2.y + 0.5);
-  check(mid.x > l.ring.left && mid.x < l.ring.right && mid.y > l.ring.top && mid.y < l.ring.bottom, '2D: Der Ring liegt um das Holzfällerlager');
-  await shot('13-2d');
   await context.close();
 }
 
