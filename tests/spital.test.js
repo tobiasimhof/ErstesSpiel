@@ -27,7 +27,7 @@ import {
 import { isItemUnlocked, isRecipeUnlocked, itemLevel, levelUp, recipeLevel, unlocksOf } from '../src/core/levels.js';
 import { applyTestPack } from '../src/core/market.js';
 import { harvest, loadInput, setRecipe, sowFromStorage } from '../src/core/production.js';
-import { levelQuests, questReward, xpNeeded } from '../src/core/quests.js';
+import { levelQuests, questReward, xpOfLevel } from '../src/core/quests.js';
 import { deserializeGame, isValidState, serializeGame } from '../src/core/save.js';
 import { storageCount } from '../src/core/shop.js';
 import { simulate } from '../src/core/sim.js';
@@ -106,7 +106,7 @@ test('Level 10 „Das Spital“: Aufstieg 2.000 Gold, 1 Schafgarbensamen gratis'
   assert.equal(def.cost, 2000);
   assert.deepEqual(def.gift, { schafgarbensamen: 1 });
   const state = levelGame(9, 2500);
-  state.quest.xp = xpNeeded(9);
+  state.quest.index = levelQuests(9).length; // v0.56.0: alle Aufträge abgegeben
   const result = levelUp(state);
   assert.deepEqual(result, { level: 10, gift: { schafgarbensamen: 1 }, cost: 2000, moreLand: true });
   assert.equal(state.gold, 500);
@@ -129,7 +129,7 @@ test('Aufträge auf Level 10: 4 Stück aus beiden Bereichen, zusammen 2.116 Erfa
     rewards.map((r) => r.xp),
     [240, 378, 389, 1109],
   );
-  assert.equal(xpNeeded(10), 2116);
+  assert.equal(xpOfLevel(10), 2116);
   assert.equal(
     rewards.reduce((sum, r) => sum + r.gold, 0),
     7052,
@@ -161,7 +161,7 @@ test('Tobias’ Fabrik: alles gekauft auf Level 9 – beim Aufstieg auf Level 10
   fullPlot(state);
   const buildingsBefore = JSON.stringify(state.buildings);
   assert.deepEqual(landOffers(state), [], 'Level 9: kein Angebot mehr');
-  state.quest.xp = xpNeeded(9);
+  state.quest.index = levelQuests(9).length; // v0.56.0: alle Aufträge abgegeben
   assert.equal(levelUp(state).moreLand, true);
   assert.deepEqual(state.world, { x: -4, y: -7, width: 46, height: 38 });
   assert.deepEqual(state.plot, WORLD, 'das Grundstück bleibt, wie es war');

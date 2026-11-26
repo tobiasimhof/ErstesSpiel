@@ -4,13 +4,19 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 26.11.2026 – Chat 32: Rückmeldung zu Level 15 – Aufstieg blockiert (v0.55.1)
+### 26.11.2026 – Chat 32: Rückmeldung zu Level 15 – Aufstieg blockiert, „1 von 4“ statt Erfahrung (v0.55.1, v0.56.0)
 
 **Tobias** (mit Bild: Level 14, „Alle Aufträge dieses Bauabschnitts sind erledigt. Jetzt kannst du auf Level 15 aufsteigen.“, Erfahrung 3.829 / 3.976, Knopf „Aufsteigen auf Level 15 · 15.000“ grau, darunter „Noch 147 Erfahrung – gib die Aufträge der Bewohner ab.“): „Hey, bringe dich auf den aktuellen Stand. Ich wollte dir noch ein Feedback zum letzten Update geben. Ich hab meinen Browser aktualisiert und kann leider nicht aufsteigen, weil mir die Erfahrung dafür fehlt. Ich hab nicht weiter produziert, weil ich nicht weiter Gold verdienen wollte, deswegen ist alles stehen geblieben und ich hab manchmal per Hand vom Band eingesammelt. Vermutlich wurde das per hand einsammeln einfach addidiert zum Laden-Lager bzw. ich habe es gerade getestet. Ich kann die Strecken trotzdem leeren, obwohl das lager voll ist. Die Fenster kannst du erstmal so lassen wie sie sind.“
 
 **Claude** hat die Ursache gefunden und nachgerechnet: Die Erfahrung, die ein Level braucht, wird aus dem heutigen Wert der Auftragswaren berechnet. Seit v0.55.0 ist der Mörser 43 statt 29 Gold wert; Level 14 verlangt in zwei Aufträgen zusammen 35 Mörser, die Grenze stieg dadurch von 3.829 auf 3.976. Tobias hatte diese Aufträge zum alten Wert abgegeben – es fehlen genau 147. Das übervolle Laden-Lager ist gewollt („Strecke leeren“ darf es überfüllen, sonst ließe sich ein Stau bei vollem Lager nicht auflösen). Entwurf v0.55.2 in `PLAENE.md`: Wer alle Aufträge eines Levels abgegeben hat, kann aufsteigen; fehlende Erfahrung wird beim Laden aufgefüllt. 2 Fragen: Fehlerkorrektur so umsetzen? „Strecke leeren“ bei vollem Lager so lassen?
 
 **Umgesetzt:** v0.55.1 (nur Doku).
+
+**Tobias:** „Statt Erfahrung könnten wir auch einfach 1 von 4 sagen. Das macht es evtl. einfacher. Strecke leeren kann so bleiben. Ich hatte nicht mehr daran gedacht. Ansonsten setz gerne alles um“
+
+**Claude** hat v0.56.0 umgesetzt: Der Aufstieg geht, sobald alle Aufträge eines Levels abgegeben sind; die Leiste im Level-Fenster und im Knopf oben zeigt „Aufträge für Level 15 · 1 von 4“. Die Erfahrung ist im Spiel nicht mehr zu sehen (Belohnung und Meldungen nur mit Gold) und zählt im Hintergrund für die späteren Verbesserungen weiter (Claudes Lesart). Tobias kann sofort auf Level 15 aufsteigen. „Strecke leeren“ bleibt.
+
+**Umgesetzt:** v0.56.0.
 
 ### 25.11.2026 – Chat 31: Beratung – zurück zu Logik und Leveln (v0.52.2, v0.53.0, v0.54.0, v0.54.1, v0.54.2, v0.55.0)
 

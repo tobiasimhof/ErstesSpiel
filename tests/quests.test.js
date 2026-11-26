@@ -1,4 +1,5 @@
 // v0.13.0: Aufträge der Bewohner (Erfahrung und Gold) und neue Warennamen.
+// v0.56.0: Für den Aufstieg zählen die Aufträge („1 von 4“), die Erfahrung nur im Hintergrund.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
@@ -6,8 +7,9 @@ import { placeBuilding } from '../src/core/buildings.js';
 import { ITEMS } from '../src/core/data/items.js';
 import { LEVELS, MAX_LEVEL, QUEST_TEST_SKIP } from '../src/core/data/levels.js';
 import { RECIPES } from '../src/core/data/recipes.js';
-import { hasEnoughXp, levelUpBlocker } from '../src/core/levels.js';
+import { canLevelUp, levelUp, levelUpBlocker } from '../src/core/levels.js';
 import {
+  allQuestsDone,
   canDeliver,
   currentQuest,
   deliverQuest,
@@ -15,10 +17,11 @@ import {
   questNeeds,
   questNumber,
   questReward,
+  questsDone,
   questValue,
   canSkipQuest,
   skipQuest,
-  xpNeeded,
+  xpOfLevel,
 } from '../src/core/quests.js';
 import { deserializeGame, serializeGame } from '../src/core/save.js';
 import { createNewGame } from '../src/core/state.js';
@@ -56,23 +59,51 @@ test('Belohnung: Gold so viel wie an der Theke, Erfahrung 3 je 10 Gold Warenwert
   assert.deepEqual(questReward({ items: { holzstab: 20, holzplatte: 10 } }), { gold: 180, xp: 54 });
 });
 
-test('Die Erfahrung aller Aufträge eines Levels reicht genau für den Aufstieg', () => {
+test('v0.56.0: Erst wenn alle Aufträge eines Levels abgegeben sind, geht der Aufstieg („1 von 4“)', () => {
   for (let level = 1; level < MAX_LEVEL; level++) {
     const state = createNewGame(level);
     state.shopLevel = level;
+    state.gold = 1e9;
     const quests = levelQuests(level);
     quests.forEach((quest, i) => {
-      assert.equal(hasEnoughXp(state), false, `Level ${level}: vor Auftrag ${i + 1} noch nicht genug`);
+      assert.equal(questsDone(state), i);
+      assert.equal(allQuestsDone(state), false, `Level ${level}: vor Auftrag ${i + 1} noch nicht alle`);
+      assert.equal(levelUpBlocker(state), 'quests');
       fillFor(state, quest);
       assert.ok(deliverQuest(state));
     });
-    assert.equal(state.quest.xp, xpNeeded(level));
-    assert.equal(hasEnoughXp(state), true, `Level ${level}: nach allen Aufträgen genug Erfahrung`);
+    assert.equal(questsDone(state), quests.length);
+    assert.equal(allQuestsDone(state), true, `Level ${level}: alle Aufträge abgegeben`);
+    assert.equal(state.quest.xp, xpOfLevel(level), 'Erfahrung zählt im Hintergrund weiter');
+    assert.equal(levelUpBlocker(state), null);
   }
 });
 
+test("v0.56.0: Tobias' Fabrik – Level 14 vor der Preisänderung des Mörsers abgegeben (3.829 statt 3.976 Erfahrung): Aufstieg geht", () => {
+  const state = createNewGame(14);
+  state.shopLevel = 14;
+  state.quest = { index: 4, xp: 3829 };
+  state.gold = 36904;
+  assert.ok(xpOfLevel(14) > 3829, 'mit den heutigen Preisen gäbe Level 14 mehr Erfahrung');
+  assert.equal(allQuestsDone(state), true);
+  assert.equal(levelUpBlocker(state), null);
+  const loaded = deserializeGame(serializeGame(state)).state;
+  assert.equal(canLevelUp(loaded), true, 'auch nach dem Laden');
+  assert.deepEqual(levelUp(loaded), { level: 15, gift: {}, cost: 15000, moreLand: true });
+  assert.deepEqual(loaded.quest, { index: 0, xp: 0 }, 'Level 15 beginnt bei 0 von 4');
+  assert.equal(loaded.gold, 36904 - 15000);
+});
+
+test('v0.56.0: Viel Erfahrung ersetzt keinen Auftrag', () => {
+  const state = createNewGame(1);
+  state.gold = 1e9;
+  state.quest = { index: 2, xp: 1e6 };
+  assert.equal(levelUpBlocker(state), 'quests', 'ein Auftrag von 3 fehlt');
+  assert.equal(levelUp(state), null);
+});
+
 test('Erfahrung je Level: steigt im Werkzeug-Kapitel, das Kräuter-Kapitel fängt wieder klein an', () => {
-  const needs = Object.keys(LEVELS).map((level) => xpNeeded(Number(level)));
+  const needs = Object.keys(LEVELS).map((level) => xpOfLevel(Number(level)));
   // v0.23.0: wie vorher, nur Level 6–8 durch das Runden der Preise etwas weniger
   // (vorher 1.841, 850, 1.332)
   // v0.26.0: Level 9 (Werkzeuge) wieder etwas mehr als Level 8
@@ -134,8 +165,8 @@ test('Höchstes Level: Aufträge gehen, die Erfahrung sammelt sich, aufsteigen g
     fillFor(state, quest);
     assert.ok(deliverQuest(state));
   }
-  assert.equal(state.quest.xp, xpNeeded(MAX_LEVEL));
-  assert.equal(state.xpTotal, xpNeeded(MAX_LEVEL));
+  assert.equal(state.quest.xp, xpOfLevel(MAX_LEVEL));
+  assert.equal(state.xpTotal, xpOfLevel(MAX_LEVEL));
   assert.equal(levelUpBlocker(state), 'max');
 });
 
@@ -170,16 +201,17 @@ test('Test-Knopf geht auch ohne die Waren; danach ist Abgeben wieder normal', ()
   assert.deepEqual(state.quest, { index: 2, xp: 27 });
 });
 
-test('Test-Knopf: alle Aufträge eines Levels ergeben genau die Erfahrung; Aufsteigen kostet weiter Gold', () => {
+test('Test-Knopf: alle Aufträge eines Levels gelten als abgegeben; Aufsteigen kostet weiter Gold', () => {
   for (let level = 1; level < MAX_LEVEL; level++) {
     const state = createNewGame(1);
     state.shopLevel = level;
     state.gold = 0;
     for (let i = 0; i < levelQuests(level).length; i++) assert.ok(skipQuest(state), `Level ${level}, Auftrag ${i + 1}`);
-    assert.equal(state.quest.xp, xpNeeded(level));
+    assert.equal(state.quest.xp, xpOfLevel(level));
+    assert.equal(allQuestsDone(state), true);
     assert.equal(canSkipQuest(state), false, 'kein Auftrag mehr');
     assert.equal(skipQuest(state), null);
-    assert.equal(levelUpBlocker(state), 'gold', `Level ${level}: genug Erfahrung, aber das Gold fehlt`);
+    assert.equal(levelUpBlocker(state), 'gold', `Level ${level}: alle Aufträge erledigt, aber das Gold fehlt`);
   }
 });
 
@@ -187,7 +219,7 @@ test('Test-Knopf auf dem höchsten Level: Erfahrung sammelt sich bis zum nächst
   const state = createNewGame(1);
   state.shopLevel = MAX_LEVEL;
   while (skipQuest(state));
-  assert.equal(state.quest.xp, xpNeeded(MAX_LEVEL));
+  assert.equal(state.quest.xp, xpOfLevel(MAX_LEVEL));
   assert.equal(levelUpBlocker(state), 'max');
   const loaded = deserializeGame(serializeGame(state));
   assert.deepEqual(loaded.state.quest, state.quest, 'Spielstand-Format unverändert');

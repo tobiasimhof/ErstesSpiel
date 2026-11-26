@@ -39,7 +39,7 @@ Wie das Spiel gebaut ist. Nur lesen, wenn programmiert wird; die Arbeitsregeln s
 | `core/buildings.js`, `belts.js`, `area.js` | Gebäude bauen, verschieben, drehen, abreißen; Förderbänder legen, aufteilen, zusammenführen, Strecke und Zulauf leeren; Bereich markieren und als Ganzes bewegen, Bereich kopieren (`planAreaCopy`, `copyArea`: alles oder nichts) |
 | `core/production.js`, `warehouse.js`, `sim.js` | Was Gebäude tun (einlegen, herstellen, wachsen, versenden, Status; Feuerfach `fuelSlot`, `refuel` – Rezept `fuel`, Gebäude `production.fuel`); Lagerhaus und Laden-Lager; Takte, Waren auf Bändern, Stau |
 | `core/shop.js`, `market.js` | Laden-Lager, Baukosten, Theken-Tempo je Level, Lager vergrößern; Händler, Theken, Kunden (eigener Zufall im Spielstand), Theken kaufen, Pleiteschutz, Testpaket, Auffüllen, Säen |
-| `core/levels.js`, `quests.js`, `land.js` | Freischalten, Aufstieg, Rezepte mit eigenem Level; Aufträge und Belohnung, Test-Knopf; Fläche je Level und Preis je Streifen |
+| `core/levels.js`, `quests.js`, `land.js` | Freischalten, Aufstieg (sobald alle Aufträge abgegeben sind), Rezepte mit eigenem Level; Aufträge und Belohnung („1 von 4“, Erfahrung nur im Hintergrund), Test-Knopf; Fläche je Level und Preis je Streifen |
 | `core/belastungstest.js` | Belastungstest: voll bebaute Fläche (Level 13, 46 × 38, 52 Straßen) nach den echten Regeln; `main.js` zeigt sie unter `?belastungstest=1` mit eigenem Speicherplatz (`STRESS_SLOT`) und speichert nie |
 | `core/offline.js`, `save.js` | Verpasste Zeit nachrechnen, Bericht „Willkommen zurück“; Spielstand in Text umwandeln, prüfen, alte Formate umwandeln (Format 21) |
 | `core/player.js` | Name des Spielers (`playerName`, höchstens 16 Zeichen, `cleanPlayerName`, `setPlayerName`) |

@@ -8,6 +8,7 @@ import { existsSync, readFileSync } from 'node:fs';
 
 import { levelUp } from '../src/core/levels.js';
 import { setPlayerName } from '../src/core/player.js';
+import { levelQuests } from '../src/core/quests.js';
 import { createNewGame } from '../src/core/state.js';
 import { bailoutLetter, brokenSaveLetter, levelUpLetter, newsLetter } from '../src/ui/letters.js';
 
@@ -19,7 +20,7 @@ function upTo(level) {
   setPlayerName(state, 'Tobias');
   let result = null;
   while (state.shopLevel < level) {
-    state.quest.xp = 1e9;
+    state.quest.index = levelQuests(state.shopLevel).length; // v0.56.0: alle Aufträge abgegeben
     state.gold = 1e9;
     result = levelUp(state);
     assert.ok(result, `Aufstieg auf ${state.shopLevel + 1}`);

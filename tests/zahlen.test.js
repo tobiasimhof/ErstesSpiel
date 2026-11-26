@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 import { buildReport, unitCost, bundleCost, rawGold, machineSeconds, bottleneck, levelFigures, plantCount, REPORT_PATH } from '../tools/zahlen.mjs';
-import { xpNeeded } from '../src/core/quests.js';
+import { xpOfLevel } from '../src/core/quests.js';
 import { MAX_LEVEL } from '../src/core/data/levels.js';
 
 const close = (a, b, what) => assert.ok(Math.abs(a - b) < 1e-9, `${what}: ${a} statt ${b}`);
@@ -34,7 +34,7 @@ test('Rechenwerkzeug: Pflanzen zählen ihre Samen, das Beet zählt beim Engpass'
 test('Rechenwerkzeug: Level 1 braucht 225 Holzblöcke, die Erfahrung passt zu den Aufträgen', () => {
   const f = levelFigures(1);
   close(f.cost.raws.holzstamm, 225 / 200, 'Holzstämme für Level 1');
-  for (let level = 1; level <= MAX_LEVEL; level++) assert.equal(levelFigures(level).xp, xpNeeded(level), `Level ${level}`);
+  for (let level = 1; level <= MAX_LEVEL; level++) assert.equal(levelFigures(level).xp, xpOfLevel(level), `Level ${level}`);
   close(bundleCost({ holzstab: 2, holzplatte: 1 }).raws.holzstamm, 15 / 200, 'Mischung');
 });
 

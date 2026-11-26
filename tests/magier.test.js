@@ -26,7 +26,7 @@ import {
   missingInputs,
   refuel,
 } from '../src/core/production.js';
-import { levelQuests, questReward, xpNeeded } from '../src/core/quests.js';
+import { levelQuests, questReward, xpOfLevel } from '../src/core/quests.js';
 import { SAVE_VERSION, deserializeGame, isValidState, serializeGame } from '../src/core/save.js';
 import { storageCount } from '../src/core/shop.js';
 import { simulate } from '../src/core/sim.js';
@@ -106,7 +106,7 @@ test('Aufträge auf Level 15: Ambrosius, Wirt Hannes, Klara – zusammen 16.066 
   );
   const gold = quests.map((q) => questReward(q).gold).reduce((a, b) => a + b, 0);
   assert.equal(gold, 16066);
-  assert.equal(xpNeeded(15), 4820);
+  assert.equal(xpOfLevel(15), 4820);
   const ratio = gold / 13251;
   assert.ok(ratio > 1.15 && ratio < 1.3, `Sprung zu Level 14: ×${ratio.toFixed(2)}`);
 });
@@ -114,7 +114,7 @@ test('Aufträge auf Level 15: Ambrosius, Wirt Hannes, Klara – zusammen 16.066 
 test('Aufstieg auf Level 15: 15.000 Gold, die Welt rückt an jeder Seite 4 Felder nach außen (bis 54 × 46)', () => {
   const state = levelGame(14, 20000);
   const before = { ...state.world };
-  state.quest.xp = xpNeeded(14);
+  state.quest.index = levelQuests(14).length; // v0.56.0: alle Aufträge abgegeben
   const up = levelUp(state);
   assert.deepEqual(up, { level: 15, gift: {}, cost: 15000, moreLand: true });
   assert.equal(state.gold, 5000);

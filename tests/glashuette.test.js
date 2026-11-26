@@ -18,7 +18,7 @@ import { fitWorldToLevel } from '../src/core/land.js';
 import { isItemUnlocked, isRecipeUnlocked, itemLevel, levelUp, recipeLevel, unlocksOf } from '../src/core/levels.js';
 import { applyTestPack, buyCounter, buyRaw, counterSlots, refillInput, refillPlan, refillSource } from '../src/core/market.js';
 import { buildingStatus, loadInput, setRecipe, sourceCount, sourceInputTypes } from '../src/core/production.js';
-import { levelQuests, questReward, xpNeeded } from '../src/core/quests.js';
+import { levelQuests, questReward, xpOfLevel } from '../src/core/quests.js';
 import { SAVE_VERSION, deserializeGame, serializeGame } from '../src/core/save.js';
 import { storageCount } from '../src/core/shop.js';
 import { simulate } from '../src/core/sim.js';
@@ -124,7 +124,7 @@ test('Level 13 „Die Glashütte“: Aufstieg 10.000 Gold, kein Geschenk, keine 
   assert.equal(def.cost, 10000);
   assert.equal(def.gift, undefined);
   const state = levelGame(12, 10500);
-  state.quest.xp = xpNeeded(12);
+  state.quest.index = levelQuests(12).length; // v0.56.0: alle Aufträge abgegeben
   const storageBefore = { ...state.storage };
   const worldBefore = { ...state.world };
   assert.deepEqual(levelUp(state), { level: 13, gift: {}, cost: 10000, moreLand: false });
@@ -135,7 +135,7 @@ test('Level 13 „Die Glashütte“: Aufstieg 10.000 Gold, kein Geschenk, keine 
 
 test('Ohne genug Gold kein Aufstieg auf Level 13', () => {
   const state = levelGame(12, 9999);
-  state.quest.xp = xpNeeded(12);
+  state.quest.index = levelQuests(12).length; // v0.56.0: alle Aufträge abgegeben
   assert.equal(levelUp(state), null);
   assert.equal(state.shopLevel, 12);
 });
@@ -156,8 +156,8 @@ test('Aufträge auf Level 13: 4 Stück, zusammen 3.147 Erfahrung und 10.490 Gold
     rewards.map((r) => r.xp),
     [180, 540, 1023, 1404],
   );
-  assert.equal(xpNeeded(13), 3147);
-  assert.ok(xpNeeded(13) > xpNeeded(12), 'mehr Erfahrung als Level 12');
+  assert.equal(xpOfLevel(13), 3147);
+  assert.ok(xpOfLevel(13) > xpOfLevel(12), 'mehr Erfahrung als Level 12');
   assert.equal(
     rewards.reduce((sum, r) => sum + r.gold, 0),
     10490,

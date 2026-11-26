@@ -1,6 +1,6 @@
 // Fenster „Laden-Level“ (v0.9.0, seit v0.13.0 mit Aufträgen):
-// - Reiter „📜 Aufträge“: Geschichte des Bauabschnitts, Erfahrungsleiste, der
-//   aktuelle Auftrag mit „✓ Abgeben“ und der Aufstieg (kostet Gold).
+// - Reiter „📜 Aufträge“: Geschichte des Bauabschnitts, Leiste „Aufträge für
+//   Level 15 · 1 von 4“ (v0.56.0, vorher Erfahrung), der aktuelle Auftrag mit „✓ Abgeben“ und der Aufstieg (kostet Gold).
 // - Reiter „🏘️ Ort & Level“: alle Bauabschnitte des Ortes und was sie
 //   freischalten.
 //
@@ -19,12 +19,11 @@ import {
   canSkipQuest,
   currentQuest,
   deliverQuest,
-  levelXp,
   questNeeds,
   questNumber,
   questReward,
+  questsDone,
   skipQuest,
-  xpNeeded,
 } from '../core/quests.js';
 import { costText, fillName, itemCount, numberFormat } from './format.js';
 import { createItemIcon } from './itemArt.js';
@@ -109,10 +108,10 @@ export function createLevelView({ state, panels, onLevelUp, onQuestDone, onTutor
     const next = LEVELS[level + 1] ? level + 1 : null;
     body.append(el('p', 'level-story', LEVELS[level].story));
 
-    // Erfahrungsleiste
+    // Leiste der Aufträge (v0.56.0, Tobias: „einfach 1 von 4“ statt Erfahrung)
     const xpBox = el('div', 'xp-box');
     const xpLabel = el('div', 'xp-label');
-    const xpTitle = el('span', null, next ? `Erfahrung für Level ${next}` : 'Erfahrung in diesem Bauabschnitt');
+    const xpTitle = el('span', null, next ? `Aufträge für Level ${next}` : 'Aufträge in diesem Bauabschnitt');
     const xpCount = el('span', 'xp-count');
     xpLabel.append(xpTitle, xpCount);
     const xpBar = el('div', 'xp-bar');
@@ -127,8 +126,8 @@ export function createLevelView({ state, panels, onLevelUp, onQuestDone, onTutor
           'div',
           'level-banner',
           lastDelivery.skipped
-            ? `🧪 Auftrag als erledigt gewertet (Test): +${numberFormat.format(lastDelivery.xp)} Erfahrung, kein Gold.`
-            : `✅ Auftrag erledigt: +${numberFormat.format(lastDelivery.xp)} Erfahrung, +${numberFormat.format(lastDelivery.gold)} Gold.`,
+            ? '🧪 Auftrag als erledigt gewertet (Test): keine Waren, kein Gold.'
+            : `✅ Auftrag erledigt: +${numberFormat.format(lastDelivery.gold)} Gold.`,
         ),
       );
     }
@@ -155,7 +154,7 @@ export function createLevelView({ state, panels, onLevelUp, onQuestDone, onTutor
       }
       const foot = el('div', 'quest-foot');
       foot.append(
-        el('span', 'quest-reward', `Belohnung: +${numberFormat.format(reward.xp)} Erfahrung · +${numberFormat.format(reward.gold)} 🪙`),
+        el('span', 'quest-reward', `Belohnung: +${numberFormat.format(reward.gold)} 🪙`),
       );
       deliver = makeButton({
         label: '✓ Abgeben',
@@ -173,8 +172,8 @@ export function createLevelView({ state, panels, onLevelUp, onQuestDone, onTutor
       foot.append(deliver);
       card.append(list, foot, el('p', 'modal-meta quest-note', 'Die Waren kommen aus dem Laden-Lager. Stehen sie auf einer Theke, räum sie vorher ab.'));
       body.append(card);
-      // v0.15.0: Test-Knopf für den Prototyp (Tobias) – Erfahrung ohne Waren
-      // und ohne Gold, damit man die Spielmechanik testen kann.
+      // v0.15.0: Test-Knopf für den Prototyp (Tobias) – zählt wie abgegeben,
+      // ohne Waren und ohne Gold, damit man die Spielmechanik testen kann.
       if (canSkipQuest(state)) {
         const testBox = el('div', 'quest-test');
         const skip = makeButton({
@@ -191,7 +190,7 @@ export function createLevelView({ state, panels, onLevelUp, onQuestDone, onTutor
         skip.classList.add('quest-skip');
         testBox.append(
           skip,
-          el('span', 'quest-test-note', `Nur zum Testen: +${numberFormat.format(reward.xp)} Erfahrung, ohne Waren und ohne Gold.`),
+          el('span', 'quest-test-note', 'Nur zum Testen: zählt als abgegeben, ohne Waren und ohne Gold.'),
         );
         body.append(testBox);
       }
@@ -211,7 +210,7 @@ export function createLevelView({ state, panels, onLevelUp, onQuestDone, onTutor
         el(
           'p',
           'level-reward',
-          `Du hast das höchste Level (${MAX_LEVEL}) erreicht. Level ${MAX_LEVEL + 1} kommt mit dem nächsten Techbaum; deine Erfahrung sammelt sich bis dahin.`,
+          `Du hast das höchste Level (${MAX_LEVEL}) erreicht. Level ${MAX_LEVEL + 1} kommt mit dem nächsten Techbaum.`,
         ),
       );
     }
@@ -249,10 +248,10 @@ export function createLevelView({ state, panels, onLevelUp, onQuestDone, onTutor
     }
 
     return () => {
-      const need = xpNeeded(level);
-      const have = levelXp(state);
-      xpCount.textContent = `${numberFormat.format(Math.min(have, need))} / ${numberFormat.format(need)}`;
-      xpFill.style.width = `${Math.min(100, (have / Math.max(1, need)) * 100)}%`;
+      const total = questNumber(state).total;
+      const done = questsDone(state);
+      xpCount.textContent = `${done} von ${total}`;
+      xpFill.style.width = `${total > 0 ? (done / total) * 100 : 100}%`;
       const needs = quest ? questNeeds(state, quest) : [];
       for (const r of rows) {
         const n = needs.find((item) => item.type === r.type);
@@ -266,11 +265,11 @@ export function createLevelView({ state, panels, onLevelUp, onQuestDone, onTutor
         const blocker = levelUpBlocker(state);
         button.disabled = blocker !== null;
         hint.textContent =
-          blocker === 'xp'
-            ? `Noch ${numberFormat.format(need - have)} Erfahrung – gib die Aufträge der Bewohner ab.`
+          blocker === 'quests'
+            ? `Noch ${total - done} ${total - done === 1 ? 'Auftrag' : 'Aufträge'} – gib die Aufträge der Bewohner ab.`
             : blocker === 'gold'
-              ? `Genug Erfahrung! Dir fehlen noch ${numberFormat.format(nextLevelCost(state) - state.gold)} Gold für den Aufstieg.`
-              : 'Genug Erfahrung und Gold – du kannst aufsteigen.';
+              ? `Alle Aufträge erledigt! Dir fehlen noch ${numberFormat.format(nextLevelCost(state) - state.gold)} Gold für den Aufstieg.`
+              : 'Alle Aufträge erledigt und genug Gold – du kannst aufsteigen.';
       }
     };
   }
@@ -292,7 +291,7 @@ export function createLevelView({ state, panels, onLevelUp, onQuestDone, onTutor
       el(
         'p',
         'modal-meta',
-        'Dein Laden liegt in einem kleinen Ort am Fluss, der wächst. Jedes Level ist ein Bauabschnitt: Die Bewohner geben Aufträge, die Erfahrung daraus schaltet das nächste Level frei, und kaufen musst du es mit Gold. Jedes Level bringt neue Gebäude, Rezepte oder mehr Platz – bis Level 10 auch zu Beginn einen Rohstoff gratis.',
+        'Dein Laden liegt in einem kleinen Ort am Fluss, der wächst. Jedes Level ist ein Bauabschnitt: Die Bewohner geben Aufträge; sind alle erledigt, kannst du das nächste Level freischalten – kaufen musst du es mit Gold. Jedes Level bringt neue Gebäude, Rezepte oder mehr Platz – bis Level 10 auch zu Beginn einen Rohstoff gratis.',
       ),
     );
     const list = el('div', 'level-list');

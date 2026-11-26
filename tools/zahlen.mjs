@@ -33,7 +33,7 @@ import { BUILDINGS } from '../src/core/data/buildings.js';
 import { LEVELS, MAX_LEVEL } from '../src/core/data/levels.js';
 import { SHOP_LEVELS, COUNTERS, STORAGE_UPGRADE } from '../src/core/data/shop.js';
 import { LAND, LAND_MORE } from '../src/core/data/land.js';
-import { questValue, questReward, xpNeeded } from '../src/core/quests.js';
+import { questValue, questReward, xpOfLevel } from '../src/core/quests.js';
 import { itemLevel, recipeLevel } from '../src/core/levels.js';
 
 export const REPORT_PATH = 'docs/inhalte/ZAHLEN.md';
@@ -188,7 +188,7 @@ export function levelFigures(level) {
     items,
     value: quests.reduce((s, q) => s + questValue(q), 0),
     gold: quests.reduce((s, q) => s + questReward(q).gold, 0),
-    xp: xpNeeded(level),
+    xp: xpOfLevel(level),
     cost,
     rawGold: rawGold(cost),
     plants: plantCount(cost),

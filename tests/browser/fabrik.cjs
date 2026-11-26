@@ -772,10 +772,11 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
 
   // ---------- Laden-Level und Aufträge (v0.13.0) ----------
   // Aufträge der Bewohner per Touch abgeben (Waren aus dem Laden-Lager), dann
-  // mit Erfahrung und Gold aufsteigen. Weitere Level: Erfahrung direkt setzen.
+  // mit allen Aufträgen und Gold aufsteigen. Weitere Level: Aufträge direkt als
+  // abgegeben setzen (v0.56.0: „1 von 4“ statt Erfahrung).
   const quest1 = await game(page, () => window.__game.currentQuest());
   check(quest1.from === 'Zimmermann Jakob' && quest1.items.holzplatte === 5, `Erster Auftrag: Jakob will 5 Holzplatten (${JSON.stringify(quest1.items)})`);
-  check(await page.isVisible('#btn-level .hud-xp'), 'Erfahrungsleiste oben im Knopf „Laden-Level“');
+  check(await page.isVisible('#btn-level .hud-xp'), 'Auftragsleiste oben im Knopf „Laden-Level“');
   await game(page, () => {
     const s = window.__game.state.storage;
     s.holzplatte = (s.holzplatte ?? 0) + 15;
@@ -793,15 +794,15 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     'Level-Fenster zeigt Bauabschnitt und den ersten Auftrag',
   );
   check(
-    levelText.includes('Erfahrung für Level 2') && levelText.includes('0 / 81') && levelText.includes('Belohnung: +9 Erfahrung · +30'),
-    'Erfahrungsleiste 0 / 81 und Belohnung',
+    levelText.includes('Aufträge für Level 2') && levelText.includes('0 von 3') && levelText.includes('Belohnung: +30') && !levelText.includes('Erfahrung'),
+    'Leiste „Aufträge für Level 2 · 0 von 3“, Belohnung nur Gold (v0.56.0: keine Erfahrung mehr zu sehen)',
   );
   check((await page.locator('#modal-content .goal-row.done').count()) === 1, 'Ware liegt im Laden-Lager (abgehakt)');
   check(
     await page.locator('#modal-content button.quest-skip', { hasText: '🧪 Test: Auftrag erledigen' }).isVisible(),
     'Test-Knopf „Auftrag erledigen“ ist zu sehen (v0.15.0, ohne Testmodus)',
   );
-  check(await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 2' }).isDisabled(), 'Aufsteigen noch gesperrt (zu wenig Erfahrung)');
+  check(await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 2' }).isDisabled(), 'Aufsteigen noch gesperrt (noch nicht alle Aufträge)');
   await shot('10b-auftrag');
   const before1 = await game(page, () => ({ plates: window.__game.state.storage.holzplatte, gold: window.__game.state.gold }));
   await page.locator('#modal-content button', { hasText: 'Abgeben' }).tap();
@@ -809,17 +810,17 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const after1 = await game(page, () => ({ plates: window.__game.state.storage.holzplatte, gold: window.__game.state.gold, quest: window.__game.state.quest }));
   check(
     after1.plates === before1.plates - 5 && after1.gold >= before1.gold + 30 && after1.quest.index === 1 && after1.quest.xp === 9,
-    `Abgeben: 5 Holzplatten weg, +30 Gold, +9 Erfahrung (${JSON.stringify(after1)})`,
+    `Abgeben: 5 Holzplatten weg, +30 Gold, +9 Erfahrung im Hintergrund (${JSON.stringify(after1)})`,
   );
   const text2 = await page.textContent('#modal-content');
-  check(text2.includes('Auftrag erledigt') && text2.includes('Auftrag 2 von 3') && text2.includes('9 / 81'), 'Nächster Auftrag rückt nach, Leiste wächst');
+  check(text2.includes('Auftrag erledigt') && text2.includes('Auftrag 2 von 3') && text2.includes('1 von 3'), 'Nächster Auftrag rückt nach, Leiste wächst');
   await page.locator('#modal-content button', { hasText: 'Abgeben' }).tap();
   await sleep(200);
   await page.locator('#modal-content button', { hasText: 'Abgeben' }).tap();
   await sleep(450);
   const done1 = await page.textContent('#modal-content');
-  check(done1.includes('Alle Aufträge dieses Bauabschnitts sind erledigt') && done1.includes('81 / 81'), 'Alle drei Aufträge erledigt, Erfahrung voll');
-  check(done1.includes('du kannst aufsteigen'), 'Genug Erfahrung und Gold');
+  check(done1.includes('Alle Aufträge dieses Bauabschnitts sind erledigt') && done1.includes('3 von 3'), 'Alle drei Aufträge erledigt, Leiste voll');
+  check(done1.includes('Alle Aufträge erledigt und genug Gold – du kannst aufsteigen'), 'Alle Aufträge und genug Gold');
   await shot('10c-level-bereit');
   const goldBeforeUp = await game(page, () => window.__game.state.gold);
   await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 2 · 30' }).tap();
@@ -856,8 +857,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await page.textContent('#hud-level')) === '2', 'Oben steht Level 2');
   await shot('10d-level-2');
   const upButton3 = page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 3' });
-  check(await upButton3.isDisabled(), 'Level 3 noch gesperrt (zu wenig Erfahrung)');
-  await game(page, () => (window.__game.state.quest.xp = window.__game.xpNeeded()));
+  check(await upButton3.isDisabled(), 'Level 3 noch gesperrt (noch nicht alle Aufträge)');
+  await game(page, () => (window.__game.state.quest.index = window.__game.questCount()));
   const enabled3 = await page
     .waitForFunction(() => [...document.querySelectorAll('#modal-content button')].some((b) => b.textContent.includes('Level 3') && !b.disabled), null, { timeout: 3000 })
     .then(() => true, () => false);
@@ -997,7 +998,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.tap('#info-close');
 
   // ---------- Level 4: Zimmerei mit zwei Eingängen (v0.10.0) ----------
-  await game(page, () => (window.__game.state.quest.xp = window.__game.xpNeeded()));
+  await game(page, () => (window.__game.state.quest.index = window.__game.questCount()));
   await page.tap('#btn-level');
   await sleep(120);
   await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 4' }).tap();
@@ -1339,7 +1340,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   // ---------- Level 5 und 6 (seit v0.24.0 ohne neue Theken) ----------
   const levelUpWithXp = async (level) => {
     await game(page, () => {
-      window.__game.state.quest.xp = window.__game.xpNeeded();
+      window.__game.state.quest.index = window.__game.questCount();
       window.__game.state.gold += 3000;
     });
     await sleep(450);
@@ -1359,7 +1360,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     'Level 6: Aufträge fürs Stadttor, danach kommt Level 7 „Die Heilstube“',
   );
   await shot('15-level-6');
-  // v0.15.0: Test-Knopf – Erfahrung ohne Waren und ohne Gold
+  // v0.15.0: Test-Knopf – zählt als abgegeben, ohne Waren und ohne Gold
   const before6 = await game(page, () => {
     const st = window.__game.state;
     return { gold: st.gold, sale: st.market.sales[0]?.id ?? 0, storage: { ...st.storage }, quest: { ...st.quest } };
@@ -1386,8 +1387,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }
   const allSkipped = await page.textContent('#modal-content');
   check(
-    allSkipped.includes('Alle Aufträge dieses Bauabschnitts sind erledigt') && allSkipped.includes('1.840 / 1.840'),
-    'Alle 4 Aufträge vom Stadttor per Test-Knopf erledigt, Erfahrung voll',
+    allSkipped.includes('Alle Aufträge dieses Bauabschnitts sind erledigt') && allSkipped.includes('4 von 4'),
+    'Alle 4 Aufträge vom Stadttor per Test-Knopf erledigt, Leiste voll',
   );
   check((await page.locator('#modal-content button.quest-skip').count()) === 0, 'Ohne Auftrag kein Test-Knopf mehr');
   // v0.16.0: Aufsteigen auf Level 7 „Die Heilstube“ (1.000 Gold; das Gold
@@ -1413,7 +1414,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     lvl7Text.includes('Level 7 erreicht') && lvl7Text.includes('Die Heilstube') && lvl7Text.includes('Heilerin Agnes') && lvl7Text.includes('5 Verbände'),
     'Level-Fenster: Heilerin Agnes möchte 5 Verbände',
   );
-  check(lvl7Text.includes('0 / 816'), 'Erfahrung für Level 8: 0 / 816');
+  check(lvl7Text.includes('Aufträge für Level 8') && lvl7Text.includes('0 von 4'), 'Aufträge für Level 8: 0 von 4');
   await shot('15c-level-7');
   await page.tap('#modal-close');
   await page.tap('#btn-shop');
@@ -1669,7 +1670,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }
   const l7done = await page.textContent('#modal-content');
   check(
-    l7done.includes('816 / 816') && l7done.includes('Nächstes Level: Level 8 · Der Kräutergarten') && l7done.includes('Kräuterstube') &&
+    l7done.includes('4 von 4') && l7done.includes('Nächstes Level: Level 8 · Der Kräutergarten') && l7done.includes('Kräuterstube') &&
       l7done.includes('Ringelblumensamen beim Händler'),
     'Level 7 erledigt; Level 8 kündigt Kräuterstube und Ringelblumensamen an',
   );
@@ -1681,7 +1682,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const lvl8 = await game(page, () => ({ level: window.__game.state.shopLevel, seeds: window.__game.state.storage.ringelblumensamen ?? 0 }));
   check(lvl8.level === 8 && lvl8.seeds === 1, `Level 8: 1 Ringelblumensamen gratis (${JSON.stringify(lvl8)})`);
   const lvl8Text = await page.textContent('#modal-content');
-  check(lvl8Text.includes('Der Kräutergarten') && lvl8Text.includes('50 Ringelblüten') && lvl8Text.includes('0 / 1.305'), 'Level 8: Agnes möchte 50 Ringelblüten, Erfahrung 0 / 1.305');
+  check(lvl8Text.includes('Der Kräutergarten') && lvl8Text.includes('50 Ringelblüten') && lvl8Text.includes('0 von 4'), 'Level 8: Agnes möchte 50 Ringelblüten, Aufträge 0 von 4');
   await shot('19-level-8');
   await page.tap('#modal-close');
   await centerOn(page, bx + 3, by + 4, 4);
@@ -1800,7 +1801,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }
   const l8done = await page.textContent('#modal-content');
   check(
-    l8done.includes('1.305 / 1.305') && l8done.includes('Nächstes Level: Level 9 · Die Schreibstube') && l8done.includes('♨️ Ofen') &&
+    l8done.includes('4 von 4') && l8done.includes('Nächstes Level: Level 9 · Die Schreibstube') && l8done.includes('♨️ Ofen') &&
       l8done.includes('Schreibstube') && l8done.includes('Holzstamm') && !l8done.includes('Kohlenmeiler'),
     'Level 8 erledigt; Level 9 kündigt Ofen und Schreibstube an, 1 Holzstamm gratis',
   );
@@ -1814,8 +1815,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(lvl9.level === 9 && lvl9.logs === logsBefore9 + 1, `Level 9: 1 Holzstamm gratis (${JSON.stringify(lvl9)})`);
   const lvl9Text = await page.textContent('#modal-content');
   check(
-    lvl9Text.includes('Die Schreibstube') && lvl9Text.includes('Schmied Konrad') && lvl9Text.includes('50 Holzkohle') && lvl9Text.includes('0 / 1.657'),
-    'Level 9: Konrad möchte 50 Holzkohle, Erfahrung 0 / 1.657',
+    lvl9Text.includes('Die Schreibstube') && lvl9Text.includes('Schmied Konrad') && lvl9Text.includes('50 Holzkohle') && lvl9Text.includes('0 von 4'),
+    'Level 9: Konrad möchte 50 Holzkohle, Aufträge 0 von 4',
   );
   await shot('19e-level-9');
   await page.tap('#modal-close');
@@ -1928,7 +1929,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }
   const l9done = await page.textContent('#modal-content');
   check(
-    l9done.includes('1.657 / 1.657') && l9done.includes('Nächstes Level: Level 10 · Das Spital') && l9done.includes('Kräuterstube: Wundverband') &&
+    l9done.includes('4 von 4') && l9done.includes('Nächstes Level: Level 10 · Das Spital') && l9done.includes('Kräuterstube: Wundverband') &&
       l9done.includes('Schafgarbensamen beim Händler') && l9done.includes('Mehr Fläche: jede Seite noch einmal erweitern (je 2.000 Gold)'),
     'Level 9 erledigt; Level 10 kündigt Wundverband, Schafgarbensamen und mehr Fläche an',
   );
@@ -1951,7 +1952,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     `Die Welt reicht an jeder Seite 4 Felder weiter (${JSON.stringify(w0)} → ${JSON.stringify(w1)})`,
   );
   const lvl10Text = await page.textContent('#modal-content');
-  check(lvl10Text.includes('Das Spital') && lvl10Text.includes('Heilerin Agnes') && lvl10Text.includes('50 Schafgarbenblüten') && lvl10Text.includes('0 / 2.116'), 'Level 10: Agnes möchte 50 Schafgarbenblüten, Erfahrung 0 / 2.116');
+  check(lvl10Text.includes('Das Spital') && lvl10Text.includes('Heilerin Agnes') && lvl10Text.includes('50 Schafgarbenblüten') && lvl10Text.includes('0 von 4'), 'Level 10: Agnes möchte 50 Schafgarbenblüten, Aufträge 0 von 4');
   await shot('19i-level-10');
   await page.tap('#modal-close');
   await sleep(150);
@@ -2106,7 +2107,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }
   const l10done = await page.textContent('#modal-content');
   check(
-    l10done.includes('2.116 / 2.116') && l10done.includes('Nächstes Level: Level 11 · Die Uhrmacherei') && l10done.includes('Uhrmacherei') && !l10done.includes('🎁'),
+    l10done.includes('4 von 4') && l10done.includes('Nächstes Level: Level 11 · Die Uhrmacherei') && l10done.includes('Uhrmacherei') && !l10done.includes('🎁'),
     'Level 10 erledigt; Level 11 kündigt die Uhrmacherei an, ohne Geschenk',
   );
   // Rohstoffe im Laden-Lager (die Fabrik läuft weiter und schickt Waren, Rohstoffe aber nicht)
@@ -2126,8 +2127,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(lvl11.storage === storageBefore11, `Kein Geschenk mehr: kein Rohstoff dazu (${lvl11.storage})`);
   const lvl11Text = await page.textContent('#modal-content');
   check(
-    lvl11Text.includes('Level 11 erreicht!') && !lvl11Text.includes('Gratis im Laden-Lager') && lvl11Text.includes('Die Uhrmacherei') && lvl11Text.includes('2 Räderuhren') && lvl11Text.includes('0 / 2.550'),
-    'Level 11: Hilde möchte 2 Räderuhren, Erfahrung 0 / 2.550, kein „Gratis“',
+    lvl11Text.includes('Level 11 erreicht!') && !lvl11Text.includes('Gratis im Laden-Lager') && lvl11Text.includes('Die Uhrmacherei') && lvl11Text.includes('2 Räderuhren') && lvl11Text.includes('0 von 4'),
+    'Level 11: Hilde möchte 2 Räderuhren, Aufträge 0 von 4, kein „Gratis“',
   );
   await shot('19q-level-11');
   await page.tap('#modal-close');
@@ -2225,7 +2226,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }
   const l11done = await page.textContent('#modal-content');
   check(
-    l11done.includes('2.550 / 2.550') && l11done.includes('Nächstes Level: Level 12 · Die Apotheke') && l11done.includes('Apotheke') && !l11done.includes('🎁'),
+    l11done.includes('4 von 4') && l11done.includes('Nächstes Level: Level 12 · Die Apotheke') && l11done.includes('Apotheke') && !l11done.includes('🎁'),
     'Level 11 erledigt; Level 12 kündigt die Apotheke an, ohne Geschenk',
   );
   const storageBefore12 = await raws11();
@@ -2239,8 +2240,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check(lvl12.storage === storageBefore12, `Kein Geschenk: kein Rohstoff dazu (${lvl12.storage})`);
   const lvl12Text = await page.textContent('#modal-content');
   check(
-    lvl12Text.includes('Level 12 erreicht!') && !lvl12Text.includes('Gratis im Laden-Lager') && lvl12Text.includes('Die Apotheke') && lvl12Text.includes('50 Kamillenblüten') && lvl12Text.includes('0 / 2.722'),
-    'Level 12: Klara möchte 50 Kamillenblüten, Erfahrung 0 / 2.722, kein „Gratis“',
+    lvl12Text.includes('Level 12 erreicht!') && !lvl12Text.includes('Gratis im Laden-Lager') && lvl12Text.includes('Die Apotheke') && lvl12Text.includes('50 Kamillenblüten') && lvl12Text.includes('0 von 4'),
+    'Level 12: Klara möchte 50 Kamillenblüten, Aufträge 0 von 4, kein „Gratis“',
   );
   await shot('19t-level-12');
   await page.tap('#modal-close');
@@ -2447,7 +2448,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }
   const l12done = await page.textContent('#modal-content');
   check(
-    l12done.includes('2.722 / 2.722') &&
+    l12done.includes('4 von 4') &&
       l12done.includes('Nächstes Level: Level 13 · Die Glashütte') &&
       l12done.includes('Schmiede: Fläschchen') &&
       l12done.includes('Ofen: Glas aus Sand') &&
@@ -2464,8 +2465,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await game(page, () => window.__game.state.shopLevel)) === 13, 'Aufstieg auf Level 13 für 10.000 Gold');
   const lvl13Text = await page.textContent('#modal-content');
   check(
-    lvl13Text.includes('Level 13 erreicht!') && lvl13Text.includes('Die Glashütte') && lvl13Text.includes('50 Glas') && lvl13Text.includes('0 / 3.147') && !lvl13Text.includes('Gratis im Laden-Lager'),
-    'Level 13: Konrad möchte 50 Glas, Erfahrung 0 / 3.147, kein „Gratis“',
+    lvl13Text.includes('Level 13 erreicht!') && lvl13Text.includes('Die Glashütte') && lvl13Text.includes('50 Glas') && lvl13Text.includes('0 von 4') && !lvl13Text.includes('Gratis im Laden-Lager'),
+    'Level 13: Konrad möchte 50 Glas, Aufträge 0 von 4, kein „Gratis“',
   );
   await shot('24a-level-13');
   await page.tap('#modal-close');
@@ -2562,7 +2563,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }
   const l13done = await page.textContent('#modal-content');
   check(
-    l13done.includes('3.147 / 3.147') &&
+    l13done.includes('4 von 4') &&
       l13done.includes('Nächstes Level: Level 14 · Die Tinktur') &&
       l13done.includes('Zimmerei: Mörser') &&
       l13done.includes('Apotheke: Tinktur') &&
@@ -2577,8 +2578,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   check((await game(page, () => window.__game.state.shopLevel)) === 14, 'Aufstieg auf Level 14 für 12.500 Gold');
   const lvl14Text = await page.textContent('#modal-content');
   check(
-    lvl14Text.includes('Level 14 erreicht!') && lvl14Text.includes('Die Tinktur') && lvl14Text.includes('15 Mörser') && lvl14Text.includes('0 / 3.976'),
-    'Level 14: Klara möchte 15 Mörser, Erfahrung 0 / 3.976 (v0.55.0: Mörser aus 5 Holzstäben)',
+    lvl14Text.includes('Level 14 erreicht!') && lvl14Text.includes('Die Tinktur') && lvl14Text.includes('15 Mörser') && lvl14Text.includes('0 von 4'),
+    'Level 14: Klara möchte 15 Mörser, Aufträge 0 von 4',
   );
   await shot('25a-level-14');
   await page.tap('#modal-close');
@@ -2623,7 +2624,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   }
   const l14done = await page.textContent('#modal-content');
   check(
-    l14done.includes('3.976 / 3.976') && l14done.includes('Nächstes Level: Level 15 · Der alte Magier') && l14done.includes('Zauberkessel') && !l14done.includes('🎁'),
+    l14done.includes('4 von 4') && l14done.includes('Nächstes Level: Level 15 · Der alte Magier') && l14done.includes('Zauberkessel') && !l14done.includes('🎁'),
     'Level 14 erledigt; Level 15 kündigt den Zauberkessel an, ohne Geschenk',
   );
   await game(page, () => (window.__game.state.gold += 15000));
@@ -2642,8 +2643,8 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   );
   const lvl15Text = await page.textContent('#modal-content');
   check(
-    lvl15Text.includes('Level 15 erreicht!') && lvl15Text.includes('Der alte Magier') && lvl15Text.includes('300 Holzkohle') && lvl15Text.includes('0 / 4.820'),
-    'Level 15: Ambrosius möchte 300 Holzkohle, Erfahrung 0 / 4.820',
+    lvl15Text.includes('Level 15 erreicht!') && lvl15Text.includes('Der alte Magier') && lvl15Text.includes('300 Holzkohle') && lvl15Text.includes('0 von 4'),
+    'Level 15: Ambrosius möchte 300 Holzkohle, Aufträge 0 von 4',
   );
   check(letter15.includes('Laden-Level 15!') && letter15.includes('Zauberkessel') && letter15.includes('Ambrosius'), `Schriftrolle: Ambrosius und der Zauberkessel (${letter15.slice(0, 200)})`);
   await shot('26a-level-15');

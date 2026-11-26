@@ -18,7 +18,7 @@ import {
   setCounterItem,
 } from '../src/core/market.js';
 import { levelUp } from '../src/core/levels.js';
-import { xpNeeded } from '../src/core/quests.js';
+import { levelQuests } from '../src/core/quests.js';
 import { catchUp } from '../src/core/offline.js';
 import { SAVE_VERSION, deserializeGame, serializeGame } from '../src/core/save.js';
 import { simulate } from '../src/core/sim.js';
@@ -234,7 +234,7 @@ test('Aufstiege bringen keine Theken – auch nicht bis Level 8', () => {
   const state = createNewGame(5);
   state.gold = 1e6;
   while (state.shopLevel < 8) {
-    state.quest.xp = xpNeeded(state.shopLevel);
+    state.quest.index = levelQuests(state.shopLevel).length; // v0.56.0: alle Aufträge abgegeben
     assert.ok(levelUp(state));
     assert.equal(state.counters.length, 2, `Level ${state.shopLevel}`);
   }

@@ -1907,7 +1907,7 @@ button.level-up {
 
 /* ---------- Aufträge und Erfahrung (v0.13.0) ---------- */
 
-/* Kleine Erfahrungsleiste unten im Knopf „Laden-Level“ */
+/* Kleine Leiste unten im Knopf „Laden-Level“ – seit v0.56.0 die erledigten Aufträge */
 button.hud-level {
   position: relative;
   overflow: hidden;

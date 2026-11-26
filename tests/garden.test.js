@@ -35,7 +35,7 @@ import {
   losesWorkOnRemove,
   sourceCount,
 } from '../src/core/production.js';
-import { xpNeeded } from '../src/core/quests.js';
+import { levelQuests, xpOfLevel } from '../src/core/quests.js';
 import { SAVE_VERSION, deserializeGame, isValidState, serializeGame } from '../src/core/save.js';
 import { storageCount } from '../src/core/shop.js';
 import { simulate } from '../src/core/sim.js';
@@ -130,7 +130,7 @@ test('Level 7 „Die Heilstube“: Beet, Flachsbreche, Webstube, Leinsamen beim 
   state.shopLevel = 6;
   assert.equal(isItemUnlocked(state, 'leinsamen'), false);
   state.gold = 999;
-  state.quest.xp = xpNeeded(6);
+  state.quest.index = levelQuests(6).length; // v0.56.0: alle Aufträge abgegeben
   assert.equal(levelUp(state), null, 'zu wenig Gold');
   state.gold = 1000;
   const up = levelUp(state);
@@ -139,7 +139,7 @@ test('Level 7 „Die Heilstube“: Beet, Flachsbreche, Webstube, Leinsamen beim 
   assert.equal(storageCount(state, 'leinsamen'), 1);
   assert.equal(isItemUnlocked(state, 'leinsamen'), true);
   assert.equal(LEVELS[7].name, 'Die Heilstube');
-  assert.equal(xpNeeded(7), 816, 'v0.23.0: 816 statt 850 (Verband 48 statt 50)');
+  assert.equal(xpOfLevel(7), 816, 'v0.23.0: 816 statt 850 (Verband 48 statt 50)');
 });
 
 // ---------- Beet ----------
