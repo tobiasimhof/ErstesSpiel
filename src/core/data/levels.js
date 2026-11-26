@@ -258,6 +258,23 @@ export const LEVELS = {
       { from: 'Wirt Hannes', text: 'Die Reisenden in meinem Gasthaus wollen beides: Heiltränke für den Weg und Traumtränke für die Nacht.', items: { heiltrank: 6, traumtrank: 5 } },
     ],
   },
+  // v0.58.0: Level 17 (Entwurf v0.58.0, Tobias, Chat 32: „Level 17 sieht bisher
+  // aber gut aus“, „Die Aufträge passen alle so“) – Antons Sternwarte, Bertas
+  // Linsen, Kaspars Fernrohre, Ambrosius sammelt Kristallsand. Aufträge zusammen
+  // 23.437 Gold (×1,2 gegenüber Level 16, Rechenwerkzeug). Aufstieg 20.000 Gold,
+  // kein Geschenk, keine neue Fläche, keine neue Maschine.
+  17: {
+    name: 'Die Sternwarte',
+    story:
+      'Kaspars Sternenuhr hat den Ort neugierig gemacht: Auf dem Hügel über dem Fluss baut Anton eine Sternwarte. Berta schleift dafür Linsen aus Glas, Kaspar baut Fernrohre daraus – und Ambrosius sammelt den feinen, glitzernden Staub, der beim Schleifen übrig bleibt.',
+    cost: 20000,
+    quests: [
+      { from: 'Steinmetzin Berta', text: 'Glas schleifen ist feiner als Stein hauen. Zeig mir, dass deine Linsen klar genug für die Sternwarte sind.', items: { linse: 20 } },
+      { from: 'Uhrmacher Kaspar', text: 'Ein Rohr aus Eisenblech, vorn eine Linse, hinten eine Linse – und plötzlich ist der Mond ganz nah. Ich brauche Fernrohre!', items: { fernrohr: 10 } },
+      { from: 'Baumeister Anton', text: 'Die Sternwarte steht! Für den Turm fehlen noch Steinplatten, Sternenuhren und Fernrohre.', items: { steinplatte: 300, sternenuhr: 3, fernrohr: 3 } },
+      { from: 'Magier Ambrosius', text: 'Der Staub vom Linsenschleifen glitzert wie Sternenlicht. Sammle ihn für mich – ich habe eine Idee für einen ganz besonderen Trank.', items: { kristallsand: 50, heiltrank: 6 } },
+    ],
+  },
 };
 
 export const MAX_LEVEL = Math.max(...Object.keys(LEVELS).map(Number));

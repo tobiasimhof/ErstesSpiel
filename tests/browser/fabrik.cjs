@@ -2839,6 +2839,82 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.tap('#info-close');
   await sleep(100);
 
+  // ---------- Level 17: Die Sternwarte (v0.58.0) ----------
+  await page.tap('#btn-level');
+  await sleep(150);
+  for (let i = 0; i < 4; i++) {
+    await page.locator('#modal-content button', { hasText: '🧪 Test: Auftrag erledigen' }).tap();
+    await sleep(200);
+  }
+  const l16done = await page.textContent('#modal-content');
+  check(
+    l16done.includes('4 von 4') &&
+      l16done.includes('Nächstes Level: Level 17 · Die Sternwarte') &&
+      l16done.includes('Steinmetz: Linse') &&
+      l16done.includes('Steinmetz: Kristallsand') &&
+      l16done.includes('Uhrmacherei: Fernrohr') &&
+      !l16done.includes('🎁'),
+    'Level 16 erledigt; Level 17 kündigt Linse, Kristallsand (Steinmetz) und Fernrohr (Uhrmacherei) an, ohne Geschenk',
+  );
+  await game(page, () => (window.__game.state.gold += 20000));
+  await sleep(450);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 17 · 20.000' }).tap();
+  await sleep(150);
+  const letter17 = await readLetter(page);
+  check((await game(page, () => window.__game.state.shopLevel)) === 17, 'Aufstieg auf Level 17 für 20.000 Gold');
+  const lvl17Text = await page.textContent('#modal-content');
+  check(
+    lvl17Text.includes('Level 17 erreicht!') && lvl17Text.includes('Die Sternwarte') && lvl17Text.includes('20 Linsen') && lvl17Text.includes('0 von 4'),
+    'Level 17: Berta möchte 20 Linsen, Aufträge 0 von 4',
+  );
+  check(letter17.includes('Laden-Level 17!') && letter17.includes('Sternwarte') && letter17.includes('Berta'), `Schriftrolle: Sternwarte und Berta (${letter17.slice(0, 200)})`);
+  await shot('28a-level-17');
+  await page.tap('#modal-close');
+  await sleep(120);
+  // Steinmetz und Uhrmacherei haben jetzt 4 Einstellungen (Tobias: höchstens 4) – per Touch umstellen
+  for (const [type, title, recipe, label, name] of [
+    ['steinmetz', 'Steinmetz', 'linse', 'Umstellen auf Linse: 10 Glas', 'Linse'],
+    ['uhrmacherei', 'Uhrmacherei', 'fernrohr', 'Umstellen auf Fernrohr: 2 Linsen + 10 Eisenbleche', 'Fernrohr'],
+  ]) {
+    const pos = await game(
+      page,
+      (t) => {
+        const b = window.__game.state.buildings.find((x) => x.type === t);
+        return { x: b.x, y: b.y, recipe: b.prod.recipe };
+      },
+      type,
+    );
+    await sleep(150);
+    await tapTile(page, pos.x, pos.y);
+    check((await page.textContent('#info-title')) === title, `${title} antippen zeigt Infofenster`);
+    await sleep(450);
+    check((await recipeOption(page, recipe).getAttribute('aria-label')) === label, `Ab Level 17: ${label}`);
+    check((await page.locator('#info-body .recipe-option').count()) === 3, `${title}: 3 andere Einstellungen zur Auswahl`);
+    check((await infoFits(page)).length === 0, `Infofenster ${title} mit 4 Einstellungen: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+    await recipeOption(page, recipe).tap();
+    await sleep(450);
+    const card = await infoCard(page);
+    check(card?.outputs.join() === `${recipe} ${name}`, `${title} umgestellt auf ${name} (${JSON.stringify(card)})`);
+    await shot(`28b-${type}-${recipe}`);
+    await recipeOption(page, pos.recipe).tap();
+    await sleep(300);
+    await page.tap('#info-close');
+  }
+  // Kristallsand: ein Steinmetz mahlt 5 Glas in 10 s
+  // (gezählt über „hergestellt“ – die Ware kann schon auf dem Band liegen)
+  const ground17 = await game(page, () => {
+    const g = window.__game;
+    const b = g.state.buildings.find((x) => x.type === 'steinmetz');
+    const before = { recipe: b.prod.recipe, stock: { ...b.prod.stock } };
+    const made = g.state.produced?.kristallsand ?? 0;
+    Object.assign(b.prod, { recipe: 'kristallsand', stock: { glas: 5 }, out: null, busy: false, timer: 0 });
+    g.simulate(11);
+    const result = (g.state.produced?.kristallsand ?? 0) - made;
+    Object.assign(b.prod, before, { busy: false, timer: 0 });
+    return result;
+  });
+  check(ground17 === 1, `Steinmetz mahlt 5 Glas zu Kristallsand (${ground17} hergestellt)`);
+
   await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)
   await page.tap('#info-close').catch(() => {});
   await shot('17-fabrik');

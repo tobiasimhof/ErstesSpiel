@@ -375,11 +375,12 @@ test('Datentabellen passen zusammen: Rezepte, Werkstätten, Waren', () => {
   assert.equal(ITEMS.holzwinkel, undefined, 'Holzwinkel entfällt');
   assert.equal(ITEMS.splitt, undefined, 'Splitt entfällt');
   assert.equal(ITEMS.eisennagel, undefined, 'Eisennägel entfallen (v0.8.0)');
-  // Alle Grundmaschinen: 5 Blöcke/Barren → 1 Teil
+  // Alle Grundmaschinen: 5 Blöcke/Barren → 1 Teil – bis auf die Linse (v0.58.0,
+  // Tobias, Chat 32: „Linse lieber aus 10 Glas“)
   for (const type of ['saegewerk', 'steinmetz', 'schmiede']) {
     for (const key of BUILDINGS[type].production.recipes) {
       const r = RECIPES[key];
-      assert.deepEqual([Object.values(r.inputs)[0], r.amount], [5, 1], `${key}: 5 → 1`);
+      assert.deepEqual([Object.values(r.inputs)[0], r.amount], [key === 'linse' ? 10 : 5, 1], `${key}: ${key === 'linse' ? 10 : 5} → 1`);
     }
   }
 });

@@ -4,6 +4,27 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.58.0 – Level 17 „Die Sternwarte“: Linse, Fernrohr, Kristallsand (26.11.2026)
+
+**Vorgenommen:**
+- Den Entwurf v0.58.0 umsetzen (Tobias, Chat 32: „Neue einstellung passen“, „Linse lieber aus 10 Glas. Die Aufträge passen alle so.“) und seine Regel „höchstens 4 Einstellungen je Maschine“ mit einem Test absichern.
+
+**Fragen, die wir uns gestellt haben:**
+- Passt die Linse aus 10 Glas zu den Regeln? → Ein alter Test verlangte bei Grundmaschinen (Sägewerk, Steinmetz, Schmiede) immer 5 → 1. Die Linse ist jetzt die einzige Ausnahme (Tobias' Wahl), der Test nennt sie.
+- Welche Maschinen sind mit 4 Einstellungen voll? → Zimmerei, Apotheke, Steinmetz und Uhrmacherei; der neue Test schlägt an, sobald eine Maschine eine 5. bekäme.
+- Wie sehen die Waren aus? → Linse: runde, flache Glasscheibe mit Glanz, steht schräg auf dem Band; Kristallsand: Häufchen heller Körner mit blauen Kristallen und Funkeln; Fernrohr: Eisenrohr, vorn breiter, Messingringe, Linse vorn.
+- Ändert sich das Spielstand-Format? → Nein (bleibt 21).
+
+**Gemacht:**
+- Daten: `items.js` (Linse 144, Kristallsand 72, Fernrohr 634), `recipes.js` (Linsen, Kristallsand, Fernrohre, ab Level 17), `buildings.js` (Steinmetz und Uhrmacherei mit je 4 Einstellungen), `levels.js` (Level 17), `shop.js` (Laden auf Level 17).
+- Darstellung: `itemArt.js` (Warenbilder „lens“, „crystals“, „telescope“), `itemForms.js` (3D-Formen).
+- Tests: neu `sternwarte.test.js` (10 Tests: höchstens 4 Einstellungen, Daten, Aufträge, Aufstieg, Steinmetz schleift und mahlt, eine Straße Glas → Linsen → Fernrohre → Laden-Lager, Spielstand); angepasst `sim` (Linse 10 → 1), `uhrmacherei`, `kraeutermuehle`, `levels`, `quests`, `save`, `waren3d`; Browser: `fabrik.cjs` bis Level 17 (Aufstieg, Steinmetz und Uhrmacherei per Touch umstellen – 4 Einstellungen passen ins Infofenster –, Kristallsand mahlen), `spiel3d.cjs` (46 Waren auf dem Band).
+- Doku: `SPIEL.md`, `LEVEL.md`, `GEBAEUDE.md`, `WAREN.md`, `BEDIENUNG.md`, `AUSBLICK.md`, `ZAHLEN.md`, `TECHNIK.md`, `STAND.md`, Archiv. Versionsnummer 0.58.0.
+
+**Geprüft:**
+- `npm test`: 499 Tests bestanden (10 neue in `sternwarte.test.js`).
+- Browser-Test parallel: ERGEBNIS58
+
 ### v0.57.2 – Tobias' Antworten zu Level 17, Grundsätze für danach (26.11.2026, nur Doku)
 
 **Vorgenommen:**

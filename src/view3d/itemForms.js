@@ -272,6 +272,27 @@ export const ITEM_FORMS = {
     cyl('#cfe9ee', 0.034, 0.042, 0.08, [0, 0.235, 0], null, 10),
     cyl('#b07a45', 0.03, 0.032, 0.05, [0, 0.295, 0], null, 10),
   ),
+  // v0.58.0: Linse – runde, flache Glasscheibe, steht schräg auf dem Band
+  linse: big(
+    cyl('#a8dcd9', 0.13, 0.13, 0.035, [0, 0.13, 0], [QUARTER * 0.75, 0, 0], 18),
+    cyl('#e8f8f6', 0.07, 0.07, 0.04, [0, 0.13, 0.004], [QUARTER * 0.75, 0, 0], 12),
+    box('#7a5230', [0.14, 0.03, 0.06], [0, 0.015, 0]),
+  ),
+  // v0.58.0: Kristallsand – Häufchen heller Körner mit ein paar blauen Kristallen
+  kristallsand: big(
+    cyl('#e3f6f4', 0.04, 0.13, 0.09, [0, 0.045, 0], null, 10),
+    ball('#9fdcf0', 0.035, [0.05, 0.08, 0.02], 4, 2),
+    ball('#9fdcf0', 0.03, [-0.05, 0.06, -0.03], 4, 2),
+    ball('#ffffff', 0.025, [0.0, 0.1, -0.01], 4, 2),
+  ),
+  // v0.58.0: Fernrohr – Eisenrohr in Laufrichtung, vorn breiter, Messingringe, Linse
+  fernrohr: big(
+    cyl('#5b6169', 0.04, 0.04, 0.2, [-0.09, 0.06, 0], [0, 0, QUARTER], 12),
+    cyl('#5b6169', 0.055, 0.055, 0.18, [0.08, 0.07, 0], [0, 0, QUARTER], 12),
+    cyl('#c9a23c', 0.062, 0.062, 0.025, [0.17, 0.07, 0], [0, 0, QUARTER], 12),
+    cyl('#c9a23c', 0.047, 0.047, 0.02, [-0.18, 0.06, 0], [0, 0, QUARTER], 12),
+    cyl('#a8dcd9', 0.05, 0.05, 0.01, [0.185, 0.07, 0], [0, 0, QUARTER], 12),
+  ),
   // v0.57.0: Heilpuder – Leinensäckchen, oben offen mit goldgelbem Pulver, rotes Band
   heilpuder: big(
     cyl('#efe3c4', 0.085, 0.105, 0.15, [0, 0.075, 0], null, 12),

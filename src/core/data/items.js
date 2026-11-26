@@ -146,5 +146,14 @@ export const ITEMS = {
   // ein Fläschchen mit rotem Trank (dieselbe Form wie der Traumtrank).
   heilpuder: { name: 'Heilpuder', plural: 'Heilpuder', price: 72, color: '#f2b705', herb: '#c2410c', shape: 'powder' },
   heiltrank: { name: 'Heiltrank', plural: 'Heiltränke', price: 600, color: '#c92a2a', glow: '#ff8787', shape: 'potion' },
+  // v0.58.0: Level 17 „Die Sternwarte“ (Entwurf v0.58.0, Tobias, Chat 32: „Neue
+  // einstellung passen“, „Linse lieber aus 10 Glas“). Linse: 10 Glas im Steinmetz
+  // geschliffen = 120 → 144 (+20 %), eine runde, flache Glasscheibe. Kristallsand:
+  // 5 Glas gemahlen = 60 → 72, ein Häufchen glitzernder Körner (Zutat des
+  // Manatranks auf Level 18). Fernrohr: 2 Linsen + 10 Eisenbleche in der
+  // Uhrmacherei = 528 → 634, ein Eisenrohr mit Messingringen und Linse.
+  linse: { name: 'Linse', plural: 'Linsen', price: 144, color: '#a8dcd9', shape: 'lens' },
+  kristallsand: { name: 'Kristallsand', plural: 'Kristallsand', price: 72, color: '#e3f6f4', glow: '#9fdcf0', shape: 'crystals' },
+  fernrohr: { name: 'Fernrohr', plural: 'Fernrohre', price: 634, color: '#5b6169', brass: '#c9a23c', shape: 'telescope' },
   traumtrank: { name: 'Traumtrank', plural: 'Traumtränke', price: 547, color: '#7b4fc9', glow: '#c9a7ff', shape: 'potion' },
 };

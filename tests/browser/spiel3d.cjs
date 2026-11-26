@@ -612,7 +612,7 @@ async function run3d(browser, baseUrl, device, expectedVersion) {
     const shapes = await game(page, () => window.__game.view3d.itemShapes());
     const byType = new Map(shapes.map((s) => [s.type, s]));
     const missing = goodsArea.types.filter((t) => !byType.has(t));
-    check(goodsArea.types.length === 43 && missing.length === 0, `Alle ${goodsArea.types.length} Waren liegen auf dem Band und haben eine Form (fehlt: ${missing.join(', ') || '–'})`);
+    check(goodsArea.types.length === 46 && missing.length === 0, `Alle ${goodsArea.types.length} Waren liegen auf dem Band und haben eine Form (fehlt: ${missing.join(', ') || '–'})`);
     const tooBig = shapes.filter((s) => s.size[0] > 0.62 || s.size[2] > 0.62 || s.size[1] > 0.42).map((s) => `${s.type} ${s.size.join('×')}`);
     check(tooBig.length === 0, `Jede Ware passt aufs Band: höchstens 0,62 breit und 0,42 hoch (${tooBig.join(', ') || 'alle passen'})`);
     const heavy = shapes.filter((s) => s.triangles > 900).map((s) => `${s.type} ${s.triangles}`);
