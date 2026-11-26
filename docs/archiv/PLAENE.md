@@ -61,6 +61,54 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.59.0 – Level 18 „Die Zauberei“: Farn, Lebenstrank, Manatrank (Chat 32, v0.58.1; wartet auf Tobias' Antworten)
+
+**Tobias (Chat 32, nach v0.58.0):** „Schreibe gerne den Entwurf für Level 18. Ich bin gerade dabei die Lebenstränke zu brauen auf level 16“ (auf Level 16 sind es Heiltränke – die Vorstufe des Lebenstranks)
+
+**Ziel:** Abschluss des Tränke-Kapitels, wie im Grobplan (2. Fassung, angenommen in Chat 27): **Farn** als 5. Pflanze (Beet, Erntebank → **Farnwedel**), der Zauberkessel braut die zwei stärksten Tränke – **Lebenstrank** (Heiltrank + Farnwedel) und **Manatrank** (Traumtrank + Kristallsand aus Level 17). Keine neue Maschine (der Kessel hat danach 4 Einstellungen und ist voll – Tobias' Regel), keine neue Fläche, kein bestehendes Rezept ändert sich. Danach (Level 19 ff.) knüpfen wir an die alten Straßen an; die „Zauber des Magiers“ kommen ab Level 20 (Tobias, Chat 32).
+
+**Geschichte:** „Ambrosius' Turm ist zu klein geworden: Am Waldrand, wo im Schatten der Farn wächst, richtet er eine Zauberei ein. Mit Farn und Kristallsand will er die zwei mächtigsten Tränke brauen, die das Tal je gesehen hat – den Lebenstrank und den Manatrank.“
+
+**Neu:**
+
+| | Was | Wert |
+|---|---|---|
+| Farnsporen | beim Händler ab Level 18 (Farne haben Sporen statt Samen), ein Tütchen mit dem Bild des Farns | 1.000 (Kauf; die Reihe 320 → 500 → 660 → 830 → 1.000) |
+| Farn | wächst im Beet in 30 Minuten (eigene Wuchsform: aufgerollte junge Wedel, dann große grüne Wedel – ohne Blüte) | – |
+| Farnwedel | Erntebank: 1 Farn → 50 (wie die Blüten); ein grüner, gefiederter Wedel | 24 |
+| Lebenstrank | Zauberkessel: 1 Heiltrank + 5 Farnwedel, Feuer 5 Holzkohle, 90 s; Fläschchen mit grünem, leuchtendem Trank | 876 ((600 + 5 × 24 + 10) × 1,2) |
+| Manatrank | Zauberkessel: 1 Traumtrank + 2 Kristallsand, Feuer 5 Holzkohle, 90 s; Fläschchen mit blauem, leuchtendem Trank | 841 ((547 + 2 × 72 + 10) × 1,2) |
+
+**Rechenwerkzeug (an einer Kopie der Daten):** Lebenstrank: Rohstoffe 404 Gold (+117 %), eine Straße 10 je Stunde = **8.760 Gold/h**, Engpass die Ringelblume (wie beim Heiltrank); Manatrank: Rohstoffe 397 Gold (+112 %), **8.410 Gold/h**, Engpass die Kamille (wie beim Traumtrank). Beide Tränke sind die längsten Straßen des Spiels: Sand → Glas → Fläschchen, Schafgarbe + Kamille → Kräutermischung → Tinktur, Ringelblume → Heilpuder → Heiltrank (bzw. Kamille → Traumtrank, Glas → Kristallsand), Farn → Farnwedel – und zum Schluss der Kessel mit Feuer. Der Farn bremst nicht (5 Wedel = ein Zehntel Pflanze je Trank).
+
+| Variante | Lebenstrank | Manatrank | Folge |
+|---|---|---|---|
+| **A (Empfehlung)** | 1 Heiltrank + 5 Farnwedel (876) | 1 Traumtrank + 2 Kristallsand (841) | beide etwa gleich, kein 1 : 1 |
+| B | wie A | 1 Traumtrank + 3 Kristallsand (928) | Manatrank teurer als Lebenstrank |
+| C | 1 Heiltrank + 10 Farnwedel (1.020) | wie A | der Farn wird der Engpass (doppelt so viele Beete) |
+
+**Aufträge** (zusammen **27.891 Gold**, ×1,19 gegenüber Level 17):
+
+| # | Wer | Was | Wert |
+|---|---|---|---|
+| 1 | Magier Ambrosius | 100 Farnwedel – „Im Schatten des Waldes wächst Farn. Säe ihn in deinen Beeten und bring mir die Wedel, frisch geerntet.“ | 2.400 |
+| 2 | Heilerin Agnes | 8 Lebenstränke – „Ein Heiltrank schließt Wunden. Ein Lebenstrank gibt den Kranken ihre ganze Kraft zurück.“ | 7.008 |
+| 3 | Magier Ambrosius | 8 Manatränke – „Traumtrank und Kristallsand, langsam über dem Feuer: der Manatrank. Er schenkt jedem Zauberer neue Kraft.“ | 6.728 |
+| 4 | Bürgermeisterin Hilde | 5 Lebenstränke + 5 Manatränke + 5 Fernrohre – „Der Ort feiert das große Fest der Zauberei! Auf dem Hügel schauen alle durch Fernrohre in die Sterne, und Ambrosius verteilt seine Tränke.“ | 11.755 |
+
+Rechenwerkzeug: Rohstoffe 14.428 Gold (3,3 Farnsporen, 3,9 Kamillensamen, 2,6 Schafgarbensamen, 2,6 Ringelblumensamen, 3,6 Sand, 1,3 Eisenerz), 12,4 Pflanzen, Maschinenzeit 5,4 h, Engpass mit je einem Beet die Kamille (1,9 h).
+
+**Aufstieg auf Level 18:** 22.500 Gold (die Reihe 17.500 → 20.000 → 22.500), kein Geschenk, keine neue Fläche; der Laden bleibt wie auf Level 17.
+
+**Was sich im Spiel ändert (v0.59.0):** eine 5. Pflanze (Sporen beim Händler, Beet, Erntebank, Wuchsform in 3D, Tütchen), vier neue Waren mit Warenbild und 3D-Form (Farnwedel, Lebenstrank, Manatrank; die Tränke in der Form des Traumtranks, grün und blau), zwei neue Einstellungen am Zauberkessel, Level 18 mit Geschichte, Aufträgen und Brief; voraussichtlich keine neue Spielregel und kein neues Spielstand-Format. Zu prüfen: Die Erntebank bekommt einen 5. Knopf (Farn) und das Beet eine 5. Saat – passt das Infofenster aufs Handy? Tests (neue Datei für Level 18, Durchspielen bis Level 18), Doku.
+
+**Danach (zur Übersicht):** Level 19 ff. – an die alten Straßen anknüpfen (Tobias, Chat 32): aus Sternenuhr, Fernrohr, Reißbrett, Mörser neue Produkte machen bzw. mit bisherigen verbinden (Ideen aus dem Grobplan: Astrolabium aus Sternenuhr + Fernrohr, Lupe, Alterstrank). Weil Zimmerei, Apotheke, Steinmetz, Uhrmacherei und Kessel dann voll sind, braucht es dafür neue Maschinen. Ab Level 20 die „Zauber des Magiers“.
+
+**Fragen an Tobias:**
+1. Passen Farn (Sporen für 1.000 Gold) und Farnwedel (24 Gold) als 5. Pflanze?
+2. Lebenstrank aus 1 Heiltrank + 5 Farnwedel und Manatrank aus 1 Traumtrank + 2 Kristallsand (A) – oder B bzw. C?
+3. Passen Geschichte, die vier Aufträge (mit Hildes Fest als Abschluss) und der Aufstieg für 22.500 Gold?
+
 ### Entwurf v0.58.0 – Level 17 „Die Sternwarte“: Linse, Fernrohr, Kristallsand (Chat 32, v0.57.1; angenommen in v0.57.2 – Variante B, Linse aus 10 Glas; umgesetzt in v0.58.0)
 
 **Tobias' Antworten (Chat 32, v0.57.2), mit einem Bild seiner Fabrik auf Level 16 (22.768 Gold):** „Alles klar perfekt. Ich bin gerade level 16, weil ich mit level 15 etwas schnell durch war, aber das kann man mit den missionen ja noch mit der anzahl beeinflusse, aber für den test war das schon mal gut, um die neuen sachen kennenzulernen. Ich finde die neuen Produkte gut, so entstehen wieder neue Straßen, weil aktuell ist mein Gebiet noch sehr frei durch die neuen Käufe. Deswegen wäre es gut, wenn wir nach der Zauberei wieder an den alten Straßen anknüpfen, damit wir aus der Sternenuhr, dem Fernrohr, dem Reißbrett, dem mörser wieder neue Produkte machen können bzw. mit bisherigen Produkten verbinden. Dann können wir die einzelnen Produktionsstraßen wieder vergrößern. Level 17 sieht bisher aber gut aus und wenn wir mit der Zauberei durch sind, haben wir hoffentlich genug neue Produkte, damit wir wie gesagt, die Straßen wieder verlängern können. Neue einstellung passen und ich finde eine Maschine sollte nicht mehr als 4 Einstellungen haben, damit wir wissen, ab wann wir neue maschinen einführen müssen. Linse lieber aus 10 Glas. Die Aufträge passen alle so. Ich finde, dass wir uns mit "zauber des Magiers" ab level 20 beschäftigen können, wenn wir mit allen grundlegenden Sachen fertig sind und wir auch lange Produktionsstraßen haben.“
