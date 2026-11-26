@@ -4,7 +4,7 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.56.2 – Browser-Test parallel (schneller live) |
+| **Aktuelle Version** | v0.57.0 – Level 16 „Die Kräutermühle“: Heilpuder und Heiltrank |
 | **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–15 im Spiel, 16–18 als Gerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
 | **Nächster Schritt** | **v0.57.0 – Level 16 „Die Kräutermühle“** (angenommen, Chat 32: Kräutermühle, Heilpuder, Heiltrank; in Arbeit). Tobias testet Level 15. Danach die „Zauber des Magiers“. |
