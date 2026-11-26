@@ -717,14 +717,19 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     saleIdBefore,
   );
   check(
-    counter8.type === 'holzblock' && counter8.count + counter8.sold === 8 && counter8.store >= blocksBefore - 8,
+    // v0.58.0: ein Kunde kurz vor dem Hinlegen zählt mit, ändert aber nichts (wie beim Auffüllen)
+    counter8.type === 'holzblock' && counter8.count <= 8 && counter8.count + counter8.sold >= 8 && counter8.store >= blocksBefore - 8,
     `Theke 1 mit genau 8 Holzblöcken bestückt (${JSON.stringify(counter8)})`,
   );
   // Über „Menge“ lässt sich die Anzahl später ändern
+  // v0.58.0: Kunden kaufen live weiter (bei paralleler Last öfter) – angezeigt wird
+  // die Anzahl beim Öffnen, also eine Zahl zwischen dem Stand davor und danach
+  const counterBefore = await game(page, () => window.__game.state.counters[0].count);
   await page.locator('#modal-content .counter-buttons button', { hasText: 'Menge' }).first().tap();
   await sleep(80);
+  const shownAmount = Number(await page.textContent('#modal-content .amount-number'));
   const counterNow = await game(page, () => window.__game.state.counters[0].count);
-  check((await page.textContent('#modal-content .amount-number')) === String(counterNow), `Menge öffnet mit der aktuellen Anzahl (${counterNow})`);
+  check(shownAmount <= counterBefore && shownAmount >= counterNow, `Menge öffnet mit der aktuellen Anzahl (${shownAmount}; davor ${counterBefore}, danach ${counterNow})`);
   await page.locator('#modal-content .amount-stepper button', { hasText: 'Alle' }).tap();
   // Auch hier: Was ein Kunde genau jetzt kauft, zählt mit.
   const saleIdAll = await game(page, () => window.__game.state.market.nextSaleId);
@@ -739,7 +744,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     },
     saleIdAll,
   );
-  check(counter.type === 'holzblock' && counter.count + counter.sold === 20, `„Alle“ füllt Theke 1 auf 20 Holzblöcke (${JSON.stringify(counter)})`);
+  check(counter.type === 'holzblock' && counter.count <= 20 && counter.count + counter.sold >= 20, `„Alle“ füllt Theke 1 auf 20 Holzblöcke (${JSON.stringify(counter)})`);
   await shot('9-theken');
   const goldBeforeSales = await game(page, () => window.__game.state.gold);
   await game(page, () => window.__game.simulate(90));
