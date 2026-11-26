@@ -90,5 +90,10 @@ export const RECIPES = {
   // Kamillenblüten den Traumtrank (Tobias, Chat 31: „1 Trinktur und 5 Blüten“).
   // fuel: so viel Holzkohle verbrennt das Feuer je Trank (Feuerfach des Kessels,
   // von Hand nachgelegt – Feuer A, Chat 27).
+  // v0.57.0: Level 16 „Die Kräutermühle“ – die Mühle mahlt Ringelblüten zu
+  // Heilpuder, der Kessel braut daraus mit Tinktur den Heiltrank (Tobias, Chat 32:
+  // „das passt alles so“; 2 Heilpuder je Trank, kein Verhältnis 1 : 1).
+  heilpuder: { building: 'kraeutermuehle', label: 'Heilpuder', inputs: { ringelbluete: 5 }, output: 'heilpuder', amount: 1, time: 15 },
+  heiltrank: { building: 'zauberkessel', label: 'Heiltränke', inputs: { tinktur: 1, heilpuder: 2 }, fuel: 5, output: 'heiltrank', amount: 1, time: 60, level: 16 },
   traumtrank: { building: 'zauberkessel', label: 'Traumtränke', inputs: { tinktur: 1, kamillenbluete: 5 }, fuel: 5, output: 'traumtrank', amount: 1, time: 60, level: 15 },
 };

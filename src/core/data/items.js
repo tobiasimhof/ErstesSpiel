@@ -139,5 +139,12 @@ export const ITEMS = {
   tinktur: { name: 'Tinktur', plural: 'Tinkturen', price: 346, color: '#7a4a24', herb: '#5f8f3a', shape: 'tincture' },
   // v0.55.0: Level 15 „Der alte Magier“ – der erste Trank: bauchiges Fläschchen
   // mit lila Trank und Korken. Wert (346 + 5 × 20 + 5 × 2 Holzkohle) × 1,2 = 547.
+  // v0.57.0: Level 16 „Die Kräutermühle“ (Entwurf v0.57.0, Tobias, Chat 32: „das
+  // passt alles so“). Heilpuder: 5 Ringelblüten in der Kräutermühle gemahlen =
+  // 60 → 72 (+20 %), ein Leinensäckchen mit goldgelbem Pulver. Heiltrank: 1 Tinktur
+  // + 2 Heilpuder + 5 Holzkohle im Zauberkessel = (346 + 2 × 72 + 5 × 2) × 1,2 = 600,
+  // ein Fläschchen mit rotem Trank (dieselbe Form wie der Traumtrank).
+  heilpuder: { name: 'Heilpuder', plural: 'Heilpuder', price: 72, color: '#f2b705', herb: '#c2410c', shape: 'powder' },
+  heiltrank: { name: 'Heiltrank', plural: 'Heiltränke', price: 600, color: '#c92a2a', glow: '#ff8787', shape: 'potion' },
   traumtrank: { name: 'Traumtrank', plural: 'Traumtränke', price: 547, color: '#7b4fc9', glow: '#c9a7ff', shape: 'potion' },
 };

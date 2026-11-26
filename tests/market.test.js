@@ -18,6 +18,7 @@ import {
   serveCustomer,
   setCounterItem,
 } from '../src/core/market.js';
+import { itemLevel } from '../src/core/levels.js';
 import { loadInput } from '../src/core/production.js';
 import { simulate } from '../src/core/sim.js';
 import { deserializeGame, serializeGame } from '../src/core/save.js';
@@ -361,14 +362,18 @@ test('Testpaket: 1.000 Gold und 50 von jeder Ware (ohne Rohstoffe)', () => {
   }
 });
 
-test('Testpaket auf Level 6: Kombi-Teile nur je 5 Stück, alle Gebäude baubar', () => {
+test('Testpaket auf Level 6: Kombi-Teile nur je 5 Stück, alle Gebäude aus frühen Waren baubar', () => {
   const state = emptyGame({});
   state.shopLevel = 6;
   applyTestPack(state);
   assert.equal(storageCount(state, 'eisenstange'), 50);
   assert.equal(storageCount(state, 'zahnradwelle'), TEST_PACK.eachAdvanced);
   assert.equal(storageCount(state, 'vorhaengeschloss'), TEST_PACK.eachAdvanced);
-  for (const type of BUILD_MENU) assert.ok(canAfford(state, BUILDINGS[type].cost), `${type} baubar`);
+  // v0.57.0: Die Kräutermühle (Level 16) kostet Mörser (Level 14) – die gibt es
+  // im Testpaket von Level 6 noch nicht; alle anderen Gebäude kosten frühe Waren
+  const late = BUILD_MENU.filter((type) => Object.keys(BUILDINGS[type].cost).some((item) => itemLevel(item) > 6));
+  assert.deepEqual(late, ['kraeutermuehle']);
+  for (const type of BUILD_MENU.filter((t) => !late.includes(t))) assert.ok(canAfford(state, BUILDINGS[type].cost), `${type} baubar`);
 });
 
 test('Testpaket auf Level 1: nur Holz-Waren', () => {

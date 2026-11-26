@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.56.2 – Browser-Test parallel (schneller live) |
-| **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–15 im Spiel, 16–18 als Gerüst |
+| **Aktuelle Version** | v0.57.0 – Level 16 „Die Kräutermühle“: Heilpuder und Heiltrank |
+| **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–16 im Spiel, 17–18 als Gerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | **v0.57.0 – Level 16 „Die Kräutermühle“** (angenommen, Chat 32: Kräutermühle, Heilpuder, Heiltrank; in Arbeit). Tobias testet Level 15. Danach die „Zauber des Magiers“. |
+| **Nächster Schritt** | **Tobias testet Level 15 und 16** (Zauberkessel, Feuerfach, Traumtrank, 4. Flächenstreifen, Herauszoomen; Kräutermühle, Heilpuder, Heiltrank). Danach die „Zauber des Magiers“ durchdenken, dann Level 17 „Die Sternwarte“. |
 
 **Tobias' Fabrik (3D) – Level 14, alle Aufträge erledigt** (Chat 31, Bild: 36.904 Gold, Laden-Lager 1.109 / 1.100) – in v0.55.0 fehlten ihm 147 Erfahrung für Level 15 (Chat 32), seit v0.56.0 zählen die Aufträge (4 von 4). Die Fabrik steht bewusst still (kein Gold mehr verdienen, daher die roten Lichter), das Lager ist übervoll vom Strecke-Leeren. Die 2D-Welt ist seit v0.54.0 entfernt (Tobias: „das 3D game, das eigentliche Game“). Level 13 (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik): Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
 
@@ -25,7 +25,7 @@ Frühere Stände der 2D-Fabrik (Level 8, 10, 11 mit Zitaten; zuletzt Level 13) i
 
 **Nächste Schritte** (jeder erst nach Tobias' OK):
 
-- **Erledigt seit Chat 25** (Einzelheiten in `PLAENE.md`): v0.39.0–v0.54.0 (Belastungstest, Level 14, Kenney-Oberfläche, Ladebildschirm, Schriftrolle, Einführung, Feinschliff, ein Spiel ohne 2D-Welt). **Jetzt:** Level 15 im Spiel (v0.55.0), Level 16 als Nächstes.
+- **Erledigt seit Chat 25** (Einzelheiten in `PLAENE.md`): v0.39.0–v0.54.0 (Belastungstest, Level 14, Kenney-Oberfläche, Ladebildschirm, Schriftrolle, Einführung, Feinschliff, ein Spiel ohne 2D-Welt). **Jetzt:** Level 15 und 16 im Spiel (v0.55.0, v0.57.0), Browser-Test parallel (v0.56.2); Level 17 als Nächstes.
 1. **Tränke-Kapitel** (angenommen, Chat 27; Tabelle in `docs/inhalte/AUSBLICK.md`): 14 Die Tinktur (Mörser, Tinktur), 15 Der alte Magier (Zauberkessel, Traumtrank), 16 Die Kräutermühle (Heilpuder, Heiltrank), 17 Die Sternwarte (Linse, Fernrohr, Sternensand), 18 Die Zauberei (Farn, Lebens- und Manatrank). Feuer im Kessel von Hand (A); mehr Fläche ab Level 15; einzige Rezeptänderung: Mörser aus 5 Holzstäben (Tobias, Chat 31). Gemahlenes Glas: **Kristallsand** (Tobias), im Steinmetz. Leitlinie: alte Maschinen bekommen neue Funktionen, neue nur, wo es Sinn ergibt.
 2. **3D-Grafik:** eigene Häuser für alle Gebäude (fertig, Möglichkeit B: Mittelalter mit ein paar Technik-Teilen; Tobias, Chat 27: „sieht sehr gut aus“). **Waren auf dem Band** (v0.46.0): eigene kleine 3D-Formen. **Für später – Rückseiten** (Tobias, Chat 27, „nur eine kleine Anmerkung für später“): Erkennungszeichen und bewegte Teile sitzen vorn; baut man links und rechts einer Straße, sieht man eine Seite immer von hinten, „und da sieht man z.b. keine Unterschiede“. Eine Stadt um die Fabrik, die mit dem Level wächst (Idee).
 3. **Nach hinten verschoben:** **Weiche** (Chat 26: eigene Straßen sind besser, siehe offene Frage 4).
@@ -57,12 +57,13 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.57.0 – Level 16 „Die Kräutermühle“ (26.11.2026)
+
+- **Warum (Tobias, Chat 32):** Entwurf angenommen („Ja, das passt alles so“).
+- **Umgesetzt:** Kräutermühle (Reiter Stein, 5 Ringelblüten → 1 Heilpuder in 15 s, 3D-Haus mit Mahlstein), Heiltrank im Zauberkessel (1 Tinktur + 2 Heilpuder, 600 Gold), Aufträge von Grete, Agnes, Ambrosius, Hannes, Aufstieg 17.500. Baukosten 10 Mörser + **4** Räderwerke (statt 5: Grenze 960 Gold). Format bleibt 21.
+- **Offen:** Tobias' Test.
+
 ### v0.56.2 – Browser-Test parallel (26.11.2026)
 
 - **Warum (Tobias, Chat 32):** „Ja, das passt alles so. Lass uns A machen deine Empfehlung“ – schneller live.
 - **Umgesetzt:** `npm run test:browser` startet die Teile gleichzeitig (Durchspielen je Gerät, 3D je Gerät, Einführung): etwa 22 statt 66 Minuten, geprüft wird dasselbe. Eine Prüfung (Theke auffüllen) hielt die Last nicht aus und ist jetzt unempfindlich gegen einen Kunden im selben Augenblick. Spiel unverändert.
-
-### v0.56.1 – Entwurf Level 16 und „schneller live“ (26.11.2026, nur Doku)
-
-- **Tobias (Chat 32):** Level 16 schon theoretisch durchgehen; überlegen, wie es schneller live geht – die Sitzung für v0.56.0 „hat schon sehr lange gedauert“.
-- **Claude:** Entwurf in `PLAENE.md`: Kräutermühle (5 Ringelblüten → Heilpuder), Heiltrank (1 Tinktur + 2 Heilpuder, 600 Gold), 4 Aufträge (19.391 Gold), Aufstieg 17.500. Gemessen: Browser-Test 66 min nacheinander; Vorschlag: Teile parallel (v0.56.2). **Offen:** Tobias' Antworten.

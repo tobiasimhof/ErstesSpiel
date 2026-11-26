@@ -33,7 +33,8 @@ test('Einteilung der Reiter (Tobias): Kombi-Maschinen beim Stoff, zu dem sie pas
   const tabOf = Object.fromEntries(BUILD_TABS.flatMap((t) => t.buildings.map((b) => [b, t.id])));
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'holz').buildings, ['holzfaeller', 'saegewerk', 'zimmerei', 'kohlenmeiler']);
   // v0.55.0: der Zauberkessel (Level 15) im Reiter „Stein“ (Tobias, Chat 27: „mehr mit stein arbeiten“)
-  assert.deepEqual(BUILD_TABS.find((t) => t.id === 'stein').buildings, ['steinbruch', 'steinmetz', 'zauberkessel']);
+  // v0.57.0: dazu die Kräutermühle (Level 16, Mahlstein) – damit ist der Reiter voll (4)
+  assert.deepEqual(BUILD_TABS.find((t) => t.id === 'stein').buildings, ['steinbruch', 'steinmetz', 'zauberkessel', 'kraeutermuehle']);
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'eisen').buildings, ['schmelzhuette', 'schmiede', 'feinschmiede', 'schlosserei']);
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'kraeuter').buildings, ['beet', 'flachsbreche', 'webstube', 'kraeuterstube']);
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'werkstatt').buildings, ['schreibstube', 'uhrmacherei', 'apotheke']);

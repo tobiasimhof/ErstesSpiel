@@ -351,7 +351,8 @@ test('Ungültiges Level, Zähler oder Flächenkäufe werden erkannt', () => {
   };
   assert.equal(bad(() => {}), true);
   assert.equal(bad((s) => (s.shopLevel = 14)), true);
-  assert.equal(bad((s) => (s.shopLevel = 16)), false); // v0.55.0: Level 15 gibt es
+  assert.equal(bad((s) => (s.shopLevel = 16)), true); // v0.57.0: Level 16 gibt es
+  assert.equal(bad((s) => (s.shopLevel = 17)), false);
   assert.equal(bad((s) => (s.shopLevel = 0)), false);
   assert.equal(bad((s) => (s.produced = { holzblock: -1 })), false);
   assert.equal(bad((s) => (s.produced = { unbekannt: 1 })), false);

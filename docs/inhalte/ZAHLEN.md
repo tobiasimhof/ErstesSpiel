@@ -23,6 +23,7 @@
 | 13 Die Glashütte | 150 Glas + 45 Fläschchen + 2 Sternenuhren + 15 Kräutermischungen | 10.490 | 3.147 | 0,75 Holzstämme, 0,75 Felsbrocken, 1 Eisenerz, 1,5 Schafgarbensamen, 1,5 Kamillensamen, 3,8 Sand | 7.367 | 3 | 2,8 h | 56 min (Ofen: Sand) | Gold ×1,2, Zeit ×1,3 |
 | 14 Die Tinktur | 35 Mörser + 25 Tinkturen + 10 Räderwerke + 8 Wundverbände | 13.251 | 3.976 | 5,6 Holzstämme, 3,4 Felsbrocken, 0,8 Leinsamen, 0,8 Ringelblumensamen, 3,3 Schafgarbensamen, 2,5 Kamillensamen, 1,3 Sand | 7.931 | 7,4 | 5,1 h | 1,7 h (Beet: Schafgarbe) | Gold ×1,3, Zeit ×1,9 |
 | 15 Der alte Magier | 300 Holzkohle + 18 Traumtränke + 10 Kamillenkissen + 10 Tinkturen | 16.066 | 4.820 | 3 Holzstämme, 2 Leinsamen, 2,8 Schafgarbensamen, 5,6 Kamillensamen, 1,4 Sand | 9.225 | 10,4 | 3,8 h | 2,8 h (Beet: Kamille) | Gold ×1,2, Zeit ×0,7 |
+| 16 Die Kräutermühle | 70 Heilpuder + 8 Wundverbände + 16 Heiltränke + 5 Traumtränke | 19.391 | 5.818 | 0,8 Leinsamen, 11 Ringelblumensamen, 2,9 Schafgarbensamen, 2,6 Kamillensamen, 1,1 Sand | 10.983 | 17,3 | 4,5 h | 5,5 h (Beet: Ringelblume) | Gold ×1,2, Zeit ×1,2 |
 
 ## Aufstieg und Theken
 
@@ -44,7 +45,8 @@
 | 12 | 10.000 | 9.072 | 110 % | 69 | Reißbrett (1.408) | 193.097 / 482.743 Gold/h (5 Theken) | 6,4 Stück/h = 9.011 Gold/h |
 | 13 | 12.500 | 10.490 | 119 % | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
 | 14 | 15.000 | 13.251 | 113 % | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
-| 15 | – (letztes Level) | 16.066 | – | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
+| 15 | 17.500 | 16.066 | 109 % | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
+| 16 | – (letztes Level) | 19.391 | – | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
 
 ## Wofür man Gold ausgibt
 
@@ -82,6 +84,7 @@ Neben Rohstoffen und Aufstiegen (Preise aus `data/shop.js` und `data/land.js`):
 | 11 | Uhrmacherei | 1 Zirkel + 1 Uhrwerk | 921 | 0,38 Holzstämme, 0,38 Felsbrocken, 0,5 Eisenerz (503 Gold) |
 | 12 | Apotheke | 1 Verstärkte Holzplatte + 1 Gewichtstein | 432 | 0,25 Holzstämme, 0,25 Felsbrocken, 0,25 Eisenerz (275 Gold) |
 | 15 | Zauberkessel | 30 Steinplatten + 10 Eisenbleche | 420 | 0,75 Felsbrocken, 0,25 Eisenerz (320 Gold) |
+| 16 | Kräutermühle | 10 Mörser + 4 Räderwerke | 862 | 1,8 Holzstämme, 1,3 Felsbrocken (549 Gold) |
 
 ## Je Ware
 
@@ -130,3 +133,5 @@ Neben Rohstoffen und Aufstiegen (Preise aus `data/shop.js` und `data/land.js`):
 | Mörser | 14 | 43 | 0,13 Holzstämme, 0,03 Felsbrocken | 27,5 | +57 % | 175 s | 112,5 s | 1.376 |
 | Tinktur | 14 | 346 | 0,1 Schafgarbensamen, 0,1 Kamillensamen, 0,05 Sand | 204 | +70 % | 245 s | 180 s | 6.920 |
 | Traumtrank | 15 | 547 | 0,1 Schafgarbensamen, 0,2 Kamillensamen, 0,05 Sand | 287 | +91 % | 365 s | 360 s | 5.470 |
+| Heilpuder | 16 | 72 | 0,1 Ringelblumensamen | 50 | +44 % | 75 s | 180 s | 1.440 |
+| Heiltrank | 16 | 600 | 0,2 Ringelblumensamen, 0,1 Schafgarbensamen, 0,1 Kamillensamen, 0,05 Sand | 304 | +97 % | 455 s | 360 s | 6.000 |

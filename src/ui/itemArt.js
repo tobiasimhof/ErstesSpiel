@@ -1313,9 +1313,51 @@ export function drawItem(ctx, type, cx, cy, size) {
       ctx.stroke();
       break;
     }
+    case 'powder': {
+      // v0.57.0 Heilpuder: ein offenes Leinensäckchen mit goldgelbem Pulver,
+      // zugebunden mit einem roten Band, davor ein kleines Häufchen
+      ctx.fillStyle = '#efe3c4';
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.3, cy - s * 0.2);
+      ctx.quadraticCurveTo(cx - s * 0.58, cy + s * 0.12, cx - s * 0.4, cy + s * 0.46);
+      ctx.lineTo(cx + s * 0.24, cy + s * 0.46);
+      ctx.quadraticCurveTo(cx + s * 0.42, cy + s * 0.12, cx + s * 0.16, cy - s * 0.2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      // Öffnung mit dem Pulver
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      ctx.ellipse(cx - s * 0.07, cy - s * 0.24, s * 0.27, s * 0.12, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.3, cy - s * 0.26);
+      ctx.quadraticCurveTo(cx - s * 0.07, cy - s * 0.52, cx + s * 0.16, cy - s * 0.26);
+      ctx.fill();
+      // Band um den Hals
+      ctx.strokeStyle = def.herb ?? '#c2410c';
+      ctx.lineWidth = Math.max(1.5, s * 0.08);
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.34, cy - s * 0.08);
+      ctx.quadraticCurveTo(cx - s * 0.07, cy + s * 0.02, cx + s * 0.2, cy - s * 0.08);
+      ctx.stroke();
+      // Häufchen vorne rechts
+      ctx.strokeStyle = OUTLINE;
+      ctx.lineWidth = Math.max(1, s * 0.07);
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      ctx.moveTo(cx + s * 0.1, cy + s * 0.5);
+      ctx.quadraticCurveTo(cx + s * 0.34, cy + s * 0.08, cx + s * 0.58, cy + s * 0.5);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      break;
+    }
     case 'potion': {
       // v0.55.0 Traumtrank: bauchiges Fläschchen mit lila Trank, Korken und
-      // einem kleinen Glanz – der Trank leuchtet von innen heller
+      // einem kleinen Glanz – der Trank leuchtet von innen heller; v0.57.0 auch
+      // der Heiltrank (rot), Farben aus color und glow
       const r = s * 0.34;
       const by = cy + s * 0.14;
       ctx.fillStyle = '#cfe9ee';
