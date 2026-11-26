@@ -102,7 +102,8 @@ export const BUILDINGS = {
       { kind: 'in', x: 0, y: 0, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['steinplatte', 'steinzahnrad'] },
+    // v0.58.0: ab Level 17 dazu Linsen und Kristallsand aus Glas (4 Einstellungen)
+    production: { kind: 'workshop', recipes: ['steinplatte', 'steinzahnrad', 'linse', 'kristallsand'] },
   },
   schmiede: {
     level: 3,
@@ -299,7 +300,8 @@ export const BUILDINGS = {
       { kind: 'in', x: 0, y: 1, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['raederuhr', 'kastenschloss', 'sternenuhr'] },
+    // v0.58.0: ab Level 17 dazu Fernrohre (4 Einstellungen)
+    production: { kind: 'workshop', recipes: ['raederuhr', 'kastenschloss', 'sternenuhr', 'fernrohr'] },
   },
   // v0.29.0: Level 12 „Die Apotheke“ – Abschluss des Kräuter-Kapitels. Im
   // Reiter „Werkstatt“ (Tobias, Chat 21: „Ja, wir können das gerne unter den

@@ -1313,6 +1313,82 @@ export function drawItem(ctx, type, cx, cy, size) {
       ctx.stroke();
       break;
     }
+    case 'lens': {
+      // v0.58.0 Linse: runde, flache Glasscheibe, leicht schräg, mit hellem Rand
+      // und Glanz
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, s * 0.46, s * 0.4, -0.3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+      ctx.lineWidth = Math.max(1, s * 0.05);
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, s * 0.36, s * 0.3, -0.3, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.lineWidth = Math.max(1.5, s * 0.08);
+      ctx.beginPath();
+      ctx.arc(cx - s * 0.06, cy - s * 0.04, s * 0.22, Math.PI * 1.05, Math.PI * 1.45);
+      ctx.stroke();
+      break;
+    }
+    case 'crystals': {
+      // v0.58.0 Kristallsand: ein Häufchen heller Körner mit glitzernden Funken
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      ctx.moveTo(cx - s * 0.52, cy + s * 0.36);
+      ctx.quadraticCurveTo(cx - s * 0.1, cy - s * 0.5, cx + s * 0.52, cy + s * 0.36);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = def.glow ?? '#9fdcf0';
+      for (const [px, py, r] of [[-0.22, 0.14, 0.07], [0.08, -0.06, 0.08], [0.26, 0.2, 0.06], [-0.04, 0.24, 0.05]]) {
+        ctx.beginPath();
+        ctx.moveTo(cx + px * s, cy + (py - r) * s);
+        ctx.lineTo(cx + (px + r * 0.6) * s, cy + py * s);
+        ctx.lineTo(cx + px * s, cy + (py + r) * s);
+        ctx.lineTo(cx + (px - r * 0.6) * s, cy + py * s);
+        ctx.closePath();
+        ctx.fill();
+      }
+      // Funkeln
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
+      ctx.lineWidth = Math.max(1, s * 0.05);
+      ctx.beginPath();
+      ctx.moveTo(cx + s * 0.3, cy - s * 0.34);
+      ctx.lineTo(cx + s * 0.3, cy - s * 0.14);
+      ctx.moveTo(cx + s * 0.2, cy - s * 0.24);
+      ctx.lineTo(cx + s * 0.4, cy - s * 0.24);
+      ctx.stroke();
+      break;
+    }
+    case 'telescope': {
+      // v0.58.0 Fernrohr: schräges Eisenrohr, vorn breiter, mit Messingringen
+      // und einer Linse an der Öffnung
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(-0.55);
+      ctx.fillStyle = def.color;
+      roundRect(ctx, -s * 0.55, -s * 0.1, s * 0.6, s * 0.2, s * 0.05);
+      ctx.fill();
+      ctx.stroke();
+      roundRect(ctx, s * 0.02, -s * 0.15, s * 0.48, s * 0.3, s * 0.06);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = def.brass ?? '#c9a23c';
+      for (const x of [-0.5, -0.02, 0.44]) {
+        roundRect(ctx, x * s, -s * (x > 0 ? 0.17 : 0.12), s * 0.08, s * (x > 0 ? 0.34 : 0.24), s * 0.03);
+        ctx.fill();
+        ctx.stroke();
+      }
+      ctx.fillStyle = '#a8dcd9';
+      ctx.beginPath();
+      ctx.ellipse(s * 0.53, 0, s * 0.05, s * 0.13, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+      break;
+    }
     case 'powder': {
       // v0.57.0 Heilpuder: ein offenes Leinensäckchen mit goldgelbem Pulver,
       // zugebunden mit einem roten Band, davor ein kleines Häufchen

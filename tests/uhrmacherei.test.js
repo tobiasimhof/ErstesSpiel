@@ -44,7 +44,8 @@ test('Uhrmacherei: 2 × 2, zwei Eingänge, Räderuhr, Kastenschloss und Sternenu
   const def = BUILDINGS.uhrmacherei;
   assert.deepEqual([def.level, def.size, def.color], [11, [2, 2], TAB_COLORS.werkstatt]);
   assert.equal(def.ports.filter((p) => p.kind === 'in').length, 2);
-  assert.deepEqual(def.production.recipes, ['raederuhr', 'kastenschloss', 'sternenuhr']);
+  // v0.58.0: ab Level 17 dazu das Fernrohr (Level 17 „Die Sternwarte“)
+  assert.deepEqual(def.production.recipes, ['raederuhr', 'kastenschloss', 'sternenuhr', 'fernrohr']);
   assert.deepEqual(RECIPES.raederuhr.inputs, { uhrwerk: 1, gewichtstein: 1 });
   assert.deepEqual(RECIPES.kastenschloss.inputs, { vorhaengeschloss: 1, schluessel: 1 });
   assert.deepEqual(RECIPES.sternenuhr.inputs, { uhrwerk: 1, zirkel: 1 });

@@ -43,7 +43,7 @@ const worth = (items) => Object.entries(items).reduce((sum, [t, n]) => sum + ITE
 // ---------- Datentabellen ----------
 
 test('Level 16 „Die Kräutermühle“: Geschichte mit Grete und Ambrosius, Laden wie auf Level 15, Aufstieg 17.500 Gold ohne Geschenk', () => {
-  assert.equal(MAX_LEVEL, 16);
+  assert.ok(MAX_LEVEL >= 16); // v0.58.0: Level 17 kommt dazu
   const def = LEVELS[16];
   assert.equal(def.name, 'Die Kräutermühle');
   assert.ok(def.story.includes('Grete') && def.story.includes('Heilpuder') && def.story.includes('Ambrosius'), def.story);
@@ -112,15 +112,13 @@ test('Aufträge auf Level 16: Grete, Agnes, Ambrosius, Hannes – zusammen 19.39
   assert.ok(ratio > 1.15 && ratio < 1.3, `Sprung zu Level 15: ×${ratio.toFixed(2)}`);
 });
 
-test('Aufstieg auf Level 16: 17.500 Gold, keine neue Fläche; danach ist Level 16 das höchste', () => {
+test('Aufstieg auf Level 16: 17.500 Gold, keine neue Fläche', () => {
   const state = levelGame(15, 20000);
   const before = { ...state.world };
   state.quest.index = levelQuests(15).length;
   assert.deepEqual(levelUp(state), { level: 16, gift: {}, cost: 17500, moreLand: false });
   assert.equal(state.gold, 2500);
   assert.deepEqual(state.world, before);
-  state.quest.index = levelQuests(16).length;
-  assert.equal(levelUp(state), null);
 });
 
 // ---------- Mühle und Kessel ----------

@@ -16,7 +16,7 @@
 | 14 | Die Tinktur (Werkzeuge + Kräuter): Zimmerei: Mörser (1 Steinplatte + 3 Holzstäbe – Schale aus Stein, Stößel aus Holz); Apotheke: Tinktur (Fläschchen + Kräutermischung), die Grundzutat aller Tränke | im Spiel |
 | 15 | Der alte Magier (Tränke): Magier Ambrosius zieht wegen der Tinktur in den Ort und bringt den **Zauberkessel** mit (neue Maschine, Reiter „Stein“, 2 Eingänge für die Zutaten, dazu ein Feuerfach für 100 Holzkohle, 5 je Trank, von Hand aus dem Laden-Lager nachlegen): Traumtrank (1 Tinktur + 5 Kamillenblüten); dazu je Seite ein 4. Flächenstreifen für 10.000 Gold (bis 54 × 46); Mörser ab dann aus 5 Holzstäben | im Spiel (v0.55.0) |
 | 16 | Die Kräutermühle (Kräuter + Tränke): **Kräutermühle** (neue Maschine, Reiter „Stein“, 1 Eingang): 5 Ringelblüten → Heilpuder; Kessel: Heiltrank (1 Tinktur + 2 Heilpuder); Baukosten 10 Mörser + 4 Räderwerke | im Spiel (v0.57.0) |
-| 17 | Die Sternwarte (Werkzeuge): Steinmetz: Linse (Glas schleifen); Uhrmacherei: Fernrohr (Linse + Eisenblech); Steinmetz: Glas mahlen → Kristallsand (für den Manatrank) | Entwurf (v0.57.1, `PLAENE.md`: Linse aus 10 Glas, Kristallsand aus 5 Glas, Fernrohr aus 2 Linsen + 10 Eisenblechen) |
+| 17 | Die Sternwarte (Werkzeuge): Steinmetz: Linse (Glas schleifen); Uhrmacherei: Fernrohr (Linse + Eisenblech); Steinmetz: Glas mahlen → Kristallsand (für den Manatrank); Linse aus 10 Glas, Kristallsand aus 5 Glas, Fernrohr aus 2 Linsen + 10 Eisenblechen | im Spiel (v0.58.0) |
 | 18 | Die Zauberei (Kräuter + Tränke, Abschluss): Farn als 5. Pflanze → Farnwedel; Kessel: Lebenstrank (Heiltrank + Farnwedel), Manatrank (Traumtrank + Kristallsand) | geplant |
 | später | Alterstrank, Stahl (Holzkohle + Eisen), Lupe, Astrolabium (Sternenuhr + Fernrohr), weitere Tränke mit Farn | Ideen |
 

@@ -24,6 +24,7 @@
 | 14 Die Tinktur | 35 Mörser + 25 Tinkturen + 10 Räderwerke + 8 Wundverbände | 13.251 | 3.976 | 5,6 Holzstämme, 3,4 Felsbrocken, 0,8 Leinsamen, 0,8 Ringelblumensamen, 3,3 Schafgarbensamen, 2,5 Kamillensamen, 1,3 Sand | 7.931 | 7,4 | 5,1 h | 1,7 h (Beet: Schafgarbe) | Gold ×1,3, Zeit ×1,9 |
 | 15 Der alte Magier | 300 Holzkohle + 18 Traumtränke + 10 Kamillenkissen + 10 Tinkturen | 16.066 | 4.820 | 3 Holzstämme, 2 Leinsamen, 2,8 Schafgarbensamen, 5,6 Kamillensamen, 1,4 Sand | 9.225 | 10,4 | 3,8 h | 2,8 h (Beet: Kamille) | Gold ×1,2, Zeit ×0,7 |
 | 16 Die Kräutermühle | 70 Heilpuder + 8 Wundverbände + 16 Heiltränke + 5 Traumtränke | 19.391 | 5.818 | 0,8 Leinsamen, 11 Ringelblumensamen, 2,9 Schafgarbensamen, 2,6 Kamillensamen, 1,1 Sand | 10.983 | 17,3 | 4,5 h | 5,5 h (Beet: Ringelblume) | Gold ×1,2, Zeit ×1,2 |
+| 17 Die Sternwarte | 20 Linsen + 13 Fernrohre + 300 Steinplatten + 3 Sternenuhren + 50 Kristallsand + 6 Heiltränke | 23.437 | 7.031 | 1,1 Holzstämme, 8,6 Felsbrocken, 4,8 Eisenerz, 1,2 Ringelblumensamen, 0,6 Schafgarbensamen, 0,6 Kamillensamen, 7,4 Sand | 14.895 | 2,4 | 7,9 h | 2,2 h (Steinbruch: Felsbrocken) | Gold ×1,2, Zeit ×1,7 |
 
 ## Aufstieg und Theken
 
@@ -46,7 +47,8 @@
 | 13 | 12.500 | 10.490 | 119 % | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
 | 14 | 15.000 | 13.251 | 113 % | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
 | 15 | 17.500 | 16.066 | 109 % | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
-| 16 | – (letztes Level) | 19.391 | – | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
+| 16 | 20.000 | 19.391 | 103 % | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
+| 17 | – (letztes Level) | 23.437 | – | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
 
 ## Wofür man Gold ausgibt
 
@@ -135,3 +137,6 @@ Neben Rohstoffen und Aufstiegen (Preise aus `data/shop.js` und `data/land.js`):
 | Traumtrank | 15 | 547 | 0,1 Schafgarbensamen, 0,2 Kamillensamen, 0,05 Sand | 287 | +91 % | 365 s | 360 s | 5.470 |
 | Heilpuder | 16 | 72 | 0,1 Ringelblumensamen | 50 | +44 % | 75 s | 180 s | 1.440 |
 | Heiltrank | 16 | 600 | 0,2 Ringelblumensamen, 0,1 Schafgarbensamen, 0,1 Kamillensamen, 0,05 Sand | 304 | +97 % | 455 s | 360 s | 6.000 |
+| Kristallsand | 17 | 72 | 0,05 Sand | 55 | +31 % | 55 s | 45 s | 5.760 |
+| Linse | 17 | 144 | 0,1 Sand | 110 | +31 % | 120 s | 90 s | 5.760 |
+| Fernrohr | 17 | 634 | 0,25 Eisenerz, 0,2 Sand | 403 | +57 % | 575 s | 225 s | 10.144 |

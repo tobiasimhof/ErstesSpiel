@@ -38,9 +38,9 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Tobias** (mit einem Bild seiner Fabrik auf Level 16, 22.768 Gold): „Alles klar perfekt. Ich bin gerade level 16, weil ich mit level 15 etwas schnell durch war, aber das kann man mit den missionen ja noch mit der anzahl beeinflusse, aber für den test war das schon mal gut, um die neuen sachen kennenzulernen. Ich finde die neuen Produkte gut, so entstehen wieder neue Straßen, weil aktuell ist mein Gebiet noch sehr frei durch die neuen Käufe. Deswegen wäre es gut, wenn wir nach der Zauberei wieder an den alten Straßen anknüpfen, damit wir aus der Sternenuhr, dem Fernrohr, dem Reißbrett, dem mörser wieder neue Produkte machen können bzw. mit bisherigen Produkten verbinden. Dann können wir die einzelnen Produktionsstraßen wieder vergrößern. Level 17 sieht bisher aber gut aus und wenn wir mit der Zauberei durch sind, haben wir hoffentlich genug neue Produkte, damit wir wie gesagt, die Straßen wieder verlängern können. Neue einstellung passen und ich finde eine Maschine sollte nicht mehr als 4 Einstellungen haben, damit wir wissen, ab wann wir neue maschinen einführen müssen. Linse lieber aus 10 Glas. Die Aufträge passen alle so. Ich finde, dass wir uns mit "zauber des Magiers" ab level 20 beschäftigen können, wenn wir mit allen grundlegenden Sachen fertig sind und wir auch lange Produktionsstraßen haben.“
 
-**Claude** hat die Antworten und die drei Grundsätze festgehalten (höchstens 4 Einstellungen je Maschine, nach Level 18 die alten Straßen verlängern, Zauber ab Level 20) und mit Level 17 begonnen.
+**Claude** hat die Antworten und die drei Grundsätze festgehalten (höchstens 4 Einstellungen je Maschine, nach Level 18 die alten Straßen verlängern, Zauber ab Level 20) und Level 17 umgesetzt: Steinmetz schleift Linsen und mahlt Kristallsand, Uhrmacherei baut Fernrohre; ein Test prüft „höchstens 4 Einstellungen“; die Linse ist die einzige Grundmaschinen-Ware, die nicht aus 5 Teilen entsteht.
 
-**Umgesetzt:** v0.57.2 (nur Doku).
+**Umgesetzt:** v0.57.2 (nur Doku), v0.58.0.
 
 ### 25.11.2026 – Chat 31: Beratung – zurück zu Logik und Leveln (v0.52.2, v0.53.0, v0.54.0, v0.54.1, v0.54.2, v0.55.0)
 

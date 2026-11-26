@@ -45,6 +45,8 @@ export const SHOP_LEVELS = {
   15: { storage: 1000, counterSize: 30, customerSeconds: [45, 60] },
   // v0.57.0: Level 16 – der Laden bleibt wie auf Level 7 bis 15.
   16: { storage: 1000, counterSize: 30, customerSeconds: [45, 60] },
+  // v0.58.0: Level 17 – der Laden bleibt wie auf Level 7 bis 16.
+  17: { storage: 1000, counterSize: 30, customerSeconds: [45, 60] },
 };
 
 // Namen der Theken-Größen für Texte (v0.10.1)

@@ -4,6 +4,28 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.58.0 – Level 17 „Die Sternwarte“: Linse, Fernrohr, Kristallsand (26.11.2026)
+
+**Vorgenommen:**
+- Den Entwurf v0.58.0 umsetzen (Tobias, Chat 32: „Neue einstellung passen“, „Linse lieber aus 10 Glas. Die Aufträge passen alle so.“) und seine Regel „höchstens 4 Einstellungen je Maschine“ mit einem Test absichern.
+
+**Fragen, die wir uns gestellt haben:**
+- Passt die Linse aus 10 Glas zu den Regeln? → Ein alter Test verlangte bei Grundmaschinen (Sägewerk, Steinmetz, Schmiede) immer 5 → 1. Die Linse ist jetzt die einzige Ausnahme (Tobias' Wahl), der Test nennt sie.
+- Welche Maschinen sind mit 4 Einstellungen voll? → Zimmerei, Apotheke, Steinmetz und Uhrmacherei; der neue Test schlägt an, sobald eine Maschine eine 5. bekäme.
+- Wie sehen die Waren aus? → Linse: runde, flache Glasscheibe mit Glanz, steht schräg auf dem Band; Kristallsand: Häufchen heller Körner mit blauen Kristallen und Funkeln; Fernrohr: Eisenrohr, vorn breiter, Messingringe, Linse vorn.
+- Ändert sich das Spielstand-Format? → Nein (bleibt 21).
+
+**Gemacht:**
+- Daten: `items.js` (Linse 144, Kristallsand 72, Fernrohr 634), `recipes.js` (Linsen, Kristallsand, Fernrohre, ab Level 17), `buildings.js` (Steinmetz und Uhrmacherei mit je 4 Einstellungen), `levels.js` (Level 17), `shop.js` (Laden auf Level 17).
+- Darstellung: `itemArt.js` (Warenbilder „lens“, „crystals“, „telescope“), `itemForms.js` (3D-Formen).
+- Tests: neu `sternwarte.test.js` (10 Tests: höchstens 4 Einstellungen, Daten, Aufträge, Aufstieg, Steinmetz schleift und mahlt, eine Straße Glas → Linsen → Fernrohre → Laden-Lager, Spielstand); angepasst `sim` (Linse 10 → 1), `uhrmacherei`, `kraeutermuehle`, `levels`, `quests`, `save`, `waren3d`; Browser: `fabrik.cjs` bis Level 17 (Aufstieg, einen Steinmetz setzen, Steinmetz und Uhrmacherei per Touch umstellen – 4 Einstellungen passen ins Infofenster –, Kristallsand mahlen; drei Theken-Prüfungen vertragen einen Kunden im selben Augenblick), `spiel3d.cjs` (46 Waren auf dem Band).
+- Doku: `SPIEL.md`, `LEVEL.md`, `GEBAEUDE.md`, `WAREN.md`, `BEDIENUNG.md`, `AUSBLICK.md`, `ZAHLEN.md`, `TECHNIK.md`, `STAND.md`, Archiv. Versionsnummer 0.58.0.
+
+**Geprüft:**
+- `npm test`: 499 Tests bestanden (10 neue in `sternwarte.test.js`).
+- Browser-Test parallel, alle Teile bestanden: 3D Tablet und Handy je 106 (46 Waren auf dem Band, Bild angesehen), Einführung 100; Durchspielen bis Level 17 nach zwei Korrekturen im Test (siehe unten) Tablet 517, Handy 525 (Steinmetz und Uhrmacherei per Touch umgestellt, 4 Einstellungen passen ins Infofenster, Kristallsand gemahlen). Zusammen 1.354 Prüfungen.
+- Im ersten Lauf gefunden und im Test behoben: (1) Beim Durchspielen gibt es keinen Steinmetz – der Test setzt jetzt einen auf freie Fläche; (2) „Menge öffnet mit der aktuellen Anzahl“ schwankte unter paralleler Last (ein Kunde kaufte im selben Augenblick) – wie beim Auffüllen in v0.56.2 verträgt die Prüfung das jetzt, ebenso „genau 8 Holzblöcke“ und „„Alle“ füllt auf 20“. Am Spiel lag keins davon.
+
 ### v0.57.2 – Tobias' Antworten zu Level 17, Grundsätze für danach (26.11.2026, nur Doku)
 
 **Vorgenommen:**

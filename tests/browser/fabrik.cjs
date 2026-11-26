@@ -717,14 +717,19 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     saleIdBefore,
   );
   check(
-    counter8.type === 'holzblock' && counter8.count + counter8.sold === 8 && counter8.store >= blocksBefore - 8,
+    // v0.58.0: ein Kunde kurz vor dem Hinlegen zählt mit, ändert aber nichts (wie beim Auffüllen)
+    counter8.type === 'holzblock' && counter8.count <= 8 && counter8.count + counter8.sold >= 8 && counter8.store >= blocksBefore - 8,
     `Theke 1 mit genau 8 Holzblöcken bestückt (${JSON.stringify(counter8)})`,
   );
   // Über „Menge“ lässt sich die Anzahl später ändern
+  // v0.58.0: Kunden kaufen live weiter (bei paralleler Last öfter) – angezeigt wird
+  // die Anzahl beim Öffnen, also eine Zahl zwischen dem Stand davor und danach
+  const counterBefore = await game(page, () => window.__game.state.counters[0].count);
   await page.locator('#modal-content .counter-buttons button', { hasText: 'Menge' }).first().tap();
   await sleep(80);
+  const shownAmount = Number(await page.textContent('#modal-content .amount-number'));
   const counterNow = await game(page, () => window.__game.state.counters[0].count);
-  check((await page.textContent('#modal-content .amount-number')) === String(counterNow), `Menge öffnet mit der aktuellen Anzahl (${counterNow})`);
+  check(shownAmount <= counterBefore && shownAmount >= counterNow, `Menge öffnet mit der aktuellen Anzahl (${shownAmount}; davor ${counterBefore}, danach ${counterNow})`);
   await page.locator('#modal-content .amount-stepper button', { hasText: 'Alle' }).tap();
   // Auch hier: Was ein Kunde genau jetzt kauft, zählt mit.
   const saleIdAll = await game(page, () => window.__game.state.market.nextSaleId);
@@ -739,7 +744,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     },
     saleIdAll,
   );
-  check(counter.type === 'holzblock' && counter.count + counter.sold === 20, `„Alle“ füllt Theke 1 auf 20 Holzblöcke (${JSON.stringify(counter)})`);
+  check(counter.type === 'holzblock' && counter.count <= 20 && counter.count + counter.sold >= 20, `„Alle“ füllt Theke 1 auf 20 Holzblöcke (${JSON.stringify(counter)})`);
   await shot('9-theken');
   const goldBeforeSales = await game(page, () => window.__game.state.gold);
   await game(page, () => window.__game.simulate(90));
@@ -2838,6 +2843,94 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await shot('27c-heiltrank');
   await page.tap('#info-close');
   await sleep(100);
+
+  // ---------- Level 17: Die Sternwarte (v0.58.0) ----------
+  await page.tap('#btn-level');
+  await sleep(150);
+  for (let i = 0; i < 4; i++) {
+    await page.locator('#modal-content button', { hasText: '🧪 Test: Auftrag erledigen' }).tap();
+    await sleep(200);
+  }
+  const l16done = await page.textContent('#modal-content');
+  check(
+    l16done.includes('4 von 4') &&
+      l16done.includes('Nächstes Level: Level 17 · Die Sternwarte') &&
+      l16done.includes('Steinmetz: Linse') &&
+      l16done.includes('Steinmetz: Kristallsand') &&
+      l16done.includes('Uhrmacherei: Fernrohr') &&
+      !l16done.includes('🎁'),
+    'Level 16 erledigt; Level 17 kündigt Linse, Kristallsand (Steinmetz) und Fernrohr (Uhrmacherei) an, ohne Geschenk',
+  );
+  await game(page, () => (window.__game.state.gold += 20000));
+  await sleep(450);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 17 · 20.000' }).tap();
+  await sleep(150);
+  const letter17 = await readLetter(page);
+  check((await game(page, () => window.__game.state.shopLevel)) === 17, 'Aufstieg auf Level 17 für 20.000 Gold');
+  const lvl17Text = await page.textContent('#modal-content');
+  check(
+    lvl17Text.includes('Level 17 erreicht!') && lvl17Text.includes('Die Sternwarte') && lvl17Text.includes('20 Linsen') && lvl17Text.includes('0 von 4'),
+    'Level 17: Berta möchte 20 Linsen, Aufträge 0 von 4',
+  );
+  check(letter17.includes('Laden-Level 17!') && letter17.includes('Sternwarte') && letter17.includes('Berta'), `Schriftrolle: Sternwarte und Berta (${letter17.slice(0, 200)})`);
+  await shot('28a-level-17');
+  await page.tap('#modal-close');
+  await sleep(120);
+  // Steinmetz und Uhrmacherei haben jetzt 4 Einstellungen (Tobias: höchstens 4) – per Touch umstellen.
+  // Einen Steinmetz gibt es beim Durchspielen noch nicht: auf eine freie Fläche setzen.
+  await game(page, () => {
+    const g = window.__game;
+    if (g.state.buildings.some((b) => b.type === 'steinmetz')) return;
+    const p = g.state.plot;
+    for (let y = p.y; y < p.y + p.height - 1; y++) {
+      for (let x = p.x; x < p.x + p.width - 1; x++) {
+        if ([0, 1].every((dx) => [0, 1].every((dy) => g.isFree(x + dx, y + dy))) && g.place('steinmetz', x, y, 0) !== null) return;
+      }
+    }
+  });
+  check(await game(page, () => window.__game.state.buildings.some((b) => b.type === 'steinmetz')), 'Ein Steinmetz steht in der Fabrik');
+  for (const [type, title, recipe, label, name] of [
+    ['steinmetz', 'Steinmetz', 'linse', 'Umstellen auf Linse: 10 Glas', 'Linse'],
+    ['uhrmacherei', 'Uhrmacherei', 'fernrohr', 'Umstellen auf Fernrohr: 2 Linsen + 10 Eisenbleche', 'Fernrohr'],
+  ]) {
+    const pos = await game(
+      page,
+      (t) => {
+        const b = window.__game.state.buildings.find((x) => x.type === t);
+        return { x: b.x, y: b.y, recipe: b.prod.recipe };
+      },
+      type,
+    );
+    await sleep(150);
+    await tapTile(page, pos.x, pos.y);
+    check((await page.textContent('#info-title')) === title, `${title} antippen zeigt Infofenster`);
+    await sleep(450);
+    check((await recipeOption(page, recipe).getAttribute('aria-label')) === label, `Ab Level 17: ${label}`);
+    check((await page.locator('#info-body .recipe-option').count()) === 3, `${title}: 3 andere Einstellungen zur Auswahl`);
+    check((await infoFits(page)).length === 0, `Infofenster ${title} mit 4 Einstellungen: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+    await recipeOption(page, recipe).tap();
+    await sleep(450);
+    const card = await infoCard(page);
+    check(card?.outputs.join() === `${recipe} ${name}`, `${title} umgestellt auf ${name} (${JSON.stringify(card)})`);
+    await shot(`28b-${type}-${recipe}`);
+    await recipeOption(page, pos.recipe).tap();
+    await sleep(300);
+    await page.tap('#info-close');
+  }
+  // Kristallsand: ein Steinmetz mahlt 5 Glas in 10 s
+  // (gezählt über „hergestellt“ – die Ware kann schon auf dem Band liegen)
+  const ground17 = await game(page, () => {
+    const g = window.__game;
+    const b = g.state.buildings.find((x) => x.type === 'steinmetz');
+    const before = { recipe: b.prod.recipe, stock: { ...b.prod.stock } };
+    const made = g.state.produced?.kristallsand ?? 0;
+    Object.assign(b.prod, { recipe: 'kristallsand', stock: { glas: 5 }, out: null, busy: false, timer: 0 });
+    g.simulate(11);
+    const result = (g.state.produced?.kristallsand ?? 0) - made;
+    Object.assign(b.prod, before, { busy: false, timer: 0 });
+    return result;
+  });
+  check(ground17 === 1, `Steinmetz mahlt 5 Glas zu Kristallsand (${ground17} hergestellt)`);
 
   await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)
   await page.tap('#info-close').catch(() => {});

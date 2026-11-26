@@ -95,5 +95,12 @@ export const RECIPES = {
   // „das passt alles so“; 2 Heilpuder je Trank, kein Verhältnis 1 : 1).
   heilpuder: { building: 'kraeutermuehle', label: 'Heilpuder', inputs: { ringelbluete: 5 }, output: 'heilpuder', amount: 1, time: 15 },
   heiltrank: { building: 'zauberkessel', label: 'Heiltränke', inputs: { tinktur: 1, heilpuder: 2 }, fuel: 5, output: 'heiltrank', amount: 1, time: 60, level: 16 },
+  // v0.58.0: Level 17 „Die Sternwarte“ – der Steinmetz schleift Linsen und
+  // mahlt Kristallsand aus Glas, die Uhrmacherei baut Fernrohre (Tobias, Chat 32).
+  // Damit haben Steinmetz und Uhrmacherei je 4 Einstellungen – mehr bekommt
+  // keine Maschine (Tobias, Chat 32).
+  linse: { building: 'steinmetz', label: 'Linsen', inputs: { glas: 10 }, output: 'linse', amount: 1, time: 30, level: 17 },
+  kristallsand: { building: 'steinmetz', label: 'Kristallsand', inputs: { glas: 5 }, output: 'kristallsand', amount: 1, time: 10, level: 17 },
+  fernrohr: { building: 'uhrmacherei', label: 'Fernrohre', inputs: { linse: 2, eisenblech: 10 }, output: 'fernrohr', amount: 1, time: 60, level: 17 },
   traumtrank: { building: 'zauberkessel', label: 'Traumtränke', inputs: { tinktur: 1, kamillenbluete: 5 }, fuel: 5, output: 'traumtrank', amount: 1, time: 60, level: 15 },
 };

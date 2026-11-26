@@ -8,7 +8,7 @@
 | 🪚 Sägewerk | Holz | 2 × 2 | „Platten“ oder „Stäbe“: 5 Holzblöcke → 1 Holzplatte bzw. Holzstab | 1 | 40 Holzblöcke |
 | 🛠️ Zimmerei | Holz | 2 × 2, 2 Eingänge | Zahnradwelle · Räderwerk · Verstärkte Holzplatte · „Mörser“ (erst ab Level 14 wählbar) | 4 | 20 Holzplatten + 10 Eisenstangen |
 | ⛏️ Steinbruch | Stein | 2 × 2 | 1 Felsbrocken → 200 Steinblöcke (15 min), Vorrat 3 | 2 | 10 Holzplatten + 5 Holzstäbe |
-| ⚒️ Steinmetz | Stein | 2 × 2 | „Platten“ oder „Zahnräder“: 5 Steinblöcke → 1 | 2 | 30 Steinblöcke + 5 Holzstäbe |
+| ⚒️ Steinmetz | Stein | 2 × 2 | „Platten“ oder „Zahnräder“: 5 Steinblöcke → 1; ab Level 17 „Linsen“ (10 Glas → 1, 30 s) und „Kristallsand“ (5 Glas → 1, 10 s) | 2 | 30 Steinblöcke + 5 Holzstäbe |
 | 🔮 Zauberkessel | Stein | 2 × 2, 2 Eingänge, **Feuerfach** | „Traumtränke“: 1 Tinktur + 5 Kamillenblüten → 1 (60 s); „Heiltränke“ (erst ab Level 16): 1 Tinktur + 2 Heilpuder → 1 (60 s); das Feuer verbrennt 5 Holzkohle je Trank – das Fach fasst 100, nachlegen von Hand mit „🔥 Auffüllen“ aus dem Laden-Lager; ohne Feuer wartet der Kessel („Feuer aus“) | 15 | 30 Steinplatten + 10 Eisenbleche (gemauerter Herd, Kessel aus Eisenblech) |
 | 🌼 Kräutermühle | Stein | 2 × 2 | „Heilpuder“: 5 Ringelblüten → 1 (15 s) | 16 | 10 Mörser + 4 Räderwerke (Mahlschalen und Antrieb; 862 Gold Warenwert) |
 | 🔥 Schmelzhütte | Eisen | 2 × 2 | 1 Eisenerz → 200 Eisenbarren (15 min), Vorrat 3 | 3 | 20 Steinplatten + 10 Holzplatten |
@@ -21,7 +21,7 @@
 | 🌿 Kräuterstube | Erde | 2 × 2, 2 Eingänge | „Heilverbände“ · „Kompressen“ · „Wundverbände“ (erst ab Level 10 wählbar) | 8 | 10 Holzplatten + 5 Eisenbleche + 2 Zahnradwellen |
 | ♨️ Ofen (früher Kohlenmeiler) | Holz | 2 × 2 | 1 Holzstamm → 100 Holzkohle, ab Level 13 auch 1 Sand → 100 Glas (je 15 min), Vorrat 3, auch gemischt | 9 | 20 Steinplatten + 2 Verstärkte Holzplatten |
 | 📐 Schreibstube | Werkstatt | 2 × 2, 2 Eingänge | „Zeichenbretter“ · „Reißzeuge“ · „Reißbretter“ (erst ab Level 12 wählbar) | 9 | 1 Verstärkte Holzplatte + 1 Zirkel |
-| 🕰️ Uhrmacherei | Werkstatt | 2 × 2, 2 Eingänge | „Räderuhren“ · „Kastenschlösser“ · „Sternenuhren“ | 11 | 1 Zirkel + 1 Uhrwerk |
+| 🕰️ Uhrmacherei | Werkstatt | 2 × 2, 2 Eingänge | „Räderuhren“ · „Kastenschlösser“ · „Sternenuhren“ · ab Level 17 „Fernrohre“ (2 Linsen + 10 Eisenbleche, 60 s) | 11 | 1 Zirkel + 1 Uhrwerk |
 | ⚗️ Apotheke | Werkstatt | 2 × 2, 2 Eingänge | „Kräutermischungen“ · „Kamillenkissen“ · „Heilpäckchen“ · „Tinkturen“ (erst ab Level 14 wählbar) | 12 | 1 Verstärkte Holzplatte + 1 Gewichtstein (Regal und Apothekerwaage) |
 | 📦 Lagerhaus | immer sichtbar | 2 × 1 | Zwischenlager 3 × 50, von Hand befüllen | 1 | 8 Holzplatten |
 | 🌀 Versandportal | immer sichtbar | 1 × 1 | schickt Waren ins Laden-Lager | 1 | 10 Holzblöcke |

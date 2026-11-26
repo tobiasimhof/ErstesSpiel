@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.57.2 – Tobias' Antworten zu Level 17, Grundsätze für danach (nur Doku) |
-| **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–16 im Spiel, 17–18 als Gerüst |
+| **Aktuelle Version** | v0.58.0 – Level 17 „Die Sternwarte“: Linse, Fernrohr, Kristallsand |
+| **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–17 im Spiel, 18 als Gerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | **v0.58.0 – Level 17 „Die Sternwarte“** (angenommen, Chat 32). Danach Entwurf Level 18 „Die Zauberei“, dann **die alten Straßen verlängern** (neue Produkte aus Sternenuhr, Fernrohr, Reißbrett, Mörser …); „Zauber des Magiers“ ab Level 20. |
+| **Nächster Schritt** | **Tobias testet Level 16 und 17.** Danach Entwurf Level 18 „Die Zauberei“ (Farn, Lebens- und Manatrank), dann **die alten Straßen verlängern** (neue Produkte aus Sternenuhr, Fernrohr, Reißbrett, Mörser …); „Zauber des Magiers“ ab Level 20. |
 
 **Tobias' Fabrik (3D) – Level 16** (Chat 32, Bild: 22.768 Gold; unten links viel freie Fläche durch die neuen Streifen). Level 15 ging „etwas schnell“ – Auftragsmengen lassen sich später anpassen; „Ich finde die neuen Produkte gut, so entstehen wieder neue Straßen“. Die Fabrik steht bewusst still (kein Gold mehr verdienen, daher die roten Lichter), das Lager ist übervoll vom Strecke-Leeren. Die 2D-Welt ist seit v0.54.0 entfernt (Tobias: „das 3D game, das eigentliche Game“). Level 13 (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik): Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
 
@@ -25,7 +25,7 @@ Frühere Stände der 2D-Fabrik (Level 8, 10, 11 mit Zitaten; zuletzt Level 13) i
 
 **Nächste Schritte** (jeder erst nach Tobias' OK):
 
-- **Erledigt seit Chat 25** (Einzelheiten in `PLAENE.md`): v0.39.0–v0.54.0 (Belastungstest, Level 14, Kenney-Oberfläche, Ladebildschirm, Schriftrolle, Einführung, Feinschliff, ein Spiel ohne 2D-Welt). **Jetzt:** Level 15 und 16 im Spiel (v0.55.0, v0.57.0), Browser-Test parallel (v0.56.2); Level 17 als Nächstes.
+- **Erledigt seit Chat 25** (Einzelheiten in `PLAENE.md`): v0.39.0–v0.54.0 (Belastungstest, Level 14, Kenney-Oberfläche, Ladebildschirm, Schriftrolle, Einführung, Feinschliff, ein Spiel ohne 2D-Welt). **Jetzt:** Level 15–17 im Spiel (v0.55.0, v0.57.0, v0.58.0), Browser-Test parallel (v0.56.2); Level 18 als Nächstes.
 1. **Tränke-Kapitel** (angenommen, Chat 27; Tabelle in `docs/inhalte/AUSBLICK.md`): 14 Die Tinktur (Mörser, Tinktur), 15 Der alte Magier (Zauberkessel, Traumtrank), 16 Die Kräutermühle (Heilpuder, Heiltrank), 17 Die Sternwarte (Linse, Fernrohr, Sternensand), 18 Die Zauberei (Farn, Lebens- und Manatrank). Feuer im Kessel von Hand (A); mehr Fläche ab Level 15; einzige Rezeptänderung: Mörser aus 5 Holzstäben (Tobias, Chat 31). Gemahlenes Glas: **Kristallsand** (Tobias), im Steinmetz. Leitlinie: alte Maschinen bekommen neue Funktionen, neue nur, wo es Sinn ergibt.
 2. **3D-Grafik:** eigene Häuser für alle Gebäude (fertig, Möglichkeit B: Mittelalter mit ein paar Technik-Teilen; Tobias, Chat 27: „sieht sehr gut aus“). **Waren auf dem Band** (v0.46.0): eigene kleine 3D-Formen. **Für später – Rückseiten** (Tobias, Chat 27, „nur eine kleine Anmerkung für später“): Erkennungszeichen und bewegte Teile sitzen vorn; baut man links und rechts einer Straße, sieht man eine Seite immer von hinten, „und da sieht man z.b. keine Unterschiede“. Eine Stadt um die Fabrik, die mit dem Level wächst (Idee).
 3. **Nach hinten verschoben:** **Weiche** (Chat 26: eigene Straßen sind besser, siehe offene Frage 4).
@@ -57,12 +57,13 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.58.0 – Level 17 „Die Sternwarte“ (26.11.2026)
+
+- **Warum (Tobias, Chat 32):** Entwurf angenommen („Linse lieber aus 10 Glas. Die Aufträge passen alle so.“).
+- **Umgesetzt:** Steinmetz schleift Linsen (10 Glas, 144) und mahlt Kristallsand (5 Glas, 72), Uhrmacherei baut Fernrohre (2 Linsen + 10 Eisenbleche, 634); Berta, Kaspar, Anton, Ambrosius (23.437 Gold), Aufstieg 20.000. Ein Test prüft „höchstens 4 Einstellungen“. Format bleibt 21.
+- **Offen:** Tobias' Test.
+
 ### v0.57.2 – Tobias' Antworten zu Level 17 (26.11.2026, nur Doku)
 
 - **Tobias (Chat 32, Bild: Level 16, 22.768 Gold):** Level 17 passt (Linse aus 10 Glas, Aufträge so); höchstens 4 Einstellungen je Maschine; nach der Zauberei die alten Straßen verlängern; Zauber ab Level 20.
 - **Offen:** Umsetzung v0.58.0.
-
-### v0.57.1 – Entwurf Level 17 „Die Sternwarte“ (26.11.2026, nur Doku)
-
-- **Tobias (Chat 32):** testet Level 15 (3. Auftrag); Level 17 „theoretisch schon mal aufschlüsseln“.
-- **Claude:** Entwurf in `PLAENE.md`: Steinmetz schleift Linsen (10 Glas) und mahlt Kristallsand (5 Glas), Uhrmacherei baut Fernrohre (2 Linsen + 10 Eisenbleche, 634 Gold), Aufträge von Berta, Kaspar, Anton, Ambrosius (23.437 Gold), Aufstieg 20.000; keine neue Maschine. **Offen:** 4 Fragen.
