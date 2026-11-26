@@ -28,7 +28,7 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 
 **Claude** hat v0.56.2 umgesetzt (Browser-Test parallel; B und D nicht, wie gewählt) und mit Level 16 nach dem Entwurf begonnen (v0.57.0). Beim Umsetzen fielen zwei bestehende Regeln auf: Kein Gebäude kostet mehr als 960 Gold an Waren (10 Mörser + 5 Räderwerke wären 970) – deshalb 10 Mörser + 4 Räderwerke (862 Gold).
 
-**Umgesetzt:** v0.56.2.
+**Umgesetzt:** v0.56.2, v0.57.0 (Level 16 „Die Kräutermühle“ nach dem Entwurf; Baukosten 10 Mörser + 4 Räderwerke).
 
 ### 25.11.2026 – Chat 31: Beratung – zurück zu Logik und Leveln (v0.52.2, v0.53.0, v0.54.0, v0.54.1, v0.54.2, v0.55.0)
 
