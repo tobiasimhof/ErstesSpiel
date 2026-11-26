@@ -272,6 +272,20 @@ export const ITEM_FORMS = {
     cyl('#cfe9ee', 0.034, 0.042, 0.08, [0, 0.235, 0], null, 10),
     cyl('#b07a45', 0.03, 0.032, 0.05, [0, 0.295, 0], null, 10),
   ),
+  // v0.57.0: Heilpuder – Leinensäckchen, oben offen mit goldgelbem Pulver, rotes Band
+  heilpuder: big(
+    cyl('#efe3c4', 0.085, 0.105, 0.15, [0, 0.075, 0], null, 12),
+    cyl('#c2410c', 0.088, 0.088, 0.022, [0, 0.12, 0], null, 12),
+    cyl('#efe3c4', 0.095, 0.08, 0.04, [0, 0.17, 0], null, 12),
+    ball('#f2b705', 0.08, [0, 0.175, 0], 10, 6),
+  ),
+  // v0.57.0: Heiltrank – wie der Traumtrank, mit rotem Trank
+  heiltrank: big(
+    ball('#c92a2a', 0.105, [0, 0.105, 0], 14, 10),
+    ball('#ff8787', 0.05, [0.03, 0.08, 0.06], 8, 6),
+    cyl('#cfe9ee', 0.034, 0.042, 0.08, [0, 0.235, 0], null, 10),
+    cyl('#b07a45', 0.03, 0.032, 0.05, [0, 0.295, 0], null, 10),
+  ),
 };
 
 // Die Form einer Ware (fehlt eine, eine Kugel in ihrer Farbe)

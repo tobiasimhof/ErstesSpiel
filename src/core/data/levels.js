@@ -242,6 +242,22 @@ export const LEVELS = {
       { from: 'Apothekerin Klara', text: 'Der alte Ambrosius kauft mir alle Tinkturen weg! Ich brauche Nachschub für mein Regal.', items: { tinktur: 10 } },
     ],
   },
+  // v0.57.0: Level 16 (Entwurf v0.57.0, Tobias, Chat 32: „Ja, das passt alles
+  // so“) – Müllerin Gretes Kräutermühle, Heilpuder und der Heiltrank. Aufträge
+  // zusammen 19.391 Gold (×1,2 gegenüber Level 15, Rechenwerkzeug). Aufstieg
+  // 17.500 Gold, kein Geschenk, keine neue Fläche.
+  16: {
+    name: 'Die Kräutermühle',
+    story:
+      'Gretes Idee hat funktioniert: Neben ihrer Kornmühle am Fluss dreht sich jetzt ein kleiner Mahlstein nur für Kräuter. Er mahlt Ringelblüten zu feinem, goldenem Heilpuder – und Ambrosius weiß sofort, was er daraus braut.',
+    cost: 17500,
+    quests: [
+      { from: 'Müllerin Grete', text: 'Meine Kräutermühle läuft! Zeig mir, wie fein dein Heilpuder wird – ich will ihn im ganzen Tal verkaufen.', items: { heilpuder: 50 } },
+      { from: 'Heilerin Agnes', text: 'Heilpuder auf die Wunde, ein Verband darüber: So heilt sie doppelt so schnell. Bringst du mir beides?', items: { heilpuder: 20, wundverband: 8 } },
+      { from: 'Magier Ambrosius', text: 'Tinktur und Heilpuder, langsam über dem Feuer gerührt: der Heiltrank. Eines Tages wird er die Grundlage für etwas viel Größeres.', items: { heiltrank: 10 } },
+      { from: 'Wirt Hannes', text: 'Die Reisenden in meinem Gasthaus wollen beides: Heiltränke für den Weg und Traumtränke für die Nacht.', items: { heiltrank: 6, traumtrank: 5 } },
+    ],
+  },
 };
 
 export const MAX_LEVEL = Math.max(...Object.keys(LEVELS).map(Number));

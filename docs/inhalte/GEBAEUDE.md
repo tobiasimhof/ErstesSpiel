@@ -9,7 +9,8 @@
 | 🛠️ Zimmerei | Holz | 2 × 2, 2 Eingänge | Zahnradwelle · Räderwerk · Verstärkte Holzplatte · „Mörser“ (erst ab Level 14 wählbar) | 4 | 20 Holzplatten + 10 Eisenstangen |
 | ⛏️ Steinbruch | Stein | 2 × 2 | 1 Felsbrocken → 200 Steinblöcke (15 min), Vorrat 3 | 2 | 10 Holzplatten + 5 Holzstäbe |
 | ⚒️ Steinmetz | Stein | 2 × 2 | „Platten“ oder „Zahnräder“: 5 Steinblöcke → 1 | 2 | 30 Steinblöcke + 5 Holzstäbe |
-| 🔮 Zauberkessel | Stein | 2 × 2, 2 Eingänge, **Feuerfach** | „Traumtränke“: 1 Tinktur + 5 Kamillenblüten → 1 (60 s); das Feuer verbrennt 5 Holzkohle je Trank – das Fach fasst 100, nachlegen von Hand mit „🔥 Auffüllen“ aus dem Laden-Lager; ohne Feuer wartet der Kessel („Feuer aus“) | 15 | 30 Steinplatten + 10 Eisenbleche (gemauerter Herd, Kessel aus Eisenblech) |
+| 🔮 Zauberkessel | Stein | 2 × 2, 2 Eingänge, **Feuerfach** | „Traumtränke“: 1 Tinktur + 5 Kamillenblüten → 1 (60 s); „Heiltränke“ (erst ab Level 16): 1 Tinktur + 2 Heilpuder → 1 (60 s); das Feuer verbrennt 5 Holzkohle je Trank – das Fach fasst 100, nachlegen von Hand mit „🔥 Auffüllen“ aus dem Laden-Lager; ohne Feuer wartet der Kessel („Feuer aus“) | 15 | 30 Steinplatten + 10 Eisenbleche (gemauerter Herd, Kessel aus Eisenblech) |
+| 🌼 Kräutermühle | Stein | 2 × 2 | „Heilpuder“: 5 Ringelblüten → 1 (15 s) | 16 | 10 Mörser + 4 Räderwerke (Mahlschalen und Antrieb; 862 Gold Warenwert) |
 | 🔥 Schmelzhütte | Eisen | 2 × 2 | 1 Eisenerz → 200 Eisenbarren (15 min), Vorrat 3 | 3 | 20 Steinplatten + 10 Holzplatten |
 | 🔨 Schmiede | Eisen | 2 × 2 | „Bleche“ oder „Stangen“: 5 Eisenbarren → 1; „Fläschchen“: 5 Glas → 1 (erst ab Level 13 wählbar) | 3 | 10 Steinplatten + 30 Eisenbarren |
 | ⚙️ Feinschmiede | Eisen | 2 × 2, 2 Eingänge | Scharnier · Schlüssel · Zirkel | 5 | 10 Eisenbleche + 2 Räderwerke |

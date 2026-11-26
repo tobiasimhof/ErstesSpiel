@@ -552,6 +552,34 @@ async function run3d(browser, baseUrl, device, expectedVersion) {
   );
   await shot('3d-11c-zauberkessel');
 
+  // v0.57.0: Kräutermühle (Level 16) – Steinhaus und Kollergang; beim Mahlen
+  // läuft der Mahlstein im Kreis und Staub steigt auf
+  const muehleId = await game(page, () => {
+    const g = window.__game;
+    const p = g.state.plot;
+    for (let y = p.y; y < p.y + p.height - 1; y++) {
+      for (let x = p.x + 4; x < p.x + p.width - 1; x++) {
+        if (![0, 1].every((dx) => [0, 1].every((dy) => g.isFree(x + dx, y + dy)))) continue;
+        const id = g.place('kraeutermuehle', x, y, 0);
+        if (id === null) continue;
+        const b = g.state.buildings.find((item) => item.id === id);
+        Object.assign(b.prod, { busy: true, timer: 0 });
+        g.camera.distance = 9;
+        g.camera.target.set(x + 1, 0, y + 1);
+        g.camera.update();
+        return id;
+      }
+    }
+    return null;
+  });
+  await sleep(1200);
+  const muehleMotion = muehleId === null ? null : await game(page, (id) => window.__game.view3d.motion(id), muehleId);
+  check(
+    Boolean(muehleMotion) && ['spin', 'dustSpot'].every((k) => muehleMotion.kinds.includes(k)) && muehleMotion.sum > 0,
+    `Kräutermühle: eigenes Haus, beim Mahlen läuft der Mahlstein und staubt (${JSON.stringify(muehleMotion)})`,
+  );
+  await shot('3d-11c-kraeutermuehle');
+
   // v0.46.0: Waren auf dem Band mit eigenem Aussehen (Tobias, Chat 27) – alle Waren
   // nebeneinander auf Bändern, je Ware eine eigene Form, nicht größer als ein Feld
   const goodsArea = await game(page, async () => {
@@ -584,7 +612,7 @@ async function run3d(browser, baseUrl, device, expectedVersion) {
     const shapes = await game(page, () => window.__game.view3d.itemShapes());
     const byType = new Map(shapes.map((s) => [s.type, s]));
     const missing = goodsArea.types.filter((t) => !byType.has(t));
-    check(goodsArea.types.length === 41 && missing.length === 0, `Alle ${goodsArea.types.length} Waren liegen auf dem Band und haben eine Form (fehlt: ${missing.join(', ') || '–'})`);
+    check(goodsArea.types.length === 43 && missing.length === 0, `Alle ${goodsArea.types.length} Waren liegen auf dem Band und haben eine Form (fehlt: ${missing.join(', ') || '–'})`);
     const tooBig = shapes.filter((s) => s.size[0] > 0.62 || s.size[2] > 0.62 || s.size[1] > 0.42).map((s) => `${s.type} ${s.size.join('×')}`);
     check(tooBig.length === 0, `Jede Ware passt aufs Band: höchstens 0,62 breit und 0,42 hoch (${tooBig.join(', ') || 'alle passen'})`);
     const heavy = shapes.filter((s) => s.triangles > 900).map((s) => `${s.type} ${s.triangles}`);
