@@ -4,6 +4,14 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 26.11.2026 – Chat 32: Rückmeldung zu Level 15 – Aufstieg blockiert (v0.55.1)
+
+**Tobias** (mit Bild: Level 14, „Alle Aufträge dieses Bauabschnitts sind erledigt. Jetzt kannst du auf Level 15 aufsteigen.“, Erfahrung 3.829 / 3.976, Knopf „Aufsteigen auf Level 15 · 15.000“ grau, darunter „Noch 147 Erfahrung – gib die Aufträge der Bewohner ab.“): „Hey, bringe dich auf den aktuellen Stand. Ich wollte dir noch ein Feedback zum letzten Update geben. Ich hab meinen Browser aktualisiert und kann leider nicht aufsteigen, weil mir die Erfahrung dafür fehlt. Ich hab nicht weiter produziert, weil ich nicht weiter Gold verdienen wollte, deswegen ist alles stehen geblieben und ich hab manchmal per Hand vom Band eingesammelt. Vermutlich wurde das per hand einsammeln einfach addidiert zum Laden-Lager bzw. ich habe es gerade getestet. Ich kann die Strecken trotzdem leeren, obwohl das lager voll ist. Die Fenster kannst du erstmal so lassen wie sie sind.“
+
+**Claude** hat die Ursache gefunden und nachgerechnet: Die Erfahrung, die ein Level braucht, wird aus dem heutigen Wert der Auftragswaren berechnet. Seit v0.55.0 ist der Mörser 43 statt 29 Gold wert; Level 14 verlangt in zwei Aufträgen zusammen 35 Mörser, die Grenze stieg dadurch von 3.829 auf 3.976. Tobias hatte diese Aufträge zum alten Wert abgegeben – es fehlen genau 147. Das übervolle Laden-Lager ist gewollt („Strecke leeren“ darf es überfüllen, sonst ließe sich ein Stau bei vollem Lager nicht auflösen). Entwurf v0.55.2 in `PLAENE.md`: Wer alle Aufträge eines Levels abgegeben hat, kann aufsteigen; fehlende Erfahrung wird beim Laden aufgefüllt. 2 Fragen: Fehlerkorrektur so umsetzen? „Strecke leeren“ bei vollem Lager so lassen?
+
+**Umgesetzt:** v0.55.1 (nur Doku).
+
 ### 25.11.2026 – Chat 31: Beratung – zurück zu Logik und Leveln (v0.52.2, v0.53.0, v0.54.0, v0.54.1, v0.54.2, v0.55.0)
 
 **Tobias:** „Lies dir den aktuellen Stand durch. "Logik und Leveln. Vorneweg ein kleiner Feinschliff: die Theke in der Einführung und die Anzeigen oben. Dann Level 15 zusammen mit neuen Ausgaben fürs Gold. " Das war dein Vorschlag für den nächsten Schritt. Ich finde den Schritt gut. Lass uns zuerst den Schritt der Einführung so ändern, dass man sobald man einen Block in die Theke legt, es 5 sekunden dauert bis der Block verkauft wird, damit man das ganze auch sieht. Dann können oben gerne die Buttons weg, die du vorgeschlagen hast und wir könnten uns überlegen, die 2D Welt komplett zu löschen, weil ich sie gar nicht mehr spiele und das 3D game, das eigentliche Game geworden ist und ich da auch schon auf lvl 14 alle Missionen abgeschlossen habe“
