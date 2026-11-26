@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 26.11.2026 – Chat 32: Rückmeldung zu Level 15 – Aufstieg blockiert, „1 von 4“ statt Erfahrung, Entwurf Level 16, Browser-Test parallel, Level 16, Entwurf Level 17, Level 17 (v0.55.1, v0.56.0, v0.56.1, v0.56.2, v0.57.0, v0.57.1, v0.57.2, v0.58.0)
+### 26.11.2026 – Chat 32: Rückmeldung zu Level 15 – Aufstieg blockiert, „1 von 4“ statt Erfahrung, Entwurf Level 16, Browser-Test parallel, Level 16, Entwurf Level 17, Level 17, Entwurf Level 18 (v0.55.1, v0.56.0, v0.56.1, v0.56.2, v0.57.0, v0.57.1, v0.57.2, v0.58.0, v0.58.1)
 
 **Tobias** (mit Bild: Level 14, „Alle Aufträge dieses Bauabschnitts sind erledigt. Jetzt kannst du auf Level 15 aufsteigen.“, Erfahrung 3.829 / 3.976, Knopf „Aufsteigen auf Level 15 · 15.000“ grau, darunter „Noch 147 Erfahrung – gib die Aufträge der Bewohner ab.“): „Hey, bringe dich auf den aktuellen Stand. Ich wollte dir noch ein Feedback zum letzten Update geben. Ich hab meinen Browser aktualisiert und kann leider nicht aufsteigen, weil mir die Erfahrung dafür fehlt. Ich hab nicht weiter produziert, weil ich nicht weiter Gold verdienen wollte, deswegen ist alles stehen geblieben und ich hab manchmal per Hand vom Band eingesammelt. Vermutlich wurde das per hand einsammeln einfach addidiert zum Laden-Lager bzw. ich habe es gerade getestet. Ich kann die Strecken trotzdem leeren, obwohl das lager voll ist. Die Fenster kannst du erstmal so lassen wie sie sind.“
 
@@ -41,6 +41,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat die Antworten und die drei Grundsätze festgehalten (höchstens 4 Einstellungen je Maschine, nach Level 18 die alten Straßen verlängern, Zauber ab Level 20) und Level 17 umgesetzt: Steinmetz schleift Linsen und mahlt Kristallsand, Uhrmacherei baut Fernrohre; ein Test prüft „höchstens 4 Einstellungen“; die Linse ist die einzige Grundmaschinen-Ware, die nicht aus 5 Teilen entsteht.
 
 **Umgesetzt:** v0.57.2 (nur Doku), v0.58.0.
+
+**Tobias:** „Schreibe gerne den Entwurf für Level 18. Ich bin gerade dabei die Lebenstränke zu brauen auf level 16“
+
+**Claude** hat darauf hingewiesen, dass es auf Level 16 Heiltränke sind (die Vorstufe des Lebenstranks), und den Entwurf für Level 18 „Die Zauberei“ geschrieben und nachgerechnet (`PLAENE.md`): Farn als 5. Pflanze (Farnsporen 1.000 Gold, Farnwedel 24), Lebenstrank (1 Heiltrank + 5 Farnwedel, 876 Gold) und Manatrank (1 Traumtrank + 2 Kristallsand, 841 Gold) im Zauberkessel, der damit 4 Einstellungen hat; Aufträge von Ambrosius, Agnes und Hilde (Fest der Zauberei) über 27.891 Gold, Aufstieg 22.500; danach die alten Straßen mit neuen Maschinen verlängern. 3 Fragen.
+
+**Umgesetzt:** v0.58.1 (nur Doku).
 
 ### 25.11.2026 – Chat 31: Beratung – zurück zu Logik und Leveln (v0.52.2, v0.53.0, v0.54.0, v0.54.1, v0.54.2, v0.55.0)
 

@@ -4,6 +4,22 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.58.1 – Entwurf Level 18 „Die Zauberei“ (26.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Den Entwurf für Level 18 schreiben, den Abschluss des Tränke-Kapitels (Tobias, Chat 32).
+
+**Fragen, die wir uns gestellt haben:**
+- Wie viel Farn und Kristallsand gehören in die Tränke? → Mit dem Rechenwerkzeug an einer Kopie der Daten drei Varianten gerechnet: 5 Farnwedel und 2 Kristallsand (Empfehlung) machen Lebens- und Manatrank etwa gleich wertvoll (876 und 841 Gold, 8.760 und 8.410 Gold/h); mit 3 Kristallsand wäre der Manatrank teurer als der Lebenstrank, mit 10 Farnwedeln würde der Farn zum Engpass.
+- Samen für den Farn? → Farne haben Sporen – „Farnsporen“ beim Händler für 1.000 Gold (die Reihe der Samen 320 → 500 → 660 → 830).
+- Was ist mit Tobias' Regel „höchstens 4 Einstellungen“? → Der Kessel hat danach 4 und ist voll; das Anknüpfen an die alten Straßen ab Level 19 braucht deshalb neue Maschinen.
+
+**Gemacht:**
+- Entwurf v0.59.0 in `PLAENE.md`; `STAND.md`, `AUSBLICK.md`, `GESPRAECHE.md`. Versionsnummer 0.58.1. Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 499 Tests bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.58.0 – Level 17 „Die Sternwarte“: Linse, Fernrohr, Kristallsand (26.11.2026)
 
 **Vorgenommen:**

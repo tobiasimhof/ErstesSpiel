@@ -4,12 +4,12 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.58.0 – Level 17 „Die Sternwarte“: Linse, Fernrohr, Kristallsand |
+| **Aktuelle Version** | v0.58.1 – Entwurf Level 18 „Die Zauberei“ (nur Doku) |
 | **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–17 im Spiel, 18 als Gerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | **Tobias testet Level 16 und 17.** Danach Entwurf Level 18 „Die Zauberei“ (Farn, Lebens- und Manatrank), dann **die alten Straßen verlängern** (neue Produkte aus Sternenuhr, Fernrohr, Reißbrett, Mörser …); „Zauber des Magiers“ ab Level 20. |
+| **Nächster Schritt** | **Tobias testet Level 16 und 17** und beantwortet die Fragen zum **Entwurf Level 18 „Die Zauberei“** (v0.59.0, `PLAENE.md`: Farn, Lebenstrank, Manatrank). Danach **die alten Straßen verlängern** (neue Produkte aus Sternenuhr, Fernrohr, Reißbrett, Mörser …); „Zauber des Magiers“ ab Level 20. |
 
-**Tobias' Fabrik (3D) – Level 16** (Chat 32, Bild: 22.768 Gold; unten links viel freie Fläche durch die neuen Streifen). Level 15 ging „etwas schnell“ – Auftragsmengen lassen sich später anpassen; „Ich finde die neuen Produkte gut, so entstehen wieder neue Straßen“. Die Fabrik steht bewusst still (kein Gold mehr verdienen, daher die roten Lichter), das Lager ist übervoll vom Strecke-Leeren. Die 2D-Welt ist seit v0.54.0 entfernt (Tobias: „das 3D game, das eigentliche Game“). Level 13 (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik): Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
+**Tobias' Fabrik (3D) – Level 16, braut Heiltränke** (Chat 32, Bild: 22.768 Gold; unten links viel freie Fläche durch die neuen Streifen). Level 15 ging „etwas schnell“ – Auftragsmengen lassen sich später anpassen; „Ich finde die neuen Produkte gut, so entstehen wieder neue Straßen“. Die Fabrik steht bewusst still (kein Gold mehr verdienen, daher die roten Lichter), das Lager ist übervoll vom Strecke-Leeren. Die 2D-Welt ist seit v0.54.0 entfernt (Tobias: „das 3D game, das eigentliche Game“). Level 13 (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik): Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
 
 Frühere Stände der 2D-Fabrik (Level 8, 10, 11 mit Zitaten; zuletzt Level 13) in `docs/archiv/STAND-LANGFASSUNG.md`.
 
@@ -57,13 +57,13 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.58.1 – Entwurf Level 18 „Die Zauberei“ (26.11.2026, nur Doku)
+
+- **Tobias (Chat 32):** „Schreibe gerne den Entwurf für Level 18.“
+- **Claude:** Entwurf in `PLAENE.md`: Farn als 5. Pflanze (Sporen 1.000, Farnwedel 24), Lebenstrank (1 Heiltrank + 5 Farnwedel, 876) und Manatrank (1 Traumtrank + 2 Kristallsand, 841) im Kessel (dann voll), Aufträge mit Hildes Fest (27.891 Gold), Aufstieg 22.500. **Offen:** 3 Fragen.
+
 ### v0.58.0 – Level 17 „Die Sternwarte“ (26.11.2026)
 
 - **Warum (Tobias, Chat 32):** Entwurf angenommen („Linse lieber aus 10 Glas. Die Aufträge passen alle so.“).
 - **Umgesetzt:** Steinmetz schleift Linsen (10 Glas, 144) und mahlt Kristallsand (5 Glas, 72), Uhrmacherei baut Fernrohre (2 Linsen + 10 Eisenbleche, 634); Berta, Kaspar, Anton, Ambrosius (23.437 Gold), Aufstieg 20.000. Ein Test prüft „höchstens 4 Einstellungen“. Format bleibt 21.
 - **Offen:** Tobias' Test.
-
-### v0.57.2 – Tobias' Antworten zu Level 17 (26.11.2026, nur Doku)
-
-- **Tobias (Chat 32, Bild: Level 16, 22.768 Gold):** Level 17 passt (Linse aus 10 Glas, Aufträge so); höchstens 4 Einstellungen je Maschine; nach der Zauberei die alten Straßen verlängern; Zauber ab Level 20.
-- **Offen:** Umsetzung v0.58.0.
