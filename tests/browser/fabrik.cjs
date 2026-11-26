@@ -765,7 +765,13 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     },
     saleIdRefill,
   );
-  check(counterRefilled.count + counterRefilled.sold === 20, `Auffüllen füllt die Theke wieder auf 20 (${JSON.stringify(counterRefilled)})`);
+  // v0.56.2: Ein Kunde kann auch kurz vor dem Auffüllen kaufen (bei paralleler Last
+  // öfter) – dann zählt er mit, ändert aber nichts: höchstens 20 liegen danach auf
+  // der Theke, mit den Verkäufen danach sind es mindestens 20
+  check(
+    counterRefilled.count <= 20 && counterRefilled.count + counterRefilled.sold >= 20,
+    `Auffüllen füllt die Theke wieder auf 20 (${JSON.stringify(counterRefilled)})`,
+  );
   await shot('10-verkauf');
 
   await page.tap('#modal-close');

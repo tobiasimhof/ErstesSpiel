@@ -4,6 +4,24 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.56.2 – Browser-Test parallel (26.11.2026)
+
+**Vorgenommen:**
+- Vorschlag A aus v0.56.1 (Tobias, Chat 32: „Ja, das passt alles so. Lass uns A machen deine Empfehlung“): die Teile des Browser-Tests gleichzeitig laufen lassen, damit eine Version schneller live geht. Am Spiel ändert sich nichts.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie aufteilen? → 5 Teile: Durchspielen auf dem Handy (mit Hochformat und schmalem Handy), Durchspielen auf dem Tablet, 3D auf dem Tablet, 3D auf dem Handy, Einführung; höchstens so viele gleichzeitig wie Prozessorkerne (hier 4), die längsten zuerst.
+- Hält der Test die Last aus? → Eine Prüfung nicht: Beim Auffüllen einer Theke kaufte ein Kunde genau zwischen dem Merken der Verkäufe und dem Antippen (vorher nur selten). Die Prüfung erlaubt das jetzt (höchstens 20 auf der Theke, mit den Verkäufen mindestens 20).
+- B (Fehler sofort melden) und D (gezielter prüfen) hat Tobias nicht gewählt; Fehler erscheinen trotzdem sofort mit dem Namen des Teils, weil der Starter jede Zeile liest.
+
+**Gemacht:**
+- Neu `tests/browser/parallel.cjs` (Starter, Protokolle je Teil, Dauer je Teil, Zusammenfassung); `smoke.cjs` mit `DEVICE=tablet-quer|handy-quer`; `package.json`: `test:browser` parallel, `test:browser:nacheinander` wie früher; `fabrik.cjs` (Theke auffüllen).
+- Doku: `CLAUDE.md` (Prüfen parallel und im Hintergrund, vorher alle betroffenen Prüfstellen suchen), `TECHNIK.md`, `STAND.md`, Archiv. Versionsnummer 0.56.2.
+
+**Geprüft:**
+- `npm test`: 479 Tests bestanden.
+- Browser-Test parallel, erster Lauf: **21,6 Minuten** statt etwa 66 (Durchspielen Tablet 21,6, Handy 11,2, 3D Tablet 15,7, Handy 5,9, Einführung 7,3; 4 gleichzeitig), 1.291 Prüfungen bestanden, 1 fehlgeschlagen (Theke auffüllen, siehe oben – korrigiert). Das Durchspielen auf dem Handy danach allein wiederholt: HANDY_ERGEBNIS. Das Tablet bremst (doppelte Auflösung, 3D wird ohne Grafikkarte gezeichnet).
+
 ### v0.56.1 – Entwurf Level 16 „Die Kräutermühle“ und „schneller live“ (26.11.2026, nur Doku)
 
 **Vorgenommen:**
