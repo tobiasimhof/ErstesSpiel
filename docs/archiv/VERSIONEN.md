@@ -20,7 +20,7 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
 **Geprüft:**
 - `npm test`: 479 Tests bestanden.
-- Browser-Test parallel, erster Lauf: **21,6 Minuten** statt etwa 66 (Durchspielen Tablet 21,6, Handy 11,2, 3D Tablet 15,7, Handy 5,9, Einführung 7,3; 4 gleichzeitig), 1.291 Prüfungen bestanden, 1 fehlgeschlagen (Theke auffüllen, siehe oben – korrigiert). Das Durchspielen auf dem Handy danach allein wiederholt: HANDY_ERGEBNIS. Das Tablet bremst (doppelte Auflösung, 3D wird ohne Grafikkarte gezeichnet).
+- Browser-Test parallel, erster Lauf: **21,6 Minuten** statt etwa 66 (Durchspielen Tablet 21,6, Handy 11,2, 3D Tablet 15,7, Handy 5,9, Einführung 7,3; 4 gleichzeitig), 1.291 Prüfungen bestanden, 1 fehlgeschlagen (Theke auffüllen, siehe oben – korrigiert). Das Durchspielen auf dem Handy danach allein wiederholt: 495 Prüfungen bestanden, 0 fehlgeschlagen. Das Tablet bremst (doppelte Auflösung, 3D wird ohne Grafikkarte gezeichnet).
 
 ### v0.56.1 – Entwurf Level 16 „Die Kräutermühle“ und „schneller live“ (26.11.2026, nur Doku)
 
