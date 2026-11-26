@@ -61,7 +61,7 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.57.0 – Level 16 „Die Kräutermühle“: Heilpuder und Heiltrank; dazu v0.56.2 „schneller live“ (Chat 32, v0.56.1; wartet auf Tobias' Antworten)
+### Entwurf v0.57.0 – Level 16 „Die Kräutermühle“: Heilpuder und Heiltrank; dazu v0.56.2 „schneller live“ (Chat 32, v0.56.1; angenommen: „Ja, das passt alles so. Lass uns A machen deine Empfehlung“ – v0.56.2 umgesetzt, v0.57.0 in Arbeit)
 
 **Tobias (Chat 32, nach v0.56.0):** „Alles klar, danke ich werd es direkt probieren. Lass uns in der zwischenzeit schon mal das nächste level theoretisch durch gehen und evtl. auch überlegen, wie wir das ganze schneller live mergen können, weil die letzte session für diesen schritt auf v56 schon sehr lange gedauert hat.“
 

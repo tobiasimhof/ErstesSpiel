@@ -27,7 +27,8 @@
 2. **Umsetzen** auf dem Arbeitsbranch.
 3. **Prüfen** vor jedem Merge mit Spielcode – automatische Tests und ein Durchlauf im Browser (Playwright) in Tablet- und Handygröße im Querformat:
    - `npm test`
-   - `SCREENSHOT_DIR=<Scratchpad>/shots npm run test:browser`, danach die Screenshots ansehen.
+   - `SCREENSHOT_DIR=<Scratchpad>/shots npm run test:browser`, danach die Screenshots ansehen. Seit v0.56.2 laufen die Teile gleichzeitig (`tests/browser/parallel.cjs`, etwa 22 statt 66 Minuten): im Hintergrund mit genug Zeit starten (z. B. 2 Stunden) und die Doku schreiben, während er läuft. Nach einer Korrektur nur den betroffenen Teil wiederholen (`ONLY=… DEVICE=… node tests/browser/smoke.cjs`).
+   - **Vor dem ersten Lauf** alle Prüfstellen suchen, die die Änderung betrifft (z. B. `grep` nach alten Texten und Zahlen in `tests/`) – sonst läuft der lange Test zweimal (Tobias, Chat 32: „schneller live“).
 4. **Dokumentieren** (siehe unten).
 5. **Mergen:** Pull Request nach `main`, direkt mergen. Die Versionsnummer steht im Titel von Pull Request und Merge-Commit, z. B. `v0.19.0: …` (Tags lassen sich aus der Arbeitsumgebung nicht pushen).
 6. **Live:** Die Live-Seite (github.io) ist aus der Arbeitsumgebung nicht erreichbar; nach dem Merge den Pages-Status über GitHub Actions („pages build and deployment“) prüfen.
