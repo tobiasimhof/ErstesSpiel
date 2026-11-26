@@ -23,7 +23,7 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
 **Geprüft:**
 - `npm test`: 489 Tests bestanden (10 neue in `kraeutermuehle.test.js`).
-- Browser-Test parallel: ERGEBNIS57
+- Browser-Test parallel (3 gleichzeitig), alle Teile beim ersten Lauf bestanden: **22,3 Minuten, 1.322 Prüfungen** – Durchspielen Tablet 501 (21,4 min) und Handy 509 (11,1 min) bis Level 16 (Aufstieg, Kräutermühle aus der Bauleiste gebaut für 10 Mörser + 4 Räderwerke, Heilpuder nach 15 s, Kessel per Touch auf Heiltrank, Heiltrank nach 60 s, Infofenster passen), 3D Tablet und Handy je 106 (Haus der Mühle: Mahlstein läuft, Staub; 43 Waren auf dem Band), Einführung 100. Screenshots angesehen (Mühle in 3D, Infofenster von Mühle und Kessel auf dem Handy).
 
 ### v0.56.2 – Browser-Test parallel (26.11.2026)
 
