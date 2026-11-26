@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.56.1 – Entwurf Level 16 „Die Kräutermühle“ und „schneller live“ (26.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Wunsch festhalten (Chat 32): Level 16 schon theoretisch durchgehen, während er Level 15 testet, und überlegen, wie es schneller live geht.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie viel Heilpuder gehört in den Heiltrank? → Mit dem Rechenwerkzeug an einer Kopie der Daten drei Varianten gerechnet: 2 Heilpuder (600 Gold, 6.000 Gold/h je Straße) ist die Empfehlung; 3 Heilpuder (686 Gold) brächte wegen der Ringelblume weniger je Stunde als der Traumtrank, 1 Heilpuder aus 10 Blüten wäre ein Verhältnis 1 : 1.
+- Wo ging bei v0.56.0 die Zeit hin? → Browser-Test etwa 66 Minuten nacheinander (Durchspielen 34, 3D 25, Einführung 7) bei 4 Prozessorkernen; feste Wartezeiten nur gut 1 Minute je Gerät; dazu etwa 50 Minuten für einen zweiten Lauf (8 übersehene Prüfstellen, ein abgebrochener Lauf).
+
+**Gemacht:**
+- Entwurf v0.57.0 (Level 16) und v0.56.2 (Browser-Test parallel) in `PLAENE.md`; `STAND.md`, `GESPRAECHE.md`. Versionsnummer 0.56.1. Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 479 Tests bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.56.0 – Aufstieg mit „1 von 4“: Aufträge statt Erfahrung (26.11.2026)
 
 **Vorgenommen:**

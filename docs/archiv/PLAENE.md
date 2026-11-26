@@ -61,6 +61,67 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.57.0 – Level 16 „Die Kräutermühle“: Heilpuder und Heiltrank; dazu v0.56.2 „schneller live“ (Chat 32, v0.56.1; wartet auf Tobias' Antworten)
+
+**Tobias (Chat 32, nach v0.56.0):** „Alles klar, danke ich werd es direkt probieren. Lass uns in der zwischenzeit schon mal das nächste level theoretisch durch gehen und evtl. auch überlegen, wie wir das ganze schneller live mergen können, weil die letzte session für diesen schritt auf v56 schon sehr lange gedauert hat.“
+
+**Ziel:** Das Tränke-Kapitel geht weiter wie im Grobplan (`AUSBLICK.md`). Gretes Idee aus Level 14 („Könnte man Kräuter nicht auch mit Wasserkraft mahlen?“) wird wahr: Die neue **Kräutermühle** mahlt Ringelblüten zu **Heilpuder**, der Zauberkessel braut daraus mit Tinktur den **Heiltrank** – den zweiten Trank und später eine Zutat des Lebenstranks (Level 18). Die Ringelblume (seit Level 8) bekommt eine neue Aufgabe, die Mörser (seit Level 14 ohne Weiterverarbeitung) werden Baumaterial. Kein bestehendes Rezept ändert sich (Lehre aus v0.55.1), keine neue Fläche.
+
+**Geschichte:** „Gretes Idee hat funktioniert: Neben ihrer Kornmühle am Fluss dreht sich jetzt ein kleiner Mahlstein nur für Kräuter. Er mahlt Ringelblüten zu feinem, goldenem Heilpuder – und Ambrosius weiß sofort, was er daraus braut.“
+
+**Kräutermühle** (neue Maschine, Reiter „Stein“ – dort ist Platz für ein 4. Gebäude):
+
+| | |
+|---|---|
+| Größe, Anschlüsse | 2 × 2 wie der Steinmetz: 1 Eingang links, Ausgang rechts |
+| Rezept | **5 Ringelblüten → 1 Heilpuder in 15 s** |
+| Baukosten | **10 Mörser + 5 Räderwerke** (970 Gold Warenwert): Mahlschalen aus den Mörsern, Antrieb aus den Räderwerken – so haben die Mörser eine Verwendung |
+| Aussehen | kleines Steinhaus mit einem flachen Mahlstein davor, der sich beim Arbeiten dreht, dazu goldener Staub (das Wasserrad hat schon das Sägewerk) |
+
+**Heilpuder:** Wert **72 Gold** (5 × 12 × 1,2), ein Säckchen mit goldgelbem Pulver; auch an der Theke verkäuflich.
+
+**Heiltrank** (neue Einstellung des Zauberkessels): **1 Tinktur + 2 Heilpuder**, Feuer 5 Holzkohle, 60 s, Wert **600 Gold** ((346 + 2 × 72 + 5 × 2) × 1,2) – 10 % mehr als der Traumtrank (547); Fläschchen mit rotem Trank. Rechenwerkzeug (an einer Kopie der Daten): Rohstoffe 304 Gold (+97 %), eine Straße 10 Tränke/h = **6.000 Gold/h** (Traumtrank 5.470); Engpass die Ringelblume – je Trank 10 Blüten, mit einem Beet 6 Minuten je Trank, mehrere Beete helfen (wie bei der Kamille).
+
+| Variante | Heiltrank aus | Wert | eine Straße |
+|---|---|---|---|
+| **A (Empfehlung)** | 1 Tinktur + 2 Heilpuder (je 5 Ringelblüten) | 600 | 6.000 Gold/h |
+| B | 1 Tinktur + 3 Heilpuder | 686 | 4.573 Gold/h – die Ringelblume bremst stärker, der bessere Trank brächte weniger je Stunde |
+| C | 1 Tinktur + 1 Heilpuder (aus 10 Ringelblüten) | 600 | 6.000 Gold/h – aber 1 : 1 (Tobias wollte beim Mörser kein 1 : 1) |
+
+**Aufträge** (zusammen **19.391 Gold**, ×1,21 gegenüber Level 15):
+
+| # | Wer | Was | Wert |
+|---|---|---|---|
+| 1 | Müllerin Grete | 50 Heilpuder – „Meine Kräutermühle läuft! Zeig mir, wie fein dein Heilpuder wird – ich will ihn im ganzen Tal verkaufen.“ | 3.600 |
+| 2 | Heilerin Agnes | 20 Heilpuder + 8 Wundverbände – „Heilpuder auf die Wunde, ein Verband darüber: So heilt sie doppelt so schnell.“ | 3.456 |
+| 3 | Magier Ambrosius | 10 Heiltränke – „Tinktur und Heilpuder, langsam über dem Feuer gerührt: der Heiltrank. Eines Tages wird er die Grundlage für etwas viel Größeres.“ | 6.000 |
+| 4 | Wirt Hannes | 6 Heiltränke + 5 Traumtränke – „Die Reisenden in meinem Gasthaus wollen beides: Heiltränke für den Weg und Traumtränke für die Nacht.“ | 6.335 |
+
+Rechenwerkzeug: Rohstoffe 10.983 Gold (11 Ringelblumensamen, 2,9 Schafgarbensamen, 2,6 Kamillensamen, 1,1 Sand, 0,8 Leinsamen), 17,3 Pflanzen, Maschinenzeit 4,5 h, Engpass mit je einem Beet die Ringelblume (5,5 h) – mit mehreren Ringelblumen-Beeten deutlich weniger.
+
+**Aufstieg auf Level 16:** 17.500 Gold (die Reihe 12.500 → 15.000 → 17.500), kein Geschenk, keine neue Fläche; der Laden bleibt wie auf Level 15.
+
+**Was sich im Spiel ändert (v0.57.0):** neue Maschine (Daten, 3D-Haus mit drehendem Mahlstein), zwei neue Waren mit eigener Form (Heilpuder, Heiltrank), eine neue Einstellung am Kessel, Level 16 mit Geschichte, Aufträgen und Brief; voraussichtlich keine neue Spielregel und kein neues Spielstand-Format. Tests (neue Datei für Level 16, Durchspielen bis Level 16), Doku. Die „Zauber des Magiers“ bleiben ein eigener Schritt danach.
+
+**Schneller live – woran es bei v0.56.0 lag (gemessen):**
+- Der Browser-Test läuft rund **66 Minuten**: Durchspielen (Tablet, Handy, Hochformat, schmales Handy) etwa 34, 3D-Ansicht etwa 25, Einführung etwa 7 – alles nacheinander, obwohl die Arbeitsumgebung 4 Prozessorkerne hat. Feste Wartezeiten sind nur gut 1 Minute je Gerät; die Zeit geht ins Durchspielen und ins Zeichnen in 3D.
+- In v0.56.0 lief er fast zweimal: Claude hatte 8 Prüfstellen übersehen, die noch die alte Erfahrung erwarteten, und ein Lauf wurde nach einer Stunde abgebrochen – zusammen etwa 50 Minuten.
+- Am Anfang lag das Spiel in einem anderen Repo als die Sitzung (das Portfolio).
+
+**Vorschläge:**
+- **A – Browser-Test parallel (Claudes Empfehlung):** Die Teile laufen gleichzeitig in eigenen Browsern – Durchspielen auf dem Tablet, Durchspielen auf dem Handy, 3D-Ansicht, Einführung. Ein Befehl startet sie zusammen und fasst das Ergebnis zusammen. Erwartet etwa 20–35 statt 66 Minuten (muss gemessen werden, 3D braucht viel Rechenleistung). Geprüft wird genau dasselbe wie heute.
+- **B – Fehler sofort melden:** Beim ersten ✘ meldet sich der Test sofort; nach einer Korrektur läuft nur der betroffene Teil noch einmal.
+- **C – Claudes Arbeitsweise:** vor dem ersten Lauf alle Prüfstellen suchen, die die Änderung betrifft; lange Läufe im Hintergrund mit genug Zeit; die Doku schreiben, während der Test läuft.
+- **D – gezielter prüfen (Tobias' Entscheidung):** bei Fehlerkorrekturen und kleinen Änderungen nur `npm test` und der betroffene Browser-Teil, der volle Lauf bei neuen Leveln und größeren Schritten. Spart am meisten Zeit, aber ein Fehler in einem nicht geprüften Teil könnte live gehen (zurückgehen geht jederzeit).
+- Neue Sitzungen gleich mit dem Repo `ErstesSpiel` starten.
+- A und B wären eine eigene kleine Version **v0.56.2** vor Level 16 (nur das Prüfwerkzeug, das Spiel bleibt unverändert); C gilt ab sofort.
+
+**Fragen an Tobias:**
+1. Passt die Kräutermühle (Reiter Stein, 5 Ringelblüten → 1 Heilpuder in 15 s, Baukosten 10 Mörser + 5 Räderwerke) und ihr Aussehen?
+2. Heiltrank: A (1 Tinktur + 2 Heilpuder, 600 Gold) – oder B bzw. C?
+3. Passen die vier Aufträge (Grete, Agnes, Ambrosius, Hannes) und der Aufstieg für 17.500 Gold?
+4. Schneller live: A und B als v0.56.2 umsetzen? Und D – gezielter prüfen bei kleinen Schritten, ja oder nein?
+
 ### Entwurf v0.55.2 – Fehlerkorrektur: Aufstieg nach einer Preisänderung (Chat 32, v0.55.1; angenommen mit Änderung – umgesetzt als v0.56.0, siehe unten)
 
 **Fehler (Tobias, Chat 32, Bild):** Auf Level 14 sind alle Aufträge abgegeben, das Level-Fenster sagt „Jetzt kannst du auf Level 15 aufsteigen“, der Knopf bleibt aber grau: „Noch 147 Erfahrung“ (3.829 / 3.976).
