@@ -4,6 +4,22 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.55.1 – Tobias' Rückmeldung zu v0.55.0: Aufstieg auf Level 15 blockiert (26.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung nach dem Update festhalten (Chat 32, mit Bild): Er kann nicht auf Level 15 aufsteigen, obwohl alle Aufträge von Level 14 erledigt sind; das Laden-Lager ist übervoll, weil er Strecken von Hand geleert hat; die dunklen Fenster bleiben vorerst.
+
+**Fragen, die wir uns gestellt haben:**
+- Warum fehlen 147 Erfahrung? → Die Erfahrung, die ein Level braucht, steht nirgends fest, sondern wird jedes Mal aus dem heutigen Wert der Auftragswaren berechnet (`xpNeeded` in `quests.js`). v0.55.0 hat den Mörser von 29 auf 43 Gold verteuert (5 statt 3 Holzstäbe). Auf Level 14 verlangen Klara (15 Mörser) und Grete (20 Mörser + 10 Räderwerke) zusammen 35 Mörser; ihre Erfahrung stieg von 131 auf 194 und von 498 auf 582. Tobias hatte beide vor dem Update zum alten Wert abgegeben – die Grenze stieg von 3.829 auf 3.976, genau 147 (mit den Datentabellen nachgerechnet). Neue Spiele betrifft das nicht.
+- Warum hat es kein Test gefunden? → Der Browser-Test spielt jedes Level mit den heutigen Preisen durch; einen Spielstand, der Aufträge vor einer Preisänderung abgegeben hat, gab es nicht. In v0.55.0 war nur nachgerechnet, dass Level 14 jetzt 3.976 statt 3.829 Erfahrung gibt.
+- Ist das übervolle Laden-Lager ein Fehler? → Nein: „Strecke leeren“ bringt die Waren immer ins Laden-Lager, auch wenn es voll ist (wie Abreißen und Ausräumen, offene Frage 7) – sonst ließe sich ein Stau bei vollem Lager nicht auflösen. Die roten Lichter kommen daher, dass Tobias die Fabrik bewusst angehalten hat.
+
+**Gemacht:**
+- Entwurf v0.55.2 (Fehlerkorrektur) in `PLAENE.md`; `STAND.md` (Status, Tobias' Fabrik, offene Frage 7, Frage 18 erledigt, Arbeitsschritt), `GESPRAECHE.md`, `ENTSCHEIDUNGEN.md`. Versionsnummer 0.55.1. Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 477 Tests bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.55.0 – Level 15 „Der alte Magier“: Zauberkessel mit Feuerfach, Traumtrank, mehr Fläche (25.11.2026)
 
 **Vorgenommen:**

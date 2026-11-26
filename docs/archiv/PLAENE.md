@@ -61,6 +61,23 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.55.2 – Fehlerkorrektur: Aufstieg nach einer Preisänderung (Chat 32, v0.55.1; wartet auf Tobias' OK)
+
+**Fehler (Tobias, Chat 32, Bild):** Auf Level 14 sind alle Aufträge abgegeben, das Level-Fenster sagt „Jetzt kannst du auf Level 15 aufsteigen“, der Knopf bleibt aber grau: „Noch 147 Erfahrung“ (3.829 / 3.976).
+
+**Ursache:** Die Erfahrung, die ein Level braucht, steht nicht fest, sondern wird aus dem heutigen Wert der Auftragswaren berechnet (`xpNeeded` in `quests.js`). Seit v0.55.0 ist der Mörser 43 statt 29 wert; Level 14 verlangt 35 Mörser (Klara 15, Grete 20). Die Grenze stieg so von 3.829 auf 3.976, Tobias' Erfahrung – zum alten Wert verdient – blieb bei 3.829. Neue Spiele betrifft das nicht; jede spätere Preisänderung könnte es aber wieder auslösen.
+
+**Vorschlag (Claudes Empfehlung):**
+1. **Neue Regel:** Wer alle Aufträge eines Levels abgegeben hat, hat genug Erfahrung für den Aufstieg – auch wenn sich Preise seitdem geändert haben (`hasEnoughXp` in `levels.js`). Gold kostet der Aufstieg weiter (Tobias hat genug).
+2. **Beim Laden des Spielstands:** Sind alle Aufträge des Levels erledigt und fehlt Erfahrung, wird sie aufgefüllt – bei Tobias +147, der Balken zeigt 3.976 / 3.976, die Gesamterfahrung (`xpTotal`, für spätere Verbesserungen) zählt sie mit. Das Spielstand-Format bleibt (21).
+3. **Tests:** ein Spielstand auf Level 14 mit allen Aufträgen und 3.829 Erfahrung kann nach dem Laden aufsteigen; die übrigen Aufstiegs-Tests bleiben.
+
+Wird ein Preis gesenkt, bleibt es wie bisher: Die übrige Erfahrung wandert ins nächste Level. Verworfen: den Mörser zurück auf 29 setzen (Tobias wollte die 5 Holzstäbe für das Gleichgewicht).
+
+**Fragen an Tobias:**
+1. Fehlerkorrektur so umsetzen?
+2. „Strecke leeren“ bei vollem Laden-Lager: so lassen (Empfehlung: sonst lässt sich ein Stau bei vollem Lager nicht mehr auflösen) oder sperren?
+
 ### Entwurf v0.55.0 – Level 15 „Der alte Magier“: Zauberkessel mit Feuer, Traumtrank, mehr Fläche (Chat 31, v0.54.1; angenommen mit Änderungen in v0.54.2 – siehe gleich unten; umgesetzt in v0.55.0)
 
 **Tobias' Antworten (Chat 31, v0.54.2), mit einem Bild seiner Fabrik (Level 14, 36.904 Gold, Laden-Lager 1.109 / 1.100 nach 1 von 10 Ausbauten):** „Die sachen mit den Zaubern für Gold können wir gerne festhalten und uns nochmal genauer Gedanken darüber machen. 1. Passt so für mich. 2. Ich würde gerne 1 Trinktur und 5 Blüten machen und den Mörser auch nochmal auf 5 Stäbe umstellen, damit wir irgendwo dieses Gleichgewicht behalten. 3. Die Namen passen auch für mich. 4. 10.000 Gold ist super. Die ganze Welt sollte auch aufs Tablet passen, steht aber jetzt nicht an oberster Stelle. Ich zeig dir in Screenshot wie es aktuell aussieht.“

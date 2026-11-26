@@ -4,12 +4,12 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.55.0 – Level 15 „Der alte Magier“: Zauberkessel mit Feuerfach, Traumtrank, mehr Fläche |
+| **Aktuelle Version** | v0.55.1 – Tobias' Rückmeldung zu v0.55.0: Aufstieg auf Level 15 blockiert (nur Doku) |
 | **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–15 im Spiel, 16–18 als Gerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | **Tobias testet Level 15** (Zauberkessel, Feuerfach, Traumtrank, 4. Flächenstreifen, Herauszoomen); offen: die Fragen 18 (dunkle Fenster, Laden-Lager voll). Danach Entwurf Level 16 „Die Kräutermühle“ und die „Zauber des Magiers“ durchdenken. |
+| **Nächster Schritt** | **v0.55.2 – Fehlerkorrektur Aufstieg** (wartet auf Tobias' OK, Entwurf in `PLAENE.md`): Wer alle Aufträge eines Levels abgegeben hat, kann aufsteigen, auch wenn sich Preise seitdem geändert haben. Danach testet Tobias Level 15 (Zauberkessel, Feuerfach, Traumtrank, 4. Flächenstreifen, Herauszoomen), dann Entwurf Level 16 „Die Kräutermühle“ und die „Zauber des Magiers“. |
 
-**Tobias' Fabrik (3D) – Level 14, alle Aufträge erledigt** (Chat 31, Bild: 36.904 Gold, Laden-Lager 1.109 / 1.100 nach 1 von 10 Ausbauten, viele rote Lichter) – seit v0.55.0 kann er auf Level 15 aufsteigen. Die 2D-Welt ist seit v0.54.0 entfernt (Tobias: „das 3D game, das eigentliche Game“). Level 13 (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik): Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
+**Tobias' Fabrik (3D) – Level 14, alle Aufträge erledigt** (Chat 31, Bild: 36.904 Gold, Laden-Lager 1.109 / 1.100) – der Aufstieg auf Level 15 scheitert seit v0.55.0 an 147 Erfahrung (Chat 32: 3.829 / 3.976, Fehler, siehe v0.55.1). Die Fabrik steht bewusst still (kein Gold mehr verdienen, daher die roten Lichter), das Lager ist übervoll, weil er Strecken von Hand geleert hat. Die 2D-Welt ist seit v0.54.0 entfernt (Tobias: „das 3D game, das eigentliche Game“). Level 13 (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik): Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
 
 Frühere Stände der 2D-Fabrik (Level 8, 10, 11 mit Zitaten; zuletzt Level 13) in `docs/archiv/STAND-LANGFASSUNG.md`.
 
@@ -43,7 +43,7 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 4. **Weiche – zurückgestellt** (Tobias, Chat 26): Eigene Straßen kommen sich nicht in die Quere; ein gemischtes Band staut bei ungleichem Verhältnis, bei gleichem nimmt die Maschine beide Waren schon an einem Eingang. Wieder aufgreifen nur, wenn ein echtes Problem sie braucht.
 5. **Eiserner Bestand** im Laden-Lager, den die Theken nicht anrühren – nur, wenn Tobias das möchte.
 6. **Verbesserungen mit Erfahrung** (später): schneller verarbeiten, schnellere Bänder, mehr Kundschaft; `xpTotal` zählt schon mit.
-7. **Laden-Lager über der Grenze:** Abreißen und Ausräumen dürfen es überfüllen – für Tobias in Ordnung, beobachten.
+7. **Laden-Lager über der Grenze:** Abreißen, Ausräumen und „Strecke leeren“ dürfen es überfüllen – für Tobias bisher in Ordnung; in Chat 32 hat er es beim Strecke-Leeren bemerkt. So lassen (Claudes Empfehlung) oder bei vollem Lager sperren? – Tobias fragen.
 8. **Claudes Lesarten** zu Level 9–13 (Mengen, Zeiten, Baukosten), die Tobias jederzeit ändern kann – Liste in der Langfassung.
 9. **Einstieg:** am Anfang vor allem die Massenproduktion ausbauen – später austesten.
 10. **Pleiteschutz:** Ein Rohstoff ohne passendes Gebäude verhindert das Geschenk – beobachten.
@@ -54,17 +54,16 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 15. **Titel:** Richtung „Factory“; „Flussfactory“, „Zunft-Factory“, „Medieval Factory“ gefallen Tobias nicht – bis dahin Platzhalter „Factory“ auf dem Ladebildschirm.
 16. **Herauszoomen in 3D:** seit v0.55.0 bis zum 1,85-Fachen der Welt – die größte Welt (54 × 46) passt aufs Tablet, auf dem Handy fast. Tobias prüft es.
 17. **Neue Ausgaben fürs Gold:** „Zauber des Magiers“ festgehalten (`AUSBLICK.md`), später genauer durchdenken (Tobias, Chat 31).
-18. **Dunkle Fenster auf Tobias' Tablet** (Bild, Chat 31): Fenster und Leisten erscheinen dunkel statt hell – vermutlich der Dunkelmodus des Browsers. Immer hell anzeigen? – Tobias fragen. Dazu: Laden-Lager übervoll, viele rote Lichter (blockiert) – Hinweis an Tobias.
 
 ## Die letzten 3 Arbeitsschritte
+
+### v0.55.1 – Tobias' Rückmeldung: Aufstieg blockiert (26.11.2026, nur Doku)
+
+- **Tobias (Chat 32, Bild):** Level 14, alle Aufträge erledigt, aber 3.829 / 3.976 Erfahrung – „Noch 147 Erfahrung“. Fabrik bewusst angehalten, Strecken von Hand geleert (Lager übervoll); Fenster „erstmal so lassen“.
+- **Claude:** Ursache: Die nötige Erfahrung wird aus den heutigen Warenpreisen berechnet; der Mörser ist seit v0.55.0 43 statt 29 wert, Level 14 verlangt 35 Mörser – genau 147 mehr. Vorschlag v0.55.2 in `PLAENE.md`. **Offen:** Tobias' OK.
 
 ### v0.55.0 – Level 15 „Der alte Magier“ (25.11.2026)
 
 - **Warum (Tobias, Chat 31):** Entwurf angenommen („Passt so für mich“), mit 5 Kamillenblüten im Traumtrank und 5 Holzstäben im Mörser; 4. Streifen für 10.000 „ist super“; die ganze Welt soll aufs Tablet passen.
 - **Umgesetzt:** Zauberkessel (Reiter Stein) mit Feuerfach (100 Holzkohle, 5 je Trank, „🔥 Auffüllen“), Traumtrank (547 Gold), Magier Ambrosius, Wirt Hannes, 4 Aufträge, Aufstieg 15.000, 4. Flächenstreifen (bis 54 × 46), Mörser aus 5 Holzstäben, „Feuer aus“ im Bericht, weiter herauszoomen; Format 21.
 - **Offen:** Tobias' Test.
-
-### v0.54.2 – Tobias' Antworten zum Entwurf Level 15 (25.11.2026, nur Doku)
-
-- **Tobias:** Kessel und Feuerfach passen, Namen passen, 4. Streifen für 10.000 „ist super“; Traumtrank aus 1 Tinktur + 5 Blüten, Mörser aus 5 Holzstäben („damit wir irgendwo dieses Gleichgewicht behalten“); ganze Welt aufs Tablet „nicht an oberster Stelle“; Zauber fürs Gold festhalten. Bild: Level 14, 36.904 Gold.
-- **Claude:** neu gerechnet (Traumtrank 547, Mörser 43, Aufträge Level 15: 16.066 Gold) in `PLAENE.md`; Zauber in `AUSBLICK.md`; Hinweise: dunkle Fenster, Laden-Lager voll. **Offen:** Umsetzung v0.55.0.
