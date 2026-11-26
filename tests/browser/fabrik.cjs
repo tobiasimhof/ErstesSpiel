@@ -2876,7 +2876,19 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await shot('28a-level-17');
   await page.tap('#modal-close');
   await sleep(120);
-  // Steinmetz und Uhrmacherei haben jetzt 4 Einstellungen (Tobias: höchstens 4) – per Touch umstellen
+  // Steinmetz und Uhrmacherei haben jetzt 4 Einstellungen (Tobias: höchstens 4) – per Touch umstellen.
+  // Einen Steinmetz gibt es beim Durchspielen noch nicht: auf eine freie Fläche setzen.
+  await game(page, () => {
+    const g = window.__game;
+    if (g.state.buildings.some((b) => b.type === 'steinmetz')) return;
+    const p = g.state.plot;
+    for (let y = p.y; y < p.y + p.height - 1; y++) {
+      for (let x = p.x; x < p.x + p.width - 1; x++) {
+        if ([0, 1].every((dx) => [0, 1].every((dy) => g.isFree(x + dx, y + dy))) && g.place('steinmetz', x, y, 0) !== null) return;
+      }
+    }
+  });
+  check(await game(page, () => window.__game.state.buildings.some((b) => b.type === 'steinmetz')), 'Ein Steinmetz steht in der Fabrik');
   for (const [type, title, recipe, label, name] of [
     ['steinmetz', 'Steinmetz', 'linse', 'Umstellen auf Linse: 10 Glas', 'Linse'],
     ['uhrmacherei', 'Uhrmacherei', 'fernrohr', 'Umstellen auf Fernrohr: 2 Linsen + 10 Eisenbleche', 'Fernrohr'],
