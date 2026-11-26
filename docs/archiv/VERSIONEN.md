@@ -4,6 +4,27 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.57.0 – Level 16 „Die Kräutermühle“: Heilpuder und Heiltrank (26.11.2026)
+
+**Vorgenommen:**
+- Den Entwurf v0.57.0 umsetzen (Tobias, Chat 32: „Ja, das passt alles so“).
+
+**Fragen, die wir uns gestellt haben:**
+- Passen die Baukosten 10 Mörser + 5 Räderwerke (970 Gold) zu den Regeln? → Nein, knapp: Kein Gebäude kostet mehr als 960 Gold an Waren (`GEBAEUDE.md`, ein Test prüft das). Deshalb 10 Mörser + **4** Räderwerke (862 Gold) – die 10 Mörser, um die es ging, bleiben. Der Test „Testpaket auf Level 6: alle Gebäude baubar“ prüft jetzt nur Gebäude aus frühen Waren (Mörser gibt es erst ab Level 14).
+- Wie sieht die Mühle aus? → Kleines Steinhaus mit Spitzdach, davor ein Kollergang: In einer runden Steinwanne mit goldenem Heilpuder läuft ein aufrecht stehender Mahlstein an einem Holzarm im Kreis (dreht sich nur beim Mahlen), daneben ein Korb mit Ringelblüten, Staub beim Mahlen. Das Wasserrad hat schon das Sägewerk.
+- Wie sieht der Heilpuder aus? → Leinensäckchen, oben offen mit goldgelbem Pulver, rotes Band, davor ein Häufchen (Warenbild „powder“ und eigene 3D-Form). Der Heiltrank hat die Form des Traumtranks in Rot.
+- Ändert sich das Spielstand-Format? → Nein (bleibt 21): neue Waren, ein neues Gebäude und eine neue Einstellung brauchen keine Umwandlung.
+
+**Gemacht:**
+- Daten: `items.js` (Heilpuder 72, Heiltrank 600), `recipes.js` (Heilpuder, Heiltrank mit `fuel: 5`, ab Level 16), `buildings.js` (Kräutermühle im Reiter Stein, Kessel mit Heiltrank), `levels.js` (Level 16), `shop.js` (Laden auf Level 16).
+- Darstellung: `itemArt.js` (Warenbild „powder“, Heiltrank über „potion“), `itemForms.js` (Heilpuder, Heiltrank), `kenney3d.js` (Haus der Kräutermühle mit Kollergang).
+- Tests: neu `kraeutermuehle.test.js` (10 Tests: Daten, Aufträge, Aufstieg, Mühle mahlt, Kessel auf Heiltrank, eine Straße bis ins Laden-Lager, Spielstand); angepasst `bauleiste`, `levels`, `magier`, `market`, `quests`, `save`, `waren3d`; Browser: `fabrik.cjs` bis Level 16 (Aufstieg, Mühle aus der Bauleiste bauen, mahlen, Kessel per Touch auf Heiltrank umstellen, brauen), `spiel3d.cjs` (Haus der Mühle, 43 Waren auf dem Band).
+- Doku: `SPIEL.md`, `LEVEL.md`, `GEBAEUDE.md`, `WAREN.md`, `BEDIENUNG.md`, `AUSBLICK.md`, `ZAHLEN.md`, `TECHNIK.md`, `STAND.md`, Archiv. Versionsnummer 0.57.0.
+
+**Geprüft:**
+- `npm test`: 489 Tests bestanden (10 neue in `kraeutermuehle.test.js`).
+- Browser-Test parallel: ERGEBNIS57
+
 ### v0.56.2 – Browser-Test parallel (26.11.2026)
 
 **Vorgenommen:**
