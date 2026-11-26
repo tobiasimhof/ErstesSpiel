@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 26.11.2026 – Chat 32: Rückmeldung zu Level 15 – Aufstieg blockiert, „1 von 4“ statt Erfahrung, Entwurf Level 16, Browser-Test parallel, Level 16, Entwurf Level 17 (v0.55.1, v0.56.0, v0.56.1, v0.56.2, v0.57.0, v0.57.1)
+### 26.11.2026 – Chat 32: Rückmeldung zu Level 15 – Aufstieg blockiert, „1 von 4“ statt Erfahrung, Entwurf Level 16, Browser-Test parallel, Level 16, Entwurf Level 17, Level 17 (v0.55.1, v0.56.0, v0.56.1, v0.56.2, v0.57.0, v0.57.1, v0.57.2, v0.58.0)
 
 **Tobias** (mit Bild: Level 14, „Alle Aufträge dieses Bauabschnitts sind erledigt. Jetzt kannst du auf Level 15 aufsteigen.“, Erfahrung 3.829 / 3.976, Knopf „Aufsteigen auf Level 15 · 15.000“ grau, darunter „Noch 147 Erfahrung – gib die Aufträge der Bewohner ab.“): „Hey, bringe dich auf den aktuellen Stand. Ich wollte dir noch ein Feedback zum letzten Update geben. Ich hab meinen Browser aktualisiert und kann leider nicht aufsteigen, weil mir die Erfahrung dafür fehlt. Ich hab nicht weiter produziert, weil ich nicht weiter Gold verdienen wollte, deswegen ist alles stehen geblieben und ich hab manchmal per Hand vom Band eingesammelt. Vermutlich wurde das per hand einsammeln einfach addidiert zum Laden-Lager bzw. ich habe es gerade getestet. Ich kann die Strecken trotzdem leeren, obwohl das lager voll ist. Die Fenster kannst du erstmal so lassen wie sie sind.“
 
@@ -35,6 +35,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat den Entwurf für Level 17 „Die Sternwarte“ geschrieben und mit dem Rechenwerkzeug an einer Kopie der Daten nachgerechnet (`PLAENE.md`): keine neue Maschine – der Steinmetz schleift Linsen (10 Glas, 144 Gold) und mahlt Kristallsand (5 Glas, 72 Gold), die Uhrmacherei baut Fernrohre (2 Linsen + 10 Eisenbleche, 634 Gold, die beste Ware je Stunde); Aufträge von Steinmetzin Berta, Uhrmacher Kaspar, Baumeister Anton und Magier Ambrosius (23.437 Gold, ×1,21), Aufstieg 20.000; zur Übersicht Level 18. 4 Fragen.
 
 **Umgesetzt:** v0.57.1 (nur Doku).
+
+**Tobias** (mit einem Bild seiner Fabrik auf Level 16, 22.768 Gold): „Alles klar perfekt. Ich bin gerade level 16, weil ich mit level 15 etwas schnell durch war, aber das kann man mit den missionen ja noch mit der anzahl beeinflusse, aber für den test war das schon mal gut, um die neuen sachen kennenzulernen. Ich finde die neuen Produkte gut, so entstehen wieder neue Straßen, weil aktuell ist mein Gebiet noch sehr frei durch die neuen Käufe. Deswegen wäre es gut, wenn wir nach der Zauberei wieder an den alten Straßen anknüpfen, damit wir aus der Sternenuhr, dem Fernrohr, dem Reißbrett, dem mörser wieder neue Produkte machen können bzw. mit bisherigen Produkten verbinden. Dann können wir die einzelnen Produktionsstraßen wieder vergrößern. Level 17 sieht bisher aber gut aus und wenn wir mit der Zauberei durch sind, haben wir hoffentlich genug neue Produkte, damit wir wie gesagt, die Straßen wieder verlängern können. Neue einstellung passen und ich finde eine Maschine sollte nicht mehr als 4 Einstellungen haben, damit wir wissen, ab wann wir neue maschinen einführen müssen. Linse lieber aus 10 Glas. Die Aufträge passen alle so. Ich finde, dass wir uns mit "zauber des Magiers" ab level 20 beschäftigen können, wenn wir mit allen grundlegenden Sachen fertig sind und wir auch lange Produktionsstraßen haben.“
+
+**Claude** hat die Antworten und die drei Grundsätze festgehalten (höchstens 4 Einstellungen je Maschine, nach Level 18 die alten Straßen verlängern, Zauber ab Level 20) und mit Level 17 begonnen.
+
+**Umgesetzt:** v0.57.2 (nur Doku).
 
 ### 25.11.2026 – Chat 31: Beratung – zurück zu Logik und Leveln (v0.52.2, v0.53.0, v0.54.0, v0.54.1, v0.54.2, v0.55.0)
 
