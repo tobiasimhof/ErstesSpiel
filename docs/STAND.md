@@ -4,12 +4,12 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.57.0 – Level 16 „Die Kräutermühle“: Heilpuder und Heiltrank |
+| **Aktuelle Version** | v0.57.1 – Entwurf Level 17 „Die Sternwarte“ (nur Doku) |
 | **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–16 im Spiel, 17–18 als Gerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | **Tobias testet Level 15 und 16** (Zauberkessel, Feuerfach, Traumtrank, 4. Flächenstreifen, Herauszoomen; Kräutermühle, Heilpuder, Heiltrank). Danach die „Zauber des Magiers“ durchdenken, dann Level 17 „Die Sternwarte“. |
+| **Nächster Schritt** | **Tobias testet Level 15 und 16** (Zauberkessel, Feuerfach, Traumtrank, 4. Flächenstreifen, Herauszoomen; Kräutermühle, Heilpuder, Heiltrank) und beantwortet die Fragen zum **Entwurf Level 17 „Die Sternwarte“** (v0.58.0, `PLAENE.md`: Linse, Fernrohr, Kristallsand). Offen: die „Zauber des Magiers“ vor oder nach Level 17. |
 
-**Tobias' Fabrik (3D) – Level 14, alle Aufträge erledigt** (Chat 31, Bild: 36.904 Gold, Laden-Lager 1.109 / 1.100) – in v0.55.0 fehlten ihm 147 Erfahrung für Level 15 (Chat 32), seit v0.56.0 zählen die Aufträge (4 von 4). Die Fabrik steht bewusst still (kein Gold mehr verdienen, daher die roten Lichter), das Lager ist übervoll vom Strecke-Leeren. Die 2D-Welt ist seit v0.54.0 entfernt (Tobias: „das 3D game, das eigentliche Game“). Level 13 (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik): Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
+**Tobias' Fabrik (3D) – Level 15, beim 3. Auftrag** (Chat 32; auf Level 14 zuletzt 36.904 Gold, Laden-Lager 1.109 / 1.100). Die Fabrik steht bewusst still (kein Gold mehr verdienen, daher die roten Lichter), das Lager ist übervoll vom Strecke-Leeren. Die 2D-Welt ist seit v0.54.0 entfernt (Tobias: „das 3D game, das eigentliche Game“). Level 13 (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik): Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
 
 Frühere Stände der 2D-Fabrik (Level 8, 10, 11 mit Zitaten; zuletzt Level 13) in `docs/archiv/STAND-LANGFASSUNG.md`.
 
@@ -57,13 +57,13 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.57.1 – Entwurf Level 17 „Die Sternwarte“ (26.11.2026, nur Doku)
+
+- **Tobias (Chat 32):** testet Level 15 (3. Auftrag); Level 17 „theoretisch schon mal aufschlüsseln“.
+- **Claude:** Entwurf in `PLAENE.md`: Steinmetz schleift Linsen (10 Glas) und mahlt Kristallsand (5 Glas), Uhrmacherei baut Fernrohre (2 Linsen + 10 Eisenbleche, 634 Gold), Aufträge von Berta, Kaspar, Anton, Ambrosius (23.437 Gold), Aufstieg 20.000; keine neue Maschine. **Offen:** 4 Fragen.
+
 ### v0.57.0 – Level 16 „Die Kräutermühle“ (26.11.2026)
 
 - **Warum (Tobias, Chat 32):** Entwurf angenommen („Ja, das passt alles so“).
 - **Umgesetzt:** Kräutermühle (Reiter Stein, 5 Ringelblüten → 1 Heilpuder in 15 s, 3D-Haus mit Mahlstein), Heiltrank im Zauberkessel (1 Tinktur + 2 Heilpuder, 600 Gold), Aufträge von Grete, Agnes, Ambrosius, Hannes, Aufstieg 17.500. Baukosten 10 Mörser + **4** Räderwerke (statt 5: Grenze 960 Gold). Format bleibt 21.
 - **Offen:** Tobias' Test.
-
-### v0.56.2 – Browser-Test parallel (26.11.2026)
-
-- **Warum (Tobias, Chat 32):** „Ja, das passt alles so. Lass uns A machen deine Empfehlung“ – schneller live.
-- **Umgesetzt:** `npm run test:browser` startet die Teile gleichzeitig (Durchspielen je Gerät, 3D je Gerät, Einführung): etwa 22 statt 66 Minuten, geprüft wird dasselbe. Eine Prüfung (Theke auffüllen) hielt die Last nicht aus und ist jetzt unempfindlich gegen einen Kunden im selben Augenblick. Spiel unverändert.
