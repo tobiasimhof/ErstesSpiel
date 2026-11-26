@@ -16,7 +16,7 @@ import {
   producedCount,
   unlocksOf,
 } from '../src/core/levels.js';
-import { canDeliver, currentQuest, deliverQuest, levelQuests, xpNeeded } from '../src/core/quests.js';
+import { canDeliver, currentQuest, deliverQuest, levelQuests, xpOfLevel } from '../src/core/quests.js';
 import { buyRaw } from '../src/core/market.js';
 import { loadInput, setRecipe } from '../src/core/production.js';
 import { deserializeGame, serializeGame } from '../src/core/save.js';
@@ -161,7 +161,7 @@ test('Hergestellte Waren werden gezählt – Blöcke und Teile', () => {
   assert.deepEqual(loaded.state.produced, state.produced);
 });
 
-// ---------- Aufsteigen (v0.13.0: Erfahrung aus Aufträgen, dann Gold) ----------
+// ---------- Aufsteigen (v0.13.0: Aufträge, dann Gold; seit v0.56.0 zählen die Aufträge statt der Erfahrung) ----------
 
 // Gibt die Waren des aktuellen Auftrags ins Laden-Lager und gibt ihn ab.
 function deliverWithGoods(state) {
@@ -170,16 +170,16 @@ function deliverWithGoods(state) {
   return deliverQuest(state);
 }
 
-test('Aufstieg auf Level 2: erst genug Erfahrung, dann kostet er Gold; dafür gibt es einen Felsbrocken', () => {
+test('Aufstieg auf Level 2: erst alle Aufträge, dann kostet er Gold; dafür gibt es einen Felsbrocken', () => {
   const state = createNewGame(5);
-  assert.equal(levelUpBlocker(state), 'xp');
-  assert.equal(levelUp(state), null, 'noch keine Erfahrung');
+  assert.equal(levelUpBlocker(state), 'quests');
+  assert.equal(levelUp(state), null, 'noch kein Auftrag abgegeben');
   assert.equal(nextLevelCost(state), 30, 'v0.23.0: durch 3 (vorher 100)');
   deliverWithGoods(state);
   deliverWithGoods(state);
-  assert.equal(levelUpBlocker(state), 'xp', 'ein Auftrag fehlt noch');
+  assert.equal(levelUpBlocker(state), 'quests', 'ein Auftrag fehlt noch');
   deliverWithGoods(state);
-  assert.equal(state.quest.xp, xpNeeded(1));
+  assert.equal(state.quest.xp, xpOfLevel(1));
   assert.equal(currentQuest(state), null, 'alle Aufträge von Level 1 erledigt');
   state.gold = 29;
   assert.equal(levelUpBlocker(state), 'gold');
@@ -191,7 +191,7 @@ test('Aufstieg auf Level 2: erst genug Erfahrung, dann kostet er Gold; dafür gi
   assert.equal(storageCount(state, 'felsbrocken'), 1, 'Gratis-Felsbrocken im Laden-Lager');
   assert.deepEqual(state.quest, { index: 0, xp: 0 }, 'Aufträge von Level 2 beginnen');
   assert.equal(currentQuest(state), levelQuests(2)[0]);
-  assert.equal(levelUpBlocker(state), 'xp');
+  assert.equal(levelUpBlocker(state), 'quests');
 });
 
 test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 und 8 mit Samen, Level 9 mit Holzstamm, Level 10 mit Schafgarbensamen und mehr Fläche, Level 11 ohne Geschenk für 5.000 Gold, Level 12 für 7.500, Level 13 für 10.000, Level 14 für 12.500, Level 15 für 15.000 mit mehr Fläche; danach ist Schluss', () => {
@@ -200,7 +200,7 @@ test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 
   state.gold = 100000;
   const results = [];
   for (let i = 0; i < 12; i++) {
-    state.quest.xp = xpNeeded(state.shopLevel);
+    state.quest.index = levelQuests(state.shopLevel).length; // v0.56.0: alle Aufträge abgegeben
     results.push(levelUp(state));
   }
   assert.deepEqual(results, [
@@ -232,7 +232,7 @@ test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 
   assert.equal(storageCount(state, 'eisenerz'), 3);
   assert.equal(storageCount(state, 'leinsamen'), 1);
   assert.equal(storageCount(state, 'ringelblumensamen'), 1);
-  state.quest.xp = 99999;
+  state.quest.index = levelQuests(15).length;
   assert.equal(levelUpBlocker(state), 'max', 'höchstes Level');
   assert.equal(nextLevelCost(state), null);
   assert.equal(levelUp(state), null);

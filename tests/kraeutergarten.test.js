@@ -21,7 +21,7 @@ import {
   sourceCount,
   sourceStock,
 } from '../src/core/production.js';
-import { xpNeeded } from '../src/core/quests.js';
+import { levelQuests, xpOfLevel } from '../src/core/quests.js';
 import { SAVE_VERSION, deserializeGame, isValidState, serializeGame } from '../src/core/save.js';
 import { storageCount } from '../src/core/shop.js';
 import { simulate } from '../src/core/sim.js';
@@ -116,10 +116,10 @@ test('Level 8 „Der Kräutergarten“: Kräuterstube und Ringelblumensamen, Auf
   assert.deepEqual(unlocksOf(8), { buildings: ['kraeuterstube'], raws: ['ringelblumensamen'], recipes: [] });
   assert.equal(LEVELS[8].name, 'Der Kräutergarten');
   assert.equal(LEVELS[8].quests.length, 4);
-  assert.equal(xpNeeded(8), 1305, 'v0.23.0: 1.305 statt 1.332 (Kräuter-Preise gerundet)');
+  assert.equal(xpOfLevel(8), 1305, 'v0.23.0: 1.305 statt 1.332 (Kräuter-Preise gerundet)');
   const state = createNewGame(8);
   state.shopLevel = 7;
-  state.quest.xp = xpNeeded(7);
+  state.quest.index = levelQuests(7).length; // v0.56.0: alle Aufträge abgegeben
   state.gold = 1330;
   const up = levelUp(state);
   assert.deepEqual([up.level, up.gift, up.cost], [8, { ringelblumensamen: 1 }, 1330]);

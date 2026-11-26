@@ -61,7 +61,7 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.55.2 – Fehlerkorrektur: Aufstieg nach einer Preisänderung (Chat 32, v0.55.1; wartet auf Tobias' OK)
+### Entwurf v0.55.2 – Fehlerkorrektur: Aufstieg nach einer Preisänderung (Chat 32, v0.55.1; angenommen mit Änderung – umgesetzt als v0.56.0, siehe unten)
 
 **Fehler (Tobias, Chat 32, Bild):** Auf Level 14 sind alle Aufträge abgegeben, das Level-Fenster sagt „Jetzt kannst du auf Level 15 aufsteigen“, der Knopf bleibt aber grau: „Noch 147 Erfahrung“ (3.829 / 3.976).
 
@@ -77,6 +77,14 @@ Wird ein Preis gesenkt, bleibt es wie bisher: Die übrige Erfahrung wandert ins 
 **Fragen an Tobias:**
 1. Fehlerkorrektur so umsetzen?
 2. „Strecke leeren“ bei vollem Laden-Lager: so lassen (Empfehlung: sonst lässt sich ein Stau bei vollem Lager nicht mehr auflösen) oder sperren?
+
+**Tobias' Antwort (Chat 32):** „Statt Erfahrung könnten wir auch einfach 1 von 4 sagen. Das macht es evtl. einfacher. Strecke leeren kann so bleiben. Ich hatte nicht mehr daran gedacht. Ansonsten setz gerne alles um“
+
+**Daraus wurde v0.56.0 (statt v0.55.2, weil sich eine Spielregel ändert):**
+- Der Aufstieg hängt nur noch daran, ob alle Aufträge des Levels abgegeben sind (`allQuestsDone`, `questsDone` in `quests.js`; `levelUpBlocker` meldet `'quests'` statt `'xp'`). Punkt 2 des Entwurfs (Erfahrung beim Laden auffüllen) entfällt damit.
+- Die Leiste im Level-Fenster heißt „Aufträge für Level 15“ und zeigt „1 von 4“; die kleine Leiste im Knopf „Laden-Level“ oben zeigt dasselbe. Hinweis unter dem Aufstieg: „Noch 1 Auftrag – …“, „Alle Aufträge erledigt! Dir fehlen noch … Gold“, „Alle Aufträge erledigt und genug Gold – du kannst aufsteigen.“
+- **Claudes Lesart** (Tobias kann sie jederzeit ändern): „Statt Erfahrung“ heißt, die Erfahrung verschwindet aus dem Spiel – Belohnung, Bestätigung, Meldung unten und Test-Knopf nennen nur noch Gold. Im Hintergrund zählt sie weiter (`xpTotal`, für die späteren Verbesserungen mit Erfahrung, offene Frage 6). Ein Aufstieg nimmt keine übrige Erfahrung mehr ins nächste Level mit. Das Spielstand-Format bleibt 21 (`quest.xp` zählt nur noch mit).
+- „Strecke leeren“ bleibt, wie es ist (offene Frage 7 entschieden).
 
 ### Entwurf v0.55.0 – Level 15 „Der alte Magier“: Zauberkessel mit Feuer, Traumtrank, mehr Fläche (Chat 31, v0.54.1; angenommen mit Änderungen in v0.54.2 – siehe gleich unten; umgesetzt in v0.55.0)
 

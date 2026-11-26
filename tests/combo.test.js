@@ -10,7 +10,7 @@ import { ITEMS } from '../src/core/data/items.js';
 import { RECIPES } from '../src/core/data/recipes.js';
 import { buildingPorts } from '../src/core/geometry.js';
 import { levelUp, producedCount } from '../src/core/levels.js';
-import { xpNeeded } from '../src/core/quests.js';
+import { levelQuests } from '../src/core/quests.js';
 import {
   counterMaxFor,
   counterSize,
@@ -280,7 +280,7 @@ test('Theken: Aufstiege bringen keine Theke mehr (v0.24.0); alle wachsen mit: kl
   const sizes = [];
   for (let i = 0; i < 3; i++) {
     // v0.13.0: Aufsteigen braucht Erfahrung aus den Aufträgen und Gold
-    state.quest.xp = xpNeeded(state.shopLevel);
+    state.quest.index = levelQuests(state.shopLevel).length; // v0.56.0: alle Aufträge abgegeben
     state.gold = 10000;
     levelUp(state);
     sizes.push([state.shopLevel, state.counters.length, counterSize(state)]);

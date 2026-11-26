@@ -18,7 +18,7 @@ import { applyTestPack } from './core/market.js';
 import { COUNTERS, TEST_PACK } from './core/data/shop.js';
 import { ITEMS } from './core/data/items.js';
 import { LAND } from './core/data/land.js';
-import { currentQuest, xpNeeded } from './core/quests.js';
+import { currentQuest, levelQuests } from './core/quests.js';
 import { storageCapacity } from './core/shop.js';
 import { createLevelView } from './ui/levels.js';
 import { numberFormat } from './ui/format.js';
@@ -228,12 +228,13 @@ function onLevelUp({ level, gift, moreLand }) {
 }
 // v0.13.0: Auftrag abgegeben
 // v0.15.0: oder mit dem Test-Knopf als erledigt gewertet (skipped)
-function onQuestDone({ gold, xp, skipped }) {
+// v0.56.0: ohne Erfahrung (zählt nur noch im Hintergrund)
+function onQuestDone({ gold, skipped }) {
   onChange();
   panels.toast(
     skipped
-      ? `Test: Auftrag als erledigt gewertet – +${numberFormat.format(xp)} Erfahrung, keine Waren, kein Gold.`
-      : `Auftrag erledigt: +${numberFormat.format(xp)} Erfahrung, +${numberFormat.format(gold)} Gold.`,
+      ? 'Test: Auftrag als erledigt gewertet – keine Waren, kein Gold.'
+      : `Auftrag erledigt: +${numberFormat.format(gold)} Gold.`,
     3000,
   );
 }
@@ -713,8 +714,9 @@ window.__game = {
     beginCatchUp(seconds);
   },
   isCatchingUp: () => Boolean(catchUpJob),
-  // v0.13.0: für den Browser-Test – Erfahrung, die das aktuelle Level zum Aufstieg braucht
-  xpNeeded: () => xpNeeded(state.shopLevel),
+  // v0.56.0: für den Browser-Test – so viele Aufträge hat das aktuelle Level
+  // (vorher xpNeeded: die Erfahrung für den Aufstieg)
+  questCount: () => levelQuests(state.shopLevel).length,
   currentQuest: () => currentQuest(state),
   // v0.20.0: für den Browser-Test – Plätze im Laden-Lager
   storageCapacity: () => storageCapacity(state),

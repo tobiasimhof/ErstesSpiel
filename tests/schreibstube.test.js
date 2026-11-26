@@ -14,7 +14,7 @@ import { RECIPES } from '../src/core/data/recipes.js';
 import { isBuildingUnlocked, itemLevel, levelUp, unlocksOf } from '../src/core/levels.js';
 import { applyTestPack, refillInput, refillPlan, refillSource } from '../src/core/market.js';
 import { buildingStatus, loadInput, setRecipe, sourceCount } from '../src/core/production.js';
-import { levelQuests, questReward, xpNeeded } from '../src/core/quests.js';
+import { levelQuests, questReward, xpOfLevel } from '../src/core/quests.js';
 import { deserializeGame, serializeGame } from '../src/core/save.js';
 import { storageCount } from '../src/core/shop.js';
 import { simulate } from '../src/core/sim.js';
@@ -113,7 +113,7 @@ test('Level 9 „Die Schreibstube“: Kohlenmeiler und Schreibstube, Aufstieg 1.
   assert.equal(LEVELS[9].name, 'Die Schreibstube');
   const state = createNewGame(9);
   state.shopLevel = 8;
-  state.quest.xp = xpNeeded(8);
+  state.quest.index = levelQuests(8).length; // v0.56.0: alle Aufträge abgegeben
   state.gold = 1670;
   assert.equal(isBuildingUnlocked(state, 'schreibstube'), false);
   const up = levelUp(state);
@@ -130,7 +130,7 @@ test('Aufträge auf Level 9: 4 Stück, Waren aus Werkzeug- und Kräuter-Kapitel,
   const asked = new Set(quests.flatMap((q) => Object.keys(q.items)));
   for (const type of ['holzkohle', 'zeichenbrett', 'reisszeug']) assert.ok(asked.has(type), `${type} wird verlangt`);
   assert.ok([...asked].some((type) => itemLevel(type) >= 7 && itemLevel(type) <= 8), 'auch eine Kräuter-Ware');
-  assert.equal(xpNeeded(9), 1657);
+  assert.equal(xpOfLevel(9), 1657);
   assert.equal(
     quests.reduce((sum, q) => sum + questReward(q).gold, 0),
     5521,

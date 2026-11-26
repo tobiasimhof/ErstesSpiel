@@ -18,7 +18,7 @@ import { fitWorldToLevel } from '../src/core/land.js';
 import { isItemUnlocked, isRecipeUnlocked, itemLevel, levelUp, recipeLevel, unlocksOf } from '../src/core/levels.js';
 import { applyTestPack } from '../src/core/market.js';
 import { setRecipe } from '../src/core/production.js';
-import { levelQuests, questReward, xpNeeded } from '../src/core/quests.js';
+import { levelQuests, questReward, xpOfLevel } from '../src/core/quests.js';
 import { SAVE_VERSION, deserializeGame, serializeGame } from '../src/core/save.js';
 import { storageCount } from '../src/core/shop.js';
 import { simulate } from '../src/core/sim.js';
@@ -99,7 +99,7 @@ test('Level 14 „Die Tinktur“: Aufstieg 12.500 Gold, kein Geschenk, keine neu
   assert.equal(def.cost, 12500);
   assert.equal(def.gift, undefined);
   const state = levelGame(13, 13000);
-  state.quest.xp = xpNeeded(13);
+  state.quest.index = levelQuests(13).length; // v0.56.0: alle Aufträge abgegeben
   const worldBefore = { ...state.world };
   assert.deepEqual(levelUp(state), { level: 14, gift: {}, cost: 12500, moreLand: false });
   assert.equal(state.gold, 500);
@@ -109,7 +109,7 @@ test('Level 14 „Die Tinktur“: Aufstieg 12.500 Gold, kein Geschenk, keine neu
 
 test('Ohne genug Gold kein Aufstieg auf Level 14', () => {
   const state = levelGame(13, 12499);
-  state.quest.xp = xpNeeded(13);
+  state.quest.index = levelQuests(13).length; // v0.56.0: alle Aufträge abgegeben
   assert.equal(levelUp(state), null);
   assert.equal(state.shopLevel, 13);
 });
@@ -127,7 +127,7 @@ test('Aufträge auf Level 14: 4 Stück, zusammen 3.976 Erfahrung und 13.251 Gold
     ],
   );
   const rewards = quests.map((q) => questReward(q));
-  assert.equal(xpNeeded(14), 3976);
+  assert.equal(xpOfLevel(14), 3976);
   assert.equal(
     rewards.reduce((sum, r) => sum + r.gold, 0),
     13251,

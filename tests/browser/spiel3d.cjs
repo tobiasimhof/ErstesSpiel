@@ -870,7 +870,7 @@ async function run3d(browser, baseUrl, device, expectedVersion) {
   // v0.51.0 (Tobias, Chat 29): Aufstieg im 3D-Test – die Schriftrolle rollt sich
   // über dem Spiel auf und bleibt, bis man „✓ Gelesen“ tippt
   await game(page, () => {
-    window.__game.state.quest.xp = window.__game.xpNeeded();
+    window.__game.state.quest.index = window.__game.questCount();
     window.__game.state.gold += 100;
   });
   await page.tap('#btn-level');

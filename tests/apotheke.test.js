@@ -16,7 +16,7 @@ import { fitWorldToLevel } from '../src/core/land.js';
 import { isItemUnlocked, isRecipeUnlocked, itemLevel, levelUp, recipeLevel, unlocksOf } from '../src/core/levels.js';
 import { applyTestPack } from '../src/core/market.js';
 import { harvest, loadInput, setRecipe, sowFromStorage } from '../src/core/production.js';
-import { levelQuests, questReward, xpNeeded } from '../src/core/quests.js';
+import { levelQuests, questReward, xpOfLevel } from '../src/core/quests.js';
 import { deserializeGame, serializeGame } from '../src/core/save.js';
 import { storageCount } from '../src/core/shop.js';
 import { simulate } from '../src/core/sim.js';
@@ -129,7 +129,7 @@ test('Level 12 „Die Apotheke“: Aufstieg 7.500 Gold, kein Geschenk, keine neu
   assert.equal(def.cost, 7500, 'Tobias: „weil man sehr viel Gold verdient“');
   assert.equal(def.gift, undefined);
   const state = levelGame(11, 8000);
-  state.quest.xp = xpNeeded(11);
+  state.quest.index = levelQuests(11).length; // v0.56.0: alle Aufträge abgegeben
   const storageBefore = { ...state.storage };
   const worldBefore = { ...state.world };
   assert.deepEqual(levelUp(state), { level: 12, gift: {}, cost: 7500, moreLand: false });
@@ -140,7 +140,7 @@ test('Level 12 „Die Apotheke“: Aufstieg 7.500 Gold, kein Geschenk, keine neu
 
 test('Ohne genug Gold kein Aufstieg auf Level 12', () => {
   const state = levelGame(11, 7499);
-  state.quest.xp = xpNeeded(11);
+  state.quest.index = levelQuests(11).length; // v0.56.0: alle Aufträge abgegeben
   assert.equal(levelUp(state), null);
   assert.equal(state.shopLevel, 11);
 });
@@ -161,8 +161,8 @@ test('Aufträge auf Level 12: 4 Stück, zusammen 2.722 Erfahrung und 9.072 Gold'
     rewards.map((r) => r.xp),
     [300, 648, 929, 845],
   );
-  assert.equal(xpNeeded(12), 2722);
-  assert.ok(xpNeeded(12) > xpNeeded(11), 'mehr Erfahrung als Level 11');
+  assert.equal(xpOfLevel(12), 2722);
+  assert.ok(xpOfLevel(12) > xpOfLevel(11), 'mehr Erfahrung als Level 11');
   assert.equal(
     rewards.reduce((sum, r) => sum + r.gold, 0),
     9072,

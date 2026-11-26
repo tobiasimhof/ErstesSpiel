@@ -14,7 +14,7 @@ import { fitWorldToLevel } from '../src/core/land.js';
 import { itemLevel, levelUp, unlocksOf } from '../src/core/levels.js';
 import { applyTestPack } from '../src/core/market.js';
 import { setRecipe } from '../src/core/production.js';
-import { levelQuests, questReward, xpNeeded } from '../src/core/quests.js';
+import { levelQuests, questReward, xpOfLevel } from '../src/core/quests.js';
 import { deserializeGame, serializeGame } from '../src/core/save.js';
 import { storageCount } from '../src/core/shop.js';
 import { simulate } from '../src/core/sim.js';
@@ -90,7 +90,7 @@ test('Level 11 „Die Uhrmacherei“: Aufstieg 5.000 Gold, kein Geschenk mehr, k
   assert.equal(def.gift, undefined, 'Tobias: Geschenke enden mit Level 10');
   assert.deepEqual(unlocksOf(11), { buildings: ['uhrmacherei'], raws: [], recipes: [] });
   const state = levelGame(10, 6000);
-  state.quest.xp = xpNeeded(10);
+  state.quest.index = levelQuests(10).length; // v0.56.0: alle Aufträge abgegeben
   const storageBefore = { ...state.storage };
   const worldBefore = { ...state.world };
   assert.deepEqual(levelUp(state), { level: 11, gift: {}, cost: 5000, moreLand: false });
@@ -115,7 +115,7 @@ test('Aufträge auf Level 11: 4 Stück, zusammen 2.550 Erfahrung und 8.497 Gold'
     rewards.map((r) => r.xp),
     [342, 778, 332, 1098],
   );
-  assert.equal(xpNeeded(11), 2550);
+  assert.equal(xpOfLevel(11), 2550);
   assert.equal(
     rewards.reduce((sum, r) => sum + r.gold, 0),
     8497,

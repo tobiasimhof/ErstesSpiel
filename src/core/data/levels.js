@@ -3,9 +3,10 @@
 // Der rote Faden: Dein Laden liegt in einem kleinen Ort am Fluss, der wächst.
 // Jedes Level ist ein Bauabschnitt des Ortes. Die Bewohner geben Aufträge –
 // immer einer nach dem anderen, 2–5 je Level. Wer einen Auftrag abgibt
-// (die Waren kommen aus dem Laden-Lager), bekommt Erfahrung (XP) und Gold.
-// Mit genug Erfahrung lässt sich das nächste Level freischalten; kaufen muss
-// man es mit Gold. Danach braucht man Bauteile für die neuen Maschinen.
+// (die Waren kommen aus dem Laden-Lager), bekommt Gold (und im Hintergrund
+// Erfahrung). Sind alle Aufträge abgegeben, lässt sich das nächste Level
+// freischalten (v0.56.0, vorher mit genug Erfahrung); kaufen muss man es mit
+// Gold. Danach braucht man Bauteile für die neuen Maschinen.
 //
 // Was ein Level freischaltet, steht direkt bei den Gebäuden (level in
 // data/buildings.js) und bei den Rohstoffen (level in data/items.js).
@@ -15,8 +16,8 @@
 // cost:   so viel Gold kostet der Aufstieg auf dieses Level
 // gift:   gibt es beim Aufstieg gratis ins Laden-Lager (zu Beginn jedes
 //         Levels ein Rohstoff; Level 1: der Holzstamm im Startvorrat)
-// quests: Aufträge, die man AUF diesem Level erledigt. Ihre Erfahrung reicht
-//         zusammen genau für den Aufstieg auf das nächste Level.
+// quests: Aufträge, die man AUF diesem Level erledigt. Sind alle abgegeben,
+//         geht der Aufstieg auf das nächste Level.
 //         from: wer bestellt, text: wofür, items: was abgegeben wird.
 //         „{name}“ im Text wird zum Namen des Spielers (v0.50.0).
 // Mengen sind Platzhalter (Tobias: Man soll für die Stückzahl schon ein wenig
@@ -247,7 +248,8 @@ export const MAX_LEVEL = Math.max(...Object.keys(LEVELS).map(Number));
 
 // Belohnung eines Auftrags, berechnet aus dem Wert der verlangten Waren:
 // Gold genau so viel wie an der Theke (Tobias: nicht mehr – man macht die
-// Aufträge wegen der Erfahrung), Erfahrung 3 je 10 Gold Warenwert.
+// Aufträge wegen der Erfahrung), Erfahrung 3 je 10 Gold Warenwert. Seit
+// v0.56.0 zählt die Erfahrung nur noch im Hintergrund (state.xpTotal).
 // v0.23.0: Seit die Preise durch 3 geteilt sind, gibt es 3 statt 1 Erfahrung
 // je 10 Gold – so bleibt die Erfahrung je Auftrag und Level wie vorher.
 export const QUEST_REWARD = { goldFactor: 1, xpPerGold: 0.3 };

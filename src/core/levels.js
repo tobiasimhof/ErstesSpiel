@@ -4,16 +4,18 @@
 // - Gebäude und Rohstoffe haben in ihrer Datentabelle ein Level.
 // - Waren gehören zum Level des Gebäudes, das sie herstellt.
 // - Das Spiel zählt alles, was hergestellt wird (state.produced).
-// - v0.13.0 (Tobias): Aufsteigen braucht Erfahrung aus den Aufträgen der
-//   Bewohner (quests.js) und kostet Gold. Die alten Ziele („1 Holzplatte und
+// - v0.13.0 (Tobias): Aufsteigen braucht die Aufträge der Bewohner
+//   (quests.js) und kostet Gold. Die alten Ziele („1 Holzplatte und
 //   1 Holzstab hergestellt“) gibt es nicht mehr.
+// - v0.56.0 (Tobias, Chat 32): Es zählt, ob alle Aufträge abgegeben sind, nicht
+//   mehr die Erfahrung („1 von 4“).
 
 import { BUILDINGS, BUILD_MENU } from './data/buildings.js';
 import { ITEMS } from './data/items.js';
 import { LEVELS, MAX_LEVEL } from './data/levels.js';
 import { RECIPES } from './data/recipes.js';
 import { fitWorldToLevel } from './land.js';
-import { createQuestState, levelXp, xpNeeded } from './quests.js';
+import { allQuestsDone, createQuestState } from './quests.js';
 import { addAllToStorage } from './shop.js';
 
 export { LEVELS, MAX_LEVEL };
@@ -94,16 +96,12 @@ export function nextLevelCost(state) {
   return next ? (next.cost ?? 0) : null;
 }
 
-// Erfahrung genug für das nächste Level?
-export function hasEnoughXp(state) {
-  return Boolean(LEVELS[state.shopLevel + 1]) && levelXp(state) >= xpNeeded(state.shopLevel);
-}
-
-// Was fehlt noch zum Aufstieg? 'max' (es gibt kein höheres Level), 'xp',
-// 'gold' oder null (es geht).
+// Was fehlt noch zum Aufstieg? 'max' (es gibt kein höheres Level), 'quests'
+// (noch nicht alle Aufträge abgegeben; v0.56.0, vorher 'xp'), 'gold' oder
+// null (es geht).
 export function levelUpBlocker(state) {
   if (!LEVELS[state.shopLevel + 1]) return 'max';
-  if (!hasEnoughXp(state)) return 'xp';
+  if (!allQuestsDone(state)) return 'quests';
   if (state.gold < nextLevelCost(state)) return 'gold';
   return null;
 }
@@ -120,10 +118,9 @@ export function canLevelUp(state) {
 export function levelUp(state) {
   if (!canLevelUp(state)) return null;
   const cost = nextLevelCost(state);
-  const rest = Math.max(0, levelXp(state) - xpNeeded(state.shopLevel));
   state.gold -= cost;
   state.shopLevel++;
-  state.quest = { ...createQuestState(), xp: rest };
+  state.quest = createQuestState();
   const gift = { ...(LEVELS[state.shopLevel].gift ?? {}) };
   addAllToStorage(state, gift);
   const moreLand = fitWorldToLevel(state);

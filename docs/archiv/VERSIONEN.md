@@ -4,6 +4,26 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.56.0 – Aufstieg mit „1 von 4“: Aufträge statt Erfahrung (26.11.2026)
+
+**Vorgenommen:**
+- Den Fehler aus v0.55.1 beheben, wie Tobias es vorgeschlagen hat (Chat 32): „Statt Erfahrung könnten wir auch einfach 1 von 4 sagen. Das macht es evtl. einfacher.“ – „Ansonsten setz gerne alles um“. „Strecke leeren kann so bleiben.“
+
+**Fragen, die wir uns gestellt haben:**
+- Fehlerkorrektur (v0.55.2) oder neuer Schritt? → v0.56.0: Es ändert sich eine Spielregel und was man sieht, nicht nur ein Fehler.
+- Was heißt „statt Erfahrung“? → Claudes Lesart: Der Aufstieg zählt die abgegebenen Aufträge, und die Erfahrung ist im Spiel nicht mehr zu sehen (Belohnung, Bestätigung, Meldung, Test-Knopf nur noch mit Gold). Im Hintergrund zählt sie weiter (`xpTotal`), für die späteren Verbesserungen mit Erfahrung.
+- Braucht Tobias' Spielstand eine Umwandlung? → Nein: Er hat auf Level 14 alle 4 Aufträge abgegeben (`quest.index` 4) und kann sofort aufsteigen. Das Spielstand-Format bleibt 21; `quest.xp` zählt nur noch mit, übrige Erfahrung wandert beim Aufstieg nicht mehr ins nächste Level.
+
+**Gemacht:**
+- Regeln: `quests.js` (`questsDone`, `allQuestsDone`; `xpNeeded` heißt jetzt `xpOfLevel` – die Erfahrung, die alle Aufträge eines Levels zusammen geben; `levelXp` entfällt), `levels.js` (`levelUpBlocker` meldet `'quests'` statt `'xp'`, `hasEnoughXp` entfällt, Aufstieg ohne übrige Erfahrung), Kommentare in `data/levels.js`.
+- Oberfläche: `ui/levels.js` (Leiste „Aufträge für Level 15 · 1 von 4“, Hinweise „Noch 1 Auftrag …“, „Alle Aufträge erledigt! …“, Belohnung nur Gold, Test-Knopf „zählt als abgegeben“, Text im Reiter „Ort & Level“), `hud.js` (kleine Leiste im Knopf zeigt die Aufträge), `main.js` (Meldung unten nur mit Gold; für den Browser-Test `questCount` statt `xpNeeded`), `style.css` (Kommentar). `tools/zahlen.mjs` nutzt `xpOfLevel` (`ZAHLEN.md` unverändert).
+- Tests: `quests.test.js` (Aufstieg erst nach allen Aufträgen; Tobias' Fall: Level 14 mit 3.829 Erfahrung steigt auf, auch nach dem Laden; viel Erfahrung ersetzt keinen Auftrag); alle Tests, die zum Aufsteigen Erfahrung setzten, setzen jetzt die Aufträge als abgegeben; Browser-Tests `fabrik.cjs` (Leiste „0 von 3“ … „3 von 3“, „0 von 4“ auf jedem neuen Level, Belohnung ohne Erfahrung) und `spiel3d.cjs`.
+- Doku: `SPIEL.md`, `LEVEL.md`, `STAND.md` (offene Fragen 6 und 7), Archiv. Versionsnummer 0.56.0.
+
+**Geprüft:**
+- `npm test`: 479 Tests bestanden (3 neue, 1 ersetzt).
+- Browser-Test, alle Teile bestanden: Durchspielen 982 Prüfungen (Tablet und Handy bis Level 15; Leiste „0 von 3“ … „3 von 3“, auf jedem neuen Level „0 von 4“, Belohnung ohne Erfahrung), 3D-Ansicht 210, Einführung 100. Der erste Lauf fand 8 vergessene Prüfungen, die nach allen Aufträgen noch die volle Erfahrung („816 / 816“ …) erwarteten – auf „4 von 4“ umgestellt. Screenshots des Level-Fensters angesehen (Tablet und Handy).
+
 ### v0.55.1 – Tobias' Rückmeldung zu v0.55.0: Aufstieg auf Level 15 blockiert (26.11.2026, nur Doku)
 
 **Vorgenommen:**
