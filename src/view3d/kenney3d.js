@@ -544,6 +544,51 @@ function medievalBuilding(lib, building) {
       ], 0.075);
       break;
     }
+    case 'kraeutermuehle': {
+      // v0.57.0: Müllerin Gretes Kräutermühle (Level 16) – hinten ein kleines
+      // Steinhaus mit Spitzdach, vorn ein Kollergang: In einer runden Steinwanne
+      // läuft ein aufrecht stehender Mahlstein an einem Holzarm im Kreis (dreht
+      // sich beim Mahlen um die Hochachse), in der Wanne goldener Heilpuder,
+      // daneben ein Korb mit Ringelblüten; beim Mahlen steigt Staub auf.
+      const h = house(lib, color, {
+        walls: {
+          N: ['wall', 'wall'],
+          W: ['wall', 'wall-window-small'],
+          E: ['wall-window-small', 'wall'],
+          S: ['wall-door', 'wall'],
+        },
+        roof: 'roof-point',
+        roofHeight: 2,
+      });
+      h.scale.setScalar(0.7);
+      h.position.set(-0.3, 0, -0.32);
+      g.add(h);
+      // Steinwanne mit Rand, darin der Heilpuder
+      const mx = 0.34;
+      const mz = 0.5;
+      g.add(plain(new THREE.CylinderGeometry(0.42, 0.45, 0.14, 18), '#8f877b', { x: mx, y: 0.07, z: mz }));
+      g.add(plain(new THREE.CylinderGeometry(0.36, 0.36, 0.02, 18), '#e0a800', { x: mx, y: 0.145, z: mz }));
+      // Der Kollergang: Achse in der Mitte, Holzarm, aufrechter Mahlstein
+      const runner = new THREE.Group();
+      runner.position.set(mx, 0.15, mz);
+      runner.add(plain(new THREE.CylinderGeometry(0.035, 0.035, 0.42, 8), '#7a5230', { y: 0.21 }));
+      runner.add(plain(new THREE.BoxGeometry(0.5, 0.05, 0.05), '#7a5230', { x: 0.1, y: 0.2 }));
+      const stone = plain(new THREE.CylinderGeometry(0.15, 0.15, 0.08, 16), '#b5ada0', { x: 0.2, y: 0.15 });
+      stone.rotation.x = Math.PI / 2;
+      runner.add(stone);
+      g.add(runner);
+      parts.spin = [{ obj: runner, axis: 'y', speed: 1.1 }];
+      parts.dustSpot = new THREE.Vector3(mx, 0.3, mz);
+      // Korb mit Ringelblüten neben der Wanne
+      g.add(plain(new THREE.CylinderGeometry(0.13, 0.1, 0.14, 10), '#a0703c', { x: 0.82, y: 0.07, z: -0.05 }));
+      stones(g, '#f59f00', [
+        [0.78, 0.16, -0.08],
+        [0.86, 0.16, -0.02],
+        [0.82, 0.18, -0.1, 0.9],
+        [0.88, 0.15, -0.1, 0.8],
+      ], 0.05);
+      break;
+    }
     case 'lagerhaus': {
       // offener Schuppen auf vier Pfosten, darunter Bretter und ein Karren
       for (const [x, z] of [[-0.88, -0.4], [0.88, -0.4], [-0.88, 0.4], [0.88, 0.4]]) {

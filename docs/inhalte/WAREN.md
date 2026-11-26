@@ -55,6 +55,8 @@
 | Mörser | Zimmerei: 1 Steinplatte + 5 Holzstäbe (Schale aus Stein, Stößel aus Holz) | 10 s | 43 |
 | Tinktur | Apotheke: 1 Fläschchen + 1 Kräutermischung (die Grundzutat aller Tränke) | 30 s | 346 |
 | Traumtrank | Zauberkessel: 1 Tinktur + 5 Kamillenblüten, Feuer 5 Holzkohle (bauchiges Fläschchen mit lila Trank) | 60 s | 547 |
+| Heilpuder | Kräutermühle: 5 Ringelblüten (Leinensäckchen mit goldgelbem Pulver) | 15 s | 72 |
+| Heiltrank | Zauberkessel: 1 Tinktur + 2 Heilpuder, Feuer 5 Holzkohle (Fläschchen mit rotem Trank) | 60 s | 600 |
 
 - Rohstoffe und Pflanzen kommen nicht aufs Band und nicht ins Lagerhaus; man legt sie direkt ins Gebäude. Pflanzen kann man nicht kaufen und nicht verkaufen.
 - **Aussehen der Kräuter** (`bloom` in `data/items.js`): Flachs hohe Halme mit kleinen blauen Blüten, Ringelblume eine große orange Blüte mit braunem Knopf, Schafgarbe ein flacher weißer Schirm aus Pünktchen über gefiederten Blättern, Kamille Gänseblümchen mit dickem gelbem Knopf. Samen sind eine Tüte in ihrer Farbe mit dem Bild der Pflanze (`grows`).

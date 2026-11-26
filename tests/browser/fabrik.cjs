@@ -2727,6 +2727,118 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.tap('#info-close');
   await sleep(100);
 
+  // ---------- Level 16: Die Kräutermühle (v0.57.0) ----------
+  await page.tap('#btn-level');
+  await sleep(150);
+  for (let i = 0; i < 4; i++) {
+    await page.locator('#modal-content button', { hasText: '🧪 Test: Auftrag erledigen' }).tap();
+    await sleep(200);
+  }
+  const l15done = await page.textContent('#modal-content');
+  check(
+    l15done.includes('4 von 4') &&
+      l15done.includes('Nächstes Level: Level 16 · Die Kräutermühle') &&
+      l15done.includes('Kräutermühle') &&
+      l15done.includes('Zauberkessel: Heiltrank') &&
+      !l15done.includes('🎁'),
+    'Level 15 erledigt; Level 16 kündigt Kräutermühle und Heiltrank an, ohne Geschenk',
+  );
+  const world15 = await game(page, () => ({ ...window.__game.state.world }));
+  await game(page, () => (window.__game.state.gold += 17500));
+  await sleep(450);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 16 · 17.500' }).tap();
+  await sleep(150);
+  const letter16 = await readLetter(page);
+  const lvl16 = await game(page, () => ({ level: window.__game.state.shopLevel, world: { ...window.__game.state.world } }));
+  check(lvl16.level === 16 && JSON.stringify(lvl16.world) === JSON.stringify(world15), `Aufstieg auf Level 16 für 17.500 Gold, keine neue Fläche (${JSON.stringify(lvl16)})`);
+  const lvl16Text = await page.textContent('#modal-content');
+  check(
+    lvl16Text.includes('Level 16 erreicht!') && lvl16Text.includes('Die Kräutermühle') && lvl16Text.includes('50 Heilpuder') && lvl16Text.includes('0 von 4'),
+    'Level 16: Grete möchte 50 Heilpuder, Aufträge 0 von 4',
+  );
+  check(letter16.includes('Laden-Level 16!') && letter16.includes('Kräutermühle') && letter16.includes('Grete'), `Schriftrolle: Grete und die Kräutermühle (${letter16.slice(0, 200)})`);
+  await shot('27a-level-16');
+  await page.tap('#modal-close');
+  await sleep(120);
+  // Kräutermühle bauen: aus der Bauleiste (Reiter „Stein“, jetzt 4 Gebäude)
+  await game(page, () => {
+    const st = window.__game.state.storage;
+    st.moerser = (st.moerser ?? 0) + 10;
+    st.raederwerk = (st.raederwerk ?? 0) + 4;
+  });
+  await page.tap('#btn-build');
+  await sleep(120);
+  await tapBuild(page, 'kraeutermuehle');
+  await sleep(150);
+  if (!(await game(page, () => window.__game.ui.ghost?.valid === true))) {
+    const spot = await game(page, () => {
+      const g = window.__game;
+      const p = g.state.plot;
+      for (let y = p.y; y < p.y + p.height - 1; y++) {
+        for (let x = p.x; x < p.x + p.width - 1; x++) {
+          if ([0, 1].every((dx) => [0, 1].every((dy) => g.isFree(x + dx, y + dy)))) return [x, y];
+        }
+      }
+      return null;
+    });
+    const ghostAt = await game(page, () => ({ ...window.__game.ui.ghost }));
+    if (spot) {
+      await showTiles(page, [[ghostAt.x, ghostAt.y], spot], 2);
+      await touchDragTiles(page, cdp, [[ghostAt.x, ghostAt.y], spot]);
+      await sleep(150);
+    }
+  }
+  check((await mode(page)) === 'place' && (await game(page, () => window.__game.ui.ghost?.valid === true)), 'Kräutermühle wählen: Vorschau auf freier Fläche');
+  await page.tap('#tool-confirm');
+  await sleep(150);
+  await page.tap('#build-close').catch(() => {});
+  await sleep(100);
+  const muehle = await game(page, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'kraeutermuehle');
+    return b && { x: b.x, y: b.y, paid: b.paid, recipe: b.prod.recipe, moerser: window.__game.state.storage.moerser ?? 0 };
+  });
+  check(Boolean(muehle) && muehle.recipe === 'heilpuder' && muehle.paid?.moerser === 10 && muehle.paid?.raederwerk === 4, `Kräutermühle gebaut für 10 Mörser + 4 Räderwerke (${JSON.stringify(muehle)})`);
+  await tapTile(page, muehle.x, muehle.y);
+  await sleep(450);
+  check((await page.textContent('#info-title')) === 'Kräutermühle', 'Kräutermühle antippen zeigt Infofenster');
+  check((await infoFits(page)).length === 0, `Infofenster der Kräutermühle: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+  await game(page, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'kraeutermuehle');
+    b.prod.stock = { ringelbluete: 5 };
+    window.__game.simulate(1);
+  });
+  await sleep(450);
+  check((await page.textContent('#info-meta')).includes('Arbeitet'), 'Die Mühle mahlt');
+  await shot('27b-kraeutermuehle');
+  await game(page, () => window.__game.simulate(15));
+  const ground = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'kraeutermuehle').prod.out);
+  check(ground?.type === 'heilpuder', `Nach 15 s ist ein Heilpuder fertig (${JSON.stringify(ground)})`);
+  await page.tap('#info-close');
+  await sleep(100);
+  // Den Kessel per Touch auf Heiltrank umstellen und brauen
+  const kessel16 = await game(page, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'zauberkessel');
+    b.prod.out = null;
+    return { x: b.x, y: b.y };
+  });
+  await tapTile(page, kessel16.x, kessel16.y);
+  await sleep(450);
+  check((await page.textContent('#info-title')) === 'Zauberkessel', 'Zauberkessel antippen zeigt Infofenster');
+  check((await recipeOption(page, 'heiltrank').getAttribute('aria-label')) === 'Umstellen auf Heiltrank: 1 Tinktur + 2 Heilpuder', 'Ab Level 16: Umstellen auf Heiltrank');
+  await recipeOption(page, 'heiltrank').tap();
+  await sleep(450);
+  check((await infoFits(page)).length === 0, `Zauberkessel auf Heiltrank: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+  await game(page, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'zauberkessel');
+    b.prod.stock = { tinktur: 1, heilpuder: 2 };
+    window.__game.simulate(61);
+  });
+  const healed = await game(page, () => window.__game.state.buildings.find((b) => b.type === 'zauberkessel').prod.out);
+  check(healed?.type === 'heiltrank', `Nach 60 s ist ein Heiltrank fertig (${JSON.stringify(healed)})`);
+  await shot('27c-heiltrank');
+  await page.tap('#info-close');
+  await sleep(100);
+
   await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)
   await page.tap('#info-close').catch(() => {});
   await shot('17-fabrik');

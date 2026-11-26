@@ -341,7 +341,29 @@ export const BUILDINGS = {
       { kind: 'in', x: 0, y: 1, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['traumtrank'], fuel: { item: 'holzkohle', capacity: 100 } },
+    // v0.57.0: auf Level 16 dazu der Heiltrank (Rezept mit level: 16)
+    production: { kind: 'workshop', recipes: ['traumtrank', 'heiltrank'], fuel: { item: 'holzkohle', capacity: 100 } },
+  },
+  // v0.57.0: Level 16 „Die Kräutermühle“ – Müllerin Gretes Idee aus Level 14
+  // („Könnte man Kräuter nicht auch mit Wasserkraft mahlen?“). Reiter „Stein“
+  // (Mahlstein): 1 Eingang wie der Steinmetz. Gebaut aus Mörsern (die
+  // Mahlschalen) und Räderwerken (der Antrieb) – so haben die Mörser eine
+  // Verwendung (Entwurf v0.57.0, Tobias, Chat 32: „das passt alles so“). Im
+  // Entwurf 10 Mörser + 5 Räderwerke (970 Gold); 4 Räderwerke (862 Gold), damit
+  // die Grenze für Baukosten (960 Gold, `GEBAEUDE.md`) hält.
+  kraeutermuehle: {
+    level: 16,
+    name: 'Kräutermühle',
+    cost: { moerser: 10, raederwerk: 4 },
+    icon: '🌼',
+    size: [2, 2],
+    color: TAB_COLORS.stein,
+    tip: 'Ringelblüten kommen am blauen Pfeil hinein, der Heilpuder am orangen heraus.',
+    ports: [
+      { kind: 'in', x: 0, y: 0, side: 'W' },
+      { kind: 'out', x: 1, y: 0, side: 'E' },
+    ],
+    production: { kind: 'workshop', recipes: ['heilpuder'] },
   },
   lagerhaus: {
     level: 1,
@@ -379,8 +401,8 @@ export const BUILD_TABS = [
   // v0.26.0: der Kohlenmeiler (Level 9) macht aus Holzstämmen Holzkohle;
   // v0.31.0 heißt er „Ofen“ und bleibt hier (Tobias, Chat 22)
   { id: 'holz', name: 'Holz', item: 'holzstamm', color: TAB_COLORS.holz, buildings: ['holzfaeller', 'saegewerk', 'zimmerei', 'kohlenmeiler'] },
-  // v0.55.0: dazu der Zauberkessel (Level 15)
-  { id: 'stein', name: 'Stein', item: 'felsbrocken', color: TAB_COLORS.stein, buildings: ['steinbruch', 'steinmetz', 'zauberkessel'] },
+  // v0.55.0: dazu der Zauberkessel (Level 15), v0.57.0 die Kräutermühle (Level 16)
+  { id: 'stein', name: 'Stein', item: 'felsbrocken', color: TAB_COLORS.stein, buildings: ['steinbruch', 'steinmetz', 'zauberkessel', 'kraeutermuehle'] },
   { id: 'eisen', name: 'Eisen', item: 'eisenerz', color: TAB_COLORS.eisen, buildings: ['schmelzhuette', 'schmiede', 'feinschmiede', 'schlosserei'] },
   // v0.19.0 (Tobias): Der Reiter heißt „Erde“ – Holz, Stein, Eisen, Erde. Die
   // id bleibt, damit der gemerkte Reiter in den Einstellungen weiter passt.
