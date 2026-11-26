@@ -4,6 +4,20 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.57.2 – Tobias' Antworten zu Level 17, Grundsätze für danach (26.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Antworten zum Entwurf Level 17 festhalten (Chat 32, mit einem Bild seiner Fabrik auf Level 16): angenommen mit Linse aus 10 Glas; dazu drei Grundsätze für danach.
+
+**Fragen, die wir uns gestellt haben:**
+- Was heißt „höchstens 4 Einstellungen je Maschine“ heute? → Zimmerei und Apotheke haben 4, mit Level 17 auch Steinmetz und Uhrmacherei – diese vier sind dann voll; neue Waren für sie brauchen eine neue Maschine.
+
+**Gemacht:**
+- `STAND.md` (Status, Tobias' Fabrik, offene Fragen 13 und 17, Arbeitsschritt), `AUSBLICK.md`, `PLAENE.md`, `GESPRAECHE.md`, `ENTSCHEIDUNGEN.md`. Versionsnummer 0.57.2. Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 489 Tests bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.57.1 – Entwurf Level 17 „Die Sternwarte“ (26.11.2026, nur Doku)
 
 **Vorgenommen:**
