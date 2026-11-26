@@ -61,6 +61,54 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.58.0 – Level 17 „Die Sternwarte“: Linse, Fernrohr, Kristallsand (Chat 32, v0.57.1; wartet auf Tobias' Antworten)
+
+**Tobias (Chat 32, nach v0.57.0):** „Perfekt. Ich teste gerade noch level 15 und bin gerade bei der dritten Aufgabe. Lass uns theoretisch schon mal level 17 aufschlüsseln, damit wir damit schon eine kleine übersicht haben“
+
+**Ziel:** Ein Werkzeug-Level im Tränke-Kapitel, wie im Grobplan (2. Fassung, angenommen in Chat 27; der Name Kristallsand ist von Tobias). Keine neue Maschine, kein neuer Rohstoff, keine neue Fläche – zwei alte Maschinen bekommen neue Einstellungen (Leitlinie „alte Maschinen, neue Funktionen“): Der **Steinmetz** schleift aus Glas **Linsen** und mahlt **Kristallsand**, die **Uhrmacherei** baut aus Linsen und Eisenblech **Fernrohre**. Kristallsand ist die Zutat des Manatranks auf Level 18 – auf Level 17 sammelt Ambrosius ihn schon. Kein bestehendes Rezept ändert sich.
+
+**Geschichte:** „Kaspars Sternenuhr hat den Ort neugierig gemacht: Auf dem Hügel über dem Fluss baut Anton eine Sternwarte. Berta schleift dafür Linsen aus Glas, Kaspar baut Fernrohre daraus – und Ambrosius sammelt den feinen, glitzernden Staub, der beim Schleifen übrig bleibt.“
+
+**Neue Einstellungen** (Steinmetz und Uhrmacherei haben danach je 4, wie Zimmerei und Apotheke):
+
+| Maschine | Einstellung | Rezept | Zeit | Wert |
+|---|---|---|---|---|
+| Steinmetz | Linsen | 10 Glas → 1 Linse | 30 s | 144 |
+| Steinmetz | Kristallsand | 5 Glas → 1 Kristallsand | 10 s | 72 |
+| Uhrmacherei | Fernrohre | 2 Linsen + 10 Eisenbleche (das Rohr) → 1 Fernrohr | 60 s | 634 |
+
+Aussehen: Linse – runde, flache Glasscheibe mit Glanz (hellblau wie das Glas); Kristallsand – kleines Häufchen glitzernder, fast weißer Körner; Fernrohr – Eisenrohr mit Messingringen, vorn die Linse.
+
+**Rechenwerkzeug (an einer Kopie der Daten):** Das Fernrohr kostet 403 Gold an Rohstoffen (+57 %); eine Straße macht 16 Stück je Stunde = **10.144 Gold/h** – die beste Ware je Stunde (Sternenuhr 8.840, Heiltrank 6.000), Engpass die Schmelzhütte (Eisenbleche). Linse und Kristallsand bringen nur +31 % auf den Sand (Glas ist schon billig), Engpass der Ofen. **Für Tobias' Fabrik:** Glas gibt es nur im Ofen, der auch die Holzkohle für den Kessel macht – für Linsen lohnt ein eigener Ofen für Glas (ein Sand gibt 100 Glas in 15 Minuten = 10 Linsen); der Steinmetz für Glas steht am besten an einer eigenen Straße.
+
+| Variante | Linse aus | Fernrohr | eine Straße |
+|---|---|---|---|
+| **B (Empfehlung)** | 10 Glas (144 Gold) | 634 Gold | 10.144 Gold/h |
+| A | 5 Glas (72 Gold) | 461 Gold | 7.376 Gold/h – weniger als die Sternenuhr von Level 11 |
+
+**Aufträge** (zusammen **23.437 Gold**, ×1,21 gegenüber Level 16):
+
+| # | Wer | Was | Wert |
+|---|---|---|---|
+| 1 | Steinmetzin Berta | 20 Linsen – „Glas schleifen ist feiner als Stein hauen. Zeig mir, dass deine Linsen klar genug für die Sternwarte sind.“ | 2.880 |
+| 2 | Uhrmacher Kaspar (zum ersten Mal mit einem Auftrag) | 10 Fernrohre – „Ein Rohr aus Eisenblech, vorn eine Linse, hinten eine Linse – und plötzlich ist der Mond ganz nah.“ | 6.340 |
+| 3 | Baumeister Anton | 300 Steinplatten + 3 Sternenuhren + 3 Fernrohre – „Die Sternwarte steht! Für den Turm fehlen noch Steinplatten, Sternenuhren und Fernrohre.“ | 7.017 |
+| 4 | Magier Ambrosius | 50 Kristallsand + 6 Heiltränke – „Der Staub vom Linsenschleifen glitzert wie Sternenlicht. Sammle ihn für mich – ich habe eine Idee für einen ganz besonderen Trank.“ | 7.200 |
+
+Rechenwerkzeug: Rohstoffe 14.895 Gold (7,4 Sand, 4,8 Eisenerz, 8,6 Felsbrocken, 1,1 Holzstamm, wenig Samen), 2,4 Pflanzen, Maschinenzeit 7,9 h, Engpass mit je einem Gebäude der Steinbruch (2,2 h für die 300 Steinplatten).
+
+**Aufstieg auf Level 17:** 20.000 Gold (die Reihe 15.000 → 17.500 → 20.000), kein Geschenk, keine neue Fläche; der Laden bleibt wie auf Level 16.
+
+**Was sich im Spiel ändert (v0.58.0):** drei neue Waren mit Warenbild und 3D-Form, zwei neue Einstellungen im Steinmetz, eine in der Uhrmacherei, Level 17 mit Geschichte, Aufträgen und Brief; keine neue Spielregel, kein neues Spielstand-Format, kein neues Haus. Tests (neue Datei für Level 17, Durchspielen bis Level 17), Doku.
+
+**Zur Übersicht – Level 18 „Die Zauberei“** (Grobplan, Abschluss des Tränke-Kapitels): Farn als 5. Pflanze → Farnwedel; Kessel: Lebenstrank (Heiltrank + Farnwedel) und Manatrank (Traumtrank + Kristallsand). Danach (Ideen): Astrolabium (Sternenuhr + Fernrohr), Lupe, Alterstrank.
+
+**Fragen an Tobias:**
+1. Passen die neuen Einstellungen: Steinmetz schleift Linsen und mahlt Kristallsand, Uhrmacherei baut Fernrohre?
+2. Linse aus 10 Glas und Fernrohr aus 2 Linsen + 10 Eisenblechen (B) – oder A?
+3. Passen Geschichte, Namen (Uhrmacher Kaspar bekommt zum ersten Mal Aufträge), die vier Aufträge und der Aufstieg für 20.000 Gold?
+4. Die „Zauber des Magiers“ (neue Ausgabe fürs Gold): vor oder nach Level 17 durchdenken?
+
 ### Entwurf v0.57.0 – Level 16 „Die Kräutermühle“: Heilpuder und Heiltrank; dazu v0.56.2 „schneller live“ (Chat 32, v0.56.1; angenommen: „Ja, das passt alles so. Lass uns A machen deine Empfehlung“ – umgesetzt in v0.56.2 und v0.57.0; Baukosten der Mühle 10 Mörser + 4 statt 5 Räderwerke, wegen der Grenze von 960 Gold)
 
 **Tobias (Chat 32, nach v0.56.0):** „Alles klar, danke ich werd es direkt probieren. Lass uns in der zwischenzeit schon mal das nächste level theoretisch durch gehen und evtl. auch überlegen, wie wir das ganze schneller live mergen können, weil die letzte session für diesen schritt auf v56 schon sehr lange gedauert hat.“

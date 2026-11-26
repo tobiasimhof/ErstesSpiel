@@ -4,6 +4,21 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.57.1 – Entwurf Level 17 „Die Sternwarte“ (26.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Level 17 schon theoretisch aufschlüsseln, während Tobias Level 15 testet (Chat 32).
+
+**Fragen, die wir uns gestellt haben:**
+- Wie viel Glas gehört in eine Linse? → Mit dem Rechenwerkzeug an einer Kopie der Daten zwei Varianten gerechnet: Aus 5 Glas (72 Gold) brächte das Fernrohr nur 7.376 Gold/h je Straße – weniger als die Sternenuhr von Level 11. Aus 10 Glas (144 Gold) wird das Fernrohr (634 Gold) mit 10.144 Gold/h die beste Ware je Stunde – Empfehlung.
+- Wer gibt die Aufträge? → Steinmetzin Berta (Level 2) und Uhrmacher Kaspar (bisher nur in der Geschichte von Level 11) kommen zurück, dazu Baumeister Anton und Magier Ambrosius, der den Kristallsand für Level 18 sammelt.
+
+**Gemacht:**
+- Entwurf v0.58.0 in `PLAENE.md`; `STAND.md`, `AUSBLICK.md`, `GESPRAECHE.md`. Versionsnummer 0.57.1. Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 489 Tests bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.57.0 – Level 16 „Die Kräutermühle“: Heilpuder und Heiltrank (26.11.2026)
 
 **Vorgenommen:**

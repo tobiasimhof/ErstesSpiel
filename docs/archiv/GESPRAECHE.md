@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 26.11.2026 – Chat 32: Rückmeldung zu Level 15 – Aufstieg blockiert, „1 von 4“ statt Erfahrung, Entwurf Level 16, Browser-Test parallel (v0.55.1, v0.56.0, v0.56.1, v0.56.2, v0.57.0)
+### 26.11.2026 – Chat 32: Rückmeldung zu Level 15 – Aufstieg blockiert, „1 von 4“ statt Erfahrung, Entwurf Level 16, Browser-Test parallel, Level 16, Entwurf Level 17 (v0.55.1, v0.56.0, v0.56.1, v0.56.2, v0.57.0, v0.57.1)
 
 **Tobias** (mit Bild: Level 14, „Alle Aufträge dieses Bauabschnitts sind erledigt. Jetzt kannst du auf Level 15 aufsteigen.“, Erfahrung 3.829 / 3.976, Knopf „Aufsteigen auf Level 15 · 15.000“ grau, darunter „Noch 147 Erfahrung – gib die Aufträge der Bewohner ab.“): „Hey, bringe dich auf den aktuellen Stand. Ich wollte dir noch ein Feedback zum letzten Update geben. Ich hab meinen Browser aktualisiert und kann leider nicht aufsteigen, weil mir die Erfahrung dafür fehlt. Ich hab nicht weiter produziert, weil ich nicht weiter Gold verdienen wollte, deswegen ist alles stehen geblieben und ich hab manchmal per Hand vom Band eingesammelt. Vermutlich wurde das per hand einsammeln einfach addidiert zum Laden-Lager bzw. ich habe es gerade getestet. Ich kann die Strecken trotzdem leeren, obwohl das lager voll ist. Die Fenster kannst du erstmal so lassen wie sie sind.“
 
@@ -29,6 +29,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat v0.56.2 umgesetzt (Browser-Test parallel; B und D nicht, wie gewählt) und mit Level 16 nach dem Entwurf begonnen (v0.57.0). Beim Umsetzen fielen zwei bestehende Regeln auf: Kein Gebäude kostet mehr als 960 Gold an Waren (10 Mörser + 5 Räderwerke wären 970) – deshalb 10 Mörser + 4 Räderwerke (862 Gold).
 
 **Umgesetzt:** v0.56.2, v0.57.0 (Level 16 „Die Kräutermühle“ nach dem Entwurf; Baukosten 10 Mörser + 4 Räderwerke).
+
+**Tobias:** „Perfekt. Ich teste gerade noch level 15 und bin gerade bei der dritten Aufgabe. Lass uns theoretisch schon mal level 17 aufschlüsseln, damit wir damit schon eine kleine übersicht haben“
+
+**Claude** hat den Entwurf für Level 17 „Die Sternwarte“ geschrieben und mit dem Rechenwerkzeug an einer Kopie der Daten nachgerechnet (`PLAENE.md`): keine neue Maschine – der Steinmetz schleift Linsen (10 Glas, 144 Gold) und mahlt Kristallsand (5 Glas, 72 Gold), die Uhrmacherei baut Fernrohre (2 Linsen + 10 Eisenbleche, 634 Gold, die beste Ware je Stunde); Aufträge von Steinmetzin Berta, Uhrmacher Kaspar, Baumeister Anton und Magier Ambrosius (23.437 Gold, ×1,21), Aufstieg 20.000; zur Übersicht Level 18. 4 Fragen.
+
+**Umgesetzt:** v0.57.1 (nur Doku).
 
 ### 25.11.2026 – Chat 31: Beratung – zurück zu Logik und Leveln (v0.52.2, v0.53.0, v0.54.0, v0.54.1, v0.54.2, v0.55.0)
 
