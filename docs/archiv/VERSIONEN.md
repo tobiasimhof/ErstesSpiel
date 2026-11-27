@@ -4,6 +4,22 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.59.1 – Entwurf Level 19 „Die Landvermessung“ (27.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Den Entwurf für Level 19 schreiben und dabei Tobias' Fragen beantworten (Chat 33): Gleichgewicht laut Rechenwerkzeug, Zahl der Straßen und wie sie wachsen können, welche Endprodukte es gibt, welche neuen Produkte aus den vorhandenen Waren entstehen können.
+
+**Fragen, die wir uns gestellt haben:**
+- Welche Waren werden nirgends weiterverarbeitet? → Mit einem kleinen Auswertungs-Skript über die Datentabellen: Räderuhr, Kastenschloss, Sternenuhr, Reißbrett, Fernrohr, Kamillenkissen, Heilpäckchen, Lebenstrank, Manatrank; der Mörser nur als Baustoff der Kräutermühle.
+- Wo ist noch Platz? → 13 freie Einstellungen in alten Maschinen (Sägewerk 2, Schmiede 1, Feinschmiede 1, Schlosserei 1, Webstube 3, Kräuterstube 1, Schreibstube 1, Kräutermühle 3); voll sind Zimmerei, Steinmetz, Uhrmacherei, Apotheke und Zauberkessel. In den Reitern ist nur noch ein Gebäude-Platz frei (Werkstatt).
+- Was verlängert die Straßen am meisten? → Messtisch (Reißbrett + Fernrohr): 7 Stufen, 13 Maschinenarten aus drei Bereichen; Astrolabium (Sternenuhr + Fernrohr): 6 Stufen, 12 Maschinenarten. Beide sind je Stunde besser als das Fernrohr (11.200 bzw. 11.131 statt 10.144 Gold/h).
+
+**Gemacht:**
+- Entwurf v0.60.0 in `PLAENE.md` (mit Varianten A–C, Aufträgen, Rechenwerkzeug-Zahlen, Ideen für Level 20+ und 4 Fragen); `STAND.md`, `AUSBLICK.md`, `GESPRAECHE.md`. Versionsnummer 0.59.1. Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 512 Tests bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.59.0 – Level 18 „Die Zauberei“: Farn, Lebenstrank, Manatrank (27.11.2026)
 
 **Vorgenommen:**

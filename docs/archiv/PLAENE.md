@@ -61,6 +61,71 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
+### Entwurf v0.60.0 – Level 19 „Die Landvermessung“: Instrumentenbau, Astrolabium, Messtisch, Heilertasche (Chat 33, v0.59.1; wartet auf Tobias' Antworten)
+
+**Tobias (Chat 33, nach v0.59.0):** „Lass uns gerne schon mal den Entwurf für Level 19 machen und dabei unterschiedliche Dinge beachten: Wie sieht es aus mit den Rechenwerkzeug ( ist noch alles im Gleichgewicht )? Wir viele verschiedene Produktionsstraßen haben wir und wie könnten wir das noch erweitern ? Welche entgültigen Produkte haben wir, die wir weiterverarbeiten können ? Welche neuen Produkte könnten entstehen, wenn wir uns anschauen, mit welchen Materialien wir neue Produkte entwerfen könnten. Welchen Entwurf hast du ? Stell mir einmal deinen Entwurf vor und beantworte mir danach meine Fragen.“
+
+**Ziel:** die alten Straßen verlängern (Tobias, Chat 32: „aus der Sternenuhr, dem Fernrohr, dem Reißbrett, dem mörser wieder neue Produkte“). Drei Endprodukte werden zu Zwischenprodukten (Sternenuhr, Reißbrett, Heilpäckchen), das Fernrohr bekommt zwei Verwendungen, der Mörser eine zweite (nach den Baukosten der Kräutermühle). Ein Werkzeug-Level nach zwei Kräuter- und Tränke-Leveln (die Level wechseln sich ab).
+
+**Geschichte:** „Der Ort ist so gewachsen, dass niemand mehr weiß, wo ein Feld aufhört und das nächste anfängt. Baumeister Anton will das ganze Tal neu vermessen – und Kaspars Lehrling Emil eröffnet neben der Uhrmacherei eine eigene Werkstatt für Messinstrumente: Astrolabien für die Sternwarte, Messtische für die Landvermesser.“
+
+**Neu:**
+
+| | Was | Wert |
+|---|---|---|
+| 🧭 Instrumentenbau | neue Maschine im Reiter „Werkstatt“ (der 4. und letzte Platz; die Uhrmacherei ist voll), 2 × 2, 2 Eingänge; Baukosten 1 Zirkel + 2 Linsen (950 Gold Warenwert, unter der Grenze 960); in 3D z. B. eine Werkstatt mit einem großen Messingring (Armillarsphäre), der sich beim Arbeiten dreht | – |
+| Astrolabium | Instrumentenbau: 1 Sternenuhr + 1 Fernrohr, 90 s – eine runde Messingscheibe mit Sternenkarte und Visier: die Sternenuhr zeigt den Himmel, das Fernrohr peilt die Sterne an | 2.087 ((1.105 + 634) × 1,2) |
+| Messtisch | Instrumentenbau: 1 Reißbrett + 1 Fernrohr, 90 s – ein Zeichenbrett auf drei Beinen mit aufgesetztem Fernrohr (so wurde früher Land vermessen: anpeilen und gleich aufzeichnen) | 2.450 ((1.408 + 634) × 1,2) |
+| Heilertasche | Kräuterstube (4. Einstellung, ab Level 19): 1 Heilpäckchen + 2 Mörser, 30 s – Lederumhängetasche: das Heilpäckchen und Mörser, um unterwegs frische Kräuter zu zerstoßen | 708 ((504 + 2 × 43) × 1,2) |
+
+Keine neue Pflanze, kein neuer Rohstoff, keine neue Fläche, kein bestehendes Rezept ändert sich.
+
+**Rechenwerkzeug (an einer Kopie der Daten):**
+- Astrolabium: Rohstoffe 906 Gold (+130 %), eine Straße **11.131 Gold/h**; Messtisch: Rohstoffe 989 Gold (+148 %), **11.200 Gold/h** – beide besser als das Fernrohr (10.144), bisher die beste Ware je Stunde. Heilertasche: +123 %, 4.720 Gold/h (die Heilpäckchen-Straße hängt an den Beeten; das Heilpäckchen selbst bringt 3.360).
+- Der **Messtisch wird die längste Straße des Spiels:** 7 Stufen, 13 Maschinenarten, aus drei Bereichen (Holz und Eisen → Zeichenbrett und Reißzeug, Flachs → Zeichenbrett, Sand → Glas → Linse → Fernrohr). Astrolabium: 6 Stufen, 12 Maschinenarten (Sternenuhr und Fernrohr kommen beide aus einer Uhrmacherei – man braucht zwei, je eine pro Einstellung). Heilertasche: 7 Stufen, 10 Maschinenarten.
+- Neue wertvollste Ware an der Theke: der Messtisch (2.450) – seit Level 12 war es das Reißbrett (1.408).
+
+**Aufträge** (zusammen **33.631 Gold**, ×1,21 gegenüber Level 18):
+
+| # | Wer | Was | Wert |
+|---|---|---|---|
+| 1 | Lehrling Emil (neu) | 3 Astrolabien – „Meister Kaspars Werkstatt ist voll, also baue ich meine eigene! Eine Sternenuhr und ein Fernrohr in einem Gerät – damit vermisst man den Himmel.“ | 6.261 |
+| 2 | Baumeister Anton | 4 Messtische – „Ein Reißbrett auf drei Beinen, darauf ein Fernrohr: Damit zeichne ich das ganze Tal auf, Feld für Feld.“ | 9.800 |
+| 3 | Heilerin Agnes | 12 Heilertaschen – „Das Tal ist so groß geworden, dass ich zu den Kranken wandere. In einer Heilertasche habe ich alles dabei: das Heilpäckchen und Mörser für frische Kräuter.“ | 8.496 |
+| 4 | Bürgermeisterin Hilde | 2 Astrolabien + 2 Messtische – „Die neue Karte des Tals kommt ins Rathaus! Die Vermesser brauchen noch Messtische, und Ambrosius möchte zwei Astrolabien für die Sternwarte.“ | 9.074 |
+
+Rechenwerkzeug: Rohstoffe 14.265 Gold (7 Holzstämme, 2,5 Felsbrocken, 9 Eisenerz, 4,8 Leinsamen, 2,4 Ringelblumensamen, 1,2 Schafgarbensamen, 2,2 Sand), 8,4 Pflanzen, Maschinenzeit 9,2 h (das meiste bisher; Level 17: 7,9 h), Engpass mit je einem Gebäude die Flachspflanze (2,4 h).
+
+**Aufstieg auf Level 19:** 25.000 Gold (die Reihe 20.000 → 22.500 → 25.000), kein Geschenk, keine neue Fläche; der Laden bleibt wie auf Level 18.
+
+| Variante | Was | Folge |
+|---|---|---|
+| **A (Empfehlung)** | Instrumentenbau mit Astrolabium und Messtisch; Heilertasche in der Kräuterstube | Werkstatt-Reiter voll, Kräuterstube voll; Instrumentenbau hat noch 2 Plätze (z. B. Lupe, Kompass) |
+| B | wie A, aber der Messtisch in der Schreibstube (ihr freier 4. Platz – sie macht ja schon das Reißbrett) | der Instrumentenbau hat anfangs nur 1 Einstellung (wie die Kräutermühle) und mehr Platz für später; die Schreibstube ist voll |
+| C | wie A, ohne Heilertasche | der Mörser bleibt nur Baustoff; der 3. Auftrag braucht eine andere Ware |
+
+**Was sich im Spiel ändert (v0.60.0):** eine neue Maschine mit eigenem 3D-Haus, drei neue Waren mit Warenbild und 3D-Form, eine neue Einstellung der Kräuterstube, Level 19 mit Geschichte, Aufträgen und Brief; voraussichtlich kein neues Spielstand-Format. Tests (neue Datei für Level 19, Durchspielen bis Level 19), Doku.
+
+**Danach – Ideen für Level 20 und später (aus den Waren, die es schon gibt):**
+
+| Idee | Zutaten | Wo | Wert etwa |
+|---|---|---|---|
+| Schatztruhe | 1 Kastenschloss + 5 Verstärkte Holzplatten | Schlosserei (freier Platz) | 2.851 |
+| Laterne | 5 Eisenbleche + 5 Glas | Feinschmiede (freier Platz) | 216 |
+| Lupe | 1 Linse + 5 Eisenstangen | Feinschmiede oder Instrumentenbau | 317 |
+| Tinte | 1 Fläschchen + 10 Holzkohle | Schreibstube (freier Platz) | 110 |
+| Standuhr | 1 Räderuhr + 3 Verstärkte Holzplatten | Uhrmacherei und Zimmerei voll → Instrumentenbau? | 1.462 |
+| Gute-Nacht-Korb (für Hannes' Gasthaus) | 1 Kamillenkissen + 1 Traumtrank | Apotheke voll → offen | 916 |
+| Trank der Jugend | 1 Lebenstrank + 1 Manatrank | Kessel voll → eine zweite Zaubermaschine (dann ein 6. Reiter, siehe unten) | 2.060 |
+
+Dazu die „Zauber des Magiers“ ab Level 20 (Gold ausgeben). **Achtung Reiter:** Mit dem Instrumentenbau sind alle 5 Reiter voll (höchstens 4 Gebäude je Reiter, damit sie aufs Handy passen); die nächste neue Maschine braucht einen 6. Reiter (z. B. „Zauberei“ mit Kessel und Kräutermühle) – vorher prüfen, ob 6 Reiter auf das Handy passen.
+
+**Fragen an Tobias:**
+1. Passt die neue Maschine **Instrumentenbau** (Reiter „Werkstatt“) mit **Astrolabium** (Sternenuhr + Fernrohr) und **Messtisch** (Reißbrett + Fernrohr)?
+2. Passt die **Heilertasche** (Heilpäckchen + 2 Mörser) in der Kräuterstube – oder lieber ohne (Variante C)?
+3. Messtisch im Instrumentenbau (A) oder in der Schreibstube (B)?
+4. Passen Geschichte, der neue Bewohner **Lehrling Emil**, die vier Aufträge und der Aufstieg für 25.000 Gold?
+
 ### Entwurf v0.59.0 – Level 18 „Die Zauberei“: Farn, Lebenstrank, Manatrank (Chat 32, v0.58.1; angenommen in Chat 33 – Variante A; umgesetzt in v0.59.0)
 
 **Tobias' Antworten (Chat 33):** „Farn können wir gerne als 5. Pflanze einführen, damit wir auch bei den Pflanzen genug Varität reinbringen können. 2. Gerne A. 3. Ja, können wir auch gerne so machen.“ – umgesetzt wie im Entwurf, ohne Änderung.

@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 27.11.2026 – Chat 33: Level 18 „Die Zauberei“ (v0.59.0)
+### 27.11.2026 – Chat 33: Level 18 „Die Zauberei“, Entwurf Level 19 (v0.59.0, v0.59.1)
 
 **Tobias:** „Les dir den aktuellen Stand durch und fasse mir kurz zusammen was die nächsten schritte sind“
 
@@ -15,6 +15,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat Level 18 nach dem Entwurf umgesetzt (Variante A, ohne Änderung): Farnsporen beim Händler, Farn im Beet (eigene Wuchsform: gefiederte Wedel ohne Blüte, eingerollte hellgrüne Spitzen), Farnwedel aus der Erntebank, Lebens- und Manatrank im Zauberkessel (der damit voll ist), die vier Aufträge mit Hildes Fest, Aufstieg 22.500. Beim Umsetzen fiel nichts auf, was den Entwurf ändert. Eine schnelle Probezeichnung der neuen Warenbilder mit einem eigenen kleinen Webserver hat die Arbeitsumgebung nicht erlaubt; die Bilder sind stattdessen in den Screenshots des Browser-Tests zu sehen.
 
 **Umgesetzt:** v0.59.0.
+
+**Tobias:** „Alles klar, danke dir. Ich teste gerade Level 19 und bin an den Fernrohren dran. Lass uns gerne schon mal den Entwurf für Level 19 machen und dabei unterschiedliche Dinge beachten: Wie sieht es aus mit den Rechenwerkzeug ( ist noch alles im Gleichgewicht )? Wir viele verschiedene Produktionsstraßen haben wir und wie könnten wir das noch erweitern ? Welche entgültigen Produkte haben wir, die wir weiterverarbeiten können ? Welche neuen Produkte könnten entstehen, wenn wir uns anschauen, mit welchen Materialien wir neue Produkte entwerfen könnten. Welchen Entwurf hast du ? Stell mir einmal deinen Entwurf vor und beantworte mir danach meine Fragen.“ (Die Fernrohre gehören zu Level 17 – vermutlich ist Tobias auf Level 17.)
+
+**Claude** hat den Entwurf für Level 19 „Die Landvermessung“ geschrieben und mit dem Rechenwerkzeug an einer Kopie der Daten nachgerechnet (`PLAENE.md`): neue Maschine Instrumentenbau (Reiter „Werkstatt“, letzter Platz) mit Astrolabium (Sternenuhr + Fernrohr) und Messtisch (Reißbrett + Fernrohr, mit 7 Stufen die längste Straße), Heilertasche (Heilpäckchen + 2 Mörser) in der Kräuterstube, Lehrling Emil als neuer Bewohner, Aufstieg 25.000. Antworten auf Tobias' Fragen: Das Gleichgewicht hält (Aufträge je Level ×1,2, sie bezahlen den nächsten Aufstieg zu 90–119 %, tiefere Waren bringen mehr Aufschlag); aber die neuen Waren seit Level 12 bringen je Stunde nicht mehr als die alten (bestes Fernrohr 10.144 Gold/h, Reißbrett 9.011, Lebenstrank 8.760) – der Entwurf hebt das mit Messtisch und Astrolabium (über 11.000) an; nach rund 480.000 Gold gibt es nichts mehr zu kaufen. 10 Straßen bis zu einem Endprodukt (Räderuhr, Kastenschloss, Sternenuhr, Reißbrett, Fernrohr, Kamillenkissen, Heilpäckchen, Lebenstrank, Manatrank, dazu der Mörser als Baustoff); 13 freie Einstellungen in alten Maschinen, aber nur noch ein freier Gebäude-Platz in den Reitern. Ideenliste für Level 20+.
+
+**Umgesetzt:** v0.59.1 (nur Doku).
 
 ### 26.11.2026 – Chat 32: Rückmeldung zu Level 15 – Aufstieg blockiert, „1 von 4“ statt Erfahrung, Entwurf Level 16, Browser-Test parallel, Level 16, Entwurf Level 17, Level 17, Entwurf Level 18 (v0.55.1, v0.56.0, v0.56.1, v0.56.2, v0.57.0, v0.57.1, v0.57.2, v0.58.0, v0.58.1)
 
