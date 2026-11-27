@@ -5,28 +5,28 @@
 | | |
 |---|---|
 | **Aktuelle Version** | v0.59.0 – Level 18 „Die Zauberei“ (Farn, Lebenstrank, Manatrank) |
-| **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–17 im Spiel, 18 als Gerüst |
+| **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–18 im Spiel, das Tränke-Kapitel ist fertig |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | **Tobias testet Level 16 und 17** und beantwortet die Fragen zum **Entwurf Level 18 „Die Zauberei“** (v0.59.0, `PLAENE.md`: Farn, Lebenstrank, Manatrank). Danach **die alten Straßen verlängern** (neue Produkte aus Sternenuhr, Fernrohr, Reißbrett, Mörser …); „Zauber des Magiers“ ab Level 20. |
+| **Nächster Schritt** | **Tobias testet Level 16 bis 18.** Danach der **Entwurf Level 19: die alten Straßen verlängern** (neue Produkte aus Sternenuhr, Fernrohr, Reißbrett, Mörser …; dafür neue Maschinen, weil Zimmerei, Apotheke, Steinmetz, Uhrmacherei und Kessel voll sind); „Zauber des Magiers“ ab Level 20. |
 
-**Tobias' Fabrik (3D) – Level 16, braut Heiltränke** (Chat 32, Bild: 22.768 Gold; unten links viel freie Fläche durch die neuen Streifen). Level 15 ging „etwas schnell“ – Auftragsmengen lassen sich später anpassen; „Ich finde die neuen Produkte gut, so entstehen wieder neue Straßen“. Die Fabrik steht bewusst still (kein Gold mehr verdienen, daher die roten Lichter), das Lager ist übervoll vom Strecke-Leeren. Die 2D-Welt ist seit v0.54.0 entfernt (Tobias: „das 3D game, das eigentliche Game“). Level 13 (Chat 27; 26.095 Gold, 60 Bilder/s bei voller Fabrik): Platz „zu ca. 70% sinnvoll gefüllt“, größere Straßen werden schwierig; das Gold häuft sich mit Waren, die er noch nicht weiterverarbeiten kann. Gebremst haben ihn in den Kräuter-Leveln fehlende Teile für Gebäude. Baustoffe laufen alle automatisch; viele Zahnradwellen für Erntebänke und Webstuben zu brauchen, „passt mir das GLeichgewicht bis hier hin sehr gut“. Kräuter (Chat 27): „mit mehreren Erntebänken gelöst, die an der Seite immer ihre Ware mit einschieben“; Heilverbände und Wundverbände brauchen zwei Kräuterstuben – „das finde ich eigentlich recht gut“. „Aktuell habe ich noch keine Probleme, weil die Bänder noch einen sehr "einseitigen" Weg haben und ich die Produktion nur umstellen muss statt ganze Produktionsstätten zu verschieben.“
+**Tobias' Fabrik (3D) – Level 16, braut Heiltränke** (Chat 32, Bild: 22.768 Gold; unten links viel freie Fläche durch die neuen Streifen). Level 15 ging „etwas schnell“ – Auftragsmengen lassen sich später anpassen; „Ich finde die neuen Produkte gut, so entstehen wieder neue Straßen“. Die Fabrik steht bewusst still (kein Gold mehr verdienen, daher die roten Lichter), das Lager ist übervoll vom Strecke-Leeren. Die 2D-Welt ist seit v0.54.0 entfernt (Tobias: „das 3D game, das eigentliche Game“).
 
-Frühere Stände der 2D-Fabrik (Level 8, 10, 11 mit Zitaten; zuletzt Level 13) in `docs/archiv/STAND-LANGFASSUNG.md`.
+Frühere Stände der Fabrik (Level 8, 10, 11 mit Zitaten; zuletzt Level 13 aus Chat 27) in `docs/archiv/STAND-LANGFASSUNG.md`.
 
 ## Fahrplan
 
 | | Meilenstein | Inhalt |
 |---|---|---|
 | M0, M1 | Planung, Fabrik-Grundgerüst | erledigt |
-| **M2** | **Produktionsketten** | **jetzt:** Werkzeuge (1–6) und Kräuter (7–12) fertig, Tränke ab Level 13 |
+| **M2** | **Produktionsketten** | **jetzt:** Werkzeuge (1–6), Kräuter (7–12) und Tränke (13–18) fertig; ab Level 19 die alten Straßen verlängern |
 | M3 | Wirtschaft & Fortschritt | Nachfrage und Trends, Laden-Ausbau mit Waren, evtl. Freischaltpunkte |
 | M4 | Optik & Gefühl | vorerst abgeschlossen (Chat 30): 3D, Häuser, Waren, Oberfläche, Ladebildschirm, Schriftrolle, Einführung; offen: Klänge, Animationen, Rückseiten, Stadt |
 | M5–M7 | Online, Clans & Handel, App | Spielerkonto, Schwarzmarkt, Clans, Android und iOS |
 
 **Nächste Schritte** (jeder erst nach Tobias' OK):
 
-- **Erledigt seit Chat 25** (Einzelheiten in `PLAENE.md`): v0.39.0–v0.54.0 (Belastungstest, Level 14, Kenney-Oberfläche, Ladebildschirm, Schriftrolle, Einführung, Feinschliff, ein Spiel ohne 2D-Welt). **Jetzt:** Level 15–17 im Spiel (v0.55.0, v0.57.0, v0.58.0), Browser-Test parallel (v0.56.2); Level 18 als Nächstes.
-1. **Tränke-Kapitel** (angenommen, Chat 27; Tabelle in `docs/inhalte/AUSBLICK.md`): 14 Die Tinktur (Mörser, Tinktur), 15 Der alte Magier (Zauberkessel, Traumtrank), 16 Die Kräutermühle (Heilpuder, Heiltrank), 17 Die Sternwarte (Linse, Fernrohr, Sternensand), 18 Die Zauberei (Farn, Lebens- und Manatrank). Feuer im Kessel von Hand (A); mehr Fläche ab Level 15; einzige Rezeptänderung: Mörser aus 5 Holzstäben (Tobias, Chat 31). Gemahlenes Glas: **Kristallsand** (Tobias), im Steinmetz. Leitlinie: alte Maschinen bekommen neue Funktionen, neue nur, wo es Sinn ergibt.
+- **Erledigt seit Chat 25** (Einzelheiten in `PLAENE.md`): v0.39.0–v0.54.0 (Belastungstest, Level 14, Kenney-Oberfläche, Ladebildschirm, Schriftrolle, Einführung, Feinschliff, ein Spiel ohne 2D-Welt). **Jetzt:** Level 15–18 im Spiel (v0.55.0, v0.57.0, v0.58.0, v0.59.0), Browser-Test parallel (v0.56.2); als Nächstes der Entwurf Level 19.
+1. **Tränke-Kapitel** (angenommen, Chat 27; seit v0.59.0 ganz im Spiel; Tabelle in `docs/inhalte/AUSBLICK.md`): 14 Die Tinktur (Mörser, Tinktur), 15 Der alte Magier (Zauberkessel, Traumtrank), 16 Die Kräutermühle (Heilpuder, Heiltrank), 17 Die Sternwarte (Linse, Fernrohr, Sternensand), 18 Die Zauberei (Farn, Lebens- und Manatrank). Feuer im Kessel von Hand (A); mehr Fläche ab Level 15; einzige Rezeptänderung: Mörser aus 5 Holzstäben (Tobias, Chat 31). Gemahlenes Glas: **Kristallsand** (Tobias), im Steinmetz. Leitlinie: alte Maschinen bekommen neue Funktionen, neue nur, wo es Sinn ergibt.
 2. **3D-Grafik:** eigene Häuser für alle Gebäude (fertig, Möglichkeit B: Mittelalter mit ein paar Technik-Teilen; Tobias, Chat 27: „sieht sehr gut aus“). **Waren auf dem Band** (v0.46.0): eigene kleine 3D-Formen. **Für später – Rückseiten** (Tobias, Chat 27, „nur eine kleine Anmerkung für später“): Erkennungszeichen und bewegte Teile sitzen vorn; baut man links und rechts einer Straße, sieht man eine Seite immer von hinten, „und da sieht man z.b. keine Unterschiede“. Eine Stadt um die Fabrik, die mit dem Level wächst (Idee).
 3. **Nach hinten verschoben:** **Weiche** (Chat 26: eigene Straßen sind besser, siehe offene Frage 4).
 4. **Später:** Verbesserungen mit Erfahrung, gründliche Durchsicht des Codes.
@@ -56,6 +56,12 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 17. **Neue Ausgaben fürs Gold:** „Zauber des Magiers“ (`AUSBLICK.md`) erst ab Level 20, „wenn wir mit allen grundlegenden Sachen fertig sind und wir auch lange Produktionsstraßen haben“ (Tobias, Chat 32).
 
 ## Die letzten 3 Arbeitsschritte
+
+### v0.59.0 – Level 18 „Die Zauberei“ (27.11.2026)
+
+- **Warum (Tobias, Chat 33):** Entwurf angenommen („Farn können wir gerne als 5. Pflanze einführen“, „Gerne A“, „Ja, können wir auch gerne so machen“).
+- **Umgesetzt:** Farn als 5. Pflanze (Farnsporen 1.000, Beet, Erntebank → 50 Farnwedel à 24; eigene Wuchsform ohne Blüte), Zauberkessel braut Lebenstrank (1 Heiltrank + 5 Farnwedel, 876) und Manatrank (1 Traumtrank + 2 Kristallsand, 841), je 90 s – der Kessel ist voll; Ambrosius, Agnes, Ambrosius, Hildes Fest (27.891 Gold), Aufstieg 22.500. Format bleibt 21.
+- **Offen:** Tobias' Test.
 
 ### v0.58.1 – Entwurf Level 18 „Die Zauberei“ (26.11.2026, nur Doku)
 

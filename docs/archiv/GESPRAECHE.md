@@ -4,6 +4,18 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
+### 27.11.2026 – Chat 33: Level 18 „Die Zauberei“ (v0.59.0)
+
+**Tobias:** „Les dir den aktuellen Stand durch und fasse mir kurz zusammen was die nächsten schritte sind“
+
+**Claude** hat zusammengefasst: Tobias testet Level 16 und 17 und beantwortet die drei Fragen zum Entwurf Level 18 (Farn als 5. Pflanze; Variante A, B oder C für Lebens- und Manatrank; Geschichte, Aufträge, Aufstieg 22.500); danach Level 18 programmieren, ab Level 19 die alten Straßen verlängern (neue Maschinen, weil die alten voll sind), ab Level 20 die „Zauber des Magiers“.
+
+**Tobias:** „Farn können wir gerne als 5. Pflanze einführen, damit wir auch bei den Pflanzen genug Varität reinbringen können. 2. Gerne A. 3. Ja, können wir auch gerne so machen.“
+
+**Claude** hat Level 18 nach dem Entwurf umgesetzt (Variante A, ohne Änderung): Farnsporen beim Händler, Farn im Beet (eigene Wuchsform: gefiederte Wedel ohne Blüte, eingerollte hellgrüne Spitzen), Farnwedel aus der Erntebank, Lebens- und Manatrank im Zauberkessel (der damit voll ist), die vier Aufträge mit Hildes Fest, Aufstieg 22.500. Beim Umsetzen fiel nichts auf, was den Entwurf ändert. Eine schnelle Probezeichnung der neuen Warenbilder mit einem eigenen kleinen Webserver hat die Arbeitsumgebung nicht erlaubt; die Bilder sind stattdessen in den Screenshots des Browser-Tests zu sehen.
+
+**Umgesetzt:** v0.59.0.
+
 ### 26.11.2026 – Chat 32: Rückmeldung zu Level 15 – Aufstieg blockiert, „1 von 4“ statt Erfahrung, Entwurf Level 16, Browser-Test parallel, Level 16, Entwurf Level 17, Level 17, Entwurf Level 18 (v0.55.1, v0.56.0, v0.56.1, v0.56.2, v0.57.0, v0.57.1, v0.57.2, v0.58.0, v0.58.1)
 
 **Tobias** (mit Bild: Level 14, „Alle Aufträge dieses Bauabschnitts sind erledigt. Jetzt kannst du auf Level 15 aufsteigen.“, Erfahrung 3.829 / 3.976, Knopf „Aufsteigen auf Level 15 · 15.000“ grau, darunter „Noch 147 Erfahrung – gib die Aufträge der Bewohner ab.“): „Hey, bringe dich auf den aktuellen Stand. Ich wollte dir noch ein Feedback zum letzten Update geben. Ich hab meinen Browser aktualisiert und kann leider nicht aufsteigen, weil mir die Erfahrung dafür fehlt. Ich hab nicht weiter produziert, weil ich nicht weiter Gold verdienen wollte, deswegen ist alles stehen geblieben und ich hab manchmal per Hand vom Band eingesammelt. Vermutlich wurde das per hand einsammeln einfach addidiert zum Laden-Lager bzw. ich habe es gerade getestet. Ich kann die Strecken trotzdem leeren, obwohl das lager voll ist. Die Fenster kannst du erstmal so lassen wie sie sind.“

@@ -58,10 +58,15 @@
 | Heilpuder | Kräutermühle: 5 Ringelblüten (Leinensäckchen mit goldgelbem Pulver) | 15 s | 72 |
 | Heiltrank | Zauberkessel: 1 Tinktur + 2 Heilpuder, Feuer 5 Holzkohle (Fläschchen mit rotem Trank) | 60 s | 600 |
 | Linse | Steinmetz: 10 Glas, geschliffen (runde, flache Glasscheibe) | 30 s | 144 |
-| Kristallsand | Steinmetz: 5 Glas, gemahlen (glitzernde helle Körner; Zutat des Manatranks auf Level 18) | 10 s | 72 |
+| Kristallsand | Steinmetz: 5 Glas, gemahlen (glitzernde helle Körner; Zutat des Manatranks) | 10 s | 72 |
 | Fernrohr | Uhrmacherei: 2 Linsen + 10 Eisenbleche (Eisenrohr mit Messingringen) | 60 s | 634 |
+| Farnsporen | Händler (ab Level 18; Farne haben Sporen statt Samen) | – | 1.000 (Kauf) |
+| Farn | Beet: 1 Farnsporen | 30 min | – (nicht verkäuflich, wird eingelegt) |
+| Farnwedel | Erntebank: 1 Farn → 50 (grüner, gefiederter Wedel) | 12 s je Stück | 24 |
+| Lebenstrank | Zauberkessel: 1 Heiltrank + 5 Farnwedel, Feuer 5 Holzkohle (Fläschchen mit grünem Trank) | 90 s | 876 |
+| Manatrank | Zauberkessel: 1 Traumtrank + 2 Kristallsand, Feuer 5 Holzkohle (Fläschchen mit blauem Trank) | 90 s | 841 |
 
 - Rohstoffe und Pflanzen kommen nicht aufs Band und nicht ins Lagerhaus; man legt sie direkt ins Gebäude. Pflanzen kann man nicht kaufen und nicht verkaufen.
-- **Aussehen der Kräuter** (`bloom` in `data/items.js`): Flachs hohe Halme mit kleinen blauen Blüten, Ringelblume eine große orange Blüte mit braunem Knopf, Schafgarbe ein flacher weißer Schirm aus Pünktchen über gefiederten Blättern, Kamille Gänseblümchen mit dickem gelbem Knopf. Samen sind eine Tüte in ihrer Farbe mit dem Bild der Pflanze (`grows`).
+- **Aussehen der Kräuter** (`bloom` in `data/items.js`): Flachs hohe Halme mit kleinen blauen Blüten, Ringelblume eine große orange Blüte mit braunem Knopf, Schafgarbe ein flacher weißer Schirm aus Pünktchen über gefiederten Blättern, Kamille Gänseblümchen mit dickem gelbem Knopf, Farn gefiederte grüne Wedel ohne Blüte mit hellgrünen, eingerollten jungen Spitzen. Samen (beim Farn die Sporen) sind eine Tüte in ihrer Farbe mit dem Bild der Pflanze (`grows`).
 - **Rechenbeispiele:** 1 Holzstamm (183) → 200 Holzblöcke (200) → 40 Teile (240); im Ofen → 100 Holzkohle (200) → mit 10 Zirkeln 10 Reißzeuge (8.180). 1 Sand (1.100) → im Ofen 100 Glas (1.200) → 20 Fläschchen (1.440); ein Ofen mit Sand reicht für 80 Fläschchen pro Stunde, eine Schmiede (30 s je Fläschchen) verarbeitet das Glas von 1,5 Öfen. 1 Eisenerz (732) → 200 Eisenbarren (800) → 40 Teile (960). 1 Leinsamen (320) → 50 Fasern (400) → 10 Verbände (480). 1 Holzstamm + 1 Felsbrocken ergeben etwa 5 Zahnradwellen oder Räderwerke. 1 Beet Flachs + 1 Beet Ringelblumen = genau 10 Heilverbände; 10 Kräuterkompressen brauchen 2 Flachspflanzen und 1 Ringelblume. 3 Beete versorgen eine Erntebank (3 × 10 Minuten = eine Wachszeit). 1 Leinsamen + 1 Ringelblumensamen + 1 Schafgarbensamen (1.480) → 10 Wundverbände (2.520). 1 Schafgarbensamen + 1 Kamillensamen (1.490) → genau 10 Kräutermischungen (2.160). Ein Ofen macht 400 Holzkohle pro Stunde – genug Feuer für 80 Traumtränke; ein Kessel braut 60 pro Stunde, wenn genug Tinktur und Kamille kommen.
 - Verwendung: Jedes Grundteil wird von mindestens einem Kombi-Rezept gebraucht (die Steinplatte vom Gewichtstein); Eisen etwas mehr als Holz und Stein, weil es mehr bringt. Der Verband ist für Wunden, die Kräuterkompresse für Prellungen und Schwellungen, der Wundverband (mit Schafgarbe) stillt Blut; die Kamille beruhigt und hilft beim Schlafen.
