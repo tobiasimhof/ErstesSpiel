@@ -100,7 +100,8 @@ test('Wundverband, Kräuterkompresse, Zeichenbrett und Reißzeug werden jetzt we
 
 test('Bauleiste: Apotheke im Reiter „Werkstatt“ (Tobias: „weil die Tränke einen eigenen Reiter bekommen“)', () => {
   const werkstatt = BUILD_TABS.find((t) => t.id === 'werkstatt');
-  assert.deepEqual(werkstatt.buildings, ['schreibstube', 'uhrmacherei', 'apotheke']);
+  // v0.60.0: dazu der Instrumentenbau (Level 19) – der Reiter ist voll
+  assert.deepEqual(werkstatt.buildings, ['schreibstube', 'uhrmacherei', 'apotheke', 'instrumentenbau']);
   assert.equal(BUILD_TABS.find((t) => t.id === 'kraeuter').buildings.length, 4, '„Erde“ ist voll');
   for (const tab of BUILD_TABS) assert.ok(tab.buildings.length <= 4, `${tab.name}: höchstens 4 Gebäude`);
 });

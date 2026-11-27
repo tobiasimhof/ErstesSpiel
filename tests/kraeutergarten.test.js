@@ -76,7 +76,7 @@ test('Kräuterstube: 2 × 2, zwei Eingänge, Heilverband und Kräuterkompresse',
   assert.deepEqual([def.level, def.size], [8, [2, 2]]);
   assert.equal(def.ports.filter((p) => p.kind === 'in').length, 2);
   // v0.27.0: dazu der Wundverband (ab Level 10)
-  assert.deepEqual(def.production.recipes, ['heilverband', 'kraeuterkompresse', 'wundverband']);
+  assert.deepEqual(def.production.recipes, ['heilverband', 'kraeuterkompresse', 'wundverband', 'heilertasche']); // v0.60.0: Heilertasche ab Level 19
   assert.deepEqual(RECIPES.heilverband.inputs, { verband: 1, ringelbluete: 5 });
   assert.deepEqual(RECIPES.kraeuterkompresse.inputs, { flachsfaser: 10, ringelbluete: 5 });
   assert.deepEqual([RECIPES.heilverband.time, RECIPES.kraeuterkompresse.time], [20, 20]);

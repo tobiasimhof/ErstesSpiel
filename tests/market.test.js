@@ -372,7 +372,8 @@ test('Testpaket auf Level 6: Kombi-Teile nur je 5 Stück, alle Gebäude aus frü
   // v0.57.0: Die Kräutermühle (Level 16) kostet Mörser (Level 14) – die gibt es
   // im Testpaket von Level 6 noch nicht; alle anderen Gebäude kosten frühe Waren
   const late = BUILD_MENU.filter((type) => Object.keys(BUILDINGS[type].cost).some((item) => itemLevel(item) > 6));
-  assert.deepEqual(late, ['kraeutermuehle']);
+  // v0.60.0: der Instrumentenbau (Level 19) kostet Linsen (Level 17)
+  assert.deepEqual(late, ['kraeutermuehle', 'instrumentenbau']);
   for (const type of BUILD_MENU.filter((t) => !late.includes(t))) assert.ok(canAfford(state, BUILDINGS[type].cost), `${type} baubar`);
 });
 

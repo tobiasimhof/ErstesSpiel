@@ -108,5 +108,16 @@ export const RECIPES = {
   // 4 Einstellungen und ist voll (Tobias, Chat 32).
   lebenstrank: { building: 'zauberkessel', label: 'Lebenstränke', inputs: { heiltrank: 1, farnwedel: 5 }, fuel: 5, output: 'lebenstrank', amount: 1, time: 90, level: 18 },
   manatrank: { building: 'zauberkessel', label: 'Manatränke', inputs: { traumtrank: 1, kristallsand: 2 }, fuel: 5, output: 'manatrank', amount: 1, time: 90, level: 18 },
+  // v0.60.0: Level 19 „Die Landvermessung“ (Tobias, Chat 33: „alles mit allem
+  // mischen“, „Die neuen Produkte passen“) – sechs neue Produkte in drei Arten:
+  // Endprodukte verbinden (Astrolabium, Messtisch, Heilertasche), Endprodukt +
+  // Zwischenprodukt (Schatztruhe), nur Zwischenprodukte (Laterne, Lupe – dafür
+  // baut man neue Fertigungsstätten).
+  astrolabium: { building: 'instrumentenbau', label: 'Astrolabien', inputs: { sternenuhr: 1, fernrohr: 1 }, output: 'astrolabium', amount: 1, time: 90 },
+  messtisch: { building: 'instrumentenbau', label: 'Messtische', inputs: { reissbrett: 1, fernrohr: 1 }, output: 'messtisch', amount: 1, time: 90 },
+  lupe: { building: 'instrumentenbau', label: 'Lupen', inputs: { linse: 1, eisenstange: 5 }, output: 'lupe', amount: 1, time: 30 },
+  heilertasche: { building: 'kraeuterstube', label: 'Heilertaschen', inputs: { heilpaeckchen: 1, moerser: 2 }, output: 'heilertasche', amount: 1, time: 30, level: 19 },
+  schatztruhe: { building: 'schlosserei', label: 'Schatztruhen', inputs: { kastenschloss: 1, verstaerkteholzplatte: 5 }, output: 'schatztruhe', amount: 1, time: 60, level: 19 },
+  laterne: { building: 'feinschmiede', label: 'Laternen', inputs: { eisenblech: 5, glas: 5 }, output: 'laterne', amount: 1, time: 20, level: 19 },
   traumtrank: { building: 'zauberkessel', label: 'Traumtränke', inputs: { tinktur: 1, kamillenbluete: 5 }, fuel: 5, output: 'traumtrank', amount: 1, time: 60, level: 15 },
 };

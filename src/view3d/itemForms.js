@@ -335,6 +335,67 @@ export const ITEM_FORMS = {
     cyl('#cfe9ee', 0.034, 0.042, 0.08, [0, 0.235, 0], null, 10),
     cyl('#b07a45', 0.03, 0.032, 0.05, [0, 0.295, 0], null, 10),
   ),
+
+  // ---------- v0.60.0: Level 19 „Die Landvermessung“ ----------
+  // Astrolabium – Messingscheibe mit blauer Sternenscheibe, steht schräg auf
+  // einem Holzfuß, oben ein Ring zum Aufhängen
+  astrolabium: big(
+    box('#7a5230', [0.16, 0.03, 0.08], [0, 0.015, 0]),
+    cyl('#c9a23c', 0.135, 0.135, 0.03, [0, 0.16, 0], [QUARTER * 0.8, 0, 0], 20),
+    cyl('#2b3f73', 0.095, 0.095, 0.034, [0, 0.16, 0.002], [QUARTER * 0.8, 0, 0], 16),
+    box('#e0c060', [0.22, 0.03, 0.012], [0, 0.16, 0.02], [QUARTER * 0.8, 0, 0.6]),
+    ring('#c9a23c', 0.03, 0.008, [0, 0.31, -0.04]),
+  ),
+  // Messtisch – Zeichenbrett auf drei Beinen, darauf ein Fernrohr
+  messtisch: big(
+    ...[
+      [0.07, 0],
+      [-0.04, 0.06],
+      [-0.04, -0.06],
+    ].map(([dx, dz]) => cyl('#8a5a2b', 0.012, 0.012, 0.2, [dx, 0.1, dz], [-dz * 5, 0, dx * 5], 6)),
+    box('#7a5230', [0.27, 0.02, 0.19], [0, 0.195, 0]),
+    box('#efe6cf', [0.26, 0.012, 0.18], [0, 0.211, 0]),
+    cyl('#5b6169', 0.026, 0.032, 0.22, [0.01, 0.245, 0], [0, 0.3, QUARTER - 0.2], 10),
+    cyl('#a8dcd9', 0.028, 0.028, 0.01, [0.115, 0.266, -0.03], [0, 0.3, QUARTER - 0.2], 10),
+  ),
+  // Lupe – runde Linse in einem Eisenring, Holzgriff; liegt leicht schräg
+  lupe: big(
+    cyl('#a8dcd9', 0.085, 0.085, 0.016, [0.05, 0.05, 0], [0, 0, -0.25], 18),
+    ring('#5b6169', 0.088, 0.013, [0.05, 0.05, 0], [QUARTER, 0, -0.25]),
+    cyl('#7a5230', 0.018, 0.022, 0.15, [-0.11, 0.03, 0], [0, 0, QUARTER - 0.25], 8),
+  ),
+  // Heilertasche – Ledertasche mit Klappe, grünem Kreuz und Umhängeriemen
+  heilertasche: big(
+    box('#8a5a2b', [0.24, 0.15, 0.12], [0, 0.075, 0]),
+    box('#a0703c', [0.245, 0.02, 0.125], [0, 0.155, 0]),
+    box('#a0703c', [0.245, 0.07, 0.01], [0, 0.125, 0.064]),
+    box('#5f8f3a', [0.025, 0.06, 0.006], [0, 0.11, 0.071]),
+    box('#5f8f3a', [0.06, 0.025, 0.006], [0, 0.11, 0.071]),
+    ring('#5a3b25', 0.1, 0.01, [0, 0.16, 0], null, Math.PI),
+  ),
+  // Schatztruhe – Holztruhe mit gewölbtem Deckel, Eisenbändern und Schloss
+  schatztruhe: big(
+    box('#8a5a2b', [0.28, 0.12, 0.18], [0, 0.06, 0]),
+    cyl('#9a6a3c', 0.09, 0.09, 0.28, [0, 0.12, 0], [0, 0, QUARTER], 12),
+    ...[-0.09, 0.09].flatMap((x) => [
+      box('#9aa3ad', [0.03, 0.125, 0.185], [x, 0.0625, 0]),
+      cyl('#9aa3ad', 0.093, 0.093, 0.03, [x, 0.12, 0], [0, 0, QUARTER], 12),
+    ]),
+    box('#c9a23c', [0.05, 0.06, 0.012], [0, 0.11, 0.094]),
+  ),
+  // Laterne – Eisengehäuse mit leuchtendem Glas, spitzes Dach, Ring
+  laterne: big(
+    box('#5b6169', [0.13, 0.025, 0.13], [0, 0.0125, 0]),
+    box('#ffd27a', [0.1, 0.14, 0.1], [0, 0.095, 0]),
+    ...[
+      [1, 1],
+      [1, -1],
+      [-1, 1],
+      [-1, -1],
+    ].map(([sx, sz]) => box('#5b6169', [0.016, 0.15, 0.016], [sx * 0.052, 0.095, sz * 0.052])),
+    cyl('#5b6169', 0.005, 0.09, 0.07, [0, 0.2, 0], [0, Math.PI / 4, 0], 4),
+    ring('#5b6169', 0.025, 0.006, [0, 0.25, 0]),
+  ),
 };
 
 // Die Form einer Ware (fehlt eine, eine Kugel in ihrer Farbe)

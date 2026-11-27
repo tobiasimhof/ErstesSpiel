@@ -4,7 +4,7 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.59.2 – Entwurf Level 19, 2. Fassung, und Entwurf Baumenü (nur Doku) |
+| **Aktuelle Version** | v0.60.0 – Level 19 „Die Landvermessung“ (Instrumentenbau, sechs neue Produkte) |
 | **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–18 im Spiel, das Tränke-Kapitel ist fertig |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
 | **Nächster Schritt** | **Tobias testet Level 17 und 18** und beantwortet die Fragen zur **2. Fassung von Level 19** (v0.60.0, `PLAENE.md`: sechs neue Produkte, Instrumentenbau) und zum **neuen Baumenü** (v0.61.0, Möglichkeiten A–C). Ab Level 19 gilt: alles mit allem mischen, Abwechslung vor Gold (Chat 33). „Zauber des Magiers“ ab Level 20. |

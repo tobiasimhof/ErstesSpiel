@@ -47,7 +47,7 @@ const worth = (items) => Object.entries(items).reduce((sum, [t, n]) => sum + ITE
 // ---------- Datentabellen ----------
 
 test('Level 18 „Die Zauberei“: Geschichte mit Ambrosius, Farn und den zwei Tränken, Laden wie auf Level 17, Aufstieg 22.500 Gold ohne Geschenk', () => {
-  assert.equal(MAX_LEVEL, 18);
+  assert.ok(MAX_LEVEL >= 18); // v0.60.0: Level 19 kommt dazu
   const def = LEVELS[18];
   assert.equal(def.name, 'Die Zauberei');
   for (const word of ['Ambrosius', 'Farn', 'Kristallsand', 'Lebenstrank', 'Manatrank']) assert.ok(def.story.includes(word), word);
@@ -111,16 +111,13 @@ test('Aufträge auf Level 18: Ambrosius, Agnes, Ambrosius, Hilde mit dem Fest �
   assert.ok(ratio > 1.15 && ratio < 1.3, `Sprung zu Level 17: ×${ratio.toFixed(2)}`);
 });
 
-test('Aufstieg auf Level 18: 22.500 Gold, keine neue Fläche; danach ist Level 18 das höchste', () => {
+test('Aufstieg auf Level 18: 22.500 Gold, keine neue Fläche', () => {
   const state = levelGame(17, 30000);
   const before = { ...state.world };
   state.quest.index = levelQuests(17).length;
   assert.deepEqual(levelUp(state), { level: 18, gift: {}, cost: 22500, moreLand: false });
   assert.equal(state.gold, 7500);
   assert.deepEqual(state.world, before);
-  state.gold = 100000;
-  state.quest.index = levelQuests(18).length;
-  assert.equal(levelUp(state), null);
 });
 
 // ---------- In der Fabrik ----------

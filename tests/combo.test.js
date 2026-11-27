@@ -88,7 +88,7 @@ function comboLine(type, recipe, slotsA, slotsB) {
 
 // ---------- Datentabellen ----------
 
-test('3 Kombi-Maschinen: 2 × 2, zwei Eingänge links, Ausgang rechts oben, je 3 Einstellungen (die Zimmerei ab Level 14 dazu den Mörser)', () => {
+test('3 Kombi-Maschinen: 2 × 2, zwei Eingänge links, Ausgang rechts oben, je 3 Einstellungen (ab Level 14 bzw. 19 dazu eine 4.: Mörser, Laterne, Schatztruhe)', () => {
   for (const type of ['zimmerei', 'feinschmiede', 'schlosserei']) {
     const def = BUILDINGS[type];
     assert.deepEqual(def.size, [2, 2], type);
@@ -100,8 +100,9 @@ test('3 Kombi-Maschinen: 2 × 2, zwei Eingänge links, Ausgang rechts oben, je 3
     assert.equal(def.production.recipes.filter((key) => !RECIPES[key].level).length, 3, type);
   }
   assert.deepEqual(BUILDINGS.zimmerei.production.recipes, ['zahnradwelle', 'raederwerk', 'verstaerkteholzplatte', 'moerser']);
-  assert.deepEqual(BUILDINGS.feinschmiede.production.recipes, ['scharnier', 'schluessel', 'zirkel']);
-  assert.deepEqual(BUILDINGS.schlosserei.production.recipes, ['gewichtstein', 'uhrwerk', 'vorhaengeschloss']);
+  // v0.60.0: ab Level 19 dazu Laterne (Feinschmiede) und Schatztruhe (Schlosserei)
+  assert.deepEqual(BUILDINGS.feinschmiede.production.recipes, ['scharnier', 'schluessel', 'zirkel', 'laterne']);
+  assert.deepEqual(BUILDINGS.schlosserei.production.recipes, ['gewichtstein', 'uhrwerk', 'vorhaengeschloss', 'schatztruhe']);
 });
 
 test('Rezepte aus Grundteilen: 10 + 5 Stück, zwei verschiedene Zutaten, jedes Rezept anders', () => {

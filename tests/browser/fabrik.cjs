@@ -2181,9 +2181,11 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   const werkstatt11 = await shownTools();
   // v0.29.0: dahinter die Apotheke, auf Level 11 noch mit Schloss
   const apoLocked11 = await page.locator('.build-item[data-tool="apotheke"]').evaluate((b) => b.classList.contains('locked') && b.textContent.includes('Level 12'));
+  // v0.60.0: ganz hinten der Instrumentenbau (Level 19)
+  const instLocked11 = await page.locator('.build-item[data-tool="instrumentenbau"]').evaluate((b) => b.classList.contains('locked') && b.textContent.includes('Level 19'));
   check(
-    werkstatt11.slice(-3).join() === 'schreibstube,uhrmacherei,apotheke' && apoLocked11,
-    `Reiter „Werkstatt“: Schreibstube und Uhrmacherei, dahinter die Apotheke mit „🔒 Level 12“ (${werkstatt11.join(', ')})`,
+    werkstatt11.slice(-4).join() === 'schreibstube,uhrmacherei,apotheke,instrumentenbau' && apoLocked11 && instLocked11,
+    `Reiter „Werkstatt“: Schreibstube und Uhrmacherei, dahinter Apotheke („🔒 Level 12“) und Instrumentenbau („🔒 Level 19“) (${werkstatt11.join(', ')})`,
   );
   const barFits11 = await page.evaluate(() =>
     [...document.querySelectorAll('.build-tab, .build-item')]
@@ -2295,7 +2297,7 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   await page.tap('.build-tab[data-tab="werkstatt"]');
   await sleep(80);
   const werkstatt12 = await shownTools();
-  check(werkstatt12.slice(-3).join() === 'schreibstube,uhrmacherei,apotheke', `Reiter „Werkstatt“: Schreibstube, Uhrmacherei, Apotheke (${werkstatt12.join(', ')})`);
+  check(werkstatt12.slice(-4).join() === 'schreibstube,uhrmacherei,apotheke,instrumentenbau', `Reiter „Werkstatt“: Schreibstube, Uhrmacherei, Apotheke, Instrumentenbau (${werkstatt12.join(', ')})`);
   const barFits12 = await page.evaluate(() =>
     [...document.querySelectorAll('.build-tab, .build-item')]
       .filter((e) => e.offsetParent)
@@ -3041,6 +3043,145 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
     return result;
   });
   check(brewed18.lebenstrank === 1 && brewed18.manatrank === 1, `Der Kessel braut in je 90 s einen Lebens- und einen Manatrank (${JSON.stringify(brewed18)})`);
+
+  // ---------- Level 19: Die Landvermessung (v0.60.0) ----------
+  await page.tap('#btn-level');
+  await sleep(150);
+  for (let i = 0; i < 4; i++) {
+    await page.locator('#modal-content button', { hasText: '🧪 Test: Auftrag erledigen' }).tap();
+    await sleep(200);
+  }
+  const l18done = await page.textContent('#modal-content');
+  check(
+    l18done.includes('4 von 4') &&
+      l18done.includes('Nächstes Level: Level 19 · Die Landvermessung') &&
+      l18done.includes('Instrumentenbau') &&
+      l18done.includes('Kräuterstube: Heilertasche') &&
+      l18done.includes('Schlosserei: Schatztruhe') &&
+      l18done.includes('Feinschmiede: Laterne') &&
+      !l18done.includes('🎁'),
+    'Level 18 erledigt; Level 19 kündigt Instrumentenbau, Heilertasche, Schatztruhe und Laterne an, ohne Geschenk',
+  );
+  await game(page, () => (window.__game.state.gold += 25000));
+  await sleep(450);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 19 · 25.000' }).tap();
+  await sleep(150);
+  const letter19 = await readLetter(page);
+  check((await game(page, () => window.__game.state.shopLevel)) === 19, 'Aufstieg auf Level 19 für 25.000 Gold');
+  const lvl19Text = await page.textContent('#modal-content');
+  check(
+    lvl19Text.includes('Level 19 erreicht!') && lvl19Text.includes('Die Landvermessung') && lvl19Text.includes('3 Astrolabien') && lvl19Text.includes('10 Lupen') && lvl19Text.includes('0 von 5'),
+    'Level 19: Kaspar möchte 3 Astrolabien und 10 Lupen, Aufträge 0 von 5',
+  );
+  check(letter19.includes('Laden-Level 19!') && letter19.includes('Landvermessung') && letter19.includes('Kaspar'), `Schriftrolle: Landvermessung und Kaspar (${letter19.slice(0, 200)})`);
+  await shot('30a-level-19');
+  await page.tap('#modal-close');
+  await sleep(120);
+  // Instrumentenbau bauen: aus der Bauleiste (Reiter „Werkstatt“, jetzt 4 Gebäude)
+  await game(page, () => {
+    const st = window.__game.state.storage;
+    st.zirkel = (st.zirkel ?? 0) + 1;
+    st.linse = (st.linse ?? 0) + 2;
+  });
+  await page.tap('#btn-build');
+  await sleep(120);
+  await tapBuild(page, 'instrumentenbau');
+  await sleep(150);
+  if (!(await game(page, () => window.__game.ui.ghost?.valid === true))) {
+    const spot = await game(page, () => {
+      const g = window.__game;
+      const p = g.state.plot;
+      for (let y = p.y; y < p.y + p.height - 1; y++) {
+        for (let x = p.x; x < p.x + p.width - 1; x++) {
+          if ([0, 1].every((dx) => [0, 1].every((dy) => g.isFree(x + dx, y + dy)))) return [x, y];
+        }
+      }
+      return null;
+    });
+    const ghostAt = await game(page, () => ({ ...window.__game.ui.ghost }));
+    if (spot) {
+      await showTiles(page, [[ghostAt.x, ghostAt.y], spot], 2);
+      await touchDragTiles(page, cdp, [[ghostAt.x, ghostAt.y], spot]);
+      await sleep(150);
+    }
+  }
+  check((await mode(page)) === 'place' && (await game(page, () => window.__game.ui.ghost?.valid === true)), 'Instrumentenbau wählen: Vorschau auf freier Fläche');
+  await page.tap('#tool-confirm');
+  await sleep(150);
+  await page.tap('#build-close').catch(() => {});
+  await sleep(100);
+  const instrument = await game(page, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'instrumentenbau');
+    return b && { x: b.x, y: b.y, paid: b.paid, recipe: b.prod.recipe };
+  });
+  check(Boolean(instrument) && instrument.recipe === 'astrolabium' && instrument.paid?.zirkel === 1 && instrument.paid?.linse === 2, `Instrumentenbau gebaut für 1 Zirkel + 2 Linsen (${JSON.stringify(instrument)})`);
+  await tapTile(page, instrument.x, instrument.y);
+  await sleep(450);
+  check((await page.textContent('#info-title')) === 'Instrumentenbau', 'Instrumentenbau antippen zeigt Infofenster');
+  check((await page.locator('#info-body .recipe-option').count()) === 2, 'Instrumentenbau: 2 andere Einstellungen zur Auswahl (Messtisch, Lupe)');
+  check((await recipeOption(page, 'messtisch').getAttribute('aria-label')) === 'Umstellen auf Messtisch: 1 Reißbrett + 1 Fernrohr', 'Umstellen auf Messtisch: 1 Reißbrett + 1 Fernrohr');
+  check((await recipeOption(page, 'lupe').getAttribute('aria-label')) === 'Umstellen auf Lupe: 1 Linse + 5 Eisenstangen', 'Umstellen auf Lupe: 1 Linse + 5 Eisenstangen');
+  check((await infoFits(page)).length === 0, `Infofenster des Instrumentenbaus: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+  await shot('30b-instrumentenbau');
+  await recipeOption(page, 'messtisch').tap();
+  await sleep(450);
+  const card19 = await infoCard(page);
+  check(card19?.outputs.join() === 'messtisch Messtisch', `Instrumentenbau umgestellt auf Messtisch (${JSON.stringify(card19)})`);
+  await page.tap('#info-close');
+  await sleep(100);
+  // Alle neuen Einstellungen arbeiten (gezählt über „hergestellt“)
+  const made19 = await game(page, () => {
+    const g = window.__game;
+    const b = g.state.buildings.find((x) => x.type === 'instrumentenbau');
+    const result = {};
+    for (const [recipe, stock, time] of [
+      ['astrolabium', { sternenuhr: 1, fernrohr: 1 }, 91],
+      ['messtisch', { reissbrett: 1, fernrohr: 1 }, 91],
+      ['lupe', { linse: 1, eisenstange: 5 }, 31],
+    ]) {
+      const before = g.state.produced?.[recipe] ?? 0;
+      Object.assign(b.prod, { recipe, stock, out: null, busy: false, timer: 0 });
+      g.simulate(time);
+      result[recipe] = (g.state.produced?.[recipe] ?? 0) - before;
+    }
+    return result;
+  });
+  check(made19.astrolabium === 1 && made19.messtisch === 1 && made19.lupe === 1, `Der Instrumentenbau stellt Astrolabium, Messtisch und Lupe her (${JSON.stringify(made19)})`);
+  // Kräuterstube, Schlosserei und Feinschmiede haben jetzt 4 Einstellungen – per Touch ansehen
+  for (const [type, title, recipe, label] of [
+    ['kraeuterstube', 'Kräuterstube', 'heilertasche', 'Umstellen auf Heilertasche: 1 Heilpäckchen + 2 Mörser'],
+    ['schlosserei', 'Schlosserei', 'schatztruhe', 'Umstellen auf Schatztruhe: 1 Kastenschloss + 5 Verstärkte Holzplatten'],
+    ['feinschmiede', 'Feinschmiede', 'laterne', 'Umstellen auf Laterne: 5 Eisenbleche + 5 Glas'],
+  ]) {
+    // Feinschmiede und Schlosserei gibt es beim Durchspielen noch nicht: auf eine freie Fläche setzen
+    const pos = await game(page, (t) => {
+      const g = window.__game;
+      let b = g.state.buildings.find((x) => x.type === t);
+      if (!b) {
+        const p = g.state.plot;
+        for (let y = p.y; y < p.y + p.height - 1 && !b; y++) {
+          for (let x = p.x; x < p.x + p.width - 1 && !b; x++) {
+            if ([0, 1].every((dx) => [0, 1].every((dy) => g.isFree(x + dx, y + dy)))) {
+              const id = g.place(t, x, y, 0);
+              if (id !== null) b = g.state.buildings.find((item) => item.id === id);
+            }
+          }
+        }
+      }
+      return b && { x: b.x, y: b.y };
+    }, type);
+    check(Boolean(pos), `${title} steht in der Fabrik`);
+    if (!pos) continue;
+    await sleep(150);
+    await tapTile(page, pos.x, pos.y);
+    check((await page.textContent('#info-title')) === title, `${title} antippen zeigt Infofenster`);
+    await sleep(450);
+    check((await recipeOption(page, recipe).getAttribute('aria-label')) === label, `Ab Level 19: ${label}`);
+    check((await page.locator('#info-body .recipe-option').count()) === 3, `${title}: 3 andere Einstellungen zur Auswahl`);
+    check((await infoFits(page)).length === 0, `Infofenster ${title} mit 4 Einstellungen: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+    await shot(`30c-${type}`);
+    await page.tap('#info-close');
+  }
 
   await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)
   await page.tap('#info-close').catch(() => {});

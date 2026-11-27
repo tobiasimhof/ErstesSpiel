@@ -70,7 +70,8 @@ test('Uhrwerk, Gewichtstein, Schlüssel und Vorhängeschloss werden jetzt weiter
 test('Bauleiste: Uhrmacherei im Reiter „Werkstatt“ neben der Schreibstube (Tobias: „Ja, mach das in den Reiter.“)', () => {
   const werkstatt = BUILD_TABS.find((t) => t.id === 'werkstatt');
   // v0.29.0: dazu die Apotheke (Level 12)
-  assert.deepEqual(werkstatt.buildings, ['schreibstube', 'uhrmacherei', 'apotheke']);
+  // v0.60.0: dazu der Instrumentenbau (Level 19) – der Reiter ist voll
+  assert.deepEqual(werkstatt.buildings, ['schreibstube', 'uhrmacherei', 'apotheke', 'instrumentenbau']);
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'eisen').buildings.length, 4, '„Eisen“ ist voll');
 });
 

@@ -37,7 +37,8 @@ test('Einteilung der Reiter (Tobias): Kombi-Maschinen beim Stoff, zu dem sie pas
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'stein').buildings, ['steinbruch', 'steinmetz', 'zauberkessel', 'kraeutermuehle']);
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'eisen').buildings, ['schmelzhuette', 'schmiede', 'feinschmiede', 'schlosserei']);
   assert.deepEqual(BUILD_TABS.find((t) => t.id === 'kraeuter').buildings, ['beet', 'flachsbreche', 'webstube', 'kraeuterstube']);
-  assert.deepEqual(BUILD_TABS.find((t) => t.id === 'werkstatt').buildings, ['schreibstube', 'uhrmacherei', 'apotheke']);
+  // v0.60.0: dazu der Instrumentenbau (Level 19) – der Reiter ist voll
+  assert.deepEqual(BUILD_TABS.find((t) => t.id === 'werkstatt').buildings, ['schreibstube', 'uhrmacherei', 'apotheke', 'instrumentenbau']);
   assert.equal(tabOf.zimmerei, 'holz');
   assert.equal(tabOf.schlosserei, 'eisen');
 });
