@@ -23,7 +23,7 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
 **Geprüft:**
 - `npm test`: 512 Prüfungen bestanden.
-- Browser-Test (parallel, 24 Minuten): 1.388 Prüfungen bestanden (Durchspielen Handy 542, Tablet 534; 3D je 106; Einführung 100). Screenshots angesehen: Farn im Beet deutlich anders als die vier blühenden Kräuter, Farnwedel-Bild im Auftrag, Zauberkessel mit Traum-, Heil- und Manatrank zum Umstellen, Erntebank mit fünf Knöpfen (der Farn allein in der letzten Reihe, über die ganze Breite). Nach der Textkorrektur das Durchspielen auf dem Handy wiederholt.
+- Browser-Test (parallel, 24 Minuten): 1.388 Prüfungen bestanden (Durchspielen Handy 542, Tablet 534; 3D je 106; Einführung 100). Screenshots angesehen: Farn im Beet deutlich anders als die vier blühenden Kräuter, Farnwedel-Bild im Auftrag, Zauberkessel mit Traum-, Heil- und Manatrank zum Umstellen, Erntebank mit fünf Knöpfen (der Farn allein in der letzten Reihe, über die ganze Breite). Nach der Textkorrektur das Durchspielen auf dem Handy wiederholt: 542 bestanden, die neue Meldung im Screenshot geprüft.
 
 ### v0.58.1 – Entwurf Level 18 „Die Zauberei“ (26.11.2026, nur Doku)
 
