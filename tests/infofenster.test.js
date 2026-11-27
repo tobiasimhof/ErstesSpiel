@@ -92,7 +92,7 @@ test('Maschine: „Stellt gerade her“ nennt jede Zutat mit hat / braucht; Umst
   ]);
   // Die anderen Einstellungen („Umstellen auf“)
   const others = productionOf('feinschmiede').recipes.filter((key) => key !== fein.prod.recipe);
-  assert.deepEqual(others, ['schluessel', 'zirkel']);
+  assert.deepEqual(others, ['schluessel', 'zirkel', 'laterne']); // v0.60.0: Laterne (erst ab Level 19 wählbar)
   setRecipe(fein, 'schluessel');
   assert.deepEqual(workshopInputs(fein), [
     { type: 'eisenstange', need: 10, have: 5, done: false },

@@ -94,7 +94,8 @@ test('Bauleiste: Kohlenmeiler im Reiter „Holz“, Schreibstube im neuen Reiter
     ['Holz', 'Stein', 'Eisen', 'Erde', 'Werkstatt'],
   );
   // v0.28.0: dazu die Uhrmacherei (Level 11), v0.29.0 die Apotheke (Level 12)
-  assert.deepEqual(tab('werkstatt').buildings, ['schreibstube', 'uhrmacherei', 'apotheke']);
+  // v0.60.0: dazu der Instrumentenbau (Level 19) – der Reiter ist voll
+  assert.deepEqual(tab('werkstatt').buildings, ['schreibstube', 'uhrmacherei', 'apotheke', 'instrumentenbau']);
   assert.equal(tab('werkstatt').item, 'reisszeug');
 });
 

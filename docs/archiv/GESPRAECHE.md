@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 27.11.2026 – Chat 33: Level 18 „Die Zauberei“, Entwurf Level 19, Baumenü (v0.59.0, v0.59.1, v0.59.2)
+### 27.11.2026 – Chat 33: Level 18 „Die Zauberei“, Entwurf Level 19, Baumenü, Level 19 (v0.59.0, v0.59.1, v0.59.2, v0.60.0)
 
 **Tobias:** „Les dir den aktuellen Stand durch und fasse mir kurz zusammen was die nächsten schritte sind“
 
@@ -27,6 +27,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat die 2. Fassung von Level 19 geschrieben und nachgerechnet (`PLAENE.md`): sechs neue Produkte in drei Arten – Endprodukte verbinden (Astrolabium, Messtisch, Heilertasche), Endprodukt + Zwischenprodukt (Schatztruhe: Kastenschloss + Verstärkte Holzplatten), nur Zwischenprodukte (Laterne: Eisenbleche + Glas; Lupe: Linse + Eisenstangen), fünf Aufträge (dazu Torwächter Ulrich und Händlerin Marta), 33.501 Gold, Engpass die Schmelzhütte. Für das Baumenü drei Möglichkeiten: A Werkzeuge und die 3 zuletzt gebauten Gebäude in der Leiste, alle Gebäude in einem Katalog-Fenster „🏭 Gebäude“ mit beliebig vielen Bereichen (Empfehlung, Tobias' Idee ausgearbeitet); B Leiste wischbar; C Bereich aufklappen. Vorschlag: erst Level 19 (passt noch in die heutige Leiste), dann das Baumenü, dann Level 20 mit neuen Maschinen.
 
 **Umgesetzt:** v0.59.2 (nur Doku).
+
+**Tobias:** „Die neuen Produkte passen. Ja, die Geschichte soll ja nur ein grober Leitfeiden sein. Den können wir später nochmal überarbeiten, damit alles sinnig ist. Personen können ja mehrmals in der Geschichte auftauchen, dann wird die Geschichte auch schlanker. Aufträge passen auch. Ich finde opition A auch am besten, weil man kann mit verschieben ja bestimmte stätten einfach nachbauen ohne ins menu zu gucken, deswegen ist das glaub ich besser.“
+
+**Claude** hat Level 19 nach der 2. Fassung umgesetzt (v0.60.0): Instrumentenbau mit eigenem 3D-Haus (Armillarsphäre aus Messingringen, die sich beim Arbeiten dreht; Messtisch mit leuchtender Linse), sechs neue Waren mit Warenbild und 3D-Form, die 4. Einstellung von Kräuterstube, Schlosserei und Feinschmiede, fünf Aufträge. Statt des neuen Lehrlings Emil gibt Uhrmacher Kaspar den ersten Auftrag. Zur Reihenfolge gab es keine Antwort; wie vorgeschlagen kommt das Baumenü (Möglichkeit A) als Nächstes. Beim Vorbereiten des Browser-Tests fielen zwei alte Prüfungen auf, die „die letzten 3 Gebäude im Reiter Werkstatt“ erwarteten – angepasst, bevor der lange Test lief.
+
+**Umgesetzt:** v0.60.0.
 
 ### 26.11.2026 – Chat 32: Rückmeldung zu Level 15 – Aufstieg blockiert, „1 von 4“ statt Erfahrung, Entwurf Level 16, Browser-Test parallel, Level 16, Entwurf Level 17, Level 17, Entwurf Level 18 (v0.55.1, v0.56.0, v0.56.1, v0.56.2, v0.57.0, v0.57.1, v0.57.2, v0.58.0, v0.58.1)
 

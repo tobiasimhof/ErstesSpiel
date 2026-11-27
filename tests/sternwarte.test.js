@@ -45,14 +45,15 @@ const worth = (items) => Object.entries(items).reduce((sum, [t, n]) => sum + ITE
 // ---------- Tobias' Regel ----------
 
 // v0.59.0: Mit Lebens- und Manatrank ist auch der Zauberkessel voll (Level 18)
-test('Tobias (Chat 32): Keine Maschine hat mehr als 4 Einstellungen – Zimmerei, Apotheke, Steinmetz, Uhrmacherei und Zauberkessel sind voll', () => {
+// v0.60.0: dazu Feinschmiede, Schlosserei und Kräuterstube (Level 19)
+test('Tobias (Chat 32): Keine Maschine hat mehr als 4 Einstellungen – Zimmerei, Apotheke, Steinmetz, Uhrmacherei, Zauberkessel, Feinschmiede, Schlosserei und Kräuterstube sind voll', () => {
   const full = [];
   for (const [type, def] of Object.entries(BUILDINGS)) {
     const recipes = def.production?.kind === 'workshop' ? def.production.recipes : [];
     assert.ok(recipes.length <= 4, `${type}: ${recipes.length} Einstellungen`);
     if (recipes.length === 4) full.push(type);
   }
-  assert.deepEqual(full.sort(), ['apotheke', 'steinmetz', 'uhrmacherei', 'zauberkessel', 'zimmerei']);
+  assert.deepEqual(full.sort(), ['apotheke', 'feinschmiede', 'kraeuterstube', 'schlosserei', 'steinmetz', 'uhrmacherei', 'zauberkessel', 'zimmerei']);
 });
 
 // ---------- Datentabellen ----------

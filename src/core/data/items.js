@@ -171,4 +171,18 @@ export const ITEMS = {
   farnwedel: { name: 'Farnwedel', plural: 'Farnwedel', price: 24, color: '#4f9a3c', shape: 'frond' },
   lebenstrank: { name: 'Lebenstrank', plural: 'Lebenstränke', price: 876, color: '#2b9a48', glow: '#8ce99a', shape: 'potion' },
   manatrank: { name: 'Manatrank', plural: 'Manatränke', price: 841, color: '#1c6fd1', glow: '#74c0fc', shape: 'potion' },
+  // v0.60.0: Level 19 „Die Landvermessung“ (Entwurf v0.60.0, 2. Fassung, Tobias,
+  // Chat 33). Wert = Zutaten × 1,2:
+  // Astrolabium: 1 Sternenuhr + 1 Fernrohr = 1.739 → 2.087 – runde Messingscheibe
+  // mit Sternennetz und Zeiger. Messtisch: 1 Reißbrett + 1 Fernrohr = 2.042 →
+  // 2.450 – Zeichenbrett auf drei Beinen mit Fernrohr. Lupe: 1 Linse + 5
+  // Eisenstangen = 264 → 317. Heilertasche: 1 Heilpäckchen + 2 Mörser = 590 →
+  // 708 – Lederumhängetasche. Schatztruhe: 1 Kastenschloss + 5 Verstärkte
+  // Holzplatten = 2.376 → 2.851. Laterne: 5 Eisenbleche + 5 Glas = 180 → 216.
+  astrolabium: { name: 'Astrolabium', plural: 'Astrolabien', price: 2087, color: '#c9a23c', star: '#2b3f73', shape: 'astrolabe' },
+  messtisch: { name: 'Messtisch', plural: 'Messtische', price: 2450, color: '#efe6cf', wood: '#8a5a2b', shape: 'surveytable' },
+  lupe: { name: 'Lupe', plural: 'Lupen', price: 317, color: '#a8dcd9', handle: '#5b6169', shape: 'magnifier' },
+  heilertasche: { name: 'Heilertasche', plural: 'Heilertaschen', price: 708, color: '#8a5a2b', shape: 'healerbag' },
+  schatztruhe: { name: 'Schatztruhe', plural: 'Schatztruhen', price: 2851, color: '#8a5a2b', metal: '#9aa3ad', shape: 'chest' },
+  laterne: { name: 'Laterne', plural: 'Laternen', price: 216, color: '#5b6169', glow: '#ffd27a', shape: 'lantern' },
 };

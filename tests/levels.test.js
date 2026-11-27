@@ -27,7 +27,7 @@ import { createNewGame } from '../src/core/state.js';
 // ---------- Datentabellen ----------
 
 test('Level-Tabelle: jedes Level ein Bauabschnitt mit 2–5 Aufträgen; ab Level 2 Preis, Level 2–10 Gratis-Rohstoff (v0.13.0)', () => {
-  assert.equal(MAX_LEVEL, 18); // v0.55.0: Level 15 „Der alte Magier“, v0.57.0: Level 16 „Die Kräutermühle“, v0.58.0: Level 17 „Die Sternwarte“, v0.59.0: Level 18 „Die Zauberei“
+  assert.equal(MAX_LEVEL, 19); // v0.55.0: Level 15 „Der alte Magier“, v0.57.0: Level 16 „Die Kräutermühle“, v0.58.0: Level 17 „Die Sternwarte“, v0.59.0: Level 18 „Die Zauberei“, v0.60.0: Level 19 „Die Landvermessung“
   let lastCost = 0;
   for (let level = 1; level <= MAX_LEVEL; level++) {
     const def = LEVELS[level];
@@ -194,12 +194,12 @@ test('Aufstieg auf Level 2: erst alle Aufträge, dann kostet er Gold; dafür gib
   assert.equal(levelUpBlocker(state), 'quests');
 });
 
-test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 und 8 mit Samen, Level 9 mit Holzstamm, Level 10 mit Schafgarbensamen und mehr Fläche, Level 11 ohne Geschenk für 5.000 Gold, Level 12 für 7.500, Level 13 für 10.000, Level 14 für 12.500, Level 15 für 15.000 mit mehr Fläche, Level 16 für 17.500, Level 17 für 20.000, Level 18 für 22.500; danach ist Schluss', () => {
+test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 und 8 mit Samen, Level 9 mit Holzstamm, Level 10 mit Schafgarbensamen und mehr Fläche, Level 11 ohne Geschenk für 5.000 Gold, Level 12 für 7.500, Level 13 für 10.000, Level 14 für 12.500, Level 15 für 15.000 mit mehr Fläche, Level 16 für 17.500, Level 17 für 20.000, Level 18 für 22.500, Level 19 für 25.000; danach ist Schluss', () => {
   const state = createNewGame(3);
   state.shopLevel = 3;
-  state.gold = 150000; // v0.59.0: mehr Startgold, damit es bis Level 18 reicht
+  state.gold = 200000; // v0.59.0/v0.60.0: mehr Startgold, damit es bis zum höchsten Level reicht
   const results = [];
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 16; i++) {
     state.quest.index = levelQuests(state.shopLevel).length; // v0.56.0: alle Aufträge abgegeben
     results.push(levelUp(state));
   }
@@ -232,17 +232,19 @@ test('Level 4 bis 6: Eisenerz als Geschenk (keine Theke mehr, v0.24.0); Level 7 
     { level: 17, gift: {}, cost: 20000, moreLand: false },
     // v0.59.0: Level 18 „Die Zauberei“ – Aufstieg 22.500 Gold (Tobias, Chat 33)
     { level: 18, gift: {}, cost: 22500, moreLand: false },
+    // v0.60.0: Level 19 „Die Landvermessung“ – Aufstieg 25.000 Gold (Tobias, Chat 33)
+    { level: 19, gift: {}, cost: 25000, moreLand: false },
   ]);
-  assert.equal(state.gold, 150000 - 3500 - 1670 - 2000 - 5000 - 7500 - 10000 - 12500 - 15000 - 17500 - 20000 - 22500);
+  assert.equal(state.gold, 200000 - 3500 - 1670 - 2000 - 5000 - 7500 - 10000 - 12500 - 15000 - 17500 - 20000 - 22500 - 25000);
   assert.equal(state.counters.length, 2, 'Theken gibt es nur noch für Gold');
   assert.equal(storageCount(state, 'eisenerz'), 3);
   assert.equal(storageCount(state, 'leinsamen'), 1);
   assert.equal(storageCount(state, 'ringelblumensamen'), 1);
-  state.quest.index = levelQuests(18).length;
+  state.quest.index = levelQuests(19).length;
   assert.equal(levelUpBlocker(state), 'max', 'höchstes Level');
   assert.equal(nextLevelCost(state), null);
   assert.equal(levelUp(state), null);
-  assert.equal(state.shopLevel, 18);
+  assert.equal(state.shopLevel, 19);
 });
 
 test('Ein neues Spiel lässt sich von Holz bis Eisen durchspielen', () => {

@@ -151,7 +151,8 @@ export const BUILDINGS = {
       { kind: 'in', x: 0, y: 1, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['scharnier', 'schluessel', 'zirkel'] },
+    // v0.60.0: ab Level 19 dazu Laternen (4 Einstellungen, voll)
+    production: { kind: 'workshop', recipes: ['scharnier', 'schluessel', 'zirkel', 'laterne'] },
   },
   schlosserei: {
     level: 6,
@@ -166,7 +167,8 @@ export const BUILDINGS = {
       { kind: 'in', x: 0, y: 1, side: 'W' },
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
-    production: { kind: 'workshop', recipes: ['gewichtstein', 'uhrwerk', 'vorhaengeschloss'] },
+    // v0.60.0: ab Level 19 dazu Schatztruhen (4 Einstellungen, voll)
+    production: { kind: 'workshop', recipes: ['gewichtstein', 'uhrwerk', 'vorhaengeschloss', 'schatztruhe'] },
   },
   // v0.16.0: Kräuter-Kapitel, Level 7 „Die Heilstube“ (Tobias, Chat 11) –
   // aufgebaut wie Level 1: Beet (wie der Händler-Rohstoff), Flachsbreche (wie
@@ -246,7 +248,8 @@ export const BUILDINGS = {
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
     // v0.27.0: Level 10 – 3. Einstellung Wundverband
-    production: { kind: 'workshop', recipes: ['heilverband', 'kraeuterkompresse', 'wundverband'] },
+    // v0.60.0: Level 19 – 4. Einstellung Heilertasche (voll)
+    production: { kind: 'workshop', recipes: ['heilverband', 'kraeuterkompresse', 'wundverband', 'heilertasche'] },
   },
   // v0.26.0: Level 9 „Die Schreibstube“ (Tobias, Chat 19) – die Werkzeuge
   // wachsen weiter. Der Kohlenmeiler macht wie das Holzfällerlager aus einem
@@ -326,6 +329,26 @@ export const BUILDINGS = {
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
     production: { kind: 'workshop', recipes: ['kraeutermischung', 'kamillenkissen', 'heilpaeckchen', 'tinktur'] },
+  },
+  // v0.60.0: Level 19 „Die Landvermessung“ (Entwurf v0.60.0, 2. Fassung, Tobias,
+  // Chat 33: „Die neuen Produkte passen“) – Uhrmacher Kaspars Werkstatt für
+  // Messinstrumente, weil die Uhrmacherei voll ist (höchstens 4 Einstellungen).
+  // Reiter „Werkstatt“ (der letzte freie Platz). Baukosten 1 Zirkel + 2 Linsen
+  // (950 Gold, unter 960): Werkzeug zum Einteilen der Skalen und Gläser.
+  instrumentenbau: {
+    level: 19,
+    name: 'Instrumentenbau',
+    cost: { zirkel: 1, linse: 2 },
+    icon: '🧭',
+    size: [2, 2],
+    color: TAB_COLORS.werkstatt,
+    tip: 'Zwei Eingänge links – am besten jede Zutat über ihren eigenen.',
+    ports: [
+      { kind: 'in', x: 0, y: 0, side: 'W' },
+      { kind: 'in', x: 0, y: 1, side: 'W' },
+      { kind: 'out', x: 1, y: 0, side: 'E' },
+    ],
+    production: { kind: 'workshop', recipes: ['astrolabium', 'messtisch', 'lupe'] },
   },
   // v0.55.0: Level 15 „Der alte Magier“ – Magier Ambrosius bringt den
   // Zauberkessel mit (Entwurf v0.55.0, Tobias, Chat 31: „Passt so für mich“).
@@ -418,7 +441,8 @@ export const BUILD_TABS = [
   // Stoff; je Reiter passen höchstens 4 Gebäude aufs Handy – deshalb ein
   // eigener Reiter (Schreibstube, Uhrmacherei). v0.29.0: dazu die Apotheke
   // (Tobias, Chat 21) – die Tränke bekommen später einen eigenen Reiter.
-  { id: 'werkstatt', name: 'Werkstatt', item: 'reisszeug', color: TAB_COLORS.werkstatt, buildings: ['schreibstube', 'uhrmacherei', 'apotheke'] },
+  // v0.60.0: dazu der Instrumentenbau (Level 19) – damit ist der Reiter voll.
+  { id: 'werkstatt', name: 'Werkstatt', item: 'reisszeug', color: TAB_COLORS.werkstatt, buildings: ['schreibstube', 'uhrmacherei', 'apotheke', 'instrumentenbau'] },
 ];
 
 // Gebäude, die man oft braucht: stehen immer sichtbar links in der Bauleiste,

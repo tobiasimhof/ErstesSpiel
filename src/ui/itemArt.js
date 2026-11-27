@@ -1485,6 +1485,201 @@ export function drawItem(ctx, type, cx, cy, size) {
       ctx.stroke();
       break;
     }
+    case 'astrolabe': {
+      // v0.60.0 Astrolabium: runde Messingscheibe mit Aufhängering, innen eine
+      // blaue Sternenscheibe mit Sternen, darüber ein Zeiger (Alhidade)
+      ctx.translate(cx, cy + s * 0.06);
+      const r = s * 0.42;
+      ctx.beginPath();
+      ctx.arc(0, -s * 0.48, s * 0.09, 0, Math.PI * 2);
+      ctx.lineWidth = Math.max(2, s * 0.07);
+      ctx.stroke();
+      ctx.lineWidth = Math.max(1, s * 0.04);
+      ctx.strokeStyle = def.color;
+      ctx.stroke();
+      ctx.lineWidth = Math.max(1, s * 0.09);
+      ctx.strokeStyle = OUTLINE;
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = def.star ?? '#2b3f73';
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.72, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      for (const [dx, dy] of [[-0.14, -0.12], [0.16, -0.06], [-0.06, 0.16], [0.1, 0.14], [0.02, -0.2]]) {
+        ctx.beginPath();
+        ctx.arc(dx * s, dy * s, s * 0.025, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.strokeStyle = shade(def.color, -0.35);
+      ctx.lineWidth = Math.max(1, s * 0.03);
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.86, 0, Math.PI * 2);
+      ctx.stroke();
+      thickLine(ctx, [[-0.3, 0.3], [0.3, -0.3]], s, 0.07, shade(def.color, 0.25));
+      ctx.fillStyle = OUTLINE;
+      ctx.beginPath();
+      ctx.arc(0, 0, s * 0.04, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    }
+    case 'surveytable': {
+      // v0.60.0 Messtisch: Zeichenbrett auf drei Beinen, darauf ein Fernrohr
+      ctx.translate(cx, cy);
+      const legs = def.wood ?? '#8a5a2b';
+      thickLine(ctx, [[-0.04, 0.02], [-0.42, 0.56]], s, 0.07, legs);
+      thickLine(ctx, [[0.04, 0.02], [0.42, 0.56]], s, 0.07, legs);
+      thickLine(ctx, [[0, 0.02], [0, 0.58]], s, 0.07, shade(legs, -0.2));
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      ctx.moveTo(-s * 0.56, s * 0.04);
+      ctx.lineTo(-s * 0.36, -s * 0.18);
+      ctx.lineTo(s * 0.56, -s * 0.18);
+      ctx.lineTo(s * 0.36, s * 0.04);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      // Linien der Karte auf dem Brett
+      ctx.strokeStyle = 'rgba(90, 60, 30, 0.6)';
+      ctx.lineWidth = Math.max(1, s * 0.03);
+      ctx.beginPath();
+      ctx.moveTo(-s * 0.3, -s * 0.02);
+      ctx.lineTo(-s * 0.05, -s * 0.12);
+      ctx.lineTo(s * 0.25, -s * 0.04);
+      ctx.stroke();
+      // Fernrohr schräg auf dem Brett
+      ctx.strokeStyle = OUTLINE;
+      ctx.lineWidth = Math.max(1, s * 0.09);
+      ctx.save();
+      ctx.translate(s * 0.08, -s * 0.3);
+      ctx.rotate(-0.35);
+      ctx.fillStyle = '#5b6169';
+      roundRect(ctx, -s * 0.34, -s * 0.07, s * 0.62, s * 0.14, s * 0.04);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#c9a23c';
+      roundRect(ctx, s * 0.22, -s * 0.09, s * 0.08, s * 0.18, s * 0.03);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+      break;
+    }
+    case 'magnifier': {
+      // v0.60.0 Lupe: runde Linse in einem Eisenring, schräger Griff
+      ctx.translate(cx, cy);
+      thickLine(ctx, [[0.14, 0.14], [0.52, 0.52]], s, 0.13, '#7a5230');
+      ctx.fillStyle = def.handle ?? '#5b6169';
+      ctx.beginPath();
+      ctx.arc(-s * 0.1, -s * 0.1, s * 0.38, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      ctx.arc(-s * 0.1, -s * 0.1, s * 0.28, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.lineWidth = Math.max(1.5, s * 0.06);
+      ctx.beginPath();
+      ctx.arc(-s * 0.1, -s * 0.1, s * 0.19, Math.PI * 1.05, Math.PI * 1.45);
+      ctx.stroke();
+      break;
+    }
+    case 'healerbag': {
+      // v0.60.0 Heilertasche: Ledertasche mit Umhängeriemen, Klappe mit grünem Kreuz
+      ctx.translate(cx, cy);
+      ctx.strokeStyle = OUTLINE;
+      ctx.lineWidth = Math.max(2, s * 0.1);
+      ctx.beginPath();
+      ctx.arc(0, -s * 0.12, s * 0.34, Math.PI * 1.08, Math.PI * 1.92);
+      ctx.stroke();
+      ctx.strokeStyle = '#5a3b25';
+      ctx.lineWidth = Math.max(1, s * 0.05);
+      ctx.stroke();
+      ctx.strokeStyle = OUTLINE;
+      ctx.lineWidth = Math.max(1, s * 0.09);
+      ctx.fillStyle = def.color;
+      roundRect(ctx, -s * 0.5, -s * 0.22, s * 1.0, s * 0.68, s * 0.12);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = shade(def.color, 0.15);
+      ctx.beginPath();
+      ctx.moveTo(-s * 0.5, -s * 0.12);
+      ctx.lineTo(s * 0.5, -s * 0.12);
+      ctx.lineTo(s * 0.5, s * 0.12);
+      ctx.quadraticCurveTo(0, s * 0.3, -s * 0.5, s * 0.12);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#5f8f3a';
+      ctx.fillRect(-s * 0.05, -s * 0.07, s * 0.1, s * 0.26);
+      ctx.fillRect(-s * 0.13, s * 0.01, s * 0.26, s * 0.1);
+      break;
+    }
+    case 'chest': {
+      // v0.60.0 Schatztruhe: Holztruhe mit gewölbtem Deckel, Eisenbändern und
+      // goldenem Kastenschloss
+      ctx.translate(cx, cy);
+      ctx.fillStyle = def.color;
+      roundRect(ctx, -s * 0.52, -s * 0.06, s * 1.04, s * 0.5, s * 0.05);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = shade(def.color, 0.15);
+      ctx.beginPath();
+      ctx.moveTo(-s * 0.52, -s * 0.06);
+      ctx.quadraticCurveTo(-s * 0.52, -s * 0.44, 0, -s * 0.44);
+      ctx.quadraticCurveTo(s * 0.52, -s * 0.44, s * 0.52, -s * 0.06);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = def.metal ?? '#9aa3ad';
+      for (const x of [-0.36, 0.28]) {
+        ctx.fillRect(x * s, -s * 0.4, s * 0.08, s * 0.82);
+        ctx.strokeRect(x * s, -s * 0.4, s * 0.08, s * 0.82);
+      }
+      ctx.fillStyle = '#c9a23c';
+      roundRect(ctx, -s * 0.1, -s * 0.12, s * 0.2, s * 0.22, s * 0.04);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = OUTLINE;
+      ctx.beginPath();
+      ctx.arc(0, -s * 0.02, s * 0.03, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    }
+    case 'lantern': {
+      // v0.60.0 Laterne: Eisengehäuse mit Glasfenstern, innen warmes Licht,
+      // oben ein spitzes Dach mit Ring
+      ctx.translate(cx, cy);
+      ctx.beginPath();
+      ctx.arc(0, -s * 0.5, s * 0.07, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = def.color;
+      ctx.beginPath();
+      ctx.moveTo(-s * 0.3, -s * 0.24);
+      ctx.lineTo(0, -s * 0.44);
+      ctx.lineTo(s * 0.3, -s * 0.24);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = def.glow ?? '#ffd27a';
+      roundRect(ctx, -s * 0.24, -s * 0.24, s * 0.48, s * 0.56, s * 0.04);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#fff4c2';
+      ctx.beginPath();
+      ctx.ellipse(0, s * 0.06, s * 0.07, s * 0.12, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = def.color;
+      ctx.fillRect(-s * 0.03, -s * 0.24, s * 0.06, s * 0.56);
+      ctx.strokeRect(-s * 0.03, -s * 0.24, s * 0.06, s * 0.56);
+      roundRect(ctx, -s * 0.32, s * 0.32, s * 0.64, s * 0.12, s * 0.03);
+      ctx.fill();
+      ctx.stroke();
+      break;
+    }
     case 'potion': {
       // v0.55.0 Traumtrank: bauchiges Fläschchen mit lila Trank, Korken und
       // einem kleinen Glanz – der Trank leuchtet von innen heller; v0.57.0 auch

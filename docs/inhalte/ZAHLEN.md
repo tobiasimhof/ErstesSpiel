@@ -26,6 +26,7 @@
 | 16 Die Kräutermühle | 70 Heilpuder + 8 Wundverbände + 16 Heiltränke + 5 Traumtränke | 19.391 | 5.818 | 0,8 Leinsamen, 11 Ringelblumensamen, 2,9 Schafgarbensamen, 2,6 Kamillensamen, 1,1 Sand | 10.983 | 17,3 | 4,5 h | 5,5 h (Beet: Ringelblume) | Gold ×1,2, Zeit ×1,2 |
 | 17 Die Sternwarte | 20 Linsen + 13 Fernrohre + 300 Steinplatten + 3 Sternenuhren + 50 Kristallsand + 6 Heiltränke | 23.437 | 7.031 | 1,1 Holzstämme, 8,6 Felsbrocken, 4,8 Eisenerz, 1,2 Ringelblumensamen, 0,6 Schafgarbensamen, 0,6 Kamillensamen, 7,4 Sand | 14.895 | 2,4 | 7,9 h | 2,2 h (Steinbruch: Felsbrocken) | Gold ×1,2, Zeit ×1,7 |
 | 18 Die Zauberei | 100 Farnwedel + 13 Lebenstränke + 13 Manatränke + 5 Fernrohre | 27.891 | 8.367 | 1,3 Eisenerz, 2,6 Ringelblumensamen, 2,6 Schafgarbensamen, 3,9 Kamillensamen, 3,6 Sand, 3,3 Farnsporen | 14.428 | 12,4 | 5,4 h | 2 h (Beet: Kamille) | Gold ×1,2, Zeit ×0,7 |
+| 19 Die Landvermessung | 3 Astrolabien + 10 Lupen + 4 Messtische + 20 Laternen + 6 Heilertaschen + 2 Schatztruhen | 33.501 | 10.050 | 6,8 Holzstämme, 1,9 Felsbrocken, 12,3 Eisenerz, 2,6 Leinsamen, 1,2 Ringelblumensamen, 0,6 Schafgarbensamen, 3,4 Sand | 16.127 | 4,4 | 9,4 h | 3,1 h (Schmelzhütte: Eisenerz) | Gold ×1,2, Zeit ×1,8 |
 
 ## Aufstieg und Theken
 
@@ -50,7 +51,8 @@
 | 15 | 17.500 | 16.066 | 109 % | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
 | 16 | 20.000 | 19.391 | 103 % | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
 | 17 | 22.500 | 23.437 | 96 % | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
-| 18 | – (letztes Level) | 27.891 | – | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
+| 18 | 25.000 | 27.891 | 90 % | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
+| 19 | – (letztes Level) | 33.501 | – | 69 | Schatztruhe (2.851) | 390.994 / 1.172.983 Gold/h (6 Theken) | 2,9 Stück/h = 8.294 Gold/h |
 
 ## Wofür man Gold ausgibt
 
@@ -89,6 +91,7 @@ Neben Rohstoffen und Aufstiegen (Preise aus `data/shop.js` und `data/land.js`):
 | 12 | Apotheke | 1 Verstärkte Holzplatte + 1 Gewichtstein | 432 | 0,25 Holzstämme, 0,25 Felsbrocken, 0,25 Eisenerz (275 Gold) |
 | 15 | Zauberkessel | 30 Steinplatten + 10 Eisenbleche | 420 | 0,75 Felsbrocken, 0,25 Eisenerz (320 Gold) |
 | 16 | Kräutermühle | 10 Mörser + 4 Räderwerke | 862 | 1,8 Holzstämme, 1,3 Felsbrocken (549 Gold) |
+| 19 | Instrumentenbau | 1 Zirkel + 2 Linsen | 950 | 0,5 Eisenerz, 0,2 Sand (586 Gold) |
 
 ## Je Ware
 
@@ -145,3 +148,9 @@ Neben Rohstoffen und Aufstiegen (Preise aus `data/shop.js` und `data/land.js`):
 | Farnwedel | 18 | 24 | 0,02 Farnsporen | 20 | +20 % | 12 s | 36 s | 2.400 |
 | Manatrank | 18 | 841 | 0,1 Schafgarbensamen, 0,2 Kamillensamen, 0,15 Sand | 397 | +112 % | 565 s | 360 s | 8.410 |
 | Lebenstrank | 18 | 876 | 0,2 Ringelblumensamen, 0,1 Schafgarbensamen, 0,1 Kamillensamen, 0,05 Sand, 0,1 Farnsporen | 404 | +117 % | 605 s | 360 s | 8.760 |
+| Laterne | 19 | 216 | 0,13 Eisenerz, 0,05 Sand | 147 | +47 % | 202,5 s | 112,5 s | 6.912 |
+| Lupe | 19 | 317 | 0,13 Eisenerz, 0,1 Sand | 202 | +57 % | 287,5 s | 112,5 s | 10.144 |
+| Heilertasche | 19 | 708 | 0,25 Holzstämme, 0,05 Felsbrocken, 0,3 Leinsamen, 0,2 Ringelblumensamen, 0,1 Schafgarbensamen | 317 | +123 % | 840 s | 540 s | 4.720 |
+| Astrolabium | 19 | 2.087 | 0,38 Holzstämme, 0,38 Felsbrocken, 0,75 Eisenerz, 0,2 Sand | 906 | +130 % | 2.220 s | 675 s | 11.131 |
+| Messtisch | 19 | 2.450 | 0,35 Holzstämme, 0,88 Eisenerz, 0,2 Leinsamen, 0,2 Sand | 989 | +148 % | 2.017,5 s | 787,5 s | 11.200 |
+| Schatztruhe | 19 | 2.851 | 1,4 Holzstämme, 0,25 Felsbrocken, 1,4 Eisenerz | 1.304 | +119 % | 3.610 s | 1.237,5 s | 8.294 |

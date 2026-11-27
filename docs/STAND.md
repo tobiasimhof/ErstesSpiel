@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.59.2 – Entwurf Level 19, 2. Fassung, und Entwurf Baumenü (nur Doku) |
-| **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–18 im Spiel, das Tränke-Kapitel ist fertig |
+| **Aktuelle Version** | v0.60.0 – Level 19 „Die Landvermessung“ (Instrumentenbau, sechs neue Produkte) |
+| **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–19 im Spiel; ab Level 19 wird alles gemischt |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
-| **Nächster Schritt** | **Tobias testet Level 17 und 18** und beantwortet die Fragen zur **2. Fassung von Level 19** (v0.60.0, `PLAENE.md`: sechs neue Produkte, Instrumentenbau) und zum **neuen Baumenü** (v0.61.0, Möglichkeiten A–C). Ab Level 19 gilt: alles mit allem mischen, Abwechslung vor Gold (Chat 33). „Zauber des Magiers“ ab Level 20. |
+| **Nächster Schritt** | **Tobias testet Level 17 bis 19.** Danach das **neue Baumenü** (v0.61.0, Möglichkeit A: Werkzeuge und die 3 zuletzt gebauten Gebäude in der Leiste, alle Gebäude im Katalog „🏭 Gebäude“), dann Level 20 mit neuen Maschinen (alles mit allem mischen, Chat 33); „Zauber des Magiers“ ab Level 20. |
 
 **Tobias' Fabrik (3D) – Level 16, braut Heiltränke** (Chat 32, Bild: 22.768 Gold; unten links viel freie Fläche durch die neuen Streifen). Level 15 ging „etwas schnell“ – Auftragsmengen lassen sich später anpassen; „Ich finde die neuen Produkte gut, so entstehen wieder neue Straßen“. Die Fabrik steht bewusst still (kein Gold mehr verdienen, daher die roten Lichter), das Lager ist übervoll vom Strecke-Leeren. Die 2D-Welt ist seit v0.54.0 entfernt (Tobias: „das 3D game, das eigentliche Game“).
 
@@ -18,14 +18,14 @@ Frühere Stände der Fabrik (Level 8, 10, 11 mit Zitaten; zuletzt Level 13 aus C
 | | Meilenstein | Inhalt |
 |---|---|---|
 | M0, M1 | Planung, Fabrik-Grundgerüst | erledigt |
-| **M2** | **Produktionsketten** | **jetzt:** Werkzeuge (1–6), Kräuter (7–12) und Tränke (13–18) fertig; ab Level 19 die alten Straßen verlängern |
+| **M2** | **Produktionsketten** | **jetzt:** Werkzeuge (1–6), Kräuter (7–12) und Tränke (13–18) fertig; ab Level 19 alles mischen (Level 19 im Spiel) |
 | M3 | Wirtschaft & Fortschritt | Nachfrage und Trends, Laden-Ausbau mit Waren, evtl. Freischaltpunkte |
 | M4 | Optik & Gefühl | vorerst abgeschlossen (Chat 30): 3D, Häuser, Waren, Oberfläche, Ladebildschirm, Schriftrolle, Einführung; offen: Klänge, Animationen, Rückseiten, Stadt |
 | M5–M7 | Online, Clans & Handel, App | Spielerkonto, Schwarzmarkt, Clans, Android und iOS |
 
 **Nächste Schritte** (jeder erst nach Tobias' OK):
 
-- **Erledigt seit Chat 25** (Einzelheiten in `PLAENE.md`): v0.39.0–v0.54.0 (Belastungstest, Level 14, Kenney-Oberfläche, Ladebildschirm, Schriftrolle, Einführung, Feinschliff, ein Spiel ohne 2D-Welt). **Jetzt:** Level 15–18 im Spiel (v0.55.0, v0.57.0, v0.58.0, v0.59.0), Browser-Test parallel (v0.56.2); Entwurf Level 19 (2. Fassung) und Baumenü (v0.59.2) warten auf Tobias.
+- **Erledigt seit Chat 25** (Einzelheiten in `PLAENE.md`): v0.39.0–v0.54.0 (Belastungstest, Level 14, Kenney-Oberfläche, Ladebildschirm, Schriftrolle, Einführung, Feinschliff, ein Spiel ohne 2D-Welt). **Jetzt:** Level 15–19 im Spiel (v0.55.0, v0.57.0, v0.58.0, v0.59.0, v0.60.0), Browser-Test parallel (v0.56.2); als Nächstes das Baumenü (Möglichkeit A, Chat 33).
 1. **Tränke-Kapitel** (angenommen, Chat 27; seit v0.59.0 ganz im Spiel; Tabelle in `docs/inhalte/AUSBLICK.md`): 14 Die Tinktur (Mörser, Tinktur), 15 Der alte Magier (Zauberkessel, Traumtrank), 16 Die Kräutermühle (Heilpuder, Heiltrank), 17 Die Sternwarte (Linse, Fernrohr, Sternensand), 18 Die Zauberei (Farn, Lebens- und Manatrank). Feuer im Kessel von Hand (A); mehr Fläche ab Level 15; einzige Rezeptänderung: Mörser aus 5 Holzstäben (Tobias, Chat 31). Gemahlenes Glas: **Kristallsand** (Tobias), im Steinmetz. Leitlinie: alte Maschinen bekommen neue Funktionen, neue nur, wo es Sinn ergibt.
 2. **3D-Grafik:** eigene Häuser für alle Gebäude (fertig, Möglichkeit B: Mittelalter mit ein paar Technik-Teilen; Tobias, Chat 27: „sieht sehr gut aus“). **Waren auf dem Band** (v0.46.0): eigene kleine 3D-Formen. **Für später – Rückseiten** (Tobias, Chat 27, „nur eine kleine Anmerkung für später“): Erkennungszeichen und bewegte Teile sitzen vorn; baut man links und rechts einer Straße, sieht man eine Seite immer von hinten, „und da sieht man z.b. keine Unterschiede“. Eine Stadt um die Fabrik, die mit dem Level wächst (Idee).
 3. **Nach hinten verschoben:** **Weiche** (Chat 26: eigene Straßen sind besser, siehe offene Frage 4).
@@ -57,6 +57,12 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 ## Die letzten 3 Arbeitsschritte
 
+### v0.60.0 – Level 19 „Die Landvermessung“ (27.11.2026)
+
+- **Warum (Tobias, Chat 33):** „Die neuen Produkte passen“, „Aufträge passen auch“; die Geschichte ist ein grober Leitfaden, Personen dürfen mehrmals vorkommen; Baumenü Möglichkeit A.
+- **Umgesetzt:** Kaspars Instrumentenbau (Werkstatt, 1 Zirkel + 2 Linsen) mit Astrolabium, Messtisch, Lupe; Heilertasche (Kräuterstube), Schatztruhe (Schlosserei), Laterne (Feinschmiede); Kaspar, Anton, Ulrich, Agnes, Marta (33.501 Gold), Aufstieg 25.000. Kaspar statt eines neuen Lehrlings. Format bleibt 21.
+- **Offen:** Tobias' Test; danach das Baumenü.
+
 ### v0.59.2 – Level 19, 2. Fassung, und Baumenü (27.11.2026, nur Doku)
 
 - **Tobias (Chat 33):** „Mir geht es aktuell um die Varität“ – Gold je Stufe darf auch mal weniger sein; jetzt „alles mit allem mischen“, mehr neue Produkte je Level, manche an Straßen angebunden, manche aus Zwischenprodukten (neue Stätten). Baumenü: nur das Grundgerüst in der Leiste, die Reiter über einen eigenen Knopf.
@@ -66,9 +72,3 @@ Kurzfassung; die ausführlichen Fassungen mit Zitaten bis v0.36.2 stehen in `doc
 
 - **Tobias (Chat 33):** Entwurf Level 19 mit Blick auf Gleichgewicht, Straßen, Endprodukte, neue Produkte.
 - **Claude:** 1. Fassung in `PLAENE.md` (Instrumentenbau mit Astrolabium und Messtisch, Heilertasche); überholt durch v0.59.2.
-
-### v0.59.0 – Level 18 „Die Zauberei“ (27.11.2026)
-
-- **Warum (Tobias, Chat 33):** Entwurf angenommen („Farn können wir gerne als 5. Pflanze einführen“, „Gerne A“, „Ja, können wir auch gerne so machen“).
-- **Umgesetzt:** Farn als 5. Pflanze (Farnsporen 1.000, Beet, Erntebank → 50 Farnwedel à 24; eigene Wuchsform ohne Blüte), Zauberkessel braut Lebenstrank (1 Heiltrank + 5 Farnwedel, 876) und Manatrank (1 Traumtrank + 2 Kristallsand, 841), je 90 s – der Kessel ist voll; Ambrosius, Agnes, Ambrosius, Hildes Fest (27.891 Gold), Aufstieg 22.500. Format bleibt 21.
-- **Offen:** Tobias' Test.

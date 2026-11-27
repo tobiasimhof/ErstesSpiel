@@ -292,6 +292,25 @@ export const LEVELS = {
       { from: 'Bürgermeisterin Hilde', text: 'Der Ort feiert das große Fest der Zauberei! Auf dem Hügel schauen alle durch Fernrohre in die Sterne, und Ambrosius verteilt seine Tränke.', items: { lebenstrank: 5, manatrank: 5, fernrohr: 5 } },
     ],
   },
+  // v0.60.0: Level 19 (Entwurf v0.60.0, 2. Fassung, Tobias, Chat 33: „Die neuen
+  // Produkte passen“, „Aufträge passen auch“; die Geschichte ist ein grober
+  // Leitfaden, Personen dürfen mehrmals vorkommen – deshalb Uhrmacher Kaspar
+  // statt eines neuen Lehrlings). Ab hier: alles mit allem mischen, Abwechslung
+  // vor Gold. Aufträge zusammen 33.501 Gold (×1,2 gegenüber Level 18).
+  // Aufstieg 25.000 Gold, kein Geschenk, keine neue Fläche.
+  19: {
+    name: 'Die Landvermessung',
+    story:
+      'Der Ort ist so gewachsen, dass niemand mehr weiß, wo ein Feld aufhört und das nächste anfängt. Anton vermisst das ganze Tal, und Kaspar baut neben seiner Uhrmacherei eine Werkstatt für Messinstrumente. Überall im Ort braucht man auf einmal Neues: Laternen für die dunklen Gassen, Truhen für die Händler, Taschen für die Heilerin.',
+    cost: 25000,
+    quests: [
+      { from: 'Uhrmacher Kaspar', text: 'Meine Uhrmacherei ist voll, also baue ich nebenan weiter! Zuerst Lupen für die feinen Arbeiten – und dann Astrolabien: Sternenuhr und Fernrohr in einem Gerät.', items: { astrolabium: 3, lupe: 10 } },
+      { from: 'Baumeister Anton', text: 'Ein Reißbrett auf drei Beinen, darauf ein Fernrohr: Mit Messtischen zeichne ich das ganze Tal auf, Feld für Feld.', items: { messtisch: 4 } },
+      { from: 'Torwächter Ulrich', text: 'Der Ort ist so groß geworden, dass ich nachts die Gassen nicht mehr überblicke. Laternen aus Eisenblech und Glas, an jede Ecke eine!', items: { laterne: 20 } },
+      { from: 'Heilerin Agnes', text: 'Ich wandere jetzt zu den Kranken. In einer Heilertasche habe ich alles dabei: das Heilpäckchen und Mörser für frische Kräuter.', items: { heilertasche: 6 } },
+      { from: 'Händlerin Marta', text: 'Seit so viele Reisende kommen, klingelt meine Kasse. Ich brauche Truhen mit einem richtigen Kastenschloss!', items: { schatztruhe: 2 } },
+    ],
+  },
 };
 
 export const MAX_LEVEL = Math.max(...Object.keys(LEVELS).map(Number));

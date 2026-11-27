@@ -70,7 +70,7 @@ test('Schafgarbe: Samen 660 Gold, wächst 30 Minuten im Beet, die Erntebank mach
 });
 
 test('Wundverband: Kräuterstube, 1 Heilverband + 5 Schafgarbenblüten, 20 s, 252 Gold (+20 %)', () => {
-  assert.deepEqual(BUILDINGS.kraeuterstube.production.recipes, ['heilverband', 'kraeuterkompresse', 'wundverband']);
+  assert.deepEqual(BUILDINGS.kraeuterstube.production.recipes, ['heilverband', 'kraeuterkompresse', 'wundverband', 'heilertasche']); // v0.60.0: Heilertasche ab Level 19
   const r = RECIPES.wundverband;
   assert.deepEqual([r.building, r.inputs, r.output, r.amount, r.time], ['kraeuterstube', { heilverband: 1, schafgarbenbluete: 5 }, 'wundverband', 1, 20]);
   assert.equal(worth(r.inputs), 210);

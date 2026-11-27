@@ -65,6 +65,12 @@
 | Farnwedel | Erntebank: 1 Farn → 50 (grüner, gefiederter Wedel) | 12 s je Stück | 24 |
 | Lebenstrank | Zauberkessel: 1 Heiltrank + 5 Farnwedel, Feuer 5 Holzkohle (Fläschchen mit grünem Trank) | 90 s | 876 |
 | Manatrank | Zauberkessel: 1 Traumtrank + 2 Kristallsand, Feuer 5 Holzkohle (Fläschchen mit blauem Trank) | 90 s | 841 |
+| Astrolabium | Instrumentenbau: 1 Sternenuhr + 1 Fernrohr (Messingscheibe mit blauer Sternenscheibe und Zeiger) | 90 s | 2.087 |
+| Messtisch | Instrumentenbau: 1 Reißbrett + 1 Fernrohr (Zeichenbrett auf drei Beinen mit Fernrohr) | 90 s | 2.450 |
+| Lupe | Instrumentenbau: 1 Linse + 5 Eisenstangen (Linse in Eisenring mit Holzgriff) | 30 s | 317 |
+| Heilertasche | Kräuterstube: 1 Heilpäckchen + 2 Mörser (Ledertasche mit grünem Kreuz) | 30 s | 708 |
+| Schatztruhe | Schlosserei: 1 Kastenschloss + 5 Verstärkte Holzplatten (Truhe mit Eisenbändern und Schloss) | 60 s | 2.851 |
+| Laterne | Feinschmiede: 5 Eisenbleche + 5 Glas (Eisengehäuse mit leuchtendem Glas) | 20 s | 216 |
 
 - Rohstoffe und Pflanzen kommen nicht aufs Band und nicht ins Lagerhaus; man legt sie direkt ins Gebäude. Pflanzen kann man nicht kaufen und nicht verkaufen.
 - **Aussehen der Kräuter** (`bloom` in `data/items.js`): Flachs hohe Halme mit kleinen blauen Blüten, Ringelblume eine große orange Blüte mit braunem Knopf, Schafgarbe ein flacher weißer Schirm aus Pünktchen über gefiederten Blättern, Kamille Gänseblümchen mit dickem gelbem Knopf, Farn gefiederte grüne Wedel ohne Blüte mit hellgrünen, eingerollten jungen Spitzen. Samen (beim Farn die Sporen) sind eine Tüte in ihrer Farbe mit dem Bild der Pflanze (`grows`).

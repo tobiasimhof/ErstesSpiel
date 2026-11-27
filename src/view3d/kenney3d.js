@@ -496,6 +496,62 @@ function medievalBuilding(lib, building) {
       parts.glow = [glowMat];
       break;
     }
+    case 'instrumentenbau': {
+      // v0.60.0: Kaspars Instrumentenbau (Level 19) – Steinhaus mit Spitzdach in
+      // der Farbe des Reiters und runden Fenstern; davor auf einem Steinsockel
+      // eine Armillarsphäre aus drei Messingringen um eine blaue Himmelskugel,
+      // schräg wie die Erdachse – sie dreht sich beim Arbeiten; daneben ein
+      // Messtisch auf drei Beinen mit Fernrohr, dessen Linse beim Arbeiten leuchtet.
+      const h = house(lib, color, {
+        walls: {
+          N: ['wall', 'wall'],
+          W: ['wall', 'wall-window-round'],
+          E: ['wall-window-round', 'wall'],
+          S: ['wall-door', 'wall-window-round'],
+        },
+        roof: 'roof-point',
+        roofHeight: 2,
+      });
+      h.scale.setScalar(0.72);
+      h.position.set(-0.3, 0, -0.32);
+      g.add(h);
+      const sx = 0.52;
+      const sz = 0.42;
+      g.add(plain(new THREE.CylinderGeometry(0.14, 0.18, 0.3, 10), '#8f877b', { x: sx, y: 0.15, z: sz }));
+      g.add(plain(new THREE.CylinderGeometry(0.03, 0.03, 0.12, 8), '#b08a2e', { x: sx, y: 0.36, z: sz }));
+      const tilt = new THREE.Group();
+      tilt.position.set(sx, 0.62, sz);
+      tilt.rotation.z = 0.4;
+      const sphere = new THREE.Group();
+      const ring = (c) => plain(new THREE.TorusGeometry(0.2, 0.018, 6, 24), c);
+      const r2 = ring('#d8b44a');
+      r2.rotation.y = Math.PI / 2;
+      const r3 = ring('#b08a2e');
+      r3.rotation.x = Math.PI / 2;
+      sphere.add(ring('#c9a23c'), r2, r3, plain(new THREE.SphereGeometry(0.07, 10, 8), '#2b3f73'));
+      sphere.add(plain(new THREE.CylinderGeometry(0.01, 0.01, 0.5, 6), '#b08a2e'));
+      tilt.add(sphere);
+      g.add(tilt);
+      parts.spin = [{ obj: sphere, axis: 'y', speed: 0.7 }];
+      // Messtisch: drei Beine, Zeichenbrett, Fernrohr mit leuchtender Linse
+      const mx = -0.62;
+      const mz = 0.62;
+      for (const [dx, dz] of [[0.1, 0], [-0.06, 0.08], [-0.06, -0.08]]) {
+        const leg = plain(new THREE.CylinderGeometry(0.015, 0.015, 0.34, 6), '#7a5230', { x: mx + dx, y: 0.16, z: mz + dz });
+        leg.rotation.set(-dz * 2.5, 0, dx * 2.5);
+        g.add(leg);
+      }
+      g.add(plain(new THREE.BoxGeometry(0.36, 0.03, 0.26), '#efe6cf', { x: mx, y: 0.34, z: mz }));
+      const scope = plain(new THREE.CylinderGeometry(0.035, 0.045, 0.3, 10), '#5b6169', { x: mx, y: 0.4, z: mz });
+      scope.rotation.z = Math.PI / 2 - 0.25;
+      g.add(scope);
+      const glowMat = mat('#bfe6ff', { emissive: '#7fd0ff', emissiveIntensity: 1.2 });
+      const lens = simpleMesh(new THREE.CylinderGeometry(0.036, 0.036, 0.01, 12), glowMat, { x: mx + 0.15, y: 0.44, z: mz, shadow: false });
+      lens.rotation.z = Math.PI / 2 - 0.25;
+      g.add(lens);
+      parts.glow = [glowMat];
+      break;
+    }
     case 'zauberkessel': {
       // v0.55.0: Magier Ambrosius' Zauberkessel (Level 15) – hinten ein kleiner
       // sechseckiger Turm, vorn ein gemauerter Herd mit dickem Eisenkessel und
