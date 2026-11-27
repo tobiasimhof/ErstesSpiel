@@ -25,6 +25,7 @@
 | 15 Der alte Magier | 300 Holzkohle + 18 Traumtränke + 10 Kamillenkissen + 10 Tinkturen | 16.066 | 4.820 | 3 Holzstämme, 2 Leinsamen, 2,8 Schafgarbensamen, 5,6 Kamillensamen, 1,4 Sand | 9.225 | 10,4 | 3,8 h | 2,8 h (Beet: Kamille) | Gold ×1,2, Zeit ×0,7 |
 | 16 Die Kräutermühle | 70 Heilpuder + 8 Wundverbände + 16 Heiltränke + 5 Traumtränke | 19.391 | 5.818 | 0,8 Leinsamen, 11 Ringelblumensamen, 2,9 Schafgarbensamen, 2,6 Kamillensamen, 1,1 Sand | 10.983 | 17,3 | 4,5 h | 5,5 h (Beet: Ringelblume) | Gold ×1,2, Zeit ×1,2 |
 | 17 Die Sternwarte | 20 Linsen + 13 Fernrohre + 300 Steinplatten + 3 Sternenuhren + 50 Kristallsand + 6 Heiltränke | 23.437 | 7.031 | 1,1 Holzstämme, 8,6 Felsbrocken, 4,8 Eisenerz, 1,2 Ringelblumensamen, 0,6 Schafgarbensamen, 0,6 Kamillensamen, 7,4 Sand | 14.895 | 2,4 | 7,9 h | 2,2 h (Steinbruch: Felsbrocken) | Gold ×1,2, Zeit ×1,7 |
+| 18 Die Zauberei | 100 Farnwedel + 13 Lebenstränke + 13 Manatränke + 5 Fernrohre | 27.891 | 8.367 | 1,3 Eisenerz, 2,6 Ringelblumensamen, 2,6 Schafgarbensamen, 3,9 Kamillensamen, 3,6 Sand, 3,3 Farnsporen | 14.428 | 12,4 | 5,4 h | 2 h (Beet: Kamille) | Gold ×1,2, Zeit ×0,7 |
 
 ## Aufstieg und Theken
 
@@ -48,7 +49,8 @@
 | 14 | 15.000 | 13.251 | 113 % | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
 | 15 | 17.500 | 16.066 | 109 % | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
 | 16 | 20.000 | 19.391 | 103 % | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
-| 17 | – (letztes Level) | 23.437 | – | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
+| 17 | 22.500 | 23.437 | 96 % | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
+| 18 | – (letztes Level) | 27.891 | – | 69 | Reißbrett (1.408) | 193.097 / 579.291 Gold/h (6 Theken) | 6,4 Stück/h = 9.011 Gold/h |
 
 ## Wofür man Gold ausgibt
 
@@ -140,3 +142,6 @@ Neben Rohstoffen und Aufstiegen (Preise aus `data/shop.js` und `data/land.js`):
 | Kristallsand | 17 | 72 | 0,05 Sand | 55 | +31 % | 55 s | 45 s | 5.760 |
 | Linse | 17 | 144 | 0,1 Sand | 110 | +31 % | 120 s | 90 s | 5.760 |
 | Fernrohr | 17 | 634 | 0,25 Eisenerz, 0,2 Sand | 403 | +57 % | 575 s | 225 s | 10.144 |
+| Farnwedel | 18 | 24 | 0,02 Farnsporen | 20 | +20 % | 12 s | 36 s | 2.400 |
+| Manatrank | 18 | 841 | 0,1 Schafgarbensamen, 0,2 Kamillensamen, 0,15 Sand | 397 | +112 % | 565 s | 360 s | 8.410 |
+| Lebenstrank | 18 | 876 | 0,2 Ringelblumensamen, 0,1 Schafgarbensamen, 0,1 Kamillensamen, 0,05 Sand, 0,1 Farnsporen | 404 | +117 % | 605 s | 360 s | 8.760 |

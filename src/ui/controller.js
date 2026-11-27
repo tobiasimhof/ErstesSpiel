@@ -412,7 +412,8 @@ export function createController({
             const result = harvest(state, beet);
             if (result === 'ok') {
               changed();
-              panels.toast(`${ITEMS[crop.plant].name} geerntet – sie liegt im Laden-Lager. Jetzt das Beet neu säen.`, 4000);
+              // v0.59.0: ohne „sie“ – der Farn ist männlich
+              panels.toast(`${ITEMS[crop.plant].name} geerntet und ins Laden-Lager gelegt. Jetzt das Beet neu säen.`, 4000);
             } else if (result === 'full') panels.toast('Dein Laden-Lager ist voll – erst Platz schaffen, dann ernten.');
             else if (result === 'unripe') panels.toast(`Noch nicht reif – in etwa ${formatDuration(growthLeft(beet))}.`);
             infoRefresh?.();

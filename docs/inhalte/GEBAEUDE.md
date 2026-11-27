@@ -9,14 +9,14 @@
 | 🛠️ Zimmerei | Holz | 2 × 2, 2 Eingänge | Zahnradwelle · Räderwerk · Verstärkte Holzplatte · „Mörser“ (erst ab Level 14 wählbar) | 4 | 20 Holzplatten + 10 Eisenstangen |
 | ⛏️ Steinbruch | Stein | 2 × 2 | 1 Felsbrocken → 200 Steinblöcke (15 min), Vorrat 3 | 2 | 10 Holzplatten + 5 Holzstäbe |
 | ⚒️ Steinmetz | Stein | 2 × 2 | „Platten“ oder „Zahnräder“: 5 Steinblöcke → 1; ab Level 17 „Linsen“ (10 Glas → 1, 30 s) und „Kristallsand“ (5 Glas → 1, 10 s) | 2 | 30 Steinblöcke + 5 Holzstäbe |
-| 🔮 Zauberkessel | Stein | 2 × 2, 2 Eingänge, **Feuerfach** | „Traumtränke“: 1 Tinktur + 5 Kamillenblüten → 1 (60 s); „Heiltränke“ (erst ab Level 16): 1 Tinktur + 2 Heilpuder → 1 (60 s); das Feuer verbrennt 5 Holzkohle je Trank – das Fach fasst 100, nachlegen von Hand mit „🔥 Auffüllen“ aus dem Laden-Lager; ohne Feuer wartet der Kessel („Feuer aus“) | 15 | 30 Steinplatten + 10 Eisenbleche (gemauerter Herd, Kessel aus Eisenblech) |
+| 🔮 Zauberkessel | Stein | 2 × 2, 2 Eingänge, **Feuerfach** | „Traumtränke“: 1 Tinktur + 5 Kamillenblüten → 1 (60 s); „Heiltränke“ (erst ab Level 16): 1 Tinktur + 2 Heilpuder → 1 (60 s); „Lebenstränke“ (ab Level 18): 1 Heiltrank + 5 Farnwedel → 1 (90 s); „Manatränke“ (ab Level 18): 1 Traumtrank + 2 Kristallsand → 1 (90 s); das Feuer verbrennt 5 Holzkohle je Trank – das Fach fasst 100, nachlegen von Hand mit „🔥 Auffüllen“ aus dem Laden-Lager; ohne Feuer wartet der Kessel („Feuer aus“) | 15 | 30 Steinplatten + 10 Eisenbleche (gemauerter Herd, Kessel aus Eisenblech) |
 | 🌼 Kräutermühle | Stein | 2 × 2 | „Heilpuder“: 5 Ringelblüten → 1 (15 s) | 16 | 10 Mörser + 4 Räderwerke (Mahlschalen und Antrieb; 862 Gold Warenwert) |
 | 🔥 Schmelzhütte | Eisen | 2 × 2 | 1 Eisenerz → 200 Eisenbarren (15 min), Vorrat 3 | 3 | 20 Steinplatten + 10 Holzplatten |
 | 🔨 Schmiede | Eisen | 2 × 2 | „Bleche“ oder „Stangen“: 5 Eisenbarren → 1; „Fläschchen“: 5 Glas → 1 (erst ab Level 13 wählbar) | 3 | 10 Steinplatten + 30 Eisenbarren |
 | ⚙️ Feinschmiede | Eisen | 2 × 2, 2 Eingänge | Scharnier · Schlüssel · Zirkel | 5 | 10 Eisenbleche + 2 Räderwerke |
 | 🔐 Schlosserei | Eisen | 2 × 2, 2 Eingänge | Gewichtstein · Uhrwerk · Vorhängeschloss | 6 | 1 Scharnier + 2 Verstärkte Holzplatten |
 | 🌱 Beet | Erde | 2 × 2, kein Band | 1 Samen → 1 Pflanze (30 min), säen und ernten von Hand; in 3D wachsen 3 × 3 Pflanzen sichtbar | 7 | 10 Holzplatten + 10 Steinplatten |
-| 🪢 Erntebank | Erde | 2 × 2 | 1 Pflanze → 50 Flachsfasern, Ringelblüten, Schafgarbenblüten bzw. Kamillenblüten (10 min), Vorrat 3, auch gemischt | 7 | 10 Holzplatten + 2 Zahnradwellen |
+| 🪢 Erntebank | Erde | 2 × 2 | 1 Pflanze → 50 Flachsfasern, Ringelblüten, Schafgarbenblüten, Kamillenblüten bzw. Farnwedel (10 min), Vorrat 3, auch gemischt | 7 | 10 Holzplatten + 2 Zahnradwellen |
 | 🧵 Webstube | Erde | 2 × 2 | 5 Flachsfasern → 1 Verband | 7 | 20 Holzstäbe + 2 Räderwerke |
 | 🌿 Kräuterstube | Erde | 2 × 2, 2 Eingänge | „Heilverbände“ · „Kompressen“ · „Wundverbände“ (erst ab Level 10 wählbar) | 8 | 10 Holzplatten + 5 Eisenbleche + 2 Zahnradwellen |
 | ♨️ Ofen (früher Kohlenmeiler) | Holz | 2 × 2 | 1 Holzstamm → 100 Holzkohle, ab Level 13 auch 1 Sand → 100 Glas (je 15 min), Vorrat 3, auch gemischt | 9 | 20 Steinplatten + 2 Verstärkte Holzplatten |

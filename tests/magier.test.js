@@ -86,8 +86,8 @@ test('Zauberkessel: Reiter „Stein“, 2 × 2 mit 2 Eingängen, 30 Steinplatten
   assert.equal(def.level, 15);
   assert.deepEqual(def.size, [2, 2]);
   assert.deepEqual(def.cost, { steinplatte: 30, eisenblech: 10 });
-  // v0.57.0: auf Level 16 kommt der Heiltrank dazu
-  assert.deepEqual(def.production, { kind: 'workshop', recipes: ['traumtrank', 'heiltrank'], fuel: { item: 'holzkohle', capacity: 100 } });
+  // v0.57.0: auf Level 16 kommt der Heiltrank dazu, v0.59.0: auf Level 18 Lebens- und Manatrank
+  assert.deepEqual(def.production, { kind: 'workshop', recipes: ['traumtrank', 'heiltrank', 'lebenstrank', 'manatrank'], fuel: { item: 'holzkohle', capacity: 100 } });
   assert.equal(def.ports.filter((p) => p.kind === 'in').length, 2, 'Tobias: höchstens 2 Eingänge – das Feuer kommt von Hand');
   assert.ok(BUILD_TABS.find((t) => t.id === 'stein').buildings.includes('zauberkessel'));
   assert.equal(isBuildingUnlocked(levelGame(14), 'zauberkessel'), false);

@@ -112,7 +112,8 @@ test('Erfahrung je Level: steigt im Werkzeug-Kapitel, das Kräuter-Kapitel fäng
   // v0.31.0: Level 13 „Die Glashütte“, v0.45.0: Level 14 „Die Tinktur“
   // v0.55.0: Level 14 mit dem teureren Mörser (5 Holzstäbe), Level 15 „Der alte Magier“
   // v0.57.0: Level 16 „Die Kräutermühle“, v0.58.0: Level 17 „Die Sternwarte“
-  assert.deepEqual(needs, [81, 90, 162, 714, 1495, 1840, 816, 1305, 1657, 2116, 2550, 2722, 3147, 3976, 4820, 5818, 7031]);
+  // v0.59.0: Level 18 „Die Zauberei“
+  assert.deepEqual(needs, [81, 90, 162, 714, 1495, 1840, 816, 1305, 1657, 2116, 2550, 2722, 3147, 3976, 4820, 5818, 7031, 8367]);
 });
 
 // ---------- Abgeben ----------

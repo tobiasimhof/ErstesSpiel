@@ -6,7 +6,8 @@
 //
 // Jede Pflanze hat ihre Wuchsform wie ihr Warenbild (bloom in data/items.js):
 // Flachs hohe Halme mit kleinen blauen Blüten, Ringelblume eine große orange
-// Blüte, Schafgarbe ein flacher weißer Schirm, Kamille kleine Gänseblümchen.
+// Blüte, Schafgarbe ein flacher weißer Schirm, Kamille kleine Gänseblümchen,
+// v0.59.0 Farn gefiederte Wedel ohne Blüte.
 // Sie wächst in vier Stufen: Keimling, kleine Pflanze, groß mit Knospen, reif.
 //
 // Nur Daten, ohne three.js (in node testbar) – dieselben Grundkörper wie die
@@ -141,7 +142,35 @@ function kamille(def, stage) {
   return parts;
 }
 
-const FORMS = { stars: flachs, disc: ringelblume, umbel: schafgarbe, daisies: kamille };
+// v0.59.0: Farn – keine Blüte, dafür gefiederte Wedel, die schräg nach außen
+// stehen; in der Mitte ein junger Wedel mit eingerollter, hellgrüner Spitze
+// (def.flower). Keimling: zwei eingerollte Spitzen; Stufe 2: Spitzen noch rund.
+function farn(def, stage) {
+  const leaf = def.color;
+  const curl = def.flower;
+  const h = [0.08, 0.12, 0.16, 0.2][stage];
+  const parts = [stalk(leaf, h, 0, 0, 0.2, 0.4, 0.011), ball(curl, stage === 3 ? 0.018 : 0.024, tip(h, 0, 0, 0.2, 0.4), 6, 4)];
+  if (stage === 0) {
+    parts.push(stalk(leaf, h * 0.7, 0.03, -0.02, 0.25, 3.5, 0.01), ball(curl, 0.02, tip(h * 0.7, 0.03, -0.02, 0.25, 3.5), 6, 4));
+    return parts;
+  }
+  const fronds = stage === 1 ? 3 : 5;
+  const len = [0, 0.16, 0.3, 0.36][stage];
+  const pairs = stage === 1 ? 3 : 5;
+  for (let k = 0; k < fronds; k++) {
+    const a = (k / fronds) * Math.PI * 2 + 0.5;
+    const frond = [box(leaf, [len, 0.008, 0.012], [len / 2, 0, 0])];
+    for (let f = 1; f <= pairs; f++) {
+      const wide = 0.075 * (1 - f / (pairs + 1.5)) * (stage === 1 ? 0.7 : 1);
+      frond.push(box(leaf, [0.018, 0.006, wide * 2], [(len * f) / (pairs + 1), 0, 0]));
+    }
+    frond.push(stage === 2 ? ball(curl, 0.02, [len, 0, 0], 5, 3) : box(curl, [0.04, 0.006, 0.02], [len, 0, 0]));
+    parts.push(group(frond, [0, 0.02, 0], [0, -a, 0.75]));
+  }
+  return parts;
+}
+
+const FORMS = { stars: flachs, disc: ringelblume, umbel: schafgarbe, daisies: kamille, fronds: farn };
 
 // Eine Pflanze (steht auf y = 0) in der Stufe stage
 export function plantForm(type, stage) {

@@ -61,7 +61,9 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.59.0 – Level 18 „Die Zauberei“: Farn, Lebenstrank, Manatrank (Chat 32, v0.58.1; wartet auf Tobias' Antworten)
+### Entwurf v0.59.0 – Level 18 „Die Zauberei“: Farn, Lebenstrank, Manatrank (Chat 32, v0.58.1; angenommen in Chat 33 – Variante A; umgesetzt in v0.59.0)
+
+**Tobias' Antworten (Chat 33):** „Farn können wir gerne als 5. Pflanze einführen, damit wir auch bei den Pflanzen genug Varität reinbringen können. 2. Gerne A. 3. Ja, können wir auch gerne so machen.“ – umgesetzt wie im Entwurf, ohne Änderung.
 
 **Tobias (Chat 32, nach v0.58.0):** „Schreibe gerne den Entwurf für Level 18. Ich bin gerade dabei die Lebenstränke zu brauen auf level 16“ (auf Level 16 sind es Heiltränke – die Vorstufe des Lebenstranks)
 
