@@ -4,6 +4,26 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.60.0 – Level 19 „Die Landvermessung“: Instrumentenbau, sechs neue Produkte (27.11.2026)
+
+**Vorgenommen:**
+- Level 19 nach der 2. Fassung des Entwurfs umsetzen (Tobias, Chat 33: „Die neuen Produkte passen“, „Aufträge passen auch“) – der Anfang von „alles mit allem mischen“.
+
+**Fragen, die wir uns gestellt haben:**
+- Ein neuer Bewohner (Lehrling Emil) oder ein bekannter? → Tobias: „Personen können ja mehrmals in der Geschichte auftauchen, dann wird die Geschichte auch schlanker“ – deshalb Uhrmacher Kaspar.
+- Passt der Instrumentenbau noch in die heutige Bauleiste? → Ja, als 4. Gebäude im Reiter „Werkstatt“; damit sind alle 5 Reiter voll – das nächste neue Gebäude kommt mit dem neuen Baumenü.
+- Welche alten Prüfungen hängen an der Werkstatt mit 3 Gebäuden? → Zwei Stellen im Durchspiel-Test („die letzten 3 Gebäude“) – vor dem langen Lauf angepasst; dazu setzt der Test Feinschmiede und Schlosserei auf eine freie Fläche, weil sie beim Durchspielen sonst nicht gebaut werden.
+
+**Gemacht:**
+- Daten: Instrumentenbau (Level 19, Reiter „Werkstatt“, 2 Eingänge, Baukosten 1 Zirkel + 2 Linsen = 950 Gold) mit Astrolabium (1 Sternenuhr + 1 Fernrohr, 90 s, 2.087), Messtisch (1 Reißbrett + 1 Fernrohr, 90 s, 2.450), Lupe (1 Linse + 5 Eisenstangen, 30 s, 317); Kräuterstube: Heilertasche (1 Heilpäckchen + 2 Mörser, 30 s, 708); Schlosserei: Schatztruhe (1 Kastenschloss + 5 Verstärkte Holzplatten, 60 s, 2.851); Feinschmiede: Laterne (5 Eisenbleche + 5 Glas, 20 s, 216). Level 19 mit Geschichte, fünf Aufträgen (Kaspar, Anton, Ulrich, Agnes, Marta; 33.501 Gold), Aufstieg 25.000, Laden wie Level 18.
+- Aussehen: sechs Warenbilder (Astrolabium, Messtisch, Lupe, Heilertasche, Schatztruhe, Laterne) und sechs 3D-Formen fürs Band; 3D-Haus des Instrumentenbaus (Steinhaus mit Spitzdach und runden Fenstern, Armillarsphäre aus drei Messingringen, die sich beim Arbeiten dreht, Messtisch mit Fernrohr und leuchtender Linse).
+- Tests: neue Datei `landvermessung.test.js` (11 Prüfungen: Daten, Werte, die drei Arten neuer Produkte, Freischalten, Zeiten, eine Straße aus Zwischenprodukten bis ins Laden-Lager, Testpaket, Spielstand); angepasst: höchstes Level 19, Erfahrung je Level, Reiter „Werkstatt“ (4), Rezeptlisten von Kräuterstube, Schlosserei und Feinschmiede, „höchstens 4 Einstellungen“ (jetzt 8 Maschinen voll), 55 Waren. Browser-Test: Durchspielen bis Level 19 (Aufstieg, Brief, Instrumentenbau aus der Bauleiste bauen und umstellen, alle drei Instrument-Einstellungen, die 4. Einstellung der drei alten Maschinen mit „nichts ragt heraus“), in 3D das neue Haus mit drehender Armillarsphäre.
+- Doku: `STAND.md`, `SPIEL.md`, `TECHNIK.md`, `LEVEL.md`, `GEBAEUDE.md`, `WAREN.md`, `AUSBLICK.md`, `BEDIENUNG.md`, `ZAHLEN.md` neu geschrieben; Archiv.
+
+**Geprüft:**
+- `npm test`: 523 Prüfungen bestanden.
+- Browser-Test: (läuft)
+
 ### v0.59.2 – Entwurf Level 19, 2. Fassung, und Entwurf Baumenü (27.11.2026, nur Doku)
 
 **Vorgenommen:**

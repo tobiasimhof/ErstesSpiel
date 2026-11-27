@@ -13,16 +13,17 @@
 | 🌼 Kräutermühle | Stein | 2 × 2 | „Heilpuder“: 5 Ringelblüten → 1 (15 s) | 16 | 10 Mörser + 4 Räderwerke (Mahlschalen und Antrieb; 862 Gold Warenwert) |
 | 🔥 Schmelzhütte | Eisen | 2 × 2 | 1 Eisenerz → 200 Eisenbarren (15 min), Vorrat 3 | 3 | 20 Steinplatten + 10 Holzplatten |
 | 🔨 Schmiede | Eisen | 2 × 2 | „Bleche“ oder „Stangen“: 5 Eisenbarren → 1; „Fläschchen“: 5 Glas → 1 (erst ab Level 13 wählbar) | 3 | 10 Steinplatten + 30 Eisenbarren |
-| ⚙️ Feinschmiede | Eisen | 2 × 2, 2 Eingänge | Scharnier · Schlüssel · Zirkel | 5 | 10 Eisenbleche + 2 Räderwerke |
-| 🔐 Schlosserei | Eisen | 2 × 2, 2 Eingänge | Gewichtstein · Uhrwerk · Vorhängeschloss | 6 | 1 Scharnier + 2 Verstärkte Holzplatten |
+| ⚙️ Feinschmiede | Eisen | 2 × 2, 2 Eingänge | Scharnier · Schlüssel · Zirkel · ab Level 19 „Laternen“ (5 Eisenbleche + 5 Glas, 20 s) | 5 | 10 Eisenbleche + 2 Räderwerke |
+| 🔐 Schlosserei | Eisen | 2 × 2, 2 Eingänge | Gewichtstein · Uhrwerk · Vorhängeschloss · ab Level 19 „Schatztruhen“ (1 Kastenschloss + 5 Verstärkte Holzplatten, 60 s) | 6 | 1 Scharnier + 2 Verstärkte Holzplatten |
 | 🌱 Beet | Erde | 2 × 2, kein Band | 1 Samen → 1 Pflanze (30 min), säen und ernten von Hand; in 3D wachsen 3 × 3 Pflanzen sichtbar | 7 | 10 Holzplatten + 10 Steinplatten |
 | 🪢 Erntebank | Erde | 2 × 2 | 1 Pflanze → 50 Flachsfasern, Ringelblüten, Schafgarbenblüten, Kamillenblüten bzw. Farnwedel (10 min), Vorrat 3, auch gemischt | 7 | 10 Holzplatten + 2 Zahnradwellen |
 | 🧵 Webstube | Erde | 2 × 2 | 5 Flachsfasern → 1 Verband | 7 | 20 Holzstäbe + 2 Räderwerke |
-| 🌿 Kräuterstube | Erde | 2 × 2, 2 Eingänge | „Heilverbände“ · „Kompressen“ · „Wundverbände“ (erst ab Level 10 wählbar) | 8 | 10 Holzplatten + 5 Eisenbleche + 2 Zahnradwellen |
+| 🌿 Kräuterstube | Erde | 2 × 2, 2 Eingänge | „Heilverbände“ · „Kompressen“ · „Wundverbände“ (erst ab Level 10 wählbar) · „Heilertaschen“ (ab Level 19: 1 Heilpäckchen + 2 Mörser, 30 s) | 8 | 10 Holzplatten + 5 Eisenbleche + 2 Zahnradwellen |
 | ♨️ Ofen (früher Kohlenmeiler) | Holz | 2 × 2 | 1 Holzstamm → 100 Holzkohle, ab Level 13 auch 1 Sand → 100 Glas (je 15 min), Vorrat 3, auch gemischt | 9 | 20 Steinplatten + 2 Verstärkte Holzplatten |
 | 📐 Schreibstube | Werkstatt | 2 × 2, 2 Eingänge | „Zeichenbretter“ · „Reißzeuge“ · „Reißbretter“ (erst ab Level 12 wählbar) | 9 | 1 Verstärkte Holzplatte + 1 Zirkel |
 | 🕰️ Uhrmacherei | Werkstatt | 2 × 2, 2 Eingänge | „Räderuhren“ · „Kastenschlösser“ · „Sternenuhren“ · ab Level 17 „Fernrohre“ (2 Linsen + 10 Eisenbleche, 60 s) | 11 | 1 Zirkel + 1 Uhrwerk |
 | ⚗️ Apotheke | Werkstatt | 2 × 2, 2 Eingänge | „Kräutermischungen“ · „Kamillenkissen“ · „Heilpäckchen“ · „Tinkturen“ (erst ab Level 14 wählbar) | 12 | 1 Verstärkte Holzplatte + 1 Gewichtstein (Regal und Apothekerwaage) |
+| 🧭 Instrumentenbau | Werkstatt | 2 × 2, 2 Eingänge | „Astrolabien“ (1 Sternenuhr + 1 Fernrohr, 90 s) · „Messtische“ (1 Reißbrett + 1 Fernrohr, 90 s) · „Lupen“ (1 Linse + 5 Eisenstangen, 30 s); in 3D ein Steinhaus mit Armillarsphäre aus Messingringen, die sich beim Arbeiten dreht, und einem Messtisch mit leuchtender Linse | 19 | 1 Zirkel + 2 Linsen (950 Gold Warenwert) |
 | 📦 Lagerhaus | immer sichtbar | 2 × 1 | Zwischenlager 3 × 50, von Hand befüllen | 1 | 8 Holzplatten |
 | 🌀 Versandportal | immer sichtbar | 1 × 1 | schickt Waren ins Laden-Lager | 1 | 10 Holzblöcke |
 | ➡️ Förderband | immer sichtbar | 1 × 1 | transportiert | 1 | 1 Holzblock je Feld |
