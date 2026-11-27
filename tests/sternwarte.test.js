@@ -44,20 +44,21 @@ const worth = (items) => Object.entries(items).reduce((sum, [t, n]) => sum + ITE
 
 // ---------- Tobias' Regel ----------
 
-test('Tobias (Chat 32): Keine Maschine hat mehr als 4 Einstellungen – Zimmerei, Apotheke, Steinmetz und Uhrmacherei sind voll', () => {
+// v0.59.0: Mit Lebens- und Manatrank ist auch der Zauberkessel voll (Level 18)
+test('Tobias (Chat 32): Keine Maschine hat mehr als 4 Einstellungen – Zimmerei, Apotheke, Steinmetz, Uhrmacherei und Zauberkessel sind voll', () => {
   const full = [];
   for (const [type, def] of Object.entries(BUILDINGS)) {
     const recipes = def.production?.kind === 'workshop' ? def.production.recipes : [];
     assert.ok(recipes.length <= 4, `${type}: ${recipes.length} Einstellungen`);
     if (recipes.length === 4) full.push(type);
   }
-  assert.deepEqual(full.sort(), ['apotheke', 'steinmetz', 'uhrmacherei', 'zimmerei']);
+  assert.deepEqual(full.sort(), ['apotheke', 'steinmetz', 'uhrmacherei', 'zauberkessel', 'zimmerei']);
 });
 
 // ---------- Datentabellen ----------
 
 test('Level 17 „Die Sternwarte“: Geschichte mit Anton, Berta, Kaspar und Ambrosius, Laden wie auf Level 16, Aufstieg 20.000 Gold ohne Geschenk', () => {
-  assert.equal(MAX_LEVEL, 17);
+  assert.ok(MAX_LEVEL >= 17); // v0.59.0: Level 18 kommt dazu
   const def = LEVELS[17];
   assert.equal(def.name, 'Die Sternwarte');
   for (const name of ['Anton', 'Berta', 'Kaspar', 'Ambrosius', 'Sternwarte']) assert.ok(def.story.includes(name), name);
@@ -108,15 +109,13 @@ test('Aufträge auf Level 17: Berta, Kaspar, Anton, Ambrosius – zusammen 23.43
   assert.ok(ratio > 1.15 && ratio < 1.3, `Sprung zu Level 16: ×${ratio.toFixed(2)}`);
 });
 
-test('Aufstieg auf Level 17: 20.000 Gold, keine neue Fläche; danach ist Level 17 das höchste', () => {
+test('Aufstieg auf Level 17: 20.000 Gold, keine neue Fläche', () => {
   const state = levelGame(16, 25000);
   const before = { ...state.world };
   state.quest.index = levelQuests(16).length;
   assert.deepEqual(levelUp(state), { level: 17, gift: {}, cost: 20000, moreLand: false });
   assert.equal(state.gold, 5000);
   assert.deepEqual(state.world, before);
-  state.quest.index = levelQuests(17).length;
-  assert.equal(levelUp(state), null);
 });
 
 // ---------- In der Fabrik ----------

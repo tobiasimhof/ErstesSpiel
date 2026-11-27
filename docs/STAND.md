@@ -4,7 +4,7 @@
 
 | | |
 |---|---|
-| **Aktuelle Version** | v0.58.1 – Entwurf Level 18 „Die Zauberei“ (nur Doku) |
+| **Aktuelle Version** | v0.59.0 – Level 18 „Die Zauberei“ (Farn, Lebenstrank, Manatrank) |
 | **Phase** | Design und Grafik vorerst abgeschlossen (Tobias, Chat 30); M2 – Produktionsketten: Level 1–17 im Spiel, 18 als Gerüst |
 | **Spielen (live)** | https://tobiasimhof.github.io/ErstesSpiel/ |
 | **Nächster Schritt** | **Tobias testet Level 16 und 17** und beantwortet die Fragen zum **Entwurf Level 18 „Die Zauberei“** (v0.59.0, `PLAENE.md`: Farn, Lebenstrank, Manatrank). Danach **die alten Straßen verlängern** (neue Produkte aus Sternenuhr, Fernrohr, Reißbrett, Mörser …); „Zauber des Magiers“ ab Level 20. |

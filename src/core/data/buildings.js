@@ -191,6 +191,8 @@ export const BUILDINGS = {
         schafgarbensamen: { plant: 'schafgarbe', time: 1800 },
         // v0.29.0: Level 12 – die Kamille auch
         kamillensamen: { plant: 'kamille', time: 1800 },
+        // v0.59.0: Level 18 – der Farn auch (Farnsporen statt Samen)
+        farnsporen: { plant: 'farn', time: 1800 },
       },
     },
   },
@@ -207,7 +209,8 @@ export const BUILDINGS = {
     ports: [{ kind: 'out', x: 1, y: 0, side: 'E' }],
     production: {
       kind: 'source',
-      inputs: { flachspflanze: 'flachsfaser', ringelblume: 'ringelbluete', schafgarbe: 'schafgarbenbluete', kamille: 'kamillenbluete' },
+      // v0.59.0: dazu der Farn (Level 18)
+      inputs: { flachspflanze: 'flachsfaser', ringelblume: 'ringelbluete', schafgarbe: 'schafgarbenbluete', kamille: 'kamillenbluete', farn: 'farnwedel' },
       amount: 50,
       duration: 600,
       capacity: 3,
@@ -344,7 +347,8 @@ export const BUILDINGS = {
       { kind: 'out', x: 1, y: 0, side: 'E' },
     ],
     // v0.57.0: auf Level 16 dazu der Heiltrank (Rezept mit level: 16)
-    production: { kind: 'workshop', recipes: ['traumtrank', 'heiltrank'], fuel: { item: 'holzkohle', capacity: 100 } },
+    // v0.59.0: auf Level 18 dazu Lebens- und Manatrank (4 Einstellungen, voll)
+    production: { kind: 'workshop', recipes: ['traumtrank', 'heiltrank', 'lebenstrank', 'manatrank'], fuel: { item: 'holzkohle', capacity: 100 } },
   },
   // v0.57.0: Level 16 „Die Kräutermühle“ – Müllerin Gretes Idee aus Level 14
   // („Könnte man Kräuter nicht auch mit Wasserkraft mahlen?“). Reiter „Stein“

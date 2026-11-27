@@ -16,15 +16,16 @@ const seeds = Object.keys(ITEMS).filter((t) => ITEMS[t].shape === 'seeds');
 const KINDS = { box: 3, cyl: 4, ball: 3 };
 
 test('Jede Pflanze hat eine eigene Wuchsform, nicht nur eine andere Farbe', () => {
-  assert.deepEqual(plants, ['flachspflanze', 'ringelblume', 'schafgarbe', 'kamille']);
+  // v0.59.0: der Farn als 5. Pflanze (Tobias, Chat 33)
+  assert.deepEqual(plants, ['flachspflanze', 'ringelblume', 'schafgarbe', 'kamille', 'farn']);
   const blooms = plants.map((t) => ITEMS[t].bloom);
-  assert.deepEqual(blooms, ['stars', 'disc', 'umbel', 'daisies']);
+  assert.deepEqual(blooms, ['stars', 'disc', 'umbel', 'daisies', 'fronds']);
   assert.equal(new Set(blooms).size, plants.length, 'keine zwei gleich');
 });
 
 test('Jede Samentüte zeigt die Pflanze, die im Beet daraus wächst', () => {
   const crops = BUILDINGS.beet.production.crops;
-  assert.equal(seeds.length, 4);
+  assert.equal(seeds.length, 5); // v0.59.0: mit den Farnsporen
   for (const seed of seeds) {
     assert.ok(ITEMS[ITEMS[seed].grows]?.grown, `${seed}: Bild einer Pflanze`);
     assert.equal(ITEMS[seed].grows, crops[seed].plant, `${seed}: wächst im Beet zu ${crops[seed].plant}`);
@@ -42,7 +43,7 @@ test('Wachstum im Beet: Keimling, kleine Pflanze, Knospen ab 60 %, reif', () => 
   assert.equal(plantStage(1, true), 3);
 });
 
-test('Pflanzenformen: bekannte Grundkörper, je Stufe größer, alle vier reif verschieden', () => {
+test('Pflanzenformen: bekannte Grundkörper, je Stufe größer, alle fünf reif verschieden', () => {
   // Höhe = längster Stängel (die Stängel sind die senkrechten Zylinder)
   const height = (parts) => Math.max(...formParts(parts).filter((p) => p.k === 'cyl').map((p) => p.s[2]));
   const ripe = new Set();
@@ -60,7 +61,8 @@ test('Pflanzenformen: bekannte Grundkörper, je Stufe größer, alle vier reif v
       assert.ok(h > last, `${type}: Stufe ${stage} höher als die vorige (${h} > ${last})`);
       last = h;
     }
-    // reif: die Blüte in der Farbe der Pflanze ist zu sehen
+    // reif: die Blüte in der Farbe der Pflanze ist zu sehen (beim Farn, der
+    // nicht blüht, die hellen Spitzen der Wedel)
     const colors = formParts(plantForm(type, 3)).map((p) => p.c.toLowerCase());
     assert.ok(colors.includes(ITEMS[type].flower.toLowerCase()), `${type}: Blüten in ${ITEMS[type].flower}`);
     ripe.add(JSON.stringify(plantForm(type, 3)));

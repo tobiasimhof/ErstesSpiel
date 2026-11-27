@@ -2932,6 +2932,116 @@ async function runDevice(browser, baseUrl, device, expectedVersion) {
   });
   check(ground17 === 1, `Steinmetz mahlt 5 Glas zu Kristallsand (${ground17} hergestellt)`);
 
+  // ---------- Level 18: Die Zauberei (v0.59.0) ----------
+  await page.tap('#btn-level');
+  await sleep(150);
+  for (let i = 0; i < 4; i++) {
+    await page.locator('#modal-content button', { hasText: '🧪 Test: Auftrag erledigen' }).tap();
+    await sleep(200);
+  }
+  const l17done = await page.textContent('#modal-content');
+  check(
+    l17done.includes('4 von 4') &&
+      l17done.includes('Nächstes Level: Level 18 · Die Zauberei') &&
+      l17done.includes('Farnsporen beim Händler') &&
+      l17done.includes('Zauberkessel: Lebenstrank') &&
+      l17done.includes('Zauberkessel: Manatrank') &&
+      !l17done.includes('🎁'),
+    'Level 17 erledigt; Level 18 kündigt Farnsporen sowie Lebens- und Manatrank (Zauberkessel) an, ohne Geschenk',
+  );
+  await game(page, () => (window.__game.state.gold += 22500));
+  await sleep(450);
+  await page.locator('#modal-content button', { hasText: 'Aufsteigen auf Level 18 · 22.500' }).tap();
+  await sleep(150);
+  const letter18 = await readLetter(page);
+  check((await game(page, () => window.__game.state.shopLevel)) === 18, 'Aufstieg auf Level 18 für 22.500 Gold');
+  const lvl18Text = await page.textContent('#modal-content');
+  check(
+    lvl18Text.includes('Level 18 erreicht!') && lvl18Text.includes('Die Zauberei') && lvl18Text.includes('100 Farnwedel') && lvl18Text.includes('0 von 4'),
+    'Level 18: Ambrosius möchte 100 Farnwedel, Aufträge 0 von 4',
+  );
+  check(letter18.includes('Laden-Level 18!') && letter18.includes('Zauberei') && letter18.includes('Ambrosius'), `Schriftrolle: Ambrosius und die Zauberei (${letter18.slice(0, 200)})`);
+  await shot('29a-level-18');
+  await page.tap('#modal-close');
+  await sleep(120);
+  // Beet: fünf Samen (Tobias, Chat 33: Farn als 5. Pflanze), Farn säen und ernten
+  await game(page, ([x, y]) => {
+    const g = window.__game;
+    const beet = g.state.buildings.find((b) => b.type === 'beet' && b.x === x && b.y === y);
+    Object.assign(beet.prod, { crop: null, timer: 0, blocked: false });
+    g.state.storage.farnsporen = (g.state.storage.farnsporen ?? 0) + 1;
+    g.simulate(0);
+  }, [bx, by + 3]);
+  await centerOn(page, bx + 1, by + 3, 4);
+  await sleep(100);
+  await tapTile(page, bx, by + 3);
+  await sleep(450);
+  const beet18 = await infoCard(page);
+  check(
+    beet18?.inputs.join() === 'leinsamen 1,ringelblumensamen 1,schafgarbensamen 1,kamillensamen 1,farnsporen 1' &&
+      beet18.outputs.join() === 'flachspflanze Flachspflanze,ringelblume Ringelblume,schafgarbe Schafgarbe,kamille Kamille,farn Farn',
+    `Leeres Beet auf Level 18: fünf Pflanzen im Kasten (${JSON.stringify(beet18)})`,
+  );
+  check((await infoFits(page)).length === 0, `Beet auf Level 18 mit fünf Samen: nichts ragt aus dem Fenster (${(await infoFits(page)).join(', ')})`);
+  await shot('29b-beet-fuenf-samen');
+  await infoButton(page, 'sow:farnsporen').tap();
+  await sleep(450);
+  await game(page, ([x, y]) => {
+    window.__game.state.buildings.find((g) => g.type === 'beet' && g.x === x && g.y === y).prod.timer = 1799.5;
+    window.__game.simulate(1);
+  }, [bx, by + 3]);
+  await sleep(500);
+  await page.locator('#info-actions button', { hasText: 'Ernten: 1 Farn' }).tap();
+  await sleep(450);
+  check((await game(page, () => window.__game.state.storage.farn ?? 0)) >= 1, 'Farn geerntet');
+  // Erntebank: ein 5. Knopf für den Farn – passt das Fenster noch (auch aufs Handy)?
+  await tapTile(page, bx + 4, by);
+  await sleep(450);
+  check(await infoButton(page, 'load:farn').isVisible(), 'Erntebank: Knopf „➕ Farn“');
+  check((await infoFits(page)).length === 0, `Erntebank mit fünf Pflanzen: nichts ragt aus dem Fenster (${(await infoFits(page)).join(', ')})`);
+  await shot('29c-erntebank-farn');
+  await page.tap('#info-close');
+  await sleep(100);
+  // Zauberkessel: jetzt 4 Einstellungen (voll) – per Touch auf Lebenstrank umstellen
+  const kessel18 = await game(page, () => {
+    const b = window.__game.state.buildings.find((x) => x.type === 'zauberkessel');
+    return { x: b.x, y: b.y };
+  });
+  await tapTile(page, kessel18.x, kessel18.y);
+  await sleep(450);
+  check((await page.textContent('#info-title')) === 'Zauberkessel', 'Zauberkessel antippen zeigt Infofenster');
+  check((await page.locator('#info-body .recipe-option').count()) === 3, 'Zauberkessel: 3 andere Einstellungen zur Auswahl');
+  check((await recipeOption(page, 'lebenstrank').getAttribute('aria-label')) === 'Umstellen auf Lebenstrank: 1 Heiltrank + 5 Farnwedel', 'Ab Level 18: Umstellen auf Lebenstrank');
+  check((await recipeOption(page, 'manatrank').getAttribute('aria-label')) === 'Umstellen auf Manatrank: 1 Traumtrank + 2 Kristallsand', 'Ab Level 18: Umstellen auf Manatrank');
+  check((await infoFits(page)).length === 0, `Zauberkessel mit 4 Einstellungen: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+  await recipeOption(page, 'lebenstrank').tap();
+  await sleep(450);
+  const card18 = await infoCard(page);
+  check(card18?.outputs.join() === 'lebenstrank Lebenstrank', `Zauberkessel umgestellt auf Lebenstrank (${JSON.stringify(card18)})`);
+  check((await infoFits(page)).length === 0, `Zauberkessel auf Lebenstrank: nichts ragt heraus (${(await infoFits(page)).join(' | ')})`);
+  await shot('29d-zauberkessel-lebenstrank');
+  await page.tap('#info-close');
+  await sleep(100);
+  // Brauen: Lebenstrank und Manatrank je in 90 s (gezählt über „hergestellt“)
+  const brewed18 = await game(page, () => {
+    const g = window.__game;
+    const b = g.state.buildings.find((x) => x.type === 'zauberkessel');
+    const made = (t) => g.state.produced?.[t] ?? 0;
+    const result = {};
+    for (const [recipe, stock] of [
+      ['lebenstrank', { heiltrank: 1, farnwedel: 5 }],
+      ['manatrank', { traumtrank: 1, kristallsand: 2 }],
+    ]) {
+      const before = made(recipe);
+      Object.assign(b.prod, { recipe, stock, out: null, busy: false, timer: 0 });
+      b.prod.fuel = Math.max(b.prod.fuel ?? 0, 10);
+      g.simulate(91);
+      result[recipe] = made(recipe) - before;
+    }
+    return result;
+  });
+  check(brewed18.lebenstrank === 1 && brewed18.manatrank === 1, `Der Kessel braut in je 90 s einen Lebens- und einen Manatrank (${JSON.stringify(brewed18)})`);
+
   await tapTile(page, 3, 3); // Auswahl aufheben (gesperrte Fläche, kein Angebot)
   await page.tap('#info-close').catch(() => {});
   await shot('17-fabrik');

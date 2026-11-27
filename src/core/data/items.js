@@ -11,7 +11,8 @@
 // bloom:    v0.47.0 (Tobias, Chat 28): Wuchsform einer Pflanze, damit sich die
 //           Kräuter nicht nur in der Farbe unterscheiden – 'stars' (Flachs: Halme
 //           mit kleinen Sternblüten), 'disc' (Ringelblume: eine große Blüte),
-//           'umbel' (Schafgarbe: flacher Schirm), 'daisies' (Kamille)
+//           'umbel' (Schafgarbe: flacher Schirm), 'daisies' (Kamille),
+//           v0.59.0 'fronds' (Farn: gefiederte Wedel, ohne Blüte)
 // grows:    v0.47.0: Samen – welche Pflanze daraus wächst (Bild auf der Samentüte)
 //
 // Preise nach dem festgelegten Techbaum (docs/SPIEL.md, Abschnitt 7):
@@ -156,4 +157,18 @@ export const ITEMS = {
   kristallsand: { name: 'Kristallsand', plural: 'Kristallsand', price: 72, color: '#e3f6f4', glow: '#9fdcf0', shape: 'crystals' },
   fernrohr: { name: 'Fernrohr', plural: 'Fernrohre', price: 634, color: '#5b6169', brass: '#c9a23c', shape: 'telescope' },
   traumtrank: { name: 'Traumtrank', plural: 'Traumtränke', price: 547, color: '#7b4fc9', glow: '#c9a7ff', shape: 'potion' },
+  // v0.59.0: Level 18 „Die Zauberei“ (Entwurf v0.59.0, Tobias, Chat 33: „Farn
+  // können wir gerne als 5. Pflanze einführen, damit wir auch bei den Pflanzen
+  // genug Varität reinbringen können“, „Gerne A“). Farn hat Sporen statt Samen
+  // (die Reihe 320 → 500 → 660 → 830 → 1.000); er wächst im selben Beet und läuft
+  // durch dieselbe Erntebank: 1.000 → 50 × 24 = 1.200 (+20 %). Er blüht nicht –
+  // flower ist das helle Grün der jungen, eingerollten Wedelspitzen.
+  // Lebenstrank: 1 Heiltrank + 5 Farnwedel + 5 Holzkohle = (600 + 120 + 10) × 1,2
+  // = 876, grün. Manatrank: 1 Traumtrank + 2 Kristallsand + 5 Holzkohle =
+  // (547 + 144 + 10) × 1,2 = 841, blau. Beide in der Form des Traumtranks.
+  farnsporen: { name: 'Farnsporen', plural: 'Farnsporen', raw: true, level: 18, buyPrice: 1000, color: '#a47148', shape: 'seeds', grows: 'farn' },
+  farn: { name: 'Farn', plural: 'Farne', raw: true, grown: true, level: 18, color: '#3d7a35', flower: '#9fcf5a', shape: 'plant', bloom: 'fronds' },
+  farnwedel: { name: 'Farnwedel', plural: 'Farnwedel', price: 24, color: '#4f9a3c', shape: 'frond' },
+  lebenstrank: { name: 'Lebenstrank', plural: 'Lebenstränke', price: 876, color: '#2b9a48', glow: '#8ce99a', shape: 'potion' },
+  manatrank: { name: 'Manatrank', plural: 'Manatränke', price: 841, color: '#1c6fd1', glow: '#74c0fc', shape: 'potion' },
 };

@@ -102,5 +102,11 @@ export const RECIPES = {
   linse: { building: 'steinmetz', label: 'Linsen', inputs: { glas: 10 }, output: 'linse', amount: 1, time: 30, level: 17 },
   kristallsand: { building: 'steinmetz', label: 'Kristallsand', inputs: { glas: 5 }, output: 'kristallsand', amount: 1, time: 10, level: 17 },
   fernrohr: { building: 'uhrmacherei', label: 'Fernrohre', inputs: { linse: 2, eisenblech: 10 }, output: 'fernrohr', amount: 1, time: 60, level: 17 },
+  // v0.59.0: Level 18 „Die Zauberei“ – der Zauberkessel braut die zwei stärksten
+  // Tränke (Tobias, Chat 33: „Gerne A“): Lebenstrank aus Heiltrank und Farnwedeln,
+  // Manatrank aus Traumtrank und Kristallsand, je 90 s. Damit hat der Kessel
+  // 4 Einstellungen und ist voll (Tobias, Chat 32).
+  lebenstrank: { building: 'zauberkessel', label: 'Lebenstränke', inputs: { heiltrank: 1, farnwedel: 5 }, fuel: 5, output: 'lebenstrank', amount: 1, time: 90, level: 18 },
+  manatrank: { building: 'zauberkessel', label: 'Manatränke', inputs: { traumtrank: 1, kristallsand: 2 }, fuel: 5, output: 'manatrank', amount: 1, time: 90, level: 18 },
   traumtrank: { building: 'zauberkessel', label: 'Traumtränke', inputs: { tinktur: 1, kamillenbluete: 5 }, fuel: 5, output: 'traumtrank', amount: 1, time: 60, level: 15 },
 };

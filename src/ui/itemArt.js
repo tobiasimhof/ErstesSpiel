@@ -116,6 +116,37 @@ function circlesPath(ctx, list, u) {
   }
 }
 
+// v0.59.0: ein Farnwedel – Mittelrippe als Bezier-Kurve (4 Punkte in Einheiten,
+// vom Stiel zur Spitze), links und rechts schräg nach vorn die Fiedern, zur
+// Spitze hin kleiner; Umriss nur außen herum.
+function frond(ctx, pts, u, leaf, size = 1) {
+  const at = (t) => {
+    const m = 1 - t;
+    const k = [m * m * m, 3 * m * m * t, 3 * m * t * t, t * t * t];
+    return [0, 1].map((i) => pts.reduce((sum, p, j) => sum + p[i] * k[j], 0));
+  };
+  const leaflet = (x, y, a, len, wide) => {
+    const ex = (x - 20 + Math.cos(a) * len * 0.5) * u;
+    const ey = (y - 20 + Math.sin(a) * len * 0.5) * u;
+    ctx.moveTo(ex + Math.cos(a) * len * 0.5 * u, ey + Math.sin(a) * len * 0.5 * u);
+    ctx.ellipse(ex, ey, len * 0.5 * u, wide * u, a, 0, Math.PI * 2);
+  };
+  silhouette(ctx, () => {
+    for (let k = 0; k < 8; k++) {
+      const t = 0.22 + k * 0.095;
+      const [x, y] = at(t);
+      const [x2, y2] = at(Math.min(1, t + 0.02));
+      const a = Math.atan2(y2 - y, x2 - x);
+      const len = (7 * (1 - t) + 2) * size;
+      for (const side of [-1, 1]) leaflet(x, y, a + side * 1.15, len, 1.35 * size);
+    }
+    const [tx, ty] = at(0.97);
+    const [ex, ey] = at(1);
+    leaflet(tx, ty, Math.atan2(ey - ty, ex - tx), 3 * size, 1.1 * size);
+  }, leaf, u, 0.8);
+  stem(ctx, pts, u, 0.9 * size, shade(leaf, -0.25));
+}
+
 // Eine Pflanze mittig am Ursprung, Größe wie die übrigen Waren (s).
 function drawPlant(ctx, def, s) {
   const u = s * 0.035;
@@ -183,6 +214,21 @@ function drawPlant(ctx, def, s) {
         circlesPath(ctx, [[x - 20.9, y - 20.9, 1.2 * k]], u);
         ctx.fill();
       }
+      break;
+    }
+    case 'fronds': {
+      // v0.59.0 Farn: drei gebogene, gefiederte Wedel, ohne Blüte; vorn ein
+      // junger Wedel, der sich noch einrollt (hellgrün)
+      frond(ctx, [[17, 39], [13, 30], [8, 22], [5, 13]], u, leaf);
+      frond(ctx, [[23, 39], [28, 31], [32, 23], [35, 14]], u, leaf);
+      frond(ctx, [[20, 39], [20, 28], [21, 16], [22, 4]], u, leaf);
+      stem(ctx, [[20, 39], [19, 35], [16, 33], [15, 30]], u, 1.2, leaf);
+      silhouette(ctx, () => circlesPath(ctx, [[-5, 8, 3]], u), flower, u, 0.8);
+      ctx.beginPath();
+      ctx.arc(-5 * u, 8 * u, 1.5 * u, Math.PI * 0.2, Math.PI * 1.8);
+      ctx.lineWidth = Math.max(1, u * 0.8);
+      ctx.strokeStyle = shade(leaf, -0.2);
+      ctx.stroke();
       break;
     }
     default: {
@@ -574,6 +620,15 @@ export function drawItem(ctx, type, cx, cy, size) {
     case 'plant': {
       ctx.translate(cx, cy);
       drawPlant(ctx, def, s);
+      break;
+    }
+    case 'frond': {
+      // v0.59.0 Farnwedel: ein grüner, gefiederter Wedel, schräg, mit kurzem
+      // braunem Stiel
+      ctx.translate(cx, cy);
+      const u = s * 0.035;
+      stem(ctx, [[5, 36], [8, 33]], u, 1.6, '#7a5230');
+      frond(ctx, [[8, 33], [14, 25], [23, 16], [35, 5]], u, def.color, 1.15);
       break;
     }
     case 'fiber': {
@@ -1433,7 +1488,8 @@ export function drawItem(ctx, type, cx, cy, size) {
     case 'potion': {
       // v0.55.0 Traumtrank: bauchiges Fläschchen mit lila Trank, Korken und
       // einem kleinen Glanz – der Trank leuchtet von innen heller; v0.57.0 auch
-      // der Heiltrank (rot), Farben aus color und glow
+      // der Heiltrank (rot), v0.59.0 Lebenstrank (grün) und Manatrank (blau),
+      // Farben aus color und glow
       const r = s * 0.34;
       const by = cy + s * 0.14;
       ctx.fillStyle = '#cfe9ee';

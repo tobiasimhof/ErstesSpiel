@@ -612,7 +612,7 @@ async function run3d(browser, baseUrl, device, expectedVersion) {
     const shapes = await game(page, () => window.__game.view3d.itemShapes());
     const byType = new Map(shapes.map((s) => [s.type, s]));
     const missing = goodsArea.types.filter((t) => !byType.has(t));
-    check(goodsArea.types.length === 46 && missing.length === 0, `Alle ${goodsArea.types.length} Waren liegen auf dem Band und haben eine Form (fehlt: ${missing.join(', ') || '–'})`);
+    check(goodsArea.types.length === 49 && missing.length === 0, `Alle ${goodsArea.types.length} Waren liegen auf dem Band und haben eine Form (fehlt: ${missing.join(', ') || '–'})`);
     const tooBig = shapes.filter((s) => s.size[0] > 0.62 || s.size[2] > 0.62 || s.size[1] > 0.42).map((s) => `${s.type} ${s.size.join('×')}`);
     check(tooBig.length === 0, `Jede Ware passt aufs Band: höchstens 0,62 breit und 0,42 hoch (${tooBig.join(', ') || 'alle passen'})`);
     const heavy = shapes.filter((s) => s.triangles > 900).map((s) => `${s.type} ${s.triangles}`);
@@ -633,10 +633,11 @@ async function run3d(browser, baseUrl, device, expectedVersion) {
   const beds = await game(page, () => {
     const g = window.__game;
     const p = g.state.plot;
-    const seeds = ['leinsamen', 'ringelblumensamen', 'schafgarbensamen', 'kamillensamen'];
+    // v0.59.0: dazu der Farn (Level 18)
+    const seeds = ['leinsamen', 'ringelblumensamen', 'schafgarbensamen', 'kamillensamen', 'farnsporen'];
     const ids = [];
-    for (let y = p.y; y + 2 <= p.y + p.height && ids.length < 4; y += 2) {
-      for (let x = p.x + 4; x + 2 <= p.x + p.width && ids.length < 4; x += 2) {
+    for (let y = p.y; y + 2 <= p.y + p.height && ids.length < 5; y += 2) {
+      for (let x = p.x + 4; x + 2 <= p.x + p.width && ids.length < 5; x += 2) {
         if (![0, 1, 2, 3].every((i) => g.isFree(x + (i % 2), y + Math.floor(i / 2)))) continue;
         const id = g.place('beet', x, y, 0);
         if (id === null) continue;
@@ -654,8 +655,8 @@ async function run3d(browser, baseUrl, device, expectedVersion) {
     g.simulate(0);
     return ids;
   });
-  check(beds.length === 4, `Vier Beete gesetzt (${beds.join(', ')})`);
-  const plants = ['flachspflanze', 'ringelblume', 'schafgarbe', 'kamille'];
+  check(beds.length === 5, `Fünf Beete gesetzt (${beds.join(', ')})`);
+  const plants = ['flachspflanze', 'ringelblume', 'schafgarbe', 'kamille', 'farn'];
   // Die Beete werden etwa 8-mal pro Sekunde geprüft; im Test-Browser laufen nur
   // wenige Bilder pro Sekunde – deshalb auf die erwartete Stufe warten.
   const cropsAt = async (stage) => {
@@ -674,11 +675,11 @@ async function run3d(browser, baseUrl, device, expectedVersion) {
   const ripe = await cropsAt(3);
   check(ripe.join() === plants.map((t) => `${t}|3`).join(), `Reif: jede Pflanze blüht in ihrer Form (${ripe.join(', ')})`);
   await shot('3d-11d-beete');
-  // Erntebank: alle vier Pflanzen freigeschaltet (Level 13), Knöpfe mit Bild und Namen
+  // Erntebank: alle fünf Pflanzen freigeschaltet (Level 18), Knöpfe mit Bild und Namen
   const bench = houseIds[houseTypes.indexOf('flachsbreche')];
   await game(page, (id) => {
     const g = window.__game;
-    g.state.shopLevel = 13;
+    g.state.shopLevel = 18;
     const b = g.state.buildings.find((item) => item.id === id);
     g.camera.fitRect({ x: b.x - 3, y: b.y - 2, width: 8, height: 6 });
     g.simulate(0);
@@ -694,8 +695,8 @@ async function run3d(browser, baseUrl, device, expectedVersion) {
     })),
   );
   check(
-    herbButtons.length === 4 && herbButtons.every((b) => b.icon === '34') && ['Flachspflanze', 'Ringelblume', 'Schafgarbe', 'Kamille'].every((n, i) => herbButtons[i].text.includes(n)),
-    `Erntebank: vier Knöpfe mit großem Bild und Namen (${herbButtons.map((b) => b.text).join(', ')})`,
+    herbButtons.length === 5 && herbButtons.every((b) => b.icon === '34') && ['Flachspflanze', 'Ringelblume', 'Schafgarbe', 'Kamille', 'Farn'].every((n, i) => herbButtons[i].text.includes(n)),
+    `Erntebank: fünf Knöpfe mit großem Bild und Namen (${herbButtons.map((b) => b.text).join(', ')})`,
   );
   const frame = await page.evaluate(() => getComputedStyle(document.getElementById('info-panel')).borderImageSource);
   check(frame.includes('panel_brown_corners_a'), `Infofenster mit Kenneys Holzrahmen (${frame.slice(-40)})`);

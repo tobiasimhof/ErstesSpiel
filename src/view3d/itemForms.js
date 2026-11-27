@@ -307,6 +307,34 @@ export const ITEM_FORMS = {
     cyl('#cfe9ee', 0.034, 0.042, 0.08, [0, 0.235, 0], null, 10),
     cyl('#b07a45', 0.03, 0.032, 0.05, [0, 0.295, 0], null, 10),
   ),
+  // v0.59.0: Farnwedel – grüner, gefiederter Wedel, liegt flach in Laufrichtung:
+  // Mittelrippe, je Seite 6 schräge Fiedern (zur Spitze kleiner), helle Spitze,
+  // kurzer brauner Stiel
+  farnwedel: big(
+    box('#3d7a35', [0.36, 0.016, 0.018], [0, 0.03, 0]),
+    ...[0, 1, 2, 3, 4, 5].flatMap((k) => {
+      const x = -0.15 + k * 0.058;
+      const len = 0.13 - k * 0.017;
+      return [-1, 1].map((side) =>
+        box('#4f9a3c', [0.036, 0.012, len], [x + Math.sin(0.45) * len * 0.5, 0.028, side * Math.cos(0.45) * len * 0.5], [0, side * 0.45, 0]),
+      );
+    }),
+    box('#9fcf5a', [0.05, 0.012, 0.026], [0.2, 0.03, 0]),
+    box('#7a5230', [0.06, 0.018, 0.02], [-0.2, 0.03, 0]),
+  ),
+  // v0.59.0: Lebenstrank (grün) und Manatrank (blau) – wie der Traumtrank
+  lebenstrank: big(
+    ball('#2b9a48', 0.105, [0, 0.105, 0], 14, 10),
+    ball('#8ce99a', 0.05, [0.03, 0.08, 0.06], 8, 6),
+    cyl('#cfe9ee', 0.034, 0.042, 0.08, [0, 0.235, 0], null, 10),
+    cyl('#b07a45', 0.03, 0.032, 0.05, [0, 0.295, 0], null, 10),
+  ),
+  manatrank: big(
+    ball('#1c6fd1', 0.105, [0, 0.105, 0], 14, 10),
+    ball('#74c0fc', 0.05, [0.03, 0.08, 0.06], 8, 6),
+    cyl('#cfe9ee', 0.034, 0.042, 0.08, [0, 0.235, 0], null, 10),
+    cyl('#b07a45', 0.03, 0.032, 0.05, [0, 0.295, 0], null, 10),
+  ),
 };
 
 // Die Form einer Ware (fehlt eine, eine Kugel in ihrer Farbe)

@@ -275,6 +275,23 @@ export const LEVELS = {
       { from: 'Magier Ambrosius', text: 'Der Staub vom Linsenschleifen glitzert wie Sternenlicht. Sammle ihn für mich – ich habe eine Idee für einen ganz besonderen Trank.', items: { kristallsand: 50, heiltrank: 6 } },
     ],
   },
+  // v0.59.0: Level 18 (Entwurf v0.59.0, Tobias, Chat 33: „Ja, können wir auch
+  // gerne so machen“) – Ambrosius' Zauberei am Waldrand: Farn als 5. Pflanze,
+  // Lebenstrank und Manatrank, zum Schluss Hildes Fest der Zauberei. Aufträge
+  // zusammen 27.891 Gold (×1,19 gegenüber Level 17, Rechenwerkzeug). Aufstieg
+  // 22.500 Gold, kein Geschenk, keine neue Fläche, keine neue Maschine.
+  18: {
+    name: 'Die Zauberei',
+    story:
+      'Ambrosius\' Turm ist zu klein geworden: Am Waldrand, wo im Schatten der Farn wächst, richtet er eine Zauberei ein. Mit Farn und Kristallsand will er die zwei mächtigsten Tränke brauen, die das Tal je gesehen hat – den Lebenstrank und den Manatrank.',
+    cost: 22500,
+    quests: [
+      { from: 'Magier Ambrosius', text: 'Im Schatten des Waldes wächst Farn. Säe ihn in deinen Beeten und bring mir die Wedel, frisch geerntet.', items: { farnwedel: 100 } },
+      { from: 'Heilerin Agnes', text: 'Ein Heiltrank schließt Wunden. Ein Lebenstrank gibt den Kranken ihre ganze Kraft zurück.', items: { lebenstrank: 8 } },
+      { from: 'Magier Ambrosius', text: 'Traumtrank und Kristallsand, langsam über dem Feuer: der Manatrank. Er schenkt jedem Zauberer neue Kraft.', items: { manatrank: 8 } },
+      { from: 'Bürgermeisterin Hilde', text: 'Der Ort feiert das große Fest der Zauberei! Auf dem Hügel schauen alle durch Fernrohre in die Sterne, und Ambrosius verteilt seine Tränke.', items: { lebenstrank: 5, manatrank: 5, fernrohr: 5 } },
+    ],
+  },
 };
 
 export const MAX_LEVEL = Math.max(...Object.keys(LEVELS).map(Number));

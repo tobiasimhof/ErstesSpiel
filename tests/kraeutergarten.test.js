@@ -58,13 +58,16 @@ test('Datentabellen: Ringelblume im selben Beet, im gleichen Takt wie Flachs (30
     schafgarbensamen: { plant: 'schafgarbe', time: GROW },
     // v0.29.0: Level 12
     kamillensamen: { plant: 'kamille', time: GROW },
+    // v0.59.0: Level 18
+    farnsporen: { plant: 'farn', time: GROW },
   });
 });
 
 test('Erntebank (bisher Flachsbreche): ein Gerät für alle Pflanzen, je 1 Pflanze → 50 Waren', () => {
   const def = BUILDINGS.flachsbreche;
   assert.equal(def.name, 'Erntebank');
-  assert.deepEqual(def.production.inputs, { flachspflanze: 'flachsfaser', ringelblume: 'ringelbluete', schafgarbe: 'schafgarbenbluete', kamille: 'kamillenbluete' });
+  // v0.59.0: dazu der Farn
+  assert.deepEqual(def.production.inputs, { flachspflanze: 'flachsfaser', ringelblume: 'ringelbluete', schafgarbe: 'schafgarbenbluete', kamille: 'kamillenbluete', farn: 'farnwedel' });
   assert.deepEqual([def.production.amount, def.production.duration, def.production.capacity], [50, 600, 3]);
 });
 
