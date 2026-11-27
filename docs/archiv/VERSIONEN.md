@@ -4,6 +4,22 @@
 
 Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
+### v0.59.2 – Entwurf Level 19, 2. Fassung, und Entwurf Baumenü (27.11.2026, nur Doku)
+
+**Vorgenommen:**
+- Tobias' Rückmeldung zur 1. Fassung festhalten (Chat 33: Abwechslung vor Gold, alles mit allem mischen, neue Stätten aus Zwischenprodukten, Baumenü anders gestalten) und den Entwurf danach überarbeiten.
+
+**Fragen, die wir uns gestellt haben:**
+- Wie viele neue Produkte passen in Level 19, ohne die Regeln zu brechen (höchstens 4 Einstellungen, höchstens 2 Eingänge, jedes Produkt logisch)? → Sechs: drei im neuen Instrumentenbau, je eins als letzte Einstellung von Kräuterstube, Schlosserei und Feinschmiede. Danach sind fast alle Maschinen mit 2 Eingängen voll – Level 20 braucht neue Maschinen.
+- Welche Produkte zwingen zu neuen Stätten? → Laterne (Eisenbleche + Glas) und Lupe (Linse + Eisenstangen): ihre Zutaten werden in den bestehenden Straßen schon verbraucht. Rechenwerkzeug: 12,3 Eisenerz, Engpass die Schmelzhütte.
+- Wie bekommt das Baumenü Platz für mehr Bereiche und Gebäude? → Drei Möglichkeiten, Empfehlung: Werkzeuge und zuletzt gebaute Gebäude in der Leiste, alle Gebäude in einem Katalog-Fenster.
+
+**Gemacht:**
+- `PLAENE.md`: 2. Fassung Level 19 und Entwurf Baumenü (die 1. Fassung bleibt darunter stehen, als überholt markiert); `STAND.md`, `AUSBLICK.md` (neue Leitlinie ab Level 19), `ENTSCHEIDUNGEN.md`, `GESPRAECHE.md`. Versionsnummer 0.59.2. Spiel unverändert.
+
+**Geprüft:**
+- `npm test`: 512 Tests bestanden (nur Doku und Versionsnummer geändert).
+
 ### v0.59.1 – Entwurf Level 19 „Die Landvermessung“ (27.11.2026, nur Doku)
 
 **Vorgenommen:**

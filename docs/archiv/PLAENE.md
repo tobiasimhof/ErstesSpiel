@@ -61,7 +61,64 @@ Claudes Plan aus Chat 8, Teil 3; Tobias: „Die Option von Band leeren finde ich
 
 **Idee für später (offen):** eine **Weiche mit Filter** – ein Band-Feld, das eine bestimmte Ware (z. B. nur Holzplatten) in eine Richtung schickt und alles andere geradeaus. Damit ließen sich gemischte Bänder automatisch sortieren. Ein eigener, größerer Schritt; Tobias hat sich dazu noch nicht geäußert (offene Frage 12).
 
-### Entwurf v0.60.0 – Level 19 „Die Landvermessung“: Instrumentenbau, Astrolabium, Messtisch, Heilertasche (Chat 33, v0.59.1; wartet auf Tobias' Antworten)
+### Entwurf v0.60.0 – Level 19 „Die Landvermessung“, 2. Fassung: sechs neue Produkte; dazu Entwurf Baumenü (Chat 33, v0.59.2; wartet auf Tobias' Antworten)
+
+**Tobias (Chat 33, zur 1. Fassung unten):** „Ich würde es nicht schlimm finden, wenn eine Stufe mal weniger Geld bringt. Mir geht es aktuell um die Varität, damit man nicht 5 Level auf seinen Endprodukten hängen bleibt, sondern jetzt alles verbinden kann, weil wir soweit alles an Grundlagen vorgestellt haben und jetzt können wir alles mit allem mischen, damit wir mehr und neue Produkte pro Level auf den Markt bringen kann, damit die Straßen länger werden und man neue Produktionsstätten bauen muss, damit man andere Dinge produzieren kann, da wir ja jetzt deutlich mehr Platz haben, deswegen soll man bei den neuen Produkten z.b. an vorhandene Straße anbinden können, aber bei anderen Produkte sollte man dann z.b. auch mit Zwischenprodukten arbeiten, damit man neue Stätten bauen darf. Da wir aktuell nur 5 Reiter haben, könnten wir das Baumenu evtl anders gestalten, indem man den Bauen Button evtl. anders gestaltet sodass wir die Reiter auch anders auflistet, damit man evtl. nur das Grundgerüst wie z.b. Förderband abreißen etc und dann als extra button evtl. dann die ganzen Reiter auswählt, aber da weiß ich nicht wie man das UI mäßig am besten regeln kann.“
+
+**Was das für die Planung heißt (Claude):** Ab Level 19 zählt **Abwechslung** mehr als Gold je Stufe: mehr neue Produkte je Level, „alles mit allem mischen“. Drei Arten neuer Produkte: **(1) an Endprodukte anbinden** (verlängert bestehende Straßen), **(2) Endprodukt + Zwischenprodukt**, **(3) nur aus Zwischenprodukten** – die Zwischenprodukte werden in den bestehenden Straßen schon verbraucht, also braucht es **neue Fertigungsstätten** (die Fläche ist da).
+
+**Level 19, 2. Fassung – sechs neue Produkte, eine neue Maschine:**
+
+| Art | Produkt | Zutaten | Wo | Zeit | Wert |
+|---|---|---|---|---|---|
+| (1) Endprodukte verbinden | **Astrolabium** | 1 Sternenuhr + 1 Fernrohr | 🧭 Instrumentenbau (neu) | 90 s | 2.087 |
+| (1) | **Messtisch** | 1 Reißbrett + 1 Fernrohr | 🧭 Instrumentenbau | 90 s | 2.450 |
+| (1) | **Heilertasche** | 1 Heilpäckchen + 2 Mörser | Kräuterstube (4. Einstellung) | 30 s | 708 |
+| (2) Endprodukt + Zwischenprodukt | **Schatztruhe** | 1 Kastenschloss + 5 Verstärkte Holzplatten | Schlosserei (4. Einstellung) | 60 s | 2.851 |
+| (3) nur Zwischenprodukte | **Laterne** | 5 Eisenbleche + 5 Glas | Feinschmiede (4. Einstellung) | 20 s | 216 |
+| (3) | **Lupe** | 1 Linse + 5 Eisenstangen | 🧭 Instrumentenbau | 30 s | 317 |
+
+🧭 Instrumentenbau wie in der 1. Fassung (Reiter „Werkstatt“, letzter freier Platz, 2 Eingänge, Baukosten 1 Zirkel + 2 Linsen). Danach voll: Feinschmiede, Schlosserei, Kräuterstube (und weiterhin Zimmerei, Steinmetz, Uhrmacherei, Apotheke, Kessel); der Instrumentenbau hat noch einen Platz.
+
+**Geschichte:** „Der Ort ist so gewachsen, dass niemand mehr weiß, wo ein Feld aufhört und das nächste anfängt. Baumeister Anton vermisst das ganze Tal, und Kaspars Lehrling Emil eröffnet eine Werkstatt für Messinstrumente. Und überall im Ort braucht man auf einmal Neues: Laternen für die dunklen Gassen, Truhen für die Händler, Taschen für die Heilerin.“
+
+**Aufträge** (zusammen **33.501 Gold**, ×1,2 gegenüber Level 18; 5 Aufträge):
+
+| # | Wer | Was | Wert |
+|---|---|---|---|
+| 1 | Lehrling Emil (neu) | 3 Astrolabien + 10 Lupen – „Meister Kaspars Werkstatt ist voll, also baue ich meine eigene! Zuerst Lupen für die feinen Arbeiten – und dann Astrolabien: Sternenuhr und Fernrohr in einem Gerät.“ | 9.431 |
+| 2 | Baumeister Anton | 4 Messtische – „Ein Reißbrett auf drei Beinen, darauf ein Fernrohr: Damit zeichne ich das ganze Tal auf, Feld für Feld.“ | 9.800 |
+| 3 | Torwächter Ulrich | 20 Laternen – „Der Ort ist so groß geworden, dass ich nachts die Gassen nicht mehr überblicke. Laternen aus Eisenblech und Glas, an jede Ecke eine!“ | 4.320 |
+| 4 | Heilerin Agnes | 6 Heilertaschen – „Ich wandere jetzt zu den Kranken. In einer Heilertasche habe ich alles dabei: das Heilpäckchen und Mörser für frische Kräuter.“ | 4.248 |
+| 5 | Händlerin Marta | 2 Schatztruhen – „Seit so viele Reisende kommen, klingelt meine Kasse. Ich brauche Truhen mit einem richtigen Kastenschloss!“ | 5.702 |
+
+**Rechenwerkzeug (an einer Kopie der Daten):** Rohstoffe 16.127 Gold (6,8 Holzstämme, 1,9 Felsbrocken, **12,3 Eisenerz**, 2,6 Leinsamen, 1,2 Ringelblumensamen, 0,6 Schafgarbensamen, 3,4 Sand), 4,4 Pflanzen, Maschinenzeit 9,4 h, Engpass mit je einem Gebäude die **Schmelzhütte** (3,1 h) – ein Werkzeug-Level, für das man weitere Schmelzhütten und Schmieden bauen muss. Je Stunde und Straße: Messtisch 11.200, Astrolabium 11.131, Lupe 10.144, Schatztruhe 8.294, Laterne 6.912, Heilertasche 4.720 Gold. Neue wertvollste Ware: die Schatztruhe (2.851). Längste Straßen: Messtisch und Heilertasche (7 Stufen), Astrolabium und Schatztruhe (6).
+
+**Aufstieg auf Level 19:** 25.000 Gold, kein Geschenk, keine neue Fläche; der Laden bleibt wie auf Level 18.
+
+**Was sich im Spiel ändert (v0.60.0):** eine neue Maschine mit eigenem 3D-Haus, sechs neue Waren mit Warenbild und 3D-Form, neue Einstellungen in Kräuterstube, Schlosserei und Feinschmiede, Level 19 mit Geschichte, fünf Aufträgen und Brief; kein neues Spielstand-Format. Passt noch in die heutige Bauleiste (der Instrumentenbau nimmt den letzten Platz im Reiter „Werkstatt“).
+
+**Für Level 20 und später:** Fast alle Maschinen mit 2 Eingängen sind dann voll (frei bleiben Sägewerk 2, Schmiede 1, Webstube 3, Kräutermühle 3 – alle mit nur einem Eingang –, Schreibstube 1, Instrumentenbau 1). Mehr Mischen braucht also **neue Maschinen** – und dafür ein neues Baumenü. Ideen aus der 1. Fassung (Tinte, Standuhr, Gute-Nacht-Korb, Trank der Jugend …) bleiben vorgemerkt.
+
+#### Entwurf Baumenü (v0.61.0, vor Level 20)
+
+**Heute:** Die Bauleiste zeigt links immer Förderband, Lagerhaus, Portal, Verschieben, Abreißen, rechts die Gebäude des gewählten Reiters; darüber 5 Reiter. Auf dem Handy ist die Breite ausgereizt – daher „höchstens 4 Gebäude je Reiter“ und keine weiteren Reiter.
+
+| Möglichkeit | So geht es | Gut | Weniger gut |
+|---|---|---|---|
+| **A (Empfehlung): Werkzeuge in der Leiste, Gebäude im Katalog** (Tobias' Idee) | Die Leiste unten zeigt nur das Grundgerüst – Förderband, Lagerhaus, Portal, Verschieben, Abreißen –, dazu die **3 zuletzt gebauten Gebäude** und einen großen Knopf **„🏭 Gebäude“**. Der öffnet ein großes Fenster (wie das Laden-Fenster): links die Bereiche untereinander (Holz, Stein, Eisen, Erde, Werkstatt – später z. B. Tränke, Instrumente), rechts die Gebäude als große Kacheln mit Bild, Name, Baukosten, 🔒 und kleinen Bildern, was sie herstellen. Antippen → das Fenster geht zu, die Vorschau zum Platzieren erscheint wie heute. Der zuletzt offene Bereich bleibt gemerkt. | beliebig viele Bereiche und Gebäude; mehr Platz für Bilder und „was stellt es her?“; das Wichtigste bleibt mit einem Tippen erreichbar (Werkzeuge, zuletzt gebaut) | ein neues Gebäude braucht einen Tipp mehr |
+| B: Leiste wie heute, aber wischbar | Reiter und Gebäude lassen sich seitlich wischen (mehr als 5 Reiter, mehr als 4 Gebäude je Reiter) | kleinste Änderung | was rechts herausragt, sieht man nicht; auf dem Handy fummelig |
+| C: Bereich aufklappen | In der Leiste ein Knopf „Bereich ▾“; er klappt eine kleine Liste aller Bereiche auf, die Gebäude des gewählten stehen in der Leiste (wischbar) | Leiste bleibt schlank | zwei kleine Menüs übereinander; wenig Platz für Kosten und Bilder |
+
+**Reihenfolge (Vorschlag):** erst Level 19 (passt noch in die heutige Leiste), dann das neue Baumenü (v0.61.0), dann Level 20 mit neuen Maschinen.
+
+**Fragen an Tobias:**
+1. Passt die 2. Fassung von Level 19 mit sechs neuen Produkten (Astrolabium, Messtisch, Heilertasche, Schatztruhe, Laterne, Lupe)?
+2. Passen Geschichte, der neue Bewohner Lehrling Emil, die fünf Aufträge und der Aufstieg für 25.000 Gold?
+3. Baumenü: A, B oder C?
+4. Reihenfolge: erst Level 19, dann das Baumenü – oder umgekehrt?
+
+### Entwurf v0.60.0 – Level 19 „Die Landvermessung“, 1. Fassung (Chat 33, v0.59.1; überholt durch die 2. Fassung oben)
 
 **Tobias (Chat 33, nach v0.59.0):** „Lass uns gerne schon mal den Entwurf für Level 19 machen und dabei unterschiedliche Dinge beachten: Wie sieht es aus mit den Rechenwerkzeug ( ist noch alles im Gleichgewicht )? Wir viele verschiedene Produktionsstraßen haben wir und wie könnten wir das noch erweitern ? Welche entgültigen Produkte haben wir, die wir weiterverarbeiten können ? Welche neuen Produkte könnten entstehen, wenn wir uns anschauen, mit welchen Materialien wir neue Produkte entwerfen könnten. Welchen Entwurf hast du ? Stell mir einmal deinen Entwurf vor und beantworte mir danach meine Fragen.“
 

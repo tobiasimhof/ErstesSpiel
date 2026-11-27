@@ -4,7 +4,7 @@
 
 Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umgesetzt wurde.
 
-### 27.11.2026 – Chat 33: Level 18 „Die Zauberei“, Entwurf Level 19 (v0.59.0, v0.59.1)
+### 27.11.2026 – Chat 33: Level 18 „Die Zauberei“, Entwurf Level 19, Baumenü (v0.59.0, v0.59.1, v0.59.2)
 
 **Tobias:** „Les dir den aktuellen Stand durch und fasse mir kurz zusammen was die nächsten schritte sind“
 
@@ -21,6 +21,12 @@ Neuester Chat oben. Was Tobias gesagt hat, was Claude vorgeschlagen hat, was umg
 **Claude** hat den Entwurf für Level 19 „Die Landvermessung“ geschrieben und mit dem Rechenwerkzeug an einer Kopie der Daten nachgerechnet (`PLAENE.md`): neue Maschine Instrumentenbau (Reiter „Werkstatt“, letzter Platz) mit Astrolabium (Sternenuhr + Fernrohr) und Messtisch (Reißbrett + Fernrohr, mit 7 Stufen die längste Straße), Heilertasche (Heilpäckchen + 2 Mörser) in der Kräuterstube, Lehrling Emil als neuer Bewohner, Aufstieg 25.000. Antworten auf Tobias' Fragen: Das Gleichgewicht hält (Aufträge je Level ×1,2, sie bezahlen den nächsten Aufstieg zu 90–119 %, tiefere Waren bringen mehr Aufschlag); aber die neuen Waren seit Level 12 bringen je Stunde nicht mehr als die alten (bestes Fernrohr 10.144 Gold/h, Reißbrett 9.011, Lebenstrank 8.760) – der Entwurf hebt das mit Messtisch und Astrolabium (über 11.000) an; nach rund 480.000 Gold gibt es nichts mehr zu kaufen. 10 Straßen bis zu einem Endprodukt (Räderuhr, Kastenschloss, Sternenuhr, Reißbrett, Fernrohr, Kamillenkissen, Heilpäckchen, Lebenstrank, Manatrank, dazu der Mörser als Baustoff); 13 freie Einstellungen in alten Maschinen, aber nur noch ein freier Gebäude-Platz in den Reitern. Ideenliste für Level 20+.
 
 **Umgesetzt:** v0.59.1 (nur Doku).
+
+**Tobias:** „Ich würde es nicht schlimm finden, wenn eine Stufe mal weniger Geld bringt. Mir geht es aktuell um die Varität, damit man nicht 5 Level auf seinen Endprodukten hängen bleibt, sondern jetzt alles verbinden kann, weil wir soweit alles an Grundlagen vorgestellt haben und jetzt können wir alles mit allem mischen, damit wir mehr und neue Produkte pro Level auf den Markt bringen kann, damit die Straßen länger werden und man neue Produktionsstätten bauen muss, damit man andere Dinge produzieren kann, da wir ja jetzt deutlich mehr Platz haben, deswegen soll man bei den neuen Produkten z.b. an vorhandene Straße anbinden können, aber bei anderen Produkte sollte man dann z.b. auch mit Zwischenprodukten arbeiten, damit man neue Stätten bauen darf. Da wir aktuell nur 5 Reiter haben, könnten wir das Baumenu evtl anders gestalten, indem man den Bauen Button evtl. anders gestaltet sodass wir die Reiter auch anders auflistet, damit man evtl. nur das Grundgerüst wie z.b. Förderband abreißen etc und dann als extra button evtl. dann die ganzen Reiter auswählt, aber da weiß ich nicht wie man das UI mäßig am besten regeln kann.“
+
+**Claude** hat die 2. Fassung von Level 19 geschrieben und nachgerechnet (`PLAENE.md`): sechs neue Produkte in drei Arten – Endprodukte verbinden (Astrolabium, Messtisch, Heilertasche), Endprodukt + Zwischenprodukt (Schatztruhe: Kastenschloss + Verstärkte Holzplatten), nur Zwischenprodukte (Laterne: Eisenbleche + Glas; Lupe: Linse + Eisenstangen), fünf Aufträge (dazu Torwächter Ulrich und Händlerin Marta), 33.501 Gold, Engpass die Schmelzhütte. Für das Baumenü drei Möglichkeiten: A Werkzeuge und die 3 zuletzt gebauten Gebäude in der Leiste, alle Gebäude in einem Katalog-Fenster „🏭 Gebäude“ mit beliebig vielen Bereichen (Empfehlung, Tobias' Idee ausgearbeitet); B Leiste wischbar; C Bereich aufklappen. Vorschlag: erst Level 19 (passt noch in die heutige Leiste), dann das Baumenü, dann Level 20 mit neuen Maschinen.
+
+**Umgesetzt:** v0.59.2 (nur Doku).
 
 ### 26.11.2026 – Chat 32: Rückmeldung zu Level 15 – Aufstieg blockiert, „1 von 4“ statt Erfahrung, Entwurf Level 16, Browser-Test parallel, Level 16, Entwurf Level 17, Level 17, Entwurf Level 18 (v0.55.1, v0.56.0, v0.56.1, v0.56.2, v0.57.0, v0.57.1, v0.57.2, v0.58.0, v0.58.1)
 
