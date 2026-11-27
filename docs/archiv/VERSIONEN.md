@@ -22,7 +22,7 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 
 **Geprüft:**
 - `npm test`: 523 Prüfungen bestanden.
-- Browser-Test: (läuft)
+- Browser-Test (parallel, 27 Minuten): 1.446 Prüfungen bestanden (Durchspielen Handy 570, Tablet 562; 3D je 107; Einführung 100). Screenshots angesehen: Instrumentenbau mit goldener Armillarsphäre und Messtisch, alle sechs neuen Waren auf dem Band, Warenbilder im Auftrag und unter „Umstellen auf“ (Kräuterstube, Schlosserei, Feinschmiede mit 4 Einstellungen passen ins Fenster, auch auf dem Handy).
 
 ### v0.59.2 – Entwurf Level 19, 2. Fassung, und Entwurf Baumenü (27.11.2026, nur Doku)
 
