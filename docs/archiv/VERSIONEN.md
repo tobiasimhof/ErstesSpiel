@@ -18,11 +18,12 @@ Neueste Version oben. Je Version: vorgenommen, Fragen, gemacht, geprüft.
 - Daten: Farnsporen (Händler ab Level 18, 1.000), Farn (wächst im Beet in 30 Minuten), Farnwedel (Erntebank: 1 Farn → 50, je 24 Gold), Lebenstrank (Zauberkessel: 1 Heiltrank + 5 Farnwedel, Feuer 5 Holzkohle, 90 s, 876) und Manatrank (1 Traumtrank + 2 Kristallsand, 90 s, 841); der Kessel hat 4 Einstellungen und ist voll. Level 18 mit Geschichte, vier Aufträgen (Ambrosius 100 Farnwedel, Agnes 8 Lebenstränke, Ambrosius 8 Manatränke, Hildes Fest: je 5 Lebens- und Manatränke + 5 Fernrohre; 27.891 Gold), Aufstieg 22.500, Laden wie Level 17.
 - Aussehen: Warenbild und Samentüte des Farns (drei gefiederte Wedel und ein eingerollter junger Wedel), Farnwedel (ein Wedel mit braunem Stiel), Lebens- und Manatrank als Fläschchen in Grün und Blau; in 3D eine eigene Wuchsform in 4 Stufen (`plantForms.js`) und Formen auf dem Band (`itemForms.js`).
 - Tests: neue Datei `zauberei.test.js` (13 Prüfungen: Daten, Preise, Freischalten, Kette Sporen → Beet → Erntebank → 50 Farnwedel, Kessel auf beide Tränke mit Feuer, Straße bis ins Laden-Lager, Testpaket, Spielstand); angepasst: höchstes Level 18, Erfahrung je Level, Pflanzen und Samen (5), Erntebank, Kessel, „höchstens 4 Einstellungen“ (jetzt auch der Kessel voll), 49 Waren. Browser-Test: Durchspielen bis Level 18 (Aufstieg, Brief, Beet mit 5 Samen, Farn säen und ernten, Erntebank mit Farn-Knopf, Kessel mit 4 Einstellungen per Touch auf Lebenstrank, beide Tränke brauen), in 3D fünf Beete in allen Stufen und die Erntebank mit fünf Knöpfen.
+- Meldung nach dem Ernten ohne „sie“: „Farn geerntet und ins Laden-Lager gelegt. Jetzt das Beet neu säen.“ (vorher „… geerntet – sie liegt im Laden-Lager“ – das passte nur zu den weiblichen Pflanzen; auf einem Screenshot aufgefallen).
 - Doku: `STAND.md` (die Level-13-Zitate aus Tobias' Fabrik nach `STAND-LANGFASSUNG.md`, damit die Datei kurz bleibt), `SPIEL.md`, `TECHNIK.md`, `LEVEL.md`, `GEBAEUDE.md`, `WAREN.md`, `AUSBLICK.md`, `BEDIENUNG.md`, `ZAHLEN.md` neu geschrieben; Archiv.
 
 **Geprüft:**
 - `npm test`: 512 Prüfungen bestanden.
-- Browser-Test: (läuft)
+- Browser-Test (parallel, 24 Minuten): 1.388 Prüfungen bestanden (Durchspielen Handy 542, Tablet 534; 3D je 106; Einführung 100). Screenshots angesehen: Farn im Beet deutlich anders als die vier blühenden Kräuter, Farnwedel-Bild im Auftrag, Zauberkessel mit Traum-, Heil- und Manatrank zum Umstellen, Erntebank mit fünf Knöpfen (der Farn allein in der letzten Reihe, über die ganze Breite). Nach der Textkorrektur das Durchspielen auf dem Handy wiederholt.
 
 ### v0.58.1 – Entwurf Level 18 „Die Zauberei“ (26.11.2026, nur Doku)
 
